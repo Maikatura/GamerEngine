@@ -1,12 +1,20 @@
 #include "Game.h"
 #include "TextureManager.h"
-#include "GameObject.h"
 #include "Map.h"
+#include "Components.h"
+#include "Vector2D.h"
+#include "Collision.h"
 
-GameObject* player;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
+SDL_Event Game::event;
+
+Manager manager;
+auto& player(manager.AddEntity());
+auto& wall(manager.AddEntity());
+
+Uint8* SDL_GetKeyState(int* numkeys);
 
 Game::Game() {
 
@@ -15,6 +23,8 @@ Game::Game() {
 Game::~Game() {
 
 }
+
+bool KEYS[322];
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) {
 
@@ -46,13 +56,28 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		isRunning = false;
 	}
 
-	player = new GameObject("assets/Player/Maika_Idle.png", 10, 10);
+	  // 322 is the number of SDLK_DOWN events
+
+	for (int i = 0; i < 322; i++) { // init them all to false
+		KEYS[i] = false;
+	}
+
+	
+	
 	map = new Map();
 	
+	player.AddComponent<TransformComponent>(300.0f, 300.0f, 64, 64, 2);
+	player.AddComponent<KeyboardController>();
+	player.AddComponent<SpriteComponent>("assets/Player/Maika_Idle.png");
+	player.AddComponent<ColliderComponent>("player");
+
+	wall.AddComponent<TransformComponent>(400.0f, 300.0f, 20, 300, 1);
+	wall.AddComponent<SpriteComponent>("assets/Tiles/grass.png");
+	wall.AddComponent<ColliderComponent>("wall");
 }
 
 void Game::HandleEvents() {
-	SDL_Event event;
+
 	SDL_PollEvent(&event);
 
 	switch (event.type) {
@@ -68,15 +93,23 @@ void Game::HandleEvents() {
 
 void Game::Update() 
 {
-	player->Update();
+	
+
+	manager.Refresh();
+	manager.Update();
+	
+	if (Collision::AABB(player.GetComponent<ColliderComponent>().collider, wall.GetComponent<ColliderComponent>().collider)) 
+	{
+		std::cout << "Wall Hit!" << std::endl;
+	}
+	
 }
 
 void Game::Render() {
 	SDL_RenderClear(renderer);
 	// Add stuff to render;
 	map->DrawMap();
-	player->Render();
-
+	manager.Draw();
 
 	SDL_RenderPresent(renderer);
 }

@@ -4,6 +4,7 @@
 
 Game* game = nullptr;
 
+
 int main(int argc, char* argv[]) {
 
 	
@@ -20,6 +21,8 @@ int main(int argc, char* argv[]) {
 
 	while (game->Running()) 
 	{
+		
+
 		frameStart = SDL_GetTicks();
 
 		game->HandleEvents();
