@@ -40,7 +40,7 @@ I wont help with setting up this project that need to be all done by you.
 
 Short answer: No.
 
-Really this game engine will not be what people want me to add to the game engine. This game engine will be released with a game im working on that I am making my own engine for. Therefore most features will be releated to what I need to my game project.
+This game engine will not be what people want me to add to the game engine. This game engine will be released with a game im working on that I am making my own engine for. Therefore most features will be releated to what I need to my game project.
 
 **Can I use this Game Engine?**
 
