@@ -13,11 +13,11 @@ Some part of the code is not what I have made and therefore you need to look up 
 ### Todo List:
 
 ###### Components
-[x] Transform
+- [x] Transform
 
 ###### Networking Part
-[ ] Started on Networking
-[ ] Networking (Master Server)
-[ ] Networking (Client Server)
+- [ ] Started on Networking
+- [ ] Networking (Master Server)
+- [ ] Networking (Client Server)
 
 
