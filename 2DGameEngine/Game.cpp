@@ -12,7 +12,7 @@ SDL_Event Game::event;
 
 Manager manager;
 auto& player(manager.AddEntity());
-auto& wall(manager.AddEntity());
+auto& animatedTexture(manager.AddEntity());
 
 Uint8* SDL_GetKeyState(int* numkeys);
 
@@ -66,14 +66,16 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	
 	map = new Map();
 	
-	player.AddComponent<TransformComponent>(300.0f, 300.0f, 64, 64, 2);
+
+	// Debugging Stuff
+	player.AddComponent<TransformComponent>(0.0f, 0.0f, 64, 64, 2);
 	player.AddComponent<KeyboardController>();
-	player.AddComponent<SpriteComponent>("assets/Player/Maika_Idle.png");
+	player.AddComponent<SpriteComponent>("assets/Player/Player_Idle.png", 5, 150);
 	player.AddComponent<ColliderComponent>("player");
 
-	wall.AddComponent<TransformComponent>(400.0f, 300.0f, 20, 300, 1);
-	wall.AddComponent<SpriteComponent>("assets/Tiles/grass.png");
-	wall.AddComponent<ColliderComponent>("wall");
+	animatedTexture.AddComponent<TransformComponent>(400.0f, 300.0f, 20, 300, 1);
+	animatedTexture.AddComponent<SpriteComponent>("assets/Tiles/grass.png");
+	animatedTexture.AddComponent<ColliderComponent>("wall");
 }
 
 void Game::HandleEvents() {
@@ -91,16 +93,15 @@ void Game::HandleEvents() {
 		
 }
 
+
 void Game::Update() 
 {
-	
 
 	manager.Refresh();
 	manager.Update();
 	
-	if (Collision::AABB(player.GetComponent<ColliderComponent>().collider, wall.GetComponent<ColliderComponent>().collider)) 
-	{
-		std::cout << "Wall Hit!" << std::endl;
+	if (Collision::AABB(player.GetComponent<ColliderComponent>(), animatedTexture.GetComponent<ColliderComponent>())) {
+		std::cout << "Working" << std::endl;
 	}
 	
 }

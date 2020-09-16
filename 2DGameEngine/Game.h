@@ -23,6 +23,8 @@ class Game
 		static SDL_Renderer* renderer;
 		static SDL_Event event;
 
+		
+
 	private:
 		int cnt;
 		bool isRunning;
