@@ -1,6 +1,8 @@
 # GamerEngine
 #### This Game Engine is built from another game engine called [BirchEngine](https://github.com/carlbirch/BirchEngine)
 
+### Setup
+I wont help with setting up this project that's need to be all done by you.
 
 ### Todo List (More will be added when needed):
 
