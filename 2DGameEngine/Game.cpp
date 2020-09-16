@@ -4,6 +4,7 @@
 #include "Components.h"
 #include "Vector2D.h"
 #include "Collision.h"
+#include <thread>
 
 Map* map;
 
@@ -11,6 +12,7 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
 Manager manager;
+auto& splashScreen(manager.AddEntity());
 auto& player(manager.AddEntity());
 auto& animatedTexture(manager.AddEntity());
 
@@ -27,6 +29,8 @@ Game::~Game() {
 bool KEYS[322];
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) {
+
+	
 
 	int flags = 0;
 

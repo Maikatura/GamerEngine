@@ -1,6 +1,7 @@
 #include "SDL.h"
 #include "Game.h"
 #include <iostream>
+#include <thread>
 
 Game* game = nullptr;
 
@@ -16,8 +17,7 @@ int main(int argc, char* argv[]) {
 
 	game = new Game();
 	game->Init("Endorblast Beta", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, false);
-
-
+	
 
 	while (game->Running()) 
 	{
