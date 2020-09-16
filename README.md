@@ -12,10 +12,10 @@ Some part of the code is not what I have made and therefore you need to look up 
 
 ### Todo List:
 
-######Components
+#####Components
 [x] Transform
 
-######Networking Part
+#####Networking Part
 [ ] Started on Networking
 [ ] Networking (Master Server)
 [ ] Networking (Client Server)
