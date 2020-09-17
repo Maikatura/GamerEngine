@@ -5,12 +5,14 @@
 #include "Vector2D.h"
 #include "Collision.h"
 #include "SDL_net.h"
+#include "Client.h"
 
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
+Client client;
 
 Manager manager;
 auto& splashScreen(manager.AddEntity());
@@ -35,7 +37,7 @@ bool KEYS[322];
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) 
 {
-
+	client.Init();
 	
 	int flags = 0;
 

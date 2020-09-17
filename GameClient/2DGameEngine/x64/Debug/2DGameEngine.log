@@ -1,8 +1,17 @@
 ﻿D:\Visual Studio\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (2DGameEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Collision.cpp
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Rigidbody2D.h(5,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   Game.cpp
 D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Rigidbody2D.h(5,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Generating Code...
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Collision.cpp(62): warning C4715: 'Collision::AABB': not all control paths return a value
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\ws2def.h(595,1): warning C4005: 'INADDR_ANY': macro redefinition
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include\SDL_net.h(102): message : see previous definition of 'INADDR_ANY'
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\ws2def.h(597,1): warning C4005: 'INADDR_BROADCAST': macro redefinition
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include\SDL_net.h(111): message : see previous definition of 'INADDR_BROADCAST'
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\ws2def.h(598,1): warning C4005: 'INADDR_NONE': macro redefinition
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include\SDL_net.h(105): message : see previous definition of 'INADDR_NONE'
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(59,12): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 1 has type 'size_t'
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(59,12): message : consider using '%zu' in the format string
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(59,12): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'enet_uint32'
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(59,12): warning C4313: 'printf': '%s' in format string conflicts with argument 2 of type 'enet_uint32'
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(59,12): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 3 has type 'int'
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(59,12): warning C4313: 'printf': '%s' in format string conflicts with argument 3 of type 'int'
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(87): warning C4715: 'Client::Init': not all control paths return a value
   2DGameEngine.vcxproj -> D:\Github\2DGameEngine_Client2\GameClient\x64\Debug\GamerEngine.exe

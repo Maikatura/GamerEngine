@@ -76,7 +76,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -111,6 +111,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>enet64.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -1,0 +1,15 @@
+﻿  MasterServer.cpp
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(36,28): warning C4473: 'sscanf_s' : not enough arguments passed for format string
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(36,28): message : placeholders and their parameters expect 2 variadic arguments, but 1 were provided
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(36,28): message : the missing variadic argument 2 is required by format string '%[^\n]'
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(36,28): message : this argument is used as a buffer size
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 1 has type 'size_t'
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): message : consider using '%zu' in the format string
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'enet_uint32'
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): warning C4313: 'printf': '%s' in format string conflicts with argument 2 of type 'enet_uint32'
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 3 has type 'int'
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): warning C4313: 'printf': '%s' in format string conflicts with argument 3 of type 'int'
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): warning C4473: 'printf' : not enough arguments passed for format string
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): message : placeholders and their parameters expect 5 variadic arguments, but 4 were provided
+D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\MasterServer.cpp(90,28): message : the missing variadic argument 5 is required by format string '%s'
+  GamerEngine_Server.vcxproj -> D:\Github\2DGameEngine_Client2\GameServer\x64\Debug\GamerEngine_Server.exe
