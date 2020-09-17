@@ -59,6 +59,27 @@ bool Collision::AABB(const ColliderComponent& a, const ColliderComponent& b, con
 			return false;
 		}
 	}
+}
 
-	
+bool Collision::AABB(const TransformComponent& a, const TransformComponent& b)
+{
+	ColliderComponent colA = a.entity->GetComponent<ColliderComponent>();
+	ColliderComponent colB = b.entity->GetComponent<ColliderComponent>();
+
+	if (AABB(colA.collider, colB.collider))
+	{
+		if (colB.tag != "player") {
+			std::cout << colA.tag << " Hit: " << colB.tag << std::endl;
+			//std::cout << colA.tag << " hit: " << colB.tag << std::endl;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
 }

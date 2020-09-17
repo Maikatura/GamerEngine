@@ -4,7 +4,7 @@
 #include "Components.h"
 #include "Vector2D.h"
 #include "Collision.h"
-
+#include "SDL_net.h"
 
 Map* map;
 
@@ -33,10 +33,10 @@ Game::~Game() {
 
 bool KEYS[322];
 
-void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) {
+void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) 
+{
 
 	
-
 	int flags = 0;
 
 	if (fullscreen) {
@@ -120,10 +120,10 @@ void Game::Update()
 	{
 		
 
-		if (Collision::AABB(player.GetComponent<ColliderComponent>(), *c)) 
-		{
-			player.GetComponent<TransformComponent>().velocity.y = 0;
-		}
+		//if (Collision::AABB(player.GetComponent<ColliderComponent>(), *c)) 
+		//{
+		//	player.GetComponent<TransformComponent>().velocity.y = 0;
+		//}
 	}
 
 }

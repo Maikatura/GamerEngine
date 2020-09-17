@@ -1,7 +1,11 @@
 #include <iostream>
+#include "SDL_net.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    while (1) 
+    {
+
+    }
 }
 

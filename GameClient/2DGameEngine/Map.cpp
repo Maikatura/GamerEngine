@@ -1,5 +1,6 @@
 #include "Map.h"
 #include "TextureManager.h"
+#include "ECS.h"
 
 int lvl1[20][25] = {
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
