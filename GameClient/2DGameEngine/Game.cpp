@@ -14,6 +14,7 @@ SDL_Event Game::event;
 
 Client client;
 
+
 Manager manager;
 auto& splashScreen(manager.AddEntity());
 auto& player(manager.AddEntity());
@@ -35,10 +36,16 @@ Game::~Game() {
 
 bool KEYS[322];
 
+void Game::NetworkLoop(void* ptr)
+{
+	client.Update();
+}
+
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) 
 {
 	client.Init();
 	
+
 	int flags = 0;
 
 	if (fullscreen) {
@@ -101,6 +108,7 @@ void Game::HandleEvents() {
 
 	switch (event.type) {
 		case SDL_QUIT:
+			client.Disconnect();
 			isRunning = false;
 			break;
 

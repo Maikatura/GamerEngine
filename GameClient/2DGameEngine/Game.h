@@ -22,6 +22,7 @@ class Game
 		bool Running() { return isRunning; }
 		void Render(); // Render Items on screen
 		void Clean();
+		static void NetworkLoop(void* ptr);
 
 		static SDL_Renderer* renderer;
 		static SDL_Event event;

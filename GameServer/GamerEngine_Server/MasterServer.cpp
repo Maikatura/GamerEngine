@@ -1,6 +1,7 @@
 #include <iostream>
 #include "include/enet/enet.h"
 
+
 #include <map>
 
 class ClientData {
@@ -84,14 +85,18 @@ int main(int argc, char** argv)
             {
                 case ENET_EVENT_TYPE_CONNECT:
                     printf("A new client connected form %x:%u.\n", event.peer->address.host, event.peer->address.port);
+                    
+                    
                     new_player_id++;
+                    
                     break;
                 case ENET_EVENT_TYPE_RECEIVE:
-                    printf("A packet of length %u containing %s was received from %s:%u on channel %s.\n",
+                    printf("A packet of length %u containing '%s' was received from %s on channel %u.\n",
                         event.packet->dataLength,
-                        event.peer->address.host,
-                        event.peer->address.port,
+                        event.packet->data,
+                        event.peer->data,
                         event.channelID);
+                    /* Clean up the packet now that we're done using it. */
                     enet_packet_destroy(event.packet);
                     
                     break;
@@ -99,7 +104,7 @@ int main(int argc, char** argv)
                 case ENET_EVENT_TYPE_DISCONNECT:
                     printf("%x:%u disconnected.\n", event.peer->address.host, event.peer->address.port);
                     
-                    break;
+                    
             }
         }
     }

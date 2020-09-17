@@ -2,17 +2,25 @@
 
 #include <iostream>
 #include "include/enet/enet.h"
+#define __STDC_WANT_LIB_EXT1__ 1
+#include <stdlib.h>
+
 
 class Client {
 
+	
+
+public:
+	
 	ENetHost* client;
 	ENetAddress address;
 	ENetEvent event;
 	ENetPeer* peer;
 
-public:
 	int Init()
 	{
+		
+
 		if (enet_initialize() != 0)
 		{
 			fprintf(stderr, "An error occurred while initializing Enet!\n");
@@ -41,6 +49,7 @@ public:
 
 		if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
 		{
+			SendPacket(peer, "Thanks for letting me connect");
 			puts("Connection to Server succeeded.");
 		}
 		else
@@ -49,27 +58,44 @@ public:
 			puts("Connection to server failed");
 		}
 
+		
 
-
-		while (enet_host_service(client, &event, 1000) > 0)
-		{
-			switch (event.type)
+		while (1) {
+			while (enet_host_service(client, &event, 1000) > 0)
 			{
-			case ENET_EVENT_TYPE_RECEIVE:
-				printf("A packet of length %u containing %s was received from %s on channel %u.\n",
-					event.packet->dataLength,
-					event.peer->address.host,
-					event.peer->address.port,
-					event.channelID);
-				enet_packet_destroy(event.packet);
-				break;
+				switch (event.type)
+				{
+				case ENET_EVENT_TYPE_CONNECT:
+					printf("Test\n");
+					break;
+				case ENET_EVENT_TYPE_RECEIVE:
+					printf("A packet of length %u containing %s was received from %s on channel %u.\n",
+						event.packet->dataLength,
+						event.packet->data,
+						event.peer->data,
+						event.channelID);
+					/* Clean up the packet now that we're done using it. */
+					enet_packet_destroy(event.packet);
+
+					break;
+				case ENET_EVENT_TYPE_DISCONNECT:
+
+					break;
+				}
 			}
 		}
 
 
 
 
-		/*enet_peer_disconnect(peer, 0);
+		
+	}
+
+	void Disconnect() 
+	{
+		
+
+		enet_peer_disconnect(peer, 0);
 
 		while (enet_host_service(client, &event, 3000) > 0)
 		{
@@ -80,15 +106,25 @@ public:
 				break;
 
 			case ENET_EVENT_TYPE_DISCONNECT:
+				
 				puts("Disconnect Succesful");
 				break;
 			}
-		}*/
+		}
 	}
 
-	void Update() 
+	void Update()
 	{
 		
+		
+	}
+
+	
+
+	void SendPacket(ENetPeer* peer, const char* data) 
+	{
+		ENetPacket* packet = enet_packet_create(data, strlen(data) + 1, ENET_PACKET_FLAG_RELIABLE);
+		enet_peer_send(peer, 0, packet);
 	}
 
 };
