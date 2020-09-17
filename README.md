@@ -6,7 +6,7 @@ I wont help with setting up this project that need to be all done by you.
 
 ### Todo List (More will be added when needed):
 
-##### Menus
+##### **Menus**
 
 - [ ] Login
 - [ ] Register
@@ -14,14 +14,14 @@ I wont help with setting up this project that need to be all done by you.
 - [ ] Inventory
 - [ ] Credits
 
-##### Components
+##### **Components**
 - [x] Transform
 - [x] Collision
 - [x] Sprite
 - [x] Input
 - [ ] Rigidbody2D
 
-##### Networking Part
+##### **Networking Part**
 - [ ] Started on Networking
 - [ ] Networking (Master Server)
 - [ ] Networking (Client Server)
@@ -29,7 +29,7 @@ I wont help with setting up this project that need to be all done by you.
 - [ ] Login System
 - [ ] Register System
 
-##### Networking Part (PHP Part)
+##### **Networking Part (PHP Part)**
 - [ ] Login Form
 - [ ] Register Form
 - [ ] Send Login To Server (To join game)
