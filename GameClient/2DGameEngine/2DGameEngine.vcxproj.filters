@@ -86,8 +86,5 @@
     <ClInclude Include="Rigidbody2D.h">
       <Filter>Src\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="RakNetIncludes.h">
-      <Filter>Src</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

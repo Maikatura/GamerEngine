@@ -1,11 +1,4 @@
-﻿D:\Visual Studio\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (2DGameEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (2DGameEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Collision.cpp
-  Game.cpp
-  GameObject.cpp
-  main.cpp
-  Map.cpp
-  SplashScreen.cpp
-  TextureManager.cpp
-  Vector2D.cpp
-  Generating Code...
-  2DGameEngine.vcxproj -> D:\Github\2DGameEngine_Client2\GameClient\x64\Debug\GamerEngine.exe
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Collision.cpp(64): warning C4715: 'Collision::AABB': not all control paths return a value
+  2DGameEngine.vcxproj -> C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\x64\Debug\GamerEngine.exe

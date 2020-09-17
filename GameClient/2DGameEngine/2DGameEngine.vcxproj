@@ -37,7 +37,6 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="KeyboardController.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="RakNetIncludes.h" />
     <ClInclude Include="Rigidbody2D.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="TextureManager.h" />
@@ -101,7 +100,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Zyro\source\repos\2DGameEngine\2DGameEngine\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Zyro\source\repos\2DGameEngine\2DGameEngine\SDL2-2.0.12\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,13 +130,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Github\2DGameEngine_Client2\2DGameEngine\RakNet;C:\Users\Zyro\source\repos\2DGameEngine\2DGameEngine\SDL2-2.0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\SDL2-2.0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Zyro\source\repos\2DGameEngine\2DGameEngine\SDL2-2.0.12\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\SDL2-2.0.12\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
