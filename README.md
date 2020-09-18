@@ -22,7 +22,7 @@ I wont help with setting up this project that need to be all done by you.
 - [ ] Rigidbody2D
 
 ##### **Networking Part**
-- [ ] Started on Networking
+- [x] Started on Networking
 - [ ] Networking (Master Server)
 - [ ] Networking (Client Server)
 - [ ] Player Sync
