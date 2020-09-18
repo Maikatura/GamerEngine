@@ -4,6 +4,7 @@
 #include "include/enet/enet.h"
 #define __STDC_WANT_LIB_EXT1__ 1
 #include <stdlib.h>
+#include <thread>
 
 
 class Client {
@@ -60,30 +61,7 @@ public:
 
 		
 
-		while (1) {
-			while (enet_host_service(client, &event, 1000) > 0)
-			{
-				switch (event.type)
-				{
-				case ENET_EVENT_TYPE_CONNECT:
-					printf("Test\n");
-					break;
-				case ENET_EVENT_TYPE_RECEIVE:
-					printf("A packet of length %u containing %s was received from %s on channel %u.\n",
-						event.packet->dataLength,
-						event.packet->data,
-						event.peer->data,
-						event.channelID);
-					/* Clean up the packet now that we're done using it. */
-					enet_packet_destroy(event.packet);
-
-					break;
-				case ENET_EVENT_TYPE_DISCONNECT:
-
-					break;
-				}
-			}
-		}
+		
 
 
 
@@ -113,8 +91,34 @@ public:
 		}
 	}
 
+
+
 	void Update()
 	{
+		
+			while (enet_host_service(client, &event, 0) > 0)
+			{
+				switch (event.type)
+				{
+				case ENET_EVENT_TYPE_CONNECT:
+					printf("Test\n");
+					break;
+				case ENET_EVENT_TYPE_RECEIVE:
+					printf("A packet of length %u containing %s was received from %s on channel %u.\n",
+						event.packet->dataLength,
+						event.packet->data,
+						event.peer->data,
+						event.channelID);
+					/* Clean up the packet now that we're done using it. */
+					enet_packet_destroy(event.packet);
+
+					break;
+				case ENET_EVENT_TYPE_DISCONNECT:
+
+					break;
+				}
+			}
+		
 		
 		
 	}

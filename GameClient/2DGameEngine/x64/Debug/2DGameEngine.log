@@ -1,16 +1,8 @@
-﻿D:\Visual Studio\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (2DGameEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (2DGameEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Game.cpp
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Rigidbody2D.h(5,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\ws2def.h(595,1): warning C4005: 'INADDR_ANY': macro redefinition
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include\SDL_net.h(102): message : see previous definition of 'INADDR_ANY'
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\ws2def.h(597,1): warning C4005: 'INADDR_BROADCAST': macro redefinition
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include\SDL_net.h(111): message : see previous definition of 'INADDR_BROADCAST'
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\ws2def.h(598,1): warning C4005: 'INADDR_NONE': macro redefinition
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include\SDL_net.h(105): message : see previous definition of 'INADDR_NONE'
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(118,13): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 1 has type 'size_t'
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(118,13): message : consider using '%zu' in the format string
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(118,13): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 3 has type 'void *'
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Game.cpp(15,15): error C2530: 'client': references must be initialized
-D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Game.cpp(47,23): error C3867: 'Client::Update': non-standard syntax; use '&' to create a pointer to member
-  Vector2D.cpp
-  Generating Code...
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Rigidbody2D.h(5,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Client.h(107,13): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 1 has type 'size_t'
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Client.h(107,13): message : consider using '%zu' in the format string
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Client.h(107,13): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 3 has type 'void *'
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Client.h(70): warning C4715: 'Client::Init': not all control paths return a value
+  2DGameEngine.vcxproj -> C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\x64\Debug\GamerEngine.exe

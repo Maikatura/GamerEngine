@@ -4,7 +4,6 @@
 #include "Components.h"
 #include "Vector2D.h"
 #include "Collision.h"
-#include "SDL_net.h"
 #include "Client.h"
 
 Map* map;
@@ -44,7 +43,9 @@ void Game::NetworkLoop(void* ptr)
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) 
 {
 	client.Init();
+
 	
+
 
 	int flags = 0;
 
@@ -125,6 +126,8 @@ void Game::Update()
 
 	manager.Refresh();
 	manager.Update();
+
+	client.Update();
 
 	for (auto c : colliders) 
 	{

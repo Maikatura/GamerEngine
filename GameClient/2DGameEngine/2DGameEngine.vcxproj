@@ -102,8 +102,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include;C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include;C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\lib\x64;D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\SDL2-2.0.12\include;D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\include;D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
