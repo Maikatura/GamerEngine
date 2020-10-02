@@ -152,6 +152,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MasterServer.cpp" />
+    <ClCompile Include="NetworkPacket.cpp" />
+    <ClCompile Include="Packet.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NetworkPacket.h" />
+    <ClInclude Include="NetworkServer.h" />
+    <ClInclude Include="Packet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

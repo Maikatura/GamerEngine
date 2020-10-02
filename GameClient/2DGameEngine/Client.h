@@ -18,17 +18,22 @@ public:
 	ENetEvent event;
 	ENetPeer* peer;
 
-	int Init()
-	{
-		
+	bool connected = false;
 
+	int Init() {
+		printf("initializing networking engine");
 		if (enet_initialize() != 0)
 		{
-			fprintf(stderr, "An error occurred while initializing Enet!\n");
+			printf("an error occurred while initializing ENet");
 			return EXIT_FAILURE;
 		}
 		atexit(enet_deinitialize);
+		printf("initialized networking engine");
+	}
 
+
+	int Connect(const char* ip, unsigned int port)
+	{
 
 		client = enet_host_create(NULL, 1, 1, 0, 0);
 
@@ -38,8 +43,8 @@ public:
 			return EXIT_FAILURE;
 		}
 
-		enet_address_set_host(&address, "127.0.0.1");
-		address.port = 5555;
+		enet_address_set_host(&address, ip);
+		address.port = port;
 
 		peer = enet_host_connect(client, &address, 1, 0);
 		if (peer == NULL)
@@ -52,6 +57,7 @@ public:
 		{
 			SendPacket(peer, "Thanks for letting me connect");
 			puts("Connection to Server succeeded.");
+			connected = true;
 		}
 		else
 		{
@@ -59,19 +65,13 @@ public:
 			puts("Connection to server failed");
 		}
 
-		
-
-		
-
-
-
-
+		return EXIT_SUCCESS;
 		
 	}
 
 	void Disconnect() 
 	{
-		
+		connected = false;
 
 		enet_peer_disconnect(peer, 0);
 

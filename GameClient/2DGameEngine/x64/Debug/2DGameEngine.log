@@ -1,8 +1,8 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (2DGameEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿D:\Visual Studio\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (2DGameEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Game.cpp
-C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Rigidbody2D.h(5,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Client.h(107,13): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 1 has type 'size_t'
-C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Client.h(107,13): message : consider using '%zu' in the format string
-C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Client.h(107,13): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 3 has type 'void *'
-C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\2DGameEngine\Client.h(70): warning C4715: 'Client::Init': not all control paths return a value
-  2DGameEngine.vcxproj -> C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GameClient\x64\Debug\GamerEngine.exe
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Rigidbody2D.h(5,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(107,13): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 1 has type 'size_t'
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(107,13): message : consider using '%zu' in the format string
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(107,13): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 3 has type 'void *'
+D:\Github\2DGameEngine_Client2\GameClient\2DGameEngine\Client.h(32): warning C4715: 'Client::Init': not all control paths return a value
+  2DGameEngine.vcxproj -> D:\Github\2DGameEngine_Client2\GameClient\x64\Debug\GamerEngine.exe

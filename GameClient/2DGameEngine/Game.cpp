@@ -43,7 +43,7 @@ void Game::NetworkLoop(void* ptr)
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) 
 {
 	client.Init();
-
+	client.Connect("127.0.0.1", 5555);
 	
 
 
@@ -127,7 +127,10 @@ void Game::Update()
 	manager.Refresh();
 	manager.Update();
 
-	client.Update();
+	if (client.connected) {
+		client.Update();
+	}
+	
 
 	for (auto c : colliders) 
 	{
