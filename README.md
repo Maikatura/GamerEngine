@@ -1,6 +1,4 @@
-# GamerEngine
-
-### This is no longer in development
+# GamerEngine (No longer in development)
 
 #### This Game Engine is built from another game engine called [BirchEngine](https://github.com/carlbirch/BirchEngine)
 
