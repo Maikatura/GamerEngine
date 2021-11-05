@@ -1,9 +1,0 @@
-﻿  MasterServer.cpp
-D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\NetworkServer.h(129,24): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'void *'
-D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\NetworkServer.h(159,16): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'void *'
-  NetworkPacket.cpp
-D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\NetworkPacket.cpp(8,57): warning C4267: 'argument': conversion from 'size_t' to 'u_long', possible loss of data
-  Packet.cpp
-  Generating Code...
-D:\Github\2DGameEngine_Client2\GameServer\GamerEngine_Server\NetworkServer.h(70): warning C4715: 'NetworkServer::Init': not all control paths return a value
-  GamerEngine_Server.vcxproj -> D:\Github\2DGameEngine_Client2\GameServer\x64\Debug\GamerEngine_Server.exe
