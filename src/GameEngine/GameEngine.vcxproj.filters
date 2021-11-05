@@ -13,27 +13,5 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Private">
-      <UniqueIdentifier>{a9a2e06f-faf7-4c9a-90f8-71f3a669de2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Public">
-      <UniqueIdentifier>{7c0b3a5a-eece-4e94-a1e8-61abaf097782}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\PCH">
-      <UniqueIdentifier>{2736473a-ea89-4da7-a030-9eac90af76d8}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\WinMain.cpp">
-      <Filter>Source Files\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\pch.cpp">
-      <Filter>Source Files\PCH</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\pch.h">
-      <Filter>Source Files\PCH</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

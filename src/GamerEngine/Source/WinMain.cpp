@@ -1,7 +1,4 @@
-#include <windows.h>
-
-#define  MAX_NAME_STRING 256
-#define HInstance() GetModuleHandle(NULL)
+#include "pch.h"
 
 WCHAR WindowClass[MAX_NAME_STRING];
 WCHAR WindowTitle[MAX_NAME_STRING];
@@ -17,6 +14,7 @@ LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             PostQuitMessage(0);
             break;
     }
+
 
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
