@@ -1,13 +1,25 @@
 #include <windows.h>
 
 #define  MAX_NAME_STRING 256
-#define HInstance() GetModuleHandle(NULL);
+#define HInstance() GetModuleHandle(NULL)
 
 WCHAR WindowClass[MAX_NAME_STRING];
 WCHAR WindowTitle[MAX_NAME_STRING];
 
 INT WindowWidth;
 INT WindowHeight;
+
+LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch(message)
+    {
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+    }
+
+    return DefWindowProc(hWnd, message, wParam, lParam);
+}
 
 int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 {
@@ -20,8 +32,6 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
     WindowWidth = 1280;
     WindowHeight = 720;
 
-    HINSTANCE instance = HInstance();
-
     /* - Create Window Class - */
 
     WNDCLASSEX wcex;
@@ -33,15 +43,15 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
 
-    wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+    wcex.hIcon = LoadIcon(0, IDI_APPLICATION);
+    wcex.hIconSm = LoadIcon(0, IDI_APPLICATION);
 
     wcex.lpszClassName = WindowClass;
-    wcex.lpszMenuName = NULL;
+    wcex.lpszMenuName = nullptr;
 
-    wcex.hInstance = instance;
+    wcex.hInstance = HInstance();
 
-    wcex.lpfnWndProc = DefWindowProc;
+    wcex.lpfnWndProc = WindowProcess;
 
     RegisterClassEx(&wcex);
 
@@ -50,7 +60,7 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 
     HWND hWnd = CreateWindow(WindowClass, WindowTitle,
         WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
-        0, 0, WindowWidth, WindowHeight, NULL, NULL, instance, NULL);
+        0, 0, WindowWidth, WindowHeight, nullptr, nullptr, HInstance(), nullptr);
 
     if (!hWnd)
     {
