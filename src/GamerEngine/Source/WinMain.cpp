@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "PCH/pch.h"
 
 WCHAR WindowClass[MAX_NAME_STRING];
 WCHAR WindowTitle[MAX_NAME_STRING];
@@ -20,8 +20,6 @@ LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
 int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 {
-    
-
     /* - Initialize Global Variables - */
     wcscpy_s(WindowClass, TEXT("GamerEngine"));
     wcscpy_s(WindowTitle, TEXT("GamerEngine"));
