@@ -1,4 +1,4 @@
-#include "PCH/pch.h"
+#include "pch/pch.h"
 
 WCHAR WindowClass[MAX_NAME_STRING];
 WCHAR WindowTitle[MAX_NAME_STRING];
