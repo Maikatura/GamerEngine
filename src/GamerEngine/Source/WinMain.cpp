@@ -1,4 +1,7 @@
-#include "pch/pch.h"
+#include <Windows.h>
+
+#define MAX_NAME_STRING 256
+#define HInstance() GetModuleHandle(NULL)
 
 WCHAR WindowClass[MAX_NAME_STRING];
 WCHAR WindowTitle[MAX_NAME_STRING];
@@ -18,9 +21,9 @@ LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
-{
 
+int CALLBACK wmain(HINSTANCE, HINSTANCE, LPSTR, INT)
+{
     /* - Initialize Global Variables - */
     wcscpy_s(WindowClass, TEXT("GamerEngine"));
     wcscpy_s(WindowTitle, TEXT("GamerEngine"));

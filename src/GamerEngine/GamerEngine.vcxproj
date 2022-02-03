@@ -47,11 +47,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\$(Configuration)\</IntDir>
+    <OutDir>..\..\Build</OutDir>
+    <IntDir>..\..\Intermediate</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\Build</OutDir>
+    <IntDir>..\..\Intermediate</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -80,7 +82,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)CommonUtilities\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -94,12 +96,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
-    <ClCompile Include="Source\PCH\pch.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Source\Application.h" />
-    <ClInclude Include="Source\PCH\pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GamerEngine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

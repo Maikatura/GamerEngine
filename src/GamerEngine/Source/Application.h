@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Application
 {
 public:
@@ -9,5 +8,4 @@ public:
 
     void Initialize();
     void Update();
-    void Render();
 };

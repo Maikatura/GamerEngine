@@ -17,7 +17,3 @@ void Application::Initialize()
 void Application::Update()
 {
 }
-
-void Application::Render()
-{
-}

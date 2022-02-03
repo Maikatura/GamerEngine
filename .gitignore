@@ -1,11 +1,7 @@
-**/Debug
-**/Library
-**/Temp
+**/[Dd]ebug
+**/[Ll]ibrary
+**/[Tt]emp
 **/.vs
 **/x64
-**/Intermediate
-**/intermediate
-**/Builds
-**/builds
-**/Build
-**/build
+**/[Ii]ntermediate
+**/.idea

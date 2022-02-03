@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\PCH\pch.cpp">
-      <Filter>Source Files\PCH</Filter>
-    </ClCompile>
     <ClCompile Include="Source\WinMain.cpp">
       <Filter>Source Files\Application</Filter>
     </ClCompile>
@@ -32,11 +29,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\PCH\pch.h">
-      <Filter>Source Files\PCH</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application.h">
       <Filter>Source Files\Application</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GamerEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
