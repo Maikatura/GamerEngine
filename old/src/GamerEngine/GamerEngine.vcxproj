@@ -95,10 +95,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Source\Application.h" />
   </ItemGroup>
