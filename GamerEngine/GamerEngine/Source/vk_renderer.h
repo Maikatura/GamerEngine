@@ -34,6 +34,10 @@ struct VkContext
 	VkSwapchainKHR swapchain;
 	VkCommandPool commandPool;
 
+	VkSemaphore aquireSemaphore;
+	VkSemaphore submitSemaphore;
+
+
 	uint32_t scImgCount;
 	VkImage scImages[5];
 
@@ -299,6 +303,27 @@ bool VulkanInit(VkContext* vkContext, void* aWindow)
 		}
 	}
 
+	// Sync Objects
+	{
+
+		VkSemaphoreCreateInfo semaInfo = {};
+		semaInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+
+		VkResult objectOne = vkCreateSemaphore(vkContext->device, &semaInfo, 0, &vkContext->aquireSemaphore);
+		VkResult objectTwo = vkCreateSemaphore(vkContext->device, &semaInfo, 0, &vkContext->submitSemaphore);
+
+		if (objectOne != VK_SUCCESS)
+		{
+			return false;
+		}
+
+		if (objectTwo != VK_SUCCESS)
+		{
+			return false;
+		}
+	}
+
 	return true;
 };
 
@@ -306,7 +331,7 @@ bool VulkanInit(VkContext* vkContext, void* aWindow)
 bool VulkanRender(VkContext* vkContext)
 {
 	uint32_t imgIndex;
-	VkResult renderCheckResult = vkAcquireNextImageKHR(vkContext->device, vkContext->swapchain, 0, 0, 0, &imgIndex);
+	VkResult renderCheckResult = vkAcquireNextImageKHR(vkContext->device, vkContext->swapchain, 0, vkContext->aquireSemaphore, 0, &imgIndex);
 	if (renderCheckResult != VK_SUCCESS)
 	{
 		return false;
@@ -336,6 +361,13 @@ bool VulkanRender(VkContext* vkContext)
 	// Render Command
 	{
 
+		VkClearColorValue color = { 0.09f,0.55f,0.76f, 1.0f };
+		VkImageSubresourceRange range = {};
+		range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		range.layerCount = 1;
+		range.levelCount = 1;
+
+		vkCmdClearColorImage(cmd, vkContext->scImages[imgIndex], VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, &color, 1, &range);
 	}
 
 	VkResult endResult = vkEndCommandBuffer(cmd);
@@ -345,11 +377,17 @@ bool VulkanRender(VkContext* vkContext)
 		return false;
 	}
 
+	VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 
 	VkSubmitInfo submitInfo = {};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.pWaitDstStageMask = &waitStage;
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &cmd;
+	submitInfo.pSignalSemaphores = &vkContext->submitSemaphore;
+	submitInfo.signalSemaphoreCount = 1;
+	submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores = &vkContext->aquireSemaphore;
 
 	VkResult renderSubmitResult = vkQueueSubmit(vkContext->graphicsQueue, 1, &submitInfo, 0);
 	if (renderSubmitResult != VK_SUCCESS)
@@ -357,13 +395,26 @@ bool VulkanRender(VkContext* vkContext)
 		return false;
 	}
 
-	vkFreeCommandBuffers(vkContext->device, vkContext->commandPool, 1, &cmd);
-
+	
 	VkPresentInfoKHR presentInfo = {};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	presentInfo.pSwapchains = &vkContext->swapchain;
 	presentInfo.swapchainCount = 1;
 	presentInfo.pImageIndices = &imgIndex;
+	presentInfo.pWaitSemaphores = &vkContext->submitSemaphore;
+	presentInfo.waitSemaphoreCount = 1;
 
-	vkQueuePresentKHR(vkContext->graphicsQueue, &presentInfo);
+	VkResult queuePresentResult = vkQueuePresentKHR(vkContext->graphicsQueue, &presentInfo);
+	if (queuePresentResult != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	VkResult waitResult = vkDeviceWaitIdle(vkContext->device);
+	if (waitResult != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	vkFreeCommandBuffers(vkContext->device, vkContext->commandPool, 1, &cmd);
 }
