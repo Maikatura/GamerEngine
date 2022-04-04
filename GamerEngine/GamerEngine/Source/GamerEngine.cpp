@@ -73,9 +73,10 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 
     ShowWindow(hWnd, SW_SHOW);
 
-    if (!vk_init(&windowVulkan, hWnd))
+    if (!VulkanInit(&windowVulkan, hWnd))
     {
-        return 0;
+        std::cout << "Failed to Initialize Vulkan" << std::endl;
+        return -1;
     }
 
     MSG msg = {0};
@@ -85,6 +86,12 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
+        }
+
+        if (!VulkanRender(&windowVulkan))
+        {
+            std::cout << "Failed to Render" << std::endl;
+            return -1;
         }
     }
 
