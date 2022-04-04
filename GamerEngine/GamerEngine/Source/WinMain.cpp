@@ -1,5 +1,5 @@
 #include <windows.h>
-
+#include "vk_renderer.h"
 #define  MAX_NAME_STRING 256
 #define HInstance() GetModuleHandle(NULL)
 
@@ -23,7 +23,7 @@ LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
 int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 {
-    
+    VkContext windowVulkan = {};
 
     /* - Initialize Global Variables - */
     wcscpy_s(WindowClass, TEXT("GamerEngine"));
@@ -58,6 +58,8 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
     /* - Create and Display our Window - */
 
 
+
+
     HWND hWnd = CreateWindow(WindowClass, WindowTitle,
         WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
         0, 0, WindowWidth, WindowHeight, nullptr, nullptr, HInstance(), nullptr);
@@ -68,9 +70,13 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
         return 0;
     }
 
+
     ShowWindow(hWnd, SW_SHOW);
 
-    /* - List for message events - */
+    if (!vk_init(&windowVulkan, hWnd))
+    {
+        return 0;
+    }
 
     MSG msg = {0};
     while (msg.message != WM_QUIT)
@@ -81,6 +87,8 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
             DispatchMessage(&msg);
         }
     }
+
+
 
     return 0;
 
