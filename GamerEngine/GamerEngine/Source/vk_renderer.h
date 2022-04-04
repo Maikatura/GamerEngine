@@ -365,5 +365,12 @@ bool VulkanRender(VkContext* vkContext)
 	presentInfo.swapchainCount = 1;
 	presentInfo.pImageIndices = &imgIndex;
 
-	vkQueuePresentKHR(vkContext->graphicsQueue, &presentInfo);
+	VkResult renderQueueResult = vkQueuePresentKHR(vkContext->graphicsQueue, &presentInfo);
+
+	if(renderQueueResult != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	return true;
 }
