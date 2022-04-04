@@ -7,7 +7,6 @@
 #include <iostream>
 
 
-
 #define ArraySize(arr) sizeof((arr)) / sizeof((arr[0]))
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL VkDebugCallback(
@@ -17,7 +16,10 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL VkDebugCallback(
 	void* pUserData
 )
 {
-	OutputDebugStringW((LPCWSTR)pCallbackData->pMessage);
+	msgServerity;
+	msgFlags;
+	pUserData;
+	
 	std::cout << "Validatrion Error" << pCallbackData->pMessage << std::endl;
 	return false;
 }
@@ -52,7 +54,7 @@ bool VulkanInit(VkContext* vkContext, void* aWindow)
 	appInfo.pApplicationName = "GamerEngine";
 	appInfo.pEngineName = "GamerEngine";
 
-	const char* extentions[] = {
+	const char* extentionsOne[] = {
 #ifdef WINDOWS_BUILD
 		VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
 #elif LINUX_BUILD
@@ -68,8 +70,8 @@ bool VulkanInit(VkContext* vkContext, void* aWindow)
 	VkInstanceCreateInfo instanceInfo = {};
 	instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	instanceInfo.pApplicationInfo = &appInfo;
-	instanceInfo.ppEnabledExtensionNames = extentions;
-	instanceInfo.enabledExtensionCount = ArraySize(extentions);
+	instanceInfo.ppEnabledExtensionNames = extentionsOne;
+	instanceInfo.enabledExtensionCount = ArraySize(extentionsOne);
 	instanceInfo.ppEnabledLayerNames = layers;
 	instanceInfo.enabledLayerCount = ArraySize(layers);
 
@@ -188,7 +190,7 @@ bool VulkanInit(VkContext* vkContext, void* aWindow)
 		queueInfo.queueCount = 1;
 		queueInfo.pQueuePriorities = &queuePriority;
 
-		const char* extentions[] = {
+		const char* extentionsTwo[] = {
 			VK_KHR_SWAPCHAIN_EXTENSION_NAME
 		};
 
@@ -197,8 +199,8 @@ bool VulkanInit(VkContext* vkContext, void* aWindow)
 		deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 		deviceInfo.pQueueCreateInfos = &queueInfo;
 		deviceInfo.queueCreateInfoCount = 1;
-		deviceInfo.ppEnabledExtensionNames = extentions;
-		deviceInfo.enabledExtensionCount = ArraySize(extentions);
+		deviceInfo.ppEnabledExtensionNames = extentionsTwo;
+		deviceInfo.enabledExtensionCount = ArraySize(extentionsTwo);
 
 		VkResult createDeviceResult = vkCreateDevice(vkContext->gpu, &deviceInfo, 0, &vkContext->device);
 
@@ -334,6 +336,7 @@ bool VulkanRender(VkContext* vkContext)
 	VkResult renderCheckResult = vkAcquireNextImageKHR(vkContext->device, vkContext->swapchain, 0, vkContext->aquireSemaphore, 0, &imgIndex);
 	if (renderCheckResult != VK_SUCCESS)
 	{
+		std::cout << "Failed to acquire next image" << std::endl;
 		return false;
 	}
 	VkCommandBuffer cmd;
@@ -344,6 +347,7 @@ bool VulkanRender(VkContext* vkContext)
 	VkResult allcResult = vkAllocateCommandBuffers(vkContext->device, &allcInfo, &cmd);
 	if (allcResult != VK_SUCCESS)
 	{
+		std::cout << "Failed to allocate command buffer" << std::endl;
 		return false;
 	}
 	
@@ -355,12 +359,12 @@ bool VulkanRender(VkContext* vkContext)
 	VkResult beginResult = vkBeginCommandBuffer(cmd, &beginInfo);
 	if (beginResult != VK_SUCCESS)
 	{
+		std::cout << "Failed to begin command buffer" << std::endl;
 		return false;
 	}
 
 	// Render Command
 	{
-
 		VkClearColorValue color = { 0.09f,0.55f,0.76f, 1.0f };
 		VkImageSubresourceRange range = {};
 		range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -392,6 +396,7 @@ bool VulkanRender(VkContext* vkContext)
 	VkResult renderSubmitResult = vkQueueSubmit(vkContext->graphicsQueue, 1, &submitInfo, 0);
 	if (renderSubmitResult != VK_SUCCESS)
 	{
+		std::cout << "Failed to submit render command" << std::endl;
 		return false;
 	}
 
@@ -407,14 +412,17 @@ bool VulkanRender(VkContext* vkContext)
 	VkResult queuePresentResult = vkQueuePresentKHR(vkContext->graphicsQueue, &presentInfo);
 	if (queuePresentResult != VK_SUCCESS)
 	{
+		std::cout << "Queue Present Failed" << std::endl;
 		return false;
 	}
 
-	VkResult waitResult = vkDeviceWaitIdle(vkContext->device);
-	if (waitResult != VK_SUCCESS)
-	{
-		return false;
-	}
+	// VkResult waitResult = vkDeviceWaitIdle(vkContext->device);
+	// if (waitResult != VK_SUCCESS)
+	// {
+	// 	return false;
+	// }
 
 	vkFreeCommandBuffers(vkContext->device, vkContext->commandPool, 1, &cmd);
+
+	return true;
 }

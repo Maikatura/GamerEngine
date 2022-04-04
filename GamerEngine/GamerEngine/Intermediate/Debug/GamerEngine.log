@@ -1,3 +1,2 @@
 ﻿  GamerEngine.cpp
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\GamerEngine\Source\vk_renderer.h(420): warning C4715: 'VulkanRender': not all control paths return a value
   GamerEngine.vcxproj -> C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Build\x64\Debug\GamerEngine.exe
