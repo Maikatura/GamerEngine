@@ -88,19 +88,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\Imgui\imgui.cpp" />
+    <ClCompile Include="Source\Core\Imgui\imgui_demo.cpp" />
+    <ClCompile Include="Source\Core\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="Source\Core\Imgui\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="Source\Core\Imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Source\Core\Imgui\imgui_tables.cpp" />
+    <ClCompile Include="Source\Core\Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Core\Rendering\Renderer.cpp" />
     <ClCompile Include="Source\GamerEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Core\Imgui\imconfig.h" />
+    <ClInclude Include="Source\Core\Imgui\imgui.h" />
+    <ClInclude Include="Source\Core\Imgui\imgui_impl_vulkan.h" />
+    <ClInclude Include="Source\Core\Imgui\imgui_impl_win32.h" />
+    <ClInclude Include="Source\Core\Imgui\imgui_internal.h" />
+    <ClInclude Include="Source\Core\Imgui\imstb_rectpack.h" />
+    <ClInclude Include="Source\Core\Imgui\imstb_textedit.h" />
+    <ClInclude Include="Source\Core\Imgui\imstb_truetype.h" />
     <ClInclude Include="Source\Core\Rendering\Renderer.h" />
     <ClInclude Include="Source\Core\Vulkan\GamerContext.h" />
     <ClInclude Include="Source\Core\Vulkan\GamerEngineCore.h" />
     <ClInclude Include="Source\Core\Vulkan\GamerInit.hpp" />
     <ClInclude Include="Source\Core\Vulkan\GamerRender.h" />
     <ClInclude Include="Source\Core\Vulkan\GamerSwapchain.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Core\Imgui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

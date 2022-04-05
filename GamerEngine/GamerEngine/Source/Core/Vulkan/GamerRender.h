@@ -6,6 +6,9 @@
 #endif
 #include <iostream>
 
+#include "../Imgui/imgui_impl_vulkan.h"
+#include "../Imgui/imgui_impl_win32.h"
+
 bool VulkanRender(VkContext* vkContext)
 {
 	uint32_t imgIndex;
@@ -15,7 +18,7 @@ bool VulkanRender(VkContext* vkContext)
 		std::cout << "Failed to acquire next image" << std::endl;
 		return false;
 	}
-	VkCommandBuffer cmd;
+	VkCommandBuffer cmd;;
 	VkCommandBufferAllocateInfo allcInfo = {};
 	allcInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	allcInfo.commandBufferCount = 1;
@@ -48,6 +51,8 @@ bool VulkanRender(VkContext* vkContext)
 		range.levelCount = 1;
 		
 		vkCmdClearColorImage(cmd, vkContext->scImages[imgIndex], VK_IMAGE_LAYOUT_GENERAL , &color, 1, &range);
+		
+		
 	}
 
 	VkResult endResult = vkEndCommandBuffer(cmd);
@@ -98,6 +103,6 @@ bool VulkanRender(VkContext* vkContext)
 	// }
 
 	vkFreeCommandBuffers(vkContext->device, vkContext->commandPool, 1, &cmd);
-
+	
 	return true;
 }

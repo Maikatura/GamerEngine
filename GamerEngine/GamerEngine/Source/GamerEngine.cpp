@@ -82,6 +82,9 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 
     bool engineStartFailed = myEngine.Init(hWnd);
 
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2((float)WindowWidth, (float)WindowHeight);
+
     if (!engineStartFailed)
     {
         std::cout << "Failed to Initialize Vulkan" << std::endl;
@@ -103,7 +106,15 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
             {
                 std::cout << "Failed to Render" << std::endl;
                 return -1;
-            }    
+            }
+            
+            ImGui_ImplVulkan_NewFrame();
+            ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
+            ImGui::ShowDemoWindow();
+            ImGui::Render();
+            
+
         }
     }
 

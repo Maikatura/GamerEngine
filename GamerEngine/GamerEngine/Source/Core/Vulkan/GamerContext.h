@@ -10,11 +10,17 @@ struct VkContext
     VkPhysicalDevice gpu;
     VkDevice device;
     VkQueue graphicsQueue;
+    VkPipelineCache pipelineCache;
     VkSwapchainKHR swapchain;
     VkCommandPool commandPool;
+    VkDescriptorPool descriptorPool;
 
     VkSemaphore aquireSemaphore;
     VkSemaphore submitSemaphore;
+
+    VkRenderPass renderPass;
+    VkPipelineLayout pipelineLayout;
+
     
     uint32_t scImgCount;
     VkImage scImages[5];
