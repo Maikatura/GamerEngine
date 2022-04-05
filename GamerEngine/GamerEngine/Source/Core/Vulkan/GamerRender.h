@@ -52,12 +52,13 @@ bool VulkanRender(VkContext* vkContext)
 		
 		vkCmdClearColorImage(cmd, vkContext->scImages[imgIndex], VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, &color, 1, &range);
 
-		/*ImGui_ImplVulkan_NewFrame();
+#if _DEBUG
+		ImGui_ImplVulkan_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 		ImGui::ShowDemoWindow();
-		ImGui::Render();*/
-		
+		ImGui::Render();
+#endif	
 	}
 
 	VkResult endResult = vkEndCommandBuffer(cmd);
