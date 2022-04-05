@@ -6,6 +6,9 @@
 #endif
 #include <iostream>
 
+#include "../Imgui/imgui_impl_vulkan.h"
+#include "Core/Imgui/imgui.h"
+
 bool CreateVulkanSwapChain(VkContext* vkContext)
 {
 	// Swapchain
@@ -182,6 +185,8 @@ bool RecreateVulkanSwapChain(VkContext* vkContext)
 	{
 		return false;
 	}
+
+	
 	
 	vkDeviceWaitIdle(vkContext->device);
 

@@ -50,6 +50,10 @@ namespace GamerEngine
         void ResizeViewport(const int aSizeX, const int aSizeY);
         bool DestroyInstance();
 
+        void CreateCommandPool(VkCommandPool* commandPool, VkCommandPoolCreateFlags flags);
+        void CreateCommandBuffer(VkCommandBuffer* commandBuffer, uint32_t commandBufferCount, VkCommandPool& commandPool);
+        void CreateFrameBuffer();
+        
         VkCommandBuffer BeginSingleTimeCommand();
         void EndSingleTimeCommands(VkCommandBuffer commandBuffer);
 
@@ -82,7 +86,7 @@ inline bool GamerEngine::GamerEngine::Init(void* aWindow, std::string aGameName,
 #elif LINUX_BUILD
 #endif
         VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
-        VK_KHR_SURFACE_EXTENSION_NAME
+        VK_KHR_SURFACE_EXTENSION_NAME,
     };
 
     const char* layers[]
@@ -270,11 +274,39 @@ inline bool GamerEngine::GamerEngine::Init(void* aWindow, std::string aGameName,
 
         if (vkCreateDescriptorPool(myWindowContext.device, &poolInfo, nullptr, &myWindowContext.descriptorPool) != VK_SUCCESS)
         {
+            std::cout << "Failed to create descriptor pool" << std::endl;
+            return false;
+        }
+    }
+    
+    CreateVulkanSwapChain(vkContext);
+    {
+        VkImageViewCreateInfo createInfo{};
+        createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        createInfo.image = myWindowContext.scImages[0];
+        createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        createInfo.format = VK_FORMAT_B8G8R8A8_SRGB;
+        createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        createInfo.subresourceRange.baseMipLevel = 0;
+        createInfo.subresourceRange.levelCount = 1;
+        createInfo.subresourceRange.baseArrayLayer = 0;
+        createInfo.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(myWindowContext.device, &createInfo, nullptr, &myWindowContext.imageView) != VK_SUCCESS)
+            {
+            std::cout << "Fail to create Image View" << std::endl;
             return false;
         }
     }
 
-    CreateVulkanSwapChain(vkContext);
+    CreateFrameBuffer();
+
+    
+    
 
 #if _DEBUG
     if (!InitImGui())
@@ -288,28 +320,28 @@ inline bool GamerEngine::GamerEngine::Init(void* aWindow, std::string aGameName,
 
 inline bool GamerEngine::GamerEngine::InitImGui()
 {
-    
-    
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGui::StyleColorsDark();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
 
+    ImGui::StyleColorsDark();
     
 
+    
     // Setup Platform/Renderer bindings
     ImGui_ImplWin32_Init(myWindow);
     ImGui_ImplVulkan_InitInfo init_info = {};
     init_info.Instance = myWindowContext.instance;
     init_info.PhysicalDevice = myWindowContext.gpu;
     init_info.Device = myWindowContext.device;
-    //init_info.QueueFamily = myWindowContext.graphicsQueue;
+    init_info.QueueFamily = myWindowContext.graphicsIndex;
     init_info.Queue = myWindowContext.graphicsQueue;
     init_info.PipelineCache = VK_NULL_HANDLE;
     init_info.DescriptorPool = myWindowContext.descriptorPool;
     init_info.Allocator = nullptr;
     init_info.MinImageCount = 2;
     init_info.ImageCount = myWindowContext.scImgCount;
-    //init_info.CheckVkResultFn = check_vk_result;
+    init_info.CheckVkResultFn = nullptr;
     ImGui_ImplVulkan_Init(&init_info, myWindowContext.renderPass);
 
     // Upload the fonts for DearImgui
@@ -347,6 +379,53 @@ inline bool GamerEngine::GamerEngine::DestroyInstance()
 
 
     return true;
+}
+
+inline void GamerEngine::GamerEngine::CreateCommandPool(VkCommandPool* commandPool, VkCommandPoolCreateFlags flags)
+{
+    
+        VkCommandPoolCreateInfo commandPoolCreateInfo = {};
+        commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+        commandPoolCreateInfo.queueFamilyIndex = myWindowContext.graphicsIndex;
+        commandPoolCreateInfo.flags = flags;
+
+        if (vkCreateCommandPool(myWindowContext.device, &commandPoolCreateInfo, nullptr, commandPool) != VK_SUCCESS) {
+            throw std::runtime_error("Could not create graphics command pool");
+        }
+
+}
+
+inline void GamerEngine::GamerEngine::CreateCommandBuffer(VkCommandBuffer* commandBuffer, uint32_t commandBufferCount,
+    VkCommandPool& commandPool)
+{
+    VkCommandBufferAllocateInfo commandBufferAllocateInfo = {};
+    commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    commandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    commandBufferAllocateInfo.commandPool = commandPool;
+    commandBufferAllocateInfo.commandBufferCount = commandBufferCount;
+    vkAllocateCommandBuffers(myWindowContext.device, &commandBufferAllocateInfo, commandBuffer);
+}
+
+inline void GamerEngine::GamerEngine::CreateFrameBuffer()
+{
+    for (size_t i = 0; i < 1; i++) {
+        VkImageView attachments[] = {
+            myWindowContext.imageView
+        };
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = myWindowContext.renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = 800;
+        framebufferInfo.height = 600;
+        framebufferInfo.layers = 1;
+
+        if (vkCreateFramebuffer(myWindowContext.device, &framebufferInfo, nullptr, &myWindowContext.frameBuffer) != VK_SUCCESS) {
+            std::cout << "Could not create framebuffer" << std::endl;
+        }
+    }
 }
 
 inline VkCommandBuffer GamerEngine::GamerEngine::BeginSingleTimeCommand()

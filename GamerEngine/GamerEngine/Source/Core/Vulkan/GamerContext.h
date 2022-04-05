@@ -15,6 +15,9 @@ struct VkContext
     VkCommandPool commandPool;
     VkDescriptorPool descriptorPool;
 
+    VkFramebuffer frameBuffer;
+    VkImageView  imageView;
+    
     VkSemaphore aquireSemaphore;
     VkSemaphore submitSemaphore;
 

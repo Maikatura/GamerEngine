@@ -33,12 +33,8 @@ LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-//int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
-//{
-//   
-//}
 
-
+#if _DEBUG
 int main()
 {
     /* - Initialize Global Variables - */
@@ -99,6 +95,98 @@ int main()
 
     while (myEngineIsRunning)
     {
+	    MSG msg = { 0 };
+	    while (msg.message != WM_QUIT)
+	    {
+	        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+	        {
+	            TranslateMessage(&msg);
+	            DispatchMessage(&msg);
+	        }
+
+	        if (myEngineIsRunning)
+	        {
+	            if (!myEngine.Update())
+	            {
+	                std::cout << "Failed to Render" << std::endl;
+	                return -1;
+	            }
+
+	#if _DEBUG
+	           /* ImGui_ImplVulkan_NewFrame();
+	            ImGui_ImplWin32_NewFrame();
+	            ImGui::NewFrame();
+	            ImGui::ShowDemoWindow();
+	            ImGui::Render();*/
+	#endif
+	        }
+	    }
+    }
+
+    myEngine.DestroyInstance();
+
+    return 0;
+}
+#else
+int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
+{
+   /* - Initialize Global Variables - */
+    wcscpy_s(WindowClass, TEXT("GamerEngine"));
+    wcscpy_s(WindowTitle, TEXT("GamerEngine"));
+
+    WindowWidth = 1280;
+    WindowHeight = 720;
+
+    /* - Create Window Class - */
+
+    WNDCLASSEX wcex;
+    wcex.cbSize = sizeof(WNDCLASSEX);
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.cbClsExtra = 0;
+    wcex.cbWndExtra = 0;
+
+    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
+
+    wcex.hIcon = LoadIcon(0, IDI_APPLICATION);
+    wcex.hIconSm = LoadIcon(0, IDI_APPLICATION);
+
+    wcex.lpszClassName = WindowClass;
+    wcex.lpszMenuName = nullptr;
+
+    wcex.hInstance = HInstance();
+
+    wcex.lpfnWndProc = WindowProcess;
+
+    RegisterClassEx(&wcex);
+
+    /* - Create and Display our Window - */
+
+
+    HWND hWnd = CreateWindow(WindowClass, WindowTitle,
+        WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+        0, 0, WindowWidth, WindowHeight, nullptr, nullptr, HInstance(), nullptr);
+
+    if (!hWnd)
+    {
+        MessageBox(0, L"Failed to Create Window.", 0, 0);
+        return 0;
+    }
+
+    ShowWindow(hWnd, SW_SHOW);
+
+    bool engineStartFailed = myEngine.Init(hWnd);
+#if _DEBUG
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2((float)WindowWidth, (float)WindowHeight);
+#endif
+    if (!engineStartFailed)
+    {
+        std::cout << "Failed to Initialize Vulkan" << std::endl;
+        return -1;
+    }
+
+    
     MSG msg = { 0 };
     while (msg.message != WM_QUIT)
     {
@@ -124,7 +212,6 @@ int main()
             ImGui::Render();*/
 #endif
         }
-    }
    
 	    
     }
@@ -133,3 +220,4 @@ int main()
 
     return 0;
 }
+#endif

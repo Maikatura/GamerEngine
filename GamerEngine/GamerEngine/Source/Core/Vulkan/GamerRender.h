@@ -42,6 +42,15 @@ bool VulkanRender(VkContext* vkContext)
 		return false;
 	}
 
+	// Render pass does so you can render to the swapchain image
+	VkRenderPassBeginInfo renderPassInfo = {};
+	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	renderPassInfo.renderPass = vkContext->renderPass;
+	renderPassInfo.framebuffer = vkContext->frameBuffer;
+	renderPassInfo.renderArea.offset = { 0, 0 };
+	//renderPassInfo.renderArea.extent = vkContext->swapchainExtent;
+
+	
 	// Render Command
 	{
 		VkClearColorValue color = { 0.09f,0.55f,0.76f, 1.0f };
@@ -52,15 +61,24 @@ bool VulkanRender(VkContext* vkContext)
 		
 		vkCmdClearColorImage(cmd, vkContext->scImages[imgIndex], VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, &color, 1, &range);
 
+
+		
 #if _DEBUG
-		ImGui_ImplVulkan_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
-		ImGui::Render();
+		// Record dear imgui primitives into command buffer
+
+		// auto io = ImGui::GetIO();
+		// io.DisplaySize = ImVec2(800, 600);
+		//
+		//
+		// ImGui_ImplVulkan_NewFrame();
+		// ImGui_ImplWin32_NewFrame();
+		// ImGui::NewFrame();
+		//
+		// ImGui::ShowDemoWindow();
+		// ImGui::Render();
 #endif	
 	}
-
+	
 	VkResult endResult = vkEndCommandBuffer(cmd);
 	if (endResult != VK_SUCCESS)
 	{
