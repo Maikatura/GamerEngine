@@ -42,15 +42,8 @@ bool VulkanRender(VkContext* vkContext)
 		return false;
 	}
 
-	// Render pass does so you can render to the swapchain image
-	VkRenderPassBeginInfo renderPassInfo = {};
-	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-	renderPassInfo.renderPass = vkContext->renderPass;
-	renderPassInfo.framebuffer = vkContext->frameBuffer;
-	renderPassInfo.renderArea.offset = { 0, 0 };
-	//renderPassInfo.renderArea.extent = vkContext->swapchainExtent;
-
 	
+
 	// Render Command
 	{
 		VkClearColorValue color = { 0.09f,0.55f,0.76f, 1.0f };
@@ -78,6 +71,9 @@ bool VulkanRender(VkContext* vkContext)
 		// ImGui::Render();
 #endif	
 	}
+
+	
+	
 	
 	VkResult endResult = vkEndCommandBuffer(cmd);
 	if (endResult != VK_SUCCESS)
