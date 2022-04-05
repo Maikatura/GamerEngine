@@ -50,8 +50,13 @@ bool VulkanRender(VkContext* vkContext)
 		range.layerCount = 1;
 		range.levelCount = 1;
 		
-		vkCmdClearColorImage(cmd, vkContext->scImages[imgIndex], VK_IMAGE_LAYOUT_GENERAL , &color, 1, &range);
-		
+		vkCmdClearColorImage(cmd, vkContext->scImages[imgIndex], VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, &color, 1, &range);
+
+		/*ImGui_ImplVulkan_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow();
+		ImGui::Render();*/
 		
 	}
 
@@ -86,7 +91,7 @@ bool VulkanRender(VkContext* vkContext)
 	presentInfo.pSwapchains = &vkContext->swapchain;
 	presentInfo.swapchainCount = 1;
 	presentInfo.pImageIndices = &imgIndex;
-	presentInfo.pWaitSemaphores = &vkContext->submitSemaphore;
+	presentInfo.pWaitSemaphores = &vkContext->aquireSemaphore;
 	presentInfo.waitSemaphoreCount = 1;
 	
 	VkResult queuePresentResult = vkQueuePresentKHR(vkContext->graphicsQueue, &presentInfo);
@@ -96,13 +101,13 @@ bool VulkanRender(VkContext* vkContext)
 		return false;
 	}
 
-	// VkResult waitResult = vkDeviceWaitIdle(vkContext->device);
-	// if (waitResult != VK_SUCCESS)
-	// {
-	// 	return false;
-	// }
+	 VkResult waitResult = vkDeviceWaitIdle(vkContext->device); // For now this fixes memory leak
+	 if (waitResult != VK_SUCCESS)
+	 {
+	 	return false;
+	 }
 
 	vkFreeCommandBuffers(vkContext->device, vkContext->commandPool, 1, &cmd);
-	
+
 	return true;
 }

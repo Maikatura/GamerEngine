@@ -1,3 +1,2 @@
 ﻿  GamerEngine.cpp
-C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\GamerEngine\Source\Core\Vulkan\GamerSwapchain.h(122): warning C4715: 'CreateVulkanSwapChain': not all control paths return a value
   GamerEngine.vcxproj -> C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Build\x64\Debug\GamerEngine.exe

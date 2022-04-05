@@ -25,9 +25,11 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL VkDebugCallback(
     msgServerity;
     msgFlags;
     pUserData;
+    pCallbackData;
 
-
-    std::cout << pCallbackData->pMessage << std::endl;
+#if _DEBUG
+    //std::cout << pCallbackData->pMessage << std::endl;
+#endif
     return false;
 }
 
@@ -63,6 +65,9 @@ inline GamerEngine::GamerEngine::GamerEngine()
 
 inline bool GamerEngine::GamerEngine::Init(void* aWindow, std::string aGameName, const int sizeX, const int sizeY)
 {
+    sizeX;
+    sizeY;
+
     auto vkContext = &myWindowContext;
     myWindow = static_cast<HWND>(aWindow);
 
@@ -252,15 +257,16 @@ inline bool GamerEngine::GamerEngine::Init(void* aWindow, std::string aGameName,
             { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
         };
 
-        VkDescriptorPoolSize poolSize{};
+        VkDescriptorPoolSize poolSize = {};
         poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSize.descriptorCount = static_cast<uint32_t>(512);
+        poolSize.descriptorCount = static_cast<uint32_t>(2);
 
-        VkDescriptorPoolCreateInfo poolInfo{};
+        VkDescriptorPoolCreateInfo poolInfo = {};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         poolInfo.poolSizeCount = 1;
         poolInfo.pPoolSizes = &poolSize;
-        poolInfo.maxSets = static_cast<uint32_t>(512);
+        poolInfo.maxSets = static_cast<uint32_t>(2);
+        poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
 
         if (vkCreateDescriptorPool(myWindowContext.device, &poolInfo, nullptr, &myWindowContext.descriptorPool) != VK_SUCCESS)
         {
@@ -270,11 +276,12 @@ inline bool GamerEngine::GamerEngine::Init(void* aWindow, std::string aGameName,
 
     CreateVulkanSwapChain(vkContext);
 
-
+#if _DEBUG
     if (!InitImGui())
     {
         return false;
     }
+#endif
 
     return true;
 }
@@ -320,8 +327,6 @@ inline bool GamerEngine::GamerEngine::InitImGui()
 
 inline bool GamerEngine::GamerEngine::Update()
 {
-    
-
     return VulkanRender(&myWindowContext);
 }
 

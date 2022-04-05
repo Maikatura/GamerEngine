@@ -1,4 +1,4 @@
-#include <windows.h>
+#include <Windows.h>
 #include "Core/Vulkan/GamerEngineCore.h"
 #include "Core/Vulkan/GamerInit.hpp"
 #include "Core/Vulkan/GamerSwapchain.h"
@@ -33,7 +33,13 @@ LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
+//int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
+//{
+//   
+//}
+
+
+int main()
 {
     /* - Initialize Global Variables - */
     wcscpy_s(WindowClass, TEXT("GamerEngine"));
@@ -69,8 +75,8 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 
 
     HWND hWnd = CreateWindow(WindowClass, WindowTitle,
-                             WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
-                             0, 0, WindowWidth, WindowHeight, nullptr, nullptr, HInstance(), nullptr);
+        WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+        0, 0, WindowWidth, WindowHeight, nullptr, nullptr, HInstance(), nullptr);
 
     if (!hWnd)
     {
@@ -81,17 +87,19 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
     ShowWindow(hWnd, SW_SHOW);
 
     bool engineStartFailed = myEngine.Init(hWnd);
-
+#if _DEBUG
     ImGuiIO& io = ImGui::GetIO();
     io.DisplaySize = ImVec2((float)WindowWidth, (float)WindowHeight);
-
+#endif
     if (!engineStartFailed)
     {
         std::cout << "Failed to Initialize Vulkan" << std::endl;
         return -1;
     }
 
-    MSG msg = {0};
+    while (myEngineIsRunning)
+    {
+    MSG msg = { 0 };
     while (msg.message != WM_QUIT)
     {
         if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
@@ -107,15 +115,18 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
                 std::cout << "Failed to Render" << std::endl;
                 return -1;
             }
-            
-            ImGui_ImplVulkan_NewFrame();
+
+#if _DEBUG
+           /* ImGui_ImplVulkan_NewFrame();
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
             ImGui::ShowDemoWindow();
-            ImGui::Render();
-            
-
+            ImGui::Render();*/
+#endif
         }
+    }
+   
+	    
     }
 
     myEngine.DestroyInstance();

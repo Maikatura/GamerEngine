@@ -90,6 +90,7 @@ bool CreateVulkanSwapChain(VkContext* vkContext)
 		VkCommandPoolCreateInfo poolInfo = {};
 		poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 		poolInfo.queueFamilyIndex = vkContext->graphicsIndex;
+		poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 		VkResult commandResult = vkCreateCommandPool(vkContext->device, &poolInfo, 0, &vkContext->commandPool);
 
 		if (commandResult != VK_SUCCESS)
@@ -155,7 +156,8 @@ bool CreateVulkanSwapChain(VkContext* vkContext)
 			return false;
 		}
 	}
-	
+
+	return true;
 }
 
 bool DestroyVulkanSwapChain(VkContext* vkContext)
