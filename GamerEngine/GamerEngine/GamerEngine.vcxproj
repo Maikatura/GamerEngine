@@ -88,10 +88,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\Rendering\Renderer.cpp" />
     <ClCompile Include="Source\GamerEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\vk_renderer.h" />
+    <ClInclude Include="Source\Core\Rendering\Renderer.h" />
+    <ClInclude Include="Source\Core\Vulkan\GamerContext.h" />
+    <ClInclude Include="Source\Core\Vulkan\GamerEngineCore.h" />
+    <ClInclude Include="Source\Core\Vulkan\GamerInit.hpp" />
+    <ClInclude Include="Source\Core\Vulkan\GamerRender.h" />
+    <ClInclude Include="Source\Core\Vulkan\GamerSwapchain.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Source\Core\Imgui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,9 +24,27 @@
     <ClCompile Include="Source\GamerEngine.cpp">
       <Filter>Source Files\Private</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Rendering\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\vk_renderer.h">
+    <ClInclude Include="Source\Core\Rendering\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Vulkan\GamerContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Vulkan\GamerEngineCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Vulkan\GamerInit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Vulkan\GamerRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Vulkan\GamerSwapchain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

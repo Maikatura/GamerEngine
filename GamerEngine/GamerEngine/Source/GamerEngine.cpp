@@ -1,5 +1,8 @@
 #include <windows.h>
-#include "vk_renderer.h"
+#include "Core/Vulkan/GamerEngineCore.h"
+#include "Core/Vulkan/GamerInit.hpp"
+#include "Core/Vulkan/GamerSwapchain.h"
+
 #define  MAX_NAME_STRING 256
 #define HInstance() GetModuleHandle(NULL)
 
@@ -9,12 +12,21 @@ WCHAR WindowTitle[MAX_NAME_STRING];
 INT WindowWidth;
 INT WindowHeight;
 
+static bool myEngineIsRunning = true;
+GamerEngine::GamerEngine myEngine;
+
 LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch(message)
+    switch (message)
     {
         case WM_DESTROY:
+            myEngineIsRunning = false;
             PostQuitMessage(0);
+            break;
+
+        case WM_SIZE:
+            myEngine.UpdateSwapchain();
+            std::cout << "Window size changed" << std::endl;
             break;
     }
 
@@ -23,8 +35,6 @@ LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
 int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 {
-    VkContext windowVulkan = {};
-
     /* - Initialize Global Variables - */
     wcscpy_s(WindowClass, TEXT("GamerEngine"));
     wcscpy_s(WindowTitle, TEXT("GamerEngine"));
@@ -58,11 +68,9 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
     /* - Create and Display our Window - */
 
 
-
-
     HWND hWnd = CreateWindow(WindowClass, WindowTitle,
-        WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
-        0, 0, WindowWidth, WindowHeight, nullptr, nullptr, HInstance(), nullptr);
+                             WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+                             0, 0, WindowWidth, WindowHeight, nullptr, nullptr, HInstance(), nullptr);
 
     if (!hWnd)
     {
@@ -70,10 +78,11 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
         return 0;
     }
 
-
     ShowWindow(hWnd, SW_SHOW);
 
-    if (!VulkanInit(&windowVulkan, hWnd))
+    bool engineStartFailed = myEngine.Init(hWnd);
+
+    if (!engineStartFailed)
     {
         std::cout << "Failed to Initialize Vulkan" << std::endl;
         return -1;
@@ -82,21 +91,23 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
     MSG msg = {0};
     while (msg.message != WM_QUIT)
     {
-        if (PeekMessage(&msg, 0,0,0, PM_REMOVE))
+        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
 
-        if (!VulkanRender(&windowVulkan))
+        if (myEngineIsRunning)
         {
-            std::cout << "Failed to Render" << std::endl;
-            return -1;
+            if (!myEngine.Update())
+            {
+                std::cout << "Failed to Render" << std::endl;
+                return -1;
+            }    
         }
     }
 
-
+    myEngine.DestroyInstance();
 
     return 0;
-
 }
