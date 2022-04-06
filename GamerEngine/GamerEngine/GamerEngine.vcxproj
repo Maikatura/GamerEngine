@@ -57,7 +57,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;WINDOWS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -65,7 +65,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(SolutionDir)External;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -118,11 +118,11 @@
     <ClInclude Include="Source\Core\Imgui\imstb_textedit.h" />
     <ClInclude Include="Source\Core\Imgui\imstb_truetype.h" />
     <ClInclude Include="Source\Core\Rendering\Renderer.h" />
-    <ClInclude Include="Source\Core\Vulkan\GamerContext.h" />
-    <ClInclude Include="Source\Core\Vulkan\GamerEngineCore.h" />
-    <ClInclude Include="Source\Core\Vulkan\GamerInit.hpp" />
-    <ClInclude Include="Source\Core\Vulkan\GamerRender.h" />
-    <ClInclude Include="Source\Core\Vulkan\GamerSwapchain.h" />
+    <ClInclude Include="Source\Core\Vulkan\defines.h" />
+    <ClInclude Include="Source\Core\Vulkan\vk_init.h" />
+    <ClInclude Include="Source\Core\Vulkan\vk_renderer.h" />
+    <ClCompile Include="Source\Core\win32_platform.cpp" />
+    <ClInclude Include="Source\Core\Vulkan\platform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
