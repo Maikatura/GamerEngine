@@ -1,10 +1,15 @@
-#include"imgui.h"
-#include"imgui_impl_glfw.h"
-#include"imgui_impl_opengl3.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
-#include<iostream>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
+#include <iostream>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <vector>
+
+#include "imgui_internal.h"
+#include "Core/Models/Model.h"
+#include "imguizmo/ImGuizmo.h"
 
 // Vertex Shader source code
 const char* vertexShaderSource = "#version 330 core\n"
@@ -23,12 +28,14 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "   FragColor = color;\n"
 "}\n\0";
 
-
+//Model model;
 
 int main()
 {
 	glfwInit();
 
+	//model.load("Models/Test.obj");
+	
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -115,6 +122,8 @@ int main()
 		 	glDrawArrays(GL_TRIANGLES, 0, 3);
 		}
 
+		//model.draw();
+		
 		ImGui::ShowDemoWindow();
 		glUseProgram(shaderProgram);
 		glUniform1f(glGetUniformLocation(shaderProgram, "size"), size);
@@ -138,3 +147,4 @@ int main()
 	glfwTerminate();
 	return 0;
 }
+
