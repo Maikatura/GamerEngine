@@ -1,7 +1,5 @@
 #pragma once
-
 #include "pch.h"
-
 #include "render/render_base.h"
 #include "vertex_holder.h"
 #include "elems/element.h"
@@ -28,6 +26,9 @@ namespace nelems
 
 		void update(nshaders::Shader* shader) override
 		{
+
+			shader->set_vec3(myTransform.myPosition, "myPosition");
+
 			// pbr color
 			shader->set_vec3(mColor, "albedo");
 
@@ -35,7 +36,6 @@ namespace nelems
 			shader->set_f1(mMetallic, "metallic");
 			shader->set_f1(1.0f, "ao");
 			
-
 		}
 
 		glm::vec3 GetPosition();

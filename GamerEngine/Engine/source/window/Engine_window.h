@@ -9,6 +9,7 @@
 #include "render/opengl_context.h"
 #include "render/opengl_buffer_manager.h"
 #include "ui/ContentBrowserPanel.h"
+#include "ui/InspectorPanel.h"
 
 #include "window/window.h"
 
@@ -70,7 +71,8 @@ namespace nwindow
 
 		// UI components
 		std::unique_ptr<Property_Panel> mPropertyPanel;
-		std::unique_ptr<ContentBrowserPanel> myContentBrowser;
+		std::unique_ptr<ContentBrowserPanel> myContentBrowserPanel;
+		std::unique_ptr<InspectorPanel> myInspectorPanel;
 
 		std::unique_ptr<SceneView> mSceneView;
 

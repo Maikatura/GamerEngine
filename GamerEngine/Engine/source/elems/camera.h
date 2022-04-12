@@ -4,12 +4,12 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "input.h"
-#include "element.h"
+#include "Models/Model.h"
 #include "shader/shader_util.h"
 
 namespace nelems
 {
-	class Camera : public Element
+	class Camera
 	{
 	public:
 
@@ -26,10 +26,19 @@ namespace nelems
 			update_view_matrix();
 		}
 
-		void update(nshaders::Shader* shader) override
+		void update(Model* aModel, nshaders::Shader* shader)
 		{
-			glm::mat4 model{ 1.0f };
-			shader->set_mat4(model, "model");
+
+			glm::mat4 model{1.0f};
+			if (aModel)
+			{
+				//shader->set_vec3(aModel->myTransform.myPosition, "myPosition");
+				shader->set_mat4(glm::scale(model, aModel->myTransform.myScale), "model");
+			}
+			else
+			{
+				shader->set_mat4(model, "model");
+			}
 			shader->set_mat4(mViewMatrix, "view");
 			shader->set_mat4(get_projection(), "projection");
 			shader->set_vec3(mPosition, "camPos");

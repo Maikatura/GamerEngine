@@ -49,28 +49,13 @@ namespace nui
 		}
 
 		mFrameBuffer->unbind();
-
-		if (mMesh)
-		{
-			ImGui::Begin("Inspector");
-
-			ImGui::Text("Transform");
-			ImGui::Text("Position");
-			nimgui::DrawImGuiPosition("Position", mMesh->myTransform);
-			ImGui::Text("Rotation");
-			nimgui::DrawImGuiRotation("Rotation", mMesh->myTransform);
-			ImGui::Text("Scale");
-			nimgui::DrawImGuiScale("Scale", mMesh->myTransform);
-
-			ImGui::End();
-		}
 		ImGui::Begin("Scene");
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		mSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 		mCamera->set_aspect(mSize.x / mSize.y);
-		mCamera->update(mShader.get());
+		mCamera->update(mMesh.get(), mShader.get());
 
 		// add rendered texture to ImGUI scene window
 		uint64_t textureID = mFrameBuffer->get_texture();

@@ -3,7 +3,7 @@
 
 namespace nui
 {
-	void Property_Panel::Render(nui::SceneView* scene_view)
+	void Property_Panel::OnImGuiRender(nui::SceneView* scene_view)
 	{
 		auto mesh = scene_view->get_mesh();
 
@@ -29,10 +29,10 @@ namespace nui
 		if (ImGui::CollapsingHeader("Light"))
 		{
 
-			ImGui::Separator();
+			/*ImGui::Separator();
 			ImGui::Text("Position");
 			ImGui::Separator();
-			nimgui::draw_vec3_widget("Position", scene_view->get_light()->mPosition, 80.0f);
+			nimgui::draw_vec3_widget("Position", scene_view->get_light()->mPosition, 80.0f);*/
 		}
 
 		ImGui::End();

@@ -3,8 +3,9 @@
 #include <imgui.h>
 
 
-ContentBrowserPanel::ContentBrowserPanel() : myFilePath("Assets")
+ContentBrowserPanel::ContentBrowserPanel() : myAssetPath("Assets")
 {
+	myCurrentDirectory = myAssetPath;
 }
 
 ContentBrowserPanel::~ContentBrowserPanel()
@@ -15,11 +16,38 @@ void ContentBrowserPanel::OnImGuiRender()
 {
 	ImGui::Begin("Content Browser");
 
-	auto relativePath = std::filesystem::relative(myFilePath);
+	auto relativePath = std::filesystem::relative(myAssetPath);
 
-	for(auto& itPath : relativePath)
+	if (myCurrentDirectory != myAssetPath)
 	{
-		ImGui::Button(itPath.filename().string().c_str());
+		if(ImGui::Button("<-"))
+		{
+			myCurrentDirectory = myCurrentDirectory.parent_path();
+		}
+	}
+
+	for(auto& directoryEntry : std::filesystem::directory_iterator(myCurrentDirectory))
+	{
+
+		const auto& path = directoryEntry.path();
+		auto relativePath = std::filesystem::relative(path, myAssetPath);
+		std::string relativePathString = relativePath.filename().string();
+
+		if (directoryEntry.is_directory())
+		{
+			if (ImGui::Button(relativePathString.c_str()))
+			{
+				myCurrentDirectory /= path.filename();
+			}
+		}
+		else
+		{
+			if (ImGui::Button(relativePathString.c_str()))
+			{
+			}
+		}
+
+
 	}
 
 

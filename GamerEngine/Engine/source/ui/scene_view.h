@@ -23,7 +23,7 @@ namespace nui
       mShader->load("shaders/vs.shader", "shaders/fs_pbr.shader");
       mLight = std::make_unique<nelems::Light>();
 
-      mCamera = std::make_unique<nelems::Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 100.0f);
+      mCamera = std::make_unique<nelems::Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 1000.0f);
 
     }
 

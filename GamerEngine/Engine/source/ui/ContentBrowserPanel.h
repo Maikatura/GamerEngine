@@ -10,5 +10,6 @@ public:
 	void OnImGuiRender();
 
 private:
-	std::filesystem::path myFilePath;
+	std::filesystem::path myCurrentDirectory;
+	std::filesystem::path myAssetPath;
 };

@@ -23,7 +23,7 @@ namespace nui
 
 		}
 
-		void Render(nui::SceneView* mScene);
+		void OnImGuiRender(nui::SceneView* mScene);
 
 		void set_mesh_load_callback(const std::function<void(const std::string&)>& callback)
 		{
