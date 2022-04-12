@@ -65,9 +65,9 @@ namespace nrender
       return true;
     }
 
-    virtual void pre_render() = 0;
+    virtual void PreRender() = 0;
 
-    virtual void post_render() = 0;
+    virtual void PostRender() = 0;
 
     virtual void end() = 0;
 

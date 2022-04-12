@@ -6,6 +6,7 @@
 #include "shader/shader_util.h"
 #include "render/opengl_buffer_manager.h"
 #include "elems/input.h"
+#include "Models/Model.h"
 
 namespace nui
 {
@@ -33,19 +34,19 @@ namespace nui
 
     nelems::Light* get_light() { return mLight.get(); }
 
-    void resize(int32_t width, int32_t height);
+    void Resize(int32_t width, int32_t height);
 
 
-    void render();
+    void Render();
 
     void load_mesh(const std::string& filepath);
 
-    void set_mesh(std::shared_ptr<nelems::Mesh> mesh)
+    void set_mesh(std::shared_ptr<Model> mesh)
     {
       mMesh = mesh;
     }
 
-    std::shared_ptr<nelems::Mesh> get_mesh() { return mMesh; }
+    std::shared_ptr<Model> get_mesh() { return mMesh; }
     
     void on_mouse_move(double x, double y, nelems::EInputButton button);
 
@@ -61,7 +62,7 @@ namespace nui
     std::unique_ptr<nrender::OpenGL_FrameBuffer> mFrameBuffer;
     std::unique_ptr<nshaders::Shader> mShader;
     std::unique_ptr<nelems::Light> mLight;
-    std::shared_ptr<nelems::Mesh> mMesh;
+    std::shared_ptr<Model> mMesh;
     glm::vec2 mSize;
   };
 }

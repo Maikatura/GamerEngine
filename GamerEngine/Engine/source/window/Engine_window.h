@@ -38,24 +38,24 @@ namespace nwindow
 
     void render();
 
-    void handle_input();
+    void HandleInput();
 
-    void* get_native_window() override { return mWindow; }
+    void* GetNativeWindow() override { return mWindow; }
 
-    void set_native_window(void* window)
+    void SetNativeWindow(void* window)
     {
       mWindow = (GLFWwindow*)window;
     }
 
-    void on_scroll(double delta) override;
+    void OnScroll(double delta) override;
 
-    void on_key(int key, int scancode, int action, int mods) override;
+    void OnKey(int key, int scancode, int action, int mods) override;
 
-    void on_resize(int width, int height) override;
+    void OnResize(int width, int height) override;
 
-    void on_close() override;
+    void OnClose() override;
 
-    bool is_running() { return mIsRunning; }
+    bool IsRunning() { return mIsRunning; }
 
 
   private:

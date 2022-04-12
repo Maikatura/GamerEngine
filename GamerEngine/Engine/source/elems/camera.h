@@ -33,6 +33,7 @@ namespace nelems
 			shader->set_mat4(mViewMatrix, "view");
 			shader->set_mat4(get_projection(), "projection");
 			shader->set_vec3(mPosition, "camPos");
+
 		}
 
     void set_aspect(float aspect)

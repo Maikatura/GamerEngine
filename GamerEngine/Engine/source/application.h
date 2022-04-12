@@ -11,7 +11,7 @@ public:
 
   static Application& Instance() { return *sInstance; }
 
-  void loop();
+  void Loop();
 
 private:
   static Application* sInstance;

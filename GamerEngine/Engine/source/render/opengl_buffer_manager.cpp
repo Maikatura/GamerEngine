@@ -53,7 +53,7 @@ namespace nrender
   {
     bind();
 
-    // the vertices as line loop
+    
     glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 
     unbind();

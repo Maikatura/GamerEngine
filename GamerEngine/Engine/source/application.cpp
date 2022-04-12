@@ -11,9 +11,9 @@ Application::Application(const std::string& app_name)
 
 }
 
-void Application::loop()
+void Application::Loop()
 {
-  while (mWindow->is_running())
+  while (mWindow->IsRunning())
   {
     mWindow->render();
   }

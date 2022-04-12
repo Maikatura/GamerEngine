@@ -5,63 +5,71 @@
 #include "render/render_base.h"
 #include "vertex_holder.h"
 #include "elems/element.h"
+#include "Transform.h"
 
 namespace nelems
 {
-  class Mesh : public Element
-  {
-    
-  public:
+	class Mesh : public Element
+	{
 
-    Mesh() = default;
+	public:
 
-    virtual ~Mesh();
+		Mesh() = default;
 
-    bool load(const std::string& filepath);
+		virtual ~Mesh();
 
-    void add_vertex(const VertexHolder& vertex) { mVertices.push_back(vertex);  }
+		bool Load(const std::string& filepath);
 
-    void add_vertex_index(unsigned int vertex_idx) { mVertexIndices.push_back(vertex_idx); }
+		void add_vertex(const VertexHolder& vertex) { mVertices.push_back(vertex); }
 
-    std::vector<unsigned int> get_vertex_indices() { return mVertexIndices; }
+		void add_vertex_index(unsigned int vertex_idx) { mVertexIndices.push_back(vertex_idx); }
 
-    void update(nshaders::Shader* shader) override
-    {
-      // pbr color
-      shader->set_vec3(mColor, "albedo");
+		std::vector<unsigned int> get_vertex_indices() { return mVertexIndices; }
 
-      shader->set_f1(mRoughness, "roughness");
-      shader->set_f1(mMetallic, "metallic");
-      shader->set_f1(1.0f, "ao");
+		void update(nshaders::Shader* shader) override
+		{
+			// pbr color
+			shader->set_vec3(mColor, "albedo");
 
-    }
-    
-    glm::vec3 mColor = { 1.0f, 0.0f, 0.0f };
-    float mRoughness = 0.2f;
-    float mMetallic = 0.1f;
+			shader->set_f1(mRoughness, "roughness");
+			shader->set_f1(mMetallic, "metallic");
+			shader->set_f1(1.0f, "ao");
+			
 
-    void init();
+		}
 
-    void create_buffers();
+		glm::vec3 GetPosition();
 
-    void delete_buffers();
+		glm::vec3 mColor = { 1.0f, 0.0f, 0.0f };
+		float mRoughness = 0.2f;
+		float mMetallic = 0.1f;
 
-    void render();
+		void Init();
 
-    void bind();
+		void CreateBuffers();
 
-    void unbind();
+		void DeleteBuffers();
 
-  private:
-    
-    // Buffers manager
-    std::unique_ptr<nrender::VertexIndexBuffer> mRenderBufferMgr;
-    
-    // Vertices and indices
-    std::vector<VertexHolder> mVertices;
-    std::vector<unsigned int> mVertexIndices;
+		void Render();
+
+		void Bind();
+
+		void Unbind();
 
 
-  };
+		Transform myTransform = {};
+	private:
+
+		
+
+		// Buffers manager
+		std::unique_ptr<nrender::VertexIndexBuffer> mRenderBufferMgr;
+
+		// Vertices and indices
+		std::vector<VertexHolder> mVertices;
+		std::vector<unsigned int> mVertexIndices;
+
+
+	};
 }
 

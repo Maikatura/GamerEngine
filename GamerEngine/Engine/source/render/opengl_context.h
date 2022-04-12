@@ -10,9 +10,9 @@ namespace nrender
 
     bool init(nwindow::IWindow* window) override;
 
-    void pre_render() override;
+    void PreRender() override;
 
-    void post_render() override;
+    void PostRender() override;
 
     void end() override;
   };

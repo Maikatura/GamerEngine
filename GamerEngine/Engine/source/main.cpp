@@ -4,7 +4,7 @@
 int main(void)
 {
   auto app = std::make_unique<Application>("Gamer Engine");
-  app->loop();
+  app->Loop();
 
   return 0;
 }

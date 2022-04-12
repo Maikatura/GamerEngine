@@ -58,12 +58,12 @@ namespace nrender
     }
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)mWindow->get_native_window(), true);
+    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)mWindow->GetNativeWindow(), true);
     ImGui_ImplOpenGL3_Init(glsl_version);
     return true;
   }
 
-  void UIContext::pre_render()
+  void UIContext::PreRender()
   {
 
     // Start the Dear ImGui frame
@@ -95,7 +95,7 @@ namespace nrender
 
   }
 
-  void UIContext::post_render()
+  void UIContext::PostRender()
   {
     // Rendering
     ImGui::Render();

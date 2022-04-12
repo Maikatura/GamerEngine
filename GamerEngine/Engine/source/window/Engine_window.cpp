@@ -32,47 +32,46 @@ namespace nwindow
     mRenderCtx->end();
   }
 
-  void GLWindow::on_resize(int width, int height)
+  void GLWindow::OnResize(int width, int height)
   {
     Width = width;
     Height = height;
 
-    mSceneView->resize(Width, Height);
+    mSceneView->Resize(Width, Height);
     render();
   }
 
-  void GLWindow::on_scroll(double delta)
+  void GLWindow::OnScroll(double delta)
   {
     mSceneView->on_mouse_wheel(-delta);
   }
 
-  void GLWindow::on_key(int key, int scancode, int action, int mods)
+  void GLWindow::OnKey(int key, int scancode, int action, int mods)
   {
     if (action == GLFW_PRESS)
     {
     }
   }
 
-  void GLWindow::on_close()
+  void GLWindow::OnClose()
   {
     mIsRunning = false;
   }
 
   void GLWindow::render()
   {
-    mRenderCtx->pre_render();
-    mUICtx->pre_render();
-    mSceneView->render();
-  	mPropertyPanel->render(mSceneView.get());
-  	mUICtx->post_render();
-  	mRenderCtx->post_render();
+    mRenderCtx->PreRender();
+    mUICtx->PreRender();
+    mSceneView->Render();
+  	mPropertyPanel->Render(mSceneView.get());
+  	mUICtx->PostRender();
+  	mRenderCtx->PostRender();
 
-    handle_input();
+    HandleInput();
   }
 
-  void GLWindow::handle_input()
+  void GLWindow::HandleInput()
   {
-    
     if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
     {
       mSceneView->on_mouse_wheel(-0.4f);

@@ -4,91 +4,97 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-
 #include "render/opengl_buffer_manager.h"
 
 namespace nelems
 {
-  void Mesh::init()
-  {
-    mRenderBufferMgr = std::make_unique<nrender::OpenGL_VertexIndexBuffer>();
+	glm::vec3 Mesh::GetPosition()
+	{
+		return myTransform.myPosition;
+	}
 
-    create_buffers();
-  }
+	void Mesh::Init()
+	{
+		mRenderBufferMgr = std::make_unique<nrender::OpenGL_VertexIndexBuffer>();
 
-  Mesh::~Mesh()
-  {
-    delete_buffers();
-  }
+		CreateBuffers();
+	}
 
-  bool Mesh::load(const std::string& filepath)
-  {
-    const uint32_t cMeshImportFlags =
-      aiProcess_CalcTangentSpace |
-      aiProcess_Triangulate |
-      aiProcess_SortByPType |
-      aiProcess_GenNormals |
-      aiProcess_GenUVCoords |
-      aiProcess_OptimizeMeshes |
-      aiProcess_ValidateDataStructure;
+	Mesh::~Mesh()
+	{
+		DeleteBuffers();
+	}
 
-    Assimp::Importer Importer;
+	bool Mesh::Load(const std::string& filepath)
+	{
+		const uint32_t cMeshImportFlags =
+			aiProcess_CalcTangentSpace |
+			aiProcess_Triangulate |
+			aiProcess_SortByPType |
+			aiProcess_GenNormals |
+			aiProcess_GenUVCoords |
+			aiProcess_OptimizeMeshes |
+			aiProcess_ValidateDataStructure;
 
-    const aiScene* pScene = Importer.ReadFile(filepath.c_str(),
-      cMeshImportFlags);
+		Assimp::Importer Importer;
 
-    if (pScene && pScene->HasMeshes())
-    {
-      mVertexIndices.clear();
-      mVertices.clear();
+		const aiScene* pScene = Importer.ReadFile(filepath.c_str(),
+			cMeshImportFlags);
 
-      auto* mesh = pScene->mMeshes[0];
+		if (pScene && pScene->HasMeshes())
+		{
+			mVertexIndices.clear();
+			mVertices.clear();
 
-      for (uint32_t i = 0; i < mesh->mNumVertices; i++)
-      {
-        VertexHolder vh;
-        vh.mPos = { mesh->mVertices[i].x, mesh->mVertices[i].y ,mesh->mVertices[i].z };
-        vh.mNormal = { mesh->mNormals[i].x, mesh->mNormals[i].y ,mesh->mNormals[i].z };
+			auto* mesh = pScene->mMeshes[0];
 
-        add_vertex(vh);
-      }
+			for (uint32_t i = 0; i < mesh->mNumVertices; i++)
+			{
+				VertexHolder vh;
+				vh.mPos = { mesh->mVertices[i].x, mesh->mVertices[i].y ,mesh->mVertices[i].z };
+				vh.mNormal = { mesh->mNormals[i].x, mesh->mNormals[i].y ,mesh->mNormals[i].z };
 
-      for (size_t i = 0; i < mesh->mNumFaces; i++)
-      {
-        aiFace face = mesh->mFaces[i];
+				add_vertex(vh);
+			}
 
-        for (size_t j = 0; j < face.mNumIndices; j++)
-          add_vertex_index(face.mIndices[j]);
-      }
 
-      init();
-      return true;
-    }
-    return false;
-  }
+			for (size_t i = 0; i < mesh->mNumFaces; i++)
+			{
+				aiFace face = mesh->mFaces[i];
 
-  void Mesh::create_buffers()
-  {
-    mRenderBufferMgr->create_buffers(mVertices, mVertexIndices);
-  }
+				for (size_t j = 0; j < face.mNumIndices; j++)
+					add_vertex_index(face.mIndices[j]);
+			}
 
-  void Mesh::delete_buffers()
-  {
-    mRenderBufferMgr->delete_buffers();
-  }
+			Init();
+			return true;
+		}
+		return false;
+	}
 
-  void Mesh::bind()
-  {
-    mRenderBufferMgr->bind();
-  }
+	void Mesh::CreateBuffers()
+	{
+		mRenderBufferMgr->create_buffers(mVertices, mVertexIndices);
+	}
 
-  void Mesh::unbind()
-  {
-    mRenderBufferMgr->unbind();
-  }
+	void Mesh::DeleteBuffers()
+	{
+		mRenderBufferMgr->delete_buffers();
+	}
 
-  void Mesh::render()
-  {
-    mRenderBufferMgr->draw((int) mVertexIndices.size());
-  }
+	void Mesh::Bind()
+	{
+		mRenderBufferMgr->bind();
+	}
+
+	void Mesh::Unbind()
+	{
+		mRenderBufferMgr->unbind();
+	}
+
+	void Mesh::Render()
+	{
+
+		mRenderBufferMgr->draw((int)mVertexIndices.size());
+	}
 }

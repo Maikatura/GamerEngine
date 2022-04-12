@@ -26,7 +26,7 @@ namespace nelems
 
     glm::vec3 mNormal;
 
-    glm::vec3 mSize;
+    glm::vec3 mScale;
 
     // TODO
     // glm::vec2 mUV;

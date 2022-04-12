@@ -6,25 +6,25 @@ namespace nrender
   static void on_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
   {
     auto pWindow = static_cast<nwindow::IWindow*>(glfwGetWindowUserPointer(window));
-    pWindow->on_key(key, scancode, action, mods);
+    pWindow->OnKey(key, scancode, action, mods);
   }
 
   static void on_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
   {
     auto pWindow = static_cast<nwindow::IWindow*>(glfwGetWindowUserPointer(window));
-    pWindow->on_scroll(yoffset);
+    pWindow->OnScroll(yoffset);
   }
 
   static void on_window_size_callback(GLFWwindow* window, int width, int height)
   {
     auto pWindow = static_cast<nwindow::IWindow*>(glfwGetWindowUserPointer(window));
-    pWindow->on_resize(width, height);
+    pWindow->OnResize(width, height);
   }
 
   static void on_window_close_callback(GLFWwindow* window)
   {
     nwindow::IWindow* pWindow = static_cast<nwindow::IWindow*>(glfwGetWindowUserPointer(window));
-    pWindow->on_close();
+    pWindow->OnClose();
   }
 
   bool OpenGL_Context::init(nwindow::IWindow* window)
@@ -41,7 +41,7 @@ namespace nrender
     // Create the window and store this window as window pointer
     // so that we can use it in callback functions
     auto glWindow = glfwCreateWindow(window->Width, window->Height, window->Title.c_str(), nullptr, nullptr);
-    window->set_native_window(glWindow);
+    window->SetNativeWindow(glWindow);
 
     if (!glWindow)
     {
@@ -69,22 +69,22 @@ namespace nrender
     return true;
   }
 
-  void OpenGL_Context::pre_render()
+  void OpenGL_Context::PreRender()
   {
     glViewport(0, 0, mWindow->Width, mWindow->Height);
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
-  void OpenGL_Context::post_render()
+  void OpenGL_Context::PostRender()
   {
     glfwPollEvents();
-    glfwSwapBuffers((GLFWwindow*) mWindow->get_native_window());
+    glfwSwapBuffers((GLFWwindow*) mWindow->GetNativeWindow());
   }
 
   void OpenGL_Context::end()
   {
-    glfwDestroyWindow((GLFWwindow*)mWindow->get_native_window());
+    glfwDestroyWindow((GLFWwindow*)mWindow->GetNativeWindow());
     glfwTerminate();
   }
 }
