@@ -1,6 +1,6 @@
 ### A OpenGL Game Engine
 
-GamerEngine is a free and open source game engine that you are allowed to use for anything you want.<br>
+GamerEngine is a free and open source 3D game engine!
 
 
 #### Installation

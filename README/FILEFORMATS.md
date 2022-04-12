@@ -1,4 +1,4 @@
-#### File Formats
+### File Formats
 
 <table>
 	<tr>
