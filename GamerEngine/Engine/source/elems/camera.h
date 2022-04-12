@@ -29,11 +29,16 @@ namespace nelems
 		void update(Model* aModel, nshaders::Shader* shader)
 		{
 
-			glm::mat4 model{1.0f};
+			glm::mat4 model(1.0f);
 			if (aModel)
 			{
-				//shader->set_vec3(aModel->myTransform.myPosition, "myPosition");
-				shader->set_mat4(glm::scale(model, aModel->myTransform.myScale), "model");
+				glm::mat4 position = glm::translate(glm::mat4(1.0f), aModel->myTransform.myPosition);
+				//glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), aModel->myTransform.myRotation);
+				glm::mat4 scale = glm::scale(glm::mat4(1.0f), aModel->myTransform.myScale);
+
+				auto model = position + scale;
+
+				shader->set_mat4(model, "model");
 			}
 			else
 			{

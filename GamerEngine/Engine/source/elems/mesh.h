@@ -27,7 +27,7 @@ namespace nelems
 		void update(nshaders::Shader* shader) override
 		{
 
-			shader->set_vec3(myTransform.myPosition, "myPosition");
+			
 
 			// pbr color
 			shader->set_vec3(mColor, "albedo");
