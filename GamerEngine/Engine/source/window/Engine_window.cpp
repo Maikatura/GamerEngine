@@ -18,6 +18,7 @@ namespace nwindow
     mSceneView = std::make_unique<SceneView>();
 
     mPropertyPanel = std::make_unique<Property_Panel>();
+    myContentBrowser = std::make_unique<ContentBrowserPanel>();
 
     mPropertyPanel->set_mesh_load_callback(
       [this](std::string filepath) { mSceneView->load_mesh(filepath); });
@@ -64,6 +65,7 @@ namespace nwindow
     mUICtx->PreRender();
     mSceneView->Render();
   	mPropertyPanel->Render(mSceneView.get());
+    myContentBrowser->OnImGuiRender();
   	mUICtx->PostRender();
   	mRenderCtx->PostRender();
 

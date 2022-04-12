@@ -8,6 +8,7 @@
 #include "render/ui_context.h"
 #include "render/opengl_context.h"
 #include "render/opengl_buffer_manager.h"
+#include "ui/ContentBrowserPanel.h"
 
 #include "window/window.h"
 
@@ -21,60 +22,61 @@ using namespace nshaders;
 
 namespace nwindow
 {
-  class GLWindow : public IWindow
-  {
-  public:
+	class GLWindow : public IWindow
+	{
+	public:
 
-    GLWindow() :
-      mIsRunning(true), mWindow(nullptr)
-    {
-      mUICtx = std::make_unique<UIContext>();
-      mRenderCtx = std::make_unique<OpenGL_Context>();
-    }
+		GLWindow() :
+			mIsRunning(true), mWindow(nullptr)
+		{
+			mUICtx = std::make_unique<UIContext>();
+			mRenderCtx = std::make_unique<OpenGL_Context>();
+		}
 
-    ~GLWindow();
+		~GLWindow();
 
-    bool init(int width, int height, const std::string& title);
+		bool init(int width, int height, const std::string& title);
 
-    void render();
+		void render();
 
-    void HandleInput();
+		void HandleInput();
 
-    void* GetNativeWindow() override { return mWindow; }
+		void* GetNativeWindow() override { return mWindow; }
 
-    void SetNativeWindow(void* window)
-    {
-      mWindow = (GLFWwindow*)window;
-    }
+		void SetNativeWindow(void* window)
+		{
+			mWindow = (GLFWwindow*)window;
+		}
 
-    void OnScroll(double delta) override;
+		void OnScroll(double delta) override;
 
-    void OnKey(int key, int scancode, int action, int mods) override;
+		void OnKey(int key, int scancode, int action, int mods) override;
 
-    void OnResize(int width, int height) override;
+		void OnResize(int width, int height) override;
 
-    void OnClose() override;
+		void OnClose() override;
 
-    bool IsRunning() { return mIsRunning; }
+		bool IsRunning() { return mIsRunning; }
 
 
-  private:
+	private:
 
-    GLFWwindow* mWindow;
+		GLFWwindow* mWindow;
 
-    // Render contexts
-    std::unique_ptr<UIContext> mUICtx;
+		// Render contexts
+		std::unique_ptr<UIContext> mUICtx;
 
-    std::unique_ptr<OpenGL_Context> mRenderCtx;
+		std::unique_ptr<OpenGL_Context> mRenderCtx;
 
-    // UI components
-    std::unique_ptr<Property_Panel> mPropertyPanel;
+		// UI components
+		std::unique_ptr<Property_Panel> mPropertyPanel;
+		std::unique_ptr<ContentBrowserPanel> myContentBrowser;
 
-    std::unique_ptr<SceneView> mSceneView;
+		std::unique_ptr<SceneView> mSceneView;
 
-    bool mIsRunning;
+		bool mIsRunning;
 
-  };
+	};
 }
 
 
