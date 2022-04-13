@@ -1,5 +1,7 @@
 # Prerequisites
 *.d
+**/.vs
+**/.idea
 
 # Compiled Object files
 *.slo
@@ -10,6 +12,7 @@
 *.VC.db-shm
 *.VC.db-wal
 *.ipch
+
 
 # Precompiled Headers
 *.gch
