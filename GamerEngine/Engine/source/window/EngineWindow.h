@@ -10,54 +10,38 @@
 #include "render/opengl_buffer_manager.h"
 #include "ui/ContentBrowserPanel.h"
 #include "ui/InspectorPanel.h"
+#include "ui/NavigationPanel.h"
 
 #include "window/window.h"
 
-#include "ui/property_panel.h"
-#include "ui/scene_view.h"
+#include "ui/PropertyPanel.h"
+#include "ui/SceneView.h"
 
-using namespace nui;
-using namespace nelems;
-using namespace nrender;
 using namespace nshaders;
 
-namespace nwindow
+namespace GamerEngine
 {
 	class GLWindow : public IWindow
 	{
 	public:
 
-		GLWindow() :
-			mIsRunning(true), mWindow(nullptr)
-		{
-			mUICtx = std::make_unique<UIContext>();
-			mRenderCtx = std::make_unique<OpenGL_Context>();
-		}
+		GLWindow();
 
 		~GLWindow();
 
-		bool init(int width, int height, const std::string& title);
+		bool Init(int width, int height, const std::string& title);
 
-		void render();
-
+		void Render();
 		void HandleInput();
-
-		void* GetNativeWindow() override { return mWindow; }
-
-		void SetNativeWindow(void* window)
-		{
-			mWindow = (GLFWwindow*)window;
-		}
+		void* GetNativeWindow() override;
+		void SetNativeWindow(void* window) override;
 
 		void OnScroll(double delta) override;
-
 		void OnKey(int key, int scancode, int action, int mods) override;
-
 		void OnResize(int width, int height) override;
-
 		void OnClose() override;
 
-		bool IsRunning() { return mIsRunning; }
+		bool IsRunning();
 
 
 	private:
@@ -66,11 +50,11 @@ namespace nwindow
 
 		// Render contexts
 		std::unique_ptr<UIContext> mUICtx;
-
 		std::unique_ptr<OpenGL_Context> mRenderCtx;
 
 		// UI components
-		std::unique_ptr<Property_Panel> mPropertyPanel;
+		std::unique_ptr<NavigationPanel> myNavPanel;
+		std::unique_ptr<PropertyPanel> mPropertyPanel;
 		std::unique_ptr<ContentBrowserPanel> myContentBrowserPanel;
 		std::unique_ptr<InspectorPanel> myInspectorPanel;
 

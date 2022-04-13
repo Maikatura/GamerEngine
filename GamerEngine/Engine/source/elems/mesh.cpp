@@ -6,7 +6,7 @@
 #include <assimp/scene.h>
 #include "render/opengl_buffer_manager.h"
 
-namespace nelems
+namespace GamerEngine
 {
 	glm::vec3 Mesh::GetPosition()
 	{
@@ -15,7 +15,7 @@ namespace nelems
 
 	void Mesh::Init()
 	{
-		mRenderBufferMgr = std::make_unique<nrender::OpenGL_VertexIndexBuffer>();
+		mRenderBufferMgr = std::make_unique<GamerEngine::OpenGL_VertexIndexBuffer>();
 
 		CreateBuffers();
 	}

@@ -1,33 +1,33 @@
 #include "pch.h"
 #include "opengl_context.h"
 
-namespace nrender
+namespace GamerEngine
 {
   static void on_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
   {
-    auto pWindow = static_cast<nwindow::IWindow*>(glfwGetWindowUserPointer(window));
+    auto pWindow = static_cast<GamerEngine::IWindow*>(glfwGetWindowUserPointer(window));
     pWindow->OnKey(key, scancode, action, mods);
   }
 
   static void on_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
   {
-    auto pWindow = static_cast<nwindow::IWindow*>(glfwGetWindowUserPointer(window));
+    auto pWindow = static_cast<GamerEngine::IWindow*>(glfwGetWindowUserPointer(window));
     pWindow->OnScroll(yoffset);
   }
 
   static void on_window_size_callback(GLFWwindow* window, int width, int height)
   {
-    auto pWindow = static_cast<nwindow::IWindow*>(glfwGetWindowUserPointer(window));
+    auto pWindow = static_cast<GamerEngine::IWindow*>(glfwGetWindowUserPointer(window));
     pWindow->OnResize(width, height);
   }
 
   static void on_window_close_callback(GLFWwindow* window)
   {
-    nwindow::IWindow* pWindow = static_cast<nwindow::IWindow*>(glfwGetWindowUserPointer(window));
+      GamerEngine::IWindow* pWindow = static_cast<GamerEngine::IWindow*>(glfwGetWindowUserPointer(window));
     pWindow->OnClose();
   }
 
-  bool OpenGL_Context::Init(nwindow::IWindow* window)
+  bool OpenGL_Context::Init(GamerEngine::IWindow* window)
   {
     __super::Init(window);
 

@@ -1,12 +1,12 @@
 #pragma once
 #include "shader/shader_util.h"
 
-namespace nelems
+namespace GamerEngine
 {
-  class Element
-  {
-  public:
-    virtual void update(nshaders::Shader* shader) = 0;
-  };
+	  class Element
+	  {
+	  public:
+	    virtual void update(nshaders::Shader* shader) = 0;
+	  };
 }
 

@@ -5,7 +5,7 @@
 #include "elems/element.h"
 #include "Transform.h"
 
-namespace nelems
+namespace GamerEngine
 {
 	class Mesh : public Element
 	{
@@ -63,7 +63,7 @@ namespace nelems
 		
 
 		// Buffers manager
-		std::unique_ptr<nrender::VertexIndexBuffer> mRenderBufferMgr;
+		std::unique_ptr<GamerEngine::VertexIndexBuffer> mRenderBufferMgr;
 
 		// Vertices and indices
 		std::vector<VertexHolder> mVertices;

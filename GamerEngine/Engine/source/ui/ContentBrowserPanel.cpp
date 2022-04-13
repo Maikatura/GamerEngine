@@ -2,7 +2,8 @@
 #include "ContentBrowserPanel.h"
 #include <imgui.h>
 
-
+namespace GamerEngine
+{
 ContentBrowserPanel::ContentBrowserPanel() : myAssetPath("Assets")
 {
 	myCurrentDirectory = myAssetPath;
@@ -52,4 +53,5 @@ void ContentBrowserPanel::OnImGuiRender()
 
 
 	ImGui::End();
+}
 }

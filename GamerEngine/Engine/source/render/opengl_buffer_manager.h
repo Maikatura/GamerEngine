@@ -4,7 +4,7 @@
 
 #include "render_base.h"
 
-namespace nrender
+namespace GamerEngine
 {
   class OpenGL_VertexIndexBuffer : public VertexIndexBuffer
   {
@@ -12,7 +12,7 @@ namespace nrender
     OpenGL_VertexIndexBuffer() : VertexIndexBuffer()
     {}
 
-    void create_buffers(const std::vector<nelems::VertexHolder>& vertices, const std::vector<unsigned int>& indices) override;
+    void create_buffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices) override;
 
     void delete_buffers() override;
 

@@ -3,28 +3,13 @@
 #include "EngineWindow.h"
 #include "elems/input.h"
 
-namespace nwindow
+namespace GamerEngine
 {
-	bool GLWindow::init(int width, int height, const std::string& title)
+	
+	GLWindow::GLWindow() : mIsRunning(true), mWindow(nullptr)
 	{
-		Width = width;
-		Height = height;
-		Title = title;
-
-		mRenderCtx->init(this);
-
-		mUICtx->init(this);
-
-		mSceneView = std::make_unique<SceneView>();
-
-		mPropertyPanel = std::make_unique<Property_Panel>();
-		myContentBrowserPanel = std::make_unique<ContentBrowserPanel>();
-		myInspectorPanel = std::make_unique<InspectorPanel>();
-
-		mPropertyPanel->set_mesh_load_callback(
-			[this](std::string filepath) { mSceneView->load_mesh(filepath); });
-
-		return mIsRunning;
+		mUICtx = std::make_unique<UIContext>();
+		mRenderCtx = std::make_unique<OpenGL_Context>();
 	}
 
 	GLWindow::~GLWindow()
@@ -34,18 +19,47 @@ namespace nwindow
 		mRenderCtx->end();
 	}
 
+	bool GLWindow::Init(int width, int height, const std::string& title)
+	{
+		Width = width;
+		Height = height;
+		Title = title;
+
+		mRenderCtx->Init(this);
+
+		mUICtx->Init(this);
+
+		mSceneView = std::make_unique<SceneView>();
+
+		mPropertyPanel = std::make_unique<PropertyPanel>();
+		myContentBrowserPanel = std::make_unique<ContentBrowserPanel>();
+		myInspectorPanel = std::make_unique<InspectorPanel>();
+		myNavPanel = std::make_unique<NavigationPanel>();
+
+		mPropertyPanel->SetMeshLoadCallback(
+			[this](std::string filepath) { mSceneView->LoadMesh(filepath); });
+
+		return mIsRunning;
+	}
+
 	void GLWindow::OnResize(int width, int height)
 	{
 		Width = width;
 		Height = height;
 
 		mSceneView->Resize(Width, Height);
-		render();
+		Render();
+	}
+
+	void GLWindow::SetNativeWindow(void* window)
+	{
+		
+		mWindow = (GLFWwindow*)window;
 	}
 
 	void GLWindow::OnScroll(double delta)
 	{
-		mSceneView->on_mouse_wheel(-delta);
+		mSceneView->OnMouseWheel(-delta);
 	}
 
 	void GLWindow::OnKey(int key, int scancode, int action, int mods)
@@ -60,13 +74,19 @@ namespace nwindow
 		mIsRunning = false;
 	}
 
-	void GLWindow::render()
+	bool GLWindow::IsRunning()
+	{
+		return mIsRunning; 
+	}
+
+	void GLWindow::Render()
 	{
 		mRenderCtx->PreRender();
 		mUICtx->PreRender();
 		mSceneView->Render();
 
 		// UI
+		myNavPanel->OnImGuiRender();
 		mPropertyPanel->OnImGuiRender(mSceneView.get());
 		myContentBrowserPanel->OnImGuiRender();
 		myInspectorPanel->OnImGuiRender(mSceneView.get());
@@ -82,22 +102,27 @@ namespace nwindow
 	{
 		if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			mSceneView->on_mouse_wheel(-0.4f);
+			mSceneView->OnMouseWheel(-0.4f);
 		}
 
 		if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			mSceneView->on_mouse_wheel(0.4f);
+			mSceneView->OnMouseWheel(0.4f);
 		}
 
 		if (glfwGetKey(mWindow, GLFW_KEY_F) == GLFW_PRESS)
 		{
-			mSceneView->reset_view();
+			mSceneView->ResetView();
 		}
 
 		double x, y;
 		glfwGetCursorPos(mWindow, &x, &y);
 
-		mSceneView->on_mouse_move(x, y, Input::GetPressedButton(mWindow));
+		mSceneView->OnMouseMove(x, y, Input::GetPressedButton(mWindow));
+	}
+
+	void* GLWindow::GetNativeWindow()
+	{
+		return mWindow; 
 	}
 }

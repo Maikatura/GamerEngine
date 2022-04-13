@@ -2,14 +2,14 @@
 
 #include "render_base.h"
 
-namespace nrender
+namespace GamerEngine
 {
   class UIContext : public RenderContext
   {
 
   public:
 
-    bool Init(nwindow::IWindow* window) override;
+    bool Init(GamerEngine::IWindow* window) override;
 
     void PreRender() override;
 

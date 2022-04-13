@@ -5,7 +5,7 @@
 #include "element.h"
 #include "shader/shader_util.h"
 
-namespace nelems
+namespace GamerEngine
 {
   class Light : public Element
   {

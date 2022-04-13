@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	auto app = std::make_unique<Application>("Gamer Engine");
+	auto app = std::make_unique<Application>("GamerEngines CHADITOR");
 	app->Loop();
 
 	return 0;

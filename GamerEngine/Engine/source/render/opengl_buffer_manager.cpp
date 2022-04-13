@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "opengl_buffer_manager.h"
 
-namespace nrender
+namespace GamerEngine
 {
-  void OpenGL_VertexIndexBuffer::create_buffers(const std::vector<nelems::VertexHolder>& vertices, const std::vector<unsigned int>& indices)
+  void OpenGL_VertexIndexBuffer::create_buffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices)
   {
     glGenVertexArrays(1, &mVAO);
 
@@ -13,16 +13,16 @@ namespace nrender
     glBindVertexArray(mVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(nelems::VertexHolder), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GamerEngine::VertexHolder), vertices.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(nelems::VertexHolder), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GamerEngine::VertexHolder), (void*)0);
 
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(nelems::VertexHolder), (void*)offsetof(nelems::VertexHolder, mNormal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GamerEngine::VertexHolder), (void*)offsetof(GamerEngine::VertexHolder, mNormal));
 
     glBindVertexArray(0);
 

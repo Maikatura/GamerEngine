@@ -1,15 +1,18 @@
 #pragma once
 #include <filesystem>
 
-class ContentBrowserPanel
+namespace GamerEngine
 {
-public:
-	ContentBrowserPanel();
-	~ContentBrowserPanel();
+	class ContentBrowserPanel
+	{
+	public:
+		ContentBrowserPanel();
+		~ContentBrowserPanel();
 
-	void OnImGuiRender();
+		void OnImGuiRender();
 
-private:
-	std::filesystem::path myCurrentDirectory;
-	std::filesystem::path myAssetPath;
-};
+	private:
+		std::filesystem::path myCurrentDirectory;
+		std::filesystem::path myAssetPath;
+	};
+}

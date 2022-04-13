@@ -2,12 +2,12 @@
 
 #include "import_base.h"
 
-namespace nmesh_import {
+namespace GamerEngine {
 
 	class ObjMeshImporter : public IMeshImporter
 	{
 	public:
-		virtual bool from_file(const std::string& filepath, nelems::Mesh* pMesh) override;
+		virtual bool from_file(const std::string& filepath, GamerEngine::Mesh* pMesh) override;
 
 	};
 }

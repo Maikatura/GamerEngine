@@ -3,9 +3,9 @@
 #include "elems/vertex_holder.h"
 #include "utils/str_utils.h"
 
-namespace nmesh_import
+namespace GamerEngine
 {
-  bool ObjMeshImporter::from_file(const std::string& filepath, nelems::Mesh* pMesh)
+  bool ObjMeshImporter::from_file(const std::string& filepath, GamerEngine::Mesh* pMesh)
   {
     std::ifstream in(filepath, std::ios::in);
     if (!in)

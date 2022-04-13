@@ -2,10 +2,10 @@
 #include "pch.h"
 #include "../elems/mesh.h"
 
-namespace nmesh_import {
+namespace GamerEngine {
 
 	struct IMeshImporter
 	{
-    virtual bool from_file(const std::string& filepath, nelems::Mesh* pMesh) = 0;
+		virtual bool from_file(const std::string& filepath, GamerEngine::Mesh* pMesh) = 0;
 	};
 }

@@ -7,7 +7,7 @@
 #include "Models/Model.h"
 #include "shader/shader_util.h"
 
-namespace nelems
+namespace GamerEngine
 {
 	class Camera
 	{

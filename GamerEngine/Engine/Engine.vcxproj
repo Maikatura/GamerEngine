@@ -143,8 +143,10 @@
     <ClCompile Include="source\ECS\Scene.cpp" />
     <ClCompile Include="source\ui\ContentBrowserPanel.cpp" />
     <ClCompile Include="source\ui\InspectorPanel.cpp" />
-    <ClCompile Include="source\ui\scene_view.cpp" />
-    <ClCompile Include="source\ui\property_panel.cpp" />
+    <ClCompile Include="source\ui\NavigationPanel.cpp" />
+    <ClCompile Include="source\ui\NetworkPanel.cpp" />
+    <ClCompile Include="source\ui\SceneView.cpp" />
+    <ClCompile Include="source\ui\PropertyPanel.cpp" />
     <ClCompile Include="source\render\opengl_context.cpp" />
     <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\elems\element.cpp" />
@@ -173,7 +175,7 @@
     <ClCompile Include="source\elems\vertex_holder.cpp" />
     <ClCompile Include="source\render\opengl_buffer_manager.cpp" />
     <ClCompile Include="source\render\ui_context.cpp" />
-    <ClCompile Include="source\window\Engine_window.cpp" />
+    <ClCompile Include="source\window\EngineWindow.cpp" />
     <ClCompile Include="source\elems\mesh.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
@@ -202,9 +204,11 @@
     <ClInclude Include="source\Transform.h" />
     <ClInclude Include="source\ui\ContentBrowserPanel.h" />
     <ClInclude Include="source\ui\InspectorPanel.h" />
+    <ClInclude Include="source\ui\NavigationPanel.h" />
+    <ClInclude Include="source\ui\NetworkPanel.h" />
     <ClInclude Include="source\utils\imgui_widgets.h" />
-    <ClInclude Include="source\ui\scene_view.h" />
-    <ClInclude Include="source\ui\property_panel.h" />
+    <ClInclude Include="source\ui\SceneView.h" />
+    <ClInclude Include="source\ui\PropertyPanel.h" />
     <ClInclude Include="source\render\opengl_context.h" />
     <ClInclude Include="source\Application.h" />
     <ClInclude Include="source\elems\element.h" />
@@ -216,7 +220,7 @@
     <ClInclude Include="source\render\render_base.h" />
     <ClInclude Include="source\render\ui_context.h" />
     <ClInclude Include="source\utils\str_utils.h" />
-    <ClInclude Include="source\window\Engine_window.h" />
+    <ClInclude Include="source\window\EngineWindow.h" />
     <ClInclude Include="source\elems\camera.h" />
     <ClInclude Include="source\elems\mesh.h" />
     <ClInclude Include="source\main.h" />

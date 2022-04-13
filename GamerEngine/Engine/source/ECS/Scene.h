@@ -15,8 +15,6 @@ namespace GamerEngine
 		
 
 	private:
-
-		
 		entt::registry myRegistry;
 	};
 }

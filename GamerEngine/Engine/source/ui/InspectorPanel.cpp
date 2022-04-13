@@ -5,26 +5,29 @@
 
 #include "utils/imgui_widgets.h"
 
-void InspectorPanel::OnImGuiRender(nui::SceneView* scene_view)
+namespace GamerEngine
 {
-	ImGui::Begin("Inspector");
-
-	auto mesh = scene_view->get_mesh();
-
-	if (mesh)
+	
+	void InspectorPanel::OnImGuiRender(GamerEngine::SceneView* scene_view)
 	{
 		ImGui::Begin("Inspector");
 
-		ImGui::Text("Transform");
-		ImGui::Text("Position");
-		nimgui::DrawImGuiPosition("Position", mesh->myTransform);
-		ImGui::Text("Rotation");
-		nimgui::DrawImGuiRotation("Rotation", mesh->myTransform);
-		ImGui::Text("Scale");
-		nimgui::DrawImGuiScale("Scale", mesh->myTransform);
+		auto mesh = scene_view->GetMesh();
+
+		if (mesh)
+		{
+			ImGui::Begin("Inspector");
+
+			ImGui::Text("Transform");
+
+			GamerEngine::DrawImGuiTransform("Pos","Pos", mesh->myTransform.myPosition);
+			GamerEngine::DrawImGuiTransform("Rot","Rot", mesh->myTransform.myRotation);
+			GamerEngine::DrawImGuiTransform("Scale","Scale", mesh->myTransform.myScale);
+
+			ImGui::End();
+		}
 
 		ImGui::End();
 	}
 
-	ImGui::End();
 }

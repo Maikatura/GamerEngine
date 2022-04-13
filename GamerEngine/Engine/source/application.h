@@ -1,6 +1,6 @@
 #pragma once
 
-#include "window/Engine_window.h"
+#include "window/EngineWindow.h"
 #include "elems/camera.h"
 
 class Application
@@ -16,5 +16,5 @@ public:
 private:
   static Application* sInstance;
 
-  std::unique_ptr<nwindow::GLWindow> mWindow;
+  std::unique_ptr<GamerEngine::GLWindow> mWindow;
 };

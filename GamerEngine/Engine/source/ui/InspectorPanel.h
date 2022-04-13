@@ -1,11 +1,14 @@
 #pragma once
-#include "scene_view.h"
+#include "SceneView.h"
 
-class InspectorPanel
+namespace GamerEngine
 {
+	class InspectorPanel
+	{
 
-public:
-	void OnImGuiRender(nui::SceneView* scene_view);
+	public:
+		void OnImGuiRender(SceneView* scene_view);
 
-private:
-};
+	private:
+	};
+}

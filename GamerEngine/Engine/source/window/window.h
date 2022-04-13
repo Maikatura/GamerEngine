@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nwindow
+namespace GamerEngine
 {
   class IWindow
   {
