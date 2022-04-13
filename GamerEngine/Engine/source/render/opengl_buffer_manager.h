@@ -12,15 +12,15 @@ namespace GamerEngine
     OpenGL_VertexIndexBuffer() : VertexIndexBuffer()
     {}
 
-    void create_buffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices) override;
+    void CreateBuffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices) override;
 
-    void delete_buffers() override;
+    void DeleteBuffers() override;
 
-    void bind() override;
+    void Bind() override;
 
-    void unbind() override;
+    void Unbind() override;
 
-    void draw(int index_count) override;
+    void Draw(int index_count) override;
 
   };
 
@@ -28,14 +28,14 @@ namespace GamerEngine
   {
   public:
 
-    void create_buffers(int32_t width, int32_t height) override;
+    void CreateBuffers(int32_t width, int32_t height) override;
 
-    void delete_buffers() override;
+    void DeleteBuffers() override;
 
-    void bind() override;
+    void Bind() override;
 
-    void unbind() override;
+    void Unbind() override;
     
-    uint32_t get_texture() override;
+    uint32_t GetTexture() override;
   };
 }

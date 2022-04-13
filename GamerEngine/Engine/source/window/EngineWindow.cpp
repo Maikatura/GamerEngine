@@ -100,20 +100,31 @@ namespace GamerEngine
 
 	void GLWindow::HandleInput()
 	{
+
+		float cameraSpeed = 0.5f;
+
 		if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			mSceneView->OnMouseWheel(-0.4f);
+			mSceneView->SetCameraPos({0.0f, 0.0f, cameraSpeed });
 		}
 
 		if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			mSceneView->OnMouseWheel(0.4f);
+			mSceneView->SetCameraPos({ 0.0f, 0.0f, -cameraSpeed });
 		}
 
-		if (glfwGetKey(mWindow, GLFW_KEY_F) == GLFW_PRESS)
+		if (glfwGetKey(mWindow, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			mSceneView->ResetView();
+			mSceneView->SetCameraPos({ cameraSpeed, 0.0f, 0.0f });
 		}
+
+		if (glfwGetKey(mWindow, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			mSceneView->SetCameraPos({ -cameraSpeed, 0.0f, 0.0f });
+		}
+
+
+		//mSceneView->ResetView();
 
 		double x, y;
 		glfwGetCursorPos(mWindow, &x, &y);

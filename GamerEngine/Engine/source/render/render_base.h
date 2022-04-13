@@ -12,15 +12,15 @@ namespace GamerEngine
 		VertexIndexBuffer() : mVBO{ 0 }, mVAO{ 0 }, mIBO{ 0 }
 		{}
 
-		virtual void create_buffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices) = 0;
+		virtual void CreateBuffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices) = 0;
 
-		virtual void delete_buffers() = 0;
+		virtual void DeleteBuffers() = 0;
 
-		virtual void bind() = 0;
+		virtual void Bind() = 0;
 
-		virtual void unbind() = 0;
+		virtual void Unbind() = 0;
 
-		virtual void draw(int index_count) = 0;
+		virtual void Draw(int index_count) = 0;
 
 	protected:
 		GLuint mVBO;
@@ -34,15 +34,15 @@ namespace GamerEngine
 		FrameBuffer() : mFBO{ 0 }, mDepthId{ 0 }
 		{}
 
-		virtual void create_buffers(int32_t width, int32_t height) = 0;
+		virtual void CreateBuffers(int32_t width, int32_t height) = 0;
 
-		virtual void delete_buffers() = 0;
+		virtual void DeleteBuffers() = 0;
 
-		virtual void bind() = 0;
+		virtual void Bind() = 0;
 
-		virtual void unbind() = 0;
+		virtual void Unbind() = 0;
 
-		virtual uint32_t get_texture() = 0;
+		virtual uint32_t GetTexture() = 0;
 
 	protected:
 		uint32_t mFBO = 0;

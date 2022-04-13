@@ -48,17 +48,17 @@ namespace GamerEngine
         vert_idx[1] = nutils::tokenize(v2, '/').at(0);
         vert_idx[2] = nutils::tokenize(v3, '/').at(0);
 
-        pMesh->add_vertex_index(vert_idx[0] - 1);
-        pMesh->add_vertex_index(vert_idx[1] - 1);
-        pMesh->add_vertex_index(vert_idx[2] - 1);        
+        pMesh->AddVertexIndex(vert_idx[0] - 1);
+        pMesh->AddVertexIndex(vert_idx[1] - 1);
+        pMesh->AddVertexIndex(vert_idx[2] - 1);        
       }
     }
 
     // Now use the indices to create the concrete vertices for the mesh
-    for (auto v_idx : pMesh->get_vertex_indices())
+    for (auto v_idx : pMesh->GetVertexIndices())
     {
       glm::vec3 vertex = t_vert[v_idx];
-      //pMesh->add_vertex(vertex);
+      //pMesh->AddVertex(vertex);
     }
     return true;
   }

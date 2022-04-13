@@ -3,7 +3,7 @@
 
 namespace GamerEngine
 {
-  void OpenGL_VertexIndexBuffer::create_buffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices)
+  void OpenGL_VertexIndexBuffer::CreateBuffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices)
   {
     glGenVertexArrays(1, &mVAO);
 
@@ -28,7 +28,7 @@ namespace GamerEngine
 
   }
 
-  void OpenGL_VertexIndexBuffer::delete_buffers()
+  void OpenGL_VertexIndexBuffer::DeleteBuffers()
   {
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
@@ -39,35 +39,35 @@ namespace GamerEngine
     glDeleteVertexArrays(1, &mVAO);
   }
 
-  void OpenGL_VertexIndexBuffer::bind()
+  void OpenGL_VertexIndexBuffer::Bind()
   {
     glBindVertexArray(mVAO);
   }
 
-  void OpenGL_VertexIndexBuffer::unbind()
+  void OpenGL_VertexIndexBuffer::Unbind()
   {
      glBindVertexArray(0);
   }
 
-  void OpenGL_VertexIndexBuffer::draw(int index_count)
+  void OpenGL_VertexIndexBuffer::Draw(int index_count)
   {
-    bind();
+    Bind();
 
     
     glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 
-    unbind();
+    Unbind();
   }
 
 
-  void OpenGL_FrameBuffer::create_buffers(int32_t width, int32_t height)
+  void OpenGL_FrameBuffer::CreateBuffers(int32_t width, int32_t height)
   {
     mWidth = width;
     mHeight = height;
 
     if (mFBO)
     {
-      delete_buffers();
+      DeleteBuffers();
     }
 
     glGenFramebuffers(1, &mFBO);
@@ -97,10 +97,10 @@ namespace GamerEngine
     GLenum buffers[4] = { GL_COLOR_ATTACHMENT0 };
     glDrawBuffers(mTexId, buffers);
 
-    unbind();
+    Unbind();
   }
 
-  void OpenGL_FrameBuffer::delete_buffers()
+  void OpenGL_FrameBuffer::DeleteBuffers()
   {
     if (mFBO)
     {
@@ -113,19 +113,19 @@ namespace GamerEngine
 
   }
 
-  void OpenGL_FrameBuffer::bind()
+  void OpenGL_FrameBuffer::Bind()
   {
     glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
     glViewport(0, 0, mWidth, mHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
-  void OpenGL_FrameBuffer::unbind()
+  void OpenGL_FrameBuffer::Unbind()
   {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
 
-  uint32_t OpenGL_FrameBuffer::get_texture()
+  uint32_t OpenGL_FrameBuffer::GetTexture()
   {
     return mTexId;
   }

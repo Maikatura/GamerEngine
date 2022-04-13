@@ -2,36 +2,36 @@
 
 namespace GamerEngine
 {
-  class VertexHolder
-  {
+	class VertexHolder
+	{
 
-  public:
-    VertexHolder() : mPos(), mNormal() {}
-    
-    // Initialize by string to be tokenized
-    // TODO: Better handle outside of this class
-    VertexHolder(const std::vector<std::string> tokens)
-    {
-    }
+	public:
+		VertexHolder() : mPos(), mNormal() {}
 
-    VertexHolder(const glm::vec3& pos, const glm::vec3& normal)
-      : mPos(pos), mNormal(normal)
-    {
-    }
+		// Initialize by string to be tokenized
+		// TODO: Better handle outside of this class
+		VertexHolder(const std::vector<std::string> tokens)
+		{
+		}
 
-    ~VertexHolder() = default;
+		VertexHolder(const glm::vec3& pos, const glm::vec3& normal)
+			: mPos(pos), mNormal(normal)
+		{
+		}
 
-
-    glm::vec3 mPos;
-
-    glm::vec3 mNormal;
-
-    glm::vec3 mScale;
-
-    // TODO
-    // glm::vec2 mUV;
+		~VertexHolder() = default;
 
 
-  };
+		glm::vec3 mPos;
+
+		glm::vec3 mNormal;
+
+		glm::vec3 mScale;
+
+		// TODO
+		// glm::vec2 mUV;
+
+
+	};
 }
 

@@ -21,96 +21,108 @@ namespace GamerEngine
 			mFar = far;
 			mFOV = fov;
 
-			set_aspect(mAspect);
+			SetAspect(mAspect);
 
 			update_view_matrix();
 		}
 
-		void update(Model* aModel, nshaders::Shader* shader)
-		{
 
-			glm::mat4 model(1.0f);
+		void Update(Model* aModel, nshaders::Shader* shader)
+		{
 			if (aModel)
 			{
-				glm::mat4 position = glm::translate(glm::mat4(1.0f), aModel->myTransform.myPosition);
-				//glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), aModel->myTransform.myRotation);
-				glm::mat4 scale = glm::scale(glm::mat4(1.0f), aModel->myTransform.myScale);
+				glm::mat4 position(1.0f);
+				glm::mat4 rotation(1.0f);
+				glm::mat4 scale(1.0f);
+				position = glm::translate(position, aModel->myTransform.myPosition);
+				rotation = glm::rotate(rotation, glm::radians(aModel->myTransform.myRotation.x), glm::vec3(1, 0, 0));
+				rotation = glm::rotate(rotation, glm::radians(aModel->myTransform.myRotation.y), glm::vec3(0, 1, 0));
+				rotation = glm::rotate(rotation, glm::radians(aModel->myTransform.myRotation.z), glm::vec3(0, 0, 1));
+				scale = glm::scale(scale, aModel->myTransform.myScale);
 
-				auto model = position + scale;
+				glm::mat4 modelView = position * scale * rotation;
 
-				shader->set_mat4(model, "model");
+				shader->set_mat4(modelView, "model");
 			}
 			else
 			{
+				glm::mat4 model(1.0f);
 				shader->set_mat4(model, "model");
 			}
 			shader->set_mat4(mViewMatrix, "view");
-			shader->set_mat4(get_projection(), "projection");
+			shader->set_mat4(GetProjection(), "projection");
 			shader->set_vec3(mPosition, "camPos");
 
 		}
 
-    void set_aspect(float aspect)
-    {
-      mProjection = glm::perspective(mFOV, aspect, mNear, mFar);
-    }
+		void SetPosition(glm::vec3 aPosition)
+		{
+			mPosition += -GetRight() * aPosition.x;
+			mPosition += GetUp() * aPosition.y;
+			mPosition += GetForward() * aPosition.z;
+		}
 
-		void set_distance(float offset)
+		void SetAspect(float aspect)
+		{
+			mProjection = glm::perspective(mFOV, aspect, mNear, mFar);
+		}
+
+		void SetDistance(float offset)
 		{
 			mDistance += offset;
 			update_view_matrix();
 		}
 
-		const glm::mat4& get_projection() const
+		const glm::mat4& GetProjection() const
 		{
 			return mProjection;
 		}
 
-    glm::mat4 get_view_projection() const
-    {
-      return mProjection * get_view_matrix();
-    }
-
-		glm::vec3 get_up() const
+		glm::mat4 GetViewProjection() const
 		{
-			return glm::rotate(get_direction(), cUp);
+			return mProjection * GetViewMatrix();
 		}
 
-		glm::vec3 get_right() const
+		glm::vec3 GetUp() const
 		{
-			return glm::rotate(get_direction(), cRight);
+			return glm::rotate(GetDirection(), cUp);
 		}
 
-		glm::vec3 get_forward() const
+		glm::vec3 GetRight() const
 		{
-			return glm::rotate(get_direction(), cForward);
+			return glm::rotate(GetDirection(), cRight);
 		}
 
-		glm::quat get_direction() const
+		glm::vec3 GetForward() const
+		{
+			return glm::rotate(GetDirection(), cForward);
+		}
+
+		glm::quat GetDirection() const
 		{
 			return glm::quat(glm::vec3(-mPitch, -mYaw, 0.0f));
 		}
 
-		glm::mat4 get_view_matrix() const
+		glm::mat4 GetViewMatrix() const
 		{
 			return mViewMatrix;
 		}
 
-		void on_mouse_wheel(double delta)
+		void OnMouseWheel(double delta)
 		{
-			set_distance(delta * 0.5f);
+			SetDistance(delta * 0.5f);
 
 			update_view_matrix();
 		}
 
-		void reset()
+		void Reset()
 		{
 			mFocus = { 0.0f, 0.0f, 0.0f };
 			//mDistance = 5.0f;
 			update_view_matrix();
 		}
 
-		void on_mouse_move(double x, double y, EInputButton button)
+		void OnMouseMove(double x, double y, EInputButton button)
 		{
 			glm::vec2 pos2d{ x, y };
 
@@ -118,31 +130,32 @@ namespace GamerEngine
 			{
 				glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.004f;
 
-				float sign = get_up().y < 0 ? -1.0f : 1.0f;
+				float sign = GetUp().y < 0 ? -1.0f : 1.0f;
 				mYaw += sign * delta.x * cRotationSpeed;
 				mPitch += delta.y * cRotationSpeed;
 
 				update_view_matrix();
-			}	
+			}
 			else if (button == EInputButton::Middle)
 			{
 				// TODO: Adjust pan speed for distance
 				glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.003f;
 
-				mFocus += -get_right() * delta.x * mDistance;
-				mFocus += get_up() * delta.y * mDistance;
+				mFocus += -GetRight() * delta.x * mDistance;
+				mFocus += GetUp() * delta.y * mDistance;
 
 				update_view_matrix();
 			}
+
 
 			mCurrentPos2d = pos2d;
 		}
 
 		void update_view_matrix()
 		{
-			mPosition =  mFocus - get_forward() * mDistance;
+			//mPosition = mFocus - GetForward();
 
-			glm::quat orientation = get_direction();
+			glm::quat orientation = GetDirection();
 			mViewMatrix = glm::translate(glm::mat4(1.0f), mPosition) * glm::toMat4(orientation);
 			mViewMatrix = glm::inverse(mViewMatrix);
 		}
@@ -156,9 +169,9 @@ namespace GamerEngine
 
 		float mDistance = 5.0f;
 		float mAspect;
-	    float mFOV;
-	    float mNear;
-	    float mFar;
+		float mFOV;
+		float mNear;
+		float mFar;
 
 		float mPitch = 0.0f;
 		float mYaw = 0.0f;

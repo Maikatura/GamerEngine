@@ -28,6 +28,8 @@ namespace GamerEngine
     void SetMesh(std::shared_ptr<Model> mesh);
 
     std::shared_ptr<Model> GetMesh() { return mMesh; }
+
+    void SetCameraPos(glm::vec3 aPosition);
     
     void OnMouseMove(double x, double y, GamerEngine::EInputButton button);
 

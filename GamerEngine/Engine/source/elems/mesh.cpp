@@ -8,11 +8,6 @@
 
 namespace GamerEngine
 {
-	glm::vec3 Mesh::GetPosition()
-	{
-		return myTransform.myPosition;
-	}
-
 	void Mesh::Init()
 	{
 		mRenderBufferMgr = std::make_unique<GamerEngine::OpenGL_VertexIndexBuffer>();
@@ -55,7 +50,7 @@ namespace GamerEngine
 				vh.mNormal = { mesh->mNormals[i].x, mesh->mNormals[i].y ,mesh->mNormals[i].z };
 
 
-				add_vertex(vh);
+				AddVertex(vh);
 			}
 
 			for (size_t i = 0; i < mesh->mNumFaces; i++)
@@ -63,7 +58,7 @@ namespace GamerEngine
 				aiFace face = mesh->mFaces[i];
 
 				for (size_t j = 0; j < face.mNumIndices; j++)
-					add_vertex_index(face.mIndices[j]);
+					AddVertexIndex(face.mIndices[j]);
 			}
 
 			Init();
@@ -72,29 +67,36 @@ namespace GamerEngine
 		return false;
 	}
 
+	void Mesh::Update(nshaders::Shader* shader)
+	{
+		shader->set_vec3(mColor, "albedo");
+		shader->set_f1(mRoughness, "roughness");
+		shader->set_f1(mMetallic, "metallic");
+		shader->set_f1(1.0f, "ao");
+	}
+
 	void Mesh::CreateBuffers()
 	{
-		mRenderBufferMgr->create_buffers(mVertices, mVertexIndices);
+		mRenderBufferMgr->CreateBuffers(mVertices, mVertexIndices);
 	}
 
 	void Mesh::DeleteBuffers()
 	{
-		mRenderBufferMgr->delete_buffers();
+		mRenderBufferMgr->DeleteBuffers();
 	}
 
 	void Mesh::Bind()
 	{
-		mRenderBufferMgr->bind();
+		mRenderBufferMgr->Bind();
 	}
 
 	void Mesh::Unbind()
 	{
-		mRenderBufferMgr->unbind();
+		mRenderBufferMgr->Unbind();
 	}
 
 	void Mesh::Render()
 	{
-
-		mRenderBufferMgr->draw((int)mVertexIndices.size());
+		mRenderBufferMgr->Draw((int)mVertexIndices.size());
 	}
 }
