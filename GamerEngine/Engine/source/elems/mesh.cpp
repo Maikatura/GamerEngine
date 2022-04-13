@@ -54,9 +54,9 @@ namespace GamerEngine
 				vh.mPos = { mesh->mVertices[i].x, mesh->mVertices[i].y ,mesh->mVertices[i].z };
 				vh.mNormal = { mesh->mNormals[i].x, mesh->mNormals[i].y ,mesh->mNormals[i].z };
 
+
 				add_vertex(vh);
 			}
-
 
 			for (size_t i = 0; i < mesh->mNumFaces; i++)
 			{

@@ -18,11 +18,16 @@ namespace GamerEngine
 		{
 			ImGui::Begin("Inspector");
 
-			ImGui::Text("Transform");
 
-			GamerEngine::DrawImGuiTransform("Pos","Pos", mesh->myTransform.myPosition);
-			GamerEngine::DrawImGuiTransform("Rot","Rot", mesh->myTransform.myRotation);
-			GamerEngine::DrawImGuiTransform("Scale","Scale", mesh->myTransform.myScale);
+			if (ImGui::CollapsingHeader("Transform"))
+			{
+				ImGui::Text("Transform");
+
+				GamerEngine::DrawImGuiTransform("Pos","Pos", mesh->myTransform.myPosition);
+				GamerEngine::DrawImGuiTransform("Rot","Rot", mesh->myTransform.myRotation);
+				GamerEngine::DrawImGuiTransform("Scale","Scale", mesh->myTransform.myScale);
+				
+			}
 
 			ImGui::End();
 		}
