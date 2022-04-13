@@ -27,6 +27,10 @@
 *.lai
 *.la
 *.a
+*.obj
+*.ilk
+*.idb
+*.pdb
 
 # Executables
 *.exe
