@@ -9,9 +9,9 @@
 namespace nrender
 {
 
-  bool UIContext::init(nwindow::IWindow* window)
+  bool UIContext::Init(nwindow::IWindow* window)
   {
-    __super::init(window);
+    __super::Init(window);
 
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 410";

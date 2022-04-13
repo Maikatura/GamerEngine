@@ -1,10 +1,10 @@
 #include "pch.h"
-#include "application.h"
+#include "Application.h"
 
 int main(void)
 {
-  auto app = std::make_unique<Application>("Gamer Engine");
-  app->Loop();
+	auto app = std::make_unique<Application>("Gamer Engine");
+	app->Loop();
 
-  return 0;
+	return 0;
 }

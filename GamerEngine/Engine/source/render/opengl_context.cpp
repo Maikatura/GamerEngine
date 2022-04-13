@@ -27,9 +27,9 @@ namespace nrender
     pWindow->OnClose();
   }
 
-  bool OpenGL_Context::init(nwindow::IWindow* window)
+  bool OpenGL_Context::Init(nwindow::IWindow* window)
   {
-    __super::init(window);
+    __super::Init(window);
 
     /* Initialize the library */
     if (!glfwInit())

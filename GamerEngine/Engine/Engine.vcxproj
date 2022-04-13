@@ -92,7 +92,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)source;$(ProjectDir)include;$(ProjectDir)source\3rdparty\imgui-docking;$(ProjectDir)source\3rdparty\imgui-docking\backends;$(ProjectDir)source\3rdparty\plugins\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)source;$(SolutionDIr)vendor\include;$(ProjectDir)source\3rdparty\imgui-docking;$(ProjectDir)source\3rdparty\imgui-docking\backends;$(ProjectDir)source\3rdparty\plugins\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -100,7 +100,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)\libs\gl;$(ProjectDir)\libs\glfw;$(ProjectDir)\libs\assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\libs\gl;$(SolutionDir)vendor\libs\glfw;$(SolutionDir)vendor\libs\assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -139,12 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\ECS\Entity.cpp" />
+    <ClCompile Include="source\ECS\Scene.cpp" />
     <ClCompile Include="source\ui\ContentBrowserPanel.cpp" />
     <ClCompile Include="source\ui\InspectorPanel.cpp" />
     <ClCompile Include="source\ui\scene_view.cpp" />
     <ClCompile Include="source\ui\property_panel.cpp" />
     <ClCompile Include="source\render\opengl_context.cpp" />
-    <ClCompile Include="source\application.cpp" />
+    <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\elems\element.cpp" />
     <ClCompile Include="source\3rdparty\imgui-docking\backends\imgui_impl_glfw.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -192,6 +194,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\3rdparty\plugins\imgui\ImFileBrowser.h" />
+    <ClInclude Include="source\Components\MeshComponent.h" />
+    <ClInclude Include="source\Components\TransformComponent.h" />
+    <ClInclude Include="source\ECS\Entity.h" />
+    <ClInclude Include="source\ECS\Scene.h" />
     <ClInclude Include="source\Models\Model.h" />
     <ClInclude Include="source\Transform.h" />
     <ClInclude Include="source\ui\ContentBrowserPanel.h" />
@@ -200,7 +206,7 @@
     <ClInclude Include="source\ui\scene_view.h" />
     <ClInclude Include="source\ui\property_panel.h" />
     <ClInclude Include="source\render\opengl_context.h" />
-    <ClInclude Include="source\application.h" />
+    <ClInclude Include="source\Application.h" />
     <ClInclude Include="source\elems\element.h" />
     <ClInclude Include="source\elems\face.h" />
     <ClInclude Include="source\elems\input.h" />

@@ -5,15 +5,29 @@
 
 namespace nwindow
 {
-	bool GLWindow::init(int width, int height, const std::string& title)
+	
+	GLWindow::GLWindow() : mIsRunning(true), mWindow(nullptr)
+	{
+		mUICtx = std::make_unique<UIContext>();
+		mRenderCtx = std::make_unique<OpenGL_Context>();
+	}
+
+	GLWindow::~GLWindow()
+	{
+		mUICtx->end();
+
+		mRenderCtx->end();
+	}
+
+	bool GLWindow::Init(int width, int height, const std::string& title)
 	{
 		Width = width;
 		Height = height;
 		Title = title;
 
-		mRenderCtx->init(this);
+		mRenderCtx->Init(this);
 
-		mUICtx->init(this);
+		mUICtx->Init(this);
 
 		mSceneView = std::make_unique<SceneView>();
 
@@ -27,20 +41,13 @@ namespace nwindow
 		return mIsRunning;
 	}
 
-	GLWindow::~GLWindow()
-	{
-		mUICtx->end();
-
-		mRenderCtx->end();
-	}
-
 	void GLWindow::OnResize(int width, int height)
 	{
 		Width = width;
 		Height = height;
 
 		mSceneView->Resize(Width, Height);
-		render();
+		Render();
 	}
 
 	void GLWindow::OnScroll(double delta)
@@ -60,7 +67,7 @@ namespace nwindow
 		mIsRunning = false;
 	}
 
-	void GLWindow::render()
+	void GLWindow::Render()
 	{
 		mRenderCtx->PreRender();
 		mUICtx->PreRender();

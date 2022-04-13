@@ -1,37 +1,39 @@
 ﻿  main.cpp
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  application.cpp
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  element.cpp
-  face.cpp
-  mesh.cpp
-  vertex_holder.cpp
-  import_obj.cpp
-  opengl_buffer_manager.cpp
-  opengl_context.cpp
-  ui_context.cpp
-  shader_util.cpp
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Entity.cpp
+  Scene.cpp
   ContentBrowserPanel.cpp
   InspectorPanel.cpp
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  property_panel.cpp
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   scene_view.cpp
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\ui\scene_view.cpp(10,13): warning C4244: '=': conversion from 'int32_t' to 'T', possible loss of data
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\ui\scene_view.cpp(10,13): warning C4244: '=': conversion from 'int32_t' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\ui\scene_view.cpp(11,13): warning C4244: '=': conversion from 'int32_t' to 'T', possible loss of data
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\ui\scene_view.cpp(11,13): warning C4244: '=': conversion from 'int32_t' to 'T', possible loss of data
           with
           [
               T=float
           ]
+  property_panel.cpp
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  opengl_context.cpp
+  Application.cpp
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  element.cpp
+  face.cpp
+  vertex_holder.cpp
+  opengl_buffer_manager.cpp
+  ui_context.cpp
   Engine_window.cpp
-C:\Users\zyro\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Engine\source\elems\camera.h(101,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  mesh.cpp
+  import_obj.cpp
+  shader_util.cpp
   Generating Code...
-glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\zyro\Documents\GitHub\GamerEngine\Build\vc120.pdb'; linking object as if no debug info
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  Engine.vcxproj -> C:\Users\zyro\Documents\GitHub\GamerEngine\Build\GamerEngine-Debug.exe
+glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
+  Engine.vcxproj -> C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\Build\GamerEngine-Debug.exe

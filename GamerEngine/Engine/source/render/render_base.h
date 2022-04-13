@@ -59,7 +59,7 @@ namespace nrender
 
     RenderContext() : mWindow(nullptr) {}
 
-    virtual bool init(nwindow::IWindow* window)
+    virtual bool Init(nwindow::IWindow* window)
     {
       mWindow = window;
       return true;

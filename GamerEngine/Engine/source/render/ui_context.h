@@ -9,7 +9,7 @@ namespace nrender
 
   public:
 
-    bool init(nwindow::IWindow* window) override;
+    bool Init(nwindow::IWindow* window) override;
 
     void PreRender() override;
 

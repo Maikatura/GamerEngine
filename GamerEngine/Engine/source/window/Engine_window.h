@@ -27,18 +27,13 @@ namespace nwindow
 	{
 	public:
 
-		GLWindow() :
-			mIsRunning(true), mWindow(nullptr)
-		{
-			mUICtx = std::make_unique<UIContext>();
-			mRenderCtx = std::make_unique<OpenGL_Context>();
-		}
+		GLWindow();
 
 		~GLWindow();
 
-		bool init(int width, int height, const std::string& title);
+		bool Init(int width, int height, const std::string& title);
 
-		void render();
+		void Render();
 
 		void HandleInput();
 
