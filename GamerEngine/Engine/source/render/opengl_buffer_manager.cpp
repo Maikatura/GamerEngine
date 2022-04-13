@@ -6,11 +6,11 @@ namespace GamerEngine
   void OpenGL_VertexIndexBuffer::CreateBuffers(const std::vector<GamerEngine::VertexHolder>& vertices, const std::vector<unsigned int>& indices)
   {
     glGenVertexArrays(1, &mVAO);
+    glBindVertexArray(mVAO);
 
     glGenBuffers(1, &mIBO);
     glGenBuffers(1, &mVBO);
 
-    glBindVertexArray(mVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GamerEngine::VertexHolder), vertices.data(), GL_STATIC_DRAW);
@@ -19,7 +19,7 @@ namespace GamerEngine
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GamerEngine::VertexHolder), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GamerEngine::VertexHolder), nullptr);
 
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GamerEngine::VertexHolder), (void*)offsetof(GamerEngine::VertexHolder, mNormal));
@@ -53,7 +53,6 @@ namespace GamerEngine
   {
     Bind();
 
-    
     glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 
     Unbind();

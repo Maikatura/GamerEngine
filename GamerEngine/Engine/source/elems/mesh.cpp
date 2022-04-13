@@ -10,7 +10,15 @@ namespace GamerEngine
 {
 	void Mesh::Init()
 	{
-		mRenderBufferMgr = std::make_unique<GamerEngine::OpenGL_VertexIndexBuffer>();
+		if (!mRenderBufferMgr)
+		{
+			mRenderBufferMgr = std::make_unique<GamerEngine::OpenGL_VertexIndexBuffer>();
+		}
+		else
+		{
+			mRenderBufferMgr->DeleteBuffers();
+		}
+
 
 		CreateBuffers();
 	}
@@ -22,6 +30,8 @@ namespace GamerEngine
 
 	bool Mesh::Load(const std::string& filepath)
 	{
+
+
 		const uint32_t cMeshImportFlags =
 			aiProcess_CalcTangentSpace |
 			aiProcess_Triangulate |
@@ -64,6 +74,7 @@ namespace GamerEngine
 			Init();
 			return true;
 		}
+
 		return false;
 	}
 
