@@ -2,17 +2,13 @@
 *.d
 **/.vs
 **/.idea
+**/x64
 
 # Compiled Object files
 *.slo
 *.lo
 *.o
 *.obj
-*.opendb
-*.VC.db-shm
-*.VC.db-wal
-*.ipch
-
 
 # Precompiled Headers
 *.gch
@@ -30,11 +26,8 @@
 *.lai
 *.la
 *.a
-*.obj
-*.ilk
-*.idb
-*.pdb
 
 # Executables
 *.exe
 *.out
+*.app
