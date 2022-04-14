@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "InspectorPanel.h"
 
-#include <imgui.h>
+#include <imgui/imgui.h>
 
 #include "utils/imgui_widgets.h"
 

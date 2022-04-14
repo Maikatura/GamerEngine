@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ContentBrowserPanel.h"
-#include <imgui.h>
+#include <imgui/imgui.h>
 
 namespace GamerEngine
 {

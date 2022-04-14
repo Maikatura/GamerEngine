@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SceneView.h"
 #include "PropertyPanel.h"
-#include "imgui.h"
+#include <imgui/imgui.h>
 
 namespace GamerEngine
 {

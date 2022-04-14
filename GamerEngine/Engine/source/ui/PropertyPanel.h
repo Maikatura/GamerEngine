@@ -3,9 +3,9 @@
 #include "elems/light.h"
 #include "ui/SceneView.h"
 
-#include "imgui.h"
+#include <imgui/imgui.h>
 #include "utils/imgui_widgets.h"
-#include <ImFileBrowser.h>
+#include <imgui/plugins/ImFileBrowser.h>
 
 namespace GamerEngine
 {
