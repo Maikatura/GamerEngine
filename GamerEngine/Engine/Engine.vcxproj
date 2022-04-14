@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="source\ECS\Entity.cpp" />
     <ClCompile Include="source\ECS\Scene.cpp" />
+    <ClCompile Include="source\render\Texture.cpp" />
     <ClCompile Include="source\ui\ContentBrowserPanel.cpp" />
     <ClCompile Include="source\ui\InspectorPanel.cpp" />
     <ClCompile Include="source\ui\NavigationPanel.cpp" />
@@ -182,6 +183,8 @@
     <ClInclude Include="source\ECS\Entity.h" />
     <ClInclude Include="source\ECS\Scene.h" />
     <ClInclude Include="source\Models\Model.h" />
+    <ClInclude Include="source\render\ImageLoader.h" />
+    <ClInclude Include="source\render\Texture.h" />
     <ClInclude Include="source\Transform.h" />
     <ClInclude Include="source\ui\ContentBrowserPanel.h" />
     <ClInclude Include="source\ui\InspectorPanel.h" />

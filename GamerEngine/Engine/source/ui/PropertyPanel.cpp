@@ -8,6 +8,7 @@ namespace GamerEngine
 		mCurrentFile = "< ... >";
 		mFileDialog.SetTitle("Open mesh");
 		mFileDialog.SetFileFilters({ ".fbx", ".obj" });
+		mFileDialog.SetPwd(std::filesystem::current_path().string() + "/Assets");
 	}
 
 	void PropertyPanel::OnImGuiRender(GamerEngine::SceneView* scene_view)
@@ -21,6 +22,7 @@ namespace GamerEngine
 			if (ImGui::Button("Open..."))
 			{
 				mFileDialog.Open();
+				
 			}
 			ImGui::SameLine(0, 5.0f);
 			ImGui::Text(mCurrentFile.c_str());

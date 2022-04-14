@@ -4,54 +4,63 @@
 
 namespace GamerEngine
 {
-ContentBrowserPanel::ContentBrowserPanel() : myAssetPath("Assets")
-{
-	myCurrentDirectory = myAssetPath;
-}
-
-ContentBrowserPanel::~ContentBrowserPanel()
-{
-}
-
-void ContentBrowserPanel::OnImGuiRender()
-{
-	ImGui::Begin("Content Browser");
-
-	auto relativePath = std::filesystem::relative(myAssetPath);
-
-	if (myCurrentDirectory != myAssetPath)
+	ContentBrowserPanel::ContentBrowserPanel() : myAssetPath("Assets")
 	{
-		if(ImGui::Button("<-"))
-		{
-			myCurrentDirectory = myCurrentDirectory.parent_path();
-		}
-	}
-
-	for(auto& directoryEntry : std::filesystem::directory_iterator(myCurrentDirectory))
-	{
-
-		const auto& path = directoryEntry.path();
-		auto relativePath = std::filesystem::relative(path, myAssetPath);
-		std::string relativePathString = relativePath.filename().string();
-
-		if (directoryEntry.is_directory())
-		{
-			if (ImGui::Button(relativePathString.c_str()))
-			{
-				myCurrentDirectory /= path.filename();
-			}
-		}
-		else
-		{
-			if (ImGui::Button(relativePathString.c_str()))
-			{
-			}
-		}
-
+		myCurrentDirectory = myAssetPath;
+		myFolder = Texture("resourses/folderIcon.png");
 
 	}
 
+	ContentBrowserPanel::~ContentBrowserPanel()
+	{
+	}
 
-	ImGui::End();
-}
+	void ContentBrowserPanel::OnImGuiRender()
+	{
+		
+
+		ImGui::Begin("Content Browser");
+
+		if (myCurrentDirectory != myAssetPath)
+		{
+			if (ImGui::Button("<-"))
+			{
+				myCurrentDirectory = myCurrentDirectory.parent_path();
+			}
+		}
+
+		const float cellSize = myIconSize + myIconPadding;
+		const float width = ImGui::GetContentRegionAvail().x;
+		int columnCount = static_cast<int>(width / cellSize);
+		if (columnCount < 1)
+			columnCount = 1;
+
+		ImGui::Columns(columnCount, 0, false);
+
+		for (auto& directoryEntry : std::filesystem::directory_iterator(myCurrentDirectory))
+		{
+			auto relativePath = std::filesystem::relative(directoryEntry.path(), myAssetPath);
+			std::string relativePathString = relativePath.filename().string();
+
+			//uint64_t id = myFolder.GetRenderID();
+			ImGui::ImageButton(reinterpret_cast<void*>(myFolder.GetRenderID()), { myIconSize, myIconSize });
+
+			if (directoryEntry.is_directory())
+			{
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+				{
+					myCurrentDirectory /= directoryEntry.path().filename();
+				}
+			}
+			else
+			{
+				// TODO : Setup so you can open files
+			}
+
+			ImGui::NextColumn();
+		}
+
+		ImGui::Columns(1);
+		ImGui::End();
+	}
 }
