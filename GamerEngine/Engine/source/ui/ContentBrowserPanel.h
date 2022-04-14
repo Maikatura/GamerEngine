@@ -20,10 +20,12 @@ namespace GamerEngine
 		float myIconSize = 128.0f;
 		float myIconPadding = 16.0f;
 
-		Texture myFolderIcon;
-		Texture myModelIcon;
-
 		std::filesystem::path myCurrentDirectory;
 		std::filesystem::path myAssetPath;
+
+		Texture myFolderIcon;
+		Texture myModelIcon;
+		Texture myScriptIcon;
+		Texture myImageIcon;
 	};
 }

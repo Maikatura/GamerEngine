@@ -1,5 +1,4 @@
-### A OpenGL Game Engine
-
+<img src="/README/images/banner.png">
 GamerEngine is a free and open source 3D game engine!
 
 

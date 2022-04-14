@@ -9,6 +9,8 @@ namespace GamerEngine
 		myCurrentDirectory = myAssetPath;
 		myFolderIcon.LoadTexture(	"resources/icons/Icon_Directory.png");
 		myModelIcon.LoadTexture(	"resources/icons/Icon_File.png");
+		myScriptIcon.LoadTexture(	"resources/icons/Icon_Code.png");
+		myImageIcon.LoadTexture(	"resources/icons/Icon_Image.png");
 	}
 
 	ContentBrowserPanel::~ContentBrowserPanel()
@@ -17,9 +19,9 @@ namespace GamerEngine
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize;
+		ImGuiWindowFlags flags = 
 
-		ImGui::Begin("Content Browser", (bool*)1, flags);
+		ImGui::Begin("Content Browser");
 
 		if (myCurrentDirectory != myAssetPath)
 		{
@@ -67,10 +69,12 @@ namespace GamerEngine
 
 	unsigned ContentBrowserPanel::GetIconID(const std::string& aExtension)
 	{
-		if (aExtension == ".fbx")		return myModelIcon.GetRenderID(); // Model File
-		if (aExtension == ".obj")		return myModelIcon.GetRenderID(); // Model File
-		if (aExtension == ".shader")	return myModelIcon.GetRenderID(); // Shader File
-		if (aExtension == ".cs")		return myModelIcon.GetRenderID(); // C# Code File
+		if (aExtension == ".fbx")		return myModelIcon.GetRenderID();	// Model File
+		if (aExtension == ".obj")		return myModelIcon.GetRenderID();	// Model File
+		if (aExtension == ".shader")	return myModelIcon.GetRenderID();	// Shader File
+		if (aExtension == ".cs")		return myScriptIcon.GetRenderID();	// C# Code File
+		if (aExtension == ".png")		return myImageIcon.GetRenderID();	// Image File
+		if (aExtension == ".jpg")		return myImageIcon.GetRenderID();	// Image File
 
 		return myModelIcon.GetRenderID();
 	}
