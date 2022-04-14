@@ -17,7 +17,7 @@
 #include "ui/PropertyPanel.h"
 #include "ui/SceneView.h"
 
-using namespace nshaders;
+using namespace GamerEngine;
 
 namespace GamerEngine
 {

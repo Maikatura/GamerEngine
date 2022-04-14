@@ -7,8 +7,8 @@ namespace GamerEngine
 	ContentBrowserPanel::ContentBrowserPanel() : myAssetPath("Assets")
 	{
 		myCurrentDirectory = myAssetPath;
-		myFolder = Texture("resourses/folderIcon.png");
-
+		myFolderIcon.LoadTexture(	"resources/icons/Icon_Directory.png");
+		myModelIcon.LoadTexture(	"resources/icons/Icon_File.png");
 	}
 
 	ContentBrowserPanel::~ContentBrowserPanel()
@@ -17,8 +17,6 @@ namespace GamerEngine
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		
-
 		ImGui::Begin("Content Browser");
 
 		if (myCurrentDirectory != myAssetPath)
@@ -42,25 +40,36 @@ namespace GamerEngine
 			auto relativePath = std::filesystem::relative(directoryEntry.path(), myAssetPath);
 			std::string relativePathString = relativePath.filename().string();
 
-			//uint64_t id = myFolder.GetRenderID();
-			ImGui::ImageButton(reinterpret_cast<void*>(myFolder.GetRenderID()), { myIconSize, myIconSize });
+			auto iconTexture = myModelIcon.GetRenderID();
 
 			if (directoryEntry.is_directory())
-			{
-				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-				{
-					myCurrentDirectory /= directoryEntry.path().filename();
-				}
-			}
+				iconTexture = myFolderIcon.GetRenderID();
 			else
-			{
-				// TODO : Setup so you can open files
-			}
+				iconTexture = GetIconID(relativePath.extension().string());
+			
+			ImGui::ImageButton(reinterpret_cast<void*>(iconTexture), { myIconSize, myIconSize });
+			ImGui::NewLine();
 
+			if (directoryEntry.is_directory())
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+					myCurrentDirectory /= directoryEntry.path().filename();
+
+			ImGui::Text(relativePathString.c_str());
 			ImGui::NextColumn();
 		}
 
 		ImGui::Columns(1);
 		ImGui::End();
 	}
+
+	unsigned ContentBrowserPanel::GetIconID(const std::string& aExtension)
+	{
+		if (aExtension == ".fbx")		return myModelIcon.GetRenderID(); // Model File
+		if (aExtension == ".obj")		return myModelIcon.GetRenderID(); // Model File
+		if (aExtension == ".shader")	return myModelIcon.GetRenderID(); // Shader File
+		if (aExtension == ".cs")		return myModelIcon.GetRenderID(); // C# Code File
+
+		return myModelIcon.GetRenderID();
+	}
 }
+

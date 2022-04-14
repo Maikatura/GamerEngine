@@ -12,7 +12,7 @@ namespace GamerEngine
 	{
 		mFrameBuffer = std::make_unique<GamerEngine::OpenGL_FrameBuffer>();
 		mFrameBuffer->CreateBuffers(800, 600);
-		mShader = std::make_unique<nshaders::Shader>();
+		mShader = std::make_unique<GamerEngine::Shader>();
 		mShader->load("shaders/vs.shader", "shaders/fs_pbr.shader");
 		mLight = std::make_unique<GamerEngine::Light>();
 

@@ -40,7 +40,7 @@ namespace GamerEngine
   private:
     std::unique_ptr<GamerEngine::Camera> mCamera;
     std::unique_ptr<GamerEngine::OpenGL_FrameBuffer> mFrameBuffer;
-    std::unique_ptr<nshaders::Shader> mShader;
+    std::unique_ptr<GamerEngine::Shader> mShader;
     std::unique_ptr<GamerEngine::Light> mLight;
     std::shared_ptr<MeshComponent> mMesh;
     glm::vec2 mSize;

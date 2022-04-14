@@ -27,7 +27,7 @@ namespace GamerEngine
 		}
 
 
-		void Update(MeshComponent* aModel, nshaders::Shader* shader)
+		void Update(MeshComponent* aModel, GamerEngine::Shader* shader)
 		{
 			if (aModel)
 			{

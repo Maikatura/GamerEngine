@@ -6,7 +6,7 @@ namespace GamerEngine
 	  class Element
 	  {
 	  public:
-	    virtual void Update(nshaders::Shader* shader) = 0;
+	    virtual void Update(GamerEngine::Shader* shader) = 0;
 	  };
 }
 

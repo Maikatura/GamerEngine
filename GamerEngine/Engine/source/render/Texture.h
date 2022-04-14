@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <array>
+#include "shader/shader_util.h"
 
 namespace GamerEngine
 {
@@ -7,9 +9,9 @@ namespace GamerEngine
 	{
 	public:
 		Texture();
-		Texture(const std::string& aPath);
 		~Texture();
 
+		void LoadTexture(const std::string& aPath);
 		void Bind(unsigned int slot = 0) const;
 		void Unbind() const;
 
@@ -26,5 +28,11 @@ namespace GamerEngine
 		int myHeight;
 		int myBPP;
 
+		std::array<float, 16> myPosition;
+		std::array<unsigned int, 6> myIndicaes;
+
+		std::unique_ptr<Shader> myShader;
+
 	};
+
 }

@@ -20,7 +20,7 @@ namespace GamerEngine
 
 		~Light() {}
 
-		void Update(nshaders::Shader* shader) override
+		void Update(GamerEngine::Shader* shader) override
 		{
 
 			shader->set_vec3(mPosition, "lightPosition");

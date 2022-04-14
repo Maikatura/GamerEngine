@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nshaders
+namespace GamerEngine
 {
 
 	// Utitlity class to Load, compile and attach a vertex- and fragment shader to a program
@@ -24,7 +24,7 @@ namespace nshaders
 		// Delete the program
 		void unload();
 
-    unsigned int get_program_id() { return mProgramId; }
+		unsigned int get_program_id() { return mProgramId; }
 
 		void set_mat4(const glm::mat4& mat4, const std::string& name);
 
@@ -33,7 +33,7 @@ namespace nshaders
 		void set_f3(float a, float b, float c, const std::string& name);
 
 		void set_vec3(const glm::vec3& vec3, const std::string& name);
-    void set_vec4(const glm::vec4& vec4, const std::string& name);
+		void set_vec4(const glm::vec4& vec4, const std::string& name);
 
 
 

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "shader_util.h"
 
-namespace nshaders
+namespace GamerEngine
 {
 	unsigned int Shader::get_compiled_shader(unsigned int shader_type, const std::string& shader_source)
 	{

@@ -78,7 +78,7 @@ namespace GamerEngine
 		return false;
 	}
 
-	void Mesh::Update(nshaders::Shader* shader)
+	void Mesh::Update(GamerEngine::Shader* shader)
 	{
 		shader->set_vec3(mColor, "albedo");
 		shader->set_f1(mRoughness, "roughness");
