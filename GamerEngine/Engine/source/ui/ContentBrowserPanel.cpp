@@ -17,7 +17,9 @@ namespace GamerEngine
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		ImGui::Begin("Content Browser");
+		ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize;
+
+		ImGui::Begin("Content Browser", (bool*)1, flags);
 
 		if (myCurrentDirectory != myAssetPath)
 		{
@@ -27,12 +29,15 @@ namespace GamerEngine
 			}
 		}
 
+		myIconPadding = myIconSize / 8;
 		const float cellSize = myIconSize + myIconPadding;
 		const float width = ImGui::GetContentRegionAvail().x;
 		int columnCount = static_cast<int>(width / cellSize);
 		if (columnCount < 1)
 			columnCount = 1;
 
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 10,10});
+		ImGui::PopStyleVar();
 		ImGui::Columns(columnCount, 0, false);
 
 		for (auto& directoryEntry : std::filesystem::directory_iterator(myCurrentDirectory))
@@ -48,8 +53,6 @@ namespace GamerEngine
 				iconTexture = GetIconID(relativePath.extension().string());
 			
 			ImGui::ImageButton(reinterpret_cast<void*>(iconTexture), { myIconSize, myIconSize });
-			ImGui::NewLine();
-
 			if (directoryEntry.is_directory())
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 					myCurrentDirectory /= directoryEntry.path().filename();

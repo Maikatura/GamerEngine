@@ -17,11 +17,11 @@ namespace GamerEngine
 	private:
 
 		unsigned int GetIconID(const std::string& aExtension);
-		float myIconSize = 96.0f;
-		float myIconPadding = 4.0f;
+		float myIconSize = 128.0f;
+		float myIconPadding = 16.0f;
 
-		Texture myFolder;
-		Texture myIcon;
+		Texture myFolderIcon;
+		Texture myModelIcon;
 
 		std::filesystem::path myCurrentDirectory;
 		std::filesystem::path myAssetPath;
