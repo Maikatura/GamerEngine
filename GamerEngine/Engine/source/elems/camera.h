@@ -34,11 +34,11 @@ namespace GamerEngine
 				glm::mat4 position(1.0f);
 				glm::mat4 rotation(1.0f);
 				glm::mat4 scale(1.0f);
-				position = glm::translate(position, aModel->myModel.myTransform.myPosition);
+				position = glm::translate(position, { aModel->myModel.myTransform.myPosition.x, aModel->myModel.myTransform.myPosition.y, aModel->myModel.myTransform.myPosition.z });
 				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.x), glm::vec3(1, 0, 0));
 				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.y), glm::vec3(0, 1, 0));
 				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.z), glm::vec3(0, 0, 1));
-				scale = glm::scale(scale, aModel->myModel.myTransform.myScale);
+				scale = glm::scale(scale, { aModel->myModel.myTransform.myScale.x, aModel->myModel.myTransform.myScale.y, aModel->myModel.myTransform.myScale.z });
 
 				glm::mat4 modelView = position * scale * rotation;
 

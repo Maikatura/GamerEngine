@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)source;$(SolutionDIr)vendor\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)source;$(SolutionDIr)vendor\include;$(SolutionDIr)vendor\include\CommonUtilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -101,8 +101,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\gl;$(SolutionDir)vendor\lib\glfw;$(SolutionDir)vendor\lib\assimp;$(SolutionDir)vendor\lib\GamerLib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;assimp-vc142-mtd.lib;External-Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\gl;$(SolutionDir)vendor\lib\glfw;$(SolutionDir)vendor\lib\assimp;$(SolutionDir)vendor\lib\GamerLib;$(SolutionDir)vendor\lib\CommonUtilities;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;assimp-vc142-mtd.lib;External-Debug.lib;CommonUtilities-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

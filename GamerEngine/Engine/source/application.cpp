@@ -2,7 +2,7 @@
 
 #include "Application.h"
 
-#include "window/EngineWindow.h"
+#include "Window/EngineWindow.h"
 
 Application::Application()
 {

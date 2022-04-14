@@ -47,7 +47,7 @@ namespace GamerEngine
 		ImGui::PopStyleVar();
 	}
 
-	static void DrawImGuiTransform(const std::string& label, const std::string& aNameTag,  glm::vec3& values, float columnWidth = 100.0f)
+	static void DrawImGuiTransform(const std::string& label, CommonUtilities::Vector3<float>& values, float columnWidth = 100.0f)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -59,9 +59,9 @@ namespace GamerEngine
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
 
-		std::string valueX = "##" + aNameTag + "X";
-		std::string valueY = "##" + aNameTag + "Y";
-		std::string valueZ = "##" + aNameTag + "Z";
+		std::string valueX = "##" + label + "X";
+		std::string valueY = "##" + label + "Y";
+		std::string valueZ = "##" + label + "Z";
 
 		ImGui::PushFont(boldFont);
 		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(65, 105, 225, 255));

@@ -2,6 +2,7 @@
 **/.vs
 **/.idea
 **/x64
+**/Temp
 *.slo
 *.lo
 *.o

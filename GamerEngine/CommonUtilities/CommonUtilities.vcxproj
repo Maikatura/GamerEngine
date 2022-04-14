@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{d36cecc9-fc34-4dec-a30d-2280f84d0e4e}</ProjectGuid>
+    <RootNamespace>Timer</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)-d</TargetName>
+    <OutDir>$(SolutionDir)vendor\lib\CommonUtilities\</OutDir>
+    <IntDir>$(SolutionDir)..\Temp\CommonUtilities\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)-r</TargetName>
+    <OutDir>..\..\External\CommonUtilities\lib</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(OutDir)..\bin\$(TargetName).pdb</ProgramDataBaseFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>RD /S /Q "$(TargetDir)..\..\include\CommonUtilities"</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>start xcopy /E /Y /R /I "$(SolutionDir)CommonUtilities\*.h" "$(TargetDir)..\..\include\CommonUtilities"
+start xcopy /E /Y /R /I "$(SolutionDir)CommonUtilities\*.hpp" "$(TargetDir)..\..\include\CommonUtilities"
+</Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>RD /S /Q "$(TargetDir)..\include"</Command>
+    </PreBuildEvent>
+    <PreLinkEvent>
+      <Command>start xcopy /E /Y /R /I "$(SolutionDir)CommonUtilities\*.h" "$(TargetDir)..\include"
+start xcopy /E /Y /R /I "$(SolutionDir)CommonUtilities\*.hpp" "$(TargetDir)..\include"
+</Command>
+    </PreLinkEvent>
+    <PostBuildEvent>
+      <Command>del "$(TargetDir)..\include\pch.h"
+del "$(TargetDir)..\include\framework.h"
+RD /S /Q  "$(TargetDir)..\include\x64"
+RD /S /Q "$(TargetDir)..\include\$(ConfigurationName)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="List\BSTSet.hpp" />
+    <ClInclude Include="List\DoublyLinkedList.hpp" />
+    <ClInclude Include="List\DoublyLinkedListNode.hpp" />
+    <ClInclude Include="Math\AABB3D.hpp" />
+    <ClInclude Include="Math\Intersection.hpp" />
+    <ClInclude Include="Math\Line.hpp" />
+    <ClInclude Include="Math\LineVolume.hpp" />
+    <ClInclude Include="Math\Matrix.h" />
+    <ClInclude Include="Math\Matrix3x3.hpp" />
+    <ClInclude Include="Math\Matrix4x4.hpp" />
+    <ClInclude Include="Math\Plane.hpp" />
+    <ClInclude Include="Math\PlaneVolume.hpp" />
+    <ClInclude Include="Math\Ray.hpp" />
+    <ClInclude Include="Math\Sphere.hpp" />
+    <ClInclude Include="Math\Vector.h" />
+    <ClInclude Include="Math\Vector2.hpp" />
+    <ClInclude Include="Math\Vector3.hpp" />
+    <ClInclude Include="Math\Vector4.hpp" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="PerformaceTimer.h" />
+    <ClInclude Include="Queue.hpp" />
+    <ClInclude Include="Sort\BogoSort.hpp" />
+    <ClInclude Include="Sort\BubbleSort.hpp" />
+    <ClInclude Include="Sort\MergeSort.hpp" />
+    <ClInclude Include="Sort\QuickSort.hpp" />
+    <ClInclude Include="Sort\SelectionSort.hpp" />
+    <ClInclude Include="Stack.hpp" />
+    <ClInclude Include="UtilityFunctions.h" />
+    <ClInclude Include="Timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

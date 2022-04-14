@@ -1,9 +1,10 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <Math/Vector3.hpp>
 
 struct TransformComponent
 {
-	glm::vec3 myPosition = { 0.0f, 0.0f, 0.0f };
-	glm::vec3 myRotation = { 0.0f, 0.0f, 0.0f };
-	glm::vec3 myScale = { 1.0f, 1.0f ,1.0f };
+	CommonUtilities::Vector3<float> myPosition = { 0.0f, 0.0f, 0.0f };
+	CommonUtilities::Vector3<float> myRotation = { 0.0f, 0.0f, 0.0f };
+	CommonUtilities::Vector3<float> myScale = { 1.0f, 1.0f ,1.0f };
 };

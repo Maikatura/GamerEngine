@@ -9,7 +9,7 @@ If ErrorLevel 1 goto Clean
 
 :Clean
 echo "Cleaing Everything!"
-PowerShell Remove-Item %cd%\* -include .vs, Intermediate, x64 -force -recurse 
+PowerShell Remove-Item %cd%\* -include .vs, Intermediate, x64, Temp -force -recurse 
 
 :EndOfbatch
 echo "Bye!"
