@@ -1,4 +1,4 @@
-<img src="/README/images/banner.png">
+<img src="/README/images/Banner.png">
 GamerEngine is a free and open source 3D game engine!
 
 
