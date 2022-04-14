@@ -23,9 +23,9 @@ namespace GamerEngine
 			{
 				ImGui::Text("Transform");
 
-				GamerEngine::DrawImGuiTransform("Pos","Pos", mesh->myTransform.myPosition);
-				GamerEngine::DrawImGuiTransform("Rot","Rot", mesh->myTransform.myRotation);
-				GamerEngine::DrawImGuiTransform("Scale","Scale", mesh->myTransform.myScale);
+				GamerEngine::DrawImGuiTransform("Pos","Pos", mesh->myModel.myTransform.myPosition);
+				GamerEngine::DrawImGuiTransform("Rot","Rot", mesh->myModel.myTransform.myRotation);
+				GamerEngine::DrawImGuiTransform("Scale","Scale", mesh->myModel.myTransform.myScale);
 				
 			}
 

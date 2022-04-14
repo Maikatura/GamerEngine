@@ -3,10 +3,12 @@
 #include "render/render_base.h"
 #include "vertex_holder.h"
 #include "elems/element.h"
-#include "Transform.h"
+#include "Components/TransformComponent.h"
+
 
 namespace GamerEngine
 {
+
 	class Mesh : public Element
 	{
 
@@ -32,7 +34,7 @@ namespace GamerEngine
 		void Bind();
 		void Unbind();
 
-		Transform myTransform = {};
+		TransformComponent myTransform = {}; // TODO:  CHANGE THIS TO TRANSFORM COMPONENT ON ENTITY!
 	private:
 		// Buffers manager
 		std::unique_ptr<GamerEngine::VertexIndexBuffer> mRenderBufferMgr;

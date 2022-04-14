@@ -4,7 +4,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "input.h"
-#include "Models/Model.h"
+#include "Components/MeshComponent.h"
 #include "shader/shader_util.h"
 
 namespace GamerEngine
@@ -27,18 +27,18 @@ namespace GamerEngine
 		}
 
 
-		void Update(Model* aModel, nshaders::Shader* shader)
+		void Update(MeshComponent* aModel, nshaders::Shader* shader)
 		{
 			if (aModel)
 			{
 				glm::mat4 position(1.0f);
 				glm::mat4 rotation(1.0f);
 				glm::mat4 scale(1.0f);
-				position = glm::translate(position, aModel->myTransform.myPosition);
-				rotation = glm::rotate(rotation, glm::radians(aModel->myTransform.myRotation.x), glm::vec3(1, 0, 0));
-				rotation = glm::rotate(rotation, glm::radians(aModel->myTransform.myRotation.y), glm::vec3(0, 1, 0));
-				rotation = glm::rotate(rotation, glm::radians(aModel->myTransform.myRotation.z), glm::vec3(0, 0, 1));
-				scale = glm::scale(scale, aModel->myTransform.myScale);
+				position = glm::translate(position, aModel->myModel.myTransform.myPosition);
+				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.x), glm::vec3(1, 0, 0));
+				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.y), glm::vec3(0, 1, 0));
+				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.z), glm::vec3(0, 0, 1));
+				scale = glm::scale(scale, aModel->myModel.myTransform.myScale);
 
 				glm::mat4 modelView = position * scale * rotation;
 

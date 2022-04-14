@@ -9,6 +9,13 @@ namespace GamerEngine
 		Entity(entt::entity aEntityID);
 		~Entity();
 
+
+		template<typename T>
+		bool HasComponent()
+		{
+			// Check if EnTT has component
+		}
+
 	private:
 		entt::entity myEntityID;
 	};

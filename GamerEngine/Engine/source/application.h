@@ -7,14 +7,16 @@ class Application
 {
 
 public:
-  Application(const std::string& app_name);
+	Application();
 
-  static Application& Instance() { return *sInstance; }
+	static Application& Instance() { return *sInstance; }
 
-  void Loop();
+	void Init(const std::string& aAppName, int aMajorVersion, int aMinorVersion, int aPatchVersion);
+	void Loop();
+
 
 private:
-  static Application* sInstance;
+	static Application* sInstance;
 
-  std::unique_ptr<GamerEngine::GLWindow> mWindow;
+	std::unique_ptr<GamerEngine::GLWindow> mWindow;
 };

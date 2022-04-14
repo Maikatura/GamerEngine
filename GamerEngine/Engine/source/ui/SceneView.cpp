@@ -55,13 +55,13 @@ namespace GamerEngine
 	{
 		if (!mMesh)
 		{
-			mMesh = std::make_shared<Model>();
+			mMesh = std::make_shared<MeshComponent>();
 		}
 
-		mMesh->Load(filepath);
+		mMesh->myModel.Load(filepath);
 	}
 
-	void SceneView::SetMesh(std::shared_ptr<Model> mesh)
+	void SceneView::SetMesh(std::shared_ptr<MeshComponent> mesh)
 	{
 		mMesh = mesh;
 	}
@@ -82,8 +82,8 @@ namespace GamerEngine
 
 		if (mMesh)
 		{
-			mMesh->Update(mShader.get());
-			mMesh->Render();
+			mMesh->myModel.Update(mShader.get());
+			mMesh->myModel.Render();
 		}
 
 		mFrameBuffer->Unbind();

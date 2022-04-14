@@ -1,9 +1,9 @@
 #pragma once
+#include "elems/mesh.h"
 
-namespace GamerEngine
+
+
+struct MeshComponent
 {
-	struct MeshComponent
-	{
-
-	};
-}
+	GamerEngine::Mesh myModel;
+};

@@ -1,10 +1,8 @@
 #pragma once
 
 #include "pch.h"
-
 #include "imgui.h"
 #include "imgui_internal.h"
-#include "../Transform.h"
 
 namespace GamerEngine
 {

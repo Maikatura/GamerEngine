@@ -6,7 +6,7 @@
 #include "shader/shader_util.h"
 #include "render/opengl_buffer_manager.h"
 #include "elems/input.h"
-#include "Models/Model.h"
+#include "Components/MeshComponent.h"
 
 namespace GamerEngine
 {
@@ -25,9 +25,9 @@ namespace GamerEngine
 
     void LoadMesh(const std::string& filepath);
 
-    void SetMesh(std::shared_ptr<Model> mesh);
+    void SetMesh(std::shared_ptr<MeshComponent> mesh);
 
-    std::shared_ptr<Model> GetMesh() { return mMesh; }
+    std::shared_ptr<MeshComponent> GetMesh() { return mMesh; }
 
     void SetCameraPos(glm::vec3 aPosition);
     
@@ -42,7 +42,7 @@ namespace GamerEngine
     std::unique_ptr<GamerEngine::OpenGL_FrameBuffer> mFrameBuffer;
     std::unique_ptr<nshaders::Shader> mShader;
     std::unique_ptr<GamerEngine::Light> mLight;
-    std::shared_ptr<Model> mMesh;
+    std::shared_ptr<MeshComponent> mMesh;
     glm::vec2 mSize;
   };
 }
