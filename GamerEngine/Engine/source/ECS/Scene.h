@@ -1,6 +1,8 @@
 #pragma once
 #include <entt/entt.hpp>
 
+#include "shader/shader_util.h"
+
 namespace GamerEngine
 {
 
@@ -16,6 +18,8 @@ namespace GamerEngine
 
 		Entity* CreateEntity();
 
+
+		void Render(GamerEngine::Shader* shader);
 		
 
 	private:

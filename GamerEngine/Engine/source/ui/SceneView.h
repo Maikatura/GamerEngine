@@ -7,6 +7,7 @@
 #include "render/opengl_buffer_manager.h"
 #include "elems/input.h"
 #include "Components/MeshComponent.h"
+#include "ECS/Scene.h"
 
 namespace GamerEngine
 {
@@ -43,6 +44,9 @@ namespace GamerEngine
     std::unique_ptr<GamerEngine::Shader> mShader;
     std::unique_ptr<GamerEngine::Light> mLight;
     std::shared_ptr<MeshComponent> mMesh;
+
+    std::unique_ptr<Scene> myScene;
+
     glm::vec2 mSize;
   };
 }

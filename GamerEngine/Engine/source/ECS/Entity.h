@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include <entt/entt.hpp>
+#include <cassert>
 
 namespace GamerEngine
 {
@@ -13,27 +14,28 @@ namespace GamerEngine
 		template<typename T, typename... Args>
 		T& AddComponent (Args&&... args)
 		{
-			asset(!HasComponent<T>() && "Entity has component");
+			assert(!HasComponent<T>() && "Entity has component");
 			return myScene->myRegistry.emplace<T>(myEntityID, std::forward<Args>(args)...);
 		}
 
 		template<typename T>
 		T& GetComponent()
 		{
-			asset(HasComponent<T>() && "Entity does not have component");
+			assert(HasComponent<T>() && "Entity does not have component");
 			return myScene->myRegistry.get<T>(myEntityID);
 		}
 
 		template<typename T>
 		bool HasComponent()
 		{
+			return false;
 			return myScene->myRegistry.any_of<T>(myEntityID);
 		}
 
 		template<typename T>
 		void RemoveComponent()
 		{
-			asset(HasComponent<T>() && "Entity does not have component");
+			assert(HasComponent<T>() && "Entity does not have component");
 			myScene->myRegistry.remove<T>(myEntityID);
 		}
 

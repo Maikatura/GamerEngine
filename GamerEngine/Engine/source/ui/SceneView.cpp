@@ -3,6 +3,8 @@
 #include "PropertyPanel.h"
 #include <imgui/imgui.h>
 
+#include "ECS/Entity.h"
+
 namespace GamerEngine
 {
 	SceneView::SceneView()
@@ -15,6 +17,7 @@ namespace GamerEngine
 		mShader = std::make_unique<GamerEngine::Shader>();
 		mShader->load("shaders/vs.shader", "shaders/fs_pbr.shader");
 		mLight = std::make_unique<GamerEngine::Light>();
+		myScene = std::make_unique<GamerEngine::Scene>();
 
 		mCamera = std::make_unique<GamerEngine::Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 1000.0f);
 
@@ -58,6 +61,10 @@ namespace GamerEngine
 			mMesh = std::make_shared<MeshComponent>();
 		}
 
+		/*auto test = myScene->CreateEntity();
+		auto& mesh = test->AddComponent<MeshComponent>();
+		mesh.myModel.Load(filepath);*/
+
 		mMesh->myModel.Load(filepath);
 	}
 
@@ -80,11 +87,14 @@ namespace GamerEngine
 
 		mFrameBuffer->Bind();
 
+		myScene->Render(mShader.get());
+
 		if (mMesh)
 		{
 			mMesh->myModel.Update(mShader.get());
 			mMesh->myModel.Render();
 		}
+
 
 		mFrameBuffer->Unbind();
 		ImGui::Begin("Scene");
