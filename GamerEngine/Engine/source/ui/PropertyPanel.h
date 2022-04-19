@@ -9,6 +9,9 @@
 
 namespace GamerEngine
 {
+
+	static MeshComponent* myPropMesh;
+
 	class PropertyPanel
 	{
 	public:

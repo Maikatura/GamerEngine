@@ -10,63 +10,84 @@ namespace GamerEngine
 
 		if (ImGui::BeginMainMenuBar())
 		{
-			if (ImGui::BeginMenu("File"))
-			{
-
-				if (ImGui::MenuItem("Save"))
-				{
-					std::cout << "New Scene (NOT) created";
-				}
-
-				ImGui::Separator();
-				if (ImGui::MenuItem("Close"))
-				{
-					std::cout << "Closed the program";
-				}
-
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Edit"))
-			{
-				if (ImGui::MenuItem("New Scene"))
-				{
-					std::cout << "New Scene (NOT) created";
-				}
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Component"))
-			{
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Windows"))
-			{
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Help"))
-			{
-				if (ImGui::MenuItem("Credits"))
-				{
-					myCreditsIsOpen = !myCreditsIsOpen;
-				}
-
-				ImGui::EndMenu();
-			}
+			FilePanel();
+			EditPanel();
+			ComponentsPanel();
+			WindowPanel();
+			HelpPanel();
 
 			ImGui::EndMainMenuBar();
 		}
 
+		CreditsPanel();
+	}
 
+	void NavigationPanel::FilePanel()
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Save"))
+			{
+				std::cout << "New Scene (NOT) created";
+			}
+
+			ImGui::Separator();
+			if (ImGui::MenuItem("Close"))
+			{
+				std::cout << "Closed the program";
+			}
+
+			ImGui::EndMenu();
+		}
+	}
+
+	void NavigationPanel::EditPanel()
+	{
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("New Scene"))
+			{
+				std::cout << "New Scene (NOT) created";
+			}
+
+			ImGui::EndMenu();
+		}
+	}
+
+	void NavigationPanel::ComponentsPanel()
+	{
+		if (ImGui::BeginMenu("Component"))
+		{
+			ImGui::EndMenu();
+		}
+	}
+
+	void NavigationPanel::WindowPanel()
+	{
+		if (ImGui::BeginMenu("Windows"))
+		{
+
+			if (ImGui::MenuItem("Inspector"))
+			{
+				std::cout << "Opened Inspector" << std::endl;
+			}
+
+			if (ImGui::MenuItem("Hierarchy"))
+			{
+				std::cout << "Opened Hierarchy" << std::endl;
+			}
+
+			ImGui::EndMenu();
+		}
+	}
+
+	void NavigationPanel::CreditsPanel()
+	{
 		if (myCreditsIsOpen)
 		{
 			ImGuiWindowFlags flags = ImGuiWindowFlags_NoDocking;
 
-			ImGui::SetNextWindowSize({200, 300}, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize({ 200, 300 }, ImGuiCond_FirstUseEver);
 			ImGui::Begin("Credits", &myCreditsIsOpen, flags);
 
 			CenterText("GamerEngine By:");
@@ -81,6 +102,20 @@ namespace GamerEngine
 
 			ImGui::End();
 		}
+	}
+
+	void NavigationPanel::HelpPanel()
+	{
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("Credits"))
+			{
+				myCreditsIsOpen = !myCreditsIsOpen;
+			}
+
+			ImGui::EndMenu();
+		}
+
 	}
 
 	void NavigationPanel::CenterText(std::string text)

@@ -3,6 +3,7 @@
 #include "EngineWindow.h"
 #include "elems/input.h"
 
+
 namespace GamerEngine
 {
 	
@@ -30,7 +31,6 @@ namespace GamerEngine
 		mUICtx->Init(this);
 
 		mSceneView = std::make_unique<SceneView>();
-
 		mPropertyPanel = std::make_unique<PropertyPanel>();
 		myContentBrowserPanel = std::make_unique<ContentBrowserPanel>();
 		myInspectorPanel = std::make_unique<InspectorPanel>();

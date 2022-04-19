@@ -146,6 +146,7 @@
     <ClCompile Include="source\ECS\Scene.cpp" />
     <ClCompile Include="source\render\Texture.cpp" />
     <ClCompile Include="source\ui\ContentBrowserPanel.cpp" />
+    <ClCompile Include="source\ui\GUIHandler.cpp" />
     <ClCompile Include="source\ui\InspectorPanel.cpp" />
     <ClCompile Include="source\ui\NavigationPanel.cpp" />
     <ClCompile Include="source\ui\NetworkPanel.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="source\render\Texture.h" />
     <ClInclude Include="source\Transform.h" />
     <ClInclude Include="source\ui\ContentBrowserPanel.h" />
+    <ClInclude Include="source\ui\GUIHandler.h" />
     <ClInclude Include="source\ui\InspectorPanel.h" />
     <ClInclude Include="source\ui\NavigationPanel.h" />
     <ClInclude Include="source\ui\NetworkPanel.h" />

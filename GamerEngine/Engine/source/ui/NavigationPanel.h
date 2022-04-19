@@ -1,14 +1,21 @@
 #pragma once
- namespace GamerEngine
- {
-	 class NavigationPanel
-	 {
-	 public:
-		 void OnImGuiRender();
-	 private:
+namespace GamerEngine
+{
+	class NavigationPanel
+	{
+	public:
+		void OnImGuiRender();
+	private:
 
-		 void CenterText(std::string text);
+		void FilePanel();
+		void EditPanel();
+		void ComponentsPanel();
+		void WindowPanel();
+		void CreditsPanel();
+		void HelpPanel();
 
-		 bool myCreditsIsOpen = false;
-	 };
- }
+		void CenterText(std::string text);
+
+		bool myCreditsIsOpen = false;
+	};
+}

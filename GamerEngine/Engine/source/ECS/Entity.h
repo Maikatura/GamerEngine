@@ -27,7 +27,7 @@ namespace GamerEngine
 		template<typename T>
 		bool HasComponent()
 		{
-			return myScene->myRegistry.has<T>(myEntityID);
+			return myScene->myRegistry.any_of<T>(myEntityID);
 		}
 
 		template<typename T>

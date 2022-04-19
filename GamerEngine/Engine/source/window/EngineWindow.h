@@ -8,14 +8,13 @@
 #include "render/ui_context.h"
 #include "render/opengl_context.h"
 #include "render/opengl_buffer_manager.h"
+#include "ui/GUIHandler.h"
+#include "window/window.h"
+#include "ui/SceneView.h"
 #include "ui/ContentBrowserPanel.h"
 #include "ui/InspectorPanel.h"
 #include "ui/NavigationPanel.h"
-
-#include "window/window.h"
-
 #include "ui/PropertyPanel.h"
-#include "ui/SceneView.h"
 
 using namespace GamerEngine;
 
