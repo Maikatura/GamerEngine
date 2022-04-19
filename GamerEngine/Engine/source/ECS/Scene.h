@@ -4,8 +4,13 @@
 
 namespace GamerEngine
 {
+
+	class Entity;
+
 	class Scene
 	{
+
+		friend class Entity;
 	public:
 		Scene();
 		~Scene();

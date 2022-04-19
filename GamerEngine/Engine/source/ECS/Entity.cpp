@@ -3,12 +3,9 @@
 
 namespace GamerEngine
 {
-	Entity::Entity(entt::entity aEntityID) : myEntityID(aEntityID)
+	Entity::Entity(entt::entity aEntityID, Scene* aScene)
 	{
-	}
-
-	Entity::~Entity()
-	{
-		delete this;
+		myEntityID = aEntityID;
+		myScene = aScene;
 	}
 }

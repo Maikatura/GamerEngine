@@ -6,10 +6,10 @@ namespace GamerEngine
 {
 	Entity* Scene::CreateEntity()
 	{
-		entt::entity entity = myRegistry.create();
+		/*entt::entity entity = myRegistry.create();
 		myRegistry.emplace<TransformComponent>(entity);
-		auto myEntity = new Entity(entity);
+		auto myEntity = Entity(entity, this);
 
-		return myEntity;
+		return myEntity;*/
 	}
 }
