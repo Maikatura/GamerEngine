@@ -2,7 +2,7 @@
 #include "SceneView.h"
 #include "PropertyPanel.h"
 #include <imgui/imgui.h>
-
+#include "Components/MeshComponent.h"
 #include "ECS/Entity.h"
 
 namespace GamerEngine

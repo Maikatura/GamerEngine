@@ -5,9 +5,7 @@
 
 namespace GamerEngine
 {
-
-	class Entity;
-
+	
 	class Scene
 	{
 

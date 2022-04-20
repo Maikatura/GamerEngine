@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Entity.h"
+#include "ECS/Scene.h"
 
 namespace GamerEngine
 {
@@ -12,4 +13,11 @@ namespace GamerEngine
 		myEntityID = aEntityID;
 		myScene = aScene;
 	}
+
+	bool Entity::IsNull()
+	{
+		return myEntityID == entt::null;
+	}
+
+	
 }

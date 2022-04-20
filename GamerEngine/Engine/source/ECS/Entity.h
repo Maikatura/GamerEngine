@@ -1,10 +1,12 @@
 #pragma once
-#include "Scene.h"
+#include "ECS/Scene.h"
 #include <entt/entt.hpp>
 #include <cassert>
 
 namespace GamerEngine
 {
+	class Scene;
+
 	class Entity
 	{
 	public:
@@ -12,8 +14,8 @@ namespace GamerEngine
 		Entity(entt::entity aEntityID, Scene* aScene);
 		Entity(const Entity& other) = default;
 
-		template<typename T, typename... Args>
-		T& AddComponent (Args&&... args)
+		template<typename T, typename ...Args>
+		T& AddComponent(Args && ...args)
 		{
 			assert(!HasComponent<T>() && "Entity has component");
 			return myScene->myRegistry.emplace<T>(myEntityID, std::forward<Args>(args)...);
@@ -26,27 +28,25 @@ namespace GamerEngine
 			return myScene->myRegistry.get<T>(myEntityID);
 		}
 
-		template<typename T>
+		template <typename T>
 		bool HasComponent()
 		{
-			return false;
 			return myScene->myRegistry.any_of<T>(myEntityID);
 		}
 
-		template<typename T>
+		template <typename T>
 		void RemoveComponent()
 		{
 			assert(HasComponent<T>() && "Entity does not have component");
 			myScene->myRegistry.remove<T>(myEntityID);
 		}
 
-		bool IsNull()
-		{
-			return myEntityID == entt::null;
-		}
+		bool IsNull();
 
 	private:
 		entt::entity myEntityID = entt::null;
 		Scene* myScene;
 	};
+	
+
 }

@@ -3,6 +3,8 @@
 
 #include <imgui/imgui.h>
 #include <Components/TransformComponent.h>
+
+#include "SceneView.h"
 #include "utils/imgui_widgets.h"
 #include "utils/EngineContext.h"
 #include "ECS/Entity.h"
@@ -10,20 +12,21 @@
 namespace GamerEngine
 {
 	
-	void InspectorPanel::OnImGuiRender(GamerEngine::EngineContext* aContext)
+	void InspectorPanel::OnImGuiRender(GamerEngine::SceneView* aContext)
 	{
 		ImGui::Begin("Inspector");
 
-		auto entity = aContext->mySelectedEntity;
+		//auto entity = aContext->mySelectedEntity;
 
-		if (entity.IsNull())
+		/*if (entity->IsNull())
 		{
 			ImGui::End();
 		}
 
-		if (entity.HasComponent<TransformComponent>())
+		if (entity->HasComponent<TransformComponent>())
 		{
-			auto& transform = entity.GetComponent<TransformComponent>();
+			
+			auto& transform = entity->GetComponent<TransformComponent>();
 
 			if (ImGui::CollapsingHeader("Transform"))
 			{
@@ -32,7 +35,7 @@ namespace GamerEngine
 				GamerEngine::DrawImGuiTransform("Scale", transform.myScale);
 			}
 
-		}
+		}*/
 
 		ImGui::End();
 	}

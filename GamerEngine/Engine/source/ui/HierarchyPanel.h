@@ -13,9 +13,9 @@ namespace GamerEngine
 		HierarchyPanel();
 		~HierarchyPanel();
 
-		void OnImGuiRender(EngineContext* aContext);
+		void OnImGuiRender(SceneView* aContext);
 
-		void RenderTreeNode(EngineContext* aContext, entt::entity& aEntity);
+		void RenderTreeNode(SceneView* aContext, entt::entity& aEntity);
 
 	private:
 		int myId;

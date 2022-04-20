@@ -15,11 +15,11 @@ namespace GamerEngine
 	{
 	}
 
-	void HierarchyPanel::OnImGuiRender(EngineContext* aContext)
+	void HierarchyPanel::OnImGuiRender(SceneView* aContext)
 	{
 		ImGui::Begin("Hierarchy");
 
-		auto view = aContext->mySceneView->GetScene()->GetRegistry()->view<TransformComponent>();
+		auto view = aContext->GetScene()->GetRegistry()->view<TransformComponent>();
 
 		for (auto entity : view)
 		{
@@ -29,7 +29,7 @@ namespace GamerEngine
 		ImGui::End();
 	}
 
-	void HierarchyPanel::RenderTreeNode(EngineContext* aContext, entt::entity& aEntity)
+	void HierarchyPanel::RenderTreeNode(SceneView* aContext, entt::entity& aEntity)
 	{
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Selected;
 

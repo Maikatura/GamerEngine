@@ -10,18 +10,21 @@
 #include "render/opengl_buffer_manager.h"
 #include "ui/GUIHandler.h"
 #include "window/window.h"
-#include "ui/SceneView.h"
-#include "ui/ContentBrowserPanel.h"
-#include "ui/InspectorPanel.h"
-#include "ui/NavigationPanel.h"
-#include "ui/PropertyPanel.h"
-#include "ui/HierarchyPanel.h"
-#include "utils/EngineContext.h"
+
+
 
 using namespace GamerEngine;
 
 namespace GamerEngine
 {
+	class SceneView;
+	class NavigationPanel;
+	class PropertyPanel;
+	class ContentBrowserPanel;
+	class InspectorPanel;
+	class HierarchyPanel;
+
+
 	class GLWindow : public IWindow
 	{
 	public:
@@ -63,7 +66,6 @@ namespace GamerEngine
 
 		std::unique_ptr<SceneView> mSceneView;
 
-		std::unique_ptr<EngineContext> myContext;
 
 		bool mIsRunning;
 

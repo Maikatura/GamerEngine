@@ -2,6 +2,13 @@
 
 #include "EngineWindow.h"
 #include "elems/input.h"
+#include "ui/ContentBrowserPanel.h"
+#include "ui/InspectorPanel.h"
+#include "ui/NavigationPanel.h"
+#include "ui/PropertyPanel.h"
+#include "ui/HierarchyPanel.h"
+#include "ui/SceneView.h"
+#include "utils/EngineContext.h"
 
 
 namespace GamerEngine
@@ -37,7 +44,7 @@ namespace GamerEngine
 		myNavPanel = std::make_unique<NavigationPanel>();
 		myHierarchyPanel = std::make_unique<HierarchyPanel>();
 
-		myContext = std::make_unique<EngineContext>();
+		//myContext = std::make_unique<EngineContext>();
 		SetUpContext();
 
 		mPropertyPanel->SetMeshLoadCallback(
@@ -63,8 +70,8 @@ namespace GamerEngine
 
 	void GLWindow::SetUpContext()
 	{
-		auto context = myContext.get();
-		context->mySceneView = mSceneView.get();
+		/*auto context = myContext.get();
+		context->mySceneView = mSceneView.get();*/
 		//context->myInspector = myInspectorPanel.get();
 	}
 
@@ -101,8 +108,8 @@ namespace GamerEngine
 		myNavPanel->OnImGuiRender();
 		mPropertyPanel->OnImGuiRender(mSceneView.get());
 		myContentBrowserPanel->OnImGuiRender();
-		myInspectorPanel->OnImGuiRender(myContext.get());
-		myHierarchyPanel->OnImGuiRender(myContext.get());
+		myInspectorPanel->OnImGuiRender(mSceneView.get());
+		myHierarchyPanel->OnImGuiRender(mSceneView.get());
 		// UI END
 
 		mUICtx->PostRender();
