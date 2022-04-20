@@ -9,17 +9,19 @@ namespace GamerEngine
 {
 	SceneView::SceneView()
 		:
-		mCamera(nullptr), mFrameBuffer(nullptr), mShader(nullptr),
+		mFrameBuffer(nullptr), mShader(nullptr),
 		mLight(nullptr), mSize(800, 600)
 	{
 		mFrameBuffer = std::make_unique<GamerEngine::OpenGL_FrameBuffer>();
 		mFrameBuffer->CreateBuffers(800, 600);
 		mShader = std::make_unique<GamerEngine::Shader>();
-		mShader->load("shaders/vs.shader", "shaders/fs_pbr.shader");
+		mShader->load("shaders/default.vert", "default.frag");
+		myModelShader = std::make_unique<GamerEngine::Shader>();
+		myModelShader->load("shaders/vs.shader", "shaders/fs_pbr.shader");
 		mLight = std::make_unique<GamerEngine::Light>();
 		myScene = std::make_unique<GamerEngine::Scene>();
 
-		mCamera = std::make_unique<GamerEngine::Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 1000.0f);
+		//mCamera = std::make_unique<GamerEngine::Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 1000.0f);
 
 	}
 
@@ -41,9 +43,9 @@ namespace GamerEngine
 
 	void SceneView::OnMouseMove(double x, double y, GamerEngine::EInputButton button)
 	{
-		mCamera->OnMouseMove(x, y, button);
+		myScene->GetCamera()->SetButton(button);
 	}
-
+	/*
 	void SceneView::OnMouseWheel(double delta)
 	{
 		mCamera->OnMouseWheel(delta);
@@ -53,57 +55,61 @@ namespace GamerEngine
 	{
 		mCamera->Reset();
 	}
+	*/
 
 	void SceneView::LoadMesh(const std::string& filepath)
 	{
-		if (!mMesh)
-		{
-			mMesh = std::make_shared<MeshComponent>();
-		}
-
-		/*auto test = myScene->CreateEntity();
+		
+		auto test = myScene->CreateEntity();
 		auto& mesh = test->AddComponent<MeshComponent>();
-		mesh.myModel.Load(filepath);*/
+		mesh.myModel.Load(filepath);
 
-		mMesh->myModel.Load(filepath);
+		mMesh = &mesh;
+		//mMesh->myModel.Load(filepath);
 	}
 
-	void SceneView::SetMesh(std::shared_ptr<MeshComponent> mesh)
-	{
-		mMesh = mesh;
-	}
 
 	void SceneView::SetCameraPos(glm::vec3 aPosition)
 	{
-		mCamera->SetPosition(aPosition);
+		myScene->GetCamera()->SetPosition(aPosition);
 	}
 
 	void SceneView::Render()
 	{
 
 		mShader->use();
+		myModelShader->use();
 
 		mLight->Update(mShader.get());
 
 		mFrameBuffer->Bind();
 
-		myScene->Render(mShader.get());
+		myScene->Render(myModelShader.get());
 
-		if (mMesh)
+		/*if (mMesh)
 		{
 			mMesh->myModel.Update(mShader.get());
 			mMesh->myModel.Render();
-		}
+		}*/
 
 
 		mFrameBuffer->Unbind();
 		ImGui::Begin("Scene");
 
+		
+
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		mSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-		mCamera->SetAspect(mSize.x / mSize.y);
-		mCamera->Update(mMesh.get(), mShader.get());
+
+		//std::cout << "X: " << ImGui::GetMousePos().x << " Y: " << ImGui::GetMousePos().y << std::endl;
+
+		
+
+		myScene->RenderCamera(mShader.get());
+
+		//mCamera->SetAspect(mSize.x / mSize.y);
+		//mCamera->Update(mMesh.get(), mShader.get());
 
 		// add rendered texture to ImGUI scene window
 		uint64_t textureID = mFrameBuffer->GetTexture();
@@ -111,5 +117,12 @@ namespace GamerEngine
 
 		ImGui::End();
 
+
+
+	}
+
+	Scene* SceneView::GetScene()
+	{
+		return myScene.get();
 	}
 }

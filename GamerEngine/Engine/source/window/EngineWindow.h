@@ -15,6 +15,8 @@
 #include "ui/InspectorPanel.h"
 #include "ui/NavigationPanel.h"
 #include "ui/PropertyPanel.h"
+#include "ui/HierarchyPanel.h"
+#include "utils/EngineContext.h"
 
 using namespace GamerEngine;
 
@@ -34,6 +36,7 @@ namespace GamerEngine
 		void HandleInput();
 		void* GetNativeWindow() override;
 		void SetNativeWindow(void* window) override;
+		void SetUpContext();
 
 		void OnScroll(double delta) override;
 		void OnKey(int key, int scancode, int action, int mods) override;
@@ -56,8 +59,11 @@ namespace GamerEngine
 		std::unique_ptr<PropertyPanel> mPropertyPanel;
 		std::unique_ptr<ContentBrowserPanel> myContentBrowserPanel;
 		std::unique_ptr<InspectorPanel> myInspectorPanel;
+		std::unique_ptr<HierarchyPanel> myHierarchyPanel;
 
 		std::unique_ptr<SceneView> mSceneView;
+
+		std::unique_ptr<EngineContext> myContext;
 
 		bool mIsRunning;
 

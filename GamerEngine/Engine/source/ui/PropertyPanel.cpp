@@ -13,8 +13,7 @@ namespace GamerEngine
 
 	void PropertyPanel::OnImGuiRender(GamerEngine::SceneView* scene_view)
 	{
-		auto mesh = scene_view->GetMesh();
-
+		
 		ImGui::Begin("Properties");
 		if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -28,12 +27,12 @@ namespace GamerEngine
 			ImGui::Text(mCurrentFile.c_str());
 		}
 
-		if (ImGui::CollapsingHeader("Material") && mesh)
+		/*if (ImGui::CollapsingHeader("Material") && mesh)
 		{
 			ImGui::ColorPicker3("Color", (float*)&mesh->myModel.mColor, ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_DisplayRGB);
 			ImGui::SliderFloat("Roughness", &mesh->myModel.mRoughness, 0.0f, 1.0f);
 			ImGui::SliderFloat("Metallic", &mesh->myModel.mMetallic, 0.0f, 1.0f);
-		}
+		}*/
 
 		if (ImGui::CollapsingHeader("Light"))
 		{

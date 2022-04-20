@@ -29,30 +29,7 @@ namespace GamerEngine
 
 		void Update(MeshComponent* aModel, GamerEngine::Shader* shader)
 		{
-			if (aModel)
-			{
-				glm::mat4 position(1.0f);
-				glm::mat4 rotation(1.0f);
-				glm::mat4 scale(1.0f);
-				position = glm::translate(position, { aModel->myModel.myTransform.myPosition.x, aModel->myModel.myTransform.myPosition.y, aModel->myModel.myTransform.myPosition.z });
-				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.x), glm::vec3(1, 0, 0));
-				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.y), glm::vec3(0, 1, 0));
-				rotation = glm::rotate(rotation, glm::radians(aModel->myModel.myTransform.myRotation.z), glm::vec3(0, 0, 1));
-				scale = glm::scale(scale, { aModel->myModel.myTransform.myScale.x, aModel->myModel.myTransform.myScale.y, aModel->myModel.myTransform.myScale.z });
-
-				glm::mat4 modelView = position * scale * rotation;
-
-				shader->set_mat4(modelView, "model");
-			}
-			else
-			{
-				glm::mat4 model(1.0f);
-				shader->set_mat4(model, "model");
-			}
-			shader->set_mat4(mViewMatrix, "view");
-			shader->set_mat4(GetProjection(), "projection");
-			shader->set_vec3(mPosition, "camPos");
-
+			shader->set_mat4(GetProjection() * mViewMatrix, "camMatrix");
 		}
 
 		void SetPosition(glm::vec3 aPosition)
@@ -122,11 +99,16 @@ namespace GamerEngine
 			update_view_matrix();
 		}
 
-		void OnMouseMove(double x, double y, EInputButton button)
+		void SetButton(EInputButton aButton)
+		{
+			myButton = aButton;
+		}
+
+		void OnMouseMove(double x, double y)
 		{
 			glm::vec2 pos2d{ x, y };
 
-			if (button == EInputButton::Right)
+			if (myButton == EInputButton::Right)
 			{
 				glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.004f;
 
@@ -136,9 +118,8 @@ namespace GamerEngine
 
 				update_view_matrix();
 			}
-			else if (button == EInputButton::Middle)
+			else if (myButton == EInputButton::Middle)
 			{
-				// TODO: Adjust pan speed for distance
 				glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.003f;
 
 				mFocus += -GetRight() * delta.x * mDistance;
@@ -176,6 +157,7 @@ namespace GamerEngine
 		float mPitch = 0.0f;
 		float mYaw = 0.0f;
 
+
 		glm::vec2 mCurrentPos2d = { 0.0f, 0.0f };
 
 		const glm::vec3 cRight = { 1.0f, 0.0f, 0.0f };
@@ -183,6 +165,8 @@ namespace GamerEngine
 		const glm::vec3 cForward = { 0.0f, 0.0f, -1.0f };
 
 		const float cRotationSpeed = 2.0f;
+
+		EInputButton myButton;
 
 	};
 }

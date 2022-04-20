@@ -2,30 +2,36 @@
 #include "InspectorPanel.h"
 
 #include <imgui/imgui.h>
-
+#include <Components/TransformComponent.h>
 #include "utils/imgui_widgets.h"
+#include "utils/EngineContext.h"
+#include "ECS/Entity.h"
 
 namespace GamerEngine
 {
 	
-	void InspectorPanel::OnImGuiRender(GamerEngine::SceneView* scene_view)
+	void InspectorPanel::OnImGuiRender(GamerEngine::EngineContext* aContext)
 	{
 		ImGui::Begin("Inspector");
 
-		auto mesh = scene_view->GetMesh();
+		auto entity = aContext->mySelectedEntity;
 
-		if (mesh)
+		if (entity.IsNull())
 		{
-			ImGui::Begin("Inspector");
+			ImGui::End();
+		}
+
+		if (entity.HasComponent<TransformComponent>())
+		{
+			auto& transform = entity.GetComponent<TransformComponent>();
 
 			if (ImGui::CollapsingHeader("Transform"))
 			{
-				GamerEngine::DrawImGuiTransform("Pos",	mesh->myModel.myTransform.myPosition	);
-				GamerEngine::DrawImGuiTransform("Rot",	mesh->myModel.myTransform.myRotation	);
-				GamerEngine::DrawImGuiTransform("Scale",	mesh->myModel.myTransform.myScale		);
+				GamerEngine::DrawImGuiTransform("Pos", transform.myPosition);
+				GamerEngine::DrawImGuiTransform("Rot",	transform.myRotation);
+				GamerEngine::DrawImGuiTransform("Scale", transform.myScale);
 			}
 
-			ImGui::End();
 		}
 
 		ImGui::End();

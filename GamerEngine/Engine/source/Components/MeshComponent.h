@@ -6,4 +6,7 @@
 struct MeshComponent
 {
 	GamerEngine::Mesh myModel;
+
+	MeshComponent() = default;
+	MeshComponent(const MeshComponent&) = default;
 };

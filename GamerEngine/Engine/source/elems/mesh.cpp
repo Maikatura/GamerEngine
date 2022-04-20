@@ -4,6 +4,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+
+#include "ECS/Scene.h"
 #include "render/opengl_buffer_manager.h"
 
 namespace GamerEngine
@@ -12,7 +14,7 @@ namespace GamerEngine
 	{
 		if (!mRenderBufferMgr)
 		{
-			mRenderBufferMgr = std::make_unique<GamerEngine::OpenGL_VertexIndexBuffer>();
+			mRenderBufferMgr = std::make_shared<GamerEngine::OpenGL_VertexIndexBuffer>();
 		}
 		else
 		{
@@ -21,6 +23,10 @@ namespace GamerEngine
 
 
 		CreateBuffers();
+	}
+
+	Mesh::Mesh()
+	{
 	}
 
 	Mesh::~Mesh()
@@ -80,10 +86,20 @@ namespace GamerEngine
 
 	void Mesh::Update(GamerEngine::Shader* shader)
 	{
-		shader->set_vec3(mColor, "albedo");
-		shader->set_f1(mRoughness, "roughness");
-		shader->set_f1(mMetallic, "metallic");
-		shader->set_f1(1.0f, "ao");
+		glm::mat4 position(1.0f);
+		glm::mat4 rotation(1.0f);
+		glm::mat4 scale(1.0f);
+		position = glm::translate(position, { myTransform.myPosition.x, myTransform.myPosition.y, myTransform.myPosition.z });
+		rotation = glm::rotate(rotation, glm::radians(myTransform.myRotation.x), glm::vec3(1, 0, 0));
+		rotation = glm::rotate(rotation, glm::radians(myTransform.myRotation.y), glm::vec3(0, 1, 0));
+		rotation = glm::rotate(rotation, glm::radians(myTransform.myRotation.z), glm::vec3(0, 0, 1));
+		scale = glm::scale(scale, { myTransform.myScale.x, myTransform.myScale.y, myTransform.myScale.z });
+
+		glm::mat4 modelView = position * scale * rotation;
+
+		shader->set_mat4(modelView, "model");
+		shader->set_mat4(Scene::GetCamera()->GetViewMatrix(), "view");
+		shader->set_mat4(Scene::GetCamera()->GetProjection(), "projection");
 	}
 
 	void Mesh::CreateBuffers()
@@ -93,7 +109,10 @@ namespace GamerEngine
 
 	void Mesh::DeleteBuffers()
 	{
-		mRenderBufferMgr->DeleteBuffers();
+		if (mRenderBufferMgr)
+		{
+			mRenderBufferMgr->DeleteBuffers();
+		}
 	}
 
 	void Mesh::Bind()
@@ -108,6 +127,9 @@ namespace GamerEngine
 
 	void Mesh::Render()
 	{
-		mRenderBufferMgr->Draw((int)mVertexIndices.size());
+		if (mRenderBufferMgr)
+		{
+			mRenderBufferMgr->Draw((int)mVertexIndices.size());
+		}
 	}
 }

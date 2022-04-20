@@ -147,6 +147,7 @@
     <ClCompile Include="source\render\Texture.cpp" />
     <ClCompile Include="source\ui\ContentBrowserPanel.cpp" />
     <ClCompile Include="source\ui\GUIHandler.cpp" />
+    <ClCompile Include="source\ui\HierarchyPanel.cpp" />
     <ClCompile Include="source\ui\InspectorPanel.cpp" />
     <ClCompile Include="source\ui\NavigationPanel.cpp" />
     <ClCompile Include="source\ui\NetworkPanel.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="source\elems\vertex_holder.cpp" />
     <ClCompile Include="source\render\opengl_buffer_manager.cpp" />
     <ClCompile Include="source\render\ui_context.cpp" />
+    <ClCompile Include="source\utils\EngineContext.cpp" />
     <ClCompile Include="source\window\EngineWindow.cpp" />
     <ClCompile Include="source\elems\mesh.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -189,9 +191,11 @@
     <ClInclude Include="source\Transform.h" />
     <ClInclude Include="source\ui\ContentBrowserPanel.h" />
     <ClInclude Include="source\ui\GUIHandler.h" />
+    <ClInclude Include="source\ui\HierarchyPanel.h" />
     <ClInclude Include="source\ui\InspectorPanel.h" />
     <ClInclude Include="source\ui\NavigationPanel.h" />
     <ClInclude Include="source\ui\NetworkPanel.h" />
+    <ClInclude Include="source\utils\EngineContext.h" />
     <ClInclude Include="source\utils\imgui_widgets.h" />
     <ClInclude Include="source\ui\SceneView.h" />
     <ClInclude Include="source\ui\PropertyPanel.h" />

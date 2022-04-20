@@ -35,6 +35,10 @@ namespace GamerEngine
 		myContentBrowserPanel = std::make_unique<ContentBrowserPanel>();
 		myInspectorPanel = std::make_unique<InspectorPanel>();
 		myNavPanel = std::make_unique<NavigationPanel>();
+		myHierarchyPanel = std::make_unique<HierarchyPanel>();
+
+		myContext = std::make_unique<EngineContext>();
+		SetUpContext();
 
 		mPropertyPanel->SetMeshLoadCallback(
 			[this](std::string filepath) { mSceneView->LoadMesh(filepath); });
@@ -57,9 +61,16 @@ namespace GamerEngine
 		mWindow = (GLFWwindow*)window;
 	}
 
+	void GLWindow::SetUpContext()
+	{
+		auto context = myContext.get();
+		context->mySceneView = mSceneView.get();
+		//context->myInspector = myInspectorPanel.get();
+	}
+
 	void GLWindow::OnScroll(double delta)
 	{
-		mSceneView->OnMouseWheel(-delta);
+		//mSceneView->OnMouseWheel(-delta);
 	}
 
 	void GLWindow::OnKey(int key, int scancode, int action, int mods)
@@ -83,13 +94,15 @@ namespace GamerEngine
 	{
 		mRenderCtx->PreRender();
 		mUICtx->PreRender();
+
 		mSceneView->Render();
 
 		// UI
 		myNavPanel->OnImGuiRender();
 		mPropertyPanel->OnImGuiRender(mSceneView.get());
 		myContentBrowserPanel->OnImGuiRender();
-		myInspectorPanel->OnImGuiRender(mSceneView.get());
+		myInspectorPanel->OnImGuiRender(myContext.get());
+		myHierarchyPanel->OnImGuiRender(myContext.get());
 		// UI END
 
 		mUICtx->PostRender();

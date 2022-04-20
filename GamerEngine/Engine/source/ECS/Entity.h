@@ -8,6 +8,7 @@ namespace GamerEngine
 	class Entity
 	{
 	public:
+		Entity();
 		Entity(entt::entity aEntityID, Scene* aScene);
 		Entity(const Entity& other) = default;
 
@@ -39,8 +40,13 @@ namespace GamerEngine
 			myScene->myRegistry.remove<T>(myEntityID);
 		}
 
+		bool IsNull()
+		{
+			return myEntityID == entt::null;
+		}
+
 	private:
-		entt::entity myEntityID;
+		entt::entity myEntityID = entt::null;
 		Scene* myScene;
 	};
 }

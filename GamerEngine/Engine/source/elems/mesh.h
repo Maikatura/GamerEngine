@@ -14,7 +14,9 @@ namespace GamerEngine
 
 	public:
 
-		Mesh() = default;
+		Mesh();
+		Mesh(const Mesh&) = default;
+
 		virtual ~Mesh();
 
 		bool Load(const std::string& filepath);
@@ -37,7 +39,7 @@ namespace GamerEngine
 		TransformComponent myTransform = {}; // TODO:  CHANGE THIS TO TRANSFORM COMPONENT ON ENTITY!
 	private:
 		// Buffers manager
-		std::unique_ptr<GamerEngine::VertexIndexBuffer> mRenderBufferMgr;
+		std::shared_ptr<GamerEngine::VertexIndexBuffer> mRenderBufferMgr;
 
 		// Vertices and indices
 		std::vector<VertexHolder> mVertices;
