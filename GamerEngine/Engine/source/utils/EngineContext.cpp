@@ -1,10 +1,5 @@
 #include "pch.h"
 #include "EngineContext.h"
-#include "ui/ContentBrowserPanel.h"
-#include "ui/HierarchyPanel.h"
-#include "ui/InspectorPanel.h"
-#include "ui/NavigationPanel.h"
-#include "ui/PropertyPanel.h"
 #include "ui/SceneView.h"
 
 namespace GamerEngine
@@ -17,6 +12,7 @@ namespace GamerEngine
 		myInspectorPanel = std::make_unique<InspectorPanel>();
 		myNavPanel = std::make_unique<NavigationPanel>();
 		myHierarchyPanel = std::make_unique<HierarchyPanel>();
+		myProfilerPanel = std::make_unique<ProfilerPanel>();
 
 		mPropertyPanel->SetMeshLoadCallback(
 			[this](std::string filepath) { mySceneView->LoadMesh(filepath); });
@@ -31,6 +27,7 @@ namespace GamerEngine
 		myContentBrowserPanel->OnImGuiRender();
 		myInspectorPanel->OnImGuiRender(this);
 		myHierarchyPanel->OnImGuiRender(this);
+		myProfilerPanel->OnImGuiRender();
 
 	}
 }

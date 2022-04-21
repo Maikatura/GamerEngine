@@ -2,11 +2,6 @@
 
 #include "EngineWindow.h"
 #include "elems/input.h"
-#include "ui/ContentBrowserPanel.h"
-#include "ui/InspectorPanel.h"
-#include "ui/NavigationPanel.h"
-#include "ui/PropertyPanel.h"
-#include "ui/HierarchyPanel.h"
 #include "ui/SceneView.h"
 #include "utils/EngineContext.h"
 

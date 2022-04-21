@@ -1,4 +1,5 @@
 #pragma once
+#include <AllocationTracker.h>
 
 #include "elems/camera.h"
 #include "elems/mesh.h"

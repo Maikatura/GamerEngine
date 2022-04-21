@@ -26,17 +26,18 @@ namespace GamerEngine
 			return;
 		}
 
-		if (entity.HasComponent<TransformComponent>())
-		{
-			
-			auto& tag = entity.GetComponent<TagComponent>();
-			
-		
 
-			ImGui::Text("Tag: "); 
+		if (entity.HasComponent<TagComponent>())
+		{
+			auto& tag = entity.GetComponent<TagComponent>();
+
+			ImGui::Text("Tag: ");
 			ImGui::SameLine();
 			ImGui::InputText("##Tag", &tag.myTag);
+		}
 
+		if (entity.HasComponent<TransformComponent>())
+		{
 			auto& transform = entity.GetComponent<TransformComponent>();
 
 			if (ImGui::CollapsingHeader("Transform"))
@@ -52,7 +53,6 @@ namespace GamerEngine
 		{
 			auto& mesh = entity.GetComponent<MeshComponent>();
 
-			
 			float* myFloats[] = {
 				&mesh.myColor.x,
 				&mesh.myColor.y,

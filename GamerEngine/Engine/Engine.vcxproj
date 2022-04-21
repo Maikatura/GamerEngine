@@ -151,6 +151,7 @@
     <ClCompile Include="source\ui\InspectorPanel.cpp" />
     <ClCompile Include="source\ui\NavigationPanel.cpp" />
     <ClCompile Include="source\ui\NetworkPanel.cpp" />
+    <ClCompile Include="source\ui\ProfilerPanel.cpp" />
     <ClCompile Include="source\ui\SceneView.cpp" />
     <ClCompile Include="source\ui\PropertyPanel.cpp" />
     <ClCompile Include="source\render\opengl_context.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="source\shader\shader_util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\AllocationTracker.h" />
     <ClInclude Include="source\Components\MeshComponent.h" />
     <ClInclude Include="source\Components\TagComponent.h" />
     <ClInclude Include="source\Components\TransformComponent.h" />
@@ -196,6 +198,7 @@
     <ClInclude Include="source\ui\InspectorPanel.h" />
     <ClInclude Include="source\ui\NavigationPanel.h" />
     <ClInclude Include="source\ui\NetworkPanel.h" />
+    <ClInclude Include="source\ui\ProfilerPanel.h" />
     <ClInclude Include="source\utils\EngineContext.h" />
     <ClInclude Include="source\utils\imgui_widgets.h" />
     <ClInclude Include="source\ui\SceneView.h" />

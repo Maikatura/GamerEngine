@@ -50,20 +50,15 @@ namespace GamerEngine
 			return (myEntityID == aEntity.GetID());
 		}
 
-		bool operator==(entt::entity aEntity)
-		{
-			return (myEntityID == aEntity);
-		}
-
 		entt::entity GetID()
 		{
 			return myEntityID;
 		}
 
-
-
-
-		bool IsNull();
+		bool IsNull()
+		{
+			return (myEntityID == entt::null);
+		}
 
 	private:
 		entt::entity myEntityID = entt::null;

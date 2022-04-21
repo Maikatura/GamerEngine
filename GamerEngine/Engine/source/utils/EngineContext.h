@@ -1,5 +1,11 @@
 #pragma once
 #include "ECS/Entity.h"
+#include "ui/HierarchyPanel.h"
+#include "ui/InspectorPanel.h"
+#include "ui/NavigationPanel.h"
+#include "ui/PropertyPanel.h"
+#include "ui/ProfilerPanel.h"
+#include "ui/ContentBrowserPanel.h"
 
 namespace GamerEngine
 {
@@ -9,6 +15,7 @@ namespace GamerEngine
 	class InspectorPanel;
 	class HierarchyPanel;
 	class SceneView;
+	class ProfilerPanel;
 
 	class EngineContext
 	{
@@ -40,6 +47,7 @@ namespace GamerEngine
 		std::unique_ptr<ContentBrowserPanel> myContentBrowserPanel;
 		std::unique_ptr<InspectorPanel> myInspectorPanel;
 		std::unique_ptr<HierarchyPanel> myHierarchyPanel;
+		std::unique_ptr<ProfilerPanel> myProfilerPanel;
 
 		Entity mySelectedEntity;
 	};

@@ -8,16 +8,7 @@ namespace GamerEngine
 	{
 	}
 
-	Entity::Entity(entt::entity aEntityID, Scene* aScene)
+	Entity::Entity(entt::entity aEntityID, Scene* aScene) : myEntityID(aEntityID), myScene(aScene)
 	{
-		myEntityID = aEntityID;
-		myScene = aScene;
 	}
-
-	bool Entity::IsNull()
-	{
-		return myEntityID == entt::null;
-	}
-
-	
 }
