@@ -10,6 +10,7 @@
     <ClInclude Include="imgui\plugins\ImFileBrowser.h" />
     <ClInclude Include="imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp" />
@@ -19,5 +20,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp" />
   </ItemGroup>
 </Project>

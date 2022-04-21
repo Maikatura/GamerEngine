@@ -22,7 +22,8 @@ namespace GamerEngine
 		entt::entity entityID = myRegistry.create();
 		Entity returnEntity = Entity(entityID, this);
 		returnEntity.AddComponent<TransformComponent>();
-		returnEntity.AddComponent<TagComponent>();
+		auto& tagComp = returnEntity.AddComponent<TagComponent>();
+		tagComp.myTag = "Entity";
 		return returnEntity;
 	}
 
@@ -44,6 +45,28 @@ namespace GamerEngine
 		{
 			GLFWwindow* mWindow = (GLFWwindow*)GLWindow::GetInstance()->GetNativeWindow();
 			myCamera->OnMouseMove(ImGui::GetMousePos().x, ImGui::GetMousePos().y, Input::GetPressedButton(mWindow));
+
+			float cameraSpeed = 0.5f;
+
+			if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
+			{
+				myCamera->SetPosition({ 0.0f, 0.0f, cameraSpeed });
+			}
+
+			if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)
+			{
+				myCamera->SetPosition({ 0.0f, 0.0f, -cameraSpeed });
+			}
+
+			if (glfwGetKey(mWindow, GLFW_KEY_A) == GLFW_PRESS)
+			{
+				myCamera->SetPosition({ cameraSpeed, 0.0f, 0.0f });
+			}
+
+			if (glfwGetKey(mWindow, GLFW_KEY_D) == GLFW_PRESS)
+			{
+				myCamera->SetPosition({ -cameraSpeed, 0.0f, 0.0f });
+			}
 		}
 
 

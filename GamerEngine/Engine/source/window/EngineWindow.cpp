@@ -24,7 +24,6 @@ namespace GamerEngine
 	GLWindow::~GLWindow()
 	{
 		mUICtx->end();
-
 		mRenderCtx->end();
 	}
 
@@ -106,27 +105,7 @@ namespace GamerEngine
 	void GLWindow::HandleInput()
 	{
 
-		float cameraSpeed = 0.5f;
-
-		if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
-		{
-			myContext->GetSceneView()->SetCameraPos({0.0f, 0.0f, cameraSpeed });
-		}
-
-		if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)
-		{
-			myContext->GetSceneView()->SetCameraPos({ 0.0f, 0.0f, -cameraSpeed });
-		}
-
-		if (glfwGetKey(mWindow, GLFW_KEY_A) == GLFW_PRESS)
-		{
-			myContext->GetSceneView()->SetCameraPos({ cameraSpeed, 0.0f, 0.0f });
-		}
-
-		if (glfwGetKey(mWindow, GLFW_KEY_D) == GLFW_PRESS)
-		{
-			myContext->GetSceneView()->SetCameraPos({ -cameraSpeed, 0.0f, 0.0f });
-		}
+		
 
 
 		//mSceneView->ResetView();

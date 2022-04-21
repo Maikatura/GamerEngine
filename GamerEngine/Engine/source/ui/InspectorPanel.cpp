@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "InspectorPanel.h"
-
-#include <imgui/imgui.h>
-#include <Components/TransformComponent.h>
-
 #include "SceneView.h"
 #include "utils/imgui_widgets.h"
 #include "utils/EngineContext.h"
 #include "ECS/Entity.h"
+#include <imgui/imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
+
+//Components
+#include <Components/TransformComponent.h>
+#include <Components/TagComponent.h>
 
 namespace GamerEngine
 {
@@ -27,6 +29,14 @@ namespace GamerEngine
 		if (entity.HasComponent<TransformComponent>())
 		{
 			
+			auto& tag = entity.GetComponent<TagComponent>();
+			
+		
+
+			ImGui::Text("Tag: "); 
+			ImGui::SameLine();
+			ImGui::InputText("##Tag", &tag.myTag);
+
 			auto& transform = entity.GetComponent<TransformComponent>();
 
 			if (ImGui::CollapsingHeader("Transform"))

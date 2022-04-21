@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "HierarchyPanel.h"
 #include <imgui/imgui.h>
-#include "Components/TransformComponent.h"
 #include "utils/EngineContext.h"
+
+#include "Components/TransformComponent.h"
+#include <Components/TagComponent.h>
 
 
 namespace GamerEngine
@@ -23,24 +25,25 @@ namespace GamerEngine
 
 		for (auto entity : view)
 		{
-			RenderTreeNode(aContext, entity);
+			auto aEntity = Entity(entity, aContext->GetSceneView()->GetScene());
+			RenderTreeNode(aContext, aEntity);
 		}
 
 		ImGui::End();
 	}
 
-	void HierarchyPanel::RenderTreeNode(EngineContext* aContext, entt::entity& aEntity)
+	void HierarchyPanel::RenderTreeNode(EngineContext* aContext, Entity aEntity)
 	{
 		ImGuiTreeNodeFlags flags = (aContext->GetSelectedEntity() == aEntity) ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_OpenOnArrow;
 
 
-		if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)aEntity, flags, "LOVE"))
+		if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)aEntity.GetID(), flags, aEntity.GetComponent<TagComponent>().myTag.c_str()))
 		{
 			ImGui::TreePop();
 		}
 		if (ImGui::IsItemClicked())
 		{
-			aContext->SetEntity(Entity(aEntity, aContext->GetSceneView()->GetScene()));
+			aContext->SetEntity(aEntity);
 		}
 		
 	}
