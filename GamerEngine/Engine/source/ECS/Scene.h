@@ -14,7 +14,7 @@ namespace GamerEngine
 		Scene();
 		~Scene();
 
-		Entity* CreateEntity();
+		Entity CreateEntity();
 
 
 		void Render(GamerEngine::Shader* shader);

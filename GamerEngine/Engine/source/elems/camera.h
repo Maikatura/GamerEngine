@@ -30,6 +30,7 @@ namespace GamerEngine
 		void Update(MeshComponent* aModel, GamerEngine::Shader* shader)
 		{
 			shader->set_mat4(GetProjection() * mViewMatrix, "camMatrix");
+			update_view_matrix();
 		}
 
 		void SetPosition(glm::vec3 aPosition)
@@ -104,11 +105,11 @@ namespace GamerEngine
 			myButton = aButton;
 		}
 
-		void OnMouseMove(double x, double y)
+		void OnMouseMove(double x, double y, EInputButton aButton)
 		{
 			glm::vec2 pos2d{ x, y };
 
-			if (myButton == EInputButton::Right)
+			if (aButton == EInputButton::Right)
 			{
 				glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.004f;
 
@@ -116,9 +117,8 @@ namespace GamerEngine
 				mYaw += sign * delta.x * cRotationSpeed;
 				mPitch += delta.y * cRotationSpeed;
 
-				update_view_matrix();
 			}
-			else if (myButton == EInputButton::Middle)
+			else if (aButton == EInputButton::Middle)
 			{
 				glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.003f;
 

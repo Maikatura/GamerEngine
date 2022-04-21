@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "Scene.h"
-
 #include "Entity.h"
-#include "Components/MeshComponent.h"
 #include <imgui/imgui.h>
+#include "Components/MeshComponent.h"
+#include "Components/TagComponent.h"
+#include "window/EngineWindow.h"
 
 namespace GamerEngine
 {
@@ -16,12 +17,13 @@ namespace GamerEngine
 	{
 	}
 
-	Entity* Scene::CreateEntity()
+	Entity Scene::CreateEntity()
 	{
 		entt::entity entityID = myRegistry.create();
 		Entity returnEntity = Entity(entityID, this);
 		returnEntity.AddComponent<TransformComponent>();
-		return &returnEntity;
+		returnEntity.AddComponent<TagComponent>();
+		return returnEntity;
 	}
 
 	void Scene::Render(GamerEngine::Shader* shader)
@@ -38,6 +40,12 @@ namespace GamerEngine
 
 	void Scene::RenderCamera(GamerEngine::Shader* shader)
 	{
+		if (ImGui::IsWindowHovered())
+		{
+			GLFWwindow* mWindow = (GLFWwindow*)GLWindow::GetInstance()->GetNativeWindow();
+			myCamera->OnMouseMove(ImGui::GetMousePos().x, ImGui::GetMousePos().y, Input::GetPressedButton(mWindow));
+		}
+
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		CommonUtilities::Vector3<float> size = { (float)viewportPanelSize.x, (float)viewportPanelSize.y, 0 };
@@ -52,11 +60,6 @@ namespace GamerEngine
 			myCamera->Update(&mesh, shader);
 		}
 
-		if (ImGui::IsWindowHovered())
-		{
-			ImGui::GetMousePos();
-			myCamera->OnMouseMove(ImGui::GetMousePos().x, ImGui::GetMousePos().y);
-		}
 	}
 
 	entt::registry* Scene::GetRegistry()

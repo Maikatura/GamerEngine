@@ -42,7 +42,6 @@ namespace GamerEngine
 		{
 			aContext->SetEntity(Entity(aEntity, aContext->GetSceneView()->GetScene()));
 		}
-
-		myId++;
+		
 	}
 }

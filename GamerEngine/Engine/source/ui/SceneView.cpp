@@ -57,7 +57,7 @@ namespace GamerEngine
 	{
 
 		auto test = myScene->CreateEntity();
-		auto& mesh = test->AddComponent<MeshComponent>();
+		auto& mesh = test.AddComponent<MeshComponent>();
 		mesh.myModel.Load(filepath);
 	}
 

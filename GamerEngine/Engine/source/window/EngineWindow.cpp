@@ -130,11 +130,9 @@ namespace GamerEngine
 
 
 		//mSceneView->ResetView();
+		
 
-		double x, y;
-		glfwGetCursorPos(mWindow, &x, &y);
-
-		myContext->GetSceneView()->OnMouseMove(x, y, Input::GetPressedButton(mWindow));
+		myContext->GetSceneView()->OnMouseMove(0, 0, Input::GetPressedButton(mWindow));
 	}
 
 	void* GLWindow::GetNativeWindow()

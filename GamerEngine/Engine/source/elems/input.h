@@ -26,6 +26,10 @@ namespace GamerEngine
 				return EInputButton::Right;
 			else if (glfwGetMouseButton(window, 2) == GLFW_PRESS)
 				return EInputButton::Middle;
+			else if (glfwGetMouseButton(window, 0) == GLFW_RELEASE)
+				return EInputButton::None;
+			else if (glfwGetMouseButton(window, 1) == GLFW_RELEASE)
+				return EInputButton::None;
 
 			return EInputButton::None;
 		}
