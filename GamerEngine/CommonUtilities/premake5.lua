@@ -5,11 +5,11 @@ project "Launcher"
 	cppdialect "C++20"
 	--staticruntime "on"
 
-	targetdir ("$(SolutionDir)..\Build\")
-	targetname("GamerEngine_%{cfg.buildcfg}")
-	objdir ("$(SolutionDir)..\Temp\Engine\")
+	targetdir ("../../Bin/")
+	targetname("%{prj.name}_%{cfg.buildcfg}")
+	objdir ("../../Temp/%{prj.name}/%{cfg.buildcfg}")
 
-	debugdir "$(SolutionDir)..\Build\"
+	debugdir "../../Bin/"
 
 	files {
 		"**.h",
@@ -17,26 +17,30 @@ project "Launcher"
 	}
 
 	includedirs {
-		"$(ProjectDir)source",
-        "$(SolutionDIr)vendor\include",
-		"$(SolutionDIr)vendor\include\CommonUtilities"
+		"../tga2dcore",
+        "../Game",
+		"../Game/Source",
+		"../External/nlohmann",
+		"../QPEcs/include",
+		"../CommonUtilities",
+		"../SoundEngine/Include"
 	}
 
-	libdirs { 
-		"$(SolutionDir)vendor\lib\gl",
-		"$(SolutionDir)vendor\lib\glfw",
-		"$(SolutionDir)vendor\lib\assimp",
-		"$(SolutionDir)vendor\lib\GamerLib",
-		"$(SolutionDir)vendor\lib\CommonUtilities" 
-	}
+	libdirs { "../../Lib/", "../SoundEngine/Lib" }
 
 	links { 
-		"glfw3.lib",
-		"glew32s.lib",
-		"opengl32.lib",
-		"assimp-vc142-mtd.lib",
-		"External-Debug.lib",
-		"CommonUtilities-d.lib"
+		"avcodec.lib",
+		"avdevice.lib",
+		"avfilter.lib",
+		"avformat.lib",
+		"avutil.lib",
+		"postproc.lib",
+		"swresample.lib",
+		"swscale.lib",
+		"Game",
+		"tga2dcore",
+        "CommonUtilities",
+		"TGAFBXImporter.lib"
 	}
 
 	defines {"_CONSOLE", "B2_USER_SETTINGS"}
