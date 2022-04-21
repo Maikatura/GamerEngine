@@ -2,13 +2,13 @@
 
 namespace GamerEngine
 {
-	class SceneView;
+	class EngineContext;
 
 	class InspectorPanel
 	{
 
 	public:
-		void OnImGuiRender(GamerEngine::SceneView* aContext);
+		void OnImGuiRender(GamerEngine::EngineContext* aContext);
 
 	
 	};

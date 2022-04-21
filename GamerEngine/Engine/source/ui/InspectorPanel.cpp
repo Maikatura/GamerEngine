@@ -12,21 +12,22 @@
 namespace GamerEngine
 {
 	
-	void InspectorPanel::OnImGuiRender(GamerEngine::SceneView* aContext)
+	void InspectorPanel::OnImGuiRender(GamerEngine::EngineContext* aContext)
 	{
 		ImGui::Begin("Inspector");
 
-		//auto entity = aContext->mySelectedEntity;
+		auto entity = aContext->GetSelectedEntity();
 
-		/*if (entity->IsNull())
+		if (entity.IsNull())
 		{
 			ImGui::End();
+			return;
 		}
 
-		if (entity->HasComponent<TransformComponent>())
+		if (entity.HasComponent<TransformComponent>())
 		{
 			
-			auto& transform = entity->GetComponent<TransformComponent>();
+			auto& transform = entity.GetComponent<TransformComponent>();
 
 			if (ImGui::CollapsingHeader("Transform"))
 			{
@@ -35,7 +36,7 @@ namespace GamerEngine
 				GamerEngine::DrawImGuiTransform("Scale", transform.myScale);
 			}
 
-		}*/
+		}
 
 		ImGui::End();
 	}

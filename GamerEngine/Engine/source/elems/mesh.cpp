@@ -84,22 +84,29 @@ namespace GamerEngine
 		return false;
 	}
 
-	void Mesh::Update(GamerEngine::Shader* shader)
+	void Mesh::Update(TransformComponent aTransform, GamerEngine::Shader* shader)
 	{
 		glm::mat4 position(1.0f);
 		glm::mat4 rotation(1.0f);
 		glm::mat4 scale(1.0f);
-		position = glm::translate(position, { myTransform.myPosition.x, myTransform.myPosition.y, myTransform.myPosition.z });
-		rotation = glm::rotate(rotation, glm::radians(myTransform.myRotation.x), glm::vec3(1, 0, 0));
-		rotation = glm::rotate(rotation, glm::radians(myTransform.myRotation.y), glm::vec3(0, 1, 0));
-		rotation = glm::rotate(rotation, glm::radians(myTransform.myRotation.z), glm::vec3(0, 0, 1));
-		scale = glm::scale(scale, { myTransform.myScale.x, myTransform.myScale.y, myTransform.myScale.z });
+		position = glm::translate(position, { aTransform.myPosition.x, aTransform.myPosition.y, aTransform.myPosition.z });
+		rotation = glm::rotate(rotation, glm::radians(aTransform.myRotation.x), glm::vec3(1, 0, 0));
+		rotation = glm::rotate(rotation, glm::radians(aTransform.myRotation.y), glm::vec3(0, 1, 0));
+		rotation = glm::rotate(rotation, glm::radians(aTransform.myRotation.z), glm::vec3(0, 0, 1));
+		scale = glm::scale(scale, { aTransform.myScale.x, aTransform.myScale.y, aTransform.myScale.z });
 
 		glm::mat4 modelView = position * scale * rotation;
 
 		shader->set_mat4(modelView, "model");
 		shader->set_mat4(Scene::GetCamera()->GetViewMatrix(), "view");
 		shader->set_mat4(Scene::GetCamera()->GetProjection(), "projection");
+		shader->set_vec4({ 1, 1,1,1 }, "color");
+
+	}
+
+	void Mesh::Update(GamerEngine::Shader* shader)
+	{
+		// This does nothing :)
 	}
 
 	void Mesh::CreateBuffers()

@@ -4,7 +4,7 @@
 
 namespace GamerEngine
 {
-	Entity::Entity()
+	Entity::Entity() : myEntityID(entt::null), myScene(nullptr)
 	{
 	}
 

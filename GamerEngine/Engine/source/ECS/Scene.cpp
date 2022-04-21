@@ -30,11 +30,9 @@ namespace GamerEngine
 
 		for (auto entity : view)
 		{
-			MeshComponent& mesh = myRegistry.get<MeshComponent>(entity);
-			mesh.myModel.Update(shader);
+			auto [mesh, transform] = myRegistry.get<MeshComponent, TransformComponent>(entity);
+			mesh.myModel.Update(transform, shader);
 			mesh.myModel.Render();
-
-			
 		}
 	}
 

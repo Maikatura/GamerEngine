@@ -3,6 +3,7 @@
 #include "pch.h"
 
 #include "element.h"
+#include "Components/TransformComponent.h"
 #include "shader/shader_util.h"
 
 namespace GamerEngine

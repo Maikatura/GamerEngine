@@ -18,23 +18,18 @@ using namespace GamerEngine;
 namespace GamerEngine
 {
 	class SceneView;
-	class NavigationPanel;
-	class PropertyPanel;
-	class ContentBrowserPanel;
-	class InspectorPanel;
-	class HierarchyPanel;
-
-
+	class EngineContext;
+	
 	class GLWindow : public IWindow
 	{
 	public:
 
 		GLWindow();
-
 		~GLWindow();
 
-		bool Init(int width, int height, const std::string& title);
+		static GLWindow* GetInstance();
 
+		bool Init(int width, int height, const std::string& title);
 		void Render();
 		void HandleInput();
 		void* GetNativeWindow() override;
@@ -51,6 +46,7 @@ namespace GamerEngine
 
 	private:
 
+		inline static GLWindow* myInstacneWinodw;
 		GLFWwindow* mWindow;
 
 		// Render contexts
@@ -58,12 +54,8 @@ namespace GamerEngine
 		std::unique_ptr<OpenGL_Context> mRenderCtx;
 
 		// UI components
-		std::unique_ptr<NavigationPanel> myNavPanel;
-		std::unique_ptr<PropertyPanel> mPropertyPanel;
-		std::unique_ptr<ContentBrowserPanel> myContentBrowserPanel;
-		std::unique_ptr<InspectorPanel> myInspectorPanel;
-		std::unique_ptr<HierarchyPanel> myHierarchyPanel;
-
+		
+		std::unique_ptr<EngineContext> myContext;
 		std::unique_ptr<SceneView> mSceneView;
 
 

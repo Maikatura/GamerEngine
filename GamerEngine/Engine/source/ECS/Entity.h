@@ -31,7 +31,11 @@ namespace GamerEngine
 		template <typename T>
 		bool HasComponent()
 		{
-			return myScene->myRegistry.any_of<T>(myEntityID);
+			if (myScene->myRegistry.valid(myEntityID))
+			{
+				return myScene->myRegistry.all_of<T>(myEntityID);
+			}
+			return false;
 		}
 
 		template <typename T>
@@ -41,12 +45,30 @@ namespace GamerEngine
 			myScene->myRegistry.remove<T>(myEntityID);
 		}
 
+		bool operator==(Entity aEntity)
+		{
+			return (myEntityID == aEntity.GetID());
+		}
+
+		bool operator==(entt::entity aEntity)
+		{
+			return (myEntityID == aEntity);
+		}
+
+		entt::entity GetID()
+		{
+			return myEntityID;
+		}
+
+
+
+
 		bool IsNull();
 
 	private:
 		entt::entity myEntityID = entt::null;
 		Scene* myScene;
 	};
-	
+
 
 }

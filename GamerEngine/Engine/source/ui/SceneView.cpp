@@ -9,27 +9,22 @@ namespace GamerEngine
 {
 	SceneView::SceneView()
 		:
-		mFrameBuffer(nullptr), mShader(nullptr),
+		mFrameBuffer(nullptr), myCameraShader(nullptr),
 		mLight(nullptr), mSize(800, 600)
 	{
 		mFrameBuffer = std::make_unique<GamerEngine::OpenGL_FrameBuffer>();
 		mFrameBuffer->CreateBuffers(800, 600);
-		mShader = std::make_unique<GamerEngine::Shader>();
-		mShader->load("shaders/default.vert", "default.frag");
+		myCameraShader = std::make_unique<GamerEngine::Shader>();
+		myCameraShader->load("shaders/camera.vert", "camera.frag");
 		myModelShader = std::make_unique<GamerEngine::Shader>();
 		myModelShader->load("shaders/vs.shader", "shaders/fs_pbr.shader");
 		mLight = std::make_unique<GamerEngine::Light>();
 		myScene = std::make_unique<GamerEngine::Scene>();
-
-		//mCamera = std::make_unique<GamerEngine::Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 1000.0f);
-
 	}
 
 	SceneView::~SceneView()
 	{
-
-		mShader->unload();
-
+		myCameraShader->unload();
 	}
 
 
@@ -45,6 +40,7 @@ namespace GamerEngine
 	{
 		myScene->GetCamera()->SetButton(button);
 	}
+
 	/*
 	void SceneView::OnMouseWheel(double delta)
 	{
@@ -59,13 +55,10 @@ namespace GamerEngine
 
 	void SceneView::LoadMesh(const std::string& filepath)
 	{
-		
+
 		auto test = myScene->CreateEntity();
 		auto& mesh = test->AddComponent<MeshComponent>();
 		mesh.myModel.Load(filepath);
-
-		mMesh = &mesh;
-		//mMesh->myModel.Load(filepath);
 	}
 
 
@@ -77,10 +70,10 @@ namespace GamerEngine
 	void SceneView::Render()
 	{
 
-		mShader->use();
+		myCameraShader->use();
 		myModelShader->use();
 
-		mLight->Update(mShader.get());
+		mLight->Update(myModelShader.get());
 
 		mFrameBuffer->Bind();
 
@@ -106,7 +99,7 @@ namespace GamerEngine
 
 		
 
-		myScene->RenderCamera(mShader.get());
+		myScene->RenderCamera(myCameraShader.get());
 
 		//mCamera->SetAspect(mSize.x / mSize.y);
 		//mCamera->Update(mMesh.get(), mShader.get());

@@ -18,6 +18,7 @@ namespace GamerEngine
 	{
 		mUICtx = std::make_unique<UIContext>();
 		mRenderCtx = std::make_unique<OpenGL_Context>();
+		myInstacneWinodw = this;
 	}
 
 	GLWindow::~GLWindow()
@@ -27,6 +28,11 @@ namespace GamerEngine
 		mRenderCtx->end();
 	}
 
+	GLWindow* GLWindow::GetInstance()
+	{
+		return myInstacneWinodw;
+	}
+
 	bool GLWindow::Init(int width, int height, const std::string& title)
 	{
 		Width = width;
@@ -34,22 +40,8 @@ namespace GamerEngine
 		Title = title;
 
 		mRenderCtx->Init(this);
-
 		mUICtx->Init(this);
-
-		mSceneView = std::make_unique<SceneView>();
-		mPropertyPanel = std::make_unique<PropertyPanel>();
-		myContentBrowserPanel = std::make_unique<ContentBrowserPanel>();
-		myInspectorPanel = std::make_unique<InspectorPanel>();
-		myNavPanel = std::make_unique<NavigationPanel>();
-		myHierarchyPanel = std::make_unique<HierarchyPanel>();
-
-		//myContext = std::make_unique<EngineContext>();
-		SetUpContext();
-
-		mPropertyPanel->SetMeshLoadCallback(
-			[this](std::string filepath) { mSceneView->LoadMesh(filepath); });
-
+		myContext = std::make_unique<EngineContext>();
 		return mIsRunning;
 	}
 
@@ -58,13 +50,12 @@ namespace GamerEngine
 		Width = width;
 		Height = height;
 
-		mSceneView->Resize(Width, Height);
+		myContext->GetSceneView()->Resize(Width, Height);
 		Render();
 	}
 
 	void GLWindow::SetNativeWindow(void* window)
 	{
-		
 		mWindow = (GLFWwindow*)window;
 	}
 
@@ -101,15 +92,9 @@ namespace GamerEngine
 	{
 		mRenderCtx->PreRender();
 		mUICtx->PreRender();
-
-		mSceneView->Render();
-
+		
 		// UI
-		myNavPanel->OnImGuiRender();
-		mPropertyPanel->OnImGuiRender(mSceneView.get());
-		myContentBrowserPanel->OnImGuiRender();
-		myInspectorPanel->OnImGuiRender(mSceneView.get());
-		myHierarchyPanel->OnImGuiRender(mSceneView.get());
+		myContext->Render();
 		// UI END
 
 		mUICtx->PostRender();
@@ -125,22 +110,22 @@ namespace GamerEngine
 
 		if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			mSceneView->SetCameraPos({0.0f, 0.0f, cameraSpeed });
+			myContext->GetSceneView()->SetCameraPos({0.0f, 0.0f, cameraSpeed });
 		}
 
 		if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			mSceneView->SetCameraPos({ 0.0f, 0.0f, -cameraSpeed });
+			myContext->GetSceneView()->SetCameraPos({ 0.0f, 0.0f, -cameraSpeed });
 		}
 
 		if (glfwGetKey(mWindow, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			mSceneView->SetCameraPos({ cameraSpeed, 0.0f, 0.0f });
+			myContext->GetSceneView()->SetCameraPos({ cameraSpeed, 0.0f, 0.0f });
 		}
 
 		if (glfwGetKey(mWindow, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			mSceneView->SetCameraPos({ -cameraSpeed, 0.0f, 0.0f });
+			myContext->GetSceneView()->SetCameraPos({ -cameraSpeed, 0.0f, 0.0f });
 		}
 
 
@@ -149,7 +134,7 @@ namespace GamerEngine
 		double x, y;
 		glfwGetCursorPos(mWindow, &x, &y);
 
-		mSceneView->OnMouseMove(x, y, Input::GetPressedButton(mWindow));
+		myContext->GetSceneView()->OnMouseMove(x, y, Input::GetPressedButton(mWindow));
 	}
 
 	void* GLWindow::GetNativeWindow()

@@ -15,11 +15,11 @@ namespace GamerEngine
 	{
 	}
 
-	void HierarchyPanel::OnImGuiRender(SceneView* aContext)
+	void HierarchyPanel::OnImGuiRender(EngineContext* aContext)
 	{
 		ImGui::Begin("Hierarchy");
 
-		auto view = aContext->GetScene()->GetRegistry()->view<TransformComponent>();
+		auto view = aContext->GetSceneView()->GetScene()->GetRegistry()->view<TransformComponent>();
 
 		for (auto entity : view)
 		{
@@ -29,10 +29,9 @@ namespace GamerEngine
 		ImGui::End();
 	}
 
-	void HierarchyPanel::RenderTreeNode(SceneView* aContext, entt::entity& aEntity)
+	void HierarchyPanel::RenderTreeNode(EngineContext* aContext, entt::entity& aEntity)
 	{
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Selected;
-
+		ImGuiTreeNodeFlags flags = (aContext->GetSelectedEntity() == aEntity) ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_OpenOnArrow;
 
 
 		if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)aEntity, flags, "LOVE"))
@@ -41,7 +40,7 @@ namespace GamerEngine
 		}
 		if (ImGui::IsItemClicked())
 		{
-			//aContext->mySelectedEntity = Entity(aEntity, aContext->mySceneView->GetScene());
+			aContext->SetEntity(Entity(aEntity, aContext->GetSceneView()->GetScene()));
 		}
 
 		myId++;
