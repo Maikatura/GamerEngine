@@ -48,6 +48,25 @@ namespace GamerEngine
 
 		}
 
+		if (entity.HasComponent<MeshComponent>()) 
+		{
+			auto& mesh = entity.GetComponent<MeshComponent>();
+
+			
+			float* myFloats[] = {
+				&mesh.myColor.x,
+				&mesh.myColor.y,
+				&mesh.myColor.z,
+				&mesh.myColor.w
+			};
+
+			if (ImGui::CollapsingHeader("Mesh"))
+			{
+				ImGui::ColorEdit4("Color: ", *myFloats);
+			}
+		}
+			
+
 		ImGui::End();
 	}
 

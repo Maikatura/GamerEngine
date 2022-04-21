@@ -84,7 +84,7 @@ namespace GamerEngine
 		return false;
 	}
 
-	void Mesh::Update(TransformComponent aTransform, GamerEngine::Shader* shader)
+	void Mesh::Update(TransformComponent aTransform, glm::vec4 aColor, GamerEngine::Shader* shader)
 	{
 		glm::mat4 position(1.0f);
 		glm::mat4 rotation(1.0f);
@@ -100,7 +100,7 @@ namespace GamerEngine
 		shader->set_mat4(modelView, "model");
 		shader->set_mat4(Scene::GetCamera()->GetViewMatrix(), "view");
 		shader->set_mat4(Scene::GetCamera()->GetProjection(), "projection");
-		shader->set_vec4({ 1, 1,1,1 }, "color");
+		shader->set_vec4(aColor, "color");
 
 	}
 

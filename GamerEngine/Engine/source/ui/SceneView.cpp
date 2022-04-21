@@ -17,7 +17,7 @@ namespace GamerEngine
 		myCameraShader = std::make_unique<GamerEngine::Shader>();
 		myCameraShader->load("shaders/camera.vert", "camera.frag");
 		myModelShader = std::make_unique<GamerEngine::Shader>();
-		myModelShader->load("shaders/vs.shader", "shaders/fs_pbr.shader");
+		myModelShader->load("shaders/main.vert", "shaders/main.frag");
 		mLight = std::make_unique<GamerEngine::Light>();
 		myScene = std::make_unique<GamerEngine::Scene>();
 	}

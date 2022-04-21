@@ -34,7 +34,7 @@ namespace GamerEngine
 		for (auto entity : view)
 		{
 			auto [mesh, transform] = myRegistry.get<MeshComponent, TransformComponent>(entity);
-			mesh.myModel.Update(transform, shader);
+			mesh.myModel.Update(transform, mesh.myColor, shader);
 			mesh.myModel.Render();
 		}
 	}

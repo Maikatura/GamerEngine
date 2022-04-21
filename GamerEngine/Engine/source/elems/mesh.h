@@ -23,7 +23,7 @@ namespace GamerEngine
 		void AddVertex(const VertexHolder& vertex) { mVertices.push_back(vertex); }
 		void AddVertexIndex(unsigned int vertex_idx) { mVertexIndices.push_back(vertex_idx); }
 		std::vector<unsigned int> GetVertexIndices() { return mVertexIndices; }
-		void Update(TransformComponent aTransform, GamerEngine::Shader* shader);
+		void Update(TransformComponent aTransform, glm::vec4 aColor , GamerEngine::Shader* shader);
 		void Update(GamerEngine::Shader* shader) override;
 
 		glm::vec3 mColor = { 1.0f, 0.0f, 0.0f };
