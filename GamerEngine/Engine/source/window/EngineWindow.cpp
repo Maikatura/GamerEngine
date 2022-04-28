@@ -99,13 +99,7 @@ namespace GamerEngine
 
 	void GLWindow::HandleInput()
 	{
-
-		
-
-
 		//mSceneView->ResetView();
-		
-
 		myContext->GetSceneView()->OnMouseMove(0, 0, Input::GetPressedButton(mWindow));
 	}
 

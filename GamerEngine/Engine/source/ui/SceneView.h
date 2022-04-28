@@ -25,13 +25,14 @@ namespace GamerEngine
 
 		void Render();
 
-		Scene* GetScene();
-
+		
 		void LoadMesh(const std::string& filepath);
 		
 		void SetCameraPos(glm::vec3 aPosition);
 
 		void OnMouseMove(double x, double y, GamerEngine::EInputButton button);
+
+		inline static Scene* GetScene();
 
 		/*void OnMouseWheel(double delta);
 
@@ -43,7 +44,7 @@ namespace GamerEngine
 		std::unique_ptr<GamerEngine::Shader> myModelShader;
 		std::unique_ptr<GamerEngine::Light> mLight;
 
-		std::unique_ptr<Scene> myScene;
+		inline static std::unique_ptr<Scene> myScene;
 
 		glm::vec2 mSize;
 	};

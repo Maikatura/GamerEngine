@@ -58,6 +58,7 @@ namespace GamerEngine
 		auto test = myScene->CreateEntity();
 		auto& mesh = test.AddComponent<MeshComponent>();
 		mesh.myModel.Load(filepath);
+		std::cout << filepath << std::endl;
 	}
 
 
@@ -76,13 +77,7 @@ namespace GamerEngine
 
 		mFrameBuffer->Bind();
 
-		myScene->Render(myModelShader.get());
-
-		/*if (mMesh)
-		{
-			mMesh->myModel.Update(mShader.get());
-			mMesh->myModel.Render();
-		}*/
+		GetScene()->Render(myModelShader.get());
 
 
 		mFrameBuffer->Unbind();

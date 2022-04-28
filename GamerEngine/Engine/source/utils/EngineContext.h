@@ -41,13 +41,13 @@ namespace GamerEngine
 		}
 
 	private:
-		std::unique_ptr<SceneView> mySceneView;
-		std::unique_ptr<NavigationPanel> myNavPanel;
-		std::unique_ptr<PropertyPanel> mPropertyPanel;
-		std::unique_ptr<ContentBrowserPanel> myContentBrowserPanel;
-		std::unique_ptr<InspectorPanel> myInspectorPanel;
-		std::unique_ptr<HierarchyPanel> myHierarchyPanel;
-		std::unique_ptr<ProfilerPanel> myProfilerPanel;
+		inline static std::unique_ptr<SceneView> mySceneView;
+		inline static std::unique_ptr<NavigationPanel> myNavPanel;
+		inline static std::unique_ptr<PropertyPanel> mPropertyPanel;
+		inline static std::unique_ptr<ContentBrowserPanel> myContentBrowserPanel;
+		inline static std::unique_ptr<InspectorPanel> myInspectorPanel;
+		inline static std::unique_ptr<HierarchyPanel> myHierarchyPanel;
+		inline static std::unique_ptr<ProfilerPanel> myProfilerPanel;
 
 		Entity mySelectedEntity;
 	};

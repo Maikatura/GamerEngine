@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "ContentBrowserPanel.h"
 #include <imgui/imgui.h>
+#include "SceneView.h"
+#include "Components/MeshComponent.h"
+#include "ecs/Entity.h"
 
 namespace GamerEngine
 {
@@ -49,18 +52,38 @@ namespace GamerEngine
 
 			auto iconTexture = myModelIcon.GetRenderID();
 
-			if (directoryEntry.is_directory())
+			if (directoryEntry.is_directory()) 
+			{
 				iconTexture = myFolderIcon.GetRenderID();
-			else
-				iconTexture = GetIconID(relativePath.extension().string());
+			}
+			else 
+			{
+				iconTexture = GetIconID(relativePath.extension().string());	
+			}
 			
 			ImGui::ImageButton(reinterpret_cast<void*>(iconTexture), { myIconSize, myIconSize });
 			if (directoryEntry.is_directory())
+			{
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+				{
 					myCurrentDirectory /= directoryEntry.path().filename();
+				}
+			}
+			else 
+			{
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+				{
+					/*auto entity = SceneView::GetScene()->CreateEntity();
+					auto& mesh = entity.AddComponent<MeshComponent>();
+					mesh.myModel.Load(relativePathString);*/
+					/*std::cout << myCurrentDirectory.string() + relativePathString << std::endl;*/
+				}
+			}
 
 			ImGui::Text(relativePathString.c_str());
 			ImGui::NextColumn();
+			
+			
 		}
 
 		ImGui::Columns(1);
