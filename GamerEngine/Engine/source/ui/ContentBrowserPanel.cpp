@@ -10,10 +10,10 @@ namespace GamerEngine
 	ContentBrowserPanel::ContentBrowserPanel() : myAssetPath("Assets")
 	{
 		myCurrentDirectory = myAssetPath;
-		myFolderIcon.LoadTexture(	"resources/icons/Icon_Directory.png");
-		myModelIcon.LoadTexture(	"resources/icons/Icon_File.png");
-		myScriptIcon.LoadTexture(	"resources/icons/Icon_Code.png");
-		myImageIcon.LoadTexture(	"resources/icons/Icon_Image.png");
+		myFolderIcon.LoadTexture(	"resources/icons/Icon_Directory.pic");
+		myModelIcon.LoadTexture(	"resources/icons/Icon_File.pic");
+		myScriptIcon.LoadTexture(	"resources/icons/Icon_Code.pic");
+		myImageIcon.LoadTexture(	"resources/icons/Icon_Image.pic");
 	}
 
 	ContentBrowserPanel::~ContentBrowserPanel()

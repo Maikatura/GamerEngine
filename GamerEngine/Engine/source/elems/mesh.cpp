@@ -101,7 +101,6 @@ namespace GamerEngine
 		shader->set_mat4(Scene::GetCamera()->GetViewMatrix(), "view");
 		shader->set_mat4(Scene::GetCamera()->GetProjection(), "projection");
 		shader->set_vec4(aColor, "color");
-
 	}
 
 	void Mesh::Update(GamerEngine::Shader* shader)
