@@ -1,24 +1,17 @@
-include "Premake/extensions.lua"
+require('vstudio')
 
-workspace "GamerEngine"
-	location "."
-	startproject "Engine" -- proably launcher
-	architecture "x64"
+premake.api.register {
+    name = "sdlchecks",
+    scope = "config",
+    kind = "boolean",
+    default = true
+}
 
-	configurations {
-		"Debug",
-		"Release",
-		"Retail"
-	}
+-- needed a way to set SDLChecks which isn't provided in premake
+-- might be better ways to do it, right now I just opted to push it in
+-- where it is in the project settings.
 
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-
-group "GamerEngine"
-
-include "GamerEngine/Engine"
-
-
-group "Dependencies"
-
-group ""
-include "Source/Game"
+premake.override(premake.vstudio.vc2010, "multiProcessorCompilation", function(base, prj)
+	premake.w('<SDLCheck>' .. tostring(true) .. '</SDLCheck>')
+	base(prj)
+end)
