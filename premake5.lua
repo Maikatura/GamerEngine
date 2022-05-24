@@ -1,8 +1,8 @@
 include "Premake/extensions.lua"
 
-workspace "TGE"
+workspace "GamerEngine"
 	location "."
-	startproject "Launcher" -- proably launcher
+	startproject "Engine" -- proably launcher
 	architecture "x64"
 
 	configurations {
@@ -15,9 +15,9 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Tga2D"
 
-include "Source/External"
-include "Source/tga2dcore"
-include "Source/Launcher"
+include "GamerEngine/Engine"
+include "GamerEngine/CommonUtilities"
+include "GamerEngine/External"
 
 group "Dependencies"
 include "Source/CommonUtilities"
