@@ -15,7 +15,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	windowClass.style = CS_VREDRAW | CS_HREDRAW | CS_OWNDC;
 	windowClass.lpfnWndProc = GraphicsEngine::WinProc;
 	windowClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	windowClass.lpszClassName = L"TGP";
+	windowClass.lpszClassName = L"GamerEngine";
 	RegisterClass(&windowClass);
 
 	myWindowHandle = CreateWindow(
