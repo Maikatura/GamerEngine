@@ -7,7 +7,10 @@ Just run the program or download the latest release on the side.
 If you wanna use the source code it will compile the code and run the engine directly if there are no issues with the current build.
 If you wanna use the development build that can include bug and compile errors. 
 use the <a href="https://github.com/Maikatura/GamerEngine/tree/Development">development</a> build.
-I will try to not have compile errors on the main branch.
+I will try to not have compile errors on the main branch. 
+I also will make every class that will be used like vectors and other types that is needed on my own to handcraft what I need.
+Feel free to use or modify anything on this project!
+
 
 #### Info
 This engine uses DirectX 11 to run and I will try to support at least Windows and Linux. 
