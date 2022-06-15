@@ -9,6 +9,11 @@ If you wanna use the development build that can include bug and compile errors.
 use the <a href="https://github.com/Maikatura/GamerEngine/tree/Development">development</a> build.
 I will try to not have compile errors on the main branch.
 
+#### Info
+This engine uses DirectX 11 to run and I will try to support at least Windows and Linux. 
+But I will focus on Windows first since windows has the most market share on computers.
+I won't support macOS sorry :D But not really sorry.
+
 #### Base Features
 - [ ] Model loader
 - [ ] View
