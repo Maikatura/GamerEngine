@@ -16,9 +16,4 @@
 		<td>Prefab</td>
 		<td>A Prefab</td>
 	</tr>
-	<tr>
-		<td>.cs</td>
-		<td>C# Script</td>
-		<td>A Script the game engine have that can be use on the editor or gameobjects to change its behaviour</td>
-	</tr>
 </table> 

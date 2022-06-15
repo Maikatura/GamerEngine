@@ -28,7 +28,7 @@ I won't support macOS sorry :D But not really sorry.
 - [ ] Dark mode
 
 #### Table of content
-<a href="/README/FILEFORMATS.md">File formats</a>
+<a href="/README/FORMATS.md">File formats</a>
 
 I like code<br>
 <img src="/README/images/sadge.png" height="30px">
