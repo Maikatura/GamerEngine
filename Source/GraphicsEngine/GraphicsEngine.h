@@ -1,10 +1,13 @@
 #pragma once
 #include <memory>
+#include <InputManager.h>
+#include <vector>
+#include <Math/Vector4.hpp>
 
 
 class DX11;
-class Scene;
 class ForwardRenderer;
+class Scene;
 class ModelAssetHandler;
 
 class GraphicsEngine
@@ -17,17 +20,44 @@ class GraphicsEngine
 
 public:
 
-	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug);
+	static GraphicsEngine* Get();
+
+	~GraphicsEngine();
+
+	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug, std::wstring aName = L"GamerEngine");
 
 	void BeginFrame();
 	void EndFrame();
-	void RenderFrame();
+	void OnFrameUpdate();
+	void OnFrameRender();
+
+
+	void SetMinimized(bool aMinimizedState);
+	void SetUpdateBuffers(bool aUpdate);
+
+
+	void SetColor(CommonUtilities::Vector4<float> aClearColor);
+	CommonUtilities::Vector4<float> GetClearColor();
+
+	std::shared_ptr<Scene> GetScene();
+	std::shared_ptr<CommonUtilities::InputManager> GetInput();
+
 
 	std::shared_ptr<Scene> myScene;
 	std::shared_ptr<ForwardRenderer> myForwardRenderer;
-	std::shared_ptr<ModelAssetHandler> myAssetHandler;
+
+
 
 	[[nodiscard]] HWND FORCEINLINE GetWindowHandle() const { return myWindowHandle; }
 	[[nodiscard]] SIZE FORCEINLINE GetWindowSize() const { return myWindowSize; }
+	[[nodiscard]] void FORCEINLINE SetWindowSize(int aX, int aY) { myWindowSize.cx = aX; myWindowSize.cy = aY; }
+private:
+	std::shared_ptr<CommonUtilities::InputManager> myInputManager;
+
+	CommonUtilities::Vector4<float> myClearColor;
+
+	inline static GraphicsEngine* myInstance;
+	bool myWantToResizeBuffers;
+	bool myIsMinimized;
 };
 

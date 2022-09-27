@@ -1,10 +1,13 @@
-
 // Exclude things we don't need from the Windows headers
 #define WIN32_LEAN_AND_MEAN
 #include "Windows.h"
 
 #include "Modelviewer.h"
 #include "GraphicsEngine.h"
+
+#if EDITOR
+#undef EDITOR
+#endif
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                       _In_opt_ HINSTANCE hPrevInstance,
@@ -20,6 +23,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     GraphicsEngine graphicsEngine;
 
+    
+
     const SIZE windowSize = { 1920, 1080 };
 
     bool bShouldRun = graphicsEngine.Initialize(
@@ -30,6 +35,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			false
 	    );
 
+ 
     while(bShouldRun)
     {
 		while(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -37,25 +43,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             TranslateMessage(&msg);
             DispatchMessage(&msg);
 
-            // Should update input here.
-
+           
 			if(msg.message == WM_QUIT)
 			{
                 bShouldRun = false;
 			}
 		}
 
-        // REMEMBER!
-        // The frame update for the game does NOT happen inside the PeekMessage loop.
-        // This would cause the game to only update if there are messages and also run
-        // the update several times per frame (once for each message).
+        
 
         graphicsEngine.BeginFrame();
 
-        graphicsEngine.RenderFrame();
+        graphicsEngine.OnFrameUpdate();
+        graphicsEngine.OnFrameRender();
 
         graphicsEngine.EndFrame();
     }
+
+
 
     return 0;
 }

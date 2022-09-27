@@ -1,15 +1,29 @@
 #pragma once
-#include "Math/Vector4.hpp"
+#include <Math/MathTypes.hpp>
 
 struct Vertex
 {
-	CommonUtilities::Vector4<float> Position = { 0,0,0,1 };
-
-	CommonUtilities::Vector4<float> VertexColors[4] =
+	Vector4f Position = { 0,0,0,1 };
+	Vector4f VertexColors[4] =
 	{
-		{0,0,0,0},
-		{0,0,0,0},
-		{0,0,0,0},
-		{0,0,0,0}
+		{1,1,1,1},
+		{1,1,1,1},
+		{1,1,1,1},
+		{1,1,1,1}
 	};
+
+	Vector2f UVs[4]
+	{
+		{0,0},
+		{0,0},
+		{0,0},
+		{0,0}
+	};
+
+	Vector4ui myBoneIDs = {0,0,0,0};
+	Vector4f myBoneWeights = { 0,0,0,0 };
+
+	Vector3f Tangent	= { 0,0,0 };
+	Vector3f Binormal	= { 0,0,0 };
+	Vector3f Normal		= { 0,0,0 };
 };

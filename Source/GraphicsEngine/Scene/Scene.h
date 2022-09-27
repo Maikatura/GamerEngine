@@ -1,42 +1,48 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <Model/SceneObject.h>
-#include "Camera.h"
-#include <Model/Model.h>
+#include <Model/ModelInstance.h>
+#include <Model/EnumTypes.h>
+#include <model/SelectedObject.hpp>
+#include <entt/entt.hpp>
+
+#include "UUID.h"
+#include "Components/Components.hpp"
+
+class Entity;
 
 class Scene
 {
-	std::vector<std::shared_ptr<Model>> mySceneObjects;
-	std::shared_ptr<Camera> myMainCamera;
-	
 public:
+
+	Scene() = default;
+	~Scene();
 
 	bool Initialize();
 
+	void Clear();
+
+	void Resize(Vector2ui aNewWindowSize);
+	entt::registry& GetRegistry();
+
+	Entity CreateEntity(const std::string& aName);
+	Entity CreateEntityWithUUID(UUID2 aUUID, const std::string& aName);
+	void DeleteEntity(Entity aEntity);
+
+	virtual void OnUpdate();
+	virtual void OnRender();
+
 	template<typename T>
-	void AddGameObject(std::shared_ptr<T> aSceneObject) 
-	{
-		mySceneObjects.push_back(std::move(aSceneObject));
-	}
+	void OnComponentAdded(Entity entity, T& component);
 
-	
+	void SetPath(const std::string& aPath);
+	const std::string& GetPath();
 
-	void SetCamera(std::shared_ptr<Camera> aCamera) 
-	{
-		myMainCamera = aCamera;
-	}
-	
-	std::shared_ptr<Camera>& GetCamera() 
-	{
-		return myMainCamera;
-	}
+private:
+	std::string myPath;
+	entt::registry myRegistry;
 
-	std::vector<std::shared_ptr<Model>> CullModels(std::shared_ptr<Camera> aCamera)
-	{
-		
-		return mySceneObjects;
-	}
-	
+	friend class Entity;
 };
+
 

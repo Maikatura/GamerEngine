@@ -78,17 +78,19 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)GraphicsEngine;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
-    <LibraryPath>$(SolutionDir)Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Game;$(SolutionDir)GraphicsEngine;$(SolutionDir)External;$(ProjectDir);$(SolutionDir)AudioEngine\include;$(SolutionDir)AudioEngine;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Bin\</OutDir>
+    <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)GraphicsEngine;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
-    <LibraryPath>$(SolutionDir)Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Game;$(SolutionDir)GraphicsEngine;$(SolutionDir)External;$(ProjectDir);$(SolutionDir)AudioEngine\include;$(SolutionDir)AudioEngine;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Bin\</OutDir>
+    <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,6 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,7 +127,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -140,7 +145,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CommonUtilities;$(SolutionDir)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -166,6 +173,12 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AudioEngine\AudioEngine.vcxproj">
+      <Project>{1a6e280a-a4e9-4dfb-b3e5-d4788b545603}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Game\Game.vcxproj">
+      <Project>{0e9e3c35-28a3-46be-b15f-2a5996119188}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\GraphicsEngine\GraphicsEngine.vcxproj">
       <Project>{4a14b5d4-9d37-4a37-9d3b-d7b2bac7b312}</Project>
     </ProjectReference>

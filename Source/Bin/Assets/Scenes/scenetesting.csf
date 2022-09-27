@@ -1,0 +1,96 @@
+Scene: SceneTesting
+Path: Assets\Scenes\scenetesting.csf
+Entities:
+  - Entity: 1696873543651849527
+    TagComponent:
+      Tag: Goblin 3
+    TransformComponent:
+      Translation: [-24.7170067, 0, -3.92425871]
+      Rotation: [0, 39.9319763, 0]
+      Scale: [0.290000081, 0.290000021, 0.290000081]
+    ModelComponent:
+      Path: Assets\Models\Gremlin.fbx
+  - Entity: 5314700465320458082
+    TagComponent:
+      Tag: Goblin 1
+    TransformComponent:
+      Translation: [2.1724143, 1.65866005, 14.6119747]
+      Rotation: [-115.468224, -6.15459442, 179.756683]
+      Scale: [0.299999326, 0.299999714, 0.299999744]
+    ModelComponent:
+      Path: Assets\Models\Gremlin.fbx
+  - Entity: 1710895463642117930
+    TagComponent:
+      Tag: Goblin 2
+    TransformComponent:
+      Translation: [-3.76815605, 0, -11.0264807]
+      Rotation: [0, -0, 0]
+      Scale: [0.300000012, 0.300000012, 0.300000012]
+    ModelComponent:
+      Path: Assets\Models\Gremlin.fbx
+  - Entity: 7685731292021888080
+    TagComponent:
+      Tag: SceneCamera
+    TransformComponent:
+      Translation: [-33.6122894, 25.2999363, 50.799263]
+      Rotation: [23.0691547, 152.279861, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.00999999978
+      FarPlane: 1500
+      Primary: true
+  - Entity: 8814650928956692589
+    TagComponent:
+      Tag: Chest 1
+    TransformComponent:
+      Translation: [-12.0525627, 0, 0.383050561]
+      Rotation: [0, -0, 0]
+      Scale: [0.0599999987, 0.0599999987, 0.0599999987]
+    ModelComponent:
+      Path: Assets\Models\Particle_Chest.fbx
+  - Entity: 4007227609636436852
+    TagComponent:
+      Tag: Chest 2
+    TransformComponent:
+      Translation: [-0.0504785255, 0, 1.80255854]
+      Rotation: [0, -43.4888687, 0]
+      Scale: [0.0599999949, 0.0599999987, 0.0599999949]
+    ModelComponent:
+      Path: Assets\Models\Particle_Chest.fbx
+  - Entity: 1637155099816054069
+    TagComponent:
+      Tag: Ground
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      Path: Assets\Models\plane.fbx
+  - Entity: 10437231424467120089
+    TagComponent:
+      Tag: Wall 1
+    TransformComponent:
+      Translation: [0, 4.30975933e-06, -98.595871]
+      Rotation: [90, -0, 0]
+      Scale: [0.999807179, 0.999999762, 0.999999762]
+    ModelComponent:
+      Path: Assets\Models\plane.fbx
+  - Entity: 7040225133702143490
+    TagComponent:
+      Tag: Wall 2
+    TransformComponent:
+      Translation: [98.0848083, 0.000267760392, 8.92534517e-05]
+      Rotation: [-89.9999466, -89.9999466, -179.999893]
+      Scale: [0.999947548, 0.999998033, 0.999958098]
+    ModelComponent:
+      Path: Assets\Models\plane.fbx
+  - Entity: 754339926488441843
+    TagComponent:
+      Tag: Cube 1
+    TransformComponent:
+      Translation: [24.7904701, 14.865799, -10.7515526]
+      Rotation: [0, -0, 0]
+      Scale: [5.40999985, 5.40999985, 5.40999985]
+    ModelComponent:
+      Path: Assets\Models\Cube.fbx
