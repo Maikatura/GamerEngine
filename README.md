@@ -1,4 +1,4 @@
-### A OpenGL Game Engine
+### A DirectX Game Engine
 
 GamerEngine is a free and open source 3D game engine!
 
@@ -13,11 +13,11 @@ I will try to not have compile errors on the main branch.
 #### Base Features
 - [x] Model loader
 - [x] View
-- [ ] Scenes
+- [x] Scenes
 - [ ] Threaded Rendering
-- [ ] Inspector
+- [x] Inspector
 - [ ] Prefabs
-- [ ] File Explorer (For project)
+- [x] File Explorer (For project)
 - [x] Dark mode
 
 #### Table of content
