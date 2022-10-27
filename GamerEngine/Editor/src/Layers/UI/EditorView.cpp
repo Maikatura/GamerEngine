@@ -1,0 +1,224 @@
+#include "Editor.pch.h"
+#include "EditorView.h"
+#include <DirectXMath.h>
+#include <GraphicsEngine.h>
+#include <Framework/DX11.h>
+#include <Scene/Scene.h>
+
+#include "Components/Components.hpp"
+#include "imgui/imgui_internal.h"
+#include "ImGuiAdded/ImGuiExtra.h"
+#include "Render/Renderer.h"
+#include "Render/SelectionData.h"
+#include <Model/Entity.h>
+#include <Components/CameraController.h>
+#include <Render/ForwardRenderer.h>
+
+#include "Debugger/ConsoleHelper.h"
+#include "Managers/CommandManager.h"
+#include "Managers/Commands/PositionCommand.h"
+
+
+bool EditorView::OnImGuiRender()
+{
+	Entity entity = SelectionData::GetEntityObject();
+
+	RenderSceneView(entity);
+	//RenderGameView();
+
+
+
+	return true;
+}
+
+void EditorView::RenderSceneView(Entity aEntity)
+{
+	static ImGuiWindowFlags gizmoWindowFlags = 0;
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+	ImGui::Begin(EditorNames::SceneViewName.c_str(), 0, gizmoWindowFlags);
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
+
+	CameraController::IsHoveringSceneView = ImGui::IsWindowHovered();
+
+	ImGuizmo::SetDrawlist();
+	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
+	ImVec2 windowSize = ImGui::GetWindowSize();
+	windowSize.y -= 20;
+
+
+	auto view = GraphicsEngine::Get()->GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
+	for(auto entity : view)
+	{
+		auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+		camera.Resize({ static_cast<unsigned int>(windowSize.x), static_cast<unsigned int>(windowSize.y) });
+	}
+
+	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowSize.x, windowSize.y);
+	ImGui::Image(DX11::RenderSRV.Get(), { windowSize.x, windowSize.y });
+
+	RenderEntityParts(aEntity);
+
+
+	/*if(ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+	{
+
+		const Vector2f mousePositionInViewport = MouseToViewport({ windowSize.x,windowSize.y}, windowScale);
+		UINT id = DX11::GetScreenObjectId(static_cast<UINT>(mousePositionInViewport.x), static_cast<UINT>(mousePositionInViewport.y));
+
+		GraphicsEngine::Get()->GetScene()->GetRegistry().each([&](auto entityID)
+			{
+				if(entityID == entt::null)
+				{
+					return;
+				}
+
+				Entity entity{ entityID, GraphicsEngine::Get()->GetScene().get() };
+				if(entity.GetID() == id)
+				{
+					SelectionData::SetEntityObject(entity);
+				}
+			}
+		);
+	}*/
+
+	ImGui::End();
+	ImGui::PopStyleVar();
+}
+
+void EditorView::RenderEntityParts(Entity aEntity)
+{
+	if(!GraphicsEngine::Get()->GetScene()->GetRegistry().valid(aEntity.GetHandle()))
+	{
+		return;
+	}
+
+	if(!aEntity.HasComponent<TransformComponent>())
+	{
+		return;
+	}
+
+	Matrix4x4f cameraView = Renderer::GetViewMatrix();
+	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(cameraView);
+	Matrix4x4f projectionView = Renderer::GetProjectionMatrix();
+
+	DirectX::XMFLOAT4X4 localMat{};
+	DirectX::XMFLOAT4X4 viewMat{};
+	DirectX::XMFLOAT4X4 projMat{};
+
+	memcpy_s(&viewMat, sizeof(Matrix4x4f), &viewInverse, sizeof(Matrix4x4f));
+	memcpy_s(&projMat, sizeof(Matrix4x4f), &projectionView, sizeof(Matrix4x4f));
+
+	TransformComponent& transform = aEntity.GetComponent<TransformComponent>();
+	float translate[3] = { transform.Translation.x, transform.Translation.y, transform.Translation.z };
+	float rotation[3] = { transform.Rotation.x, transform.Rotation.y, transform.Rotation.z };
+	float scale[3] = { transform.Scale.x, transform.Scale.y, transform.Scale.z };
+
+	ImGuizmo::RecomposeMatrixFromComponents(translate, rotation, scale, *localMat.m);
+
+	if(!ImGui::IsMouseDown(ImGuiMouseButton_Right))
+	{
+		if(ImGui::IsKeyPressed('W'))
+		{
+			myOperation = ImGuizmo::OPERATION::TRANSLATE;
+		}
+		if(ImGui::IsKeyPressed('E'))
+		{
+			myOperation = ImGuizmo::OPERATION::ROTATE;
+		}
+		if(ImGui::IsKeyPressed('R'))
+		{
+			myOperation = ImGuizmo::OPERATION::SCALE;
+		}
+	}
+
+	ImGuizmo::Enable(true);
+
+
+	ImGuizmo::Manipulate(*viewMat.m,
+		*projMat.m,
+		myOperation,
+		ImGuizmo::LOCAL,
+		*localMat.m,
+		NULL,
+		NULL
+	);
+
+	if(ImGuizmo::IsOver() && ImGuizmo::IsUsing())
+	{
+		myIsEditingPosition = true;
+	}
+	else
+	{
+		myIsEditingPosition = false;
+	}
+
+
+
+	ImGuizmo::DecomposeMatrixToComponents(*localMat.m, translate, rotation, scale);
+
+	memcpy_s(&transform.Translation, sizeof(Vector3f), &translate[0], sizeof(Vector3f));
+	memcpy_s(&transform.Rotation, sizeof(Vector3f), &rotation[0], sizeof(Vector3f));
+	memcpy_s(&transform.Scale, sizeof(Vector3f), &scale[0], sizeof(Vector3f));
+
+	if(myIsEditingPosition != myOldIsEditingPosition)
+	{
+		if (myIsFirstTimeEditing)
+		{
+			myStartTranslate = transform;
+			ConsoleHelper::Log(LogType::Info, "Transform Editing Started");
+		}
+		else
+		{
+			myEditedTranslate = transform;
+			auto test = new PositionCommand(aEntity, myStartTranslate, myEditedTranslate);
+			CommandManager::DoCommand(test);
+			ConsoleHelper::Log(LogType::Info, "Transform Editing Done");
+		}
+
+		myIsFirstTimeEditing = !myIsFirstTimeEditing;
+	}
+
+	myOldIsEditingPosition = myIsEditingPosition;
+}
+
+void EditorView::RenderGameView()
+{
+	//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+	ImGui::Begin(EditorNames::GameViewName.c_str());
+
+	if(ImGui::IsWindowFocused())
+	{
+		Renderer::SetRenderGame(true);
+	}
+	else
+	{
+		Renderer::SetRenderGame(false);
+	}
+
+	ImGui::TextWrapped("Nothing");
+
+	ImGui::End();
+	//ImGui::PopStyleVar();
+}
+
+void EditorView::OnUpdate()
+{
+	
+}
+
+
+Vector2f EditorView::MouseToViewport(Vector2f aWindowSize, float windowScale)
+{
+	if (!ImGui::IsWindowHovered())
+	{
+		return {0,0};
+	}
+
+	std::cout << "Error: Currently Broken, u cant select item in the viewport yet\n";
+
+ 	return { 0,0 };
+}
+
+

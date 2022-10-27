@@ -1,0 +1,26 @@
+#pragma once
+#include <unordered_map>
+#include <Model/Texture.h>
+#include <memory>
+#include <d3d11.h>
+
+class Texture;
+
+class TextureAssetHandler
+{
+	typedef std::unordered_map<std::wstring, std::shared_ptr<Texture>> TextureMap;
+
+	inline static TextureMap myRegistry{};
+
+public:
+
+	static void Clear();
+
+	static std::shared_ptr<Texture> GetTexture(const std::wstring& aName);
+
+	static bool LoadTexture(const std::wstring& aFileName);
+	static void UnloadUnusedTextures();
+
+	static ID3D11PixelShader* GetPixelShader(const std::string& aPath);
+	static ID3D11VertexShader* GetVertexShader(const std::string& aPath);
+};
