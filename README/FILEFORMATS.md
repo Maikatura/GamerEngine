@@ -7,7 +7,7 @@
 		<th>Info</th>
 	</tr>
 	<tr>
-		<td>.info</td>
+		<td>.data</td>
 		<td>Data</td>
 		<td>Stores all data of that file and referense inside to that item in the game engine</td>
 	</tr>
