@@ -17,8 +17,23 @@
 		<td>A Prefab</td>
 	</tr>
 	<tr>
-		<td>.cs</td>
-		<td>C# Script</td>
-		<td>A Script the game engine have that can be use on the editor or gameobjects to change its behaviour</td>
+		<td>.csf</td>
+		<td>Scene</td>
+		<td>Scene file that stands for "Cool Scene File"</td>
+	</tr>
+	<tr>
+		<td>.fbx</td>
+		<td>Model</td>
+		<td>Model file for 3D Models</td>
+	</tr>
+	<tr>
+		<td>.anim</td>
+		<td>Animation</td>
+		<td>Animation file for fbx files</td>
+	</tr>
+	<tr>
+		<td>.dds</td>
+		<td>Texture</td>
+		<td>Texture file for DirectX</td>
 	</tr>
 </table> 
