@@ -68,6 +68,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			if(msg.message == WM_QUIT)
 			{
+				myLayers.Destory();
 				bShouldRun = false;
 			}
 		}
@@ -77,19 +78,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			break;
 		}
 
+
 		myLayers.BeginFrame();
 		graphicsEngine.BeginFrame();
-
-		ID3D11RenderTargetView* buffers[2]
-		{
-			DX11::RenderRTV.Get(),
-			DX11::IDBuffer.Get()
-		};
-
-		DX11::Context->OMSetRenderTargets(2, &buffers[0], DX11::DepthBuffer.Get());
-
-		
-			graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());
+		graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameRender();
 
 		LineRenderer::Render();
@@ -100,7 +92,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		graphicsEngine.EndFrame();
 	}
 
-	myLayers.Destory();
+	
 	//std::cout << Allocation::TotalAlloc() << std::endl;
 	//system("pause");
 

@@ -35,5 +35,5 @@ cbuffer Objectbuffer : register(b1)
 	float2 OB_Padding;
 }
 
-SamplerState defaultSampler : register(s0);
-Texture2D particleTexture : register(t0);
+SamplerState defaultSampler		:	register(s0);
+Texture2D particleTexture		:	register(t0);

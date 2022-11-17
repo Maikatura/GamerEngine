@@ -29,7 +29,7 @@ GBufferOutput main(VertexToPixel input)
 		normalize(input.myNormal)
 		);
 
-	float3 pixelNormal = normalMap * 0.75f;
+	float3 pixelNormal = normalMap;
 	pixelNormal.z = 0;
 	pixelNormal = pixelNormal * 2 - 1;
 	pixelNormal.z = sqrt(1 - saturate(pixelNormal.x + pixelNormal.x + pixelNormal.y + pixelNormal.y));

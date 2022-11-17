@@ -29,6 +29,8 @@ namespace CommonUtilities
 		Vector3<T> Cross(const Vector3<T>& aVector) const; //Returns the cross product of this and aVector
 
 		Vector3<T> Blend(Vector3<T> aBlendState1, Vector3<T> aBlendState2, T aBlendAmount);
+
+		const Vector3 operator* (const T& aRval) const;
 	};
 
 	template <class T>
@@ -129,6 +131,12 @@ namespace CommonUtilities
 		T z = (channelZA + channelZB);
 
 		return { x, y, z };
+	}
+
+	template<typename T>
+	const Vector3<T> Vector3<T>::operator* (const T& aRval) const
+	{
+		return Vector3<T>(x * aRval, y * aRval, z * aRval);
 	}
 
 	//Returns the vector sum of aVector0 and aVector1 

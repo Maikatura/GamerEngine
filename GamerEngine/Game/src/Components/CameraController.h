@@ -1,16 +1,19 @@
 #pragma once
 #include <Components/ScriptableEntity.h>
 
+
+struct CameraControllerData
+{
+	float myMaxSpeed = 1000.0f;
+	float mySpeed = 30.0f;
+	float mySpeedShiftMul = 1.5f;
+	float myMouseSensitivity = 10.0f;
+	bool HasBeenActivated = false;
+};
+
 class CameraController : public ScriptableEntity
 {
 
-
-
-	float myMaxSpeed = 250.0f;
-	float mySpeed = 30.0f;
-	float mySpeedShiftMul = 1.5f;
-	float myMouseSensitivity = 50.0f;
-	bool HasBeenActivated = false;
 
 public:
 	inline static bool IsHoveringSceneView = false;
@@ -25,8 +28,6 @@ public:
 	void SetMaxSpeed(float aMaxSpeed);
 
 	void OnUpdate() override;
-
-	
 
 private:
 

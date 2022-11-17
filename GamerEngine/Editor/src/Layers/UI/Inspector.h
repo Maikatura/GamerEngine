@@ -15,8 +15,5 @@ public:
 	void AddComponent(Entity& aEntity);
 
 private:
-
-	std::wstring DropFile();
-
 	FileType myCurrentFileType = FileType::Error;
 };

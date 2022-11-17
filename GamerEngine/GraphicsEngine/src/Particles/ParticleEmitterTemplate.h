@@ -10,21 +10,21 @@ struct EmitterSettingsData
 
 	float SpawnAngle = 0.0f;
 
-	float LifeTime;
+	float LifeTime = 1.0f;
 
-	Vector3f StartVelocity;
+	Vector3f StartVelocity = { 0,0,0 };
 
-	Vector3f EndVelocity;
+	Vector3f EndVelocity = {0,0,0};
 
-	float GravityScale;
+	float GravityScale = 0.0f;
 
-	float StartSize;
+	float StartSize = 1.0f;
 
-	float EndSize;
+	float EndSize = 1.0f;
 
-	Vector4f StartColor;
+	Vector4f StartColor = { 1,1,1,1 };
 
-	Vector4f EndColor;
+	Vector4f EndColor = {1,1,1,1};
 };
 
 struct ParticleEmitterTemplate

@@ -204,6 +204,36 @@
     <ClInclude Include="src\Render\DeferredRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Light\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light\SpotLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\DepthStencil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\ShadowRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\Buffers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\RendererBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\CameraComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EngineSettings\Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\PostProcessRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio\AudioManager.cpp">
@@ -305,30 +335,53 @@
     <ClCompile Include="src\Input\InputInternal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Light\PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light\SpotLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\ShadowRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\RendererBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\CameraComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\PostProcessRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ImGui\.editorconfig" />
     <None Include="src\ImGui\.gitattributes" />
     <None Include="src\ImGui\.gitignore" />
-    <None Include="src\Shaders\ShaderStructs.hlsli" />
-    <None Include="src\Shaders\SpriteShaderStructs.hlsli" />
-    <None Include="src\Shaders\PBRFunctions.hlsli" />
-    <None Include="src\Shaders\Common.hlsli" />
-    <None Include="src\Shaders\DeferredShaderStructs.hlsli" />
+    <None Include="Shaders\ShaderStructs.hlsli" />
+    <None Include="Shaders\SpriteShaderStructs.hlsli" />
+    <None Include="Shaders\PBRFunctions.hlsli" />
+    <None Include="Shaders\Common.hlsli" />
+    <None Include="Shaders\DeferredShaderStructs.hlsli" />
+    <None Include="Shaders\LightBuffer.hlsli" />
+    <None Include="Shaders\ShadowShaderStructs.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\ImGui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Shaders\DefaultPS.hlsl" />
-    <FxCompile Include="src\Shaders\DefaultVS.hlsl" />
-    <FxCompile Include="src\Shaders\LineshaderPS.hlsl" />
-    <FxCompile Include="src\Shaders\LineshaderVS.hlsl" />
-    <FxCompile Include="src\Shaders\SpriteGS.hlsl" />
-    <FxCompile Include="src\Shaders\SpritePS.hlsl" />
-    <FxCompile Include="src\Shaders\SpriteVS.hlsl" />
-    <FxCompile Include="src\Shaders\GBDeferredPS.hlsl" />
-    <FxCompile Include="src\Shaders\DeferredFullscreenVS.hlsl" />
-    <FxCompile Include="src\Shaders\DeferredDefaultPS.hlsl" />
+    <FxCompile Include="Shaders\DefaultPS.hlsl" />
+    <FxCompile Include="Shaders\DefaultVS.hlsl" />
+    <FxCompile Include="Shaders\LineshaderPS.hlsl" />
+    <FxCompile Include="Shaders\LineshaderVS.hlsl" />
+    <FxCompile Include="Shaders\SpriteGS.hlsl" />
+    <FxCompile Include="Shaders\SpritePS.hlsl" />
+    <FxCompile Include="Shaders\SpriteVS.hlsl" />
+    <FxCompile Include="Shaders\GBDeferredPS.hlsl" />
+    <FxCompile Include="Shaders\FullscreenVS.hlsl" />
+    <FxCompile Include="Shaders\ShadowCubeGS.hlsl" />
+    <FxCompile Include="Shaders\DeferredPS.hlsl" />
+    <FxCompile Include="Shaders\PostProcess\PP-Bloom.hlsl" />
+    <FxCompile Include="Shaders\PostProcess\PP-Luminance.hlsl" />
   </ItemGroup>
 </Project>

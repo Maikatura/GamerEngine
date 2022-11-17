@@ -9,6 +9,11 @@ class EnvironmentLight : public Light
 
 	std::shared_ptr<Texture> myTexture;
 
+
 public:
+
+
 	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer) override;
+
+	void SetData(TransformComponent* data) override;
 };

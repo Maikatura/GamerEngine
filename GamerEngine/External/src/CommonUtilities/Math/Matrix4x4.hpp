@@ -6,7 +6,7 @@
 #include <cmath>
 
 
-#define MatrixSize 4
+#define MatrixSize 16
 
 namespace CommonUtilities
 {
@@ -16,8 +16,12 @@ namespace CommonUtilities
 	public:
 		Matrix4x4<T>();
 		Matrix4x4<T>(const Matrix4x4<T>& aMatrix);
+
 		T& operator()(const int aRow, const int aColumn);
 		const T& operator()(const int aRow, const int aColumn) const;
+		T& operator()(const int anIndex);
+		const T& operator()(const int anIndex) const;
+
 		static Matrix4x4<T> CreateRotationAroundX(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundY(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundZ(T aAngleInRadians);
@@ -34,63 +38,41 @@ namespace CommonUtilities
 		Vector3<T> GetSide();
 		Vector3<T> GetUp();
 		Vector3<T> GetForward();
+		Vector4<T> GetForwardW();
 
 		Vector3<T> GetPosition() const;
+		Vector4<T> GetPositionW() const;
 		Vector3<T> GetRotation() const;
 		Vector3<T> GetScale() const;
 
 
 		void SetPosition(Vector4<T> aPosition);
 
-
-		static Matrix4x4<T> Identity;
-
-		std::array<std::array<T, MatrixSize>, MatrixSize> myMatrix;
+		std::array<T, MatrixSize> myMatrix;
 	};
 
 
 	template <class T>
 	Vector3<T> Matrix4x4<T>::GetScale() const
 	{
-		return { myMatrix[0][0], myMatrix[1][1], myMatrix[2][2] };
+		return { myMatrix[0], myMatrix[5], myMatrix[11] };
 	}
 
 	template <typename T>
 	Matrix4x4<T>::Matrix4x4()
 	{
-		float zero = static_cast<T>(0);
-		float one = static_cast<T>(1);
-
-		myMatrix[0][0] = one;
-		myMatrix[0][1] = zero;
-		myMatrix[0][2] = zero;
-		myMatrix[0][3] = zero;
-
-		myMatrix[1][0] = zero;
-		myMatrix[1][1] = one;
-		myMatrix[1][2] = zero;
-		myMatrix[1][3] = zero;
-
-		myMatrix[2][0] = zero;
-		myMatrix[2][1] = zero;
-		myMatrix[2][2] = one;
-		myMatrix[2][3] = zero;
-
-		myMatrix[3][0] = zero;
-		myMatrix[3][1] = zero;
-		myMatrix[3][2] = zero;
-		myMatrix[3][3] = one;
+		for(int i = 0; i < 16; i++)
+		{
+			myMatrix[i] = (i % 5 == 0 ? 1 : 0);
+		}
 	}
 
 	template<typename T>
-	Matrix4x4<T>::Matrix4x4(const Matrix4x4<T>& aMatrix4)
+	Matrix4x4<T>::Matrix4x4(const Matrix4x4<T>& aMatrix)
 	{
-		for(int row = 1; row <= 4; ++row)
+		for(int i = 0; i < 16; i++)
 		{
-			for(int column = 1; column <= 4; ++column)
-			{
-				myMatrix[row - 1][column - 1] = aMatrix4(row, column);
-			}
+			myMatrix[i] = aMatrix(i);
 		}
 	}
 
@@ -98,13 +80,19 @@ namespace CommonUtilities
 	template <typename T>
 	T& Matrix4x4<T>::operator()(const int aRow, const int aColumn)
 	{
-		return myMatrix[aRow - 1][aColumn - 1];
+		return myMatrix[(aRow - 1) * 4 + (aColumn - 1)];
 	}
 
 	template <typename T>
 	const T& Matrix4x4<T>::operator()(const int aRow, const int aColumn) const
 	{
-		return myMatrix[aRow - 1][aColumn - 1];
+		return myMatrix[(aRow - 1) * 4 + (aColumn - 1)];
+	}
+
+	template <class T>
+	T& Matrix4x4<T>::operator()(const int anIndex)
+	{
+		return myMatrix[anIndex];
 	}
 
 	template<typename T>
@@ -260,6 +248,29 @@ namespace CommonUtilities
 		}
 	}
 
+	template<typename T>
+	void operator*=(Vector4<T>& aLval, const Matrix4x4<T>& aRval)
+	{
+		Vector4<T> output;
+		output.x = aLval.x * aRval(1, 1);
+		output.y = aLval.x * aRval(1, 2);
+		output.z = aLval.x * aRval(1,3);
+		output.w = aLval.x * aRval(1,4);
+		output.x += aLval.y * aRval(2,1);
+		output.y += aLval.y * aRval(2,2);
+		output.z += aLval.y * aRval(2,3);
+		output.w += aLval.y * aRval(2,4);
+		output.x += aLval.z * aRval(3,1);
+		output.y += aLval.z * aRval(3,2);
+		output.z += aLval.z * aRval(3,3);
+		output.w += aLval.z * aRval(3,4);
+		output.x += aLval.w * aRval(4,1);
+		output.y += aLval.w * aRval(4,2);
+		output.z += aLval.w * aRval(4,3);
+		output.w += aLval.w * aRval(4,4);
+		aLval = output; // Switched for row major
+	}
+
 	template <typename T>
 	void operator*=(Matrix4x4<T>& aFirstMatrix4, const Matrix4x4<T>& aSecondMatrix4)
 	{
@@ -290,14 +301,20 @@ namespace CommonUtilities
 		}
 	}
 
+	template <class T>
+	const T& Matrix4x4<T>::operator()(const int anIndex) const
+	{
+		return myMatrix[anIndex];
+	}
+
 	template<typename T>
 	Matrix4x4<T> Matrix4x4<T>::CreateRotationAroundX(T aAngleInRadians)
 	{
 		Matrix4x4<T> matrix;
-		matrix.myMatrix[1][1] = cos(aAngleInRadians);
-		matrix.myMatrix[1][2] = sin(aAngleInRadians);
-		matrix.myMatrix[2][1] = -sin(aAngleInRadians);
-		matrix.myMatrix[2][2] = cos(aAngleInRadians);
+		matrix(2, 2) = cos(aAngleInRadians);
+		matrix(3, 2) = -sin(aAngleInRadians);
+		matrix(2, 3) = sin(aAngleInRadians);
+		matrix(3, 3) = cos(aAngleInRadians);
 
 		return matrix;
 	}
@@ -306,10 +323,10 @@ namespace CommonUtilities
 	Matrix4x4<T> Matrix4x4<T>::CreateRotationAroundY(T aAngleInRadians)
 	{
 		Matrix4x4<T> matrix;
-		matrix.myMatrix[0][0] = cos(aAngleInRadians);
-		matrix.myMatrix[0][2] = -sin(aAngleInRadians);
-		matrix.myMatrix[2][0] = sin(aAngleInRadians);
-		matrix.myMatrix[2][2] = cos(aAngleInRadians);
+		matrix(3, 3) = cos(aAngleInRadians);
+		matrix(1, 3) = -sin(aAngleInRadians);
+		matrix(3, 1) = sin(aAngleInRadians);
+		matrix(1, 1) = cos(aAngleInRadians);
 
 		return matrix;
 	}
@@ -318,11 +335,10 @@ namespace CommonUtilities
 	Matrix4x4<T> Matrix4x4<T>::CreateRotationAroundZ(T aAngleInRadians)
 	{
 		Matrix4x4<T> matrix;
-		matrix.myMatrix[0][0] = cos(aAngleInRadians);
-		matrix.myMatrix[0][1] = sin(aAngleInRadians);
-		matrix.myMatrix[1][0] = -sin(aAngleInRadians);
-		matrix.myMatrix[1][1] = cos(aAngleInRadians);
-
+		matrix(1, 1) = cos(aAngleInRadians);
+		matrix(2, 1) = -sin(aAngleInRadians);
+		matrix(1, 2) = sin(aAngleInRadians);
+		matrix(2, 2) = cos(aAngleInRadians);
 		return matrix;
 	}
 
@@ -362,10 +378,10 @@ namespace CommonUtilities
 	template <class T>
 	void Matrix4x4<T>::SetPosition(Vector4<T> aPosition)
 	{
-		myMatrix[3][0] = aPosition.x;
-		myMatrix[3][1] = aPosition.y;
-		myMatrix[3][2] = aPosition.z;
-		myMatrix[3][3] = aPosition.w;
+		myMatrix[12] = aPosition.x;
+		myMatrix[13] = aPosition.y;
+		myMatrix[14] = aPosition.z;
+		myMatrix[15] = aPosition.w;
 	}
 
 	template <class T>
@@ -407,18 +423,20 @@ namespace CommonUtilities
 	template <class T>
 	void Matrix4x4<T>::DecomposeTransform(Vector3<T>& aTranslate, Vector3<T>& aRotation, Vector3<T>& aScale)
 	{
-		aTranslate.x = myMatrix[3][0];
-		aTranslate.y = myMatrix[3][1];
-		aTranslate.z = myMatrix[3][2];
+		Matrix4x4<T> mat = *this;
+
+		aTranslate.x = mat(4,1);
+		aTranslate.y = mat(4,2);
+		aTranslate.z = mat(4,3);
 
 		float radToDeg = 180.0f / 3.14159f;
-		aRotation.x = radToDeg * std::atan2f(myMatrix[1][2], myMatrix[2][2]);
-		aRotation.y = radToDeg * std::atan2f(-myMatrix[0][2], std::sqrtf(myMatrix[1][2] * myMatrix[1][2] + myMatrix[2][2] * myMatrix[2][2]));
-		aRotation.z = radToDeg * std::atan2f( myMatrix[0][1], myMatrix[0][0]);
+		aRotation.x = radToDeg * std::atan2f(mat(2,3), mat(3,3));
+		aRotation.y = radToDeg * std::atan2f(-mat[0][2], std::sqrtf(mat[1][2] * mat[1][2] + mat[2][2] * mat[2][2]));
+		aRotation.z = radToDeg * std::atan2f(mat[0][1], mat[0][0]);
 
-		aScale.x = myMatrix[0][0];
-		aScale.y = myMatrix[1][1];
-		aScale.z = myMatrix[2][2];
+		aScale.x = mat(1,1);
+		aScale.y = mat(2,2);
+		aScale.z = mat(3,3);
 	}
 
 	template <class T>
@@ -443,25 +461,38 @@ namespace CommonUtilities
 	template <class T>
 	Vector3<T> Matrix4x4<T>::GetSide()
 	{
-		return Vector3<T>(myMatrix[0][0], myMatrix[0][1], myMatrix[0][2]);
+		return Vector3<T>{ myMatrix[0], myMatrix[1], myMatrix[2] };
 	}
 
 	template <class T>
 	Vector3<T> Matrix4x4<T>::GetUp()
 	{
-		return Vector3<T>(myMatrix[1][0], myMatrix[1][1], myMatrix[1][2]);
+		return Vector3<T>{ myMatrix[4], myMatrix[5], myMatrix[6] };;
 	}
 
 	template <class T>
 	Vector3<T> Matrix4x4<T>::GetForward()
 	{
-		return Vector3<T>(myMatrix[2][0], myMatrix[2][1], myMatrix[2][2]);
+		return Vector3<T>{ myMatrix[8], myMatrix[9], myMatrix[10] };
 	}
+
+	template <class T>
+	Vector4<T> Matrix4x4<T>::GetForwardW()
+	{
+		return Vector4<T>{ myMatrix[8], myMatrix[9], myMatrix[10], myMatrix[11] };
+	}
+
 
 	template <class T>
 	Vector3<T> Matrix4x4<T>::GetPosition() const
 	{
-		return Vector3<float>(myMatrix[3][0], myMatrix[3][1], myMatrix[3][2]);
+		return Vector3<T>{ myMatrix[12], myMatrix[13], myMatrix[14] };
+	}
+
+	template <class T>
+	Vector4<T> Matrix4x4<T>::GetPositionW() const
+	{
+		return Vector4<T>{ myMatrix[12], myMatrix[13], myMatrix[14], myMatrix[15] };
 	}
 
 	template <class T>

@@ -3,7 +3,7 @@
 
 void Layer::OnAttach()
 {
-    
+    hasInited = true;
 }
 
 bool Layer::OnRender()
@@ -33,4 +33,9 @@ bool Layer::OnDetach()
 bool Layer::OnShutdown()
 {
     return false;
+}
+
+bool Layer::HasBeenAdded()
+{
+    return hasInited;
 }

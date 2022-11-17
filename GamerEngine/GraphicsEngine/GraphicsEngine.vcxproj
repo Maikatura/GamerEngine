@@ -80,7 +80,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Lib\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)src;$(SolutionDir)External\src;$(SolutionDir)External\src\ImGui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)SoundEngine\src;$(SolutionDir)Game\src;$(SolutionDir)FBXImporter;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)src;$(SolutionDir)External\src;$(SolutionDir)External\src\ImGui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)SoundEngine\src;$(SolutionDir)Game\src;$(SolutionDir)FBXImporter;$(SolutionDir)External\src\physx\include;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)</TargetName>
     <LibraryPath>$(SolutionDir)Lib\$(Configuration)</LibraryPath>
   </PropertyGroup>
@@ -146,7 +146,7 @@
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
-      <ObjectFileOutput>$(SolutionDir)Bin\Shaders\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>$(SolutionDir)Bin\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
       <PreprocessorDefinitions>_DEBUG</PreprocessorDefinitions>
     </FxCompile>
     <Lib>
@@ -177,7 +177,7 @@
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
-      <ObjectFileOutput>$(SolutionDir)Bin\Shaders\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>$(SolutionDir)Bin\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <Lib>
       <AdditionalDependencies>FBXImporter.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -188,11 +188,16 @@
     <ClInclude Include="src\AssetHandlers\LightAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\ParticleAssetHandler.h" />
     <ClInclude Include="src\Audio\Audio.h" />
+    <ClInclude Include="src\Components\CameraComponent.h" />
     <ClInclude Include="src\Components\ChildComponent.h" />
+    <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\Components.hpp" />
     <ClInclude Include="src\Components\ScriptableEntity.h" />
     <ClInclude Include="src\Debugger\ConsoleHelper.h" />
+    <ClInclude Include="src\EngineSettings\Settings.h" />
     <ClInclude Include="src\Input\InputInternal.h" />
+    <ClInclude Include="src\Light\PointLight.h" />
+    <ClInclude Include="src\Light\SpotLight.h" />
     <ClInclude Include="src\Managers\CommandManager.h" />
     <ClInclude Include="src\Managers\Commands\AbstractCommand.h" />
     <ClInclude Include="src\Managers\Commands\InspectorCommnad.h" />
@@ -201,7 +206,9 @@
     <ClInclude Include="src\Managers\DropManager.h" />
     <ClInclude Include="src\GraphicsEngine.pch.h" />
     <ClInclude Include="src\Model\Render2D.h" />
+    <ClInclude Include="src\Render\Buffers.h" />
     <ClInclude Include="src\Render\DeferredRenderer.h" />
+    <ClInclude Include="src\Render\DepthStencil.h" />
     <ClInclude Include="src\Render\LineRenderer.h" />
     <ClInclude Include="src\ImGui\imconfig.h" />
     <ClInclude Include="src\ImGui\imgui.h" />
@@ -216,6 +223,9 @@
     <ClInclude Include="src\Light\EnvironmentLight.h" />
     <ClInclude Include="src\Light\Light.h" />
     <ClInclude Include="src\Model\Entity.h" />
+    <ClInclude Include="src\Render\PostProcessRenderer.h" />
+    <ClInclude Include="src\Render\RendererBase.h" />
+    <ClInclude Include="src\Render\ShadowRenderer.h" />
     <ClInclude Include="src\Types\EnumTypes.h" />
     <ClInclude Include="src\Model\Material.h" />
     <ClInclude Include="src\Model\ModelInstance.h" />
@@ -251,9 +261,12 @@
     <ClCompile Include="src\AssetHandlers\LightAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\ParticleAssetHandler.cpp" />
     <ClCompile Include="src\Audio\AudioManager.cpp" />
+    <ClCompile Include="src\Components\CameraComponent.cpp" />
     <ClCompile Include="src\Debugger\ConsoleHelper.cpp" />
     <ClCompile Include="src\Input\Input.cpp" />
     <ClCompile Include="src\Input\InputInternal.cpp" />
+    <ClCompile Include="src\Light\PointLight.cpp" />
+    <ClCompile Include="src\Light\SpotLight.cpp" />
     <ClCompile Include="src\Managers\CommandManager.cpp" />
     <ClCompile Include="src\Model\Entity.cpp" />
     <ClCompile Include="src\Particles\ParticleEmitterTemplate.cpp" />
@@ -277,9 +290,12 @@
     <ClCompile Include="src\Model\Model.cpp" />
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp" />
     <ClCompile Include="src\AssetHandlers\ModelAssetHandler.cpp" />
+    <ClCompile Include="src\Render\PostProcessRenderer.cpp" />
     <ClCompile Include="src\Render\Render2D.cpp" />
     <ClCompile Include="src\Render\RenderBuffer.cpp" />
     <ClCompile Include="src\Render\Renderer.cpp" />
+    <ClCompile Include="src\Render\RendererBase.cpp" />
+    <ClCompile Include="src\Render\ShadowRenderer.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Model\SceneObject.cpp" />
     <ClCompile Include="src\Model\Transform.cpp" />
@@ -291,67 +307,96 @@
     <None Include="src\ImGui\.editorconfig" />
     <None Include="src\ImGui\.gitattributes" />
     <None Include="src\ImGui\.gitignore" />
-    <None Include="src\Shaders\Common.hlsli" />
-    <None Include="src\Shaders\DeferredShaderStructs.hlsli" />
-    <None Include="src\Shaders\PBRFunctions.hlsli">
+    <None Include="Shaders\Common.hlsli" />
+    <None Include="Shaders\DeferredShaderStructs.hlsli" />
+    <None Include="Shaders\LightBuffer.hlsli" />
+    <None Include="Shaders\PBRFunctions.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </None>
-    <None Include="src\Shaders\ShaderStructs.hlsli">
+    <None Include="Shaders\ShaderStructs.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </None>
-    <None Include="src\Shaders\SpriteShaderStructs.hlsli" />
+    <None Include="Shaders\ShadowShaderStructs.hlsli" />
+    <None Include="Shaders\SpriteShaderStructs.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\ImGui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Shaders\DefaultPS.hlsl">
+    <FxCompile Include="Shaders\DefaultPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="src\Shaders\DefaultVS.hlsl">
+    <FxCompile Include="Shaders\DefaultVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="src\Shaders\DeferredDefaultPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    <FxCompile Include="Shaders\DeferredPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="src\Shaders\DeferredFullscreenVS.hlsl">
+    <FxCompile Include="Shaders\FullscreenVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="src\Shaders\GBDeferredPS.hlsl">
+    <FxCompile Include="Shaders\GBDeferredPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="src\Shaders\LineshaderPS.hlsl">
+    <FxCompile Include="Shaders\LineshaderPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="src\Shaders\LineshaderVS.hlsl">
+    <FxCompile Include="Shaders\LineshaderVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="src\Shaders\SpriteGS.hlsl">
+    <FxCompile Include="Shaders\PostProcess\PP-Bloom.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)Bin\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)Bin\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shaders\PostProcess\PP-Luminance.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)Bin\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)Bin\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shaders\ShadowCubeGS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\SpriteGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
     </FxCompile>
-    <FxCompile Include="src\Shaders\SpritePS.hlsl">
+    <FxCompile Include="Shaders\SpritePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="src\Shaders\SpriteVS.hlsl">
+    <FxCompile Include="Shaders\SpriteVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
@@ -359,6 +404,9 @@
   <ItemGroup>
     <ProjectReference Include="..\External\Externals.vcxproj">
       <Project>{d36cecc9-fc34-4dec-a30d-2280f84d0e4e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\FBXImporter\FBXImporter.vcxproj">
+      <Project>{ccaa1397-531e-4263-b46b-f97ea01ef3d2}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

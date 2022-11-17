@@ -5,6 +5,7 @@
 #include <d3d11.h>
 
 class Texture;
+class DepthStencil;
 
 class TextureAssetHandler
 {
@@ -20,6 +21,8 @@ public:
 
 	static bool LoadTexture(const std::wstring& aFileName);
 	static void UnloadUnusedTextures();
+
+	static std::unique_ptr<DepthStencil> CreateDepthStencil(const std::wstring& aName, size_t aWidth, size_t aHeight);
 
 	static ID3D11PixelShader* GetPixelShader(const std::string& aPath);
 	static ID3D11VertexShader* GetVertexShader(const std::string& aPath);

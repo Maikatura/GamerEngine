@@ -108,11 +108,116 @@ void LineRenderer::DrawLine(Vector3f aStartPoint, Vector3f aEndPoint, Vector4f a
 	myLinesToRender.push_back(lines);
 }
 
-void LineRenderer::DrawCube(Vector3f aPosition, Vector3f aSize, Vector4f aColor)
+void LineRenderer::DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation,  Vector4f aColor)
 {
-	aPosition;
-	aSize;
-	aColor;
+	
+	// Data
+	float halfSizeX = (aSize.x * 0.5f);
+	float halfSizeY = (aSize.y * 0.5f);
+	float halfSizeZ = (aSize.z * 0.5f);
+
+	Vector3f p1;
+	Vector3f p2;
+	Vector3f p3;
+	Vector3f p4;
+	Vector3f p5;
+	Vector3f p6;
+	Vector3f p7;
+	Vector3f p8;
+
+	LineVertex v1;
+	LineVertex v2;
+	LineVertex v3;
+	LineVertex v4;
+
+
+	aRotation *= 3.1415f / 180.0f;
+
+	// Lower Half 
+	{
+		p1 = { aPosition.x + halfSizeX, aPosition.y - halfSizeY, aPosition.z + halfSizeZ };
+		p2 = { aPosition.x + halfSizeX, aPosition.y - halfSizeY, aPosition.z - halfSizeZ };
+		p3 = { aPosition.x - halfSizeX, aPosition.y - halfSizeY, aPosition.z - halfSizeZ };
+		p4 = { aPosition.x - halfSizeX, aPosition.y - halfSizeY, aPosition.z + halfSizeZ };
+
+		v1.Position = { p1.x , p1.y , p1.z, 1.0f };
+		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v2.Position = { p2.x , p2.y , p2.z, 1.0f };
+		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+
+		v3.Position = { p3.x , p3.y , p3.z , 1.0f };
+		v3.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v4.Position = { p4.x , p4.y , p4.z, 1.0f };
+		v4.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		myLinesToRender.push_back({ v1, v2 });
+		myLinesToRender.push_back({ v2, v3 });
+		myLinesToRender.push_back({ v3, v4 });
+		myLinesToRender.push_back({ v4, v1 });
+	}
+	// Top Half
+	{
+		p5 = { aPosition.x + halfSizeX , aPosition.y + halfSizeY, aPosition.z + halfSizeZ };
+		p6 = { aPosition.x + halfSizeX , aPosition.y + halfSizeY, aPosition.z - halfSizeZ };
+		p7 = { aPosition.x - halfSizeX , aPosition.y + halfSizeY, aPosition.z - halfSizeZ };
+		p8 = { aPosition.x - halfSizeX , aPosition.y + halfSizeY, aPosition.z + halfSizeZ };
+
+
+		v1.Position = { p5.x , p5.y , p5.z, 1.0f };
+		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v2.Position = { p6.x , p6.y , p6.z , 1.0f };
+		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v3.Position = { p7.x , p7.y , p7.z, 1.0f };
+		v3.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v4.Position = { p8.x , p8.y , p8.z , 1.0f };
+		v4.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		myLinesToRender.push_back({ v1, v2 });
+		myLinesToRender.push_back({ v2, v3 });
+		myLinesToRender.push_back({ v3, v4 });
+		myLinesToRender.push_back({ v4, v1 });
+	}
+	// Between Lower and Top
+	{
+		v1.Position = { p1.x , p1.y , p1.z, 1.0f };
+		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v2.Position = { p5.x , p5.y , p5.z , 1.0f };
+		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		myLinesToRender.push_back({ v1, v2 });
+
+		v1.Position = { p2.x , p2.y , p2.z , 1.0f };
+		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v2.Position = { p6.x , p6.y , p6.z , 1.0f };
+		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		myLinesToRender.push_back({ v1, v2 });
+
+		v1.Position = { p3.x , p3.y , p3.z , 1.0f };
+		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v2.Position = { p7.x , p7.y , p7.z , 1.0f };
+		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+
+		myLinesToRender.push_back({ v1, v2 });
+
+		v1.Position = { p4.x , p4.y , p4.z, 1.0f };
+		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		v2.Position = { p8.x , p8.y , p8.z , 1.0f };
+		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
+
+		myLinesToRender.push_back({ v1, v2 });
+	}
 }
 
 void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselation)
@@ -154,7 +259,7 @@ void LineRenderer::Render()
 
 	for(int i = 0; i < myLinesToRender.size(); i++)
 	{
-		DX11::Context->VSSetConstantBuffers(4, 1, myLineCBuffer.GetAddressOf());
+		DX11::Context->VSSetConstantBuffers(3, 1, myLineCBuffer.GetAddressOf());
 
 		DX11::Context->IASetInputLayout(myInputLayout.Get());
 		DX11::Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);

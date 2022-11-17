@@ -8,6 +8,8 @@
 class DX11;
 class ForwardRenderer;
 class DeferredRenderer;
+class ShadowRenderer;
+class PostProcessRenderer;
 class GBuffer;
 class Scene;
 class ModelAssetHandler;
@@ -47,14 +49,20 @@ public:
 	RenderMode GetRenderMode() const { return myRenderMode; }
 
 
+	void ResetStates() const;
+
 	std::shared_ptr<Scene> GetScene();
 	std::shared_ptr<CommonUtilities::InputManager> GetInput();
-
 	std::vector<std::string> GetDropPath();
+
+	bool GetEngineUpdateRuntime();
+	void SetEngineUpdateRuntime(bool aCondition);
 
 	std::shared_ptr<Scene> myScene;
 	std::shared_ptr<ForwardRenderer> myForwardRenderer;
 	std::shared_ptr<DeferredRenderer> myDeferredRenderer;
+	std::shared_ptr<ShadowRenderer> myShadowRenderer;
+	std::shared_ptr<PostProcessRenderer> myPostProcessRenderer;
 	std::shared_ptr<GBuffer> myGBuffer;
 
 	[[nodiscard]] HWND FORCEINLINE GetWindowHandle() const { return myWindowHandle; }
@@ -71,6 +79,7 @@ private:
 	RenderMode myRenderMode = RenderMode::Default;
 
 
+	bool myUpdateCondition = false;
 	bool myUseEditor = true;
 	bool myWantToResizeBuffers = false;
 	bool myIsMinimized = false;

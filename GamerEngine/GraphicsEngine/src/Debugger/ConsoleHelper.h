@@ -21,7 +21,7 @@ public:
 	static void Startup();
 
 	static void Log(LogType aLogType, const std::string& aLogMessage);
-
+	static void LogError(const std::string& aLogMessage);
 
 private:
 

@@ -432,7 +432,17 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 					mesh.Vertices[v].Normal[2]
 				};
 
+
 			}
+
+
+			for(size_t i = 0; i < 4; i++)
+			{
+				mdl->test.BoxExtents.push_back(tgaModel.BoxSphereBounds.BoxExtents[i]);
+				mdl->test.Center.push_back(tgaModel.BoxSphereBounds.Center[i]);
+			}
+			mdl->test.Radius = tgaModel.BoxSphereBounds.Radius;
+
 
 			mdlIndices = mesh.Indices;
 
@@ -538,6 +548,8 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			mdl->GetMaterial()->SetNormalTexture(TextureAssetHandler::GetTexture(normalTexture));
 			mdl->GetMaterial()->SetMaterialTexture(TextureAssetHandler::GetTexture(materialTexture));
 
+			
+
 			if(hasSkeleton)
 			{
 				mdl->Init(modelData, aFilePath, mdlSkeleton);
@@ -546,7 +558,7 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			{
 				mdl->Init(modelData, aFilePath);
 			}
-
+			
 			myModelRegistry.insert({ aFilePath, mdl });
 		}
 
@@ -562,7 +574,7 @@ bool ModelAssetHandler::LoadAnimation(const std::wstring& aModelName, const std:
 	std::shared_ptr<ModelInstance> model = GetModelInstance(aModelName);
 
 	TGA::FBXAnimation tgaAnimation;
-	if(TGA::FBXImporter::LoadAnimation(ansiFileName, tgaAnimation))
+	if(TGA::FBXImporter::LoadAnimation(ansiFileName, model->GetSkeleton()->BoneNames,  tgaAnimation))
 	{
 		Animation animOut;
 		animOut.Duration = static_cast<float>(tgaAnimation.Duration);
@@ -571,7 +583,7 @@ bool ModelAssetHandler::LoadAnimation(const std::wstring& aModelName, const std:
 		animOut.Name = Helpers::string_cast<std::wstring>(tgaAnimation.Name);
 		for(int i = 0; i < static_cast<int>(tgaAnimation.Length); i++)
 		{
-			animOut.Frames.push_back(Animation::Frame{ *reinterpret_cast<std::vector<CommonUtilities::Matrix4x4<float>>*>(&tgaAnimation.Frames[i].LocalTransforms) });
+			animOut.Frames.push_back(Animation::Frame{ *(std::vector<Matrix4x4f>*)&tgaAnimation.Frames[i].LocalTransforms });
 		}
 
 		model->GetSkeleton()->Animations.insert({ someFilePath, animOut });

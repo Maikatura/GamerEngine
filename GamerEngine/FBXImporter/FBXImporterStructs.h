@@ -158,15 +158,15 @@ namespace TGA
 		FBXTexture VectorDisplacement;
 	};
 
-	struct FBXBoxSphereBounds
-	{
-		float BoxExtents[3];
-		float Center[3];
-		float Radius;
-	};
-
 	struct FBXModel
 	{
+		struct FBXBoxSphereBounds
+		{
+			float BoxExtents[3];
+			float Center[3];
+			float Radius;
+		};
+
 		struct FBXMesh
 		{
 			std::vector<FBXVertex> Vertices;
@@ -174,49 +174,12 @@ namespace TGA
 
 			unsigned int MaterialIndex;
 			std::string MeshName;
-			FBXBoxSphereBounds BoxSphereBounds;
-		};
-
-		struct FBXLODGroup
-		{
-			struct FBXLodLevel
-			{
-				unsigned int Level;
-				float Distance;
-				std::vector<FBXMesh> Meshes;
-				FBXBoxSphereBounds BoxSphereBounds;
-			};
-
-			std::vector<FBXLodLevel> Levels;
 		};
 
 		FBXSkeleton Skeleton;
 
 		std::vector<FBXMesh> Meshes;
 		std::vector<FBXMaterial> Materials;
-		std::vector<FBXLODGroup> LODGroups;
-
-		std::string Name;
-
-		FBXBoxSphereBounds BoxSphereBounds;
-	};
-
-	struct FBXNavMesh
-	{
-		struct FBXNavMeshPolygon
-		{
-			std::vector<unsigned int> Indices;
-		};
-
-		struct FBXNavMeshChunk
-		{
-			std::vector<FBXVertex> Vertices;
-			std::vector<FBXNavMeshPolygon> Polygons;
-
-			std::string ChunkName;
-		};
-
-		std::vector<FBXNavMeshChunk> Chunks;
 		std::string Name;
 		FBXBoxSphereBounds BoxSphereBounds;
 	};
@@ -225,10 +188,8 @@ namespace TGA
 	{
 		struct Frame
 		{
-			// Stores Joint Name to Transform.
-			std::unordered_map<std::string, Matrix> GlobalTransforms;
-			// Stores Joint Name to Transform for Bone Space Transforms.
-			std::unordered_map<std::string, Matrix> LocalTransforms;
+			std::vector<Matrix> GlobalTransforms;
+			std::vector<Matrix> LocalTransforms;
 		};
 
 		// The animation frames.

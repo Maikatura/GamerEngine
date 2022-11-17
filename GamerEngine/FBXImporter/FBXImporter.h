@@ -21,19 +21,10 @@ namespace TGA
 		 * NOTE: The FBXModel structure is very barebones but contain enough data to generate your own ModelData :).
 		 * @param someFilePath The FBX file to load.
 		 * @param outModel The model data read from the file.
+		 * @param ignoreNoMesh If true LoadModel will return if it managed to load no meshes from the file. Useful to load i.e. a skeleton.
 		 * @returns True if the file was read successfully and a model loaded.
 		 */
 		static bool LoadModel(const std::string& someFilePath, FBXModel& outModel);
-
-		/**
-		 * Attempts to load an FBX file exported by the TGA Unreal Plugin exporter. May work with other exports as well.
-		 * Will ignore all data except the actual control points and indices in the mesh.
-		 * @param someFilePath The FBX file to load.
-		 * @param outNavMesh The Nav Mesh data read from the file.
-		 * @param shouldTriangulate Nav Meshes are not always triangulated. Pass True to force triangulation. Note that this may break the NavMesh!
-		 * @returns True if the file was read successfully and a model loaded.
-		 */
-		static bool LoadNavMesh(const std::string& someFilePath, FBXNavMesh& outNavMesh, bool shouldTriangulate = false);
 
 		/**
 		 * Checks the specified file to see if it contains a model with at least one mesh.
@@ -47,10 +38,11 @@ namespace TGA
 		 * NOTE: The FBXAnimation structure is very barebones but contains enough information to play an animation
 		 * on a model with blending. You may, however, want to generate your own structure!
 		 * @param someFilePath The FBX file to load.
+		 * @param BoneNames A list of all bone names in the skeleton, for finding their frames transforms.
 		 * @param outAnimation The animation data read from the file.
 		 * @returns True if the file was read successfully and an animation loaded.
 		 */
-		static bool LoadAnimation(const std::string& someFilePath, FBXAnimation& outAnimation);
+		static bool LoadAnimation(const std::string& someFilePath, const std::vector<std::string>& BoneNames, FBXAnimation& outAnimation);
 
 		/**
 		 * Attempts to load a skeleton only from the specified file.

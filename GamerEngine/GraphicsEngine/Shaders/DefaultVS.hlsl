@@ -15,7 +15,6 @@ VertexToPixel main(VertexInput input)
 	}
 
 	const float4 vertexWorldPosition = mul(OB_ToWorld, mul(input.myPosition, skinningMatrix));
-	result.myVxPosition =	vertexWorldPosition;
 
 	const float4 vertexViewPosition = mul(FB_ToView, vertexWorldPosition);
 	const float4 vertexProjectionPosition = mul(FB_ToProjection, vertexViewPosition);
@@ -24,6 +23,7 @@ VertexToPixel main(VertexInput input)
 	const float3x3 skinNormalRotation = (float3x3)skinningMatrix;
 
 	result.myPosition	=	vertexProjectionPosition;
+	result.myVxPosition =	vertexWorldPosition;
 
 	result.myTangent	=	mul(worldNormalRotation, mul(input.myTangent,	skinNormalRotation));
 	result.myBinormal	=	mul(worldNormalRotation, mul(input.myBinormal,	skinNormalRotation));

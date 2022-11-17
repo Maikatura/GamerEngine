@@ -1,9 +1,9 @@
 #pragma once
 #include <Layers/Layer.h>
-#include <ImGuizmo/ImGuizmo.h>
+#include "ImGuizmo/ImGuizmo.h"
 
 #include "Components/Components.hpp"
-#include "imgui/imgui_internal.h"
+#include <imgui/imgui_internal.h>
 #include "Math/MathTypes.hpp"
 
 class Entity;

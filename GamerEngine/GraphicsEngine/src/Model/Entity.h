@@ -24,7 +24,7 @@ public:
 	T& AddComponent(Args&&... args)
 	{
 		T& component = myScene->myRegistry.emplace<T>(myEntityHandle, std::forward<Args>(args)...);
-		myScene->OnComponentAdded<T>(*this, component);
+		//myScene->OnComponentAdded<T>(*this, component);
 		return component;
 	}
 
@@ -32,7 +32,7 @@ public:
 	T& AddOrReplaceComponent(Args&&... args)
 	{
 		T& component = myScene->myRegistry.emplace_or_replace<T>(myEntityHandle, std::forward<Args>(args)...);
-		myScene->OnComponentAdded<T>(*this, component);
+		//myScene->OnComponentAdded<T>(*this, component);
 		return component;
 	}
 

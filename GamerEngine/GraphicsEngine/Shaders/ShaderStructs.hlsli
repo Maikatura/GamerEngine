@@ -1,3 +1,22 @@
+#define MAX_MODEL_BONES 148
+SamplerState defaultSampler			:	register(s0);
+SamplerState shadowSampler			:	register(s1);
+
+Texture2D albedoTexture				:	register(t0);
+Texture2D normalTexture				:	register(t1);
+Texture2D materialTexture			:	register(t2);
+
+Texture2D vertexNormalTexture		:	register(t3);
+Texture2D worldPositionTexture		:	register(t4);
+Texture2D ambientOcclusionTexture	:	register(t5);
+TextureCube environmentTexture		:	register(t10);
+
+Texture2D dirLightShadowMap			:	register(t19);
+Texture2D shadowMap[20]				:	register(t20);
+
+TextureCube shadowCubeTexture[20]	:	register(t40);
+
+
 struct VertexInput
 {
 	float4 myPosition		:	POSITION;
@@ -36,7 +55,7 @@ struct VertexToPixel
 struct PixelOutput
 {
 	float4 myColor			:	SV_TARGET;
-	float  myID				:	SV_TARGET1;
+	float  myID : SV_TARGET1;
 };
 
 struct LineInput
@@ -59,8 +78,9 @@ struct GBufferOutput
 	float4 Material			:	SV_TARGET2;
 	float4 VertexNormal		:	SV_TARGET3;
 	float4 WorldPosition	:	SV_TARGET4;
-	float AmbientOcclusion	:	SV_TARGET5;
+	float AmbientOcclusion : SV_TARGET5;
 };
+
 
 cbuffer FrameBuffer	: register(b0)
 {
@@ -68,6 +88,10 @@ cbuffer FrameBuffer	: register(b0)
 	float4x4 FB_ToProjection;
 	float3 FB_CamTranslation;
 	int FB_RenderMode;
+	float NearPlane;
+	float FarPlane;
+	float DeltaTime;
+	float TotalTime;
 }
 
 cbuffer Objectbuffer : register(b1)
@@ -77,28 +101,12 @@ cbuffer Objectbuffer : register(b1)
 	float3 OB_Padding;
 	int OB_ID;
 	float3 OB_Paddinging;
-	float4x4 OB_BoneData[128];
+	float4x4 OB_BoneData[MAX_MODEL_BONES];
 }
 
-cbuffer LightBuffer : register(b3)
-{
-	float3 LB_Color;
-	float LB_Intensity;
-	float3 LB_Direction;
-	float LB_padding;
-}
-
-cbuffer LineCBuffer : register(b4)
+cbuffer LineCBuffer : register(b2)
 {
 	float4x4 LCB_ToWorld;
 	float4x4 LCB_ToView;
 	float4x4 LCB_ToProjection;
 };
-
-SamplerState defaultSampler : register(s0);
-
-Texture2D albedoTexture		: register(t0);
-Texture2D normalTexture		: register(t1);
-Texture2D materialTexture	: register(t2);
-
-TextureCube environmentTexture : register(t10);

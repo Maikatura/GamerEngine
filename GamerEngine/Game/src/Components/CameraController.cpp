@@ -8,36 +8,6 @@
 #include "Input/Input.h"
 
 
-float CameraController::GetSpeed() const
-{
-	return mySpeed;
-}
-
-float CameraController::GetSpeedMul() const
-{
-	return mySpeedShiftMul;
-}
-
-float CameraController::GetMaxSpeed() const
-{
-	return myMaxSpeed;
-}
-
-void CameraController::SetSpeed(float aSpeed)
-{
-	mySpeed = aSpeed;
-}
-
-void CameraController::SetSpeedMul(float aSpeedMultiply)
-{
-	mySpeedShiftMul = aSpeedMultiply;
-}
-
-void CameraController::SetMaxSpeed(float aMaxSpeed)
-{
-	myMaxSpeed = aMaxSpeed;
-}
-
 void CameraController::OnUpdate()
 {
 	auto& camera = GetComponent<CameraComponent>();
@@ -47,46 +17,45 @@ void CameraController::OnUpdate()
 		return;
 	}
 
-	auto& transform = GetComponent<TransformComponent>();
-	auto transformMatrix = transform.GetMatrix();
-
 	float aDeltaTime = Time::GetDeltaTime();
 
-
 	Vector3f movement;
+
+	TransformComponent& transform = GetComponent<TransformComponent>();
+	CameraControllerData& cameraData = GetComponent<CameraControllerData>();
+
+	auto transformMatrix = transform.GetMatrix();
 	camera.ViewProjection = Matrix4x4f::BuildTransform(transform.Translation, transform.Rotation, transform.Scale);
-
-
 
 	if(InputInternal::IsMousePressed(VK_LBUTTON) && IsHoveringSceneView)
 	{
-		HasBeenActivated = true;
+		cameraData.HasBeenActivated = true;
 	}
 
 	if(InputInternal::IsMouseReleased(VK_LBUTTON))
 	{
-		HasBeenActivated = false;
+		cameraData.HasBeenActivated = false;
 	}
 
-	if(!HasBeenActivated)
+	if(!cameraData.HasBeenActivated)
 	{
 		return;
 	}
 
-	transform.Rotation.y += InputInternal::GetMouseDelta().x * aDeltaTime * myMouseSensitivity;
-	transform.Rotation.x += InputInternal::GetMouseDelta().y * aDeltaTime * myMouseSensitivity;
+	transform.Rotation.y += InputInternal::GetMouseDelta().x * aDeltaTime * cameraData.myMouseSensitivity;
+	transform.Rotation.x += InputInternal::GetMouseDelta().y * aDeltaTime * cameraData.myMouseSensitivity;
 
 	if (ImGui::GetIO().MouseWheel != 0.0f)
 	{
-		mySpeed += (ImGui::GetIO().MouseWheel * 0.5f) * (mySpeed * 0.25f);
-		mySpeed = CommonUtilities::Clamp(mySpeed, 0.1f, myMaxSpeed);
+		cameraData.mySpeed += (ImGui::GetIO().MouseWheel * 0.5f) * (cameraData.mySpeed * 0.25f);
+		cameraData.mySpeed = CommonUtilities::Clamp(cameraData.mySpeed, 0.1f, cameraData.myMaxSpeed);
 	}
 
-	float speed = mySpeed;
+	float speed = cameraData.mySpeed;
 
 	if(InputInternal::IsKeyDown(ImGuiKey_LeftShift))
 	{
-		speed *= mySpeedShiftMul;
+		speed *= cameraData.mySpeedShiftMul;
 	}
 
 	

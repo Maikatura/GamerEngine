@@ -5,6 +5,9 @@
 #include <Layers/UI/FileExplorer.h>
 #include <Layers/UI/MainMenuBar.h>
 #include <Layers/UI/EditorSettingsPanel.h>
+#include <Layers/UI/AnimatorLayer.h>
+#include <Layers/UI/HelpPanel.h>
+
 #include <Layers/NetworkingLayer.h>
 #include <Layers/Debug/ConsoleWindow.h>
 #include <Layers/Debug/KeybindShortcutsLayer.h>

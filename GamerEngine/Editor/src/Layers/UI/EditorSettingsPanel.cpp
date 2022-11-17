@@ -16,6 +16,8 @@
 #include "Scene/SceneSerializer.h"
 #include <imgui_markdown/imgui_markdown.h>
 
+#include "Layers/EditorColorScheme.h"
+
 ImFont* H1 = NULL;
 ImFont* H2 = NULL;
 ImFont* H3 = NULL;
@@ -87,6 +89,9 @@ void EditorSettingsPanel::LoadConfig()
 {
 
 #pragma region ImGui Style 1
+
+	//EditorColorScheme::ApplyTheme();
+	
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);

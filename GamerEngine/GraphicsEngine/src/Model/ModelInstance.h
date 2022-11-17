@@ -5,13 +5,14 @@
 #include <Math/mathTypes.hpp>
 #include <Model/Material.h>
 
+#include "Render/LineRenderer.h"
 
 
 class ModelInstance : public SceneObject
 {
 	std::shared_ptr<Model> myModel;
 	int myModelMeshes;
-	std::array<CommonUtilities::Matrix4x4<float>,128> myBoneTransform{};
+	std::array<CommonUtilities::Matrix4x4<float>,MAX_MODEL_BONES> myBoneTransform{};
 	std::shared_ptr<AnimationStatus> myAnimState;
 
 public:
@@ -45,12 +46,29 @@ public:
 	FORCEINLINE const Skeleton* GetSkeleton() const { return myModel->GetSkeleton(); }
 	FORCEINLINE Model::MeshData const& GetMeshData(unsigned int anIndex) const { return myModel->GetMeshData(anIndex); }
 	FORCEINLINE size_t GetNumMeshes() const { return myModel->GetNumMeshes(); }
-	FORCEINLINE std::array<CommonUtilities::Matrix4x4<float>, 128> GetBoneTransform() { return myBoneTransform; }
+	FORCEINLINE std::array<CommonUtilities::Matrix4x4<float>, MAX_MODEL_BONES> GetBoneTransform() { return myBoneTransform; }
 };
 
 inline void ModelInstance::Update()
 {
 
+
+	// TODO : TEST REMOVE LATE!!!!
+	if(myModel)
+	{
+		if (myModel->test.BoxExtents.size() > 0)
+		{
+			float boxX = (myModel->test.BoxExtents[0] + myModel->test.Center[0]) * GetTransform().GetScale().x;
+			float boxY = (myModel->test.BoxExtents[1] + myModel->test.Center[1]) * GetTransform().GetScale().y;
+			float boxZ = (myModel->test.BoxExtents[2] + myModel->test.Center[2]) * GetTransform().GetScale().z;
+
+			Vector3f bounds = { boxX, boxY, boxZ };
+			Vector3f position = GetTransform().GetPosition();
+			position.y += boxY * 0.5f;
+
+			LineRenderer::DrawCube(position, bounds, GetTransform().GetRotation());
+		}
+	}
 
 
 	SceneObject::Update();

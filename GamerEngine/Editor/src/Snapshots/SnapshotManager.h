@@ -2,6 +2,12 @@
 #include "Components/Components.hpp"
 #include "entt/entt.hpp"
 
+template<class T>
+struct SnapshotContainer
+{
+    std::vector<entt::entity> entitySnapshot;
+    std::vector<T> componentSnapshot;
+};
 
 class SnapshotManager
 {
@@ -17,22 +23,19 @@ private:
     void CleanUpSnapshotData();
 
     template <class ComponentType>
-    void CreateSnapshotForComponent(std::vector<entt::entity>& entitySnapshot, std::vector<ComponentType>& componentSnapshot);
+    void CreateSnapshotForComponent(SnapshotContainer<ComponentType>& aSnapshot);
 
     template<typename ComponentType>
-    void RestoreSnapshotForComponent(std::vector<entt::entity>& entitySnapshot, std::vector<ComponentType>& componentSnapshot);
+    void RestoreSnapshotForComponent(SnapshotContainer<ComponentType>& aSnapshot);
 
     template<typename ComponentType>
-    void CleanUpSnapshotData(std::vector<entt::entity>& entitySnapshot, std::vector<ComponentType>& componentSnapshot);
+    void CleanUpSnapshotData(SnapshotContainer<ComponentType>& aSnapshot);
 
     entt::registry nullReg{};
 	entt::registry* myRegistry;
 
-	std::vector<entt::entity> entitySnapshot_TransformComponent;
-    std::vector<TransformComponent> componentSnapshot_TransformComponent;
-
-    std::vector<entt::entity> entitySnapshot_ModelComponent;
-    std::vector<ModelComponent> componentSnapshot_ModelComponent;
+    SnapshotContainer<TransformComponent> entitySnapshot_Transform;
+    SnapshotContainer<ModelComponent> entitySnapshot_Models;
 
 
 	// Additional snapshot data for proper entity restoration

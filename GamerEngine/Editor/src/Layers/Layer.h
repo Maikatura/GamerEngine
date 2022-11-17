@@ -16,6 +16,9 @@ public:
 	virtual bool OnDetach();
 	virtual bool OnShutdown();
 
+	bool HasBeenAdded();
+
 protected:
 	bool myIsOpen = true;
+	bool hasInited = false;
 };

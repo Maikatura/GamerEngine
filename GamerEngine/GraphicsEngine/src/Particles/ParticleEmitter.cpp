@@ -152,20 +152,34 @@ void ParticleEmitter::OnUpdate(TransformComponent& aTransform)
 		float systemPoint;
 		systemPoint = (myAge / myLifeTime) * (myEmitterTimePoints.size() - 1);
 		if(systemPoint >= myEmitterTimePoints.size() - 1) systemPoint = 0;
-		myTimeToNextSpawn = CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMinFrequency, myEmitterTimePoints[systemPoint + 1].myMinFrequency, systemPoint - (int)systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMaxFrequency, myEmitterTimePoints[systemPoint + 1].myMaxFrequency, systemPoint - (int)systemPoint), (rand() % 1000) * .001f);
+
+		const int systemPointInt = static_cast<int>(systemPoint);
+
+		myTimeToNextSpawn = CommonUtilities::LerpMinMax(
+			CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinFrequency,
+			                            myEmitterTimePoints[systemPointInt + 1].myMinFrequency,
+				systemPoint- systemPoint),
+			CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxFrequency,
+			                            myEmitterTimePoints[systemPointInt + 1].myMaxFrequency,
+			                            systemPoint - systemPoint), (rand() % 1000) * .001f);
+
+
 		float particlesPerFrame = Time::GetDeltaTime() / myTimeToNextSpawn;
 
 		do
 		{
 			ParticleVertex p;
 			p.myAge = 0;
-			p.myLifeTime = CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMinLifeTime, myEmitterTimePoints[systemPoint + 1].myMinLifeTime, systemPoint - (int)systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMaxLifeTime, myEmitterTimePoints[systemPoint + 1].myMaxLifeTime, systemPoint - (int)systemPoint), (rand() % 1000) * .001f);
-			p.myPosition = aTransform.Translation + myOffset + CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myPosition, myEmitterTimePoints[systemPoint + 1].myPosition, systemPoint - (int)systemPoint);
+
+			int systemPointInt = static_cast<int>(systemPoint);
+
+			p.myLifeTime = CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinLifeTime, myEmitterTimePoints[systemPointInt + 1].myMinLifeTime, systemPoint - systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxLifeTime, myEmitterTimePoints[systemPointInt + 1].myMaxLifeTime, systemPoint - systemPointInt), (rand() % 1000) * .001f);
+			p.myPosition = aTransform.Translation + myOffset + CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myPosition, myEmitterTimePoints[systemPointInt + 1].myPosition, systemPoint - systemPoint);
 			p.myRotation = 0;
 			Vector3f angle;
-			angle.x += CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMinAngle.x, myEmitterTimePoints[systemPoint + 1].myMinAngle.x, systemPoint - (int)systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMaxAngle.x, myEmitterTimePoints[systemPoint + 1].myMaxAngle.x, systemPoint - (int)systemPoint), (rand() % 1000) * .001f);
-			angle.y += CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMinAngle.y, myEmitterTimePoints[systemPoint + 1].myMinAngle.y, systemPoint - (int)systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMaxAngle.y, myEmitterTimePoints[systemPoint + 1].myMaxAngle.y, systemPoint - (int)systemPoint), (rand() % 1000) * .001f);
-			angle.z += CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMinAngle.z, myEmitterTimePoints[systemPoint + 1].myMinAngle.z, systemPoint - (int)systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMaxAngle.z, myEmitterTimePoints[systemPoint + 1].myMaxAngle.z, systemPoint - (int)systemPoint), (rand() % 1000) * .001f);
+			angle.x += CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinAngle.x, myEmitterTimePoints[systemPointInt + 1].myMinAngle.x, systemPoint - systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxAngle.x, myEmitterTimePoints[systemPointInt + 1].myMaxAngle.x, systemPoint - systemPointInt), (rand() % 1000) * .001f);
+			angle.y += CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinAngle.y, myEmitterTimePoints[systemPointInt + 1].myMinAngle.y, systemPoint - systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxAngle.y, myEmitterTimePoints[systemPointInt + 1].myMaxAngle.y, systemPoint - systemPointInt), (rand() % 1000) * .001f);
+			angle.z += CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinAngle.z, myEmitterTimePoints[systemPointInt + 1].myMinAngle.z, systemPoint - systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxAngle.z, myEmitterTimePoints[systemPointInt + 1].myMaxAngle.z, systemPoint - systemPointInt), (rand() % 1000) * .001f);
 			angle *= 3.14159f / 180;
 
 			auto anglev4 = Matrix4x4f::CreateRotationAroundX(angle.x) * Matrix4x4f::CreateRotationAroundY(angle.y) * Matrix4x4f::CreateRotationAroundZ(angle.z) * Vector4f(0, 1, 0, 0);
@@ -173,9 +187,9 @@ void ParticleEmitter::OnUpdate(TransformComponent& aTransform)
 			angle.y = anglev4.y;
 			angle.z = anglev4.z;
 
-			float speed = CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMinSpeed, myEmitterTimePoints[systemPoint + 1].myMinSpeed, systemPoint - (int)systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMaxSpeed, myEmitterTimePoints[systemPoint + 1].myMaxSpeed, systemPoint - (int)systemPoint), (rand() % 1000) * .001f);
+			float speed = CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinSpeed, myEmitterTimePoints[systemPointInt + 1].myMinSpeed, systemPoint - systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxSpeed, myEmitterTimePoints[systemPointInt + 1].myMaxSpeed, systemPoint - systemPointInt), (rand() % 1000) * .001f);
 			p.myCurrentVelocity = angle * speed;
-			p.myCurrentRotationalVelocity = CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMinRotationSpeed, myEmitterTimePoints[systemPoint + 1].myMinRotationSpeed, systemPoint - (int)systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPoint].myMaxRotationSpeed, myEmitterTimePoints[systemPoint + 1].myMaxRotationSpeed, systemPoint - (int)systemPoint), (rand() % 1000) * .001f);
+			p.myCurrentRotationalVelocity = CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinRotationSpeed, myEmitterTimePoints[systemPointInt + 1].myMinRotationSpeed, systemPoint - systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxRotationSpeed, myEmitterTimePoints[systemPointInt + 1].myMaxRotationSpeed, systemPoint - systemPointInt), (rand() % 1000) * .001f);
 			myParticles.push_back(p);
 			particlesPerFrame--;
 		} while(particlesPerFrame > 0);

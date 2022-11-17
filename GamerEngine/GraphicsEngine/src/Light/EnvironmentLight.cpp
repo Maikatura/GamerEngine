@@ -9,3 +9,7 @@ void EnvironmentLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLight
 		myTexture->SetAsResource(10);
 	}
 }
+
+void EnvironmentLight::SetData(TransformComponent* data)
+{
+}

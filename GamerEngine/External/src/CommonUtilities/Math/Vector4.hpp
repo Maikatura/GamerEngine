@@ -43,7 +43,9 @@ namespace CommonUtilities
 		//Returns the dot product of this and aVector 
 		T Dot(const Vector4<T>& aVector) const;
 
+		const Vector4 operator* (const T& aRval) const;
 
+		void operator+= (const Vector4& aRval);
 
 		static Vector4<T> Blend(Vector4<T> aBlendOne, Vector4<T> aBlendTwo, T aBlendAmount);
 	};
@@ -110,6 +112,21 @@ namespace CommonUtilities
 		y = normalized.y;
 		z = normalized.z;
 		w = normalized.w;
+	}
+
+	template<typename T>
+	const Vector4<T> Vector4<T>::operator* (const T& aRval) const
+	{
+		return Vector4<T>(x * aRval, y * aRval, z * aRval, w * aRval);
+	}
+
+	template<typename T>
+	void Vector4<T>::operator+=(const Vector4& aRval)
+	{
+		x += aRval.x;
+		y += aRval.y;
+		z += aRval.z;
+		w += aRval.w;
 	}
 
 	template <class T>

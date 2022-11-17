@@ -4,14 +4,22 @@
 
 void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom)
 {
-	
-	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(),aTransfrom.GetMatrix(), aModel.myModel });
-	
+	Transform transform = Transform();
+
+	transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
+	aModel.GetModel()->SetTransform(transform);
+
+	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(),aTransfrom.GetMatrix(), aModel.GetModel()});
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
 {
 	mySpritesToRender.push_back({ Matrix4x4f::BuildTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale), aSprite });
+}
+
+void Renderer::RenderLight(Light* aLight)
+{
+	myLightToRender.push_back(aLight);
 }
 
 void Renderer::SetRenderGame(bool aToggleToRenderGame)

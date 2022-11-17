@@ -23,6 +23,9 @@
 #include "Components/ChildComponent.h"
 #include "Debugger/ConsoleHelper.h"
 
+#include <Fonts/IconsForkAwesome.h>
+
+#include "imgui_internal.h"
 
 std::vector<Entity> mySelectedEntity;
 
@@ -31,38 +34,11 @@ bool Hierarchy::OnImGuiRender()
 	/*auto models = GraphicsEngine::Get()->GetScene()->CullModels();*/
 
 	ImGui::Begin(EditorNames::HierarchyName.c_str(), &myIsOpen);
+	
 
+	auto startCursor = ImGui::GetCursorPos();
+	
 
-	if(ImGui::IsWindowHovered())
-	{
-		auto payload = ImGui::GetDragDropPayload();
-		if(payload != nullptr)
-		{
-			if(payload->IsDataType("SceneHierarchy"))
-			{
-
-				std::vector<Entity>& entityDataVector = *static_cast<std::vector<Entity>*>(payload->Data);
-				entityDataVector.resize(payload->DataSize / sizeof(Entity));
-
-				for(size_t i = 0; i < entityDataVector.size(); i++)
-				{
-					Entity draggedEntity = entityDataVector[i];
-					if(draggedEntity.GetComponent<ChildComponent>().HasParent())
-					{
-						auto parent = draggedEntity.GetComponent<ChildComponent>().GetParent();
-						parent.GetComponent<ChildComponent>().RemoveChild(draggedEntity);
-						draggedEntity.GetComponent<ChildComponent>().ClearParent();
-
-					}
-				}
-
-				
-			}
-		}
-	}
-
-
-	DropHandler::DropFileScene();
 	DrawWindowPopupMenu();
 
 	GraphicsEngine::Get()->GetScene()->GetRegistry().each([&](auto entityID)
@@ -86,16 +62,42 @@ bool Hierarchy::OnImGuiRender()
 	{
 		SelectionData::SetEntityObject({ entt::null, nullptr });
 
-		if (mySelectedEntity.size() > 1)
+		if(mySelectedEntity.size() > 1)
 		{
 			mySelectedEntity.clear();
-			
 		}
 	}
 
+	auto size = ImGui::GetWindowSize();
 
+	auto endCursor = ImGui::GetCursorPos();
 
+	ImRect dropRect = ImGui::GetCurrentWindow()->WorkRect;
+	ImGuiID id = 131023012;
+	if(ImGui::BeginDragDropTargetCustom(dropRect, id))
+	{
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SceneHierarchy");
+		if(payload != nullptr)
+		{
+			std::vector<Entity>& entityDataVector = *static_cast<std::vector<Entity>*>(payload->Data);
+			entityDataVector.resize(payload->DataSize / sizeof(Entity));
 
+			for(size_t i = 0; i < entityDataVector.size(); i++)
+			{
+				Entity draggedEntity = entityDataVector[i];
+				if(draggedEntity.GetComponent<ChildComponent>().HasParent())
+				{
+					auto parent = draggedEntity.GetComponent<ChildComponent>().GetParent();
+					parent.GetComponent<ChildComponent>().RemoveChild(draggedEntity);
+					draggedEntity.GetComponent<ChildComponent>().ClearParent();
+				}
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	DropHandler::DropFileScene(dropRect, 1238901278903);
+	
 
 	ImGui::End();
 
@@ -121,7 +123,6 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 		}
 	}
 
-	auto& tag = aEntity.GetComponent<TagComponent>().Tag;
 
 	ImGuiTreeNodeFlags flags = 0;
 	for(size_t i = 0; i < mySelectedEntity.size(); i++)
@@ -131,17 +132,12 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 	flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
 
-	if(tag == "SceneCamera (DONT TOUCH)")
-	{
-		ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
-	}
+	if(aEntity.GetComponent<TagComponent>().Tag == "SceneCamera (DONT TOUCH)") ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
 
-	bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)aEntity, flags, tag.c_str());
+	auto tag = "%s " + aEntity.GetComponent<TagComponent>().Tag;
+	bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)aEntity, flags, tag.c_str(), ICON_FK_CUBE);
 
-	if(tag == "SceneCamera (DONT TOUCH)")
-	{
-		ImGui::PopStyleColor();
-	}
+	if(aEntity.GetComponent<TagComponent>().Tag == "SceneCamera (DONT TOUCH)") ImGui::PopStyleColor();
 
 	DropHandler::DropFileEntity(aEntity);
 	CheckIfUserWantToSetParent(aEntity);
@@ -156,7 +152,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 	}
 	else if(ImGui::IsItemClicked() && !ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
 	{
-			
+
 		if(mySelectedEntity.size() <= 1)
 		{
 			mySelectedEntity.clear();
@@ -165,7 +161,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 		}
 	}
 
-	
+
 
 	bool entityDeleted = false;
 	if(ImGui::BeginPopupContextItem())
@@ -237,7 +233,20 @@ void Hierarchy::DrawWindowPopupMenu()
 		{
 			ConsoleHelper::Log(LogType::Info, "This will be removed when add component when its been added");
 			auto entity = GraphicsEngine::Get()->GetScene()->CreateEntity("Directional Light");
-			entity.AddComponent<DirectionalLightComponent>();
+		}
+
+		if(ImGui::MenuItem("Create Point Light"))
+		{
+			ConsoleHelper::Log(LogType::Info, "This will be removed when add component when its been added");
+			auto entity = GraphicsEngine::Get()->GetScene()->CreateEntity("Point Light");
+			entity.AddComponent<PointLightComponent>();
+		}
+
+		if(ImGui::MenuItem("Create Spot Light"))
+		{
+			ConsoleHelper::Log(LogType::Info, "This will be removed when add component when its been added");
+			auto entity = GraphicsEngine::Get()->GetScene()->CreateEntity("Spot Light");
+			entity.AddComponent<SpotLightComponent>();
 		}
 
 		ImGui::EndPopup();
@@ -329,6 +338,11 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 
 					}
 
+					if(!shouldExit)
+					{
+						shouldExit = LoopThoughChildren(aEntity);
+					}
+
 					if(shouldExit) return;
 
 					aEntity.GetComponent<ChildComponent>().SetChild(aChildEntity);
@@ -348,6 +362,28 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 				{
 
 					Entity entityParent = aEntity;
+
+
+					bool done = false;
+					while(!done)
+					{
+						if(entityParent.GetID() == aChildEntity.GetID())
+						{
+							done = true;
+							shouldExit = true;
+							std::cout << entityParent.GetComponent<TagComponent>().Tag << std::endl;
+						}
+
+						if(entityParent.GetComponent<ChildComponent>().HasParent())
+						{
+							entityParent = entityParent.GetComponent<ChildComponent>().GetParent();
+						}
+						else
+						{
+							done = true;
+						}
+
+					}
 
 					if(!shouldExit)
 					{
@@ -387,5 +423,5 @@ void Hierarchy::DropAFile()
 
 void Hierarchy::IsItemHovered(Entity& aEntity)
 {
-
+	aEntity;
 }

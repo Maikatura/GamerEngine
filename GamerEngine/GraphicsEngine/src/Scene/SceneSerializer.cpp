@@ -11,6 +11,8 @@
 #include "Particles/ParticleEmitter.h"
 #include <Light/DirectionalLight.h>
 #include <Light/EnvironmentLight.h>
+#include <entt/entt.hpp>
+#include "Components/ChildComponent.h"
 
 namespace YAML
 {
@@ -117,13 +119,11 @@ SceneSerializer::SceneSerializer(Scene* scene)
 
 static void SerializeEntity(YAML::Emitter& out, Entity entity)
 {
-	(entity.HasComponent<IDComponent>());
-
 
 	out << YAML::BeginMap; // Entity
 	out << YAML::Key << "Entity" << YAML::Value << (uint64_t)entity.GetUUID();
 
-	if (entity.HasComponent<TagComponent>())
+	if(entity.HasComponent<TagComponent>())
 	{
 		out << YAML::Key << "TagComponent";
 		out << YAML::BeginMap; // TagComponent
@@ -134,7 +134,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::EndMap; // TagComponent
 	}
 
-	if (entity.HasComponent<TransformComponent>())
+	if(entity.HasComponent<TransformComponent>())
 	{
 		out << YAML::Key << "TransformComponent";
 		out << YAML::BeginMap; // TransformComponent
@@ -147,7 +147,33 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::EndMap; // TransformComponent
 	}
 
-	if (entity.HasComponent<CameraComponent>())
+	if(entity.HasComponent<ChildComponent>())
+	{
+		out << YAML::Key << "ChildComponent";
+		out << YAML::BeginMap; // ChildComponent
+
+		auto& cc = entity.GetComponent<ChildComponent>();
+
+		if(cc.HasParent())
+		{
+			out << YAML::Key << "Parent" << YAML::Value << cc.GetParent().GetUUID();
+		}
+
+		out << YAML::Key << "ChildrenSize" << YAML::Value << cc.GetChildren().size();
+		out << YAML::Key << "Children";
+		out << YAML::BeginMap; // Children
+
+		for(int i = 0; i < cc.GetChildren().size(); i++)
+		{
+			out << YAML::Key << i << YAML::Value << cc.GetChildren()[i].GetUUID();
+		}
+
+		out << YAML::EndMap; // Children
+
+		out << YAML::EndMap; // ChildComponent
+	}
+
+	if(entity.HasComponent<CameraComponent>())
 	{
 		auto& cameraComp = entity.GetComponent<CameraComponent>();
 		out << YAML::Key << "CameraComponent" << YAML::Value;
@@ -159,23 +185,23 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::EndMap; // Camera
 	}
 
-	if (entity.HasComponent<ModelComponent>())
+	if(entity.HasComponent<ModelComponent>())
 	{
 		auto& model = entity.GetComponent<ModelComponent>();
 
 		out << YAML::Key << "ModelComponent";
 		out << YAML::BeginMap; // ModelComponent
 
-		out << YAML::Key << "Path" << YAML::Value << Helpers::string_cast<std::string>(model.myModel->GetModel()->GetName());
+		out << YAML::Key << "Path" << YAML::Value << Helpers::string_cast<std::string>(model.GetModel()->GetModel()->GetName());
 		out << YAML::Key << "Texture";
 		out << YAML::BeginMap;
 
-		auto material = model.myModel->GetModel()->GetMaterial();
+		auto material = model.GetModel()->GetModel()->GetMaterial();
 
-		if (material)
+		if(material)
 		{
 			auto albedoTex = material->GetAlbedoTexture();
-			if (albedoTex)
+			if(albedoTex)
 			{
 				out << YAML::Key << "Albedo" << YAML::Value << "Assets/Textures/" + Helpers::string_cast<std::string>(albedoTex->GetName());
 			}
@@ -199,7 +225,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::EndMap; // ModelComponent
 	}
 
-	if (entity.HasComponent<ParticleEmitter>())
+	if(entity.HasComponent<ParticleEmitter>())
 	{
 		auto& particle = entity.GetComponent<ParticleEmitter>();
 		const auto& particleData = particle.GetEmitterSettings();
@@ -259,7 +285,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::EndMap; // ParticleEmitter
 	}
 
-	if (entity.HasComponent<DirectionalLightComponent>())
+	if(entity.HasComponent<DirectionalLightComponent>())
 	{
 		out << YAML::Key << "DirectionalLightComponent";
 		out << YAML::BeginMap; // DirectionalLightComponent
@@ -271,6 +297,36 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 		out << YAML::EndMap; // DirectionalLightComponent
 	}
+
+	if(entity.HasComponent<SpotLightComponent>())
+	{
+		out << YAML::Key << "SpotLightComponent";
+		out << YAML::BeginMap; // SpotLightComponent
+
+		auto& tc = entity.GetComponent<SpotLightComponent>().mySpotLight;
+		out << YAML::Key << "Color" << YAML::Value << tc->GetColor();
+		out << YAML::Key << "Intensity" << YAML::Value << tc->GetIntensity();
+		out << YAML::Key << "Range" << YAML::Value << tc->GetRange();
+		out << YAML::Key << "InnerCone" << YAML::Value << tc->GetInnerCone();
+		out << YAML::Key << "OuterCone" << YAML::Value << tc->GetOuterCone();
+
+		out << YAML::EndMap; // SpotLightComponent
+	}
+
+	if(entity.HasComponent<PointLightComponent>())
+	{
+		out << YAML::Key << "PointLightComponent";
+		out << YAML::BeginMap; // PointLightComponent
+
+		auto& tc = entity.GetComponent<PointLightComponent>().myPointLight;
+		out << YAML::Key << "Color" << YAML::Value << tc->GetColor();
+		out << YAML::Key << "Intensity" << YAML::Value << tc->GetIntensity();
+		out << YAML::Key << "Range" << YAML::Value << tc->GetRange();
+
+		out << YAML::EndMap; // PointLightComponent
+	}
+
+
 
 	out << YAML::EndMap; // Entity
 }
@@ -297,10 +353,45 @@ static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene)
 		tc.Scale = transformComponent["Scale"].as<Vector3f>();
 	}
 
+
+	auto childComponent = aEntityNode["ChildComponent"];
+	if(childComponent)
+	{
+		auto& cc = deserializedEntity.GetComponent<ChildComponent>();
+
+		if(childComponent["Parent"])
+		{
+			auto entityID = childComponent["Parent"].as<uint64_t>();
+			cc.TempParent = entityID;
+		}
+
+		if(childComponent["ChildrenSize"])
+		{
+			int size = childComponent["ChildrenSize"].as<int>();
+
+			if(size > 0)
+			{
+				auto children = childComponent["Children"];
+
+				if(children)
+				{
+					for(int i = 0; i < size; i++)
+					{
+						auto entityID = children[std::to_string(i)].as<uint64_t>();
+						cc.TempChildren.push_back(entityID);
+					}
+				}
+			}
+
+		}
+	}
+
+
 	const auto cameraComponent = aEntityNode["CameraComponent"];
 	if(cameraComponent)
 	{
 		auto& camera = deserializedEntity.AddComponent<CameraComponent>();
+		deserializedEntity.AddComponent<CameraControllerData>();
 		deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		//deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
@@ -316,24 +407,24 @@ static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene)
 		auto& modelComp = deserializedEntity.AddComponent<ModelComponent>();
 		auto path = Helpers::string_cast<std::wstring>(modelComponent["Path"].as<std::string>());
 
-		modelComp.myModel = ModelAssetHandler::GetModelInstance(path);
+		modelComp.SetModel(ModelAssetHandler::GetModelInstance(path));
 
 
 		auto textures = modelComponent["Texture"];
 
 		if(textures["Albedo"])
 		{
-			modelComp.myModel->GetMaterial()->SetAlbedoTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Albedo"].as<std::string>())));
+			modelComp.GetModel()->GetMaterial()->SetAlbedoTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Albedo"].as<std::string>())));
 		}
 
 		if(textures["Normal"])
 		{
-			modelComp.myModel->GetMaterial()->SetNormalTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Normal"].as<std::string>())));
+			modelComp.GetModel()->GetMaterial()->SetNormalTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Normal"].as<std::string>())));
 		}
 
 		if(textures["Material"])
 		{
-			modelComp.myModel->GetMaterial()->SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Material"].as<std::string>())));
+			modelComp.GetModel()->GetMaterial()->SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Material"].as<std::string>())));
 		}
 
 	}
@@ -393,7 +484,7 @@ static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene)
 			}
 		}
 
-		if (particleSettingsSize > 0)
+		if(particleSettingsSize > 0)
 		{
 			YAML::Node settings;
 			if(particleComponent["ParticleSettings"])
@@ -432,9 +523,51 @@ static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene)
 		dirLightComp.Direction = dirLightComponent["Direction"].as<Vector3f>();
 		dirLightComp.Intensity = dirLightComponent["Intensity"].as<float>();
 
-		aScene->GetDirLight()->Init(dirLightComp.Color, dirLightComp.Intensity);
-		aScene->GetDirLight()->SetDirection(dirLightComp.Direction);
+		dirLightComp.myDirectionalLight->Init(dirLightComp.Color, dirLightComp.Intensity);
+		dirLightComp.myDirectionalLight->SetDirection(dirLightComp.Direction);
+		dirLightComp.myDirectionalLight->SetPosition(0, 0	,0);
 	}
+
+	auto spotLightComponent = aEntityNode["SpotLightComponent"];
+	if(spotLightComponent)
+	{
+		auto& spotLightComp = deserializedEntity.AddComponent<SpotLightComponent>();
+
+
+		Vector4f color = spotLightComponent["Color"].as<Vector4f>();
+		float intensity = spotLightComponent["Intensity"].as<float>();
+		float range = spotLightComponent["Range"].as<float>();
+		float innerCone = spotLightComponent["InnerCone"].as<float>();
+		float outerCone = spotLightComponent["OuterCone"].as<float>();
+
+		auto light = spotLightComp.mySpotLight;
+
+		light->SetColor({ color.x,  color.y,  color.z });
+		light->SetIntensity(intensity);
+		light->SetRange(range);
+		light->SetInnerCone(innerCone);
+		light->SetOuterCone(outerCone);
+	}
+
+	auto pointLightComponent = aEntityNode["PointLightComponent"];
+	if(pointLightComponent)
+	{
+		auto& pointLightComp = deserializedEntity.AddComponent<PointLightComponent>();
+
+
+
+		Vector4f color = pointLightComponent["Color"].as<Vector4f>();
+		float intensity = pointLightComponent["Intensity"].as<float>();
+		float range = pointLightComponent["Range"].as<float>();
+
+		auto light = pointLightComp.myPointLight;
+
+		light->SetColor({ color.x,  color.y,  color.z });
+		light->SetIntensity(intensity);
+		light->SetRange(range);
+
+	}
+
 }
 
 void SceneSerializer::Serialize(const std::string& aFilepath)
@@ -458,6 +591,9 @@ void SceneSerializer::Serialize(const std::string& aFilepath)
 	std::ofstream fout(aFilepath);
 	fout << out.c_str();
 	fout.close();
+
+
+
 }
 
 void SceneSerializer::SerializeRuntime(const std::string& aFilepath)
@@ -483,11 +619,11 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath)
 
 	std::string sceneName = data["Scene"].as<std::string>();
 
-	if (data["Path"])
+	if(data["Path"])
 	{
 		myScene->SetPath(data["Path"].as<std::string>());
 	}
-	
+
 
 	auto entities = data["Entities"];
 	if(entities)
@@ -495,6 +631,40 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath)
 		for(auto entity : entities)
 		{
 			DeserializeEntity(entity, myScene);
+		}
+	}
+
+	myScene->Initialize();
+
+	// Fix parenting :)
+	const auto& view = myScene->GetRegistry().view<ChildComponent>();
+	for(auto& entity1 : view)
+	{
+		for(auto& entity2 : view)
+		{
+			Entity entityOne = { entity1, myScene };
+			Entity entityTwo = { entity2, myScene };
+
+			if(entityOne.GetComponent<ChildComponent>().HasParent())
+			{
+				auto e1Id = entityOne.GetComponent<ChildComponent>().TempParent;
+				auto e2Id = entityTwo.GetUUID();
+				if(e1Id == e2Id)
+				{
+					entityOne.GetComponent<ChildComponent>().SetParent(entityTwo);
+
+				}
+			}
+
+			for(size_t i = 0; i < entityOne.GetComponent<ChildComponent>().TempChildren.size(); i++)
+			{
+				if(entityOne.GetComponent<ChildComponent>().TempChildren[i] == entityTwo.GetUUID())
+				{
+					entityOne.GetComponent<ChildComponent>().SetChild(entityTwo);
+					entityTwo.GetComponent<ChildComponent>().SetParent(entityOne);
+				}
+			}
+
 		}
 	}
 

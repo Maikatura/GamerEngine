@@ -1,21 +1,21 @@
 #include "Editor.pch.h"
 #include "Inspector.h"
-#include <filesystem>
 #include <GraphicsEngine.h>
-#include <ImGui/imgui_stdlib.h>
 #include <Model/Entity.h>
 #include <Render/SelectionData.h>
 #include <Scene/Scene.h>
 #include "StringCast.h"
+#include "AssetHandlers/ModelAssetHandler.h"
 #include "Audio/Audio.h"
 #include "Components/CameraController.h"
 #include "Components/Components.hpp"
-#include "Debugger/ConsoleHelper.h"
 #include "ImGuiAdded/ImGuiExtra.h"
 #include "Model/ModelInstance.h"
 #include "Particles/ParticleEmitter.h"
-#include "Light/DirectionalLight.h"
 #include "Light/EnvironmentLight.h"
+#include "Light/SpotLight.h"
+#include "Light/PointLight.h"
+#include "Handlers/DropHandler.h"
 
 
 bool Inspector::OnImGuiRender()
@@ -34,7 +34,7 @@ bool Inspector::OnImGuiRender()
 
 	ImGui::End();
 
-	if (!myIsOpen)
+	if(!myIsOpen)
 	{
 		return false;
 	}
@@ -47,19 +47,21 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 	static ImGuiInputTextFlags flagsReadOnly;
 	flagsReadOnly |= ImGuiInputTextFlags_ReadOnly;
 
-	if (aEntity.HasComponent<TagComponent>())
+	if(aEntity.HasComponent<TagComponent>())
 	{
 		auto& tag = aEntity.GetComponent<TagComponent>();
 
+		std::string tagName = tag.Tag;
+
 		ImGuiInputTextFlags flags = ImGuiInputTextFlags_None;
-		if (tag.Tag == "SceneCamera (DONT TOUCH)")
+		if(tagName == "SceneCamera (DONT TOUCH)")
 		{
 			flags |= ImGuiInputTextFlags_ReadOnly;
 			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
 		}
 
-		ImGui::InputText("Tag", &tag.Tag, flags);
-		if(tag.Tag == "SceneCamera (DONT TOUCH)")
+		ImGui::InputText(ICON_FK_TAG" Tag", &tag.Tag, flags);
+		if(tagName == "SceneCamera (DONT TOUCH)")
 		{
 			ImGui::PopStyleColor();
 		}
@@ -70,14 +72,14 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 		}
 	}
 
-	if (aEntity.HasComponent<TransformComponent>())
+	if(aEntity.HasComponent<TransformComponent>())
 	{
 		auto& transform = aEntity.GetComponent<TransformComponent>();
-		auto translate = transform.Translation ;
+		auto translate = transform.Translation;
 		auto rotation = transform.Rotation;
 		auto scale = transform.Scale;
 
-		if(ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+		if(ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_DefaultOpen, "%s Transform", ICON_FK_ARROWS))
 		{
 			ImGui::DragFloat3("Position", &translate.x, 0.25f);
 			ImGui::DragFloat3("Rotation", &rotation.x, 0.25f);
@@ -93,9 +95,9 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 	ImGui::SeparateWithSpacing();
 
-	if (aEntity.HasComponent<CameraComponent>())
+	if(aEntity.HasComponent<CameraComponent>())
 	{
-		if(ImGui::TreeNodeEx("CameraComponent", ImGuiTreeNodeFlags_DefaultOpen, "Camera Component"))
+		if(ImGui::TreeNodeEx("CameraComponent", ImGuiTreeNodeFlags_DefaultOpen, "%s Camera Component", ICON_FK_CAMERA))
 		{
 			auto& camera = aEntity.GetComponent<CameraComponent>();
 
@@ -110,19 +112,36 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 		}
 	}
 
-	if (aEntity.HasComponent<ModelComponent>())
+	if(aEntity.HasComponent<ModelComponent>())
 	{
-		if(ImGui::TreeNodeEx("ModelComponent", ImGuiTreeNodeFlags_DefaultOpen, "Model Component"))
+		if(ImGui::TreeNodeEx("ModelComponent", ImGuiTreeNodeFlags_DefaultOpen, "Mesh Renderer"))
 		{
-			const auto& model = aEntity.GetComponent<ModelComponent>();
-			std::string modelPath = Helpers::string_cast<std::string>(model.myModel->GetModel()->GetName());
-			ImGui::TextWrapped(modelPath.c_str());
+			auto& model = aEntity.GetComponent<ModelComponent>();
+
+			{
+				ImGui::BeginGroup();
+
+				const std::wstring& modelName = model.GetModel()->GetModel()->GetName();
+				std::string modelPath = Helpers::string_cast<std::string>(modelName);
+				ImGui::InputText("Model", &modelPath, flagsReadOnly);
+
+				auto newFile = DropHandler::DropFileEntity(aEntity);
+
+				if(!newFile.empty())
+				{
+					auto modelStuff = ModelAssetHandler::GetModelInstance(newFile);
+					model.SetModel(modelStuff);
+					
+				}
+
+				ImGui::EndGroup();
+			}
 
 			// Albedo
 			{
 				ImGui::BeginGroup();
 
-				auto albedoTex = model.myModel->GetMaterial()->GetAlbedoTexture();
+				auto albedoTex = model.GetModel()->GetMaterial()->GetAlbedoTexture();
 				std::string name = (albedoTex != nullptr) ? Helpers::string_cast<std::string>(albedoTex->GetName()) : "No Texture";
 
 				if(albedoTex != nullptr)
@@ -138,11 +157,11 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 					ImGui::InputText("Albedo", &name, flagsReadOnly);
 				}
 
-				auto newFile = DropFile();
+				std::wstring newFile = DropHandler::DropFileEntity(aEntity);
 				std::filesystem::path aNewPath = newFile;
 				if(name != aNewPath.filename() && !aNewPath.filename().string().empty())
 				{
-					model.myModel->GetMaterial()->SetAlbedoTexture(TextureAssetHandler::GetTexture(newFile));
+					model.GetModel()->GetMaterial()->SetAlbedoTexture(TextureAssetHandler::GetTexture(newFile));
 				}
 
 				ImGui::EndGroup();
@@ -151,7 +170,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			{
 				ImGui::BeginGroup();
 
-				auto normalTexture = model.myModel->GetMaterial()->GetNormalTexture();
+				auto normalTexture = model.GetModel()->GetMaterial()->GetNormalTexture();
 				std::string name = (normalTexture != nullptr) ? Helpers::string_cast<std::string>(normalTexture->GetName()) : "No Texture";
 
 				if(normalTexture != nullptr)
@@ -167,11 +186,11 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 					ImGui::InputText("Normal", &name, flagsReadOnly);
 				}
 
-				auto newFile = DropFile();
+				std::wstring newFile = DropHandler::DropFileEntity(aEntity);
 				std::filesystem::path aNewPath = newFile;
 				if(name != aNewPath.filename() && !aNewPath.filename().string().empty())
 				{
-					model.myModel->GetMaterial()->SetNormalTexture(TextureAssetHandler::GetTexture(newFile));
+					model.GetModel()->GetMaterial()->SetNormalTexture(TextureAssetHandler::GetTexture(newFile));
 				}
 
 				ImGui::EndGroup();
@@ -182,10 +201,10 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 
 
-				auto materialTex = model.myModel->GetMaterial()->GetMaterialTexture();
+				auto materialTex = model.GetModel()->GetMaterial()->GetMaterialTexture();
 				std::string name = (materialTex != nullptr) ? Helpers::string_cast<std::string>(materialTex->GetName()) : "No Texture";
 
-				if (materialTex != nullptr)
+				if(materialTex != nullptr)
 				{
 					ImGui::Image(materialTex->GetSRV().Get(), { 20, 20 });
 					ImGui::SameLine();
@@ -193,39 +212,45 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 				}
 				else
 				{
-					ImGui::ColorButton("##placeholder", { 1,0,0,1 }, 0,{ 20, 20 });
+					ImGui::ColorButton("##placeholder", { 1,0,0,1 }, 0, { 20, 20 });
 					ImGui::SameLine();
 					ImGui::InputText("Material", &name, flagsReadOnly);
 				}
 
-				
-				auto newFile = DropFile();
+				std::wstring newFile = DropHandler::DropFileEntity(aEntity);
 				std::filesystem::path aNewPath = newFile;
 				if(name != aNewPath.filename() && !aNewPath.filename().string().empty())
 				{
-					model.myModel->GetMaterial()->SetMaterialTexture(TextureAssetHandler::GetTexture(newFile));
+					model.GetModel()->GetMaterial()->SetMaterialTexture(TextureAssetHandler::GetTexture(newFile));
 				}
-				
-				
+
+
 
 				ImGui::EndGroup();
 			}
 
-			
 
-			if(ImGui::ListBoxHeader("Animations"))
+			if (model.GetModel()->GetSkeleton()->GetRoot()) 
 			{
-				for(auto item : model.myModel->GetSkeleton()->Animations)
+				ImGui::BeginGroup();
+
+				if(ImGui::ListBoxHeader("Animations"))
 				{
-					std::string item_name = Helpers::string_cast<std::string>(item.first);
-					if(ImGui::Selectable(item_name.c_str()))
+					for(auto item : model.GetModel()->GetSkeleton()->Animations)
 					{
-						model.myModel->PlayAnimation(item.first);
+						std::string item_name = Helpers::string_cast<std::string>(item.first);
+						if(ImGui::Selectable(item_name.c_str()))
+						{
+							model.GetModel()->PlayAnimation(item.first);
+						}
 					}
+					ImGui::ListBoxFooter();
+					DropHandler::DropFileEntity(aEntity);
 				}
-				ImGui::ListBoxFooter();
+
+				ImGui::EndGroup();
 			}
-			
+
 			ImGui::TreePop();
 		}
 	}
@@ -264,7 +289,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 						ImGui::TreePop();
 					}
 
-					
+
 				}
 
 				ImGui::TreePop();
@@ -298,40 +323,95 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 		}
 	}
 
-	if (aEntity.HasComponent<DirectionalLightComponent>())
+	if(aEntity.HasComponent<DirectionalLightComponent>())
 	{
 		auto& directionalLight = aEntity.GetComponent<DirectionalLightComponent>();
-		
 
-		if(ImGui::TreeNodeEx("DirectionalLight", ImGuiTreeNodeFlags_DefaultOpen, "Directional Light"))
+		if(ImGui::TreeNodeEx("DirectionalLight", ImGuiTreeNodeFlags_DefaultOpen, "%s Directional Light", ICON_FK_LIGHTBULB_O))
 		{
-			auto& dirLight = *GraphicsEngine::Get()->GetScene()->GetDirLight();
-			directionalLight.Direction = aEntity.GetComponent<TransformComponent>().Rotation;
-			directionalLight.Color = ToVector3(dirLight.GetColor());
-			directionalLight.Intensity = dirLight.GetIntensity();
+			
 
+			ImGui::Checkbox("Active", &directionalLight.Active);
 			ImGui::DragFloat3("Direction", &directionalLight.Direction.x);
 			ImGui::ColorEdit3("Light Color", &directionalLight.Color.x);
 			ImGui::DragFloat("Intensity", &directionalLight.Intensity, 0.1f, 0.0f, 10.0f);
 
-			aEntity.GetComponent<TransformComponent>().Rotation = directionalLight.Direction;
-			dirLight.SetDirection(aEntity.GetComponent<TransformComponent>().Rotation);
-			dirLight.SetColor(directionalLight.Color);
-			dirLight.SetIntensity(directionalLight.Intensity);
+
 
 			ImGui::TreePop();
 		}
 
 	}
 
-	if (aEntity.HasComponent<NativeScriptComponent>())
+	if(aEntity.HasComponent<SpotLightComponent>())
+	{
+		if(ImGui::TreeNodeEx("Spot Light", ImGuiTreeNodeFlags_DefaultOpen, "%s Spot Light", ICON_FK_LIGHTBULB_O)) 
+		{
+
+			auto& spotLight = aEntity.GetComponent<SpotLightComponent>();
+
+			auto light = spotLight.mySpotLight;
+
+			auto lightData = light->GetColor();
+			auto lightIntensity = light->GetIntensity();
+			auto lightRange = light->GetRange();
+			auto lightInnerCone = light->GetInnerCone();
+			auto lightOuterCone = light->GetOuterCone();
+
+
+			ImGui::ColorEdit3("Color", &lightData.x);
+			ImGui::DragFloat("Intensity", &lightIntensity);
+			ImGui::DragFloat("Range", &lightRange);
+			ImGui::DragFloat("Inner Cone", &lightInnerCone);
+			ImGui::DragFloat("Outer Cone", &lightOuterCone);
+
+			int tempIndex = light->GetLightBufferData().ShadowMapIndex;
+			ImGui::DragInt("Index", &tempIndex);
+
+			light->SetColor({ lightData.x, lightData.y, lightData.z });
+			light->SetIntensity(lightIntensity);
+			light->SetRange(lightRange);
+			light->SetInnerCone(lightInnerCone);
+			light->SetOuterCone(lightOuterCone);
+			ImGui::TreePop();
+		}
+	}
+
+	if(aEntity.HasComponent<PointLightComponent>())
+	{
+		if(ImGui::TreeNodeEx("Point Light", ImGuiTreeNodeFlags_DefaultOpen, "%s Point Light", ICON_FK_LIGHTBULB_O))
+		{
+
+			auto& pointLight = aEntity.GetComponent<PointLightComponent>();
+
+			auto light = pointLight.myPointLight;
+
+			auto lightData = light->GetColor();
+			auto lightIntensity = light->GetIntensity();
+			auto lightRange = light->GetRange();
+
+			ImGui::ColorEdit3("Color", &lightData.x);
+			ImGui::DragFloat("Intensity", &lightIntensity);
+			ImGui::DragFloat("Range", &lightRange);
+
+			int tempIndex = light->GetLightBufferData().ShadowMapIndex;
+			ImGui::DragInt("Index", &tempIndex);
+
+			light->SetColor({ lightData.x, lightData.y, lightData.z });
+			light->SetIntensity(lightIntensity);
+			light->SetRange(lightRange);
+			ImGui::TreePop();
+		}
+	}
+
+	if(aEntity.HasComponent<NativeScriptComponent>())
 	{
 		auto check = aEntity.GetComponent<NativeScriptComponent>().Instance;
 		if(check != nullptr)
 		{
-			auto& controller = aEntity.GetComponent<NativeScriptComponent>().Get<CameraController>();
+			/*auto& controller = aEntity.GetComponent<NativeScriptComponent>().Get<CameraController>();
 
-			if(ImGui::TreeNodeEx("CameraController", ImGuiTreeNodeFlags_DefaultOpen, "Camera Controller"))
+			if(ImGui::TreeNodeEx("CameraController", ImGuiTreeNodeFlags_DefaultOpen, "%s Camera Controller", ICON_FK_CODE))
 			{
 				float speed = controller.GetSpeed();
 				float speedMul = controller.GetSpeedMul();
@@ -350,7 +430,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
 			ImGui::TextWrapped("You can't listen you should not touch this object\nI know you shouldn't see this object but I haven't fixed that yet!");
-			ImGui::PopStyleColor();
+			ImGui::PopStyleColor();*/
 		}
 	}
 
@@ -362,18 +442,14 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 void Inspector::AddComponent(Entity& aEntity)
 {
-
-
-
 	if(ImGui::ButtonCenter("Add Component"))
 	{
 		ImGui::OpenPopup("AddComponent");
-		//ConsoleHelper::Log(LogType::Error, "This features isn't in yet");
 	}
 
-	if (ImGui::BeginPopup("AddComponent"))
+	if(ImGui::BeginPopup("AddComponent"))
 	{
-		if (ImGui::MenuItem("Model Component"))
+		if(ImGui::MenuItem("Model Component"))
 		{
 			aEntity.AddComponent<ModelComponent>();
 			ImGui::CloseCurrentPopup();
@@ -389,90 +465,84 @@ void Inspector::AddComponent(Entity& aEntity)
 	}
 }
 
-std::wstring Inspector::DropFile()
-{
-	if(ImGui::BeginDragDropTarget())
-	{
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM");
-		if(payload)
-		{
-			std::wstring path = static_cast<const wchar_t*>(payload->Data);
-			
-			return path;
-		}
-		ImGui::EndDragDropTarget();
-	}
-
-	return L"";
-}
-
 #pragma optimize( "", off )
 void Inspector::DrawFileObject(Entity& aEntity)
 {
+	aEntity;
 	std::shared_ptr<SelectedObejct> selectedObjectData = SelectionData::GetSelectedObject();
 
 	switch(selectedObjectData->FileType)
 	{
-		case FileType::Audio:
+	case FileType::Audio:
+	{
+		std::string audio = (const char*)(selectedObjectData->FileData);
+
+		if(ImGui::Button("Play"))
 		{
-			std::string audio = (const char*)(selectedObjectData->FileData);
-
-			if(ImGui::Button("Play"))
-			{
-				AudioManager::PlayAudio(audio);
-			}
-
-			ImGui::SameLine();
-
-			if(ImGui::Button("Stop"))
-			{
-				AudioManager::StopAudio(audio);
-			}
-			break;
+			AudioManager::PlayAudio(audio);
 		}
 
-		case FileType::Texture:
-		{
-			float size = ImGui::GetWindowContentRegionWidth();
-			Texture* texture = ((Texture*)selectedObjectData->FileData);
-			ImGui::Image(texture->GetSRV().Get(), { size ,size });
-			ImGui::Text("Okay and why?");
+		ImGui::SameLine();
 
-			break;
-		}
-
-		case FileType::Scene:
+		if(ImGui::Button("Stop"))
 		{
-			ImGui::TextWrapped("This is a scene I don't know what you wanna change here?");
-			ImGui::SeparateWithSpacing();
-			ImGui::TextWrapped("But did you know you can drag the scene onto the hierarchy to load a scene?");
-			break;
+			AudioManager::StopAudio(audio);
 		}
+		break;
+	}
 
-		case FileType::Model:
-		{
-			ImGui::TextWrapped("This is a model I don't know what you wanna change here? Since there are no components (YET)");
-			break;
-		}
+	case FileType::Texture:
+	{
+		float size = ImGui::GetWindowContentRegionWidth();
+		Texture* texture = ((Texture*)selectedObjectData->FileData);
+		ImGui::Image(texture->GetSRV().Get(), { size ,size });
+		ImGui::Text("Okay and why?");
 
-		case FileType::Text:
-		{
-			ImGui::TextWrapped("LMAO, A TEXT FILE xD");
-			break;
-		}
+		break;
+	}
 
-		case FileType::Animation:
-		{
-			ImGui::TextWrapped("LMAO, A ANIMATION FILE xD");
-			break;
-		}
+	case FileType::Scene:
+	{
+		ImGui::TextWrapped("This is a scene I don't know what you wanna change here?");
+		ImGui::SeparateWithSpacing();
+		ImGui::TextWrapped("But did you know you can drag the scene onto the hierarchy or the scene view to load a scene?");
+		break;
+	}
 
-		default:
-		{
-			ImGui::Text("No Custom Inspector for this object type yet");
-			
-			break;
-		}
+	case FileType::Model:
+	{
+		ImGui::TextWrapped("This is a model I don't know what you wanna change here? Since there are no components (YET)");
+		break;
+	}
+
+	case FileType::Text:
+	{
+		ImGui::TextWrapped("LMAO, A TEXT FILE xD");
+		break;
+	}
+
+	case FileType::Animation:
+	{
+		ImGui::TextWrapped("LMAO, A ANIMATION FILE xD");
+		break;
+	}
+
+	case FileType::Node:
+	{
+
+		std::string* nodeName = static_cast<std::string*>(selectedObjectData->FileData);
+
+		ImGui::InputText("Name", nodeName);
+
+		break;
+	}
+
+	default:
+	{
+		ImGui::Text("No Custom Inspector for this object type yet");
+
+		break;
+	}
 	}
 }
 #pragma optimize( "", on ) 

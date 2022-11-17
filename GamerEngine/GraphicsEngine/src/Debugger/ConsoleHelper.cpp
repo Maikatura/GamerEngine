@@ -68,3 +68,14 @@ void ConsoleHelper::Log(LogType aLogType, const std::string& aLogMessage)
 	SetConsoleTextAttribute(consoleColor, 15);
 	std::cout << logMessage << "\n";
 }
+
+void ConsoleHelper::LogError(const std::string& aLogMessage)
+{
+	int color = 4;
+	auto consoleColor = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(consoleColor, color);
+	std::cout << "[" << myEnumNames[LogType::Error] << "]" << " : ";
+
+	SetConsoleTextAttribute(consoleColor, 15);
+	std::cout << aLogMessage << "\n";
+}

@@ -15,6 +15,8 @@ enum class FileType
 	Prefab,
 	DLL,
 	Text,
+	Node,
+
 
 	COUNT
 };
@@ -33,5 +35,6 @@ enum class RenderMode
 	Roughness,
 	Metalness,
 	Emissiveness,
+	Diffuse,
 	COUNT
 };

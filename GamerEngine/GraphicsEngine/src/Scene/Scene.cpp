@@ -7,6 +7,8 @@
 #include "AssetHandlers/ModelAssetHandler.h"
 #include "Light/DirectionalLight.h"
 #include "Light/EnvironmentLight.h"
+#include "Light/SpotLight.h"
+#include "Light/PointLight.h"
 #include <Model/ModelInstance.h>
 #include "Particles/ParticleEmitter.h"
 #include "Render/Renderer.h"
@@ -21,14 +23,20 @@ Scene::~Scene()
 
 bool Scene::Initialize()
 {
-	myDirectionalLight = LightAssetHandler::CreateDirectionalLight({ 1,1,1 }, 2.0f, { 0,90,0 });
-	//myEnvironmentLight = LightAssetHandler::CreateEnvironmentLight(L"Assets\\Textures\\studio_cubemap.dds");
+	myDirectionalLight = nullptr;
+	myEnvironmentLight = LightAssetHandler::CreateEnvironmentLight(L"Assets\\Textures\\studio_cubemap.dds");
+
+
+	myComponentMap[entt::type_id<ModelComponent>().hash()] = "ModelComponent";
 
 	return true;
 }
 
 void Scene::Clear()
 {
+	Renderer::Clear();
+	Renderer::ResetLights();
+
 	myRegistry.each([&](auto entityID)
 		{
 			myRegistry.destroy(entityID);
@@ -75,51 +83,58 @@ void Scene::DeleteEntity(Entity aEntity)
 		aEntity.GetComponent<NativeScriptComponent>().DestroyScript;
 	}
 
+	if(aEntity.HasComponent<PointLightComponent>())
+	{
+		Renderer::RemoveLight(aEntity.GetComponent<PointLightComponent>().myPointLight.get());
+	}
+
+	if(aEntity.HasComponent<SpotLightComponent>())
+	{
+		Renderer::RemoveLight(aEntity.GetComponent<SpotLightComponent>().mySpotLight.get());
+	}
+
+	if(aEntity.HasComponent<DirectionalLightComponent>())
+	{
+		Renderer::RemoveLight(myDirectionalLight.get());
+	}
+
 	myRegistry.destroy(aEntity);
 }
 
 void Scene::OnUpdate(bool aShouldRunLoop)
 {
-
-
-
-
 	{
 		myRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+		{
+			if(!nsc.Instance)
 			{
-				if(!nsc.Instance)
-				{
-					nsc.Instance = nsc.InstantiateScript();
-					nsc.Instance->myEntity = Entity{ entity, this };
-					nsc.Instance->OnCreate();
-				}
+				nsc.Instance = nsc.InstantiateScript();
+				nsc.Instance->myEntity = Entity{ entity, this };
+				nsc.Instance->OnCreate();
+			}
 
-				nsc.Instance->OnUpdate();
-			});
-
+			nsc.Instance->OnUpdate();
+		});
 	}
 
 	if(aShouldRunLoop)
 	{
-
-		const auto& view = myRegistry.view<TransformComponent, ParticleEmitter>();
-		for(const auto& entity : view)
 		{
-			auto [transform, particleEmitter] = view.get<TransformComponent, ParticleEmitter>(entity);
-			//model.myModel->GetMatrix().GetMatrix().BuildTransform(transform.Translation, transform.Rotation, transform.Scale);
-			particleEmitter.OnUpdate(transform);
+			const auto& view = myRegistry.view<TransformComponent, ParticleEmitter>();
+			for(const auto& entity : view)
+			{
+				auto [transform, particleEmitter] = view.get<TransformComponent, ParticleEmitter>(entity);
+				particleEmitter.OnUpdate(transform);
+			}
 		}
-	}
 
-	if(aShouldRunLoop)
-	{
-		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
-		for(const auto& entity : view)
 		{
-			auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
-			//model.myModel->GetMatrix().GetMatrix().BuildTransform(transform.Translation, transform.Rotation, transform.Scale);
-			model.myModel->Update();
-
+			const auto& view = myRegistry.view<ModelComponent>();
+			for(const auto& entity : view)
+			{
+				auto& component = view.get<ModelComponent>(entity);
+				component.Update();
+			}
 		}
 	}
 }
@@ -152,6 +167,36 @@ void Scene::OnRender()
 			Renderer::RenderSprite(&particleEmitter, transform);
 		}
 	}
+	{
+		const auto& view = myRegistry.view<TransformComponent, DirectionalLightComponent>();
+		for(const auto& entity : view)
+		{
+			auto [transform, dirLight] = view.get<TransformComponent, DirectionalLightComponent>(entity);
+
+			myDirectionalLight = dirLight.myDirectionalLight;
+
+			myDirectionalLight->SetData(&transform, &dirLight);
+			
+		}
+	}
+
+	{
+		const auto& view = myRegistry.view<TransformComponent, PointLightComponent>();
+		for(const auto& entity : view)
+		{
+			auto [transform, pointLight] = view.get<TransformComponent, PointLightComponent>(entity);
+			pointLight.myPointLight->SetData(&transform);
+		}
+	}
+
+	{
+		const auto& view = myRegistry.view<TransformComponent, SpotLightComponent>();
+		for(const auto& entity : view)
+		{
+			auto [transform, spotLight] = view.get<TransformComponent, SpotLightComponent>(entity);
+			spotLight.mySpotLight->SetData(&transform);
+		}
+	}
 
 	{
 		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
@@ -162,6 +207,17 @@ void Scene::OnRender()
 			Entity entityPtr = Entity{ entity, this };
 			Renderer::Render(&entityPtr, model, transform);
 		}
+	}
+
+	{
+		auto lightList = Renderer::GetLights();
+
+		for(size_t i = 0; i < lightList.size(); i++)
+		{
+			lightList[i]->Update();
+		}
+		CommonUtilities::MergeSort(lightList);
+		lightList;
 	}
 }
 
@@ -178,6 +234,11 @@ std::shared_ptr<DirectionalLight> Scene::GetDirLight()
 std::shared_ptr<EnvironmentLight> Scene::GetEnvLight()
 {
 	return myEnvironmentLight;
+}
+
+void Scene::Clean()
+{
+	Light::Reset();
 }
 
 void Scene::SetPath(const std::string& aPath)
@@ -221,4 +282,12 @@ void Scene::OnComponentAdded<ParticleEmitter>(Entity entity, ParticleEmitter& co
 
 template<>
 void Scene::OnComponentAdded<DirectionalLightComponent>(Entity entity, DirectionalLightComponent& component)
+{}
+
+template<>
+void Scene::OnComponentAdded<SpotLightComponent>(Entity entity, SpotLightComponent& component)
+{}
+
+template<>
+void Scene::OnComponentAdded<PointLightComponent>(Entity entity, PointLightComponent& component)
 {}

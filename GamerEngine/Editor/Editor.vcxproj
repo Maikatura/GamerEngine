@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\src;$(SolutionDir)External\src\imgui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src</IncludePath>
+    <IncludePath>$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\src;$(SolutionDir)External\src\imgui\imgui;$(SolutionDir)External\src\imgui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src</IncludePath>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
@@ -88,7 +88,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\src;$(SolutionDir)External\src\imgui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src;$(SolutionDir)Networking\src\Networking\uv\include;$(SolutionDir)Networking\src\Networking\uv\src</IncludePath>
+    <IncludePath>$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\src;$(SolutionDir)External\src\imgui\imgui;$(SolutionDir)External\src\imgui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src</IncludePath>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
@@ -97,6 +97,7 @@
     <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
     <PublicModuleDirectories>
     </PublicModuleDirectories>
+    <CopyCppRuntimeToOutputDir>false</CopyCppRuntimeToOutputDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -183,13 +184,16 @@
     <ClInclude Include="src\Editor.pch.h" />
     <ClInclude Include="src\Handlers\DropHandler.h" />
     <ClInclude Include="src\ImGuiAdded\ImGuiExtra.h" />
+    <ClInclude Include="src\Layers\EditorColorScheme.h" />
     <ClInclude Include="src\Layers\LayerHeader.h" />
     <ClInclude Include="src\Layers\Debug\ConsoleWindow.h" />
     <ClInclude Include="src\Layers\EditorLayers.h" />
+    <ClInclude Include="src\Layers\UI\AnimatorLayer.h" />
     <ClInclude Include="src\Layers\UI\EditorSettingsPanel.h" />
     <ClInclude Include="src\Layers\EditorValues.hpp" />
     <ClInclude Include="src\Layers\UI\EditorView.h" />
     <ClInclude Include="src\Layers\UI\FileExplorer.h" />
+    <ClInclude Include="src\Layers\UI\HelpPanel.h" />
     <ClInclude Include="src\Layers\UI\Hierarchy.h" />
     <ClInclude Include="src\Layers\UI\Inspector.h" />
     <ClInclude Include="src\Layers\Layer.h" />
@@ -208,9 +212,11 @@
     <ClCompile Include="src\Handlers\MetaFileHandler.cpp" />
     <ClCompile Include="src\Layers\Debug\ConsoleWindow.cpp" />
     <ClCompile Include="src\Layers\EditorLayers.cpp" />
+    <ClCompile Include="src\Layers\UI\AnimatorLayer.cpp" />
     <ClCompile Include="src\Layers\UI\EditorSettingsPanel.cpp" />
     <ClCompile Include="src\Layers\UI\EditorView.cpp" />
     <ClCompile Include="src\Layers\UI\FileExplorer.cpp" />
+    <ClCompile Include="src\Layers\UI\HelpPanel.cpp" />
     <ClCompile Include="src\Layers\UI\Hierarchy.cpp" />
     <ClCompile Include="src\Layers\UI\Inspector.cpp" />
     <ClCompile Include="src\Layers\Layer.cpp" />

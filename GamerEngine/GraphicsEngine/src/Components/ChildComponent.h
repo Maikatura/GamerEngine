@@ -8,6 +8,10 @@ struct ChildComponent
 	Entity myParent;
 	std::vector<Entity> myChildren{};
 
+
+	uint64_t TempParent;
+	std::vector<uint64_t> TempChildren;
+
 	void SetChild(Entity aChild)
 	{
 		myChildren.push_back(aChild);
@@ -35,7 +39,7 @@ struct ChildComponent
 		myParent = { entt::null, nullptr };
 	}
 
-	const Entity GetParent() const
+	Entity GetParent() const
 	{
 		return myParent;
 	}

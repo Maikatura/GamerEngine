@@ -6,7 +6,9 @@
 #include "ImGuizmo/ImGuizmo.h"
 #include <Layers/LayerHeader.h>
 #include "Scene/Scene.h"
+#include <Fonts/IconsForkAwesome.h>
 
+#include "Debugger/ConsoleHelper.h"
 
 EditorLayers::EditorLayers()
 {}
@@ -26,12 +28,22 @@ void EditorLayers::Init()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.IniFilename = NULL;
 
-	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsDark();
 
 	ImGui_ImplWin32_Init(GraphicsEngine::Get()->GetWindowHandle());
 	ImGui_ImplDX11_Init(DX11::Device.Get(), DX11::Context.Get());
 
 	ImGui::LoadIniSettingsFromDisk((myImGuiSettingsFile + "EditorLayout.data").c_str());
+
+	io.Fonts->AddFontDefault();
+
+	ImFontConfig config;
+	config.MergeMode = true;
+	config.GlyphMinAdvanceX = 13.0f; // Use if you want to make the icon monospaced
+	static const ImWchar icon_ranges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
+	io.Fonts->AddFontFromFileTTF(FONT_ICON_FILE_NAME_FK, 13.0f, &config, icon_ranges);
+
+	
 
 	AddDefaultLayers();
 }
@@ -39,7 +51,6 @@ void EditorLayers::Init()
 void EditorLayers::AddLayer(std::shared_ptr<Layer> aLayer)
 {
 	myLayers.push_back(aLayer);
-	aLayer->OnAttach();
 }
 
 void EditorLayers::Destory()
@@ -55,10 +66,15 @@ void EditorLayers::BeginFrame()
 {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
+
+	
+
 	ImGui::NewFrame();
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 	ImGuizmo::SetOrthographic(false);
 	ImGuizmo::BeginFrame();
+
+	OnAttach();
 }
 
 void EditorLayers::EndFrame()
@@ -85,8 +101,9 @@ void EditorLayers::AddDefaultLayers()
 	AddLayer(std::make_shared<ConsoleWindow>());
 	AddLayer(std::make_shared<FileExplorer>());
 	AddLayer(std::make_shared<Hierarchy>());
-	AddLayer(std::make_shared<EditorView>());
 	AddLayer(std::make_shared<Inspector>());
+	AddLayer(std::make_shared<AnimatorLayer>());
+	AddLayer(std::make_shared<EditorView>());
 	AddLayer(std::make_shared<KeybindShortcutsLayer>());
 }
 
@@ -94,12 +111,22 @@ void EditorLayers::OnUpdate()
 {
 	for(int i = 0; i < myLayers.size(); i++)
 	{
-		myLayers[i]->OnUpdate();
+		if(!myLayers[i]->HasBeenAdded())
+		{
+			myLayers[i]->OnUpdate();
+		}
 	}
 }
 
 void EditorLayers::OnAttach()
 {
+	for(int i = 0; i < myLayers.size(); i++)
+	{
+		if (!myLayers[i]->HasBeenAdded())
+		{
+			myLayers[i]->OnAttach();
+		}
+	}
 }
 
 void EditorLayers::OnImGuiRender()
@@ -108,13 +135,16 @@ void EditorLayers::OnImGuiRender()
 
 	for(int i = 0; i < myLayers.size(); i++)
 	{
-		if(!myLayers[i]->OnImGuiRender())
+		if (myLayers[i]->HasBeenAdded())
 		{
-			std::cout << "Removed a Layer" << std::endl;
-			myLayers[i].swap(myLayers[myLayers.size() - 1]);
-			myLayers[myLayers.size() - 1]->OnDetach();
+			if(!myLayers[i]->OnImGuiRender())
+			{
+				ConsoleHelper::Log(LogType::Info, "Removed a layer from editor");
+				myLayers[i].swap(myLayers[myLayers.size() - 1]);
+				myLayers[myLayers.size() - 1]->OnDetach();
 
-			myLayers.pop_back();
+				myLayers.pop_back();
+			}
 		}
 	}
 }

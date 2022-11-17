@@ -7,6 +7,7 @@
 #include "GraphicsEngine.h"
 #include "Time.hpp"
 #include "Debugger/ConsoleHelper.h"
+#include "Fonts/IconsForkAwesome.h"
 #include "Scene/Scene.h"
 #include "Snapshots/SnapshotManager.h"
 
@@ -20,7 +21,7 @@ bool MainMenuBar::OnImGuiRender()
 
     if(ImGui::BeginMainMenuBar())
     {
-        if(ImGui::BeginMenu("File"))
+        if(ImGui::BeginMenu(ICON_FK_FILE" File"))
         {
             if(ImGui::MenuItem("Open"))
             {
@@ -74,9 +75,9 @@ bool MainMenuBar::OnImGuiRender()
 
         if(ImGui::BeginMenu("Help"))
         {
-            if(ImGui::MenuItem("NO ELP"))
+            if(ImGui::MenuItem("Help Panel"))
             {
-                //myLayers->AddLayer(std::make_shared<EditorSettingsPanel>());
+                myLayers.AddLayer(std::make_shared<HelpPanel>());
             }
 
             ImGui::EndMenu();
@@ -85,20 +86,23 @@ bool MainMenuBar::OnImGuiRender()
         ImGuiIO& io = ImGui::GetIO();
         auto windowWidth = io.DisplaySize.x;
 
-        float size = 16;
-        float padding = 4;
+        float size = 16.0f;
+        float padding = 4.0f;
 
 
 
 
         float textWidth = 0.0f;
-        if (!myLayers.myShouldRunEngine)
+        if (!GraphicsEngine::Get()->GetEngineUpdateRuntime())
         {
-        	textWidth = ImGui::CalcTextSize("Play").x;
-            ImGui::SetCursorPosX((windowWidth * 0.5) - (size + padding));
-            if(ImGui::Button("Play"))
+            std::string playText = ICON_FK_PLAY;
+            playText += " Play";
+
+        	textWidth = ImGui::CalcTextSize(playText.c_str()).x;
+            ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
+            if(ImGui::Button(playText.c_str()))
             {
-            	myLayers.myShouldRunEngine = true;
+                GraphicsEngine::Get()->SetEngineUpdateRuntime(true);
 
                 mySnapshot = SnapshotManager(&GraphicsEngine::Get()->GetScene()->GetRegistry());
                 mySnapshot.CreateSnapshot();
@@ -106,23 +110,30 @@ bool MainMenuBar::OnImGuiRender()
         }
         else
         {
-            textWidth = ImGui::CalcTextSize("Stop").x;
-            ImGui::SetCursorPosX((windowWidth * 0.5) - (size + padding));
-            if(ImGui::Button("Stop"))
+
+            std::string stopText = ICON_FK_STOP;
+            stopText += " Stop";
+
+            textWidth = ImGui::CalcTextSize(stopText.c_str()).x;
+            ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
+            if(ImGui::Button(stopText.c_str()))
             {
-                myLayers.myShouldRunEngine = false;
+                GraphicsEngine::Get()->SetEngineUpdateRuntime(false);
                 ConsoleHelper::Log(LogType::Info, "Stopped game");
                 mySnapshot.RestoreSnapShot();
             }
         }
        
 
-        textWidth = ImGui::CalcTextSize("Pause").x;
-        ImGui::SetCursorPosX((windowWidth * 0.5) + (size + padding));
-        if(ImGui::Button("Pause"))
+        std::string resumeOrPause = (GraphicsEngine::Get()->GetEngineUpdateRuntime() == true) ? "Pause" : "Resume";
+
+        textWidth = ImGui::CalcTextSize(resumeOrPause.c_str()).x;
+        ImGui::SetCursorPosX((windowWidth * 0.5f) + (size + padding));
+
+        if(ImGui::Button(resumeOrPause.c_str()))
         {
-            myLayers.myShouldRunEngine = !myLayers.myShouldRunEngine;
-            ConsoleHelper::Log(LogType::Info, "Paused game");
+            GraphicsEngine::Get()->SetEngineUpdateRuntime(!GraphicsEngine::Get()->GetEngineUpdateRuntime());
+            ConsoleHelper::Log(LogType::Info, "Paused/Resumed game");
         }
 
 

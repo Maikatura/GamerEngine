@@ -4,9 +4,12 @@
 #include <entt/entt.hpp>
 #include <Math/MathTypes.hpp>
 
+
 class ModelInstance;
 class DirectionalLight;
 class EnvironmentLight;
+class SpotLight;
+class PointLight;
 class Entity;
 
 class Scene
@@ -38,6 +41,7 @@ public:
 
 	std::shared_ptr<DirectionalLight> GetDirLight();
 	std::shared_ptr<EnvironmentLight> GetEnvLight();
+	void Clean();
 
 private:
 	std::string myPath;
@@ -47,6 +51,8 @@ private:
 	std::shared_ptr<EnvironmentLight> myEnvironmentLight;
 
 	Vector4f mySceneBackgroundColor = {0.0f,0.0f,0.0f,1.0f};
+
+	std::map<entt::id_type, std::string> myComponentMap;
 
 	friend class Entity;
 };

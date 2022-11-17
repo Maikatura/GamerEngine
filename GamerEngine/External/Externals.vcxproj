@@ -57,11 +57,11 @@
     <TargetName>$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)Lib\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\imgui\imgui;$(ProjectDir)src\imgui\imguizmo;$(ProjectDir)src\imgui\tabs;$(ProjectDir)src\imgui\;$(ProjectDir)src\Networking\;$(ProjectDir)src\Networking\uv;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\imgui\imgui;$(ProjectDir)src\imgui\imguizmo;$(ProjectDir)src\imgui\tabs;$(ProjectDir)src\imgui\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -202,6 +202,7 @@
     <ClInclude Include="src\entt\signal\fwd.hpp" />
     <ClInclude Include="src\entt\signal\sigh.hpp" />
     <ClInclude Include="src\framework.h" />
+    <ClInclude Include="src\ImGui\Fonts\IconsForkAwesome.h" />
     <ClInclude Include="src\ImGui\ImGuiFile\Dirent\dirent.h" />
     <ClInclude Include="src\ImGui\ImGuiFile\ImGuiFileBrowser.h" />
     <ClInclude Include="src\ImGui\ImGuizmo\GraphEditor.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\PerformaceTimer.h" />
     <ClInclude Include="src\CommonUtilities\Queue.hpp" />
+    <ClInclude Include="src\physx\src\device\nvPhysXtoDrv.h" />
     <ClInclude Include="src\rapidjson\allocators.h" />
     <ClInclude Include="src\rapidjson\document.h" />
     <ClInclude Include="src\rapidjson\encodedstream.h" />

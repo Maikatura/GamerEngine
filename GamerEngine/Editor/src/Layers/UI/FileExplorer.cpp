@@ -289,6 +289,10 @@ void FileExplorer::SetInspectorValue(std::filesystem::directory_entry aDirectory
 	{
 		SelectionData::SetSelectedObject<Texture*>(aFileType, nullptr);
 	}
+	else if(aFileType == FileType::Model)
+	{
+		SelectionData::SetSelectedObject<Texture*>(aFileType, nullptr);
+	}
 
 }
 

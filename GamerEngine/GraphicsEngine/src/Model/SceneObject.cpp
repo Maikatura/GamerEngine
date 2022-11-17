@@ -17,6 +17,11 @@ void SceneObject::SetPosition(float aX, float aY, float aZ)
 	myTransform->SetPosition({ aX, aY, aZ });
 }
 
+void SceneObject::SetPosition(Vector3f aPos)
+{
+	myTransform->SetPosition({ aPos.x, aPos.y, aPos.z });
+}
+
 void SceneObject::SetScale(float aX, float aY, float aZ)
 {
 	myTransform->SetScale({ aX, aY, aZ });

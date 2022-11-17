@@ -12,19 +12,18 @@
 #include "Render/SelectionData.h"
 #include <Model/Entity.h>
 #include <Components/CameraController.h>
-#include <Render/ForwardRenderer.h>
 
 #include "Debugger/ConsoleHelper.h"
+#include "Handlers/DropHandler.h"
 #include "Managers/CommandManager.h"
 #include "Managers/Commands/PositionCommand.h"
-
 
 bool EditorView::OnImGuiRender()
 {
 	Entity entity = SelectionData::GetEntityObject();
 
+	RenderGameView();
 	RenderSceneView(entity);
-	//RenderGameView();
 
 
 
@@ -36,6 +35,8 @@ void EditorView::RenderSceneView(Entity aEntity)
 	static ImGuiWindowFlags gizmoWindowFlags = 0;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 	ImGui::Begin(EditorNames::SceneViewName.c_str(), 0, gizmoWindowFlags);
+	ImGui::BeginChild("SceneView");
+
 	ImGuiWindow* window = ImGui::GetCurrentWindow();
 	gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
 
@@ -45,7 +46,7 @@ void EditorView::RenderSceneView(Entity aEntity)
 	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
 	ImVec2 windowSize = ImGui::GetWindowSize();
-	windowSize.y -= 20;
+	windowSize.y;
 
 
 	auto view = GraphicsEngine::Get()->GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
@@ -57,32 +58,13 @@ void EditorView::RenderSceneView(Entity aEntity)
 
 	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowSize.x, windowSize.y);
 	ImGui::Image(DX11::RenderSRV.Get(), { windowSize.x, windowSize.y });
+	//ImGui::Image(GraphicsEngine::Get()->GetScene()->GetDirLight()->GetShadowMapView(), {windowSize.x, windowSize.y});
 
 	RenderEntityParts(aEntity);
 
-
-	/*if(ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-	{
-
-		const Vector2f mousePositionInViewport = MouseToViewport({ windowSize.x,windowSize.y}, windowScale);
-		UINT id = DX11::GetScreenObjectId(static_cast<UINT>(mousePositionInViewport.x), static_cast<UINT>(mousePositionInViewport.y));
-
-		GraphicsEngine::Get()->GetScene()->GetRegistry().each([&](auto entityID)
-			{
-				if(entityID == entt::null)
-				{
-					return;
-				}
-
-				Entity entity{ entityID, GraphicsEngine::Get()->GetScene().get() };
-				if(entity.GetID() == id)
-				{
-					SelectionData::SetEntityObject(entity);
-				}
-			}
-		);
-	}*/
-
+	ImGui::EndChild();
+	ImRect rect = ImGui::GetCurrentWindow()->WorkRect;
+	DropHandler::DropFileScene(rect, 12310198389013290);
 	ImGui::End();
 	ImGui::PopStyleVar();
 }
@@ -208,9 +190,11 @@ void EditorView::OnUpdate()
 	
 }
 
-
 Vector2f EditorView::MouseToViewport(Vector2f aWindowSize, float windowScale)
 {
+	aWindowSize;
+	windowScale;
+
 	if (!ImGui::IsWindowHovered())
 	{
 		return {0,0};

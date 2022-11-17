@@ -2,19 +2,18 @@
 #include "GraphicsEngine.h"
 #include <Framework/DX11.h>
 #include <Scene/Scene.h>
-#include <Render/ForwardRenderer.h>
-#include "Render/DeferredRenderer.h"
 #include <AssetHandlers/ModelAssetHandler.h>
 #include <ImGui/imgui.h>
-
 #include "Audio/AudioManager.h"
 #include "Input/Input.h"
 #include "Render/Renderer.h"
-#include "Scene/SceneSerializer.h"
 #include "Managers/DropManager.h"
 #include <Managers/CommandManager.h>
 
-
+#include <Render/ForwardRenderer.h>
+#include "Render/DeferredRenderer.h"
+#include "Render/ShadowRenderer.h"
+#include "Render/PostProcessRenderer.h"
 
 
 GraphicsEngine* GraphicsEngine::Get()
@@ -38,6 +37,10 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 	myInstance = this;
 	myUseEditor = aBoolToUseEditor;
+	if (!myUseEditor)
+	{
+		myUpdateCondition = true;
+	}
 
 	// Initialize our window:
 	WNDCLASS windowClass = {};
@@ -73,6 +76,8 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	myScene = std::make_shared<Scene>();
 	myForwardRenderer = std::make_shared<ForwardRenderer>();
 	myDeferredRenderer = std::make_shared<DeferredRenderer>();
+	myShadowRenderer = std::make_shared<ShadowRenderer>();
+	myPostProcessRenderer = std::make_shared<PostProcessRenderer>();
 	myGBuffer = std::make_shared<GBuffer>();
 
 	Time::Update();
@@ -95,12 +100,27 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		return false;
 	}
 
-	if (!myDeferredRenderer->Init())
+	if (!myDeferredRenderer->Initialize())
+	{
+		return false;
+	}
+
+	if(!myShadowRenderer->Initialize())
+	{
+		return false;
+	}
+
+	if (!myPostProcessRenderer->Initialize())
 	{
 		return false;
 	}
 
 	if (!myGBuffer->CreateGBuffer())
+	{
+		return false;
+	}
+
+	if (!RendererBase::Init())
 	{
 		return false;
 	}
@@ -175,6 +195,8 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 			break;
 		}
 
+		
+
 		case WM_DESTROY:
 		{
 			PostQuitMessage(0);
@@ -183,14 +205,19 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 		case WM_DROPFILES:
 		{
 			std::cout << "Dropped something\n";
-			//MessageBox(Get()->GetWindowHandle(), L"Dragged!", L"Title", MB_OK | MB_ICONINFORMATION);
 			break;
 		}
 
-		case WS_EX_ACCEPTFILES:
+		case WM_QUIT:
+		{
+			std::cout << "Test\n";
+			break;
+		}
+
+		case WM_CLOSE:
 		{
 			std::cout << "Dropped something\n";
-			//MessageBox(Get()->GetWindowHandle(), L"Dragged!", L"Title", MB_OK | MB_ICONINFORMATION);
+			break;
 		}
 
 	}
@@ -216,9 +243,11 @@ void GraphicsEngine::BeginFrame()
 		myWantToResizeBuffers = false;
 	}
 
+
 	Vector4f clearColor = Renderer::GetClearColor();
 	DX11::BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
 	
+	ResetStates();
 }
 
 void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
@@ -230,18 +259,20 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 
 	if(myScene)
 	{
-		if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
+		if (!myUpdateCondition)
 		{
-			CommandManager::Undo();
+			if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
+			{
+				CommandManager::Undo();
+			}
+
+			if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
+			{
+				CommandManager::Redo();
+			}
 		}
 
-		if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
-		{
-			CommandManager::Redo();
-		}
-
-
-		myScene->OnUpdate(aShouldRunLoop);
+		myScene->OnUpdate(myUpdateCondition);
 	}
 }
 
@@ -253,25 +284,52 @@ void GraphicsEngine::OnFrameRender()
 	{
 		myScene->OnRender();
 
+		std::vector<Light*> someLightList = Renderer::GetSomeLights();
+		
+		const std::shared_ptr<DirectionalLight>& directionalLight = myScene->GetDirLight();
+		const std::shared_ptr<EnvironmentLight>& environmentLight = myScene->GetEnvLight();
+		const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
+		std::vector<RenderBuffer2D>& spriteList = Renderer::GetSprites();
 
-		myForwardRenderer->SetDepthStencilState(DepthStencilState::DSSReadWrite);
-		myForwardRenderer->SetBlendState(BlendState::NoBlend);
+		float deltaTime = Time::GetDeltaTime();
+
+		// TODO : CLEAN THIS MESS UP
+
+		RendererBase::SetDepthStencilState(DepthStencilState::DSS_ReadWrite);
+		RendererBase::SetBlendState(BlendState::NoBlend);
+		myShadowRenderer->ClearResources();
+		myShadowRenderer->Render(modelList);
+
 		myGBuffer->ClearResource(0);
 		myGBuffer->SetAsTarget();
-		myDeferredRenderer->GenerateGBuffer(Renderer::GetModels(), Time::GetDeltaTime(), 0);
+		myDeferredRenderer->GenerateGBuffer(modelList, deltaTime, 0);
+
 		myGBuffer->ClearTarget();
 		myGBuffer->SetAsResource(0);
-		myForwardRenderer->SetDepthStencilState(DepthStencilState::DSSIgnore);
-		myDeferredRenderer->Render(myScene->GetDirLight(), myScene->GetEnvLight(), Time::GetDeltaTime(), 0);
-		myForwardRenderer->SetDepthStencilState(DepthStencilState::DSSReadWrite);
-		myForwardRenderer->SetBlendState(BlendState::AlphaBlend);
-		//myForwardRenderer->Render(Renderer::GetModels(), myScene->GetDirLight(), myScene->GetEnvLight());
-		myForwardRenderer->RenderSprites(Renderer::GetSprites(), myScene->GetDirLight(), myScene->GetEnvLight());
-		myForwardRenderer->SetBlendState(BlendState::NoBlend);
+
+		
+		RendererBase::SetDepthStencilState(DepthStencilState::DSS_Ignore);
+		myDeferredRenderer->Render(directionalLight, environmentLight, someLightList, deltaTime, 0);
+
+		RendererBase::SetDepthStencilState(DepthStencilState::DSS_ReadWrite);
+		RendererBase::SetBlendState(BlendState::NoBlend);
+		myForwardRenderer->Render(modelList, directionalLight, environmentLight, someLightList);
+
+		RendererBase::SetDepthStencilState(DepthStencilState::DSS_Ignore);
+		myForwardRenderer->RenderSprites(spriteList, directionalLight, environmentLight);
+		
+		//myPostProcessRenderer->Render(PostProcessRenderer::PP_BLOOM);
+
+		RendererBase::SetBlendState(BlendState::AlphaBlend);
 	}
 
+
+
 	DX11::Context->GSSetShader(nullptr, nullptr, 0);
+
 	Renderer::Clear();
+
+	myScene->Clean();
 }
 
 void GraphicsEngine::EndFrame()
@@ -302,6 +360,14 @@ bool GraphicsEngine::UseEditor() const
 	return myUseEditor;
 }
 
+void GraphicsEngine::ResetStates() const
+{
+	RendererBase::SetBlendState(BlendState::NoBlend);
+	RendererBase::SetDepthStencilState(DepthStencilState::DSS_ReadWrite);
+	RendererBase::SetSamplerState(SamplerState::SS_Default, 0);
+	RendererBase::SetSamplerState(SamplerState::SS_PointClamp, 1);
+}
+
 std::shared_ptr<Scene> GraphicsEngine::GetScene()
 {
 	return myScene;
@@ -315,5 +381,15 @@ std::shared_ptr<CommonUtilities::InputManager> GraphicsEngine::GetInput()
 std::vector<std::string> GraphicsEngine::GetDropPath()
 {
 	return myDropManager->GetDropPaths();
+}
+
+bool GraphicsEngine::GetEngineUpdateRuntime()
+{
+	return myUpdateCondition;
+}
+
+void GraphicsEngine::SetEngineUpdateRuntime(bool aCondition)
+{
+	myUpdateCondition = aCondition;
 }
 

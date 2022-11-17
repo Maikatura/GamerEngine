@@ -21,6 +21,7 @@ public:
 	void SetTransform(Transform aTransform);
 	void SetRotation(float aPitch, float aYaw, float aRoll);
 	void SetPosition(float aX, float aY, float aZ);
+	void SetPosition(Vector3f aPos);
 	void SetScale(float aX, float aY, float aZ);
 
 	virtual void Update();

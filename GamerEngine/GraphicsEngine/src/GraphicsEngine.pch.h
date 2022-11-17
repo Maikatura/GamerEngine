@@ -16,5 +16,44 @@
 #include <Math/MathTypes.hpp>
 #include <Time.hpp>
 
+#include <iostream>
+#include <string>
+
+#include <EngineSettings/Settings.h>
+
+
+#if _DEBUG
+#include <dxgidebug.h>
+
+inline void ReportDX11()
+{
+	auto handle = GetModuleHandle(L"dxgidebug.dll");
+	if(handle != INVALID_HANDLE_VALUE)
+	{
+		auto fun = reinterpret_cast<decltype(&DXGIGetDebugInterface)>(GetProcAddress(handle, "DXGIGetDebugInterface"));
+		if(fun) // TODO FIXME: "DXGIGetDebugInterface" not found on certain systems
+		{
+			IDXGIDebug* pDebug = nullptr;
+			fun(__uuidof(IDXGIDebug), (void**)&pDebug);
+			if(pDebug)
+			{
+				pDebug->ReportLiveObjects(DXGI_DEBUG_D3D11, DXGI_DEBUG_RLO_ALL);
+			}
+		}
+	}
+}
+
+#endif
+
+
+template<typename T>
+inline void SafeRelease(T& ptr)
+{
+    if(ptr != NULL)
+    {
+        ptr->Release();
+        ptr = NULL;
+    }
+}
 
 #endif //GRAPHICSENGINE_PCH

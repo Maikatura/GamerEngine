@@ -22,9 +22,6 @@ struct EditorSetting
 
 class EditorSettingsPanel : public Layer
 {
-
-
-
 public:
 
 	EditorSettingsPanel();

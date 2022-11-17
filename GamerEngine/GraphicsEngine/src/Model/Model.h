@@ -7,6 +7,7 @@
 #include <d3d11.h>
 #include <Math/MathTypes.hpp>
 #include "Material.h"
+#include <EngineSettings/Settings.h>
 
 using namespace Microsoft::WRL;
 
@@ -68,7 +69,7 @@ struct AnimationStatus
 	float myCurrentTime = 0.0f;
 	int myCurrentFrame = 0;
 	Animation* myCurrentAnimation = nullptr;
-	Matrix4x4f myBoneTransforms[128]{};
+	Matrix4x4f myBoneTransforms[MAX_MODEL_BONES]{};
 };
 
 class Model : public SceneObject
@@ -89,6 +90,13 @@ public:
 		UINT myPrimitiveTopology;
 	};
 
+	struct BoxSphereBounds
+	{
+		std::vector<float> BoxExtents;
+		std::vector<float> Center;
+		float Radius;
+	} test;
+
 private:
 
 
@@ -105,19 +113,18 @@ public:
 		myMeshData.push_back(aMeshData);
 		myPath = aPath;
 	}
-
 	void Init(MeshData aMeshData, const std::wstring& aPath) 
 	{
 		myMeshData.push_back(aMeshData);
 		myPath = aPath;
 	}
 
-	void SetMaterial(Material* aMaterial) { myMaterial = *aMaterial; }
-	FORCEINLINE Material* GetMaterial() { return &myMaterial; }
+	void SetMaterial(Material* aMaterial)									{ myMaterial = *aMaterial; }
+	FORCEINLINE Material* GetMaterial()										{ return &myMaterial; }
 	FORCEINLINE Skeleton* GetSkeleton()										{ return &mySkeleton; }
 	FORCEINLINE const Skeleton* GetSkeleton() const							{ return &mySkeleton; }
-	FORCEINLINE const size_t& GetNumMeshes() const							{ return myMeshData.size(); }
-	FORCEINLINE const MeshData & GetMeshData(unsigned int anIndex = 0) const { return myMeshData[anIndex]; }
+	FORCEINLINE size_t GetNumMeshes() const									{ return myMeshData.size(); }
+	FORCEINLINE const MeshData& GetMeshData(unsigned int anIndex = 0) const { return myMeshData[anIndex]; }
 	FORCEINLINE const std::wstring& GetName() const							{ return myPath; }
 };
 

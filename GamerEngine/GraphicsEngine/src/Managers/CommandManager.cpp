@@ -3,12 +3,9 @@
 
 void CommandManager::DoCommand(AbstractCommand* aCommand)
 {
-	if (myRedoStack.size() > 0)
+	for (size_t i = myRedoStack.size(); i > 0; i--)
 	{
-		for (int i = 0; i < myRedoStack.size(); i++)
-		{
-			myRedoStack.pop();
-		}
+		myRedoStack.pop();
 	}
 
 

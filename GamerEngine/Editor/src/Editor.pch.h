@@ -6,13 +6,21 @@
 #include <Framework/DX11.h>
 
 
-// add headers that you want to pre-compile here
+// ImGui Start
 #include <ImGui/ImGui.h>
 #include <ImGui/imgui_impl_dx11.h>
 #include <ImGui/imgui_impl_win32.h>
-#include <imguizmo/imguizmo.h>
 #include <ImGui/imgui_stdlib.h>
+#include "Fonts/IconsForkAwesome.h"
+#include <imguizmo/imguizmo.h>
+// ImGui End
+
+
 #include <Math/MathTypes.hpp>
+#include <filesystem>
+
+// add headers that you want to pre-compile here
+
 
 
 #endif 
