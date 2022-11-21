@@ -122,7 +122,7 @@ UINT DX11::GetScreenObjectId(UINT x, UINT y)
 
 bool DX11::CreateSwapChain(bool aEnableDeviceDebug)
 {
-	HRESULT result;
+	HRESULT result = S_FALSE;
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 	swapChainDesc.BufferCount = 1;
@@ -147,9 +147,7 @@ bool DX11::CreateSwapChain(bool aEnableDeviceDebug)
 		Context.GetAddressOf()
 	);
 	if(FAILED(result))
-	{
 		return false;
-	}
 
 	return true;
 }
@@ -160,20 +158,16 @@ bool DX11::CreateTexture2D()
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
-	HRESULT result;
+	HRESULT result = S_FALSE;
 
 
 	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBufferTex);
 	if(FAILED(result))
-	{
 		return false;
-	}
 
 	result = Device->CreateRenderTargetView(BackBufferTex, nullptr, BackBuffer.GetAddressOf());
 	if(FAILED(result))
-	{
 		return false;
-	}
 
 	SafeRelease(BackBufferTex);
 
@@ -182,7 +176,7 @@ bool DX11::CreateTexture2D()
 
 bool DX11::CreateDepthBuffer()
 {
-	HRESULT result;
+	HRESULT result = S_FALSE;
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
@@ -198,17 +192,11 @@ bool DX11::CreateDepthBuffer()
 
 	result = Device->CreateTexture2D(&depthBufferDesc, nullptr, depthBufferTexture.GetAddressOf());
 	if(FAILED(result))
-	{
 		return false;
-	}
 
 	result = Device->CreateDepthStencilView(depthBufferTexture.Get(), nullptr, DepthBuffer.GetAddressOf());
 	if(FAILED(result))
-	{
 		return false;
-	}
-
-	//Context->OMSetRenderTargets(1, BackBuffer.GetAddressOf(), DepthBuffer.Get());
 
 	return true;
 }
@@ -233,6 +221,9 @@ bool DX11::ResizeViewport()
 
 bool DX11::CreateShaderResourceView()
 {
+	HRESULT result = S_FALSE;
+
+
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
@@ -251,12 +242,10 @@ bool DX11::CreateShaderResourceView()
 	textureDesc.MiscFlags = 0;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.SampleDesc.Quality = 0;
-
-
-
-	Device->CreateTexture2D(&textureDesc, nullptr, &BackBufferTex);
-
-
+	
+	result = Device->CreateTexture2D(&textureDesc, nullptr, &BackBufferTex);
+	if(FAILED(result))
+		return false;
 
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc{};
 	renderTargetViewDesc.Format = textureDesc.Format;
@@ -270,16 +259,20 @@ bool DX11::CreateShaderResourceView()
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
 
-	Device->CreateRenderTargetView(BackBufferTex, &renderTargetViewDesc, RenderRTV.GetAddressOf());
-	Device->CreateShaderResourceView(BackBufferTex, &shaderResourceViewDesc, RenderSRV.GetAddressOf());
+	result = Device->CreateRenderTargetView(BackBufferTex, &renderTargetViewDesc, RenderRTV.GetAddressOf());
+	if(FAILED(result))
+		return false;
 
+	result = Device->CreateShaderResourceView(BackBufferTex, &shaderResourceViewDesc, RenderSRV.GetAddressOf());
+	if(FAILED(result))
+		return false;
 
 	return true;
 }
 
 bool DX11::CreateSampler()
 {
-	HRESULT result;
+	HRESULT result = S_FALSE;
 	D3D11_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -297,9 +290,7 @@ bool DX11::CreateSampler()
 
 	result = Device->CreateSamplerState(&samplerDesc, SampleStateDefault.GetAddressOf());
 	if(FAILED(result))
-	{
 		return false;
-	}
 
 	Context->PSSetSamplers(0, 1, SampleStateDefault.GetAddressOf());
 
@@ -334,6 +325,7 @@ bool DX11::CreateSelectionView()
 	Device->CreateTexture2D(&textureDesc, nullptr, IDBufferTex.GetAddressOf());
 	if(FAILED(result))
 		return false;
+
 	D3D11_RENDER_TARGET_VIEW_DESC IDBufferViewDesc;
 	IDBufferViewDesc.Format = IDBufferDesc.Format;
 	IDBufferViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;

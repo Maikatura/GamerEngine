@@ -37,6 +37,7 @@ public:
 
 
 	static void Render();
+	static void Clear();
 
 private:
 

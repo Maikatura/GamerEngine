@@ -9,17 +9,28 @@
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
+
 // add headers that you want to pre-compile here
 #include <Windows.h>
 #include <d3d11.h>
+
+// Only include in editor
+#ifndef EDITOR
+#define EDITOR
 #include <ImGui/imgui.h>
+#include <EngineSettings/Settings.h>
+
+
+#endif
+
+// Common Utilities
 #include <Math/MathTypes.hpp>
 #include <Time.hpp>
 
 #include <iostream>
 #include <string>
 
-#include <EngineSettings/Settings.h>
+
 
 
 #if _DEBUG

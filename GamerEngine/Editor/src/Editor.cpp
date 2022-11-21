@@ -85,6 +85,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		graphicsEngine.OnFrameRender();
 
 		LineRenderer::Render();
+		LineRenderer::Clear();
+
 		myLayers.OnUpdate();
 		myLayers.OnImGuiRender();
 

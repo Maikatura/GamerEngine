@@ -395,10 +395,12 @@ static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene)
 		deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		//deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
-		camera.myFoV = cameraComponent["FOV"].as<float>();
-		camera.myNearPlane = cameraComponent["NearPlane"].as<float>();
-		camera.myFarPlane = cameraComponent["FarPlane"].as<float>();
+		float FoV = cameraComponent["FOV"].as<float>();
+		float NearPlane = cameraComponent["NearPlane"].as<float>();
+		float FarPlane = cameraComponent["FarPlane"].as<float>();
 		camera.Primary = cameraComponent["Primary"].as<bool>();
+
+		camera.Initialize(FoV, NearPlane, FarPlane);
 	}
 
 	auto modelComponent = aEntityNode["ModelComponent"];

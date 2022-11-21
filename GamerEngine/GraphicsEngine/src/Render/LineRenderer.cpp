@@ -7,6 +7,7 @@
 #include <fstream>
 #include "Render/Renderer.h"
 
+
 ComPtr<ID3D11Buffer> LineRenderer::myLineCBuffer;
 ComPtr<ID3D11Buffer> LineRenderer::myBuffer;
 ComPtr<ID3D11InputLayout> LineRenderer::myInputLayout;
@@ -17,15 +18,11 @@ ComPtr<ID3D11PixelShader> LineRenderer::myLinePixelShader;
 LineCBufferData LineRenderer::myLineCBufferData;
 std::vector<std::array<LineVertex, 2>> LineRenderer::myLinesToRender;
 
+
 bool LineRenderer::Init()
 {
+#if _DEBUG
 	HRESULT result;
-
-	/*LineVertex v[] = {
-		LineVertex({0.0f,0.0f, -0.0f}),
-		LineVertex({0.0f, 100.0f, -0.0f})
-	};*/
-
 
 	D3D11_SUBRESOURCE_DATA vertexBufferData;
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
@@ -84,33 +81,37 @@ bool LineRenderer::Init()
 	{
 		return false;
 	}
-
+#endif
 	return true;
 }
 
 void LineRenderer::DrawPoint(Vector3f aPosition, Vector4f aColor)
 {
+#if _DEBUG
 	std::array<LineVertex, 2> point = {
 		LineVertex({aPosition.x,aPosition.y, aPosition.z, 1.0f }, aColor),
 		LineVertex({aPosition.x,aPosition.y, aPosition.z, 1.0f }, aColor)
 	};
 
 	myLinesToRender.push_back(point);
+#endif
 }
 
 void LineRenderer::DrawLine(Vector3f aStartPoint, Vector3f aEndPoint, Vector4f aColor)
 {
+#if _DEBUG
 	std::array<LineVertex, 2> lines = {
 		LineVertex({aStartPoint.x,aStartPoint.y, aStartPoint.z, 1.0f }, aColor),
 		LineVertex({aEndPoint.x,aEndPoint.y, aEndPoint.z, 1.0f }, aColor)
 	};
 
 	myLinesToRender.push_back(lines);
+#endif
 }
 
 void LineRenderer::DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation,  Vector4f aColor)
 {
-	
+#if _DEBUG
 	// Data
 	float halfSizeX = (aSize.x * 0.5f);
 	float halfSizeY = (aSize.y * 0.5f);
@@ -218,10 +219,12 @@ void LineRenderer::DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotati
 
 		myLinesToRender.push_back({ v1, v2 });
 	}
+#endif
 }
 
 void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselation)
 {
+#if _DEBUG
 	aPosition;
 	aRadius;
 	aTesselation;
@@ -231,10 +234,14 @@ void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselatio
 		Vector2f offset(sin(angle) * aRadius, cos(angle) * aRadius);
 		DrawPoint({ aPosition.x + offset.x, aPosition.y + offset.y, 0.0f });
 	}*/
+#endif
 }
+
+
 
 void LineRenderer::Render()
 {
+#if _DEBUG
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
 	myLineCBufferData.View = Matrix4x4f::GetFastInverse(Renderer::GetViewMatrix());
@@ -281,6 +288,12 @@ void LineRenderer::Render()
 		DX11::Context->IASetVertexBuffers(0, 1, myBuffer.GetAddressOf(), &stride, &offset);
 		DX11::Context->Draw(2, 0);
 	}
+#endif
+}
 
+void LineRenderer::Clear()
+{
+#if _DEBUG
 	myLinesToRender.clear();
+#endif
 }

@@ -66,6 +66,7 @@ inline void ModelInstance::Update()
 			Vector3f position = GetTransform().GetPosition();
 			position.y += boxY * 0.5f;
 
+
 			LineRenderer::DrawCube(position, bounds, GetTransform().GetRotation());
 		}
 	}

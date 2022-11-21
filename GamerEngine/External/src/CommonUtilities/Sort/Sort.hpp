@@ -213,6 +213,9 @@ namespace CommonUtilities
             indexOfSubArrayTwo++;
             indexOfMergedArray++;
         }
+
+        delete[] leftArray;
+        delete[] rightArray;
     }
 
     // begin is for left index and end is

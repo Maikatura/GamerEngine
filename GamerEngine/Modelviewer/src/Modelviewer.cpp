@@ -1,14 +1,15 @@
 // Exclude things we don't need from the Windows headers
+
+
 #define WIN32_LEAN_AND_MEAN
 #include "Windows.h"
 
 #include "Modelviewer.h"
 #include "GraphicsEngine.h"
+#include "Render/LineRenderer.h"
 #include "Scene/SceneSerializer.h"
 
-#if EDITOR
-#undef EDITOR
-#endif
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                       _In_opt_ HINSTANCE hPrevInstance,
@@ -37,7 +38,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     );
 
     SceneSerializer loadScene(graphicsEngine.GetScene().get());
-    loadScene.Deserialize("Assets\\Scenes\\shadowtesting.csf");
+    loadScene.Deserialize("Assets\\Scenes\\Shadow_Mapping_Scene.csf");
  
     while(bShouldRun)
     {
@@ -56,6 +57,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         graphicsEngine.OnFrameUpdate(true);
         graphicsEngine.OnFrameRender();
         graphicsEngine.EndFrame();
+
+		#if _DEBUG
+        LineRenderer::Clear();
+		#endif
     }
 
 
