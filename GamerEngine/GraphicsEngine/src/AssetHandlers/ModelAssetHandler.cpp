@@ -8,6 +8,38 @@
 #include <FBXImporter.h>
 
 
+std::array<D3D11_INPUT_ELEMENT_DESC, InputLayoutSize> ModelAssetHandler::CreateLayout()
+{
+	std::array<D3D11_INPUT_ELEMENT_DESC, InputLayoutSize> layout =
+	{
+		{
+			{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"COLOR", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"COLOR", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"COLOR", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"TEXCOORD", 2, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"TEXCOORD", 3, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"BONEIDS", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"BONEWEIGHTS", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+
+			// Instance Data
+			{"WORLD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+			{"WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+			{"WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+			{"WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1}
+
+		}
+	};
+
+	return layout;
+}
+
 bool ModelAssetHandler::InitUnitCube()
 {
 	HRESULT result = S_FALSE;
@@ -207,21 +239,26 @@ bool ModelAssetHandler::InitUnitCube()
 	{
 		2,1,0,
 		1,2,3,
+
 		// Left
-				6,4,5,
-				7,6,5,
-				// Top
-				8,9,12,
-				12,9,13,
-				// Bottom
-				15,11,10,
-				14,15,10,
-				// Front
-				16,20,22,
-				22,18,16,
-				// Back
-				23,21,17,
-				17,19,23
+		6,4,5,
+		7,6,5,
+
+		// Top
+		8,9,12,
+		12,9,13,
+
+		// Bottom
+		15,11,10,
+		14,15,10,
+
+		// Front
+		16,20,22,
+		22,18,16,
+
+		// Back
+		23,21,17,
+		17,19,23
 	};
 
 	D3D11_BUFFER_DESC indexBufferDesc = {};
@@ -253,7 +290,7 @@ bool ModelAssetHandler::InitUnitCube()
 	vsFile.close();
 
 	ComPtr<ID3D11PixelShader> pixelShader = TextureAssetHandler::GetPixelShader("Shaders\\DefaultPS.cso");
-	
+
 	ID3D11InputLayout* inputLayout;
 	result = DX11::Device->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
 	if(FAILED(result))
@@ -287,7 +324,11 @@ bool ModelAssetHandler::InitUnitCube()
 
 
 	mdl->Init(modelData, L"Cube");
-	myModelRegistry.insert({ L"Cube", mdl });
+
+	std::shared_ptr<ModelInstance> mdlInstance = std::make_shared<ModelInstance>();
+	mdlInstance->Init(mdl);
+
+	myModelRegistry.insert({ L"Cube", mdlInstance });
 
 
 	return true;
@@ -302,7 +343,12 @@ bool ModelAssetHandler::InitUnitSphere()
 
 void ModelAssetHandler::Clear()
 {
-	myModelRegistry.clear();
+	for(auto item : myModelRegistry)
+	{
+		
+			item.second->ClearInstanceData();
+			std::cout << "Name: " << item.second->GetModel()->Name << " Cleared Data" << "\n";
+	}
 }
 
 bool ModelAssetHandler::Initialize()
@@ -326,30 +372,18 @@ void ModelAssetHandler::UnloadModel(const std::wstring& aFilePath)
 
 }
 
-std::array<D3D11_INPUT_ELEMENT_DESC, InputLayoutSize> ModelAssetHandler::CreateLayout()
+void ModelAssetHandler::ResetRenderedModels()
 {
-	std::array<D3D11_INPUT_ELEMENT_DESC, InputLayoutSize> layout =
+	for(auto item : myModelRegistry)
 	{
+		if (item.second)
 		{
-			{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"COLOR", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"COLOR", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"COLOR", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"TEXCOORD", 2, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"TEXCOORD", 3, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"BONEIDS", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"BONEWEIGHTS", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+			item.second->SetHasBeenRenderer(false);
+			
 		}
-	};
-
-	return layout;
+	}
 }
+
 
 bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 {
@@ -357,8 +391,8 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 
 	HRESULT result = S_FALSE;
 
-	TGA::FBXModel tgaModel;
-	if(TGA::FBXImporter::LoadModel(ansiFileName, tgaModel))
+	FBXModel tgaModel;
+	if(FBXImporter::LoadModel(ansiFileName, tgaModel))
 	{
 		std::shared_ptr<Model> mdl = std::make_shared<Model>();
 
@@ -370,7 +404,7 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			std::vector<Vertex> mdlVertices;
 
 			std::vector<unsigned int> mdlIndices;
-			TGA::FBXModel::FBXMesh& mesh = tgaModel.Meshes[i];
+			FBXModel::FBXMesh& mesh = tgaModel.Meshes[i];
 			mdlVertices.resize(mesh.Vertices.size());
 
 			for(size_t v = 0; v < mesh.Vertices.size(); v++)
@@ -438,10 +472,10 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 
 			for(size_t i = 0; i < 4; i++)
 			{
-				mdl->test.BoxExtents.push_back(tgaModel.BoxSphereBounds.BoxExtents[i]);
-				mdl->test.Center.push_back(tgaModel.BoxSphereBounds.Center[i]);
+				mdl->BoxBounds.BoxExtents.push_back(tgaModel.BoxSphereBounds.BoxExtents[i]);
+				mdl->BoxBounds.Center.push_back(tgaModel.BoxSphereBounds.Center[i]);
 			}
-			mdl->test.Radius = tgaModel.BoxSphereBounds.Radius;
+			mdl->BoxBounds.Radius = tgaModel.BoxSphereBounds.Radius;
 
 
 			mdlIndices = mesh.Indices;
@@ -548,18 +582,23 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			mdl->GetMaterial()->SetNormalTexture(TextureAssetHandler::GetTexture(normalTexture));
 			mdl->GetMaterial()->SetMaterialTexture(TextureAssetHandler::GetTexture(materialTexture));
 
-			
-
 			if(hasSkeleton)
 			{
+
 				mdl->Init(modelData, aFilePath, mdlSkeleton);
 			}
 			else
 			{
 				mdl->Init(modelData, aFilePath);
 			}
-			
-			myModelRegistry.insert({ aFilePath, mdl });
+
+			mdl->Name = ansiFileName;
+			std::shared_ptr<ModelInstance> mdlInstance = std::make_shared<ModelInstance>();
+
+			mdlInstance->Init(mdl);
+
+
+			myModelRegistry.insert({ aFilePath, mdlInstance });
 		}
 
 		return true;
@@ -573,8 +612,8 @@ bool ModelAssetHandler::LoadAnimation(const std::wstring& aModelName, const std:
 	const std::string ansiFileName = Helpers::string_cast<std::string>(someFilePath);
 	std::shared_ptr<ModelInstance> model = GetModelInstance(aModelName);
 
-	TGA::FBXAnimation tgaAnimation;
-	if(TGA::FBXImporter::LoadAnimation(ansiFileName, model->GetSkeleton()->BoneNames,  tgaAnimation))
+	FBXAnimation tgaAnimation;
+	if(FBXImporter::LoadAnimation(ansiFileName, model->GetSkeleton()->BoneNames, tgaAnimation))
 	{
 		Animation animOut;
 		animOut.Duration = static_cast<float>(tgaAnimation.Duration);
@@ -583,7 +622,7 @@ bool ModelAssetHandler::LoadAnimation(const std::wstring& aModelName, const std:
 		animOut.Name = Helpers::string_cast<std::wstring>(tgaAnimation.Name);
 		for(int i = 0; i < static_cast<int>(tgaAnimation.Length); i++)
 		{
-			animOut.Frames.push_back(Animation::Frame{ *(std::vector<Matrix4x4f>*)&tgaAnimation.Frames[i].LocalTransforms });
+			animOut.Frames.push_back(Animation::Frame{ *(std::vector<Matrix4x4f>*) & tgaAnimation.Frames[i].LocalTransforms });
 		}
 
 		model->GetSkeleton()->Animations.insert({ someFilePath, animOut });
@@ -603,21 +642,28 @@ std::shared_ptr<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath
 		model = myModelRegistry.find(aFilePath);
 	}
 
-	return model->second;
+	return model->second->GetModel();
 }
 
 std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFilePath)
 {
-	auto modelInstance = std::make_shared<ModelInstance>();
+	std::shared_ptr<ModelInstance> modelInstance = nullptr;
 	auto model = myModelRegistry.find(aFilePath);
-
-
 	if(model == myModelRegistry.end())
 	{
 		LoadModel(aFilePath);
 		model = myModelRegistry.find(aFilePath);
 	}
 
-	modelInstance->Init(model->second);
+	modelInstance = model->second;
+
+	for(auto item : myModelRegistry)
+	{
+		std::cout << "Name: " << item.second->GetModel()->Name << "\n";
+	}
+
+	std::cout << "END\n";
+	
+
 	return modelInstance;
 }

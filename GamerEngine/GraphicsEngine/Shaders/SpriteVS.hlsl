@@ -1,6 +1,6 @@
-#include "SpriteShaderStructs.hlsli"
+#include "Data/SpriteShaderStructs.hlsli"
 
-VertexData main(VertexData input)
+SpriteVertexData main(SpriteVertexData input)
 {
 	return input;
 }

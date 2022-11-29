@@ -28,7 +28,10 @@ class ForwardRenderer : public RendererBase
 {
 	
 	SceneLightBuffer mySceneLightBufferData {};
-	Microsoft::WRL::ComPtr<ID3D11Buffer> myLightBuffer;
+	ComPtr<ID3D11Buffer> myLightBuffer;
+	
+
+
 
 public:
 

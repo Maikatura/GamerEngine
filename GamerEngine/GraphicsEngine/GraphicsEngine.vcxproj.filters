@@ -353,18 +353,23 @@
     <ClCompile Include="src\Render\PostProcessRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Model\ModelInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ImGui\.editorconfig" />
     <None Include="src\ImGui\.gitattributes" />
     <None Include="src\ImGui\.gitignore" />
-    <None Include="Shaders\ShaderStructs.hlsli" />
-    <None Include="Shaders\SpriteShaderStructs.hlsli" />
-    <None Include="Shaders\PBRFunctions.hlsli" />
-    <None Include="Shaders\Common.hlsli" />
-    <None Include="Shaders\DeferredShaderStructs.hlsli" />
-    <None Include="Shaders\LightBuffer.hlsli" />
-    <None Include="Shaders\ShadowShaderStructs.hlsli" />
+    <None Include="Shaders\PostProcess\PostProcessStructs.hlsli" />
+    <None Include="Shaders\Data\SpriteShaderStructs.hlsli" />
+    <None Include="Shaders\Data\Common.hlsli" />
+    <None Include="Shaders\Data\DeferredShaderStructs.hlsli" />
+    <None Include="Shaders\Data\LightBuffer.hlsli" />
+    <None Include="Shaders\Data\PBRFunctions.hlsli" />
+    <None Include="Shaders\Data\ShaderStructs.hlsli" />
+    <None Include="Shaders\Data\ShadowShaderStructs.hlsli" />
+    <None Include="Shaders\Data\Tonemaps.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\ImGui\LICENSE.txt" />
@@ -383,5 +388,10 @@
     <FxCompile Include="Shaders\DeferredPS.hlsl" />
     <FxCompile Include="Shaders\PostProcess\PP-Bloom.hlsl" />
     <FxCompile Include="Shaders\PostProcess\PP-Luminance.hlsl" />
+    <FxCompile Include="Shaders\PostProcess\PP-Copy.hlsl" />
+    <FxCompile Include="Shaders\PostProcess\PP-Gaussian.hlsl" />
+    <FxCompile Include="Shaders\PostProcess\PP-SSAO.hlsl" />
+    <FxCompile Include="Shaders\PostProcess\PP-Tonemap.hlsl" />
+    <FxCompile Include="Shaders\RenderTexPS.hlsl" />
   </ItemGroup>
 </Project>

@@ -4,8 +4,13 @@
 
 void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom)
 {
-	Transform transform = Transform();
 
+	if (!aModel.GetModel())
+	{
+		return;
+	}
+
+	Transform transform = Transform();
 	transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
 	aModel.GetModel()->SetTransform(transform);
 

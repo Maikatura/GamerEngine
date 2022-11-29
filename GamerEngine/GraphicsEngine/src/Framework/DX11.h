@@ -26,6 +26,7 @@ public:
 	static ComPtr<ID3D11SamplerState> SamplerStateWrap;
 
 	static ComPtr<ID3D11RenderTargetView> BackBuffer;
+	static ComPtr<ID3D11ShaderResourceView> BackBufferSRV;
 	static ID3D11Texture2D* BackBufferTex;
 	static ComPtr<ID3D11DepthStencilView> DepthBuffer;
 

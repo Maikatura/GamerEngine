@@ -1,4 +1,4 @@
-#include "TGAFBXImporter.pch.h"
+#include "FBXImporter.pch.h"
 #include "FBXImporter.h"
 
 #include <algorithm>
@@ -10,8 +10,7 @@
 
 #include "Internal.inl"
 
-namespace TGA
-{
+
 	//struct CrtCheckMemory
 	//{
 	//	_CrtMemState state1;
@@ -1176,4 +1175,3 @@ namespace TGA
 //		}
 //	}
 //#endif
-}

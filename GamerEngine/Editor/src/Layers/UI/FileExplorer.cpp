@@ -12,7 +12,9 @@
 #include "StringCast.h"
 #include <fstream>
 
+#include "Components/CameraController.h"
 #include "Debugger/ConsoleHelper.h"
+#include "Scene/SceneSerializer.h"
 
 extern const std::filesystem::path AssetPath = "Assets";
 
@@ -56,16 +58,59 @@ bool FileExplorer::OnImGuiRender()
 
 	ImGui::Begin(EditorNames::ContentBrowserName.c_str());
 
+	if(ImGui::BeginPopupContextWindow("FILECREATOR") && !ImGui::IsItemHovered())
+	{
+		if(ImGui::MenuItem("Create Scene"))
+		{
+
+			Scene scene = Scene();
+
+			auto camera = scene.CreateEntity("Camera");
+
+			auto& cameraComp = camera.AddComponent<CameraComponent>();
+			camera.AddComponent<CameraControllerData>();
+			camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+			cameraComp.myFarPlane = 25000.0f;
+			cameraComp.myNearPlane = 0.01f;
+			cameraComp.myFoV = 90.0f;
+			cameraComp.Primary = true;
+
+			SceneSerializer saveNewScene(&scene);
+			saveNewScene.Serialize(myCurrentDirectory.string() + "\\" + "New Scene.csf");
+		}
+
+		ImGui::EndPopup();
+	}
+
 	HoveredWithItem();
 
-	if(myCurrentDirectory != std::filesystem::path(AssetPath))
+
+	auto pathBacktrack = myCurrentDirectory;
+
+	std::vector< std::filesystem::path> paths;
+	while(pathBacktrack != std::filesystem::path(AssetPath).parent_path())
 	{
-		if(ImGui::Button("<-"))
+		paths.push_back(pathBacktrack);
+		pathBacktrack = pathBacktrack.parent_path();
+	}
+
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+	for (int i = paths.size() - 1; i >= 0; i--)
+	{
+		std::string currentPath = paths[i].filename().string();
+		if(ImGui::Button(currentPath.c_str()))
 		{
 			TextureAssetHandler::UnloadUnusedTextures();
-			myCurrentDirectory = myCurrentDirectory.parent_path();
+			myCurrentDirectory = paths[i];
 		}
+
+		ImGui::SameLine();
+		ImGui::Text("/");
+		ImGui::SameLine();
 	}
+	ImGui::PopStyleVar();
+	ImGui::NewLine();
 
 	float panelWidth = ImGui::GetContentRegionAvail().x;
 	int columnCount = (int)(panelWidth / cellSize);
@@ -84,6 +129,11 @@ bool FileExplorer::OnImGuiRender()
 		ImGui::ImGuiCenterNextWindow();
 		ImGui::Confirm("Do you want to delete file?", [path]() { std::filesystem::remove_all(path); }, []() {}, myConfirmCheck);
 	}
+
+
+
+	
+
 
 	ImGui::End();
 
@@ -229,8 +279,8 @@ std::vector<std::filesystem::directory_entry> FileExplorer::GetSortedDirectory()
 
 void FileExplorer::RenderRenameFrame(std::filesystem::directory_entry aDirectory)
 {
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.1f);
 	ImGui::PushStyleColor(ImGuiCol_FrameBg, 0);
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.1f);
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 5.0f, 5.0f });
 	ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, { 5.f, 5.f });
 
@@ -241,9 +291,7 @@ void FileExplorer::RenderRenameFrame(std::filesystem::directory_entry aDirectory
 	}
 
 	ImGui::PopStyleColor();
-	ImGui::PopStyleVar();
-	ImGui::PopStyleVar();
-	ImGui::PopStyleVar();
+	ImGui::PopStyleVar(3);
 
 	if(ImGui::IsKeyPressed(ImGuiKey_Escape))
 	{
@@ -252,10 +300,10 @@ void FileExplorer::RenderRenameFrame(std::filesystem::directory_entry aDirectory
 
 	if(ImGui::IsKeyPressed(ImGuiKey_Enter) || (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemHovered()))
 	{
-		std::filesystem::path test = myCurrentDirectory.string() + "\\" + myRenameBuffer;
-		if(myRenameBuffer != "" && !FileExists(test.string()))
+		std::filesystem::path renameFile = myCurrentDirectory.string() + "\\" + myRenameBuffer;
+		if(myRenameBuffer != "" && !FileExists(renameFile.string()))
 		{
-			std::filesystem::rename(mySelectedPath, test);
+			std::filesystem::rename(mySelectedPath, renameFile);
 		}
 		else
 		{

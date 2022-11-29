@@ -1,3 +1,4 @@
+
 float3 LinearToGamma(float3 aColor)
 {
     return pow(abs(aColor), 1.0 / 2.2);
@@ -19,9 +20,7 @@ int GetNumMips(TextureCube cubeTex)
 
 bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightProjection, float3 aWorldPosition, bool aCastShadows)
 {
-	if(!aCastShadows) return false;
-
-
+	
 	float shadowBias = 0.00001f;
 
 	float4 w2lView = mul(aLightView, float4(aWorldPosition, 1));
@@ -45,10 +44,9 @@ bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightPr
 
 bool GetShadowPixel(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLightProjection, float aRange, float3 aLightPosition, float3 aWorldPosition, bool aCastShadows)
 {
-	if(!aCastShadows) return false;
-
 	float shadowBias = 0.00001f;
 
+	[unroll(6)]
 	for(int face = 0; face < 6; face++)
 	{
 		float4 w2lView = mul(aLightView[face], float4(aWorldPosition, 1));
@@ -69,4 +67,24 @@ bool GetShadowPixel(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLi
 		}
 	}
 	return false;
+}
+
+float4 GetViewPosition(float2 uv)
+{
+	const float4 worldPosition = float4(ambientOcclusionTexture.Sample(defaultSampler, uv).rgb, 1);
+	const float4 viewPosition = mul(FB_ToView, worldPosition);
+	return viewPosition;
+}
+
+float4 GetViewNormal(float2 uv)
+{
+	const float4 worldNormal = float4(normalTexture.Sample(defaultSampler, uv).rgb, 0);
+	const float4 viewNormal = mul(FB_ToView, worldNormal);
+	return viewNormal;
+}
+
+float2 GetRandom(float2 uv, float2 uvScale)
+{
+	const float3 random = 2.0f * blueNoiseTexture.Sample(pointWrapSampler, uv * uvScale).rgb - 1.0f;
+	return random.xy;
 }

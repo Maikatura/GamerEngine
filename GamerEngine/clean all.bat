@@ -14,6 +14,8 @@ rmdir /s /q "%cd%\Intermediate\"
 rmdir /s /q "%cd%\Lib\"
 del /f "%cd%\Bin\GamerEngine-Debug.*"
 del /f "%cd%\Bin\GamerEngine-Release.pdb"
+del /f "%cd%\Bin\GamerEngine-Release.exp"
+del /f "%cd%\Bin\GamerEngine-Release.lib"
 del /f "%cd%\Bin\Modelviewer.*"
 
 :EndOfbatch

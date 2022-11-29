@@ -15,21 +15,21 @@ std::shared_ptr<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vect
 	myDirectionalLight->Init(aColor, anIntensity);
 
 	myDirectionalLight->SetLightPosition({0, 0, 0});
-
-
 	myDirectionalLight->SetDirection(aRotation);
+
+
 	myDirectionalLight->myLightBufferData.LightType = 1;
 
 
 	constexpr float nearPlane = 0.1f;
 	constexpr float farPlane = 250000.0f;
-	const Vector2f resolution = { 2048, 2048 };
+	const Vector2f resolution = { 2048.0f * 4.0f, 2048.0f * 4.0f };
 
 	myDirectionalLight->myLightBufferData.NearPlane = nearPlane;
 	myDirectionalLight->myLightBufferData.FarPlane = farPlane;
 
-	myDirectionalLight->myLightBufferData.LightProjection(1, 1) = 2.f / resolution.x;
-	myDirectionalLight->myLightBufferData.LightProjection(2, 2) = 2.f / resolution.y;
+	myDirectionalLight->myLightBufferData.LightProjection(1, 1) = 2.f / (resolution.x);
+	myDirectionalLight->myLightBufferData.LightProjection(2, 2) = 2.f / (resolution.y);
 	myDirectionalLight->myLightBufferData.LightProjection(3, 3) = 1.f / (farPlane - nearPlane);
 	myDirectionalLight->myLightBufferData.LightProjection(4, 3) = nearPlane / (nearPlane - farPlane);
 	myDirectionalLight->myLightBufferData.LightProjection(4, 4) = 1.f;

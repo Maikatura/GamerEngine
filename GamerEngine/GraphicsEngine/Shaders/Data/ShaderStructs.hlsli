@@ -1,6 +1,8 @@
-#define MAX_MODEL_BONES 148
+#define MAX_MODEL_BONES 128
 SamplerState defaultSampler			:	register(s0);
 SamplerState shadowSampler			:	register(s1);
+SamplerState pointWrapSampler		:	register(s2);
+SamplerState pointClampSampler		:	register(s3);
 
 Texture2D albedoTexture				:	register(t0);
 Texture2D normalTexture				:	register(t1);
@@ -9,6 +11,8 @@ Texture2D materialTexture			:	register(t2);
 Texture2D vertexNormalTexture		:	register(t3);
 Texture2D worldPositionTexture		:	register(t4);
 Texture2D ambientOcclusionTexture	:	register(t5);
+Texture2D SSAOTexture				:	register(t6);
+Texture2D blueNoiseTexture			:	register(t8);
 TextureCube environmentTexture		:	register(t10);
 
 Texture2D dirLightShadowMap			:	register(t19);
@@ -33,6 +37,10 @@ struct VertexInput
 	float3 myTangent		:	TANGENT;
 	float3 myBinormal		:	BINORMAL;
 	float3 myNormal			:	NORMAL;
+
+	// Instancing Properties
+	float4x4 Offset			:	WORLD;
+	uint InstanceId			:	SV_InstanceID;
 };
 
 struct VertexToPixel
@@ -55,7 +63,6 @@ struct VertexToPixel
 struct PixelOutput
 {
 	float4 myColor			:	SV_TARGET;
-	float  myID : SV_TARGET1;
 };
 
 struct LineInput
@@ -78,7 +85,7 @@ struct GBufferOutput
 	float4 Material			:	SV_TARGET2;
 	float4 VertexNormal		:	SV_TARGET3;
 	float4 WorldPosition	:	SV_TARGET4;
-	float AmbientOcclusion : SV_TARGET5;
+	float AmbientOcclusion	:	SV_TARGET5;
 };
 
 
@@ -87,20 +94,24 @@ cbuffer FrameBuffer	: register(b0)
 	float4x4 FB_ToView;
 	float4x4 FB_ToProjection;
 	float3 FB_CamTranslation;
-	int FB_RenderMode;
-	float NearPlane;
-	float FarPlane;
-	float DeltaTime;
-	float TotalTime;
+	unsigned int FB_RenderMode;
+	float FB_NearPlane;
+	float FB_FarPlane;
+	float FB_DeltaTime;
+	float FB_TotalTime;
+	float2 FB_Resolution;
+	float2 Padding;
+	float4 FB_FrustrumCorners[4];
 }
 
 cbuffer Objectbuffer : register(b1)
 {
 	float4x4 OB_ToWorld;
-	int OB_HasBones = 0;
-	float3 OB_Padding;
-	int OB_ID;
-	float3 OB_Paddinging;
+	float4x4 OB_ToWorldInverse;
+	bool OB_HasBones = false;
+	unsigned int OB_ObjectId;
+	bool OB_IsSelected = false;
+	bool OB_IsInstanced = false;
 	float4x4 OB_BoneData[MAX_MODEL_BONES];
 }
 

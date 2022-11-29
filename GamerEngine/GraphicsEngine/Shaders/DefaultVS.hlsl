@@ -1,4 +1,4 @@
-#include "ShaderStructs.hlsli"
+#include "Data/DeferredShaderStructs.hlsli"
 
 VertexToPixel main(VertexInput input)
 {
@@ -14,7 +14,15 @@ VertexToPixel main(VertexInput input)
 		skinningMatrix += input.myBoneWeights.w * OB_BoneData[input.myBoneIDs.w];
 	}
 
-	const float4 vertexWorldPosition = mul(OB_ToWorld, mul(input.myPosition, skinningMatrix));
+	float4 vertexWorldPosition = 0;
+	if (OB_IsInstanced)
+	{
+		vertexWorldPosition = mul(input.Offset, mul(input.myPosition, skinningMatrix));
+	}
+	else
+	{
+		vertexWorldPosition = mul(OB_ToWorld, mul(input.myPosition, skinningMatrix));
+	}
 
 	const float4 vertexViewPosition = mul(FB_ToView, vertexWorldPosition);
 	const float4 vertexProjectionPosition = mul(FB_ToProjection, vertexViewPosition);

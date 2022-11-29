@@ -80,7 +80,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Lib\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)src;$(SolutionDir)External\src;$(SolutionDir)External\src\ImGui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)Include;$(SolutionDir)SoundEngine\src;$(SolutionDir)SoundEngine\src\Include;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)src;$(SolutionDir)External\src;$(SolutionDir)External\src\ImGui;$(SolutionDir)CommonUtilities\src;$(SolutionDir)Include;$(SolutionDir)SoundEngine\src;$(SolutionDir)SoundEngine\src\Include;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)</TargetName>
     <LibraryPath>$(SolutionDir)Lib\$(Configuration)</LibraryPath>
   </PropertyGroup>
@@ -88,7 +88,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Lib\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)src;$(SolutionDir)External\src;$(SolutionDir)External\src\ImGui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)Include;$(SolutionDir)SoundEngine\src;$(SolutionDir)SoundEngine\src\Include;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)src;$(SolutionDir)External\src;$(SolutionDir)External\src\ImGui;$(SolutionDir)CommonUtilities\src;$(SolutionDir)Include;$(SolutionDir)SoundEngine\src;$(SolutionDir)SoundEngine\src\Include;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src</IncludePath>
     <TargetName>$(ProjectName)</TargetName>
     <LibraryPath>$(SolutionDir)Lib\$(Configuration)</LibraryPath>
   </PropertyGroup>

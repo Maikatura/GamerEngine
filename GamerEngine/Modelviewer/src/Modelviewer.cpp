@@ -38,7 +38,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     );
 
     SceneSerializer loadScene(graphicsEngine.GetScene().get());
-    loadScene.Deserialize("Assets\\Scenes\\Shadow_Mapping_Scene.csf");
+    loadScene.Deserialize("Assets\\Scenes\\Default.csf");
  
     while(bShouldRun)
     {

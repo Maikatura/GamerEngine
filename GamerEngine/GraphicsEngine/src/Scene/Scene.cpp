@@ -153,7 +153,7 @@ void Scene::OnRender()
 
 			if(camera.Primary)
 			{
-				Renderer::SetCamera(camera.ViewProjection, camera.Projection);
+				Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
 				break;
 			}
 		}
@@ -198,6 +198,18 @@ void Scene::OnRender()
 		}
 	}
 
+
+	{
+		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
+		for(const auto& entity : view)
+		{
+			auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
+
+			model.GetModel()->ClearInstanceData();
+			model.GetModel()->SetHasBeenRenderer(false);
+		}
+	}
+
 	{
 		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
 		for(const auto& entity : view)
@@ -205,6 +217,8 @@ void Scene::OnRender()
 			auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
 
 			Entity entityPtr = Entity{ entity, this };
+			model.GetModel()->AddRenderedInstance(&transform);
+
 			Renderer::Render(&entityPtr, model, transform);
 		}
 	}

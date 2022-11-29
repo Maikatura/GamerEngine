@@ -37,7 +37,7 @@ public:
 	}
 
 	template<typename T>
-	T GetScriptComponent();
+	T* GetScriptComponent();
 
 	template<typename T>
 	T& GetComponent()

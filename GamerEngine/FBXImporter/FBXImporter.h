@@ -4,8 +4,7 @@
 
 #include "FBXImporterStructs.h"
 
-namespace TGA
-{
+
 	struct FBXAnimation;
 	struct FBXModel;
 
@@ -64,4 +63,3 @@ namespace TGA
 		 */
 		static __forceinline const std::string& GetLastError() { return myLastError; }
 	};
-}

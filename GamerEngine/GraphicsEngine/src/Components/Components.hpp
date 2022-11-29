@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene/UUID.h"
 #include <string>
-#include <CommonUtilities/Math/MathTypes.hpp>
+#include <Math/MathTypes.hpp>
 #include <Model/ModelInstance.h>
 
 #include "AssetHandlers/LightAssetHandler.h"
@@ -66,8 +66,7 @@ public:
 	{
 		if (!myModel)
 		{
-			myModel = std::make_shared<ModelInstance>();
-			myModel->Init(std::make_shared<Model>());
+			return nullptr;
 		}
 
 		return myModel;
@@ -81,6 +80,7 @@ public:
 	void SetModel(std::shared_ptr<ModelInstance> aModel)
 	{
 		myModel = aModel;
+		myModel->Init(GetModel()->GetModel());
 	}
 
 private:

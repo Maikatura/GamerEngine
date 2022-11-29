@@ -219,6 +219,7 @@ void Hierarchy::DrawWindowPopupMenu()
 			ConsoleHelper::Log(LogType::Info, "This will be removed when add component when its been added");
 			auto entity = GraphicsEngine::Get()->GetScene()->CreateEntity("Scene Camera");
 			entity.AddComponent<CameraComponent>();
+			entity.AddComponent<CameraControllerData>();
 			entity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		}
 

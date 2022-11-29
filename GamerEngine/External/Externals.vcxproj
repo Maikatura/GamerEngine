@@ -50,7 +50,6 @@
     <OutDir>$(SolutionDir)Lib\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir)src;$(ProjectDir)src\imgui\imgui;$(ProjectDir)src\imgui\imguizmo;$(ProjectDir)src\imgui\tabs;$(ProjectDir)src\imgui\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Lib\$(Configuration)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -328,7 +327,6 @@
     <ClCompile Include="src\ImGui\ImGuizmo\ImGradient.cpp" />
     <ClCompile Include="src\ImGui\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="src\ImGui\ImGuizmo\ImSequencer.cpp" />
-    <ClCompile Include="src\CommonUtilities\InputManager.cpp" />
     <ClCompile Include="src\ImGui\ImGui\imgui.cpp" />
     <ClCompile Include="src\ImGui\ImGui\imgui_demo.cpp" />
     <ClCompile Include="src\ImGui\ImGui\imgui_draw.cpp" />
@@ -341,7 +339,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\CommonUtilities\Timer.cpp" />
+ 
     <ClCompile Include="src\yaml-cpp\binary.cpp" />
     <ClCompile Include="src\yaml-cpp\convert.cpp" />
     <ClCompile Include="src\yaml-cpp\depthguard.cpp" />

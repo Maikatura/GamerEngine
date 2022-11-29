@@ -77,17 +77,18 @@ class Model : public SceneObject
 public:
 	struct MeshData 
 	{
-		UINT myNumberOfVertices;
-		UINT myNumberOfIndices;
-		UINT myStride;
-		UINT myOffset;
 		ComPtr<ID3D11Buffer> myVertexBuffer;
 		ComPtr<ID3D11Buffer> myIndexBuffer;
 		ComPtr<ID3D11VertexShader> myVertexShader;
 		ComPtr<ID3D11GeometryShader> myGeometryShader;
 		ComPtr<ID3D11PixelShader> myPixelShader;
 		ComPtr<ID3D11InputLayout> myInputLayout;
+
 		UINT myPrimitiveTopology;
+		UINT myNumberOfVertices;
+		UINT myNumberOfIndices;
+		UINT myStride;
+		UINT myOffset;
 	};
 
 	struct BoxSphereBounds
@@ -95,7 +96,7 @@ public:
 		std::vector<float> BoxExtents;
 		std::vector<float> Center;
 		float Radius;
-	} test;
+	} BoxBounds;
 
 private:
 
@@ -123,6 +124,7 @@ public:
 	FORCEINLINE Material* GetMaterial()										{ return &myMaterial; }
 	FORCEINLINE Skeleton* GetSkeleton()										{ return &mySkeleton; }
 	FORCEINLINE const Skeleton* GetSkeleton() const							{ return &mySkeleton; }
+	FORCEINLINE bool HasSkeleton() const									{ return mySkeleton.GetRoot(); }
 	FORCEINLINE size_t GetNumMeshes() const									{ return myMeshData.size(); }
 	FORCEINLINE const MeshData& GetMeshData(unsigned int anIndex = 0) const { return myMeshData[anIndex]; }
 	FORCEINLINE const std::wstring& GetName() const							{ return myPath; }

@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\src;$(SolutionDir)External\src\imgui\imgui;$(SolutionDir)External\src\imgui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src</IncludePath>
+    <IncludePath>$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\src;$(SolutionDir)External\src\imgui\imgui;$(SolutionDir)External\src\imgui;$(SolutionDir)CommonUtilities\src;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
@@ -88,7 +88,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\src;$(SolutionDir)External\src\imgui\imgui;$(SolutionDir)External\src\imgui;$(SolutionDir)External\src\CommonUtilities;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src</IncludePath>
+    <IncludePath>$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\src;$(SolutionDir)External\src\imgui\imgui;$(SolutionDir)External\src\imgui;$(SolutionDir)CommonUtilities\src;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src</IncludePath>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>

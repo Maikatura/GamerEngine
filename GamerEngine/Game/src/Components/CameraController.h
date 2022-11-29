@@ -7,7 +7,7 @@ struct CameraControllerData
 	float myMaxSpeed = 1000.0f;
 	float mySpeed = 30.0f;
 	float mySpeedShiftMul = 1.5f;
-	float myMouseSensitivity = 10.0f;
+	float myMouseSensitivity = 0.033f;
 	bool HasBeenActivated = false;
 };
 

@@ -111,7 +111,7 @@ void EditorLayers::OnUpdate()
 {
 	for(int i = 0; i < myLayers.size(); i++)
 	{
-		if(!myLayers[i]->HasBeenAdded())
+		if(myLayers[i]->HasBeenAdded())
 		{
 			myLayers[i]->OnUpdate();
 		}

@@ -343,6 +343,7 @@ static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene)
 
 	Entity deserializedEntity = aScene->CreateEntityWithUUID(uuid, name);
 
+
 	auto transformComponent = aEntityNode["TransformComponent"];
 	if(transformComponent)
 	{
@@ -409,7 +410,8 @@ static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene)
 		auto& modelComp = deserializedEntity.AddComponent<ModelComponent>();
 		auto path = Helpers::string_cast<std::wstring>(modelComponent["Path"].as<std::string>());
 
-		modelComp.SetModel(ModelAssetHandler::GetModelInstance(path));
+		auto modelInstance = ModelAssetHandler::GetModelInstance(path);
+		modelComp.SetModel(modelInstance);
 
 
 		auto textures = modelComponent["Texture"];
@@ -574,6 +576,8 @@ static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene)
 
 void SceneSerializer::Serialize(const std::string& aFilepath)
 {
+
+
 	YAML::Emitter out;
 	out << YAML::BeginMap;
 	out << YAML::Key << "Scene" << YAML::Value << "SceneTesting";
@@ -606,6 +610,8 @@ void SceneSerializer::SerializeRuntime(const std::string& aFilepath)
 
 bool SceneSerializer::Deserialize(const std::string& aFilepath)
 {
+	ModelAssetHandler::Clear();
+
 	YAML::Node data;
 	try
 	{

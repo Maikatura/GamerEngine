@@ -1,4 +1,4 @@
-#include "DeferredShaderStructs.hlsli"
+#include "Data/DeferredShaderStructs.hlsli"
 
 DeferredVertexToPixel main(DeferredVertexInput input)
 {

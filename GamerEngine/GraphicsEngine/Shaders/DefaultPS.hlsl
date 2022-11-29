@@ -1,19 +1,33 @@
 #define MAX_LIGHTS 8
-#include "LightBuffer.hlsli"
-#include "ShaderStructs.hlsli"
-#include "PBRFunctions.hlsli"
+#include "Data/LightBuffer.hlsli"
+#include "Data/ShaderStructs.hlsli"
+#include "Data/PBRFunctions.hlsli"
 
 PixelOutput main(VertexToPixel input)
 {
-	PixelOutput result = { 0,0,0,0, 0 };
+	PixelOutput result = { 0,0,0,0 };
+
+
+
 
 	const float4 albedo = albedoTexture.Sample(defaultSampler, input.myUV);
+
+	if(albedo.a == 0)
+	{
+		discard;
+		result.myColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+		return result;
+	}
+
+
 	// TGA weirdness R:unused | G:norm.y | B:AO | A:norm.x
 	const float3 normalMap = normalTexture.Sample(defaultSampler, input.myUV).agb;
 	// TGA weirdness R:metal | G:rough | B:emissive | A:emissiveStr
 	const float4 materialMap = materialTexture.Sample(defaultSampler, input.myUV);
 
 	const float ambientOcclusion = normalMap.z;
+	const float ssaoValue = saturate(SSAOTexture.Sample(defaultSampler, input.myUV).r);
+
 	//AO = 1;
 	const float metalness = materialMap.r;
 	const float roughness = materialMap.g;
@@ -21,8 +35,8 @@ PixelOutput main(VertexToPixel input)
 	const float emissiveStr = materialMap.a;
 
 	const float3 toEye = normalize(FB_CamTranslation.xyz - input.myVxPosition.xyz);
-	const float3 specularColor = lerp((float3).04f, albedo, metalness);
-	const float3 diffuseColor = lerp((float3).01f, albedo, 1 - metalness);
+	const float3 specularColor = lerp((float3)0.04f, albedo, metalness);
+	const float3 diffuseColor = lerp((float3)0.01f, albedo, 1 - metalness);
 
 	const float3x3 TBN = float3x3(
 		normalize(input.myTangent),
@@ -30,15 +44,10 @@ PixelOutput main(VertexToPixel input)
 		normalize(input.myNormal)
 		);
 
-	float3 pixelNormal = normalMap;
-	pixelNormal.z = 0;
-	pixelNormal = pixelNormal * 2 - 1;
-	pixelNormal.z = sqrt(1 - saturate(pixelNormal.x + pixelNormal.x + pixelNormal.y + pixelNormal.y));
-	pixelNormal = normalize(pixelNormal);
-	pixelNormal = normalize(mul(pixelNormal, TBN));
+	float3 pixelNormal = CalculatePixelNormal(normalMap, TBN);
 
 
-	const float3 ambientLighting = EvaluateAmbience(
+	float3 ambientLighting = EvaluateAmbience(
 		environmentTexture,
 		pixelNormal,
 		input.myNormal,
@@ -49,6 +58,7 @@ PixelOutput main(VertexToPixel input)
 		specularColor
 	);
 
+	ambientLighting *= ssaoValue;
 
 	float shadow = .001f;
 
@@ -81,8 +91,11 @@ PixelOutput main(VertexToPixel input)
 	switch(FB_RenderMode)
 	{
 		default:
+			break;
 		case 0: // Default
 		{
+
+#endif
 			[unroll(20)]
 			for(unsigned int l = 0; l < LB_NumLights; l++)
 			{
@@ -94,6 +107,7 @@ PixelOutput main(VertexToPixel input)
 						break;
 
 					case 2:
+					{
 						float3 pointTemp = EvaluatePointLight(diffuseColor,
 							specularColor, pixelNormal, roughness, Light.Color, Light.Intensity * 100,
 							Light.Range * 100, Light.Position, toEye, input.myNormal.xyz);
@@ -108,8 +122,9 @@ PixelOutput main(VertexToPixel input)
 						}
 						pointLight += pointTemp;
 						break;
-
+					}
 					case 3:
+					{
 						float3 spotTemp = EvaluateSpotLight(diffuseColor,
 							specularColor, pixelNormal, roughness, Light.Color, Light.Intensity * 100,
 							Light.Range * 100, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
@@ -124,11 +139,15 @@ PixelOutput main(VertexToPixel input)
 						}
 						spotLight += spotTemp;
 						break;
+					}
 				}
 			}
-
-			result.myColor.rgb = LinearToGamma(ambientLighting + directLighting + pointLight + spotLight) + (emissive * albedo * emissiveStr);
+			float3 emissiveColor = emissive * albedo.xyz * emissiveStr;
+			result.myColor.rgb =(directLighting + ambientLighting + pointLight + spotLight + emissiveColor);
 			result.myColor.a = 1;
+
+
+#ifdef _DEBUG
 			break;
 		}
 		case 1: // UV1
@@ -209,7 +228,7 @@ PixelOutput main(VertexToPixel input)
 		}
 		case 9:
 		{
-			result.myColor.rgb = ambientOcclusion;
+			result.myColor.rgb = ambientOcclusion * ssaoValue;
 			result.myColor.a = 1;
 			break;
 		}
@@ -233,66 +252,31 @@ PixelOutput main(VertexToPixel input)
 		}
 		case 13:
 		{
-			result.myColor.rgb = pixelNormal;
+			float4 color = albedoTexture.Sample(defaultSampler, input.myUV);
+			float luminance = dot(color.rgb, float3(.2f, .75f, .6f));
+			float cutOff = .82f;
+			luminance = saturate(luminance - cutOff);
+			result.myColor = color * luminance * (1.0f / cutOff);
+		
+			result.myColor.a = 1;
+			break;
+		}
+		case 14:
+		{
+			result.myColor.rgb = (GetViewNormal(input.myUV) + 1.0f) / 2.0f;
+			result.myColor.a = 1;
+			break;
+		}
+		case 15:
+		{
+			result.myColor.rgb = (GetViewPosition(input.myUV) + 1.0f) / 2.0f;
 			result.myColor.a = 1;
 			break;
 		}
 	}
 
-
-#else
-
-
-[unroll(20)]
-for(unsigned int l = 0; l < LB_NumLights; l++)
-{
-	const LightData Light = LB_Lights[l];
-	switch(Light.LightType)
-	{
-
-		case 1:
-			break;
-
-		case 2:
-			float3 pointTemp = EvaluatePointLight(diffuseColor,
-				specularColor, pixelNormal, roughness, Light.Color, Light.Intensity * 100,
-				Light.Range * 100, Light.Position, toEye, input.myNormal.xyz);
-
-			if(Light.CastShadows)
-			{
-				float4x4 plViews[6] = { Light.LightView, Light.LightView1, Light.LightView2, Light.LightView3, Light.LightView4, Light.LightView5 };
-				if(GetShadowPixel(shadowCubeTexture[l], plViews, Light.LightProjection, Light.Range, Light.Position, input.myNormal.xyz, Light.CastShadows))
-				{
-					pointTemp *= shadow;
-				}
-			}
-			pointLight += pointTemp;
-			break;
-
-		case 3:
-			float3 spotTemp = EvaluateSpotLight(diffuseColor,
-				specularColor, pixelNormal, roughness, Light.Color, Light.Intensity * 100,
-				Light.Range * 100, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
-				Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, input.myNormal.xyz);
-
-			if(Light.CastShadows)
-			{
-				if(GetShadowPixel(shadowMap[l], Light.LightView, Light.LightProjection, input.myNormal.xyz, Light.CastShadows))
-				{
-					spotTemp *= shadow;
-				}
-			}
-			spotLight += spotTemp;
-			break;
-	}
-}
-
-	result.myColor.rgb = LinearToGamma(ambientLighting + directLighting + pointLight + spotLight) + (emissive * albedo * emissiveStr);
-	result.myColor.a = 1;
-
 #endif
 
-	result.myID = OB_ID;
 
 
 

@@ -63,10 +63,14 @@ private:
 	ComPtr<ID3D11PixelShader> myGBufferPS;
 	ComPtr<ID3D11PixelShader> myDeferredPS;
 	ComPtr<ID3D11VertexShader> myDeferredVS;
+	ComPtr<ID3D11PixelShader> myRenderTexPS;
+
 public:
 
 
 	bool Initialize();
 	void GenerateGBuffer(const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime);
 	void Render(const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime);
+	void RenderLate();
+
 };

@@ -1,5 +1,5 @@
-#include "ShadowShaderStructs.hlsli"
-#include "ShaderStructs.hlsli"
+#include "Data/ShadowShaderStructs.hlsli"
+#include "Data/ShaderStructs.hlsli"
 
 [maxvertexcount(18)]
 void main(

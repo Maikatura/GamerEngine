@@ -1,13 +1,12 @@
-#include "../DeferredShaderStructs.hlsli"
-#include "../ShaderStructs.hlsli"
+#include "../Data/DeferredShaderStructs.hlsli"
 
 DeferredPixelOutput main(DeferredVertexToPixel input)
 {
-	DeferredPixelOutput result;
+	DeferredPixelOutput output;
 
 	float4 color1 = albedoTexture.Sample(defaultSampler, input.myUV);
 	float4 color2 = normalTexture.Sample(defaultSampler, input.myUV);
-	result.myColor = color1 + color2;
+	output.myColor = (color1 + color2);
 
-	return result;
+	return output;
 }

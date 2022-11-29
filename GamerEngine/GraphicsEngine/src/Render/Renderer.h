@@ -13,8 +13,9 @@ class Renderer
 {
 public:
 
-	static void SetCamera(const Matrix4x4f& aViewProjection, const Matrix4x4f& aProjection)
+	static void SetCamera(CameraComponent* aCamera, const Matrix4x4f& aViewProjection, const Matrix4x4f& aProjection)
 	{
+		myCamera = aCamera;
 		myViewProjection = aViewProjection;
 		myProjection = aProjection;
 	}
@@ -67,6 +68,16 @@ public:
 
 	static CommonUtilities::Matrix4x4<float>& GetProjectionMatrix() { return myProjection; }
 	static CommonUtilities::Matrix4x4<float>& GetViewMatrix() { return myViewProjection; }
+	static CameraComponent* GetCamera()
+	{
+		if(myCamera)
+		{
+			return myCamera;
+		}
+
+		return nullptr;
+	}
+
 
 	static bool IsVisable(TransformComponent& aTransform)
 	{
@@ -97,4 +108,5 @@ private:
 	inline static Vector4f myClearColor;
 
 	inline static bool myRenderGame = false;
+	inline static CameraComponent* myCamera;
 };

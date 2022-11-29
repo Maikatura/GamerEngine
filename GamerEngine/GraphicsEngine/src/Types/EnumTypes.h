@@ -36,5 +36,8 @@ enum class RenderMode
 	Metalness,
 	Emissiveness,
 	Diffuse,
+	Luminance,
+	ViewNormal,
+	ViewPosition,
 	COUNT
 };

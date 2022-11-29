@@ -1,4 +1,4 @@
-#include "ShaderStructs.hlsli"
+#include "Data/ShaderStructs.hlsli"
 
 LineToPixel main(LineInput input)
 {

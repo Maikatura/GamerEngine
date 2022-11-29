@@ -1,6 +1,7 @@
-#include "SpriteShaderStructs.hlsli"
+#include "Data/ShaderStructs.hlsli"
+#include "Data/SpriteShaderStructs.hlsli"
 
-PixelOutput main(GeometryToPixel input)
+SpritePixelOutput main(SpriteGeometryToPixel input)
 {
 	PixelOutput result;
 	float4 texColor = particleTexture.Sample(defaultSampler, input.myUV);

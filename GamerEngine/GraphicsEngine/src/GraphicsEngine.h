@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include <InputManager.h>
+#include <Utilites/InputManager.h>
 #include <vector>
 #include <Math/Vector4.hpp>
 #include <Types/EnumTypes.h>
@@ -41,13 +41,11 @@ public:
 
 	void SetMinimized(bool aMinimizedState);
 	void SetUpdateBuffers(bool aUpdate);
-
-	bool UseEditor() const;
 	
 
 	void SetRenderMode(RenderMode aRenderMode) { myRenderMode = aRenderMode; }
 	RenderMode GetRenderMode() const { return myRenderMode; }
-
+	int GetRenderModeInt() const { return (int)myRenderMode; }
 
 	void ResetStates() const;
 

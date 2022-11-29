@@ -1,12 +1,13 @@
-#include "ShaderStructs.hlsli"
+#include "Data/DeferredShaderStructs.hlsli"
 
 GBufferOutput main(VertexToPixel input)
 {
 	GBufferOutput result;
 
 	const float4 albedo = albedoTexture.Sample(defaultSampler, input.myUV);
-	if(albedo.a < .05f)
+	if(albedo.a == 0)
 	{
+		discard;
 		result.Albedo = 0;
 		result.Normal = 0;
 		result.Material = 0;

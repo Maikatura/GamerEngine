@@ -1,35 +1,16 @@
-#include "../DeferredShaderStructs.hlsli"
-#include "../ShaderStructs.hlsli"
+#include "../Data/DeferredShaderStructs.hlsli"
 
 DeferredPixelOutput main(DeferredVertexToPixel input)
 {
-	DeferredPixelOutput result;
+	DeferredPixelOutput output;
+
+
 
 	float4 color = albedoTexture.Sample(defaultSampler, input.myUV);
+	float luminance = dot(color.rgb, float3(.2f, .75f, .6f));
+	float cutOff = .82f;
+	luminance = saturate(luminance - cutOff);
+	output.myColor = color * luminance * (1.0f / cutOff);
 
-	if (color.a < 0.05f)
-	{
-		discard;
-		result.myColor.rgb = float3(0, 0, 0);
-		result.myColor.a = 0;
-		return result;
-	}
-	const float3 resource = color.rgb;
-
-	{
-		float luminance = dot(resource, float3(0.2126f, 0.7152f, 0.0722f));
-		/*float cutOff = 0.8f;
-		if (luminance >= cutOff)
-		{
-			result.myColor.rgb = resource;
-		}
-		else
-		{
-			result.myColor.rgb = 0;
-		}*/
-
-		result.myColor.rgb = resource * pow(luminance, 5);
-	}
-
-	return result;
+	return output;
 }

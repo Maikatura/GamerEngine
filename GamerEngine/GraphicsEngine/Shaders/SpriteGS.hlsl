@@ -1,9 +1,10 @@
-#include "SpriteShaderStructs.hlsli"
+#include "Data/ShaderStructs.hlsli"
+#include "Data/SpriteShaderStructs.hlsli"
 
 [maxvertexcount(4)]
 void main(
-	point VertexData input[1],
-	inout TriangleStream<GeometryToPixel> output
+	point SpriteVertexData input[1],
+	inout TriangleStream<SpriteGeometryToPixel> output
 )
 {
 	float2 offsets[4] =
@@ -21,7 +22,7 @@ void main(
 		{1, 1}
 	};
 
-	VertexData pInput = input[0];
+	SpriteVertexData pInput = input[0];
 	pInput.myZRotation *= 3.14159f / 180.f;
 	float2x2 rotMarix = float2x2(
 		cos(pInput.myZRotation), -sin(pInput.myZRotation),
@@ -30,7 +31,7 @@ void main(
 
 	for(int i = 0; i < 4; i++)
 	{
-		GeometryToPixel result;
+		SpriteGeometryToPixel result;
 		float4 pos;
 		float2 offs;
 

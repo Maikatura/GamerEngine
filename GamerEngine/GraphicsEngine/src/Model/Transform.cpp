@@ -32,7 +32,7 @@ Vector3f Transform::GetRotation()
 Vector3f Transform::GetScale()
 {
 	Vector3f output;
-
+	
 	Vector4f scaleX = { myTransformMatrix(1,1), myTransformMatrix(1,2), myTransformMatrix(1,3), myTransformMatrix(1,4) };
 	Vector4f scaleY = { myTransformMatrix(2,1), myTransformMatrix(2,2), myTransformMatrix(2,3), myTransformMatrix(2,4) };
 	Vector4f scaleZ = { myTransformMatrix(3,1), myTransformMatrix(3,2), myTransformMatrix(3,3), myTransformMatrix(3,4) };

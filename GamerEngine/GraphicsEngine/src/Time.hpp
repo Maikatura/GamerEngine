@@ -1,5 +1,5 @@
 #pragma once
-#include <Timer.h>
+#include <Utilites/Timer.h>
 
 class Time
 {
@@ -17,13 +17,9 @@ public:
 	static void Update()
 	{
 		myTimer.Update();
-
 	}
 
 private:
-
-	
-
 
 	inline static CommonUtilities::Timer myTimer;
 };

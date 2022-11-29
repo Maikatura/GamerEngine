@@ -8,6 +8,8 @@
 #include "Framework/DX11.h"
 #include <Sort/sort.hpp>
 
+#include "AssetHandlers/ModelAssetHandler.h"
+
 bool ShadowRenderer::Initialize()
 {
 	HRESULT result = S_FALSE;
@@ -55,6 +57,12 @@ bool ShadowRenderer::Initialize()
 
 void ShadowRenderer::Render(const std::vector<RenderBuffer>& aModelList)
 {
+	if(aModelList.empty())
+	{
+		return;
+	}
+
+
 	HRESULT result = S_FALSE;
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
@@ -69,6 +77,7 @@ void ShadowRenderer::Render(const std::vector<RenderBuffer>& aModelList)
 
 		lightList[i]->ClearShadowMap();
 		lightList[i]->SetShadowMapAsDepth();
+
 
 
 		const Light::LightBufferData lightData = lightList[i]->GetLightBufferData();
@@ -109,6 +118,8 @@ void ShadowRenderer::Render(const std::vector<RenderBuffer>& aModelList)
 			DX11::Context->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
 		}
 
+		ModelAssetHandler::ResetRenderedModels();
+
 		for(const auto& RenderBuffer : aModelList)
 		{
 			if(!RenderBuffer.myModel)
@@ -116,21 +127,27 @@ void ShadowRenderer::Render(const std::vector<RenderBuffer>& aModelList)
 				continue;
 			}
 			auto& model = RenderBuffer.myModel;
+			bool isInstanced = model->HasRenderedInstance();
+
 			for(unsigned int m = 0; m < model->GetNumMeshes(); m++)
 			{
 				const Model::MeshData& meshData = model->GetMeshData(m);
 
+
+				
+
+				myObjectBufferData.IsInstanced = isInstanced;
 				myObjectBufferData.World = RenderBuffer.myTransform;
 				ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-				myObjectBufferData.myObjectId = RenderBuffer.myId;
+				
 				myObjectBufferData.myHasBones = false;
 				if(model->GetSkeleton()->GetRoot())
 				{
 					auto bones = model->GetBoneTransform();
 					myObjectBufferData.myHasBones = true;
 					memcpy_s(
-						&myObjectBufferData.myBoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
+						&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
 						&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
 					);
 				}
@@ -171,10 +188,49 @@ void ShadowRenderer::Render(const std::vector<RenderBuffer>& aModelList)
 				DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
 				
-				DX11::Context->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
 				DX11::Context->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 				DX11::Context->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)meshData.myPrimitiveTopology);
-				DX11::Context->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
+
+				if(isInstanced && !model->HasBeenRendered())
+				{
+					myInstancedTransformBufferData.clear();
+					int sizeOfDrawTransform = model->GetNumberOfInstances();
+					for(int i = 0; i < sizeOfDrawTransform; i++)
+					{
+						auto matrix = model->GetTransformVector()[i].World->GetMatrix();
+						myInstancedTransformBufferData.push_back(matrix);
+					}
+
+
+					ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
+					result = DX11::Context->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+					memcpy(bufferData.pData, &myInstancedTransformBufferData[0], sizeof(Matrix4x4f) * model->GetNumberOfInstances());
+					DX11::Context->Unmap(myInstanceBuffer.Get(), 0);
+
+					ID3D11Buffer* buffers[2] = { meshData.myVertexBuffer.Get(), myInstanceBuffer.Get() };
+
+					UINT stride[2] = { meshData.myStride, sizeof(Matrix4x4f) };
+
+					UINT offset[2] = { meshData.myOffset, 0 };
+
+					DX11::Context->IASetVertexBuffers(0, 2, buffers, stride, offset);
+					DX11::Context->DrawIndexedInstanced(
+						meshData.myNumberOfIndices,
+						model->GetNumberOfInstances(),
+						0, 0, 0
+					);
+
+				}
+				else if (!isInstanced)
+				{
+					DX11::Context->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
+					DX11::Context->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
+				}
+			}
+
+			if(isInstanced)
+			{
+				model->SetHasBeenRenderer(true);
 			}
 		}
 	}

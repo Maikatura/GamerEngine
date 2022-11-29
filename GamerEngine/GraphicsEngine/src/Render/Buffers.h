@@ -22,7 +22,9 @@ enum class DepthStencilState
 enum class SamplerState
 {
 	SS_Default,
+	SS_Wrap,
 	SS_PointClamp,
+	SS_PointWrap,
 	SS_Count
 };
 
@@ -36,14 +38,18 @@ struct FrameBufferData
 	float FarPlane;
 	float DeltaTime;
 	float TotalTime;
+	Vector2ui Resolution;
+	Vector2f Padding;
+	Vector4f FrustrumCorners[4];
 };
 
 struct ObjectBufferData
 {
 	Matrix4x4f World;
-	int myHasBones;
-	Vector3f myPadding1;
-	int myObjectId = 0;
-	Vector3f myPadding2;
-	Matrix4x4f myBoneData[MAX_MODEL_BONES]{};
+	Matrix4x4f WorldInv;
+	alignas(4) bool myHasBones = false;
+	unsigned int OB_ObjectId;
+	alignas(4) bool IsSelected = false;
+	alignas(4) bool IsInstanced;
+	Matrix4x4f BoneData[MAX_MODEL_BONES]{};
 };

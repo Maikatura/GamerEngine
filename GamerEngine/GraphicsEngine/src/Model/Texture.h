@@ -8,6 +8,7 @@ using namespace Microsoft::WRL;
 class Texture
 {
 	friend class TextureAssetHandler;
+	friend class PostProcessRenderer;
 
 protected:
 	std::wstring myName;

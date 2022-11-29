@@ -9,6 +9,6 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
-#include <CommonUtilities/Math/MathTypes.hpp>
+#include <Math/MathTypes.hpp>
 
 #endif //PCH_H

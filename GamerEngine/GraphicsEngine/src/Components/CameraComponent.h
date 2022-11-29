@@ -18,7 +18,11 @@ public:
 	void Resize(Vector2ui aResolution);
 	float GetResScale();
 
+	float GetVerticalFoV();
+	Vector2ui GetResolution();
+
 private:
+	float myVerticalFoV;
 	Vector2ui myRes;
 
 };

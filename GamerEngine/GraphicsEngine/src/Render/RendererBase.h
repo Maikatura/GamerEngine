@@ -12,13 +12,18 @@ public:
 	static void SetBlendState(BlendState aBlendState);
 	static void SetSamplerState(SamplerState aSamplerState, int aStartSlot);
 
+	void RemoveResource(int aSlot);
+
 protected:
 	FrameBufferData myFrameBufferData{};
 	ObjectBufferData myObjectBufferData{};
 
+
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myFrameBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myObjectBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myMaterialBuffer;
+	inline static Microsoft::WRL::ComPtr<ID3D11Buffer> myInstanceBuffer;
+	inline static std::vector<Matrix4x4f> myInstancedTransformBufferData;
 
 	inline static std::array<Microsoft::WRL::ComPtr<ID3D11DepthStencilState>, (int)DepthStencilState::DSS_Count> myDepthStencilStates;
 	inline static std::array<Microsoft::WRL::ComPtr<ID3D11BlendState>, (int)BlendState::BSCount> myBlendStates;

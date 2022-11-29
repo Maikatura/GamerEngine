@@ -18,7 +18,7 @@
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TGAFBXImporter.pch.h">
+    <ClInclude Include="FBXImporter.pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FBXImporter.h">
@@ -29,7 +29,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TGAFBXImporter.pch.cpp">
+    <ClCompile Include="FBXImporter.pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FBXImporter.cpp">

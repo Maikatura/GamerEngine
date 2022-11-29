@@ -1,11 +1,15 @@
 #pragma once
 #include "Model/Transform.h"
 
+class TransformComponent;
+
 
 class SceneObject
 {
 protected:
 	std::shared_ptr<Transform> myTransform;
+
+
 
 public:
 
@@ -23,6 +27,9 @@ public:
 	void SetPosition(float aX, float aY, float aZ);
 	void SetPosition(Vector3f aPos);
 	void SetScale(float aX, float aY, float aZ);
+
+
+	void SetTransform(Matrix4x4f aTransform);
 
 	virtual void Update();
 

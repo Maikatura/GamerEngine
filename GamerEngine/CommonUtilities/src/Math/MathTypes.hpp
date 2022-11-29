@@ -1,6 +1,6 @@
 #pragma once
-#include <CommonUtilities/Math/Vector.h>
-#include <CommonUtilities/Math/Matrix.h>
+#include <Math/Vector.h>
+#include <Math/Matrix.h>
 
 typedef CommonUtilities::Vector2<float> Vector2f;
 typedef CommonUtilities::Vector3<float> Vector3f;

@@ -34,6 +34,8 @@ void CameraComponent::Resize(Vector2ui aResolution)
 	const float hFoVRad = myFoV * (0.01745f);
 	const float vFoVRad = 2 * std::atan(std::tan(hFoVRad / 2) * (static_cast<float>(aResolution.y) / static_cast<float>(aResolution.x)));
 
+	myVerticalFoV = vFoVRad;
+
 	const float myXScale = 1 / std::tanf(hFoVRad * 0.5f);
 	const float myYScale = 1 / std::tanf(vFoVRad * 0.5f);
 	const float Q = myFarPlane / (myFarPlane - myNearPlane);
@@ -49,4 +51,14 @@ void CameraComponent::Resize(Vector2ui aResolution)
 float CameraComponent::GetResScale()
 {
 	return static_cast<float>(myRes.y) / static_cast<float>(myRes.x);
+}
+
+float CameraComponent::GetVerticalFoV()
+{
+	return myVerticalFoV;
+}
+
+Vector2ui CameraComponent::GetResolution()
+{
+	return myRes;
 }

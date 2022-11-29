@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Texture.h"
-#include <CommonUtilities/Math/MathTypes.hpp>
+#include <Math/MathTypes.hpp>
 #include <d3d11.h>
 
 namespace MaterialTextureChannel

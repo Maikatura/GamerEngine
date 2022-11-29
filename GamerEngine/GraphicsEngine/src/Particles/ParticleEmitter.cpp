@@ -5,7 +5,7 @@
 #include <fstream>
 #include <Render/Render2D.h>
 #include <Sort/Sort.hpp>
-#include <CommonUtilities/UtilityFunctions.h>
+#include <Utilites/UtilityFunctions.h>
 #include <Model/Texture.h>
 #include "Components/ScriptableEntity.h"
 
@@ -102,8 +102,8 @@ bool ParticleEmitter::Init()
 
 	DX11::Device->CreateBuffer(&vertBufferDesc, &vertSubData, myVertexBuffer.GetAddressOf());
 
-	if(!TextureAssetHandler::LoadTexture(L"Assets\\Particles\\ParticleStar.dds"))
-		myTexture = TextureAssetHandler::GetTexture(L"Assets\\Particles\\ParticleStar.dds");
+	if(!TextureAssetHandler::LoadTexture(L"Assets\\Textures\\ParticleStar.dds"))
+		myTexture = TextureAssetHandler::GetTexture(L"Assets\\Textures\\ParticleStar.dds");
 
 	return true;
 }

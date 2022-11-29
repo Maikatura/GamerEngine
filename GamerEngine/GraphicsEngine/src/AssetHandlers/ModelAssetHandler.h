@@ -6,11 +6,11 @@
 #include <vector>
 #include "Model/ModelInstance.h"
 
-const int InputLayoutSize = 14;
+const int InputLayoutSize = 18;
 
 class ModelAssetHandler
 {
-	inline static std::unordered_map<std::wstring, std::shared_ptr<Model>> myModelRegistry;
+	inline static std::unordered_map<std::wstring, std::shared_ptr<ModelInstance>> myModelRegistry;
 
 	static bool InitUnitCube();
 	static bool InitUnitSphere();
@@ -21,6 +21,8 @@ public:
 	static bool Initialize();
 
 	static void UnloadModel(const std::wstring& aFilePath);
+
+	static void ResetRenderedModels();
 
 	static bool LoadModel(const std::wstring& aFilePath);
 	static bool LoadAnimation(const std::wstring& aModelName, const std::wstring& someFilePath);

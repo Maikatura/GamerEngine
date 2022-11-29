@@ -13,6 +13,7 @@ ComPtr<ID3D11SamplerState> DX11::SampleStateDefault;
 ComPtr<ID3D11SamplerState> DX11::SamplerStateWrap;
 
 ComPtr<ID3D11RenderTargetView> DX11::BackBuffer;
+ComPtr<ID3D11ShaderResourceView> DX11::BackBufferSRV;
 ID3D11Texture2D* DX11::BackBufferTex;
 ComPtr<ID3D11DepthStencilView> DX11::DepthBuffer;
 
@@ -92,7 +93,7 @@ void DX11::BeginFrame(std::array<float, 4> aClearColor)
 
 void DX11::EndFrame()
 {
-	SwapChain->Present(1, 0);
+	SwapChain->Present(0, 0);
 }
 
 RECT DX11::GetClientSize()
@@ -164,6 +165,7 @@ bool DX11::CreateTexture2D()
 	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBufferTex);
 	if(FAILED(result))
 		return false;
+
 
 	result = Device->CreateRenderTargetView(BackBufferTex, nullptr, BackBuffer.GetAddressOf());
 	if(FAILED(result))
@@ -266,6 +268,8 @@ bool DX11::CreateShaderResourceView()
 	result = Device->CreateShaderResourceView(BackBufferTex, &shaderResourceViewDesc, RenderSRV.GetAddressOf());
 	if(FAILED(result))
 		return false;
+
+	SafeRelease(BackBufferTex);
 
 	return true;
 }

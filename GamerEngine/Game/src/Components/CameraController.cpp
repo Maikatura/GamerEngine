@@ -4,7 +4,7 @@
 #include <Input/InputInternal.h>
 #include <imgui/imgui.h>
 
-#include "UtilityFunctions.h"
+#include "Utilites/UtilityFunctions.h"
 #include "Input/Input.h"
 
 
@@ -42,8 +42,8 @@ void CameraController::OnUpdate()
 		return;
 	}
 
-	transform.Rotation.y += InputInternal::GetMouseDelta().x * aDeltaTime * cameraData.myMouseSensitivity;
-	transform.Rotation.x += InputInternal::GetMouseDelta().y * aDeltaTime * cameraData.myMouseSensitivity;
+	transform.Rotation.y += InputInternal::GetMouseDelta().x  * cameraData.myMouseSensitivity;
+	transform.Rotation.x += InputInternal::GetMouseDelta().y  * cameraData.myMouseSensitivity;
 
 	if (ImGui::GetIO().MouseWheel != 0.0f)
 	{

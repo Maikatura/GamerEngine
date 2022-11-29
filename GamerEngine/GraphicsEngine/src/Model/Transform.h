@@ -37,6 +37,11 @@ public:
 	Vector3f GetWorldRotation();
 	Vector3f GetWorldScale();
 
+	void SetMatrix(Matrix4x4f aMatrix)
+	{
+		myTransformMatrix = aMatrix;
+	}
+
 	Vector3f GetXAxis()
 	{
 		auto myTransform = GetMatrix();

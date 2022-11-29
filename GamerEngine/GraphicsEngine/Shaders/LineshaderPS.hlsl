@@ -1,4 +1,4 @@
-#include "ShaderStructs.hlsli"
+#include "Data/ShaderStructs.hlsli"
 
 PixelOutput main(LineToPixel input) : SV_TARGET
 {

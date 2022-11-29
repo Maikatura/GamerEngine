@@ -1,5 +1,5 @@
 #pragma once
-#include <CommonUtilities/Math/MathTypes.hpp>
+#include <Math/MathTypes.hpp>
 
 struct Vertex
 {
