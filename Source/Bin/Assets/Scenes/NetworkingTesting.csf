@@ -1,0 +1,150 @@
+Scene: SceneTesting
+Path: D:\Github\School\Assignments\9-TGP\Engine\Source\Bin\Assets\Scenes\NetworkingTesting.csf
+Entities:
+  - Entity: 1828353707181980437
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [-151.439209, 349.460876, 0]
+      Rotation: [0, -0, 0]
+      Scale: [34.8062706, 34.8062706, 34.8062706]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Path: Assets\Models\Shapes\Cube.fbx
+      Texture:
+        Albedo: resources/textures/T_Default_C.dds
+        Normal: resources/textures/T_Default_N.dds
+        Material: resources/textures/T_Default_M.dds
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [310.859955, 454.151794, 101.107819]
+      Rotation: [23.7293205, -102.956841, 0.000104268343]
+      Scale: [0.999991119, 0.999997914, 0.999999642]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 25000
+      Primary: true
+  - Entity: 12249053080913131129
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [127.736137, 10.5608025, 51.1042519]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [1, 1, 0, 1]
+      Intensity: 1235
+      Range: 100
+  - Entity: 18154001615173253105
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Path: Assets\Models\Sponza\Sponza.fbx
+      Texture:
+        Albedo: resources/textures/T_Default_C.dds
+        Normal: resources/textures/T_Default_N.dds
+        Material: resources/textures/T_Default_M.dds
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [2.21987414, 178.938751, 1.55942154]
+      Rotation: [65.3925095, 89.9999466, -29.7479935]
+      Scale: [0.998147011, 0.999633551, 0.999681354]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [-44, 100, 85]
+      Intensity: 1
+  - Entity: 377685717553651175
+    TagComponent:
+      Tag: Particle Emitter
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ParticleComponent:
+      EmitterSettingsSize: 2
+      EmitterSettings:
+        0:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+        1:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+      ParticleSettingsSize: 2
+      ParticleSettings:
+        0:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 10, 0]
+          Scale: [1, 1, 1]
+          Color: [1, 0, 0, 1]
+        1:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 20, 0]
+          Scale: [0, 0, 0]
+          Color: [1, 0, 1, 1]
+  - Entity: 5742462819475109311
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [42.2282906, 0.406421661, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [1, 1, 0, 1]
+      Intensity: 281
+      Range: 241

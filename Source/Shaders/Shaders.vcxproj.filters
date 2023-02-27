@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Data">
+      <UniqueIdentifier>{3F05847C-2B3C-850D-D428-6B10C03E010F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess">
+      <UniqueIdentifier>{4A4DE2DA-B602-5BD0-3FF7-54A7ABAB51D4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Default_PS.hlsl" />
+    <FxCompile Include="Shaders\Default_VS.hlsl" />
+    <FxCompile Include="Shaders\Deferred_PS.hlsl" />
+    <FxCompile Include="Shaders\Fullscreen_VS.hlsl" />
+    <FxCompile Include="Shaders\GBuffer_PS.hlsl" />
+    <FxCompile Include="Shaders\Lineshader_PS.hlsl" />
+    <FxCompile Include="Shaders\Lineshader_VS.hlsl" />
+    <FxCompile Include="Shaders\PostProcess\PP-Bloom_PS.hlsl">
+      <Filter>PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PostProcess\PP-Copy_PS.hlsl">
+      <Filter>PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PostProcess\PP-Gaussian_PS.hlsl">
+      <Filter>PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PostProcess\PP-Luminance_PS.hlsl">
+      <Filter>PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PostProcess\PP-SSAO_PS.hlsl">
+      <Filter>PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PostProcess\PP-Tonemap_PS.hlsl">
+      <Filter>PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RenderTex_PS.hlsl" />
+    <FxCompile Include="Shaders\ShadowCube_GS.hlsl" />
+    <FxCompile Include="Shaders\Sprite_GS.hlsl" />
+    <FxCompile Include="Shaders\Sprite_PS.hlsl" />
+    <FxCompile Include="Shaders\Sprite_VS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Data\BufferData.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\Common.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\DeferredShaderStructs.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\IndirectFunctions.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\LightBuffer.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\NormalHelpers.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\PBRFunctions.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\Samplers.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\ShaderStructs.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\ShadowFunctions.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\ShadowShaderStructs.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\SpriteShaderStructs.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\Data\Tonemaps.hlsli">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Shaders\PostProcess\PostProcessStructs.hlsli">
+      <Filter>PostProcess</Filter>
+    </None>
+  </ItemGroup>
+</Project>

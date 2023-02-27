@@ -1,0 +1,1 @@
+#define MAX_MODEL_BONES 128

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{7140E78B-5382-4F90-BAC3-F7D57B2C3D27}</ProjectGuid>
+    <RootNamespace>Modelviewer</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)External\imgui\src\imgui;$(SolutionDir)External\src;$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\imgui\src;$(SolutionDir)CommonUtilities\src;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src;$(SolutionDir)External\NodeEditor\Include</IncludePath>
+    <OutDir>$(SolutionDir)Lib\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)External\imgui\src\imgui;$(SolutionDir)External\src;$(ProjectDir)src;$(SolutionDir)Game\src;$(SolutionDir)GraphicsEngine\src;$(SolutionDir)External\imgui\src;$(SolutionDir)CommonUtilities\src;$(SolutionDir)SoundEngine\src\include;$(SolutionDir)SoundEngine\src;$(SolutionDir)External\NodeEditor\Include</IncludePath>
+    <OutDir>$(SolutionDir)Lib\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src/Modelviewer.h" />
+    <ClInclude Include="src/Resource.h" />
+    <ClInclude Include="src/targetver.h" />
+    <ClInclude Include="src\BlueprintUtilities\Include\ax\Builders.h" />
+    <ClInclude Include="src\BlueprintUtilities\Include\ax\Drawing.h" />
+    <ClInclude Include="src\BlueprintUtilities\Include\ax\Math2D.h" />
+    <ClInclude Include="src\BlueprintUtilities\Include\ax\Widgets.h" />
+    <ClInclude Include="src\BlueprintUtilities\Include\Interop.h" />
+    <ClInclude Include="src\GraphManager.h" />
+    <ClInclude Include="src\GraphNodeBase.h" />
+    <ClInclude Include="src\GraphNodeInstance.h" />
+    <ClInclude Include="src\GraphNodePin.h" />
+    <ClInclude Include="src\GraphNodeRegistry.h" />
+    <ClInclude Include="src\GraphNode_Print.h" />
+    <ClInclude Include="src\GraphNode_Start.h" />
+    <ClInclude Include="src\GraphNode_Variable.h" />
+    <ClInclude Include="src\GraphVariable.h" />
+    <ClInclude Include="src\Math\GraphNode_MathAbs.h" />
+    <ClInclude Include="src\Math\GraphNode_MathAdd.h" />
+    <ClInclude Include="src\Math\GraphNode_MathAtan2.h" />
+    <ClInclude Include="src\Math\GraphNode_MathCos.h" />
+    <ClInclude Include="src\Math\GraphNode_MathLength.h" />
+    <ClInclude Include="src\Math\GraphNode_MathMax.h" />
+    <ClInclude Include="src\Math\GraphNode_MathMin.h" />
+    <ClInclude Include="src\Math\GraphNode_MathMul.h" />
+    <ClInclude Include="src\Math\GraphNode_MathSin.h" />
+    <ClInclude Include="src\Math\GraphNode_MathSub.h" />
+    <ClInclude Include="src\NodeTypes.h" />
+    <ClInclude Include="src\Utility\Get\GraphNode_GetGameObjectPosition.h" />
+    <ClInclude Include="src\Utility\Get\GraphNode_GetMousePosition.h" />
+    <ClInclude Include="src\Utility\Set\GraphNode_SetGameObjectPosition.h" />
+    <ClInclude Include="src\Utility\Set\GraphNode_SetGameObjectScale.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src/Modelviewer.cpp" />
+    <ClCompile Include="src\BlueprintUtilities\Source\ax\Builders.cpp" />
+    <ClCompile Include="src\BlueprintUtilities\Source\ax\Drawing.cpp" />
+    <ClCompile Include="src\BlueprintUtilities\Source\ax\Widgets.cpp" />
+    <ClCompile Include="src\GraphManager.cpp" />
+    <ClCompile Include="src\GraphNodeBase.cpp" />
+    <ClCompile Include="src\GraphNodeInstance.cpp" />
+    <ClCompile Include="src\GraphNodePin.cpp" />
+    <ClCompile Include="src\GraphNodeRegistry.cpp" />
+    <ClCompile Include="src\GraphNode_Print.cpp" />
+    <ClCompile Include="src\GraphNode_Start.cpp" />
+    <ClCompile Include="src\GraphNode_Variable.cpp" />
+    <ClCompile Include="src\GraphVariable.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathAbs.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathAdd.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathAtan2.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathCos.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathLength.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathMax.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathMin.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathMul.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathSin.cpp" />
+    <ClCompile Include="src\Math\GraphNode_MathSub.cpp" />
+    <ClCompile Include="src\Utility\Get\GraphNode_GetGameObjectPosition.cpp" />
+    <ClCompile Include="src\Utility\Get\GraphNode_GetMousePosition.cpp" />
+    <ClCompile Include="src\Utility\Set\GraphNode_SetGameObjectPosition.cpp" />
+    <ClCompile Include="src\Utility\Set\GraphNode_SetGameObjectScale.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src/Modelviewer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src/Modelviewer.ico" />
+    <Image Include="src/small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\External\ImGui\ImGui.vcxproj">
+      <Project>{b2d40f52-16ee-4120-92be-91399b040e95}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\BlueprintUtilities\Include\ax\Math2D.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

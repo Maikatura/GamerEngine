@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DBC7D3B0-C769-FE86-B024-12DB9C6585D7}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\Temp\lib\</OutDir>
+    <IntDir>..\Temp\Intermediate\Engine\Debug\</IntDir>
+    <TargetName>Engine_Debug</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\Temp\lib\</OutDir>
+    <IntDir>..\Temp\Intermediate\Engine\Release\</IntDir>
+    <TargetName>Engine_Release</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>GraphicsEngine.pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>GraphicsEngine.pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\GraphicsEngine.pch.h" />
+    <ClInclude Include="src\Renderer\AssetHandlers\DDSTextureLoader11.h" />
+    <ClInclude Include="src\Renderer\AssetHandlers\LightAssetHandler.h" />
+    <ClInclude Include="src\Renderer\AssetHandlers\ModelAssetHandler.h" />
+    <ClInclude Include="src\Renderer\AssetHandlers\ParticleAssetHandler.h" />
+    <ClInclude Include="src\Renderer\AssetHandlers\TextureAssetHandler.h" />
+    <ClInclude Include="src\Renderer\Audio\Audio.h" />
+    <ClInclude Include="src\Renderer\Audio\AudioManager.h" />
+    <ClInclude Include="src\Renderer\Debugger\ConsoleHelper.h" />
+    <ClInclude Include="src\Renderer\EngineSettings\Settings.h" />
+    <ClInclude Include="src\Renderer\Framework\DX11.h" />
+    <ClInclude Include="src\Renderer\GraphicsEngine.h" />
+    <ClInclude Include="src\Renderer\Input\Input.h" />
+    <ClInclude Include="src\Renderer\Light\DirectionalLight.h" />
+    <ClInclude Include="src\Renderer\Light\EnvironmentLight.h" />
+    <ClInclude Include="src\Renderer\Light\Light.h" />
+    <ClInclude Include="src\Renderer\Light\PointLight.h" />
+    <ClInclude Include="src\Renderer\Light\SpotLight.h" />
+    <ClInclude Include="src\Renderer\Managers\CommandManager.h" />
+    <ClInclude Include="src\Renderer\Managers\Commands\AbstractCommand.h" />
+    <ClInclude Include="src\Renderer\Managers\Commands\InspectorCommnad.h" />
+    <ClInclude Include="src\Renderer\Managers\Commands\ModelCommand.h" />
+    <ClInclude Include="src\Renderer\Managers\Commands\PositionCommand.h" />
+    <ClInclude Include="src\Renderer\Managers\DropManager.h" />
+    <ClInclude Include="src\Renderer\Model\Entity.h" />
+    <ClInclude Include="src\Renderer\Model\Material.h" />
+    <ClInclude Include="src\Renderer\Model\Model.h" />
+    <ClInclude Include="src\Renderer\Model\ModelData.h" />
+    <ClInclude Include="src\Renderer\Model\ModelInstance.h" />
+    <ClInclude Include="src\Renderer\Model\Render2D.h" />
+    <ClInclude Include="src\Renderer\Model\SceneObject.h" />
+    <ClInclude Include="src\Renderer\Model\SelectedObject.hpp" />
+    <ClInclude Include="src\Renderer\Model\Texture.h" />
+    <ClInclude Include="src\Renderer\Model\Transform.h" />
+    <ClInclude Include="src\Renderer\Model\Vertex.h" />
+    <ClInclude Include="src\Renderer\Particles\ParticleEmitter.h" />
+    <ClInclude Include="src\Renderer\Particles\ParticleEmitterTemplate.h" />
+    <ClInclude Include="src\Renderer\Particles\ParticleSystem.h" />
+    <ClInclude Include="src\Renderer\Render\Buffers.h" />
+    <ClInclude Include="src\Renderer\Render\DeferredRenderer.h" />
+    <ClInclude Include="src\Renderer\Render\DepthStencil.h" />
+    <ClInclude Include="src\Renderer\Render\ForwardRenderer.h" />
+    <ClInclude Include="src\Renderer\Render\LineRenderer.h" />
+    <ClInclude Include="src\Renderer\Render\PostProcessRenderer.h" />
+    <ClInclude Include="src\Renderer\Render\Render2D.h" />
+    <ClInclude Include="src\Renderer\Render\RenderBuffer.h" />
+    <ClInclude Include="src\Renderer\Render\Renderer.h" />
+    <ClInclude Include="src\Renderer\Render\RendererBase.h" />
+    <ClInclude Include="src\Renderer\Render\SelectionData.h" />
+    <ClInclude Include="src\Renderer\Render\ShadowRenderer.h" />
+    <ClInclude Include="src\Renderer\Scene\Scene.h" />
+    <ClInclude Include="src\Renderer\Scene\SceneManager.h" />
+    <ClInclude Include="src\Renderer\Scene\SceneSerializer.h" />
+    <ClInclude Include="src\Renderer\Scene\UUID.h" />
+    <ClInclude Include="src\Renderer\Types\EnumTypes.h" />
+    <ClInclude Include="src\Renderer\Types\FileExtensions.h" />
+    <ClInclude Include="src\StringCast.h" />
+    <ClInclude Include="src\Time.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\GraphicsEngine.pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\AssetHandlers\DDSTextureLoader11.cpp" />
+    <ClCompile Include="src\Renderer\AssetHandlers\LightAssetHandler.cpp" />
+    <ClCompile Include="src\Renderer\AssetHandlers\ModelAssetHandler.cpp" />
+    <ClCompile Include="src\Renderer\AssetHandlers\ParticleAssetHandler.cpp" />
+    <ClCompile Include="src\Renderer\AssetHandlers\TextureAssetHandler.cpp" />
+    <ClCompile Include="src\Renderer\Audio\AudioManager.cpp" />
+    <ClCompile Include="src\Renderer\Debugger\ConsoleHelper.cpp" />
+    <ClCompile Include="src\Renderer\Framework\DX11.cpp" />
+    <ClCompile Include="src\Renderer\GraphicsEngine.cpp" />
+    <ClCompile Include="src\Renderer\Input\Input.cpp" />
+    <ClCompile Include="src\Renderer\Light\DirectionalLight.cpp" />
+    <ClCompile Include="src\Renderer\Light\EnvironmentLight.cpp" />
+    <ClCompile Include="src\Renderer\Light\PointLight.cpp" />
+    <ClCompile Include="src\Renderer\Light\SpotLight.cpp" />
+    <ClCompile Include="src\Renderer\Managers\CommandManager.cpp" />
+    <ClCompile Include="src\Renderer\Model\Entity.cpp" />
+    <ClCompile Include="src\Renderer\Model\Material.cpp" />
+    <ClCompile Include="src\Renderer\Model\Model.cpp" />
+    <ClCompile Include="src\Renderer\Model\ModelInstance.cpp" />
+    <ClCompile Include="src\Renderer\Model\SceneObject.cpp" />
+    <ClCompile Include="src\Renderer\Model\Texture.cpp" />
+    <ClCompile Include="src\Renderer\Model\Transform.cpp" />
+    <ClCompile Include="src\Renderer\Particles\ParticleEmitter.cpp" />
+    <ClCompile Include="src\Renderer\Particles\ParticleEmitterTemplate.cpp" />
+    <ClCompile Include="src\Renderer\Particles\ParticleSystem.cpp" />
+    <ClCompile Include="src\Renderer\Render\DeferredRenderer.cpp" />
+    <ClCompile Include="src\Renderer\Render\ForwardRenderer.cpp" />
+    <ClCompile Include="src\Renderer\Render\LineRenderer.cpp" />
+    <ClCompile Include="src\Renderer\Render\PostProcessRenderer.cpp" />
+    <ClCompile Include="src\Renderer\Render\Render2D.cpp" />
+    <ClCompile Include="src\Renderer\Render\RenderBuffer.cpp" />
+    <ClCompile Include="src\Renderer\Render\Renderer.cpp" />
+    <ClCompile Include="src\Renderer\Render\RendererBase.cpp" />
+    <ClCompile Include="src\Renderer\Render\ShadowRenderer.cpp" />
+    <ClCompile Include="src\Renderer\Scene\Scene.cpp" />
+    <ClCompile Include="src\Renderer\Scene\SceneManager.cpp" />
+    <ClCompile Include="src\Renderer\Scene\SceneSerializer.cpp" />
+    <ClCompile Include="src\Renderer\Scene\UUID.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\External\CommonUtilities\CommonUtilities.vcxproj">
+      <Project>{AA29E689-16B5-534E-1FC6-D6428BD0AF4E}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\FBXImporter\FBXImporter.vcxproj">
+      <Project>{5711F0AA-C3C6-68A0-4CBB-6277B86F5FA4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\WICTextureLoader\WICTextureLoader.vcxproj">
+      <Project>{D06FBC32-BC68-DB84-E59A-C009D1F2BA90}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Game\Game.vcxproj">
+      <Project>{7FA9857C-6BE0-860D-14CD-6C1000E3020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Shaders\Shaders.vcxproj">
+      <Project>{EFAC8DF2-5B8C-0C8E-64A4-9764D00273EF}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -15,31 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="src/Modelviewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="src/Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Modelviewer.h">
+    <ClInclude Include="src/targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Modelviewer.cpp">
+    <ClCompile Include="src/Modelviewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Modelviewer.rc">
+    <ResourceCompile Include="src/Modelviewer.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
+    <Image Include="src/Modelviewer.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Modelviewer.ico">
+    <Image Include="src/small.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

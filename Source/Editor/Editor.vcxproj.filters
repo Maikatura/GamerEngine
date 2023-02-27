@@ -1,103 +1,202 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Components">
+      <UniqueIdentifier>{6B7DD516-5735-1764-C03C-F0BFAC13B254}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Handlers">
+      <UniqueIdentifier>{B62BEE20-A2F8-482C-CB11-37D4B73D7EBA}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="ImGuiAdded">
+      <UniqueIdentifier>{329D0BA4-1E55-4DF1-875C-264D7333E8E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Layers">
+      <UniqueIdentifier>{157446C0-0116-7196-EAD0-84EAD611F8E6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Layers\Debug">
+      <UniqueIdentifier>{4B7A7E83-37DD-0D28-E062-46DECCA4D9AA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Layers\Network">
+      <UniqueIdentifier>{8E9B1360-7A69-0766-63FD-778C4F6AE3CA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Layers\UI">
+      <UniqueIdentifier>{224B2E62-8EB5-E2D8-D7F3-937E439DC02D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Snapshots">
+      <UniqueIdentifier>{28632D73-94CD-E1E9-DD0B-938F49B5BF3E}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Components\CameraController.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Editor.h" />
+    <ClInclude Include="src\Editor.pch.h" />
+    <ClInclude Include="src\Handlers\DropHandler.h">
+      <Filter>Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="Editor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Handlers\FileDialog.h">
+      <Filter>Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\Inspector.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Handlers\MetaFileHandler.h">
+      <Filter>Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\Hierarchy.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\ImGuiAdded\ImGuiExtra.h">
+      <Filter>ImGuiAdded</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\EditorView.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Input\InputInternal.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\FileExplorer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Layers\Debug\ConsoleWindow.h">
+      <Filter>Layers\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="SettingKeybinds.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Layers\Debug\KeybindShortcutsLayer.h">
+      <Filter>Layers\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\EditorLayers.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Layers\EditorColorScheme.h">
+      <Filter>Layers</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\MainMenuBar.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Layers\EditorLayers.h">
+      <Filter>Layers</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\EditorSettingsPanel.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Layers\EditorValues.hpp">
+      <Filter>Layers</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\EditorValues.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Layers\Layer.h">
+      <Filter>Layers</Filter>
     </ClInclude>
-    <ClInclude Include="Layers\Layer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Layers\LayerHeader.h">
+      <Filter>Layers</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuiAdded\ImGuiConfirm.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Layers\Network\CreateObjectMessage.h">
+      <Filter>Layers\Network</Filter>
     </ClInclude>
+    <ClInclude Include="src\Layers\Network\MoveObjectMessage.h">
+      <Filter>Layers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Network\NetOverloads.h">
+      <Filter>Layers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Network\PlayerConnectMessage.h">
+      <Filter>Layers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Network\PlayerDisconnectMessage.h">
+      <Filter>Layers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Network\PlayerMoveMessage.h">
+      <Filter>Layers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Network\SkinChangerMessage.h">
+      <Filter>Layers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\NetworkingLayer.h">
+      <Filter>Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\AnimatorLayer.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\EditorSettingsPanel.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\EditorView.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\FileExplorer.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\FileSearch.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\HelpPanel.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\Hierarchy.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\Inspector.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\MainMenuBar.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resource.h" />
+    <ClInclude Include="src\SettingKeybinds.h" />
+    <ClInclude Include="src\Snapshots\SnapshotManager.h">
+      <Filter>Snapshots</Filter>
+    </ClInclude>
+    <ClInclude Include="src\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Editor.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Components\CameraController.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Layers\Inspector.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Editor.cpp" />
+    <ClCompile Include="src\Editor.pch.cpp" />
+    <ClCompile Include="src\Handlers\DropHandler.cpp">
+      <Filter>Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="Layers\Hierarchy.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Handlers\MetaFileHandler.cpp">
+      <Filter>Handlers</Filter>
     </ClCompile>
-    <ClCompile Include="Layers\EditorView.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Input\InputInternal.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="Layers\FileExplorer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Layers\Debug\ConsoleWindow.cpp">
+      <Filter>Layers\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Layers\LayerHeader.h">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Layers\Debug\KeybindShortcutsLayer.cpp">
+      <Filter>Layers\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Layers\MainMenuBar.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Layers\EditorLayers.cpp">
+      <Filter>Layers</Filter>
     </ClCompile>
-    <ClCompile Include="Layers\EditorSettingsPanel.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Layers\Layer.cpp">
+      <Filter>Layers</Filter>
     </ClCompile>
-    <ClCompile Include="Layers\Layer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Layers\NetworkingLayer.cpp">
+      <Filter>Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\AnimatorLayer.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\EditorSettingsPanel.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\EditorView.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\FileExplorer.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\FileSearch.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\HelpPanel.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\Hierarchy.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\Inspector.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\MainMenuBar.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Snapshots\SnapshotManager.cpp">
+      <Filter>Snapshots</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Editor.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <None Include="src\Editor.aps" />
+    <None Include="src\Editor.ico" />
+    <None Include="src\VERSIONINFO.APS" />
+    <None Include="src\small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Editor.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <ResourceCompile Include="src\Editor.rc" />
   </ItemGroup>
 </Project>

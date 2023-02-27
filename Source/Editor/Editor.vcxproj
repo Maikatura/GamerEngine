@@ -1,14 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -19,49 +11,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{8C1A20B0-78BC-4A86-6177-5EDA4DB8D1D6}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{E3F6607C-8018-4B48-9053-91824EA3D17E}</ProjectGuid>
     <RootNamespace>Editor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -70,141 +40,174 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Game;$(SolutionDir)GraphicsEngine;$(SolutionDir)External;$(ProjectDir);$(SolutionDir)AudioEngine\include;$(SolutionDir)AudioEngine;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)Bin\</OutDir>
-    <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
-    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
-    <TargetName>GameEngine-Debug</TargetName>
+    <OutDir>..\Bin\</OutDir>
+    <IntDir>..\Temp\Intermediate\Editor\Debug\</IntDir>
+    <TargetName>Editor_Debug</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Game;$(SolutionDir)GraphicsEngine;$(SolutionDir)External;$(ProjectDir);$(SolutionDir)AudioEngine\include;$(SolutionDir)AudioEngine;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)Bin\</OutDir>
-    <LibraryPath>$(SolutionDir)Lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
-    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
-    <TargetName>GamerEngine-Release</TargetName>
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\Bin\</OutDir>
+    <IntDir>..\Temp\Intermediate\Editor\Release\</IntDir>
+    <TargetName>Editor_Release</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Editor.pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;d3d11.lib;dxguid.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\debug\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 -ignore:4251 -ignore:4275 -ignore:4355 -ignore:4505 -ignore:4244 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Editor.pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>
-      </FunctionLevelLinking>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <BasicRuntimeChecks>
-      </BasicRuntimeChecks>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;d3d11.lib;dxguid.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 -ignore:4251 -ignore:4275 -ignore:4355 -ignore:4505 -ignore:4244 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Editor.h" />
-    <ClInclude Include="ImGuiAdded\ImGuiConfirm.h" />
-    <ClInclude Include="Layers\EditorLayers.h" />
-    <ClInclude Include="Layers\EditorSettingsPanel.h" />
-    <ClInclude Include="Layers\EditorValues.hpp" />
-    <ClInclude Include="Layers\EditorView.h" />
-    <ClInclude Include="Layers\FileExplorer.h" />
-    <ClInclude Include="Layers\Hierarchy.h" />
-    <ClInclude Include="Layers\Inspector.h" />
-    <ClInclude Include="Layers\Layer.h" />
-    <ClInclude Include="Layers\MainMenuBar.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="SettingKeybinds.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="src\Components\CameraController.h" />
+    <ClInclude Include="src\Editor.h" />
+    <ClInclude Include="src\Editor.pch.h" />
+    <ClInclude Include="src\Handlers\DropHandler.h" />
+    <ClInclude Include="src\Handlers\FileDialog.h" />
+    <ClInclude Include="src\Handlers\MetaFileHandler.h" />
+    <ClInclude Include="src\ImGuiAdded\ImGuiExtra.h" />
+    <ClInclude Include="src\Input\InputInternal.h" />
+    <ClInclude Include="src\Layers\Debug\ConsoleWindow.h" />
+    <ClInclude Include="src\Layers\Debug\KeybindShortcutsLayer.h" />
+    <ClInclude Include="src\Layers\EditorColorScheme.h" />
+    <ClInclude Include="src\Layers\EditorLayers.h" />
+    <ClInclude Include="src\Layers\EditorValues.hpp" />
+    <ClInclude Include="src\Layers\Layer.h" />
+    <ClInclude Include="src\Layers\LayerHeader.h" />
+    <ClInclude Include="src\Layers\Network\CreateObjectMessage.h" />
+    <ClInclude Include="src\Layers\Network\MoveObjectMessage.h" />
+    <ClInclude Include="src\Layers\Network\NetOverloads.h" />
+    <ClInclude Include="src\Layers\Network\PlayerConnectMessage.h" />
+    <ClInclude Include="src\Layers\Network\PlayerDisconnectMessage.h" />
+    <ClInclude Include="src\Layers\Network\PlayerMoveMessage.h" />
+    <ClInclude Include="src\Layers\Network\SkinChangerMessage.h" />
+    <ClInclude Include="src\Layers\NetworkingLayer.h" />
+    <ClInclude Include="src\Layers\UI\AnimatorLayer.h" />
+    <ClInclude Include="src\Layers\UI\EditorSettingsPanel.h" />
+    <ClInclude Include="src\Layers\UI\EditorView.h" />
+    <ClInclude Include="src\Layers\UI\FileExplorer.h" />
+    <ClInclude Include="src\Layers\UI\FileSearch.h" />
+    <ClInclude Include="src\Layers\UI\HelpPanel.h" />
+    <ClInclude Include="src\Layers\UI\Hierarchy.h" />
+    <ClInclude Include="src\Layers\UI\Inspector.h" />
+    <ClInclude Include="src\Layers\UI\MainMenuBar.h" />
+    <ClInclude Include="src\Resource.h" />
+    <ClInclude Include="src\SettingKeybinds.h" />
+    <ClInclude Include="src\Snapshots\SnapshotManager.h" />
+    <ClInclude Include="src\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Editor.cpp" />
-    <ClCompile Include="Layers\EditorSettingsPanel.cpp" />
-    <ClCompile Include="Layers\EditorView.cpp" />
-    <ClCompile Include="Layers\FileExplorer.cpp" />
-    <ClCompile Include="Layers\Hierarchy.cpp" />
-    <ClCompile Include="Layers\Inspector.cpp" />
-    <ClCompile Include="Layers\Layer.cpp" />
-    <ClCompile Include="Layers\LayerHeader.h" />
-    <ClCompile Include="Layers\MainMenuBar.cpp" />
+    <ClCompile Include="src\Components\CameraController.cpp" />
+    <ClCompile Include="src\Editor.cpp" />
+    <ClCompile Include="src\Editor.pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Handlers\DropHandler.cpp" />
+    <ClCompile Include="src\Handlers\MetaFileHandler.cpp" />
+    <ClCompile Include="src\Input\InputInternal.cpp" />
+    <ClCompile Include="src\Layers\Debug\ConsoleWindow.cpp" />
+    <ClCompile Include="src\Layers\Debug\KeybindShortcutsLayer.cpp" />
+    <ClCompile Include="src\Layers\EditorLayers.cpp" />
+    <ClCompile Include="src\Layers\Layer.cpp" />
+    <ClCompile Include="src\Layers\NetworkingLayer.cpp" />
+    <ClCompile Include="src\Layers\UI\AnimatorLayer.cpp" />
+    <ClCompile Include="src\Layers\UI\EditorSettingsPanel.cpp" />
+    <ClCompile Include="src\Layers\UI\EditorView.cpp" />
+    <ClCompile Include="src\Layers\UI\FileExplorer.cpp" />
+    <ClCompile Include="src\Layers\UI\FileSearch.cpp" />
+    <ClCompile Include="src\Layers\UI\HelpPanel.cpp" />
+    <ClCompile Include="src\Layers\UI\Hierarchy.cpp" />
+    <ClCompile Include="src\Layers\UI\Inspector.cpp" />
+    <ClCompile Include="src\Layers\UI\MainMenuBar.cpp" />
+    <ClCompile Include="src\Snapshots\SnapshotManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Editor.rc" />
+    <None Include="src\Editor.aps" />
+    <None Include="src\Editor.ico" />
+    <None Include="src\VERSIONINFO.APS" />
+    <None Include="src\small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Editor.ico" />
-    <Image Include="small.ico" />
+    <ResourceCompile Include="src\Editor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AudioEngine\AudioEngine.vcxproj">
-      <Project>{1a6e280a-a4e9-4dfb-b3e5-d4788b545603}</Project>
+    <ProjectReference Include="..\External\FBXImporter\FBXImporter.vcxproj">
+      <Project>{5711F0AA-C3C6-68A0-4CBB-6277B86F5FA4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\Engine.vcxproj">
+      <Project>{DBC7D3B0-C769-FE86-B024-12DB9C6585D7}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Game\Game.vcxproj">
-      <Project>{0e9e3c35-28a3-46be-b15f-2a5996119188}</Project>
+      <Project>{7FA9857C-6BE0-860D-14CD-6C1000E3020F}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\GraphicsEngine\GraphicsEngine.vcxproj">
-      <Project>{4a14b5d4-9d37-4a37-9d3b-d7b2bac7b312}</Project>
+    <ProjectReference Include="..\External\rapidjson\Rapidjson.vcxproj">
+      <Project>{2F4FA070-9BB9-54E7-E4F7-058D50A1323C}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\yaml-cpp\YamlCpp.vcxproj">
+      <Project>{3BF5F3B0-A7D4-724C-B0EC-FD221C4BD9AD}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\ImGui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\TurNet\TurNet.vcxproj">
+      <Project>{076955D4-F30A-80AA-DCC5-93FEC80607FB}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
