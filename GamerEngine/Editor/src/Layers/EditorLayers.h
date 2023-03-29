@@ -30,6 +30,7 @@ public:
 	void EndFrame();
 
 	bool ShouldRunEngine();
+	void SetShouldEngineRun(bool aCond);
 
 private:
 

@@ -2,6 +2,8 @@
 #include <functional>
 #include <ImGui/imgui.h>
 
+#include "imgui/imgui_internal.h"
+
 namespace ImGui
 {
 	inline void ImGuiCenterNextWindow() noexcept
@@ -140,4 +142,9 @@ namespace ImGui
 		ImGui::Columns(1);
 		ImGui::PopStyleVar();
 	}
+
+
+
+
+	
 }

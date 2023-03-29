@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <unordered_map>
 #include <Layers/Layer.h>
-#include <Types/EnumTypes.h>
+#include <Renderer/Types/EnumTypes.h>
 
 class Texture;
 

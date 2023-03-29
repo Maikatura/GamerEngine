@@ -7,6 +7,8 @@ class HelpPanel : public Layer
 {
 public:
 
+	HelpPanel();
+
 	void OnAttach() override;
 	bool OnImGuiRender() override;
 };

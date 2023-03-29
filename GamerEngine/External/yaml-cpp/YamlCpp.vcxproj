@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3BF5F3B0-A7D4-724C-B0EC-FD221C4BD9AD}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>YamlCpp</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\YamlCpp\Debug\</IntDir>
+    <TargetName>YamlCpp_Debug</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\YamlCpp\Release\</IntDir>
+    <TargetName>YamlCpp_Release</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="yaml-cpp\anchor.h" />
+    <ClInclude Include="yaml-cpp\binary.h" />
+    <ClInclude Include="yaml-cpp\collectionstack.h" />
+    <ClInclude Include="yaml-cpp\contrib\anchordict.h" />
+    <ClInclude Include="yaml-cpp\contrib\graphbuilder.h" />
+    <ClInclude Include="yaml-cpp\contrib\graphbuilderadapter.h" />
+    <ClInclude Include="yaml-cpp\depthguard.h" />
+    <ClInclude Include="yaml-cpp\directives.h" />
+    <ClInclude Include="yaml-cpp\dll.h" />
+    <ClInclude Include="yaml-cpp\emitfromevents.h" />
+    <ClInclude Include="yaml-cpp\emitter.h" />
+    <ClInclude Include="yaml-cpp\emitterdef.h" />
+    <ClInclude Include="yaml-cpp\emittermanip.h" />
+    <ClInclude Include="yaml-cpp\emitterstate.h" />
+    <ClInclude Include="yaml-cpp\emitterstyle.h" />
+    <ClInclude Include="yaml-cpp\emitterutils.h" />
+    <ClInclude Include="yaml-cpp\eventhandler.h" />
+    <ClInclude Include="yaml-cpp\exceptions.h" />
+    <ClInclude Include="yaml-cpp\exp.h" />
+    <ClInclude Include="yaml-cpp\indentation.h" />
+    <ClInclude Include="yaml-cpp\mark.h" />
+    <ClInclude Include="yaml-cpp\node\convert.h" />
+    <ClInclude Include="yaml-cpp\node\detail\impl.h" />
+    <ClInclude Include="yaml-cpp\node\detail\iterator.h" />
+    <ClInclude Include="yaml-cpp\node\detail\iterator_fwd.h" />
+    <ClInclude Include="yaml-cpp\node\detail\memory.h" />
+    <ClInclude Include="yaml-cpp\node\detail\node.h" />
+    <ClInclude Include="yaml-cpp\node\detail\node_data.h" />
+    <ClInclude Include="yaml-cpp\node\detail\node_iterator.h" />
+    <ClInclude Include="yaml-cpp\node\detail\node_ref.h" />
+    <ClInclude Include="yaml-cpp\node\emit.h" />
+    <ClInclude Include="yaml-cpp\node\impl.h" />
+    <ClInclude Include="yaml-cpp\node\iterator.h" />
+    <ClInclude Include="yaml-cpp\node\node.h" />
+    <ClInclude Include="yaml-cpp\node\parse.h" />
+    <ClInclude Include="yaml-cpp\node\ptr.h" />
+    <ClInclude Include="yaml-cpp\node\type.h" />
+    <ClInclude Include="yaml-cpp\nodebuilder.h" />
+    <ClInclude Include="yaml-cpp\nodeevents.h" />
+    <ClInclude Include="yaml-cpp\noexcept.h" />
+    <ClInclude Include="yaml-cpp\null.h" />
+    <ClInclude Include="yaml-cpp\ostream_wrapper.h" />
+    <ClInclude Include="yaml-cpp\parser.h" />
+    <ClInclude Include="yaml-cpp\ptr_vector.h" />
+    <ClInclude Include="yaml-cpp\regex_yaml.h" />
+    <ClInclude Include="yaml-cpp\regeximpl.h" />
+    <ClInclude Include="yaml-cpp\scanner.h" />
+    <ClInclude Include="yaml-cpp\scanscalar.h" />
+    <ClInclude Include="yaml-cpp\scantag.h" />
+    <ClInclude Include="yaml-cpp\setting.h" />
+    <ClInclude Include="yaml-cpp\singledocparser.h" />
+    <ClInclude Include="yaml-cpp\stlemitter.h" />
+    <ClInclude Include="yaml-cpp\stream.h" />
+    <ClInclude Include="yaml-cpp\streamcharsource.h" />
+    <ClInclude Include="yaml-cpp\stringsource.h" />
+    <ClInclude Include="yaml-cpp\tag.h" />
+    <ClInclude Include="yaml-cpp\token.h" />
+    <ClInclude Include="yaml-cpp\traits.h" />
+    <ClInclude Include="yaml-cpp\yaml.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="yaml-cpp\binary.cpp" />
+    <ClCompile Include="yaml-cpp\contrib\graphbuilder.cpp" />
+    <ClCompile Include="yaml-cpp\contrib\graphbuilderadapter.cpp" />
+    <ClCompile Include="yaml-cpp\convert.cpp" />
+    <ClCompile Include="yaml-cpp\depthguard.cpp" />
+    <ClCompile Include="yaml-cpp\directives.cpp" />
+    <ClCompile Include="yaml-cpp\emit.cpp" />
+    <ClCompile Include="yaml-cpp\emitfromevents.cpp" />
+    <ClCompile Include="yaml-cpp\emitter.cpp" />
+    <ClCompile Include="yaml-cpp\emitterstate.cpp" />
+    <ClCompile Include="yaml-cpp\emitterutils.cpp" />
+    <ClCompile Include="yaml-cpp\exceptions.cpp" />
+    <ClCompile Include="yaml-cpp\exp.cpp" />
+    <ClCompile Include="yaml-cpp\memory.cpp" />
+    <ClCompile Include="yaml-cpp\node.cpp" />
+    <ClCompile Include="yaml-cpp\node_data.cpp" />
+    <ClCompile Include="yaml-cpp\nodebuilder.cpp" />
+    <ClCompile Include="yaml-cpp\nodeevents.cpp" />
+    <ClCompile Include="yaml-cpp\null.cpp" />
+    <ClCompile Include="yaml-cpp\ostream_wrapper.cpp" />
+    <ClCompile Include="yaml-cpp\parse.cpp" />
+    <ClCompile Include="yaml-cpp\parser.cpp" />
+    <ClCompile Include="yaml-cpp\regex_yaml.cpp" />
+    <ClCompile Include="yaml-cpp\scanner.cpp" />
+    <ClCompile Include="yaml-cpp\scanscalar.cpp" />
+    <ClCompile Include="yaml-cpp\scantag.cpp" />
+    <ClCompile Include="yaml-cpp\scantoken.cpp" />
+    <ClCompile Include="yaml-cpp\simplekey.cpp" />
+    <ClCompile Include="yaml-cpp\singledocparser.cpp" />
+    <ClCompile Include="yaml-cpp\stream.cpp" />
+    <ClCompile Include="yaml-cpp\tag.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

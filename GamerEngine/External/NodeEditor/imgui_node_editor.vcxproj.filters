@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\Source\crude_json.cpp" />
+    <ClCompile Include="src\Source\imgui_canvas.cpp" />
+    <ClCompile Include="src\Source\imgui_node_editor.cpp" />
+    <ClCompile Include="src\Source\imgui_node_editor_api.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Source\crude_json.h" />
+    <ClInclude Include="src\Source\imgui_bezier_math.h" />
+    <ClInclude Include="src\Source\imgui_canvas.h" />
+    <ClInclude Include="src\Source\imgui_extra_math.h" />
+    <ClInclude Include="src\Source\imgui_node_editor_internal.h" />
+    <ClInclude Include="src\Include\imgui_node_editor.h" />
+    <ClInclude Include="src\Source\imgui_bezier_math.inl" />
+    <ClInclude Include="src\Source\imgui_extra_math.inl" />
+    <ClInclude Include="src\Source\imgui_node_editor_internal.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="src\Support\imgui_node_editor.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{15AC954C-6857-35C5-8994-668722BF2148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{00540024-2D61-3898-89B2-E16730AE67D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support">
+      <UniqueIdentifier>{72718149-19B1-319F-82AB-50FFBBA1FB81}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

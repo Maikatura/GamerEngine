@@ -1,26 +1,39 @@
 #include "Editor.pch.h"
 #include "EditorView.h"
 #include <DirectXMath.h>
-#include <GraphicsEngine.h>
-#include <Framework/DX11.h>
-#include <Scene/Scene.h>
+#include <Renderer/GraphicsEngine.h>
+#include <Renderer/Framework/DX11.h>
+#include <Renderer/Scene/Scene.h>
 
 #include "Components/Components.hpp"
 #include "imgui/imgui_internal.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Render/Renderer.h"
-#include "Render/SelectionData.h"
-#include <Model/Entity.h>
+#include "Renderer/Render/Renderer.h"
+#include "Renderer/Render/SelectionData.h"
+#include <Renderer/Model/Entity.h>
 #include <Components/CameraController.h>
 
-#include "Debugger/ConsoleHelper.h"
+#include "Renderer/Debugger/ConsoleHelper.h"
 #include "Handlers/DropHandler.h"
-#include "Managers/CommandManager.h"
-#include "Managers/Commands/PositionCommand.h"
+#include "Renderer/Managers/CommandManager.h"
+#include "Renderer/Managers/Commands/PositionCommand.h"
+#include "Renderer/Scene/SceneManager.h"
+#include "Layers/NetworkingLayer.h"
+#include "Layers/Network/MoveObjectMessage.h"
 
-bool EditorView::OnImGuiRender()
+EditorView::EditorView() : Layer("Scene")
+{
+
+}
+
+bool EditorView::OnImGuiRender() 
 {
 	Entity entity = SelectionData::GetEntityObject();
+
+	if(!SceneManager::GetScene())
+	{
+		return true;
+	}
 
 	RenderGameView();
 	RenderSceneView(entity);
@@ -48,8 +61,9 @@ void EditorView::RenderSceneView(Entity aEntity)
 	ImVec2 windowSize = ImGui::GetWindowSize();
 	windowSize.y;
 
+	
 
-	auto view = GraphicsEngine::Get()->GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
+	auto view = SceneManager::GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
 	for(auto entity : view)
 	{
 		auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
@@ -64,14 +78,14 @@ void EditorView::RenderSceneView(Entity aEntity)
 
 	ImGui::EndChild();
 	ImRect rect = ImGui::GetCurrentWindow()->WorkRect;
-	DropHandler::DropFileScene(rect, 12310198389013290);
+	DropHandler::DropFileScene(rect, static_cast<ImGuiID>(1231089013290));
 	ImGui::End();
 	ImGui::PopStyleVar();
 }
 
 void EditorView::RenderEntityParts(Entity aEntity)
 {
-	if(!GraphicsEngine::Get()->GetScene()->GetRegistry().valid(aEntity.GetHandle()))
+	if(!SceneManager::GetScene()->GetRegistry().valid(aEntity.GetHandle()))
 	{
 		return;
 	}
@@ -101,15 +115,15 @@ void EditorView::RenderEntityParts(Entity aEntity)
 
 	if(!ImGui::IsMouseDown(ImGuiMouseButton_Right))
 	{
-		if(ImGui::IsKeyPressed('W'))
+		if(ImGui::IsKeyPressed(ImGuiKey_W))
 		{
 			myOperation = ImGuizmo::OPERATION::TRANSLATE;
 		}
-		if(ImGui::IsKeyPressed('E'))
+		if(ImGui::IsKeyPressed(ImGuiKey_E))
 		{
 			myOperation = ImGuizmo::OPERATION::ROTATE;
 		}
-		if(ImGui::IsKeyPressed('R'))
+		if(ImGui::IsKeyPressed(ImGuiKey_R))
 		{
 			myOperation = ImGuizmo::OPERATION::SCALE;
 		}
@@ -121,7 +135,7 @@ void EditorView::RenderEntityParts(Entity aEntity)
 	ImGuizmo::Manipulate(*viewMat.m,
 		*projMat.m,
 		myOperation,
-		ImGuizmo::LOCAL,
+		ImGuizmo::WORLD,
 		*localMat.m,
 		NULL,
 		NULL
@@ -154,9 +168,18 @@ void EditorView::RenderEntityParts(Entity aEntity)
 		else
 		{
 			myEditedTranslate = transform;
-			auto test = new PositionCommand(aEntity, myStartTranslate, myEditedTranslate);
-			CommandManager::DoCommand(test);
+			auto moveCommand = new PositionCommand(aEntity, myStartTranslate, myEditedTranslate);
+			CommandManager::DoCommand(moveCommand);
 			ConsoleHelper::Log(LogType::Info, "Transform Editing Done");
+
+			TurNet::TurMessage outMsg;
+			ObjectMoveMessage moveMsg;
+			moveMsg.EntityID = aEntity.GetComponent<IDComponent>().ID;
+			moveMsg.Transform = transform;
+		
+			outMsg << moveMsg;
+
+			NetworkingLayer::GetClient().SendToServer(outMsg);
 		}
 
 		myIsFirstTimeEditing = !myIsFirstTimeEditing;

@@ -4,33 +4,38 @@
 #include <string>
 #include <Layers/LayerHeader.h>
 
-#include "GraphicsEngine.h"
+#include "Renderer/GraphicsEngine.h"
 #include "Time.hpp"
-#include "Debugger/ConsoleHelper.h"
+#include "Renderer/Debugger/ConsoleHelper.h"
 #include "Fonts/IconsForkAwesome.h"
-#include "Scene/Scene.h"
+#include "Handlers/FileDialog.h"
+#include "Renderer/Scene/Scene.h"
+#include "Renderer/Scene/SceneManager.h"
+#include "Renderer/Scene/SceneSerializer.h"
 #include "Snapshots/SnapshotManager.h"
 
 
-MainMenuBar::MainMenuBar(EditorLayers& aLayer) : myLayers(aLayer)
+MainMenuBar::MainMenuBar(EditorLayers& aLayer) : Layer("MainMenuBar"), myLayers(aLayer)
 { }
 
 bool MainMenuBar::OnImGuiRender()
 {
-    
-
     if(ImGui::BeginMainMenuBar())
     {
         if(ImGui::BeginMenu(ICON_FK_FILE" File"))
         {
             if(ImGui::MenuItem("Open"))
             {
-
+                std::string path = FileDialog::OpenFile("Scene File (*.csf)\0*.csf\0");
+                SceneManager::LoadScene(path);
+                ConsoleHelper::Log(LogType::Info, std::string("Open Scene from '" + SceneManager::GetScene()->GetPath() + "'"));
             }
 
             if(ImGui::MenuItem("Save"))
             {
-                // TODO : FIX A POSTMASTER THAT SEND THE OPEN COMMAND TO THE KeybindShortcuts to open the file prompt to save
+                std::string path = FileDialog::SaveFile("Scene File (*.csf)\0*.csf\0");
+                SceneManager::SaveScene(path + ".csf");
+                ConsoleHelper::Log(LogType::Info, std::string("Saved scene to '" + SceneManager::GetScene()->GetPath() + "'"));
             }
 
             ImGui::EndMenu();
@@ -38,27 +43,6 @@ bool MainMenuBar::OnImGuiRender()
 
         if(ImGui::BeginMenu("View"))
         {
-            if(ImGui::BeginMenu("Windows"))
-            {
-
-                if(ImGui::MenuItem(EditorNames::HierarchyName.c_str()))
-                {
-                    myLayers.AddLayer(std::make_shared<Hierarchy>());
-                }
-
-                if(ImGui::MenuItem(EditorNames::InspectorName.c_str()))
-                {
-                    myLayers.AddLayer(std::make_shared<Inspector>());
-                }
-
-                if(ImGui::MenuItem("Networking"))
-                {
-                    myLayers.AddLayer(std::make_shared<NetworkingLayer>());
-                }
-
-            	ImGui::EndMenu();
-            }
-
             ImGui::EndMenu();
         }
 
@@ -72,6 +56,28 @@ bool MainMenuBar::OnImGuiRender()
 
             ImGui::EndMenu();
         }
+
+        if(ImGui::BeginMenu("Windows"))
+        {
+
+            if(ImGui::MenuItem(EditorNames::HierarchyName.c_str()))
+            {
+                myLayers.AddLayer(std::make_shared<Hierarchy>());
+            }
+
+            if(ImGui::MenuItem(EditorNames::InspectorName.c_str()))
+            {
+                myLayers.AddLayer(std::make_shared<Inspector>());
+            }
+
+            if(ImGui::MenuItem("Networking"))
+            {
+                myLayers.AddLayer(std::make_shared<NetworkingLayer>());
+            }
+
+            ImGui::EndMenu();
+        }
+
 
         if(ImGui::BeginMenu("Help"))
         {
@@ -93,7 +99,7 @@ bool MainMenuBar::OnImGuiRender()
 
 
         float textWidth = 0.0f;
-        if (!GraphicsEngine::Get()->GetEngineUpdateRuntime())
+        if (!myLayers.ShouldRunEngine())
         {
             std::string playText = ICON_FK_PLAY;
             playText += " Play";
@@ -102,9 +108,8 @@ bool MainMenuBar::OnImGuiRender()
             ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
             if(ImGui::Button(playText.c_str()))
             {
-                GraphicsEngine::Get()->SetEngineUpdateRuntime(true);
-
-                mySnapshot = SnapshotManager(&GraphicsEngine::Get()->GetScene()->GetRegistry());
+                myLayers.SetShouldEngineRun(true);
+                mySnapshot = SnapshotManager(&SceneManager::GetScene()->GetRegistry());
                 mySnapshot.CreateSnapshot();
             }
         }
@@ -118,21 +123,21 @@ bool MainMenuBar::OnImGuiRender()
             ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
             if(ImGui::Button(stopText.c_str()))
             {
-                GraphicsEngine::Get()->SetEngineUpdateRuntime(false);
+                myLayers.SetShouldEngineRun(false);
                 ConsoleHelper::Log(LogType::Info, "Stopped game");
                 mySnapshot.RestoreSnapShot();
             }
         }
        
 
-        std::string resumeOrPause = (GraphicsEngine::Get()->GetEngineUpdateRuntime() == true) ? "Pause" : "Resume";
+        std::string resumeOrPause = (GraphicsEngine::Get()->GetPauseState() == true) ? "Resume" : "Pause";
 
         textWidth = ImGui::CalcTextSize(resumeOrPause.c_str()).x;
         ImGui::SetCursorPosX((windowWidth * 0.5f) + (size + padding));
 
         if(ImGui::Button(resumeOrPause.c_str()))
         {
-            GraphicsEngine::Get()->SetEngineUpdateRuntime(!GraphicsEngine::Get()->GetEngineUpdateRuntime());
+            GraphicsEngine::Get()->SetPauseState(!GraphicsEngine::Get()->GetPauseState());
             ConsoleHelper::Log(LogType::Info, "Paused/Resumed game");
         }
 

@@ -3,7 +3,6 @@
 #include "ImGuizmo/ImGuizmo.h"
 
 #include "Components/Components.hpp"
-#include <imgui/imgui_internal.h>
 #include "Math/MathTypes.hpp"
 
 class Entity;
@@ -12,7 +11,7 @@ class EditorView : public Layer
 {
 public:
 
-	
+	EditorView();
 
 
 	bool OnImGuiRender() override;

@@ -7,16 +7,17 @@
 #include <rapidjson/writer.h>
 #include "Windows.h"
 
-#include <GraphicsEngine.h>
+#include <Renderer/GraphicsEngine.h>
 
 #include "Time.hpp"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Render/Renderer.h"
-#include "Scene/Scene.h"
-#include "Scene/SceneSerializer.h"
+#include "Renderer/Render/Renderer.h"
+#include "Renderer/Scene/Scene.h"
+#include "Renderer/Scene/SceneSerializer.h"
 #include <imgui_markdown/imgui_markdown.h>
 
 #include "Layers/EditorColorScheme.h"
+#include "Renderer/Scene/SceneManager.h"
 
 ImFont* H1 = NULL;
 ImFont* H2 = NULL;
@@ -24,7 +25,7 @@ ImFont* H3 = NULL;
 
 ImGui::MarkdownConfig mdConfig;
 
-EditorSettingsPanel::EditorSettingsPanel()
+EditorSettingsPanel::EditorSettingsPanel() : Layer("Editor Settings")
 {
 	OnAttach();
 }
@@ -53,8 +54,8 @@ bool EditorSettingsPanel::OnImGuiRender()
 	}
 
 
-	ImGui::Begin(EditorNames::SettingsName.c_str(), &myIsOpen);
-
+	BeginMenu(&myIsOpen);
+	
 
 	std::vector<std::string> menuNames = { "Editor", "Scene" };
 #if _DEBUG
@@ -80,7 +81,7 @@ bool EditorSettingsPanel::OnImGuiRender()
 	}
 #endif
 
-	ImGui::End();
+	EndMenu();
 
 	return true;
 }
@@ -288,17 +289,12 @@ void EditorSettingsPanel::RenderEditorSettings()
 	ImGui::TextWrapped("Save and load scene");
 	if(ImGui::Button("Save Scene"))
 	{
-		SceneSerializer test(GraphicsEngine::Get()->GetScene().get());
-		test.Serialize("Assets\\Scenes\\scenetesting.csf");
+		SceneManager::SaveScene("Assets\\Scenes\\scenetesting.csf");
 	}
 
 	if(ImGui::Button("Load Scene"))
 	{
-
-		GraphicsEngine::Get()->GetScene()->Clear();
-		GraphicsEngine::Get()->GetScene() = std::make_shared<Scene>();
-		SceneSerializer test(GraphicsEngine::Get()->GetScene().get());
-		test.Deserialize("Assets\\Scenes\\scenetesting.csf");
+		SceneManager::LoadScene("Assets\\Scenes\\scenetesting.csf");
 	}
 
 

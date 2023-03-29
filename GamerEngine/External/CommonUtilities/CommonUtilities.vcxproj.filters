@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Data">
+      <UniqueIdentifier>{B6241DCF-A2F1-77DA-CB0A-6682B736AD68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\List">
+      <UniqueIdentifier>{B8A921CF-A476-7CDA-CD8F-6A82B9BBB168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Math">
+      <UniqueIdentifier>{261422CF-12E1-7CDA-3BFA-6A822726B268}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sort">
+      <UniqueIdentifier>{C49925CF-B066-80DA-D97F-6E82C5ABB568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utilites">
+      <UniqueIdentifier>{4F1238FC-3B75-C7A0-E4FA-FF56D03C9323}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="src\Data\HashTable.hpp">
+      <Filter>src\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Data\Pointer.h">
+      <Filter>src\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Data\SharedRef.h">
+      <Filter>src\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Data\UniquePtr.h">
+      <Filter>src\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\List\BSTSet.hpp">
+      <Filter>src\List</Filter>
+    </ClInclude>
+    <ClInclude Include="src\List\DoublyLinkedList.hpp">
+      <Filter>src\List</Filter>
+    </ClInclude>
+    <ClInclude Include="src\List\DoublyLinkedListNode.hpp">
+      <Filter>src\List</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\AABB3D.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Intersection.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Line.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\LineVolume.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\MathTypes.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Matrix.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Matrix3x3.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Matrix4x4.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Plane.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\PlaneVolume.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Quaternion.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Ray.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Sphere.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vector.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vector2.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vector3.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vector4.hpp">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sort\Sort.hpp">
+      <Filter>src\Sort</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\InputManager.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\PerformaceTimer.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\ProfilerMacro.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\Queue.hpp">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\Stack.hpp">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\Timer.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\UtilityFunctions.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\VisualProfiler.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="src\Utilites\InputManager.cpp">
+      <Filter>src\Utilites</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utilites\Timer.cpp">
+      <Filter>src\Utilites</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "ImGuizmo/GraphEditor.h"
-#include "Render/SelectionData.h"
+#include "Renderer/Render/SelectionData.h"
 
 template <typename T, std::size_t N>
 struct Array
@@ -27,6 +27,8 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
 {
 	bool AllowedLink(GraphEditor::NodeIndex from, GraphEditor::NodeIndex to) override
 	{
+		from;
+		to;
 		return true;
 	}
 
@@ -50,7 +52,12 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
 	}
 
 	virtual void RightClick(GraphEditor::NodeIndex nodeIndex, GraphEditor::SlotIndex slotIndexInput, GraphEditor::SlotIndex slotIndexOutput) override
-	{}
+	{
+		nodeIndex;
+		slotIndexInput;
+		slotIndexOutput;
+
+	}
 
 	void AddLink(GraphEditor::NodeIndex inputNodeIndex, GraphEditor::SlotIndex inputSlotIndex, GraphEditor::NodeIndex outputNodeIndex, GraphEditor::SlotIndex outputSlotIndex) override
 	{
@@ -64,6 +71,7 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
 
 	void CustomDraw(ImDrawList* drawList, ImRect rectangle, GraphEditor::NodeIndex nodeIndex) override
 	{
+		nodeIndex;
 		drawList->AddLine(rectangle.Min, rectangle.Max, IM_COL32(0, 0, 0, 255));
 		drawList->AddText(rectangle.Min, IM_COL32(255, 128, 64, 255), "Draw");
 	}
@@ -164,6 +172,10 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
 
 	std::vector<GraphEditor::Link> mLinks = { {0, 0, 1, 0} };
 };
+
+AnimatorLayer::AnimatorLayer() : Layer("Animator")
+{
+}
 
 bool AnimatorLayer::OnImGuiRender()
 {

@@ -1,8 +1,8 @@
 #include "Editor.pch.h"
 #include <Snapshots/SnapshotManager.h>
-#include "GraphicsEngine.h"
-#include "entt/entt.hpp"
-#include "Scene/Scene.h"
+#include "Renderer/GraphicsEngine.h"
+#include <entt.hpp>
+#include "Renderer/Scene/Scene.h"
 #include <Components/Components.hpp>
 
 

@@ -28,6 +28,7 @@ void LinkCallback(ImGui::MarkdownLinkCallbackData data_)
 
 inline ImGui::MarkdownImageData ImageCallback(ImGui::MarkdownLinkCallbackData data_)
 {
+    data_;
     // In your application you would load an image based on data_ input. Here we just use the imgui font texture.
     ImTextureID image = ImGui::GetIO().Fonts->TexID;
     // > C++14 can use ImGui::MarkdownImageData imageData{ true, false, image, ImVec2( 40.0f, 20.0f ) };
@@ -96,6 +97,10 @@ void Markdown(const std::string& markdown_)
     mdConfig.userData = NULL;
     mdConfig.formatCallback = MarkdownFormatCallback;
     ImGui::Markdown(markdown_.c_str(), markdown_.length(), mdConfig);
+}
+
+HelpPanel::HelpPanel() : Layer("Help Panel")
+{
 }
 
 void HelpPanel::OnAttach()

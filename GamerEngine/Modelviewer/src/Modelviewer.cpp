@@ -2,12 +2,15 @@
 
 
 #define WIN32_LEAN_AND_MEAN
+#define _WINSOCKAPI_ 
 #include "Windows.h"
 
 #include "Modelviewer.h"
-#include "GraphicsEngine.h"
-#include "Render/LineRenderer.h"
-#include "Scene/SceneSerializer.h"
+#include "Renderer/GraphicsEngine.h"
+#include "Renderer/Render/LineRenderer.h"
+#include "Renderer/Scene/Scene.h"
+#include "Renderer/Scene/SceneManager.h"
+#include "Renderer/Scene/SceneSerializer.h"
 
 
 
@@ -37,8 +40,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         false
     );
 
-    SceneSerializer loadScene(graphicsEngine.GetScene().get());
-    loadScene.Deserialize("Assets\\Scenes\\Default.csf");
+    SceneManager::LoadScene("Assets\\Scenes\\FastTest.csf");
  
     while(bShouldRun)
     {
@@ -52,6 +54,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 bShouldRun = false;
 			}
 		}
+
+        if(!bShouldRun)
+        {
+            break;
+        }
 
         graphicsEngine.BeginFrame();
         graphicsEngine.OnFrameUpdate(true);

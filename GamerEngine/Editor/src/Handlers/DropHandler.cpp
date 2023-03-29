@@ -2,15 +2,16 @@
 #include <filesystem>
 #include <Handlers/DropHandler.h>
 
-#include "GraphicsEngine.h"
+#include "Renderer/GraphicsEngine.h"
 #include "StringCast.h"
-#include "AssetHandlers/ModelAssetHandler.h"
-#include "Debugger/ConsoleHelper.h"
-#include "Scene/SceneSerializer.h"
-#include "Types/FileExtensions.h"
+#include "Renderer/AssetHandlers/ModelAssetHandler.h"
+#include "Renderer/Debugger/ConsoleHelper.h"
+#include "Renderer/Scene/SceneSerializer.h"
+#include "Renderer/Types/FileExtensions.h"
 
 #include "Components/Components.hpp"
-#include "Render/Renderer.h"
+#include "Renderer/Render/Renderer.h"
+#include "Renderer/Scene/SceneManager.h"
 
 std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 {
@@ -39,17 +40,17 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 
 		if(payload)
 		{
-			std::wstring wPath = static_cast<const wchar_t*>(payload->Data);
-			auto stringPath = Helpers::string_cast<std::string>(wPath);
+			wPath = static_cast<const wchar_t*>(payload->Data);
+			const auto stringPath = Helpers::string_cast<std::string>(wPath);
 			std::filesystem::path path = stringPath;
-			auto extension = path.extension().string();
+			const auto extension = path.extension().string();
 
 
 			if(fbxExt == extension)
 			{
 
-				auto& modelComp = GraphicsEngine::Get()->GetScene()->CreateEntity("").AddComponent<ModelComponent>();
-				modelComp.SetModel(ModelAssetHandler::GetModelInstance(wPath));
+				auto& modelComp = SceneManager::GetScene()->CreateEntity("").AddComponent<ModelComponent>();
+				modelComp.SetModel(ModelAssetHandler::Get().GetModelInstance(wPath));
 				ConsoleHelper::Log(LogType::Info, "Loaded a model '" + path.filename().string() + "' into the scene");
 			}
 
@@ -57,12 +58,11 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 			{
 
 				GraphicsEngine::Get()->SetEngineUpdateRuntime(false);
-				GraphicsEngine::Get()->GetScene()->Clear();
-				GraphicsEngine::Get()->GetScene() = std::make_shared<Scene>();
-				SceneSerializer sceneLoader(GraphicsEngine::Get()->GetScene().get());
-				sceneLoader.Deserialize(stringPath);
 
-				ConsoleHelper::Log(LogType::Info, "Loaded a scene '" + path.filename().string() + "'");
+				SceneManager::LoadScene(stringPath);
+				
+
+				ConsoleHelper::Log(LogType::Info, "Loaded a scene '" + stringPath + "'");
 
 			}
 		}
@@ -90,7 +90,7 @@ std::wstring DropHandler::DropFileEntity(Entity& aEntity)
 			auto extension = path.extension().string();
 
 
-			if(textureExt == extension)
+			if(textureExt0 == extension)
 			{
 				hasFound = true;
 
@@ -114,7 +114,7 @@ std::wstring DropHandler::DropFileEntity(Entity& aEntity)
 				}
 				auto& modelComp = aEntity.GetComponent<ModelComponent>();
 
-				ModelAssetHandler::LoadAnimation(modelComp.GetModel()->GetModel()->GetName(), wPath);
+				ModelAssetHandler::Get().LoadAnimation(modelComp.GetModel()->GetModel()->GetName(), wPath);
 				modelComp.GetModel()->PlayAnimation(wPath);
 				std::filesystem::path modelName = modelComp.GetModel()->GetModel()->GetName();
 

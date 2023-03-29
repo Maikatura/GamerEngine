@@ -1,54 +1,78 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Components">
+      <UniqueIdentifier>{6B7DD516-5735-1764-C03C-F0BFAC13B254}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Components\Audio">
+      <UniqueIdentifier>{AC2F53F1-9828-7243-C15A-57C8ADB2514F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Components\Network">
+      <UniqueIdentifier>{E49A6957-D07E-2AAD-39DF-240025E2142F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{898ac114-b0ee-4411-ba7c-6dba59f42f64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Temporary">
-      <UniqueIdentifier>{3b9a8441-a232-4cc8-9ae7-d55cb2535c28}</UniqueIdentifier>
+    <Filter Include="Network">
+      <UniqueIdentifier>{8F6A0D6C-FB49-8C07-0462-17DE70C0F268}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\Animator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\CameraController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Rotater.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\pch.h">
-      <Filter>Header Files</Filter>
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\Audio\AudioSource.h">
-      <Filter>Header Files</Filter>
+      <Filter>Components\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="src\Components\Camera.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\CameraComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ChildComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Component.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Components.hpp">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\NativeScriptComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Network\NetworkComponent.h">
+      <Filter>Components\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\RandomMoverComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Rotater.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ScriptableEntity.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Network\NetworkSettings.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework.h" />
+    <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\pch.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Components\CameraComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\Components\CameraController.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Components\Component.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Components\Network\NetworkComponent.cpp">
+      <Filter>Components\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\RandomMoverComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\ScriptableEntity.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp" />
   </ItemGroup>
 </Project>

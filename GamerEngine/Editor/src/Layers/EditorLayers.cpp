@@ -1,14 +1,14 @@
 #include "Editor.pch.h"
 #include <Layers/EditorLayers.h>
 #include <iostream>
-#include <GraphicsEngine.h>
-#include <Framework/DX11.h>
+#include <Renderer/GraphicsEngine.h>
+#include <Renderer/Framework/DX11.h>
 #include "ImGuizmo/ImGuizmo.h"
 #include <Layers/LayerHeader.h>
-#include "Scene/Scene.h"
+#include "Renderer/Scene/Scene.h"
 #include <Fonts/IconsForkAwesome.h>
 
-#include "Debugger/ConsoleHelper.h"
+#include "Renderer/Debugger/ConsoleHelper.h"
 
 EditorLayers::EditorLayers()
 {}
@@ -43,8 +43,6 @@ void EditorLayers::Init()
 	static const ImWchar icon_ranges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 	io.Fonts->AddFontFromFileTTF(FONT_ICON_FILE_NAME_FK, 13.0f, &config, icon_ranges);
 
-	
-
 	AddDefaultLayers();
 }
 
@@ -55,6 +53,7 @@ void EditorLayers::AddLayer(std::shared_ptr<Layer> aLayer)
 
 void EditorLayers::Destory()
 {
+	OnDetach();
 	ImGui::SaveIniSettingsToDisk((myImGuiSettingsFile + "EditorLayout.data").c_str());
 
 	ImGui_ImplDX11_Shutdown();
@@ -93,6 +92,11 @@ void EditorLayers::EndFrame()
 bool EditorLayers::ShouldRunEngine()
 {
 	return myShouldRunEngine;
+}
+
+void EditorLayers::SetShouldEngineRun(bool aCond)
+{
+	myShouldRunEngine = aCond;
 }
 
 void EditorLayers::AddDefaultLayers()
@@ -150,5 +154,10 @@ void EditorLayers::OnImGuiRender()
 }
 
 void EditorLayers::OnDetach()
-{}
+{
+	for(int i = 0; i < myLayers.size(); i++)
+	{
+		myLayers[i]->OnDetach();
+	}
+}
 

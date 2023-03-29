@@ -1,6 +1,6 @@
 #pragma once
 #include "Components/Components.hpp"
-#include "entt/entt.hpp"
+#include <entt.hpp>
 
 template<class T>
 struct SnapshotContainer

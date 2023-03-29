@@ -1,6 +1,6 @@
 #pragma once
 #include "Components/ScriptableEntity.h"
-#include "Render/Renderer.h"
+#include "Renderer/Render/Renderer.h"
 #define PI 3.14f
 
 class Camera

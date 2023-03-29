@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{076955D4-F30A-80AA-DCC5-93FEC80607FB}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>TurNet</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\TurNet\Debug\</IntDir>
+    <TargetName>TurNet_Debug</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\TurNet\Release\</IntDir>
+    <TargetName>TurNet_Release</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26812;26451;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;..\CryptoPP;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 -ignore:4231 -ignore:4251 -ignore:4275 -ignore:4355 -ignore:4505 -ignore:4244 -ignore:4242 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26812;26451;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;..\CryptoPP;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 -ignore:4231 -ignore:4251 -ignore:4275 -ignore:4355 -ignore:4505 -ignore:4244 -ignore:4242 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="NetworkPackager.h" />
+    <ClInclude Include="TurHeader.h" />
+    <ClInclude Include="TurNet\Client\ClientUDP.h" />
+    <ClInclude Include="TurNet\Security\Crypt.hpp" />
+    <ClInclude Include="TurNet\Server\ServerMessageQueue.h" />
+    <ClInclude Include="TurNet\Server\ServerUDP.h" />
+    <ClInclude Include="TurNet\Shared\Data\ClientConnection.h" />
+    <ClInclude Include="TurNet\Shared\DataHandling\MessageData.h" />
+    <ClInclude Include="TurNet\Shared\DataHandling\MessageTypes.h" />
+    <ClInclude Include="TurNet\Shared\DataHandling\NetworkDataTypes.h" />
+    <ClInclude Include="TurNet\Shared\DataHandling\NetworkType.h" />
+    <ClInclude Include="TurNet\Shared\DataHandling\TurMessage.h" />
+    <ClInclude Include="TurNet\Shared\DataHandling\TurOverloads.h" />
+    <ClInclude Include="TurNet\Shared\Managment\ClientStatus.h" />
+    <ClInclude Include="TurNet\Shared\Managment\ReadersWriterLock.h" />
+    <ClInclude Include="TurNet\Shared\Managment\TurMap.h" />
+    <ClInclude Include="TurNet\Shared\Managment\TurQueue.h" />
+    <ClInclude Include="TurNet\Shared\Managment\WorkerThread.h" />
+    <ClInclude Include="TurNet\Shared\TurNetworkBase.h" />
+    <ClInclude Include="TurNet\Shared\Utility\TurCompare.h" />
+    <ClInclude Include="TurNet\Shared\Utility\TurString.h" />
+    <ClInclude Include="TurNet\Shared\Utility\TurTimer.h" />
+    <ClInclude Include="TurNet\TurNet.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TurNet\Client\ClientUDP.cpp" />
+    <ClCompile Include="TurNet\Server\ServerMessageQueue.cpp" />
+    <ClCompile Include="TurNet\Server\ServerUDP.cpp" />
+    <ClCompile Include="TurNet\Shared\DataHandling\MessageData.cpp" />
+    <ClCompile Include="TurNet\Shared\Managment\WorkerThread.cpp" />
+    <ClCompile Include="TurNet\Shared\TurNetworkBase.cpp" />
+    <ClCompile Include="TurNet\Shared\Utility\TurTimer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\cryptopp\CryptoPP.vcxproj">
+      <Project>{267AC9BA-1247-24C6-3B60-126E278C5954}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

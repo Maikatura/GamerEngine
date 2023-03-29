@@ -16,5 +16,8 @@ struct Node
 class AnimatorLayer : public Layer
 {
 public:
+
+	AnimatorLayer();
+
 	bool OnImGuiRender() override;
 };

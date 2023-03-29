@@ -1,14 +1,25 @@
 // Exclude things we don't need from the Windows headers
 #include "Editor.pch.h"
 
-#include <d3d11.h>
-#include <Editor.h>
-#include <GraphicsEngine.h>
-#include <Framework/DX11.h>
-#include <Render/LineRenderer.h> 
+#include "TurHeader.h"
+#define _WINSOCKAPI_ 
+#include "Windows.h"
+
+
+#include <Renderer/Framework/DX11.h>
+#include <Renderer/GraphicsEngine.h>
+#include <Renderer/Framework/DX11.h>
+#include <Renderer/Render/LineRenderer.h> 
 #include "Time.hpp"
+#include "Components/CameraController.h"
+#include "Components/NativeScriptComponent.h"
 #include "Layers/EditorLayers.h"
 #include "Layers/UI/EditorSettingsPanel.h"
+#include "Renderer/model/Entity.h"
+#include "Renderer/Scene/SceneManager.h"
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                       _In_opt_ HINSTANCE hPrevInstance,
@@ -39,6 +50,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	GraphicsEngine graphicsEngine;
 	EditorLayers myLayers;
 
+	std::function<bool(HWND, UINT, WPARAM, LPARAM)> function = [&](HWND aHWND, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	{
+		if(ImGui_ImplWin32_WndProcHandler(aHWND, uMsg, wParam, lParam))
+			return true;
+
+		return false;
+	};
+
+	graphicsEngine.SetWinProc(function);
+
 	const SIZE windowSize = { 1920, 1080 };
 
 	std::wstring editorName = L"GamerEngine Editor";
@@ -58,6 +79,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	myLayers.Init();
 	EditorSettingsPanel::LoadConfig();
 	LineRenderer::Init();
+
+
+	auto cameraFunc = std::function<void(Entity)>([](Entity aEntity)
+	{
+		aEntity.AddComponent<CameraControllerData>();
+		aEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+	});
+	
+	Scene::SetCameraHandle(cameraFunc);
+
+	SceneManager::LoadScene("Editor\\Scenes\\default.csf");
 	
 	while(bShouldRun)
 	{
@@ -78,9 +110,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			break;
 		}
 
-
 		myLayers.BeginFrame();
 		graphicsEngine.BeginFrame();
+
+		//graphicsEngine.SetEngineUpdateRuntime(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameRender();
 

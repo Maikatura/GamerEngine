@@ -1,24 +1,24 @@
 #include "Editor.pch.h"
 #include "FileExplorer.h"
 #include "ImGui/imgui.h"
-#include <AssetHandlers/TextureAssetHandler.h>
-#include <Model/Texture.h>
-#include "GraphicsEngine.h"
+#include <Renderer/AssetHandlers/TextureAssetHandler.h>
+#include <Renderer/Model/Texture.h>
+#include "Renderer/GraphicsEngine.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Scene/Scene.h"
+#include "Renderer/Scene/Scene.h"
 #include <ImGui/imgui_stdlib.h>
-#include <Types/FileExtensions.h>
-#include "Render/SelectionData.h"
+#include <Renderer/Types/FileExtensions.h>
+#include "Renderer/Render/SelectionData.h"
 #include "StringCast.h"
 #include <fstream>
 
 #include "Components/CameraController.h"
-#include "Debugger/ConsoleHelper.h"
-#include "Scene/SceneSerializer.h"
+#include "Renderer/Debugger/ConsoleHelper.h"
+#include "Renderer/Scene/SceneSerializer.h"
 
 extern const std::filesystem::path AssetPath = "Assets";
 
-FileExplorer::FileExplorer() : myCurrentDirectory(AssetPath)
+FileExplorer::FileExplorer() : Layer("File Explorer"), myCurrentDirectory(AssetPath)
 {
 	myConfirmCheck = false;
 	myIsRenaming = false;
@@ -34,8 +34,10 @@ FileExplorer::FileExplorer() : myCurrentDirectory(AssetPath)
 	myFileType.insert({ FileType::DLL,		TextureAssetHandler::GetTexture(L"Editor\\icons\\dll.dds") });
 
 	myExtensionsMap.insert({ shaderExt,	FileType::Shader });
-	myExtensionsMap.insert({ textureExt,		FileType::Texture });
 	myExtensionsMap.insert({ dllExt,		FileType::DLL });
+
+	myExtensionsMap.insert({ textureExt0,	FileType::Texture });
+	myExtensionsMap.insert({ textureExt1,	FileType::Texture });
 
 	myExtensionsMap.insert({ textExt,		FileType::Text });
 	myExtensionsMap.insert({ jsonExt,		FileType::Text });
@@ -56,16 +58,16 @@ FileExplorer::FileExplorer() : myCurrentDirectory(AssetPath)
 bool FileExplorer::OnImGuiRender()
 {
 
-	ImGui::Begin(EditorNames::ContentBrowserName.c_str());
+	BeginMenu();
 
 	if(ImGui::BeginPopupContextWindow("FILECREATOR") && !ImGui::IsItemHovered())
 	{
 		if(ImGui::MenuItem("Create Scene"))
 		{
+			
+			/*SharedRef<Scene> scene = MakeSharedRef<Scene>();
 
-			Scene scene = Scene();
-
-			auto camera = scene.CreateEntity("Camera");
+			auto camera = scene->CreateEntity("Camera");
 
 			auto& cameraComp = camera.AddComponent<CameraComponent>();
 			camera.AddComponent<CameraControllerData>();
@@ -74,10 +76,10 @@ bool FileExplorer::OnImGuiRender()
 			cameraComp.myFarPlane = 25000.0f;
 			cameraComp.myNearPlane = 0.01f;
 			cameraComp.myFoV = 90.0f;
-			cameraComp.Primary = true;
+			cameraComp.Primary = true;*/
 
-			SceneSerializer saveNewScene(&scene);
-			saveNewScene.Serialize(myCurrentDirectory.string() + "\\" + "New Scene.csf");
+			/*SceneSerializer saveNewScene(scene);
+			saveNewScene.Serialize(myCurrentDirectory.string() + "\\" + "New Scene.csf");*/
 		}
 
 		ImGui::EndPopup();
@@ -96,7 +98,7 @@ bool FileExplorer::OnImGuiRender()
 	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-	for (int i = paths.size() - 1; i >= 0; i--)
+	for (int i = static_cast<int>(paths.size() - 1); i >= 0; i--)
 	{
 		std::string currentPath = paths[i].filename().string();
 		if(ImGui::Button(currentPath.c_str()))
@@ -131,11 +133,7 @@ bool FileExplorer::OnImGuiRender()
 	}
 
 
-
-	
-
-
-	ImGui::End();
+	EndMenu();
 
 	return true;
 }

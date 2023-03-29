@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="TurNet">
+      <UniqueIdentifier>{076955D4-F30A-80AA-DCC5-93FEC80607FB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurNet\Client">
+      <UniqueIdentifier>{358BEA3E-A14B-6675-6A86-AFF2D605AB51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurNet\Security">
+      <UniqueIdentifier>{AE772440-1A03-9204-2314-15F98F1EEE04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurNet\Server">
+      <UniqueIdentifier>{4DA0C363-B960-3F9A-829B-8817EE1A8476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurNet\Shared">
+      <UniqueIdentifier>{4D86F063-B946-6C9A-8281-B517EE00B176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurNet\Shared\Data">
+      <UniqueIdentifier>{D6F34AA4-C2D7-0BFA-2B38-064D173BF67B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurNet\Shared\DataHandling">
+      <UniqueIdentifier>{FB5BCF72-E76B-7B43-5025-E0613C546ADC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurNet\Shared\Managment">
+      <UniqueIdentifier>{94B352FD-00EB-9A94-09F5-FEB775ABC18D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurNet\Shared\Utility">
+      <UniqueIdentifier>{9041F085-FCAD-AB80-C5A1-43DE31CDCDE8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NetworkPackager.h" />
+    <ClInclude Include="TurHeader.h" />
+    <ClInclude Include="TurNet\Client\ClientUDP.h">
+      <Filter>TurNet\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Security\Crypt.hpp">
+      <Filter>TurNet\Security</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Server\ServerMessageQueue.h">
+      <Filter>TurNet\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Server\ServerUDP.h">
+      <Filter>TurNet\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Data\ClientConnection.h">
+      <Filter>TurNet\Shared\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\DataHandling\MessageData.h">
+      <Filter>TurNet\Shared\DataHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\DataHandling\MessageTypes.h">
+      <Filter>TurNet\Shared\DataHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\DataHandling\NetworkDataTypes.h">
+      <Filter>TurNet\Shared\DataHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\DataHandling\NetworkType.h">
+      <Filter>TurNet\Shared\DataHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\DataHandling\TurMessage.h">
+      <Filter>TurNet\Shared\DataHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\DataHandling\TurOverloads.h">
+      <Filter>TurNet\Shared\DataHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Managment\ClientStatus.h">
+      <Filter>TurNet\Shared\Managment</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Managment\ReadersWriterLock.h">
+      <Filter>TurNet\Shared\Managment</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Managment\TurMap.h">
+      <Filter>TurNet\Shared\Managment</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Managment\TurQueue.h">
+      <Filter>TurNet\Shared\Managment</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Managment\WorkerThread.h">
+      <Filter>TurNet\Shared\Managment</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\TurNetworkBase.h">
+      <Filter>TurNet\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Utility\TurCompare.h">
+      <Filter>TurNet\Shared\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Utility\TurString.h">
+      <Filter>TurNet\Shared\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\Shared\Utility\TurTimer.h">
+      <Filter>TurNet\Shared\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="TurNet\TurNet.h">
+      <Filter>TurNet</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TurNet\Client\ClientUDP.cpp">
+      <Filter>TurNet\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="TurNet\Server\ServerMessageQueue.cpp">
+      <Filter>TurNet\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="TurNet\Server\ServerUDP.cpp">
+      <Filter>TurNet\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="TurNet\Shared\DataHandling\MessageData.cpp">
+      <Filter>TurNet\Shared\DataHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="TurNet\Shared\Managment\WorkerThread.cpp">
+      <Filter>TurNet\Shared\Managment</Filter>
+    </ClCompile>
+    <ClCompile Include="TurNet\Shared\TurNetworkBase.cpp">
+      <Filter>TurNet\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="TurNet\Shared\Utility\TurTimer.cpp">
+      <Filter>TurNet\Shared\Utility</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
