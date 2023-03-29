@@ -127,7 +127,7 @@ void EditorLayers::BeginFrame()
 	
 
 	ImGui::NewFrame();
-	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_None);
 	ImGuizmo::SetOrthographic(false);
 	ImGuizmo::BeginFrame();
 

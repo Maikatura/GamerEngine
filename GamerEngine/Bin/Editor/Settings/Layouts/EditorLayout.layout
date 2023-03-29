@@ -1,8 +1,8 @@
 Windows:
   - Name: Console
-    IsOpen: true
-  - Name: File Explorer
     IsOpen: false
+  - Name: File Explorer
+    IsOpen: true
   - Name: Hierarchy
     IsOpen: false
   - Name: Inspector

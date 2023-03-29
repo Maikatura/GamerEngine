@@ -14,6 +14,7 @@
 
 #include "Components/CameraController.h"
 #include "Renderer/Debugger/ConsoleHelper.h"
+#include "Renderer/Scene/SceneManager.h"
 #include "Renderer/Scene/SceneSerializer.h"
 
 extern const std::filesystem::path AssetPath = "Assets";
@@ -189,7 +190,16 @@ void FileExplorer::LoopThroughFiles()
 		if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 		{
 			if(directoryEntry.is_directory())
+			{
 				myCurrentDirectory /= myCurrentPath.filename();
+			}
+			else
+			{
+				HandleFile(directoryEntry, fileType);
+				std::cout << "Swag" << std::endl;
+			}
+			
+
 
 		}
 
@@ -350,6 +360,32 @@ std::shared_ptr<Texture> FileExplorer::SelectIcon(std::filesystem::directory_ent
 	else
 	{
 		return myFileType[aFileType];
+	}
+}
+
+void FileExplorer::HandleFile(std::filesystem::directory_entry aPath, FileType aFileType)
+{
+	switch (aFileType) {
+		case FileType::Error: break;
+		case FileType::Folder: break;
+		case FileType::FBX: break;
+		case FileType::Shader: break;
+		case FileType::Model: break;
+		case FileType::Texture: break;
+		case FileType::Audio: break;
+		case FileType::Scene:
+		{
+			SceneManager::LoadScene(aPath.path().string());
+			break;
+		}
+		case FileType::Animation: break;
+		case FileType::SceneObject: break;
+		case FileType::Prefab: break;
+		case FileType::DLL: break;
+		case FileType::Text: break;
+		case FileType::Node: break;
+		case FileType::COUNT: break;
+	default: ;
 	}
 }
 

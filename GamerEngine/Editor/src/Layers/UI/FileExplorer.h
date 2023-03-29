@@ -23,6 +23,8 @@ public:
 	void ExplorerDragDropSourceSetter(std::shared_ptr<Texture> aIconTexture);
 	FileType GetFileType(std::filesystem::directory_entry aDirectory);
 	std::shared_ptr<Texture> SelectIcon(std::filesystem::directory_entry aDirectory, FileType aFileType);
+	void HandleFile(std::filesystem::directory_entry aPath, FileType aFileType);
+
 
 private:
 	std::vector<std::filesystem::directory_entry> GetSortedDirectory();
