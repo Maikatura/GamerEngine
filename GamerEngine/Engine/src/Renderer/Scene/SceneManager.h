@@ -39,6 +39,8 @@ public:
 
 	static SceneStatus GetStatus();
 
+	static Entity ConstructEntity(entt::entity aEntityValue);
+
 	static Entity CreateEntityType(int aEntityType, const UUID2& aUUID = 0);
 	static void SwapScene();
 };

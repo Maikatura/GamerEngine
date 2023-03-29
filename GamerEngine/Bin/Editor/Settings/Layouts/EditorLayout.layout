@@ -1,0 +1,15 @@
+Windows:
+  - Name: Console
+    IsOpen: true
+  - Name: File Explorer
+    IsOpen: false
+  - Name: Hierarchy
+    IsOpen: false
+  - Name: Inspector
+    IsOpen: true
+  - Name: Animator
+    IsOpen: false
+  - Name: Scene
+    IsOpen: true
+  - Name: Networking
+    IsOpen: true

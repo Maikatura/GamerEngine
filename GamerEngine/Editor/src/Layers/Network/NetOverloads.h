@@ -9,6 +9,8 @@ enum class NetworkMessages : char
 	ObjectDelete,
 	ObjectMove,
 
+	ServerObjectMove,
+
 	PlayerConnectSelf,
 	PlayerDisconnectSelf,
 	PlayerConnect,

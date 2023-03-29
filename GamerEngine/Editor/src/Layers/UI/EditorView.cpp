@@ -26,28 +26,27 @@ EditorView::EditorView() : Layer("Scene")
 
 }
 
-bool EditorView::OnImGuiRender() 
+void EditorView::OnImGuiRender()
 {
 	Entity entity = SelectionData::GetEntityObject();
 
 	if(!SceneManager::GetScene())
 	{
-		return true;
+		return;
 	}
+
+	// TODO : Separate to SceneView.h and GameView.h
 
 	RenderGameView();
 	RenderSceneView(entity);
-
-
-
-	return true;
 }
 
 void EditorView::RenderSceneView(Entity aEntity)
 {
 	static ImGuiWindowFlags gizmoWindowFlags = 0;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
-	ImGui::Begin(EditorNames::SceneViewName.c_str(), 0, gizmoWindowFlags);
+
+	BeginMenu(gizmoWindowFlags);
 	ImGui::BeginChild("SceneView");
 
 	ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -79,7 +78,7 @@ void EditorView::RenderSceneView(Entity aEntity)
 	ImGui::EndChild();
 	ImRect rect = ImGui::GetCurrentWindow()->WorkRect;
 	DropHandler::DropFileScene(rect, static_cast<ImGuiID>(1231089013290));
-	ImGui::End();
+	EndMenu();
 	ImGui::PopStyleVar();
 }
 

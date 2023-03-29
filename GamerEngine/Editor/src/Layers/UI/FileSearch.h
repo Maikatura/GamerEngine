@@ -9,6 +9,6 @@ public:
 
 	static bool Search(const std::string& aFileExtension);
 
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 
 };

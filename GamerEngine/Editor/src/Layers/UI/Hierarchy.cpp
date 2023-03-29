@@ -35,11 +35,11 @@ std::vector<Entity> mySelectedEntity;
 Hierarchy::Hierarchy() : Layer("Hierarchy")
 {}
 
-bool Hierarchy::OnImGuiRender()
+void Hierarchy::OnImGuiRender()
 {
 	/*auto models = GraphicsEngine::Get()->GetScene()->CullModels();*/
 
-	BeginMenu(&myIsOpen);
+	BeginMenu();
 
 	if(SceneManager::GetScene())
 	{
@@ -120,8 +120,6 @@ bool Hierarchy::OnImGuiRender()
 	EndMenu();
 
 	myEntityList.clear();
-
-	return myIsOpen;
 }
 
 void Hierarchy::DrawEntityNode(Entity& aEntity)

@@ -236,7 +236,7 @@ void TurNet::ClientUDP::WorkerThread()
 					std::cout << "Packet from " << ipAddress << ":" << sin->sin_port << "\n";
 					std::cout << "Packet Size: " << messageData.BufferReceiveType << "\n";
 
-					messageData.Connection = *sin;
+					messageData.Connection.ToClient(*sin);
 
 					data.Header.Connection = messageData.Connection;
 

@@ -1,4 +1,6 @@
 #include "Editor.pch.h"
+
+#include <fstream>
 #include <Layers/EditorLayers.h>
 #include <iostream>
 #include <Renderer/GraphicsEngine.h>
@@ -7,7 +9,6 @@
 #include <Layers/LayerHeader.h>
 #include "Renderer/Scene/Scene.h"
 #include <Fonts/IconsForkAwesome.h>
-
 #include "Renderer/Debugger/ConsoleHelper.h"
 
 EditorLayers::EditorLayers()
@@ -44,15 +45,72 @@ void EditorLayers::Init()
 	io.Fonts->AddFontFromFileTTF(FONT_ICON_FILE_NAME_FK, 13.0f, &config, icon_ranges);
 
 	AddDefaultLayers();
+
+	YAML::Node data;
+	try
+	{
+		data = YAML::LoadFile("Editor\\Settings\\Layouts\\EditorLayout.layout");
+	}
+	catch(YAML::ParserException e)
+	{
+		return;
+	}
+
+	auto windows = data["Windows"];
+	for (int i = 0; i < myLayers.size(); i++)
+	{
+		if (windows)
+		{
+			for(auto window : windows)
+			{
+				LoadLayout(window, myLayers[i]);
+			}
+		}
+	}
 }
 
 void EditorLayers::AddLayer(std::shared_ptr<Layer> aLayer)
 {
-	myLayers.push_back(aLayer);
+
+	bool windowExist = false;
+	for(int i = 0; i < myLayers.size(); i++)
+	{
+		if (myLayers[i]->GetLayerName() == aLayer->GetLayerName())
+		{
+			myLayers[i]->SetOpen(true);
+			windowExist = true;
+		}
+	}
+
+	if(!windowExist)
+	{
+		myLayers.push_back(aLayer);
+	}
 }
 
 void EditorLayers::Destory()
 {
+	YAML::Emitter out;
+	out << YAML::BeginMap;
+	out << YAML::Key << "Windows" << YAML::Value << YAML::BeginSeq;
+	for(int i = 0; i < myLayers.size(); i++)
+	{
+		if (myLayers[i]->ShouldBeSaved())
+		{
+			out << YAML::BeginMap; // Window
+			out << YAML::Key << "Name" << YAML::Value << myLayers[i]->GetLayerName();
+			out << YAML::Key << "IsOpen" << YAML::Value << myLayers[i]->IsOpen();
+			out << YAML::EndMap; // Window
+		}
+	}
+
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
+
+	std::ofstream fout("Editor\\Settings\\Layouts\\EditorLayout.layout");
+	fout << out.c_str();
+	fout.close();
+
 	OnDetach();
 	ImGui::SaveIniSettingsToDisk((myImGuiSettingsFile + "EditorLayout.data").c_str());
 
@@ -89,6 +147,14 @@ void EditorLayers::EndFrame()
 	}
 }
 
+void EditorLayers::LoadLayout(YAML::Node window, std::vector<std::shared_ptr<Layer>>::const_reference aLayer)
+{
+	if(window["Name"].as<std::string>() == aLayer->GetLayerName())
+	{
+		aLayer->SetOpen(window["IsOpen"].as<bool>());
+	}
+}
+
 bool EditorLayers::ShouldRunEngine()
 {
 	return myShouldRunEngine;
@@ -109,6 +175,7 @@ void EditorLayers::AddDefaultLayers()
 	AddLayer(std::make_shared<AnimatorLayer>());
 	AddLayer(std::make_shared<EditorView>());
 	AddLayer(std::make_shared<KeybindShortcutsLayer>());
+	AddLayer(std::make_shared<NetworkingLayer>());
 }
 
 void EditorLayers::OnUpdate()
@@ -141,14 +208,19 @@ void EditorLayers::OnImGuiRender()
 	{
 		if (myLayers[i]->HasBeenAdded())
 		{
-			if(!myLayers[i]->OnImGuiRender())
+			if (myLayers[i]->IsOpen())
+			{
+				myLayers[i]->OnImGuiRender();
+			}
+
+			/*if(!myLayers[i]->OnImGuiRender())
 			{
 				ConsoleHelper::Log(LogType::Info, "Removed a layer from editor");
 				myLayers[i].swap(myLayers[myLayers.size() - 1]);
 				myLayers[myLayers.size() - 1]->OnDetach();
 
 				myLayers.pop_back();
-			}
+			}*/
 		}
 	}
 }

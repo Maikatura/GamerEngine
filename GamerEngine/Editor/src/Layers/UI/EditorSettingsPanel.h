@@ -27,7 +27,7 @@ public:
 	EditorSettingsPanel();
 
 	void OnAttach() override;
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 
     static void LoadConfig();
 	static void SaveConfig();

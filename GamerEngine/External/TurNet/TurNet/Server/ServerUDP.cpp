@@ -93,7 +93,7 @@ void TurNet::ServerUDP::StartWorker()
 }
 
 
-int TurNet::ServerUDP::SendToClient(sockaddr_in aAddress, TurNet::TurMessage& aMessage)
+int TurNet::ServerUDP::SendToClient(ClientAddress aAddress, TurNet::TurMessage& aMessage)
 {
 	std::string messageToClient = aMessage.BufferRaw();
 
@@ -109,7 +109,7 @@ int TurNet::ServerUDP::SendToClient(sockaddr_in aAddress, TurNet::TurMessage& aM
 	std::memcpy(aDataBuffer, crypted.c_str(), crypted.size());
 
 
-	return SendToClientRaw(aAddress, aDataBuffer, static_cast<int>(crypted.size()));
+	return SendToClientRaw(aAddress.ToAddress(), aDataBuffer, static_cast<int>(crypted.size()));
 }
 
 
@@ -216,7 +216,7 @@ void TurNet::ServerUDP::WorkerThread()
 						TurNet::TurMessage data;
 						TurNet::MessageDecoder(data, messageData);
 
-						messageData.Connection = *sin;
+						messageData.Connection.ToClient(*sin);
 
 						for(int i = 0; i < myClients.size(); i++)
 						{
@@ -248,7 +248,7 @@ void TurNet::ServerUDP::WorkerThread()
 					TurNet::TurMessage data;
 					TurNet::MessageDecoder(data, messageData);
 
-					messageData.Connection = *sin;
+					messageData.Connection.ToClient(*sin);
 
 					data.Header.Connection = messageData.Connection;
 

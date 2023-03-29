@@ -19,5 +19,5 @@ public:
 
 	AnimatorLayer();
 
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 };

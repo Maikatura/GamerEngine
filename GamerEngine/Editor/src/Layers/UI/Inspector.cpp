@@ -27,9 +27,9 @@ Inspector::Inspector() : Layer("Inspector")
 {
 }
 
-bool Inspector::OnImGuiRender()
+void Inspector::OnImGuiRender()
 {
-	BeginMenu(&myIsOpen);
+	BeginMenu();
 
 	Entity entity = SelectionData::GetEntityObject();
 
@@ -46,8 +46,6 @@ bool Inspector::OnImGuiRender()
 	}
 
 	EndMenu();
-
-	return myIsOpen;
 }
 
 void Inspector::DrawSceneObject(Entity& aEntity)

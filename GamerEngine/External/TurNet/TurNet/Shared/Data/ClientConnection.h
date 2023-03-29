@@ -2,30 +2,33 @@
 
 #include "TurHeader.h"
 
-class ClientConnection
+namespace TurNet
 {
-public:
-	bool IsAlive;
-	bool WaitingTimeout;
-	sockaddr_in Address{};
-	float Timer{};
-	float TimeoutTimer{};
-	bool HasSendMessage;
-
-	ClientConnection()
+	class ClientConnection
 	{
-		Timer = 0.0f;
-		TimeoutTimer = 0.0f;
-		IsAlive = true;
-		HasSendMessage = false;
-		WaitingTimeout = false;
-	}
+	public:
+		bool IsAlive;
+		bool WaitingTimeout;
+		bool HasSendMessage;
+		float Timer{};
+		float TimeoutTimer{};
+		ClientAddress Address{};
 
-	void ResetTimers(float aTimerValue, float aTimeOutValue)
-	{
-		Timer += aTimerValue;
-		TimeoutTimer += aTimeOutValue;
-		HasSendMessage = false;
-		WaitingTimeout = false;
-	}
-};
+		ClientConnection()
+		{
+			Timer = 0.0f;
+			TimeoutTimer = 0.0f;
+			IsAlive = true;
+			HasSendMessage = false;
+			WaitingTimeout = false;
+		}
+
+		void ResetTimers(float aTimerValue, float aTimeOutValue)
+		{
+			Timer += aTimerValue;
+			TimeoutTimer += aTimeOutValue;
+			HasSendMessage = false;
+			WaitingTimeout = false;
+		}
+	};
+}

@@ -36,11 +36,12 @@ bool NetworkingLayer::OnDetach()
 	return true;
 }
 
-bool NetworkingLayer::OnImGuiRender()
+void NetworkingLayer::OnImGuiRender()
 {
 	NetworkSettings::IsClient = true;
 
 	BeginMenu();
+	
 
     if (ImGui::Button("Host"))
     {
@@ -117,16 +118,11 @@ bool NetworkingLayer::OnImGuiRender()
 	ImGui::Text(bytes);
 
 	EndMenu();
-
-
-	return true;
 }
 
 void NetworkingLayer::OnUpdate()
 {
 	Layer::OnUpdate();
-
-	
 
 
 	if (mySendTime <= 0.0f)
@@ -205,9 +201,6 @@ void NetworkingLayer::StartNetworkingClient()
 
 		switch(NetworkMessages messageType = static_cast<NetworkMessages>(typeBase))
 		{
-
-			
-
 			case NetworkMessages::ObjectMove:
 			{
 				ObjectMoveMessage moveMsg;
@@ -230,6 +223,29 @@ void NetworkingLayer::StartNetworkingClient()
 						auto& netComp = view.get<Network::NetworkComponent>(entity);
 						netComp.SetNewPosition(moveMsg.Transform.Translation);
 						std::cout << moveMsg << std::endl;
+					}
+				}
+				break;
+			}
+			case NetworkMessages::ServerObjectMove:
+			{
+				NetObjectMoveMessage moveMsg;
+				someData >> moveMsg;
+
+				std::cout << "Server Moved A Object" << std::endl;
+
+				auto view = SceneManager::GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
+				for(auto& entity : view)
+				{
+					if(!SceneManager::GetScene()->GetRegistry().valid(entity))
+					{
+						return;
+					}
+
+					auto& netComp = view.get< Network::NetworkComponent>(entity);
+					if(netComp.GetID() == moveMsg.EntityID)
+					{
+						netComp.SetNewPosition(moveMsg.Transform.Translation);
 					}
 				}
 				break;

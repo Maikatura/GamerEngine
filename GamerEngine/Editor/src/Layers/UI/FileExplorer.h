@@ -11,7 +11,7 @@ class FileExplorer : public Layer
 public:
 
 	FileExplorer();
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 
 	void LoopThroughFiles();
 

@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include <yaml-cpp/yaml.h>
+
 
 class EditorLayers
 {
@@ -29,6 +31,7 @@ public:
 	void BeginFrame();
 	void EndFrame();
 
+	void LoadLayout(YAML::Node window, std::vector<std::shared_ptr<Layer>>::const_reference layer);
 	bool ShouldRunEngine();
 	void SetShouldEngineRun(bool aCond);
 

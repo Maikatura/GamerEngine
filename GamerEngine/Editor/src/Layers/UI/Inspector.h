@@ -12,7 +12,7 @@ public:
 
 	Inspector();
 
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 
 	void DrawSceneObject(Entity& aEntity);
 	void DrawFileObject(Entity& aEntity);

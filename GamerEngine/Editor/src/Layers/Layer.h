@@ -9,7 +9,7 @@ public:
 
 	virtual bool OnRender();
 	virtual bool EndFrame();
-	virtual bool OnImGuiRender();
+	virtual void OnImGuiRender();
 
 	virtual void OnUpdate();
 
@@ -17,9 +17,14 @@ public:
 	virtual bool OnDetach();
 	virtual bool OnShutdown();
 
+	bool ShouldBeSaved();
+
+	std::string GetLayerName();
+	void SetOpen(bool aOpenState);
+	bool IsOpen();
 	bool HasBeenAdded();
 
-	bool BeginMenu(bool* isOpen = 0, ImGuiWindowFlags aFlag = 0);
+	bool BeginMenu(ImGuiWindowFlags aFlag = 0);
 	void EndMenu();
 
 

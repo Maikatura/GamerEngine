@@ -67,6 +67,23 @@ namespace YAML
 	};
 
 	template<>
+	struct convert<UUID2>
+	{
+		static Node encode(const UUID2& rhs)
+		{
+			Node node;
+			node.push_back(rhs);
+			return node;
+		}
+
+		static bool decode(const Node& node, UUID2& rhs)
+		{
+			rhs = node.as<uint64_t>();
+			return true;
+		}
+	};
+
+	template<>
 	struct convert<Vector4f>
 	{
 		static Node encode(const Vector4f& rhs)
@@ -340,7 +357,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		auto& netComp = entity.GetComponent<Network::NetworkComponent>();
 		out << YAML::Key << "IsServer" << YAML::Value << netComp.IsServer();
 		out << YAML::Key << "Smooth" << YAML::Value << netComp.ShouldSmooth();
-		
+		out << YAML::Key << "ID" << YAML::Value << netComp.GetID();
 
 		out << YAML::EndMap; // PointLightComponent
 
@@ -617,9 +634,9 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 		{
 			auto& pointLightComp = deserializedEntity.AddComponent<PointLightComponent>();
 
-			Vector4f color = pointLightComponent["Color"].as<Vector4f>();
-			float intensity = pointLightComponent["Intensity"].as<float>();
-			float range = pointLightComponent["Range"].as<float>();
+			Vector4f color = (pointLightComponent["Color"]) ? pointLightComponent["Color"].as<Vector4f>() : Vector4f();
+			float intensity = (pointLightComponent["Intensity"]) ? pointLightComponent["Intensity"].as<float>() : 1.0f;
+			float range = (pointLightComponent["Range"]) ? pointLightComponent["Range"].as<float>() : 1.0f;
 
 			auto light = pointLightComp.myPointLight;
 
@@ -634,9 +651,9 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 	if (networkComp)
 	{
 		auto& netComp = deserializedEntity.AddComponent<Network::NetworkComponent>();
-		netComp.SetServer(networkComp["IsServer"].as<bool>());
-		netComp.SetServer((networkComp["Smooth"]) ? networkComp["Smooth"].as<bool>() : false);
-
+		netComp.SetServer((networkComp["IsServer"]) ? networkComp["IsServer"].as<bool>() : false);
+		netComp.SetShouldSmooth((networkComp["Smooth"]) ? networkComp["Smooth"].as<bool>() : false);
+		netComp.SetID((networkComp["ID"]) ? networkComp["ID"].as<UUID2>() : UUID2());
 	}
 
 	auto randomMover = aEntityNode["RandomMoverComponent"];

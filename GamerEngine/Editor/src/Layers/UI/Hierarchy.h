@@ -14,7 +14,7 @@ public:
 
 	Hierarchy();
 
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 
 	void DrawEntityNode(Entity& aEntity);
 

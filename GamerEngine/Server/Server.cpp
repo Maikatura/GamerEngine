@@ -63,7 +63,7 @@ struct ClientData
 {
 	bool IsBot = false;
 	uint64_t ClientID;
-	sockaddr_in ClientAddress;
+	TurNet::ClientAddress Address;
 	Vector3f Translation;
 };
 
@@ -74,7 +74,7 @@ std::uniform_int_distribution<> distr(-250, 250);
 
 void LoadScene()
 {
-	SceneManager::LoadScene("Assets\\Scenes\\NetworkRandomMoverTester.csf");
+	SceneManager::LoadScene("Assets\\Scenes\\Network.csf");
 }
 
 HANDLE hStdin;
@@ -123,7 +123,7 @@ int main()
 				myServer.SendToClient(someData.Header.Connection, message);
 
 				ClientData data;
-				data.ClientAddress = someData.Header.Connection;
+				data.Address = someData.Header.Connection;
 				data.ClientID = ClientID;
 				data.IsBot = false;
 				myClientsConnected.push_back(data);
@@ -143,7 +143,7 @@ int main()
 
 				for(int i = 0; i < myClientsConnected.size(); i++)
 				{
-					if(!TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].ClientAddress))
+					if(!TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].Address))
 					{
 
 						TurNet::TurMessage msgOut2;
@@ -155,7 +155,7 @@ int main()
 
 						if(!myClientsConnected[i].IsBot)
 						{
-							myServer.SendToClient(myClientsConnected[i].ClientAddress, msgOutNewPlayer);
+							myServer.SendToClient(myClientsConnected[i].Address, msgOutNewPlayer);
 						}
 
 						myServer.SendToClient(someData.Header.Connection, msgOut2);
@@ -178,7 +178,7 @@ int main()
 
 				for(int i = 0; i < myClientsConnected.size(); i++)
 				{
-					if(TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].ClientAddress) && !myClientsConnected[i].IsBot)
+					if(TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].Address) && !myClientsConnected[i].IsBot)
 					{
 						auto it = myClientsConnected.begin() + i;
 						disMsg.ClientID = it->ClientID;
@@ -192,7 +192,7 @@ int main()
 				{
 					if(!myClientsConnected[i].IsBot)
 					{
-						myServer.SendToClient(myClientsConnected[i].ClientAddress, outMsg);
+						myServer.SendToClient(myClientsConnected[i].Address, outMsg);
 					}
 				}
 				break;
@@ -215,9 +215,9 @@ int main()
 
 						for(int i = 0; i < myClientsConnected.size(); i++)
 						{
-							if(!TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].ClientAddress) && !myClientsConnected[i].IsBot)
+							if(!TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].Address) && !myClientsConnected[i].IsBot)
 							{
-								myServer.SendToClient(myClientsConnected[i].ClientAddress, outMsg);
+								myServer.SendToClient(myClientsConnected[i].Address, outMsg);
 							}
 						}
 						break;
@@ -234,9 +234,9 @@ int main()
 
 						for(int i = 0; i < myClientsConnected.size(); i++)
 						{
-							if(!TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].ClientAddress) && !myClientsConnected[i].IsBot)
+							if(!TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].Address) && !myClientsConnected[i].IsBot)
 							{
-								myServer.SendToClient(myClientsConnected[i].ClientAddress, outMsg);
+								myServer.SendToClient(myClientsConnected[i].Address, outMsg);
 							}
 						}
 
@@ -262,7 +262,7 @@ int main()
 						{
 							if(myClientsConnected[i].ClientID != mvInMsg.ClientID && !myClientsConnected[i].IsBot)
 							{
-								myServer.SendToClient(myClientsConnected[i].ClientAddress, outMsg);
+								myServer.SendToClient(myClientsConnected[i].Address, outMsg);
 							}
 						}
 						break;
@@ -279,7 +279,7 @@ int main()
 								TurNet::TurMessage outMsg;
 								outMsg << skinMsg;
 
-								myServer.SendToClient(myClientsConnected[i].ClientAddress, outMsg);
+								myServer.SendToClient(myClientsConnected[i].Address, outMsg);
 							}
 						}
 

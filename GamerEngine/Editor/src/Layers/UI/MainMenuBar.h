@@ -11,7 +11,7 @@ public:
 	MainMenuBar() = default;
 	MainMenuBar(EditorLayers& aLayer);
 
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 
 private:
 	EditorLayers& myLayers;

@@ -5,6 +5,7 @@ Layer::Layer(const std::string& aLayerName, bool aAlwaysOpen, bool aSaveLayerSet
 {
     myLayerName = aLayerName;
     myIsAlwaysOpen = aAlwaysOpen;
+    mySaveLayer = aSaveLayerSettings;
 }
 
 void Layer::OnAttach()
@@ -22,9 +23,9 @@ bool Layer::EndFrame()
     return false;
 }
 
-bool Layer::OnImGuiRender()
+void Layer::OnImGuiRender()
 {
-    return false;
+    
 }
 
 void Layer::OnUpdate()
@@ -41,14 +42,34 @@ bool Layer::OnShutdown()
     return false;
 }
 
+bool Layer::ShouldBeSaved()
+{
+    return mySaveLayer;
+}
+
+std::string Layer::GetLayerName()
+{
+    return myLayerName;
+}
+
+void Layer::SetOpen(bool aOpenState)
+{
+    myIsOpen = aOpenState;
+}
+
+bool Layer::IsOpen()
+{
+    return myIsOpen;
+}
+
 bool Layer::HasBeenAdded()
 {
     return hasInited;
 }
 
-bool Layer::BeginMenu(bool* isOpen, ImGuiWindowFlags aFlag)
+bool Layer::BeginMenu(ImGuiWindowFlags aFlag)
 {
-    return ImGui::Begin(myLayerName.c_str(), isOpen, aFlag);
+	return ImGui::Begin(myLayerName.c_str(), &myIsOpen, aFlag);
 }
 
 void Layer::EndMenu()

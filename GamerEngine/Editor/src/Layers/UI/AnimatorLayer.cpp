@@ -177,7 +177,7 @@ AnimatorLayer::AnimatorLayer() : Layer("Animator")
 {
 }
 
-bool AnimatorLayer::OnImGuiRender()
+void AnimatorLayer::OnImGuiRender()
 {
 	static GraphEditor::Options options;
 	static GraphEditorDelegate delegate;
@@ -185,9 +185,7 @@ bool AnimatorLayer::OnImGuiRender()
 	static GraphEditor::FitOnScreen fit = GraphEditor::Fit_None;
 
 
-	ImGui::Begin("Animator Editor (WIP)", NULL, 0);
+	BeginMenu();
 	GraphEditor::Show(delegate, options, viewState, true, &fit);
-	ImGui::End();
-
-	return true;
+	EndMenu();
 }

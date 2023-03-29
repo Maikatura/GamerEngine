@@ -121,7 +121,7 @@ void HelpPanel::OnAttach()
     //H1 = io.Fonts->AddFontFromFileTTF("Editor/fonts/Vera.ttf", fontSizeH1);
 }
 
-bool HelpPanel::OnImGuiRender()
+void HelpPanel::OnImGuiRender()
 {
     
 
@@ -139,5 +139,4 @@ bool HelpPanel::OnImGuiRender()
     Markdown(markdownText);
 
 	ImGui::End();
-	return isOpen;
 }

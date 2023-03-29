@@ -1,20 +1,42 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <ws2tcpip.h>
+
 #include "TurHeader.h"
 
+#include "TurNet/Shared/Utility/TurString.h"
 
 namespace TurNet
 {
-#define DEFAULT_BUFFER_SIZE 512
+	#define DEFAULT_BUFFER_SIZE 512
 
 	/**
 	 * \ THIS WILL BE REMOVE WHEN MY NEW HEADER SYSTEM IS IMPLEMENTED
 	 */
 
+	struct ClientAddress
+	{
+		std::string Address;
+		unsigned short Port;
+		sockaddr_in RealAddress;
+
+		void ToClient(sockaddr_in aAddress)
+		{
+			Address = TurNet::string_cast<std::string>(std::wstring(InetNtop(aAddress.sin_family, &aAddress.sin_addr, (PWSTR)Address.c_str(), DEFAULT_BUFFER_SIZE)));
+			Port = aAddress.sin_port;
+			RealAddress = aAddress;
+		}
+
+		sockaddr_in ToAddress()
+		{
+			return RealAddress;
+		}
+	};
+
 	struct MessageData
 	{
-		sockaddr_in Connection;
+		ClientAddress Connection;
 		int BufferReceiveType;
 		char Buffer[DEFAULT_BUFFER_SIZE]{};
 		int BufferLength = DEFAULT_BUFFER_SIZE;

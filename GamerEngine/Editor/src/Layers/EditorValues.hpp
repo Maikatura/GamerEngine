@@ -4,7 +4,7 @@
 class EditorNames
 {
 public:
-	inline static std::string InspectorName = "Properties";
+	inline static std::string InspectorName = "Inspector";
 	inline static std::string HierarchyName = "Hierarchy";
 	inline static std::string SettingsName = "Settings";
 	inline static std::string SceneViewName = "Scene";

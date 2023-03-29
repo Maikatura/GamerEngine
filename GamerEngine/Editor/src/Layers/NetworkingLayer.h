@@ -47,7 +47,7 @@ public:
 
 	void OnAttach() override;
 	bool OnDetach() override;
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 	void OnUpdate() override;
 	void Listen();
 

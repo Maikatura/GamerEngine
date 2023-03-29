@@ -1,0 +1,60 @@
+Scene: SceneTesting
+Path: C:\Users\simon.igelstrom\Documents\School\Assignments\9-TGP\Engine\Source\Bin\Assets\Scenes\1FastTest.csf
+Entities:
+  - Entity: 1828353707181980437
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, -508.054779, 0.917554855]
+      Rotation: [0, -0, 0]
+      Scale: [1000, 10, 1000]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Path: Assets\Models\Shapes\Cube.fbx
+      Texture:
+        Albedo: resources/textures/T_Default_C.dds
+        Normal: resources/textures/T_Default_N.dds
+        Material: resources/textures/T_Default_M.dds
+        Albedo: resources/textures/T_Default_C.dds
+        Normal: resources/textures/T_Default_N.dds
+        Material: resources/textures/T_Default_M.dds
+        Albedo: resources/textures/T_Default_C.dds
+        Normal: resources/textures/T_Default_N.dds
+        Material: resources/textures/T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [521.309143, 690.635681, 1183.61719]
+      Rotation: [24.4236145, -154.006973, 0.000104271501]
+      Scale: [0.999961138, 0.999956548, 0.999987185]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 25000
+      Primary: true
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [92.2944183, 203.494476, -159.69783]
+      Rotation: [132.786758, -16.4169998, 0]
+      Scale: [0.995829344, 0.999664962, 0.999686956]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [-44, 100, 85]
+      Intensity: 1

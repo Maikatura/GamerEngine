@@ -154,6 +154,11 @@ SceneStatus SceneManager::GetStatus()
 	return mySceneStatus;
 }
 
+Entity SceneManager::ConstructEntity(entt::entity aEntityValue)
+{
+	return Entity(aEntityValue, myScene.get());
+}
+
 Entity SceneManager::CreateEntityType(int aEntityType, const UUID2& aUUID)
 {
 	Entity aEntity;

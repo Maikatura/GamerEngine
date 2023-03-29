@@ -15,10 +15,10 @@
 #include "Snapshots/SnapshotManager.h"
 
 
-MainMenuBar::MainMenuBar(EditorLayers& aLayer) : Layer("MainMenuBar"), myLayers(aLayer)
+MainMenuBar::MainMenuBar(EditorLayers& aLayer) : Layer("MainMenuBar", true, false), myLayers(aLayer)
 { }
 
-bool MainMenuBar::OnImGuiRender()
+void MainMenuBar::OnImGuiRender()
 {
     if(ImGui::BeginMainMenuBar())
     {
@@ -60,19 +60,24 @@ bool MainMenuBar::OnImGuiRender()
         if(ImGui::BeginMenu("Windows"))
         {
 
-            if(ImGui::MenuItem(EditorNames::HierarchyName.c_str()))
+            for(int i = 0; i < myLayers.myLayers.size(); i++)
             {
-                myLayers.AddLayer(std::make_shared<Hierarchy>());
-            }
+                if (myLayers.myLayers[i]->ShouldBeSaved())
+                {
+                    if(ImGui::MenuItemEx(myLayers.myLayers[i]->GetLayerName().c_str(), myLayers.myLayers[i]->IsOpen() ? ICON_FK_CHECK : ""))
+                    {
+                        if(myLayers.myLayers[i]->IsOpen())
+                        {
+                            myLayers.myLayers[i]->SetOpen(false);
+                        }
+                        else
+                        {
+                            myLayers.myLayers[i]->SetOpen(true);
+                        }
+                    }
+                }
 
-            if(ImGui::MenuItem(EditorNames::InspectorName.c_str()))
-            {
-                myLayers.AddLayer(std::make_shared<Inspector>());
-            }
 
-            if(ImGui::MenuItem("Networking"))
-            {
-                myLayers.AddLayer(std::make_shared<NetworkingLayer>());
             }
 
             ImGui::EndMenu();
@@ -154,5 +159,4 @@ bool MainMenuBar::OnImGuiRender()
 
         ImGui::EndMainMenuBar();
     }
-	return true;
 }

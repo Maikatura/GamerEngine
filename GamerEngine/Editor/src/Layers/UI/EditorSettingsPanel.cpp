@@ -46,15 +46,15 @@ void EditorSettingsPanel::OnAttach()
  //   H1 = io.Fonts->AddFontFromFileTTF( "Editor\\Fonts\\VeraBd.ttf", fontSizeH1 );
 }
 
-bool EditorSettingsPanel::OnImGuiRender()
+void EditorSettingsPanel::OnImGuiRender()
 {
 	if(!myIsOpen)
 	{
-		return false;
+		return;
 	}
 
 
-	BeginMenu(&myIsOpen);
+	BeginMenu();
 	
 
 	std::vector<std::string> menuNames = { "Editor", "Scene" };
@@ -83,7 +83,6 @@ bool EditorSettingsPanel::OnImGuiRender()
 
 	EndMenu();
 
-	return true;
 }
 
 void EditorSettingsPanel::LoadConfig()

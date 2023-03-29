@@ -23,7 +23,7 @@ namespace TurNet
 		NetworkDataTypes ID{};
 		uint32_t MessageID;
 		uint32_t Size = 0;
-		sockaddr_in Connection {};
+		ClientAddress Connection {};
 	};
 
 

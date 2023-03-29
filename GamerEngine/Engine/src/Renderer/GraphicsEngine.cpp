@@ -278,7 +278,7 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 
 
 
-			if(!myUpdateCondition && !myIsPaused)
+			if(!aShouldRunLoop && myIsPaused)
 			{
 				if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
 				{
@@ -291,7 +291,7 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 				}
 			}
 
-			scene->OnUpdate((myUpdateCondition && !myIsPaused), SceneManager::GetStatus() == SceneStatus::Complete);
+			scene->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::GetStatus() == SceneStatus::Complete);
 		}
 
 		

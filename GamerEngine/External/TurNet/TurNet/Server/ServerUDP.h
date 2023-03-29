@@ -30,7 +30,7 @@ namespace TurNet
 		bool Start() override;
 
 		void StartWorker() override;
-		int SendToClient(sockaddr_in aAddress, TurNet::TurMessage& aMessage);
+		int SendToClient(ClientAddress aAddress, TurNet::TurMessage& aMessage);
 
 		void Stop();
 		

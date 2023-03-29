@@ -10,10 +10,7 @@ bool FileSearch::Search(const std::string& aFileExtension)
 
 }
 
-bool FileSearch::OnImGuiRender()
+void FileSearch::OnImGuiRender()
 {
-	
 
-
-	return true;
 }

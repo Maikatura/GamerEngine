@@ -14,7 +14,7 @@ public:
 	EditorView();
 
 
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 
 	void RenderSceneView(Entity aEntity);
 	void RenderGameView();

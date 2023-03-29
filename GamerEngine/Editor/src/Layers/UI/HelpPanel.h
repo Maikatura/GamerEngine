@@ -10,5 +10,5 @@ public:
 	HelpPanel();
 
 	void OnAttach() override;
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 };

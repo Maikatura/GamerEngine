@@ -59,8 +59,8 @@ void RandomMoverComponent::OnUpdate()
 		mySendTimer = 5.0f;
 
 		TurNet::TurMessage message;
-		ObjectMoveMessage objMove;
-		objMove.EntityID = GetUUID();
+		NetObjectMoveMessage objMove;
+		objMove.EntityID = netComp.GetID();
 		objMove.Transform = transform;
 
 

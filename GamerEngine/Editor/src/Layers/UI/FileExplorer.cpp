@@ -55,7 +55,7 @@ FileExplorer::FileExplorer() : Layer("File Explorer"), myCurrentDirectory(AssetP
 	myDeletePath = "";
 }
 
-bool FileExplorer::OnImGuiRender()
+void FileExplorer::OnImGuiRender()
 {
 
 	BeginMenu();
@@ -134,8 +134,6 @@ bool FileExplorer::OnImGuiRender()
 
 
 	EndMenu();
-
-	return true;
 }
 
 void FileExplorer::LoopThroughFiles()
