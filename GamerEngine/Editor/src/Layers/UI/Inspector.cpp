@@ -631,7 +631,7 @@ void Inspector::DrawFileObject(Entity& aEntity)
 	{
 		ImGui::TextWrapped("This is a scene I don't know what you wanna change here?");
 		ImGui::SeparateWithSpacing();
-		ImGui::TextWrapped("But did you know you can drag the scene onto the hierarchy or the scene view to load a scene?");
+		ImGui::TextWrapped("But did you know you can drag the scene onto the hierarchy or the scene view to load a scene? You can also double click to open it!");
 		break;
 	}
 
@@ -655,9 +655,7 @@ void Inspector::DrawFileObject(Entity& aEntity)
 
 	case FileType::Node:
 	{
-
 		std::string* nodeName = static_cast<std::string*>(selectedObjectData->FileData);
-
 		ImGui::InputText("Name", nodeName);
 
 		break;
