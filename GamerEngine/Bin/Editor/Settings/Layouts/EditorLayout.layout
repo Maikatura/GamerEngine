@@ -13,3 +13,5 @@ Windows:
     IsOpen: true
   - Name: Networking
     IsOpen: true
+  - Name: Help Panel
+    IsOpen: false

@@ -176,6 +176,7 @@ void EditorLayers::AddDefaultLayers()
 	AddLayer(std::make_shared<EditorView>());
 	AddLayer(std::make_shared<KeybindShortcutsLayer>());
 	AddLayer(std::make_shared<NetworkingLayer>());
+	AddLayer(std::make_shared<HelpPanel>());
 }
 
 void EditorLayers::OnUpdate()

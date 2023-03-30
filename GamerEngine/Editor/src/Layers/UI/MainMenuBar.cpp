@@ -64,17 +64,41 @@ void MainMenuBar::OnImGuiRender()
             {
                 if (myLayers.myLayers[i]->ShouldBeSaved())
                 {
-                    if(ImGui::MenuItemEx(myLayers.myLayers[i]->GetLayerName().c_str(), myLayers.myLayers[i]->IsOpen() ? ICON_FK_CHECK : ""))
-                    {
-                        if(myLayers.myLayers[i]->IsOpen())
-                        {
-                            myLayers.myLayers[i]->SetOpen(false);
-                        }
-                        else
-                        {
-                            myLayers.myLayers[i]->SetOpen(true);
-                        }
-                    }
+                    //if (myLayers.myLayers[i]->GetCategory() != "")
+                    //{
+                    //    /*if(ImGui::BeginMenu(myLayers.myLayers[i]->GetCategory().c_str()))
+                    //    {
+                    //        if(ImGui::MenuItemEx(myLayers.myLayers[i]->GetLayerName().c_str(), myLayers.myLayers[i]->IsOpen() ? ICON_FK_CHECK : ""))
+                    //        {
+                    //            if(myLayers.myLayers[i]->IsOpen())
+                    //            {
+                    //                myLayers.myLayers[i]->SetOpen(false);
+                    //            }
+                    //            else
+                    //            {
+                    //                myLayers.myLayers[i]->SetOpen(true);
+                    //            }
+                    //        }
+
+                    //        ImGui::EndMenu();*/
+                    //    }
+                    //    else
+                    //    {
+                            if(ImGui::MenuItemEx(myLayers.myLayers[i]->GetLayerName().c_str(), myLayers.myLayers[i]->IsOpen() ? ICON_FK_CHECK : ""))
+                            {
+                                if(myLayers.myLayers[i]->IsOpen())
+                                {
+                                    myLayers.myLayers[i]->SetOpen(false);
+                                }
+                                else
+                                {
+                                    myLayers.myLayers[i]->SetOpen(true);
+                                }
+                            }
+                        //}
+                    //}
+
+                    
                 }
 
 

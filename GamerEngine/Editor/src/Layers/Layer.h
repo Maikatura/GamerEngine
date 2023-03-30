@@ -4,7 +4,7 @@
 class Layer 
 {
 public:
-	Layer(const std::string& aLayerName, bool aAlwaysOpen = false, bool aSaveLayerSettings = true);
+	Layer(const std::string& aLayerName, bool aAlwaysOpen = false, bool aSaveLayerSettings = true, const std::string& aCategory = "");
 	virtual ~Layer() = default;
 
 	virtual bool OnRender();
@@ -19,6 +19,7 @@ public:
 
 	bool ShouldBeSaved();
 
+	std::string GetCategory();
 	std::string GetLayerName();
 	void SetOpen(bool aOpenState);
 	bool IsOpen();
@@ -34,4 +35,5 @@ protected:
 	bool myIsOpen = true;
 	bool hasInited = false;
 	std::string myLayerName;
+	std::string myCategory;
 };

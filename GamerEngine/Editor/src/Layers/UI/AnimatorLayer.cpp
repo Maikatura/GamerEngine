@@ -173,7 +173,7 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
 	std::vector<GraphEditor::Link> mLinks = { {0, 0, 1, 0} };
 };
 
-AnimatorLayer::AnimatorLayer() : Layer("Animator")
+AnimatorLayer::AnimatorLayer() : Layer("Animator", false, true, "Info")
 {
 }
 

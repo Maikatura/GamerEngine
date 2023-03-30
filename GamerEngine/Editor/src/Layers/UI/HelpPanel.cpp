@@ -99,7 +99,7 @@ void Markdown(const std::string& markdown_)
     ImGui::Markdown(markdown_.c_str(), markdown_.length(), mdConfig);
 }
 
-HelpPanel::HelpPanel() : Layer("Help Panel")
+HelpPanel::HelpPanel() : Layer("Help Panel", false, true, "Info")
 {
 }
 
@@ -123,20 +123,10 @@ void HelpPanel::OnAttach()
 
 void HelpPanel::OnImGuiRender()
 {
-    
-
-
-   
-
-
-
-	bool isOpen = true;
-	ImGui::Begin("Help Panel", &isOpen);
-
+    BeginMenu();
     const std::string markdownText = R"([Made by](https://github.com/maikatura)
 	# Here will be a documentation :)
 	)";
     Markdown(markdownText);
-
-	ImGui::End();
+    EndMenu();
 }

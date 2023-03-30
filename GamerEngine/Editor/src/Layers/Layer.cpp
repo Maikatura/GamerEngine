@@ -1,11 +1,12 @@
 #include "Editor.pch.h"
 #include "Layer.h"
 
-Layer::Layer(const std::string& aLayerName, bool aAlwaysOpen, bool aSaveLayerSettings)
+Layer::Layer(const std::string& aLayerName, bool aAlwaysOpen, bool aSaveLayerSettings, const std::string& aCategory)
 {
     myLayerName = aLayerName;
     myIsAlwaysOpen = aAlwaysOpen;
     mySaveLayer = aSaveLayerSettings;
+    myCategory = aCategory;
 }
 
 void Layer::OnAttach()
@@ -45,6 +46,11 @@ bool Layer::OnShutdown()
 bool Layer::ShouldBeSaved()
 {
     return mySaveLayer;
+}
+
+std::string Layer::GetCategory()
+{
+    return myCategory;
 }
 
 std::string Layer::GetLayerName()
