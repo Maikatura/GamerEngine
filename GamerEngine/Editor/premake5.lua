@@ -33,7 +33,8 @@ linkoptions
 disablewarnings
 {
     "26812", --prefer enum class over enum
-    "26451" --arithmetic overflow
+    "26451", --arithmetic overflow
+	"2220"
 }
 
 defines
@@ -63,6 +64,8 @@ includedirs{
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
     "%{IncludeDirs.FBXSDK}",
+	"%{IncludeDirs.PhysicsEngine}",
+	"%{IncludeDirs.PyBullet}"
 }
 
 externalincludedirs {
@@ -76,6 +79,7 @@ links
 	"FBXImporter",
 	"Engine",
 	"Game",
+	"PhysicsEngine",
 	
 	"RapidJson",
 	"YamlCpp",

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\CL\Utils\Context.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Context.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Detail.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Device.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Error.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Error.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\ErrorCodes.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Event.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Event.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\File.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\File.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\InteropContext.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\OpenCLUtilsCpp_Export.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\OpenCLUtils_Export.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Platform.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\Utils\Utils.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CL\cl.h" />
+    <ClInclude Include="include\CL\cl2.hpp" />
+    <ClInclude Include="include\CL\cl_d3d10.h" />
+    <ClInclude Include="include\CL\cl_d3d11.h" />
+    <ClInclude Include="include\CL\cl_dx9_media_sharing.h" />
+    <ClInclude Include="include\CL\cl_dx9_media_sharing_intel.h" />
+    <ClInclude Include="include\CL\cl_egl.h" />
+    <ClInclude Include="include\CL\cl_ext.h" />
+    <ClInclude Include="include\CL\cl_ext_intel.h" />
+    <ClInclude Include="include\CL\cl_gl.h" />
+    <ClInclude Include="include\CL\cl_gl_ext.h" />
+    <ClInclude Include="include\CL\cl_half.h" />
+    <ClInclude Include="include\CL\cl_icd.h" />
+    <ClInclude Include="include\CL\cl_layer.h" />
+    <ClInclude Include="include\CL\cl_platform.h" />
+    <ClInclude Include="include\CL\cl_va_api_media_sharing_intel.h" />
+    <ClInclude Include="include\CL\cl_version.h" />
+    <ClInclude Include="include\CL\opencl.h" />
+    <ClInclude Include="include\CL\opencl.hpp" />
+  </ItemGroup>
+</Project>

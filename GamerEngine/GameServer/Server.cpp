@@ -10,8 +10,8 @@
 
 int main()
 {
-	TurNet::ServerUDP myServer;
-	std::vector<sockaddr_in> myClientsConnected;
+	/*TurNet::ServerUDP myServer;
+	std::vector<ClientAdd> myClientsConnected;
 
 	myServer.Start();
 
@@ -106,7 +106,7 @@ int main()
 
 		using namespace std::literals::chrono_literals;
 		std::this_thread::sleep_for(1s);
-	}
+	}*/
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

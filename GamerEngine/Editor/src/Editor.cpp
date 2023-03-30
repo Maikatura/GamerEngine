@@ -10,6 +10,8 @@
 #include <Renderer/GraphicsEngine.h>
 #include <Renderer/Framework/DX11.h>
 #include <Renderer/Render/LineRenderer.h> 
+
+#include "Physics.h"
 #include "Time.hpp"
 #include "Components/CameraController.h"
 #include "Components/NativeScriptComponent.h"
@@ -79,6 +81,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	myLayers.Init();
 	EditorSettingsPanel::LoadConfig();
 	LineRenderer::Init();
+	Physics::Get().Init();
 
 
 	auto cameraFunc = std::function<void(Entity)>([](Entity aEntity)
@@ -112,6 +115,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		myLayers.BeginFrame();
 		graphicsEngine.BeginFrame();
+
+		Physics::Get().Update();
 
 		//graphicsEngine.SetEngineUpdateRuntime(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());

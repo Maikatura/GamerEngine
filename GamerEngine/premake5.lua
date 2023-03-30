@@ -26,11 +26,14 @@ include "External/yaml-cpp"
 include "External/WICTextureLoader"
 include "External/rapidjson"
 include "External/cryptopp"
+include "External/PyBullet"
+include "External/OpenCL"
 
 	
 group "Backend"
 include "Shaders"
 include "AudioEngine"
+include "PhysicsEngine"
 
 group "Engine"
 include "Game"

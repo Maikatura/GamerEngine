@@ -6,8 +6,12 @@
 IncludeDirs = {}
 IncludeDirs["GraphicsEngine"] = "%{wks.location}/Engine/src/"
 IncludeDirs["Game"] = "%{wks.location}/Game/src"
+IncludeDirs["Components"] = "%{wks.location}/Engine/src/"
+IncludeDirs["PhysicsEngine"] = "%{wks.location}/PhysicsEngine/src/"
 
 -- Eternal Includes
+
+IncludeDirs["PyBullet"] = "%{wks.location}/External/PyBullet/src"
 IncludeDirs["TurNet"] = "%{wks.location}/External/TurNet/"
 IncludeDirs["CryptoPP"] = "%{wks.location}/External/CryptoPP/"
 IncludeDirs["CommonUtilities"] = "%{wks.location}/External/CommonUtilities/src/"
@@ -19,7 +23,6 @@ IncludeDirs["YamlCpp"] = "%{wks.location}/External/yaml-cpp/"
 IncludeDirs["WICTextureLoader"] = "%{wks.location}/External/WICTextureLoader/"
 IncludeDirs["RapidJson"] = "%{wks.location}/External/rapidjson/"
 IncludeDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/include/"
-IncludeDirs["Components"] = "%{wks.location}/Engine/src/"
 
 --Libaries
 LibDirs = {}
