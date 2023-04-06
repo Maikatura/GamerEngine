@@ -52,6 +52,7 @@ includedirs{
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
     "%{IncludeDirs.FBXSDK}",
+	"%{IncludeDirs.Flecs}",
 	
 	"%{IncludeDirs.TurNet}"
 }
@@ -69,6 +70,7 @@ links
 	"Game",
 	"RapidJson",
 	"YamlCpp",
+	"Flecs",
 	
 	"d3d11.lib",
 	"dxguid.lib",

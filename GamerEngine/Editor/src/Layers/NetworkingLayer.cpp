@@ -124,34 +124,7 @@ void NetworkingLayer::OnUpdate()
 {
 	Layer::OnUpdate();
 
-
-	if (mySendTime <= 0.0f)
-	{
-		if (Renderer::GetCamera()->HasMoved())
-		{
-			mySendTime += myMoveSendTime;
-
-			const Vector3f position = Renderer::GetCamera()->ViewProjection.GetPosition();
-			const Vector3f rotation = Renderer::GetCamera()->ViewProjection.GetRotation();
-
-
-			TurNet::TurMessage outMsg;
-			PlayerMoveMessage moveMsg;
-			moveMsg.ClientID = myClientID;
-			moveMsg.Time = std::chrono::high_resolution_clock::now();
-			moveMsg.MoveSpeed = Renderer::GetCamera()->GetCameraSpeed();
-			moveMsg.Translation = position;
-
-			outMsg << moveMsg;
-			myClient.SendToServer(outMsg);
-
-			Renderer::GetCamera()->SetHasMoved(false);
-		}
-	}
-	else
-	{
-		mySendTime -= Time::GetDeltaTime();
-	}
+	UpdateCamera();
 
 	for(int i = 0; i < myPlayers.size(); i++)
 	{
@@ -184,6 +157,42 @@ void NetworkingLayer::OnUpdate()
 
 void NetworkingLayer::Listen()
 {
+}
+
+void NetworkingLayer::UpdateCamera()
+{
+	if(mySendTime <= 0.0f)
+	{
+		if(!Renderer::GetCamera())
+		{
+			return;
+		}
+
+		if(Renderer::GetCamera()->HasMoved())
+		{
+			mySendTime += myMoveSendTime;
+
+			const Vector3f position = Renderer::GetCamera()->ViewProjection.GetPosition();
+			const Vector3f rotation = Renderer::GetCamera()->ViewProjection.GetRotation();
+
+
+			TurNet::TurMessage outMsg;
+			PlayerMoveMessage moveMsg;
+			moveMsg.ClientID = myClientID;
+			moveMsg.Time = std::chrono::high_resolution_clock::now();
+			moveMsg.MoveSpeed = Renderer::GetCamera()->GetCameraSpeed();
+			moveMsg.Translation = position;
+
+			outMsg << moveMsg;
+			myClient.SendToServer(outMsg);
+
+			Renderer::GetCamera()->SetHasMoved(false);
+		}
+	}
+	else
+	{
+		mySendTime -= Time::GetDeltaTime();
+	}
 }
 
 void NetworkingLayer::StartNetworkingClient()

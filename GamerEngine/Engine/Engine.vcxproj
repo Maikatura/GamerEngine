@@ -60,7 +60,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -86,7 +86,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -226,6 +226,9 @@
     </ProjectReference>
     <ProjectReference Include="..\Shaders\Shaders.vcxproj">
       <Project>{EFAC8DF2-5B8C-0C8E-64A4-9764D00273EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\flecs\Flecs.vcxproj">
+      <Project>{32A72E0D-9EBB-56BE-673D-FA1DD31053EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

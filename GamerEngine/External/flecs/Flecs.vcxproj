@@ -230,6 +230,7 @@
     <ClInclude Include="include\flecs\private\strbuf.h" />
     <ClInclude Include="include\flecs\private\switch_list.h" />
     <ClInclude Include="include\flecs\private\vec.h" />
+    <ClInclude Include="include2\flecs.h" />
     <ClInclude Include="src\addons\json\json.h" />
     <ClInclude Include="src\addons\meta\meta.h" />
     <ClInclude Include="src\addons\pipeline\pipeline.h" />

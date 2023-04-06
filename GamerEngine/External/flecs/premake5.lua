@@ -35,7 +35,8 @@ defines
 	"flecs_STATIC"
 }
 
-includedirs{
+includedirs
+{
     "./src",
 	"%{IncludeDirs.Flecs}"
 }

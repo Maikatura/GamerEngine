@@ -45,14 +45,14 @@
     <IntDir>..\Temp\Intermediate\Game\Debug\</IntDir>
     <TargetName>Game_Debug</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\Engine\src;..\External\CommonUtilities\src;..\External\entt;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\Temp\lib\</OutDir>
     <IntDir>..\Temp\Intermediate\Game\Release\</IntDir>
     <TargetName>Game_Release</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\Engine\src;..\External\CommonUtilities\src;..\External\entt;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -138,6 +138,9 @@
     </ProjectReference>
     <ProjectReference Include="..\External\TurNet\TurNet.vcxproj">
       <Project>{076955D4-F30A-80AA-DCC5-93FEC80607FB}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\flecs\Flecs.vcxproj">
+      <Project>{32A72E0D-9EBB-56BE-673D-FA1DD31053EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

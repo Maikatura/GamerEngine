@@ -20,6 +20,9 @@
 #include "Components/Network/NetworkComponent.h"
 #include "TurNet/Shared/DataHandling/TurMessage.h"
 
+#include "flecs.h"
+
+
 Scene::Scene() : mySceneIsReady(false), mySceneStatus(SceneStatus::None)
 {
 
@@ -27,6 +30,13 @@ Scene::Scene() : mySceneIsReady(false), mySceneStatus(SceneStatus::None)
 
 Scene::~Scene()
 {
+	myWorld.quit();
+
+	if(myStatisticThread.joinable())
+	{
+		myStatisticThread.join();
+	}
+
 	Clear();
 }
 
@@ -38,6 +48,17 @@ bool Scene::Initialize()
 	myComponentMap[entt::type_id<ModelComponent>().hash()] = "ModelComponent";
 
 	mySceneIsReady = false;
+
+	myWorld.set<flecs::Rest>({});
+	myWorld.import<flecs::monitor>();
+
+	myStatisticThread = std::thread([&]()
+	{
+		myWorld.app().enable_rest().run();
+	});
+
+
+
 
 	return true;
 }

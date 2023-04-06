@@ -10,5 +10,12 @@
 **/builds
 **/Build
 **/build
+*.exe
+*.pdb
+
+
+// GamerEngine
+GamerEngine/Bin/Shaders/*
+
 
 

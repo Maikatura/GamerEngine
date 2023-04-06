@@ -91,6 +91,9 @@
     <Filter Include="include\flecs\private">
       <UniqueIdentifier>{0F030642-7B6F-C13C-4463-599AB08EE3A4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include2">
+      <UniqueIdentifier>{DBA00C65-C76D-6770-F086-5518DCB29CFE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -494,6 +497,9 @@
     </ClInclude>
     <ClInclude Include="include\flecs\private\vec.h">
       <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include2\flecs.h">
+      <Filter>include2</Filter>
     </ClInclude>
     <ClInclude Include="src\addons\json\json.h">
       <Filter>src\addons\json</Filter>

@@ -46,7 +46,7 @@
     <IntDir>..\Temp\Intermediate\Server\Debug\</IntDir>
     <TargetName>Server_Debug</TargetName>
     <TargetExt>.exe</TargetExt>
-    <ExternalIncludePath>..\External\TurNet;..\Game\src;..\External\rapidjson;..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\External\TurNet;..\Game\src;..\External\rapidjson;..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,7 +54,7 @@
     <IntDir>..\Temp\Intermediate\Server\Release\</IntDir>
     <TargetName>Server_Release</TargetName>
     <TargetExt>.exe</TargetExt>
-    <ExternalIncludePath>..\External\TurNet;..\Game\src;..\External\rapidjson;..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\External\TurNet;..\Game\src;..\External\rapidjson;..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -125,6 +125,9 @@
     </ProjectReference>
     <ProjectReference Include="..\External\TurNet\TurNet.vcxproj">
       <Project>{076955D4-F30A-80AA-DCC5-93FEC80607FB}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\flecs\Flecs.vcxproj">
+      <Project>{32A72E0D-9EBB-56BE-673D-FA1DD31053EF}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\CommonUtilities\CommonUtilities.vcxproj">
       <Project>{AA29E689-16B5-534E-1FC6-D6428BD0AF4E}</Project>

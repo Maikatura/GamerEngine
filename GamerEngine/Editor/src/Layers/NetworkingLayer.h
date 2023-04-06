@@ -53,6 +53,8 @@ public:
 
 	static TurNet::ClientUDP& GetClient() { return myClient; }
 
+	void UpdateCamera();
+
 private:
 	void StartNetworkingClient();
 	void StartNetworkingServer();

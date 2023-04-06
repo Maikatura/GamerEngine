@@ -51,7 +51,8 @@ externalincludedirs {
 	"%{IncludeDirs.CommonUtilities}",
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.FBXImporter}",
-	"%{IncludeDirs.FBXSDK}"
+	"%{IncludeDirs.FBXSDK}",
+	"%{IncludeDirs.Flecs}"
 }
 
 externalwarnings "Off"
@@ -63,6 +64,8 @@ links
 	"YamlCpp",
 	"Engine",
 	"TurNet",
+	"Flecs",
+	
 	"CommonUtilities",
 	"Game",
 	"ws2_32.lib",

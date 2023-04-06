@@ -53,7 +53,7 @@ includedirs{
 	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.YamlCpp}",
 	"%{IncludeDirs.WICTextureLoader}",
-	"%{IncludeDirs.Flecs}"
+	"%{IncludeDirs.Flecs}../include2"
 }
 
 externalincludedirs {
@@ -68,7 +68,8 @@ links
 	"FBXImporter",
 	"WICTextureLoader",
 	"Game",
-	"Shaders"
+	"Shaders",
+	"Flecs"
 }
 
 files 

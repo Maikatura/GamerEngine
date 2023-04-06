@@ -48,7 +48,8 @@ includedirs{
 externalincludedirs {
 	"%{IncludeDirs.GraphicsEngine}",
 	"%{IncludeDirs.CommonUtilities}",
-	"%{IncludeDirs.Entt}"
+	"%{IncludeDirs.Entt}",
+	"%{IncludeDirs.Flecs}"
 }
 
 externalwarnings "Off"
@@ -56,7 +57,8 @@ externalwarnings "Off"
 links
 {
 	"CommonUtilities",
-	"TurNet"
+	"TurNet",
+	"Flecs"
 }
 
 files 

@@ -4,7 +4,7 @@ Windows:
   - Name: File Explorer
     IsOpen: true
   - Name: Hierarchy
-    IsOpen: false
+    IsOpen: true
   - Name: Inspector
     IsOpen: true
   - Name: Animator
@@ -12,6 +12,6 @@ Windows:
   - Name: Scene
     IsOpen: true
   - Name: Networking
-    IsOpen: true
+    IsOpen: false
   - Name: Help Panel
-    IsOpen: true
+    IsOpen: false
