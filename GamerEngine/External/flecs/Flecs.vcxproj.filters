@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs">
+      <UniqueIdentifier>{059F3DA5-715F-B9DB-3A9A-0259A619FEB7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons">
+      <UniqueIdentifier>{EDC29D4A-D951-2714-8270-3B0F6EDE37BA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp">
+      <UniqueIdentifier>{3FEB8A18-2B10-DA98-545B-BF2840DFD8B6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\impl">
+      <UniqueIdentifier>{A0BC98C1-0CD5-7FEB-D581-0F8541591485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins">
+      <UniqueIdentifier>{060ACB93-72ED-D9D3-7BF0-0710E752A024}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\app">
+      <UniqueIdentifier>{560EC836-C2C7-32E1-4B27-4DBBB7DFE850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\component">
+      <UniqueIdentifier>{08C24BDB-74DC-AE7C-BDFE-BE102958D683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\doc">
+      <UniqueIdentifier>{EB1AC836-57D4-32E1-E033-4DBB4CECE850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\entity">
+      <UniqueIdentifier>{B2E7D832-9E39-B022-8758-ED327349C90B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\enum">
+      <UniqueIdentifier>{2A03CC0F-16EA-8D07-BF3A-F424AB00076E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\event">
+      <UniqueIdentifier>{F7875009-634C-4FF9-2CB2-7FC39835EB2E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\filter">
+      <UniqueIdentifier>{9B5FCF34-87B1-A624-70D0-E3345CC1BF0D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\id">
+      <UniqueIdentifier>{22EA6A09-0E26-6E73-7738-866A6393168E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\json">
+      <UniqueIdentifier>{8FD5CE0F-7BBC-9007-240D-F72410D3096E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\meta">
+      <UniqueIdentifier>{BC3FD00F-A826-9207-5177-F8243D3D0B6E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\module">
+      <UniqueIdentifier>{1BB18B45-0703-6335-F021-A045DC127C1E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\monitor">
+      <UniqueIdentifier>{BD58B0F7-29E8-71E2-32E4-52FA9EF2ACEE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\observer">
+      <UniqueIdentifier>{3D71EAE8-29EE-DD2B-526B-DE3F3E477ABF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\pipeline">
+      <UniqueIdentifier>{0BF500E9-F771-F42B-20EF-F43F0CCB90BF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\query">
+      <UniqueIdentifier>{2B22290A-97E6-27FA-604C-58C4CCCFC32F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\rest">
+      <UniqueIdentifier>{93FDD20F-7FE4-9407-2835-FB2414FB0D6E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\rule">
+      <UniqueIdentifier>{AD40D30F-9927-9507-4278-FB242E3E0E6E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\snapshot">
+      <UniqueIdentifier>{2522770C-119F-6A4F-3A1C-6B6326F806E3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\system">
+      <UniqueIdentifier>{7ACE4754-6620-1F44-4F3F-5C543B30382D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\term">
+      <UniqueIdentifier>{2D16D40F-19FD-9507-C24D-FC24AE130F6E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\timer">
+      <UniqueIdentifier>{76F7580A-E2BB-57FA-AB21-88C417A5F32F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\mixins\units">
+      <UniqueIdentifier>{C8BE6D0A-3483-6CFA-FDE8-9CC4696C0830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\addons\cpp\utils">
+      <UniqueIdentifier>{FF2F8DF5-EB55-575C-D49B-DC27C0607C28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\flecs\private">
+      <UniqueIdentifier>{0F030642-7B6F-C13C-4463-599AB08EE3A4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\addons">
+      <UniqueIdentifier>{1592CC4E-014A-0E9C-6A51-E7F75628A98C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\addons\expr">
+      <UniqueIdentifier>{83160034-EFA1-6DF8-F8B2-F0EC64BDC9F8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\addons\json">
+      <UniqueIdentifier>{FEBE0234-6A4A-70F8-735B-F3ECDF65CCF8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\addons\meta">
+      <UniqueIdentifier>{2B290434-97B4-71F8-A0C5-F4EC0CD0CDF8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\addons\os_api_impl">
+      <UniqueIdentifier>{B0A81DA0-9CA2-46F2-850F-DD0271A8AC5E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\addons\pipeline">
+      <UniqueIdentifier>{FAFDD96E-665F-B77C-EFCC-FD2E5B2DEE3B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\addons\rules">
+      <UniqueIdentifier>{0F6EECB4-FB66-0B07-2499-F08B10F1EA12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\addons\system">
+      <UniqueIdentifier>{A9CF1B55-15E6-19EB-5E5D-A50CCAB2EA72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\datastructures">
+      <UniqueIdentifier>{7A16FF44-66FA-BF9A-CF5A-BAEDBB5DAA1C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\flecs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\app.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\coredoc.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\c_types.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\component.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\entity.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\entity_view.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\flecs.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\impl\iter.hpp">
+      <Filter>include\flecs\addons\cpp\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\impl\world.hpp">
+      <Filter>include\flecs\addons\cpp\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\invoker.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\iter.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\lifecycle_traits.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\log.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\app\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\app</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\app\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\app</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\component\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\doc\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\doc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\doc\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\doc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\entity\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\entity\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\enum\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\enum</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\event\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\event\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\event\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\filter\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\filter\builder_i.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\filter\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\filter\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\id\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\id</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\id\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\id</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\json\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\meta\cursor.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\meta\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\meta\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\meta\opaque.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\module\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\module</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\monitor\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\monitor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\monitor\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\monitor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\observer\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\observer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\observer\builder_i.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\observer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\observer\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\observer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\observer\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\observer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\pipeline\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\pipeline\builder_i.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\pipeline\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\pipeline\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\query\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\query</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\query\builder_i.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\query</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\query\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\query</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\query\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\query</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rest\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\rest</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rest\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\rest</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rule\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\rule</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rule\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\rule</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rule\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\rule</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\snapshot\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\snapshot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\snapshot\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\snapshot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\system\builder.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\system\builder_i.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\system\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\system\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\term\builder_i.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\term</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\term\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\term</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\term\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\term</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\timer\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\timer\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\units\decl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\units</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\mixins\units\impl.hpp">
+      <Filter>include\flecs\addons\cpp\mixins\units</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\pair.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\ref.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\table.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\type.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\array.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\builder.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\enum.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\function_traits.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\iterable.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\node_builder.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\signature.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\string.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\stringstream.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\utils\utils.hpp">
+      <Filter>include\flecs\addons\cpp\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\cpp\world.hpp">
+      <Filter>include\flecs\addons\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\deprecated.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\doc.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\expr.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\flecs_c.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\flecs_cpp.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\http.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\journal.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\json.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\log.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\meta.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\meta_c.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\module.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\monitor.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\os_api_impl.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\parser.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\pipeline.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\plecs.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\rest.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\rules.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\snapshot.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\stats.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\system.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\timer.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\addons\units.h">
+      <Filter>include\flecs\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\bake_config.h">
+      <Filter>include\flecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\os_api.h">
+      <Filter>include\flecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\addons.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\allocator.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\api_defines.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\api_flags.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\api_support.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\api_types.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\bitset.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\block_allocator.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\hashmap.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\map.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\sparse.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\strbuf.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\switch_list.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flecs\private\vec.h">
+      <Filter>include\flecs\private</Filter>
+    </ClInclude>
+    <ClInclude Include="src\addons\json\json.h">
+      <Filter>src\addons\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\addons\meta\meta.h">
+      <Filter>src\addons\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="src\addons\pipeline\pipeline.h">
+      <Filter>src\addons\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="src\addons\rules\rules.h">
+      <Filter>src\addons\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="src\addons\system\system.h">
+      <Filter>src\addons\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datastructures\entity_index.h">
+      <Filter>src\datastructures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datastructures\name_index.h">
+      <Filter>src\datastructures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datastructures\qsort.h">
+      <Filter>src\datastructures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datastructures\stack_allocator.h">
+      <Filter>src\datastructures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\id_record.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\iter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\observable.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\poly.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\private_api.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\private_types.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stage.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\table.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\table_cache.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\addons\app.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\coredoc.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\doc.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\expr\deserialize.c">
+      <Filter>src\addons\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\expr\serialize.c">
+      <Filter>src\addons\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\expr\strutil.c">
+      <Filter>src\addons\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\expr\vars.c">
+      <Filter>src\addons\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\flecs_cpp.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\http.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\journal.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\json\deserialize.c">
+      <Filter>src\addons\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\json\json.c">
+      <Filter>src\addons\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\json\serialize.c">
+      <Filter>src\addons\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\json\serialize_type_info.c">
+      <Filter>src\addons\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\log.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\meta\api.c">
+      <Filter>src\addons\meta</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\meta\cursor.c">
+      <Filter>src\addons\meta</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\meta\meta.c">
+      <Filter>src\addons\meta</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\meta\serialized.c">
+      <Filter>src\addons\meta</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\meta_c.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\module.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\monitor.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\os_api_impl\os_api_impl.c">
+      <Filter>src\addons\os_api_impl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\parser.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\pipeline\pipeline.c">
+      <Filter>src\addons\pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\pipeline\worker.c">
+      <Filter>src\addons\pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\plecs.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\rest.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\rules\api.c">
+      <Filter>src\addons\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\rules\compile.c">
+      <Filter>src\addons\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\rules\engine.c">
+      <Filter>src\addons\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\rules\trav_cache.c">
+      <Filter>src\addons\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\snapshot.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\stats.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\system\system.c">
+      <Filter>src\addons\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\timer.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addons\units.c">
+      <Filter>src\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bootstrap.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\allocator.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\bitset.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\block_allocator.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\hash.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\hashmap.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\map.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\name_index.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\qsort.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\sparse.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\stack_allocator.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\strbuf.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\switch_list.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datastructures\vec.c">
+      <Filter>src\datastructures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity_filter.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filter.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hierarchy.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\id_record.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iter.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\misc.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\observable.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\observer.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\os_api.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\poly.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\query.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\search.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stage.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\table.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\table_cache.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\table_graph.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\value.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

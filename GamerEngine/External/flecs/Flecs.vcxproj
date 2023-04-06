@@ -1,0 +1,334 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{32A72E0D-9EBB-56BE-673D-FA1DD31053EF}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Flecs</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\Flecs\Debug\</IntDir>
+    <TargetName>Flecs_Debug</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\Flecs\Release\</IntDir>
+    <TargetName>Flecs_Release</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;flecs_STATIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;flecs_STATIC;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\flecs.h" />
+    <ClInclude Include="include\flecs\addons\app.h" />
+    <ClInclude Include="include\flecs\addons\coredoc.h" />
+    <ClInclude Include="include\flecs\addons\cpp\c_types.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\component.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\entity.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\entity_view.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\flecs.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\impl\iter.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\impl\world.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\invoker.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\iter.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\lifecycle_traits.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\log.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\app\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\app\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\component\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\doc\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\doc\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\entity\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\entity\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\enum\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\event\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\event\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\event\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\filter\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\filter\builder_i.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\filter\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\filter\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\id\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\id\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\json\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\meta\cursor.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\meta\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\meta\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\meta\opaque.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\module\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\monitor\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\monitor\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\observer\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\observer\builder_i.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\observer\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\observer\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\pipeline\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\pipeline\builder_i.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\pipeline\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\pipeline\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\query\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\query\builder_i.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\query\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\query\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rest\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rest\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rule\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rule\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\rule\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\snapshot\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\snapshot\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\system\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\system\builder_i.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\system\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\system\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\term\builder_i.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\term\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\term\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\timer\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\timer\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\units\decl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\mixins\units\impl.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\pair.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\ref.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\table.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\type.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\array.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\enum.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\function_traits.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\iterable.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\node_builder.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\signature.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\string.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\stringstream.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\utils\utils.hpp" />
+    <ClInclude Include="include\flecs\addons\cpp\world.hpp" />
+    <ClInclude Include="include\flecs\addons\deprecated.h" />
+    <ClInclude Include="include\flecs\addons\doc.h" />
+    <ClInclude Include="include\flecs\addons\expr.h" />
+    <ClInclude Include="include\flecs\addons\flecs_c.h" />
+    <ClInclude Include="include\flecs\addons\flecs_cpp.h" />
+    <ClInclude Include="include\flecs\addons\http.h" />
+    <ClInclude Include="include\flecs\addons\journal.h" />
+    <ClInclude Include="include\flecs\addons\json.h" />
+    <ClInclude Include="include\flecs\addons\log.h" />
+    <ClInclude Include="include\flecs\addons\meta.h" />
+    <ClInclude Include="include\flecs\addons\meta_c.h" />
+    <ClInclude Include="include\flecs\addons\module.h" />
+    <ClInclude Include="include\flecs\addons\monitor.h" />
+    <ClInclude Include="include\flecs\addons\os_api_impl.h" />
+    <ClInclude Include="include\flecs\addons\parser.h" />
+    <ClInclude Include="include\flecs\addons\pipeline.h" />
+    <ClInclude Include="include\flecs\addons\plecs.h" />
+    <ClInclude Include="include\flecs\addons\rest.h" />
+    <ClInclude Include="include\flecs\addons\rules.h" />
+    <ClInclude Include="include\flecs\addons\snapshot.h" />
+    <ClInclude Include="include\flecs\addons\stats.h" />
+    <ClInclude Include="include\flecs\addons\system.h" />
+    <ClInclude Include="include\flecs\addons\timer.h" />
+    <ClInclude Include="include\flecs\addons\units.h" />
+    <ClInclude Include="include\flecs\bake_config.h" />
+    <ClInclude Include="include\flecs\os_api.h" />
+    <ClInclude Include="include\flecs\private\addons.h" />
+    <ClInclude Include="include\flecs\private\allocator.h" />
+    <ClInclude Include="include\flecs\private\api_defines.h" />
+    <ClInclude Include="include\flecs\private\api_flags.h" />
+    <ClInclude Include="include\flecs\private\api_support.h" />
+    <ClInclude Include="include\flecs\private\api_types.h" />
+    <ClInclude Include="include\flecs\private\bitset.h" />
+    <ClInclude Include="include\flecs\private\block_allocator.h" />
+    <ClInclude Include="include\flecs\private\hashmap.h" />
+    <ClInclude Include="include\flecs\private\map.h" />
+    <ClInclude Include="include\flecs\private\sparse.h" />
+    <ClInclude Include="include\flecs\private\strbuf.h" />
+    <ClInclude Include="include\flecs\private\switch_list.h" />
+    <ClInclude Include="include\flecs\private\vec.h" />
+    <ClInclude Include="src\addons\json\json.h" />
+    <ClInclude Include="src\addons\meta\meta.h" />
+    <ClInclude Include="src\addons\pipeline\pipeline.h" />
+    <ClInclude Include="src\addons\rules\rules.h" />
+    <ClInclude Include="src\addons\system\system.h" />
+    <ClInclude Include="src\datastructures\entity_index.h" />
+    <ClInclude Include="src\datastructures\name_index.h" />
+    <ClInclude Include="src\datastructures\qsort.h" />
+    <ClInclude Include="src\datastructures\stack_allocator.h" />
+    <ClInclude Include="src\id_record.h" />
+    <ClInclude Include="src\iter.h" />
+    <ClInclude Include="src\observable.h" />
+    <ClInclude Include="src\poly.h" />
+    <ClInclude Include="src\private_api.h" />
+    <ClInclude Include="src\private_types.h" />
+    <ClInclude Include="src\stage.h" />
+    <ClInclude Include="src\table.h" />
+    <ClInclude Include="src\table_cache.h" />
+    <ClInclude Include="src\world.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\addons\app.c" />
+    <ClCompile Include="src\addons\coredoc.c" />
+    <ClCompile Include="src\addons\doc.c" />
+    <ClCompile Include="src\addons\expr\deserialize.c" />
+    <ClCompile Include="src\addons\expr\serialize.c" />
+    <ClCompile Include="src\addons\expr\strutil.c" />
+    <ClCompile Include="src\addons\expr\vars.c" />
+    <ClCompile Include="src\addons\flecs_cpp.c" />
+    <ClCompile Include="src\addons\http.c" />
+    <ClCompile Include="src\addons\journal.c" />
+    <ClCompile Include="src\addons\json\deserialize.c">
+      <ObjectFileName>$(IntDir)\deserialize1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\addons\json\json.c" />
+    <ClCompile Include="src\addons\json\serialize.c">
+      <ObjectFileName>$(IntDir)\serialize1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\addons\json\serialize_type_info.c" />
+    <ClCompile Include="src\addons\log.c" />
+    <ClCompile Include="src\addons\meta\api.c" />
+    <ClCompile Include="src\addons\meta\cursor.c" />
+    <ClCompile Include="src\addons\meta\meta.c" />
+    <ClCompile Include="src\addons\meta\serialized.c" />
+    <ClCompile Include="src\addons\meta_c.c" />
+    <ClCompile Include="src\addons\module.c" />
+    <ClCompile Include="src\addons\monitor.c" />
+    <ClCompile Include="src\addons\os_api_impl\os_api_impl.c" />
+    <ClCompile Include="src\addons\parser.c" />
+    <ClCompile Include="src\addons\pipeline\pipeline.c" />
+    <ClCompile Include="src\addons\pipeline\worker.c" />
+    <ClCompile Include="src\addons\plecs.c" />
+    <ClCompile Include="src\addons\rest.c" />
+    <ClCompile Include="src\addons\rules\api.c">
+      <ObjectFileName>$(IntDir)\api1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\addons\rules\compile.c" />
+    <ClCompile Include="src\addons\rules\engine.c" />
+    <ClCompile Include="src\addons\rules\trav_cache.c" />
+    <ClCompile Include="src\addons\snapshot.c" />
+    <ClCompile Include="src\addons\stats.c" />
+    <ClCompile Include="src\addons\system\system.c" />
+    <ClCompile Include="src\addons\timer.c" />
+    <ClCompile Include="src\addons\units.c" />
+    <ClCompile Include="src\bootstrap.c" />
+    <ClCompile Include="src\datastructures\allocator.c" />
+    <ClCompile Include="src\datastructures\bitset.c" />
+    <ClCompile Include="src\datastructures\block_allocator.c" />
+    <ClCompile Include="src\datastructures\hash.c" />
+    <ClCompile Include="src\datastructures\hashmap.c" />
+    <ClCompile Include="src\datastructures\map.c" />
+    <ClCompile Include="src\datastructures\name_index.c" />
+    <ClCompile Include="src\datastructures\qsort.c" />
+    <ClCompile Include="src\datastructures\sparse.c" />
+    <ClCompile Include="src\datastructures\stack_allocator.c" />
+    <ClCompile Include="src\datastructures\strbuf.c" />
+    <ClCompile Include="src\datastructures\switch_list.c" />
+    <ClCompile Include="src\datastructures\vec.c" />
+    <ClCompile Include="src\entity.c" />
+    <ClCompile Include="src\entity_filter.c" />
+    <ClCompile Include="src\filter.c" />
+    <ClCompile Include="src\hierarchy.c" />
+    <ClCompile Include="src\id_record.c" />
+    <ClCompile Include="src\iter.c" />
+    <ClCompile Include="src\misc.c" />
+    <ClCompile Include="src\observable.c" />
+    <ClCompile Include="src\observer.c" />
+    <ClCompile Include="src\os_api.c" />
+    <ClCompile Include="src\poly.c" />
+    <ClCompile Include="src\query.c" />
+    <ClCompile Include="src\search.c" />
+    <ClCompile Include="src\stage.c" />
+    <ClCompile Include="src\table.c" />
+    <ClCompile Include="src\table_cache.c" />
+    <ClCompile Include="src\table_graph.c" />
+    <ClCompile Include="src\value.c" />
+    <ClCompile Include="src\world.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

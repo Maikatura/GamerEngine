@@ -52,7 +52,8 @@ includedirs{
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.YamlCpp}",
-	"%{IncludeDirs.WICTextureLoader}"
+	"%{IncludeDirs.WICTextureLoader}",
+	"%{IncludeDirs.Flecs}"
 }
 
 externalincludedirs {

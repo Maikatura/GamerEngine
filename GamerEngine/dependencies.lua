@@ -11,6 +11,7 @@ IncludeDirs["PhysicsEngine"] = "%{wks.location}/PhysicsEngine/src/"
 
 -- Eternal Includes
 
+IncludeDirs["Flecs"] = "%{wks.location}/External/flecs/include/"
 IncludeDirs["PyBullet"] = "%{wks.location}/External/PyBullet/src"
 IncludeDirs["TurNet"] = "%{wks.location}/External/TurNet/"
 IncludeDirs["CryptoPP"] = "%{wks.location}/External/CryptoPP/"

@@ -65,7 +65,8 @@ includedirs{
 	"%{IncludeDirs.FBXImporter}",
     "%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.PhysicsEngine}",
-	"%{IncludeDirs.PyBullet}"
+	"%{IncludeDirs.PyBullet}",
+	"%{IncludeDirs.Flecs}"
 }
 
 externalincludedirs {
@@ -80,6 +81,7 @@ links
 	"Engine",
 	"Game",
 	"PhysicsEngine",
+	"Flecs",
 	
 	"RapidJson",
 	"YamlCpp",

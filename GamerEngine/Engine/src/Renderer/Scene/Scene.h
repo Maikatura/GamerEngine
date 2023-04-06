@@ -88,9 +88,7 @@ private:
 	std::mutex myLock;
 
 	Vector4f mySceneBackgroundColor = {0.0f,0.0f,0.0f,1.0f};
-
 	
-
 	std::map<entt::id_type, std::string> myComponentMap;
 
 	inline static std::function<void(Entity)> myEditorCamHandler;

@@ -144,7 +144,6 @@ void MainMenuBar::OnImGuiRender()
         }
         else
         {
-
             std::string stopText = ICON_FK_STOP;
             stopText += " Stop";
 

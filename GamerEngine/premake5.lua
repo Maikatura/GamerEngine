@@ -28,6 +28,7 @@ include "External/rapidjson"
 include "External/cryptopp"
 include "External/PyBullet"
 include "External/OpenCL"
+include "External/flecs"
 
 	
 group "Backend"
