@@ -45,7 +45,15 @@ void Network::NetworkComponent::OnUpdate()
 			myNewTranslation = transform.Translation;
 		}
 
-		transform.Translation = Vector3f::Lerp(transform.Translation, myNewTranslation, Time::GetDeltaTime());
+
+		if (myShouldSmooth)
+		{
+			transform.Translation = Vector3f::Lerp(transform.Translation, myNewTranslation, Time::GetDeltaTime());
+		}
+		else
+		{
+			transform.Translation = myNewTranslation;
+		}
 	}
 	
 }

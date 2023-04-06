@@ -76,6 +76,17 @@ void MarkdownFormatCallback(const ImGui::MarkdownFormatInfo& markdownFormatInfo_
             }
             break;
         }
+    	case ImGui::MarkdownFormatType::LINK:
+        {
+            if (start_)
+            {
+                ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(51, 153, 255, 255));
+            }
+            else
+            {
+                ImGui::PopStyleColor();
+            }
+        }
         default:
         {
             break;
@@ -124,9 +135,9 @@ void HelpPanel::OnAttach()
 void HelpPanel::OnImGuiRender()
 {
     BeginMenu();
-    const std::string markdownText = R"([Made by](https://github.com/maikatura)
-	# Here will be a documentation :)
-	)";
+    std::string markdownText = "[Made by](https://github.com/maikatura)\n";
+    markdownText += "# Here will be a documentation :)\n";
+	markdownText += "[Statistic Page](https://www.flecs.dev/explorer/)";
     Markdown(markdownText);
     EndMenu();
 }

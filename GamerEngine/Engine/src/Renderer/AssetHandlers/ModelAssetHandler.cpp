@@ -656,16 +656,8 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			mat.SetNormalTexture(normal);
 			mat.SetMaterialTexture(material);
 
-
-			if (tgaModel.Materials.size() <= 0)
-			{
-				mdl->PushMaterial(mat);
-			}
-			else
-			{
-				mdl->GetMaterial().resize(tgaModel.Materials.size());
-				mdl->GetMaterial()[0] = mat;
-			}
+			mdl->PushMaterial(mat);
+			
 
 
 

@@ -37,7 +37,7 @@ void EditorView::OnImGuiRender()
 
 	// TODO : Separate to SceneView.h and GameView.h
 
-	RenderGameView();
+	//RenderGameView();
 	RenderSceneView(entity);
 }
 
@@ -58,9 +58,6 @@ void EditorView::RenderSceneView(Entity aEntity)
 	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
 	ImVec2 windowSize = ImGui::GetWindowSize();
-	windowSize.y;
-
-	
 
 	auto view = SceneManager::GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
 	for(auto entity : view)

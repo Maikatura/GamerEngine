@@ -496,7 +496,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 				mat.SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Material"].as<std::string>())));
 			}
 
-			materials.emplace(materials.begin(), mat);
+			materials.push_back( mat);
 		}
 	}
 
