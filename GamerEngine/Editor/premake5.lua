@@ -65,11 +65,11 @@ includedirs{
 	"%{IncludeDirs.TurNet}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
+	"%{IncludeDirs.OpenFBX}",
     "%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.PhysicsEngine}",
 	"%{IncludeDirs.PyBullet}",
 	"%{IncludeDirs.Flecs}"
-	--"%{IncludeDirs.OpenFBX}"
 }
 
 externalincludedirs {
@@ -88,7 +88,7 @@ links
 	
 	"RapidJson",
 	"YamlCpp",
-	--"OpenFBX",
+	"OpenFBX",
 	
 	"ImGui",
 	

@@ -8,7 +8,7 @@
 #include <Importer.h>
 
 #include "Renderer/Scene/SceneManager.h"
-
+#include <ofbx.h>
 
 TGA::FBX::Importer importer;
 

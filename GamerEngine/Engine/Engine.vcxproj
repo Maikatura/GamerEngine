@@ -60,7 +60,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\include;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -86,7 +86,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\include;..\External\entt;..\Game\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -217,6 +217,9 @@
     </ProjectReference>
     <ProjectReference Include="..\External\FBXImporter\FBXImporter.vcxproj">
       <Project>{5711F0AA-C3C6-68A0-4CBB-6277B86F5FA4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\OpenFBX\OpenFBX.vcxproj">
+      <Project>{97529BD1-0332-1A6D-0C4A-A54378A880CE}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\WICTextureLoader\WICTextureLoader.vcxproj">
       <Project>{D06FBC32-BC68-DB84-E59A-C009D1F2BA90}</Project>

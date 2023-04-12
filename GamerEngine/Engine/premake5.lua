@@ -49,12 +49,13 @@ includedirs{
 	"%{IncludeDirs.TurNet}",
 	"%{IncludeDirs.CommonUtilities}",
 	"%{IncludeDirs.FBXImporter}",
+	"%{IncludeDirs.OpenFBX}",
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.YamlCpp}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.Flecs}../include2"
-	--"%{IncludeDirs.OpenFBX}"
+	
 }
 
 externalincludedirs {
@@ -67,11 +68,11 @@ links
 {
 	"CommonUtilities",
 	"FBXImporter",
+	"OpenFBX",
 	"WICTextureLoader",
 	"Game",
 	"Shaders",
 	"Flecs"
-	--"OpenFBX"
 }
 
 files 
@@ -79,7 +80,6 @@ files
 	"**.h",
 	"**.cpp",
 	"**.hpp",
-	"**.c",
 	
 	"**.hlsl",
     "**.hlsli"
