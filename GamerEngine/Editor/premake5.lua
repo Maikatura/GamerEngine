@@ -41,7 +41,9 @@ defines
 {
     "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS",
 	"_WINSOCKAPI_",
-	"NOMINMAX"
+	"NOMINMAX",
+	"_CRT_SECURE_NO_WARNINGS",
+	"_HAS_EXCEPTIONS=0"
 }
 
 libdirs 
@@ -67,6 +69,7 @@ includedirs{
 	"%{IncludeDirs.PhysicsEngine}",
 	"%{IncludeDirs.PyBullet}",
 	"%{IncludeDirs.Flecs}"
+	--"%{IncludeDirs.OpenFBX}"
 }
 
 externalincludedirs {
@@ -85,6 +88,7 @@ links
 	
 	"RapidJson",
 	"YamlCpp",
+	--"OpenFBX",
 	
 	"ImGui",
 	
@@ -93,7 +97,8 @@ links
 	"ws2_32.lib",
 	
 	"d3d11.lib",
-	"dxguid.lib"
+	"dxguid.lib",
+	"opengl32.lib"
 }
 
 files 

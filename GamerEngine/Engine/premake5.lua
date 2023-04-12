@@ -54,6 +54,7 @@ includedirs{
 	"%{IncludeDirs.YamlCpp}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.Flecs}../include2"
+	--"%{IncludeDirs.OpenFBX}"
 }
 
 externalincludedirs {
@@ -70,6 +71,7 @@ links
 	"Game",
 	"Shaders",
 	"Flecs"
+	--"OpenFBX"
 }
 
 files 
@@ -77,6 +79,7 @@ files
 	"**.h",
 	"**.cpp",
 	"**.hpp",
+	"**.c",
 	
 	"**.hlsl",
     "**.hlsli"

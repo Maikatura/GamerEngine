@@ -34,7 +34,7 @@ class Scene
 public:
 
 	Scene();
-	~Scene();
+	virtual ~Scene();
 
 	bool Initialize();
 

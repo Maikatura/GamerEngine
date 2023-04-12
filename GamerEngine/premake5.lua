@@ -29,6 +29,7 @@ include "External/cryptopp"
 include "External/PyBullet"
 include "External/OpenCL"
 include "External/flecs"
+include "External/OpenFBX"
 
 	
 group "Backend"

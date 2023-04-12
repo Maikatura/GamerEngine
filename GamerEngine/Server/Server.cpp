@@ -74,7 +74,7 @@ std::uniform_int_distribution<> distr(-250, 250);
 
 void LoadScene()
 {
-	SceneManager::LoadScene("Assets\\Scenes\\Network.csf");
+	SceneManager::LoadScene("Assets\\Scenes\\Showcase.csf");
 }
 
 HANDLE hStdin;

@@ -24,6 +24,7 @@ IncludeDirs["YamlCpp"] = "%{wks.location}/External/yaml-cpp/"
 IncludeDirs["WICTextureLoader"] = "%{wks.location}/External/WICTextureLoader/"
 IncludeDirs["RapidJson"] = "%{wks.location}/External/rapidjson/"
 IncludeDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/include/"
+IncludeDirs["OpenFBX"] = "%{wks.location}/External/OpenFBX/include/"
 
 --Libaries
 LibDirs = {}

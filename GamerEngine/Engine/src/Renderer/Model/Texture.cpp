@@ -3,6 +3,10 @@
 #include <Renderer/Framework/DX11.h>
 
 
+Texture::Texture()
+{
+}
+
 Texture::~Texture()
 {
 	myTexture.Reset();

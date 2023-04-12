@@ -25,6 +25,7 @@ public:
 	FORCEINLINE const std::wstring& GetName() const { return myName; }
 	FORCEINLINE const std::wstring& GetPath() const { return myPath; }
 
+	Texture();
 	virtual ~Texture();
 
 	void SetName(const std::wstring& aName);

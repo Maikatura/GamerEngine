@@ -32,14 +32,14 @@ void RandomMoverComponent::OnUpdate()
 
 	auto& netComp = GetComponent<Network::NetworkComponent>();
 
-	if (NetworkSettings::IsClient)
-	{
-		return;
-	}
+	
 
 	auto& transform = GetComponent<TransformComponent>();
 
-	
+	if(NetworkSettings::IsClient)
+	{
+		return;
+	}
 
 	if (mySendTimer <= 0.0f)
 	{
