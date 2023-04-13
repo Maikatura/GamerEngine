@@ -80,6 +80,7 @@ files
 	"**.h",
 	"**.cpp",
 	"**.hpp",
+	"**.c",
 	
 	"**.hlsl",
     "**.hlsli"

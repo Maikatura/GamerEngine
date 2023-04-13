@@ -372,6 +372,46 @@ bool ModelAssetHandler::InitUnitSphere()
 	return true;
 }
 
+ofbx::IScene* ModelAssetHandler::LoadModelScene(const std::string& aPath)
+{
+
+	FILE* fp;
+	fopen_s(&fp, aPath.c_str(), "rb");
+
+	if(!fp)
+	{
+		return nullptr;
+	}
+
+	fseek(fp, 0, SEEK_END);
+	long file_size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+	auto* content = new ofbx::u8[file_size];
+	fread(content, 1, file_size, fp);
+
+
+	ofbx::LoadFlags flags =
+		ofbx::LoadFlags::TRIANGULATE |
+		//		ofbx::LoadFlags::IGNORE_MODELS |
+		ofbx::LoadFlags::IGNORE_BLEND_SHAPES |
+		ofbx::LoadFlags::IGNORE_CAMERAS |
+		ofbx::LoadFlags::IGNORE_LIGHTS |
+		//		ofbx::LoadFlags::IGNORE_TEXTURES |
+		ofbx::LoadFlags::IGNORE_SKIN |
+		ofbx::LoadFlags::IGNORE_BONES |
+		ofbx::LoadFlags::IGNORE_PIVOTS |
+		//		ofbx::LoadFlags::IGNORE_MATERIALS |
+		ofbx::LoadFlags::IGNORE_POSES |
+		ofbx::LoadFlags::IGNORE_VIDEOS |
+		ofbx::LoadFlags::IGNORE_LIMBS |
+		//		ofbx::LoadFlags::IGNORE_MESHES |
+		ofbx::LoadFlags::IGNORE_ANIMATIONS;
+
+	ofbx::IScene* myScene = ofbx::load((ofbx::u8*)content, file_size, (ofbx::u16)flags);
+
+	return myScene;
+}
+
 ModelAssetHandler& ModelAssetHandler::Get()
 {
 	if (!myInstance)
@@ -446,6 +486,8 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 
 	TGA::FBX::Model tgaModel;
 
+
+
 	importer.InitImporter();
 
 	if(importer.LoadModel(aFilePath, tgaModel))
@@ -459,6 +501,7 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			std::vector<unsigned int> mdlIndices;
 			TGA::FBX::Model::Mesh& mesh = tgaModel.Meshes[i];
 			mdlVertices.resize(mesh.Vertices.size());
+
 
 			for(size_t v = 0; v < mesh.Vertices.size(); v++)
 			{

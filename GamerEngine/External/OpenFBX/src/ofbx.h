@@ -124,6 +124,9 @@ struct DataView
 	}
 };
 
+#ifdef VOID
+#undef VOID
+#endif
 
 struct IElementProperty
 {

@@ -149,8 +149,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\miniz.h" />
-    <ClInclude Include="include\ofbx.h" />
+    <ClInclude Include="src\miniz.h" />
+    <ClInclude Include="src\ofbx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\miniz.c" />

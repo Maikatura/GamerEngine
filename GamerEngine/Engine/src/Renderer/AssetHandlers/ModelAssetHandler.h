@@ -6,6 +6,11 @@
 #include <vector>
 #include "Renderer/Model/ModelInstance.h"
 
+namespace ofbx
+{
+	struct IScene;
+}
+
 const int InputLayoutSize = 19;
 
 class ModelAssetHandler
@@ -14,6 +19,9 @@ class ModelAssetHandler
 
 	bool InitUnitCube();
 	bool InitUnitSphere();
+
+
+	ofbx::IScene* LoadModelScene(const std::string& aPath);
 
 	inline static std::shared_ptr<ModelAssetHandler> myInstance;
 

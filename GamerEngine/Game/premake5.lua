@@ -42,7 +42,8 @@ defines
 
 includedirs{
     "./src",
-	"%{IncludeDirs.TurNet}"
+	"%{IncludeDirs.TurNet}",
+	"%{IncludeDirs.OpenFBX}"
 }
 
 externalincludedirs {
@@ -58,7 +59,8 @@ links
 {
 	"CommonUtilities",
 	"TurNet",
-	"Flecs"
+	"Flecs",
+	"OpenFBX"
 }
 
 files 
