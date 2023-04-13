@@ -467,7 +467,14 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 		auto& modelComp = deserializedEntity.AddComponent<ModelComponent>();
 		auto path = Helpers::string_cast<std::wstring>(modelComponent["Path"].as<std::string>());
 
+
 		auto modelInstance = ModelAssetHandler::Get().GetModelInstance(path);
+
+		if (!modelInstance)
+		{
+			return;
+		}
+
 		modelComp.SetModel(modelInstance);
 
 

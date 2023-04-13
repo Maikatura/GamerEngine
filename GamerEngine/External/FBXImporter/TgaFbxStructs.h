@@ -63,6 +63,14 @@ namespace TGA
 			Matrix& operator*=(const Matrix& aMatrix);
 		};
 
+		struct Vec4
+		{
+			float x;
+			float y;
+			float z;
+			float w;
+		};
+
 		struct Box
 		{
 			float Min[3]{ 0, 0, 0 };
@@ -154,6 +162,14 @@ namespace TGA
 			const Bone* GetRoot() const { if (!Bones.empty()) { return &Bones[0]; } return nullptr; }
 		};
 
+		struct Blendshape
+		{
+			std::string Name;
+			std::vector<unsigned int> AffectedIndexes;     // all Vertices affected by blendshape
+			std::vector<Vec4> BlendShapePosition; // Where the affected Vertex should go to when the blendshape is at 100%
+			float WeightPercent; // How much the blendshape was when Importing it
+		};
+
 		struct Model
 		{
 			struct Mesh
@@ -164,6 +180,7 @@ namespace TGA
 				unsigned int MaterialIndex;
 				std::string MeshName;
 				BoxSphereBounds BoxSphereBounds;
+				std::vector<Blendshape> Blendshapes;
 			};
 
 			struct LODGroup
@@ -188,6 +205,8 @@ namespace TGA
 			std::string Name;
 
 			BoxSphereBounds BoxSphereBounds;
+
+			
 
 			__forceinline bool IsValid() const
 			{
@@ -246,6 +265,7 @@ namespace TGA
 
 			std::string Name;
 		};
+
 	}
 }
 

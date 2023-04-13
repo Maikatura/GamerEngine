@@ -9,6 +9,7 @@
 #include "fbxsdk/core/base/fbxstatus.h"
 #include "fbxsdk/fileio/fbximporter.h"
 #include "fbxsdk/scene/fbxscene.h"
+#include "fbxsdk/scene/geometry/fbxblendshape.h"
 
 namespace TGA
 {
@@ -257,6 +258,7 @@ namespace TGA
 
 					mdlMeshes.insert(mdlMeshes.end(), nodeMeshes.begin(), nodeMeshes.end());
 				}
+
 
 				if(!mdlMeshes.empty() || !mdlLodGroups.empty())
 				{

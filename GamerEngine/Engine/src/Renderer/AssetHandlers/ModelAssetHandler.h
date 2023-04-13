@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <unordered_map>
 #include <memory>
@@ -23,6 +24,9 @@ class ModelAssetHandler
 
 	ofbx::IScene* LoadModelScene(const std::string& aPath);
 
+
+
+
 	inline static std::shared_ptr<ModelAssetHandler> myInstance;
 
 public:
@@ -36,6 +40,8 @@ public:
 	void UnloadModel(const std::wstring& aFilePath);
 
 	void ResetRenderedModels();
+
+	bool LoadModelNewTesting(const std::wstring& aFilePath);
 
 	bool LoadModel(const std::wstring& aFilePath);
 	bool LoadAnimation(const std::wstring& aModelName, const std::wstring& someFilePath);

@@ -84,6 +84,11 @@ void ModelInstance::Init(std::shared_ptr<Model> aModel)
 
 std::shared_ptr<Model> ModelInstance::GetModel()
 {
+	if (!myModel)
+	{
+		return nullptr;
+	}
+
 	return myModel;
 }
 

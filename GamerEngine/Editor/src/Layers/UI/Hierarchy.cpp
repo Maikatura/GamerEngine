@@ -71,8 +71,6 @@ void Hierarchy::OnImGuiRender()
 				return;
 			}
 
-
-
 			DrawEntityNode(entity);
 		});
 
@@ -124,9 +122,6 @@ void Hierarchy::OnImGuiRender()
 
 void Hierarchy::DrawEntityNode(Entity& aEntity)
 {
-
-
-
 	for(size_t i = 0; i < myEntityList.size(); i++)
 	{
 		if(aEntity.GetID() == myEntityList[i])
@@ -215,7 +210,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 		{
 			if(aEntity.GetComponent<ModelComponent>().GetModel())
 			{
-				DrawArmature(aEntity.GetComponent<ModelComponent>().GetModel());
+				DrawArmature(aEntity, aEntity.GetComponent<ModelComponent>().GetModel());
 			}
 		}
 
@@ -315,11 +310,10 @@ void Hierarchy::DrawWindowPopupMenu()
 	}
 }
 
-void Hierarchy::DrawArmature(std::shared_ptr<ModelInstance> aModel)
+void Hierarchy::DrawArmature(Entity& aEntity, std::shared_ptr<ModelInstance> aModel)
 {
 	if(aModel->GetSkeleton())
 	{
-
 		auto root = aModel->GetSkeleton()->GetRoot();
 		if(root)
 		{
@@ -343,6 +337,17 @@ void Hierarchy::DrawArmature(std::shared_ptr<ModelInstance> aModel)
 		{
 			uint32_t name = CommonUtilities::HashString(aModel->GetMeshData(i).myMeshName);
 			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)name, ImGuiTreeNodeFlags_Leaf, aModel->GetMeshData(i).myMeshName.c_str());
+
+			if(ImGui::IsItemClicked() && !ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+			{
+				if(mySelectedEntity.size() <= 1)
+				{
+					mySelectedEntity.clear();
+					mySelectedEntity.push_back(aEntity);
+					SelectionData::SetEntityObject(mySelectedEntity[0]);
+				}
+			}
+
 			if(opened)
 			{
 				ImGui::TreePop();

@@ -23,7 +23,7 @@ public:
 	void DrawEntityPopupMenu(std::shared_ptr<ModelInstance> aModel);
 	void DrawWindowPopupMenu();
 
-	void DrawArmature(std::shared_ptr<ModelInstance> aModel);
+	void DrawArmature(Entity& aEntity, std::shared_ptr<ModelInstance> aModel);
 	void LoopBones(const Skeleton* aSkeleton, const Skeleton::Bone* aBone);
 
 	bool LoopThoughChildren(Entity& aEntity);

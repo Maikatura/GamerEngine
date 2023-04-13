@@ -122,8 +122,11 @@ public:
 
 	void SetModel(std::shared_ptr<ModelInstance> aModel)
 	{
-		myModel = std::move(aModel);
-		myModel->Init(GetModel()->GetModel());
+		if (aModel)
+		{
+			myModel = std::move(aModel);
+			myModel->Init(GetModel()->GetModel());
+		}
 	}
 
 private:

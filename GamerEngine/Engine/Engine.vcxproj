@@ -108,6 +108,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\EngineSettingDefines.h" />
     <ClInclude Include="src\GraphicsEngine.pch.h" />
     <ClInclude Include="src\Renderer\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\Renderer\AssetHandlers\LightAssetHandler.h" />

@@ -101,25 +101,46 @@ public:
 		float Radius;
 	} BoxBounds;
 
+	struct BlendShapeData
+	{
+		std::string BlendShapeName;
+		std::vector<unsigned int> AffectedIndexes;     // all Vertices affected by blendshape
+		std::vector<Vector4f> BlendShapePosition; // Where the affected Vertex should go to when the blendshape is at 100%
+		float WeightPercent;
+	};
+
+	std::vector<BlendShapeData> BlendshapeVector;
+
 private:
+
+
 
 
 	int myMaterialSize = 0;
 	Skeleton mySkeleton;
 	std::vector<Material> myMaterial;
 	std::vector<MeshData> myMeshData = {};
+	
 	std::wstring myPath;
 	
 
 public:
-	void Init(MeshData aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
+	void Init(MeshData aMeshData, const std::wstring& aPath, Skeleton aSkeleton, std::vector<BlendShapeData> BlendShapes)
 	{
+		for (int i = 0; i < BlendShapes.size(); i++)
+		{
+			BlendshapeVector.push_back(BlendShapes[i]);
+		}
 		mySkeleton = aSkeleton;
 		myMeshData.push_back(aMeshData);
 		myPath = aPath;
 	}
-	void Init(MeshData aMeshData, const std::wstring& aPath) 
+	void Init(MeshData aMeshData, const std::wstring& aPath, std::vector<BlendShapeData> BlendShapes)
 	{
+		for(int i = 0; i < BlendShapes.size(); i++)
+		{
+			BlendshapeVector.push_back(BlendShapes[i]);
+		}
 		myMeshData.push_back(aMeshData);
 		myPath = aPath;
 	}
