@@ -909,6 +909,29 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			mdl->PushMaterial(mat);
 
 
+			for(size_t i = 0; i < mesh.Blendshapes.size(); i++)
+			{
+				Model::BlendShapeData data;
+
+				data.MeshName = mesh.Blendshapes[i].MeshName;
+				data.BlendShapeName = mesh.Blendshapes[i].Name;
+				data.AffectedIndexes = mesh.Blendshapes[i].AffectedIndexes;
+				data.WeightPercent = mesh.Blendshapes[i].WeightPercent;
+
+				for(size_t x = 0; x < mesh.Blendshapes[x].BlendShapePosition.size(); x++)
+				{
+					data.BlendShapePosition.push_back({
+						mesh.Blendshapes[x].BlendShapePosition[x].x,
+						mesh.Blendshapes[x].BlendShapePosition[x].y,
+						mesh.Blendshapes[x].BlendShapePosition[x].z,
+						mesh.Blendshapes[x].BlendShapePosition[x].w,
+					});
+				}
+
+				modelData.BlendshapeVector.push_back(data);
+
+			}
+
 			if(hasSkeleton)
 			{
 				mdl->Init(modelData, aFilePath, mdlSkeleton);
@@ -916,38 +939,12 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			else
 			{
 				mdl->Init(modelData, aFilePath);
-				
 			}
 
 			
 		}
 
-
-		std::vector<Model::BlendShapeData> blendData;
-		for(int blendShapeIndex = 0; blendShapeIndex < tgaModel.Blendshapes.size(); blendShapeIndex++)
-		{
-			Model::BlendShapeData data;
-
-			data.AffectedIndexes = tgaModel.Blendshapes[blendShapeIndex].AffectedIndexes;
-			data.BlendShapeName = tgaModel.Blendshapes[blendShapeIndex].Name;
-
-			for(int BlendPosIndex = 0; BlendPosIndex < tgaModel.Blendshapes[blendShapeIndex].BlendShapePosition.size(); BlendPosIndex++)
-			{
-				data.BlendShapePosition.push_back({
-					tgaModel.Blendshapes[blendShapeIndex].BlendShapePosition[BlendPosIndex].x,
-					tgaModel.Blendshapes[blendShapeIndex].BlendShapePosition[BlendPosIndex].y,
-					tgaModel.Blendshapes[blendShapeIndex].BlendShapePosition[BlendPosIndex].z,
-					tgaModel.Blendshapes[blendShapeIndex].BlendShapePosition[BlendPosIndex].w
-					});
-			}
-
-
-			data.WeightPercent = tgaModel.Blendshapes[blendShapeIndex].WeightPercent;
-			blendData.push_back(data);
-		}
-
 		mdl->Name = ansiFileName;
-		mdl->BlendshapeVector = blendData;
 		std::shared_ptr<ModelInstance> mdlInstance = std::make_shared<ModelInstance>();
 
 		mdlInstance->Init(mdl);

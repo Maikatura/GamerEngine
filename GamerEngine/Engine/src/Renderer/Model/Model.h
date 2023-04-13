@@ -75,6 +75,16 @@ struct AnimationStatus
 class Model : public SceneObject
 {
 public:
+
+	struct BlendShapeData
+	{
+		std::string MeshName;
+		std::string BlendShapeName;
+		std::vector<unsigned int> AffectedIndexes;     // all Vertices affected by blendshape
+		std::vector<Vector4f> BlendShapePosition; // Where the affected Vertex should go to when the blendshape is at 100%
+		float WeightPercent;
+	};
+
 	struct MeshData 
 	{
 		ComPtr<ID3D11Buffer> myVertexBuffer;
@@ -92,6 +102,7 @@ public:
 
 		UINT myMaterialIndex;
 		std::string myMeshName;
+		std::vector<BlendShapeData> BlendshapeVector;
 	};
 
 	struct BoxSphereBounds
@@ -101,15 +112,9 @@ public:
 		float Radius;
 	} BoxBounds;
 
-	struct BlendShapeData
-	{
-		std::string BlendShapeName;
-		std::vector<unsigned int> AffectedIndexes;     // all Vertices affected by blendshape
-		std::vector<Vector4f> BlendShapePosition; // Where the affected Vertex should go to when the blendshape is at 100%
-		float WeightPercent;
-	};
+	
 
-	std::vector<BlendShapeData> BlendshapeVector;
+
 
 private:
 

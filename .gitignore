@@ -16,6 +16,6 @@
 
 // GamerEngine
 GamerEngine/Bin/Shaders/*
-
+!**/Layers/Debug
 
 

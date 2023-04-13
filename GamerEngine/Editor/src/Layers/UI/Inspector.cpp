@@ -153,9 +153,15 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 				if(model.GetModel())
 				{
-					for(int i = 0; i < model.GetModel()->GetModel()->BlendshapeVector.size(); i++)
+					for(int i = 0; i < model.GetModel()->GetModel()->GetNumMeshes(); i++)
 					{
-						ImGui::Text(model.GetModel()->GetModel()->BlendshapeVector[i].BlendShapeName.c_str());
+						auto& meshData = model.GetModel()->GetModel()->GetMeshData(i);
+
+						for(int blendIndex = 0; blendIndex < meshData.BlendshapeVector.size(); blendIndex++)
+						{
+							ImGui::Text(meshData.BlendshapeVector[blendIndex].BlendShapeName.c_str());
+						}
+
 					}
 				}
 

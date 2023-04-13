@@ -259,79 +259,6 @@ namespace TGA
 					mdlMeshes.insert(mdlMeshes.end(), nodeMeshes.begin(), nodeMeshes.end());
 				}
 
-				std::vector<Blendshape> mdlBlendshapes;
-				for(FbxNode* meshNode : sceneMeshNodes)
-				{
-					FbxMesh* mesh = meshNode->GetMesh();
-
-					int blendshapeCount = mesh->GetDeformerCount(FbxDeformer::eBlendShape);
-					for(int i = 0; i < blendshapeCount; i++)
-					{
-						FbxBlendShape* blendshape = (FbxBlendShape*)mesh->GetDeformer(i, FbxDeformer::eBlendShape);
-						const char* blendshapeName = blendshape->GetName();
-						// Do something with blendshape name...
-					}
-
-					int numBaseVertices = mesh->GetControlPointsCount();
-					FbxVector4* baseVertices = mesh->GetControlPoints();
-
-					// Load blendshape channels
-					int numChannels = mesh->GetDeformerCount(FbxDeformer::eBlendShape);
-					for(int i = 0; i < numChannels; i++)
-					{
-						FbxBlendShape* blendShape = static_cast<FbxBlendShape*>(mesh->GetDeformer(i, FbxDeformer::eBlendShape));
-
-						// Load blendshape targets
-						int numTargets = blendShape->GetBlendShapeChannelCount();
-						for(int j = 0; j < numTargets; j++)
-						{
-							FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(j);
-							FbxShape* targetShape = channel->GetTargetShape(0);
-
-							// Calculate offset between base mesh and target
-							std::vector<unsigned int> affectedIndexes;
-							std::vector<Vec4> blendShapePosition;
-							int numTargetVertices = targetShape->GetControlPointsCount();
-							FbxVector4* targetVertices = targetShape->GetControlPoints();
-							FbxVector4 offset = targetVertices[0] - baseVertices[0];  // Calculate offset for the first vertex
-							for(int k = 0; k < numTargetVertices; k++)
-							{
-								FbxVector4 baseVertex = baseVertices[k];
-								FbxVector4 targetVertex = targetVertices[k];
-
-								FbxVector4 vertexOffset = targetVertex - baseVertex;
-								if(vertexOffset != offset)
-								{
-									// Error: Target vertices do not match base vertices
-									break;
-								}
-
-								affectedIndexes.push_back(k);
-								blendShapePosition.push_back(Vec4{
-									(float)vertexOffset[0],
-									(float)vertexOffset[1],
-									(float)vertexOffset[2],
-									0.0f
-									}
-								);
-							}
-
-							// Load blendshape weight
-							float weightPercent = channel->DeformPercent;
-
-							// Create blendshape target
-							Blendshape blendshapeTarget;
-							blendshapeTarget.Name = channel->GetName();
-							blendshapeTarget.AffectedIndexes = affectedIndexes;
-							blendshapeTarget.BlendShapePosition = blendShapePosition;
-							blendshapeTarget.WeightPercent = weightPercent;
-
-							// Add blendshape target to list
-							mdlBlendshapes.push_back(blendshapeTarget);
-						}
-					}
-				}
-
 				if(!mdlMeshes.empty() || !mdlLodGroups.empty())
 				{
 					outModel.Name = ansiFileName;
@@ -340,7 +267,7 @@ namespace TGA
 					outModel.Skeleton = std::move(mdlSkeleton);
 					outModel.Materials = std::move(mdlMaterials);
 					outModel.BoxSphereBounds = mdlBounds;
-					outModel.Blendshapes = std::move(mdlBlendshapes);
+					//outModel.Blendshapes = std::move(mdlBlendshapes);
 				}
 			}
 

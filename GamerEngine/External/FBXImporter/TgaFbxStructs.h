@@ -164,6 +164,7 @@ namespace TGA
 
 		struct Blendshape
 		{
+			std::string MeshName;
 			std::string Name;
 			std::vector<unsigned int> AffectedIndexes;     // all Vertices affected by blendshape
 			std::vector<Vec4> BlendShapePosition; // Where the affected Vertex should go to when the blendshape is at 100%
@@ -180,6 +181,7 @@ namespace TGA
 				unsigned int MaterialIndex;
 				std::string MeshName;
 				BoxSphereBounds BoxSphereBounds;
+				std::vector<Blendshape> Blendshapes;
 			};
 
 			struct LODGroup
@@ -197,7 +199,6 @@ namespace TGA
 
 			Skeleton Skeleton;
 
-			std::vector<Blendshape> Blendshapes;
 			std::vector<Mesh> Meshes;
 			std::vector<Material> Materials;
 			std::vector<LODGroup> LODGroups;

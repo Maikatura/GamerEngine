@@ -48,6 +48,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\EngineSettingDefines.h" />
     <ClInclude Include="src\GraphicsEngine.pch.h" />
     <ClInclude Include="src\Renderer\AssetHandlers\DDSTextureLoader11.h">
       <Filter>Renderer\AssetHandlers</Filter>
@@ -219,7 +220,6 @@
     </ClInclude>
     <ClInclude Include="src\StringCast.h" />
     <ClInclude Include="src\Time.hpp" />
-    <ClInclude Include="src\EngineSettingDefines.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GraphicsEngine.pch.cpp" />

@@ -124,8 +124,6 @@
     <ClInclude Include="src\Handlers\MetaFileHandler.h" />
     <ClInclude Include="src\ImGuiAdded\ImGuiExtra.h" />
     <ClInclude Include="src\Input\InputInternal.h" />
-    <ClInclude Include="src\Layers\Debug\ConsoleWindow.h" />
-    <ClInclude Include="src\Layers\Debug\KeybindShortcutsLayer.h" />
     <ClInclude Include="src\Layers\EditorColorScheme.h" />
     <ClInclude Include="src\Layers\EditorLayers.h" />
     <ClInclude Include="src\Layers\EditorValues.hpp" />
@@ -149,9 +147,9 @@
     <ClInclude Include="src\Layers\UI\Hierarchy.h" />
     <ClInclude Include="src\Layers\UI\Inspector.h" />
     <ClInclude Include="src\Layers\UI\MainMenuBar.h" />
+    <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\SettingKeybinds.h" />
     <ClInclude Include="src\Snapshots\SnapshotManager.h" />
-    <ClInclude Include="src\resource.h" />
     <ClInclude Include="src\targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -163,8 +161,6 @@
     <ClCompile Include="src\Handlers\DropHandler.cpp" />
     <ClCompile Include="src\Handlers\MetaFileHandler.cpp" />
     <ClCompile Include="src\Input\InputInternal.cpp" />
-    <ClCompile Include="src\Layers\Debug\ConsoleWindow.cpp" />
-    <ClCompile Include="src\Layers\Debug\KeybindShortcutsLayer.cpp" />
     <ClCompile Include="src\Layers\EditorLayers.cpp" />
     <ClCompile Include="src\Layers\Layer.cpp" />
     <ClCompile Include="src\Layers\NetworkingLayer.cpp" />
