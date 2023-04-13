@@ -7,7 +7,7 @@ class KeybindShortcutsLayer : public Layer
 public:
 	KeybindShortcutsLayer();
 
-	bool OnImGuiRender() override;
+	void OnImGuiRender() override;
 	void OnUpdate() override;
 
 

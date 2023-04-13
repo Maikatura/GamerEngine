@@ -124,6 +124,8 @@
     <ClInclude Include="src\Handlers\MetaFileHandler.h" />
     <ClInclude Include="src\ImGuiAdded\ImGuiExtra.h" />
     <ClInclude Include="src\Input\InputInternal.h" />
+    <ClInclude Include="src\Layers\Debug\ConsoleWindow.h" />
+    <ClInclude Include="src\Layers\Debug\KeybindShortcutsLayer.h" />
     <ClInclude Include="src\Layers\EditorColorScheme.h" />
     <ClInclude Include="src\Layers\EditorLayers.h" />
     <ClInclude Include="src\Layers\EditorValues.hpp" />
@@ -161,6 +163,8 @@
     <ClCompile Include="src\Handlers\DropHandler.cpp" />
     <ClCompile Include="src\Handlers\MetaFileHandler.cpp" />
     <ClCompile Include="src\Input\InputInternal.cpp" />
+    <ClCompile Include="src\Layers\Debug\ConsoleWindow.cpp" />
+    <ClCompile Include="src\Layers\Debug\KeybindShortcutsLayer.cpp" />
     <ClCompile Include="src\Layers\EditorLayers.cpp" />
     <ClCompile Include="src\Layers\Layer.cpp" />
     <ClCompile Include="src\Layers\NetworkingLayer.cpp" />

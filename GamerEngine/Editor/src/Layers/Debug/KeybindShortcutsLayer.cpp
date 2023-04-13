@@ -10,12 +10,12 @@
 #include "Renderer/Scene/SceneSerializer.h"
 
 
-KeybindShortcutsLayer::KeybindShortcutsLayer()
+KeybindShortcutsLayer::KeybindShortcutsLayer() : Layer("Keybinds", true, false)
 {
 	Layer::OnAttach();
 }
 
-bool KeybindShortcutsLayer::OnImGuiRender()
+void KeybindShortcutsLayer::OnImGuiRender()
 {
 	{
 		if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('S') && !Input::IsMouseDown(VK_LBUTTON))
@@ -25,7 +25,6 @@ bool KeybindShortcutsLayer::OnImGuiRender()
 			ConsoleHelper::Log(LogType::Info, std::string("Saved scene to '" + path + "'"));
 		}
 	}
-	return true;
 }
 
 void KeybindShortcutsLayer::OnUpdate()

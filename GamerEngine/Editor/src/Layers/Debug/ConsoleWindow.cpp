@@ -3,14 +3,16 @@
 #include <Layers/Debug/ConsoleWindow.h>
 
 
-bool ConsoleWindow::OnImGuiRender()
+ConsoleWindow::ConsoleWindow() : Layer("Console Window")
 {
-	ImGui::Begin("Console");
+}
+
+void ConsoleWindow::OnImGuiRender()
+{
+
+	BeginMenu();
 
 
 
-	ImGui::End();
-
-
-	return true;
+	EndMenu();
 }

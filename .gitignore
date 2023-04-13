@@ -17,5 +17,7 @@
 // GamerEngine
 GamerEngine/Bin/Shaders/*
 !**/Layers/Debug
+!**/ThirdParty/FBXSDK/lib/debug
+!**/ThirdParty/FBXSDK/lib/release
 
 

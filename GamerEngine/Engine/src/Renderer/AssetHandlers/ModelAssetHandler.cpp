@@ -918,17 +918,17 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 				data.AffectedIndexes = mesh.Blendshapes[i].AffectedIndexes;
 				data.WeightPercent = mesh.Blendshapes[i].WeightPercent;
 
-				for(size_t x = 0; x < mesh.Blendshapes[x].BlendShapePosition.size(); x++)
+				for(size_t x = 0; x < mesh.Blendshapes[i].BlendShapePosition.size(); x++)
 				{
 					data.BlendShapePosition.push_back({
-						mesh.Blendshapes[x].BlendShapePosition[x].x,
-						mesh.Blendshapes[x].BlendShapePosition[x].y,
-						mesh.Blendshapes[x].BlendShapePosition[x].z,
-						mesh.Blendshapes[x].BlendShapePosition[x].w,
+						mesh.Blendshapes[i].BlendShapePosition[x].x,
+						mesh.Blendshapes[i].BlendShapePosition[x].y,
+						mesh.Blendshapes[i].BlendShapePosition[x].z,
+						mesh.Blendshapes[i].BlendShapePosition[x].w,
 					});
 				}
 
-				modelData.BlendshapeVector.push_back(data);
+				modelData.Blendshapes.push_back(data);
 
 			}
 

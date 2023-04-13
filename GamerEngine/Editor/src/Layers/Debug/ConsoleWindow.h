@@ -4,5 +4,7 @@
 class ConsoleWindow : public Layer
 {
 public:
-	bool OnImGuiRender() override;
+	ConsoleWindow();
+
+	void OnImGuiRender() override;
 };

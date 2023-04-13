@@ -157,9 +157,9 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 					{
 						auto& meshData = model.GetModel()->GetModel()->GetMeshData(i);
 
-						for(int blendIndex = 0; blendIndex < meshData.BlendshapeVector.size(); blendIndex++)
+						for(int blendIndex = 0; blendIndex < meshData.Blendshapes.size(); blendIndex++)
 						{
-							ImGui::Text(meshData.BlendshapeVector[blendIndex].BlendShapeName.c_str());
+							ImGui::Text(meshData.Blendshapes[blendIndex].BlendShapeName.c_str());
 						}
 
 					}

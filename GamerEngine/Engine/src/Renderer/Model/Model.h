@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <utility>
 #include <vector>
 #include <Renderer/Model/SceneObject.h>
 #include <unordered_map>
@@ -102,7 +103,7 @@ public:
 
 		UINT myMaterialIndex;
 		std::string myMeshName;
-		std::vector<BlendShapeData> BlendshapeVector;
+		std::vector<BlendShapeData> Blendshapes;
 	};
 
 	struct BoxSphereBounds
@@ -130,13 +131,13 @@ private:
 	
 
 public:
-	void Init(MeshData aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
+	void Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
 	{
-		mySkeleton = aSkeleton;
+		mySkeleton = std::move(aSkeleton);
 		myMeshData.push_back(aMeshData);
 		myPath = aPath;
 	}
-	void Init(MeshData aMeshData, const std::wstring& aPath)
+	void Init(const MeshData& aMeshData, const std::wstring& aPath)
 	{
 		myMeshData.push_back(aMeshData);
 		myPath = aPath;
