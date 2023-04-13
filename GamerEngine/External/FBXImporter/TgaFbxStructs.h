@@ -180,7 +180,6 @@ namespace TGA
 				unsigned int MaterialIndex;
 				std::string MeshName;
 				BoxSphereBounds BoxSphereBounds;
-				std::vector<Blendshape> Blendshapes;
 			};
 
 			struct LODGroup
@@ -198,6 +197,7 @@ namespace TGA
 
 			Skeleton Skeleton;
 
+			std::vector<Blendshape> Blendshapes;
 			std::vector<Mesh> Meshes;
 			std::vector<Material> Materials;
 			std::vector<LODGroup> LODGroups;

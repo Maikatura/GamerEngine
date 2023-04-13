@@ -125,22 +125,14 @@ private:
 	
 
 public:
-	void Init(MeshData aMeshData, const std::wstring& aPath, Skeleton aSkeleton, std::vector<BlendShapeData> BlendShapes)
+	void Init(MeshData aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
 	{
-		for (int i = 0; i < BlendShapes.size(); i++)
-		{
-			BlendshapeVector.push_back(BlendShapes[i]);
-		}
 		mySkeleton = aSkeleton;
 		myMeshData.push_back(aMeshData);
 		myPath = aPath;
 	}
-	void Init(MeshData aMeshData, const std::wstring& aPath, std::vector<BlendShapeData> BlendShapes)
+	void Init(MeshData aMeshData, const std::wstring& aPath)
 	{
-		for(int i = 0; i < BlendShapes.size(); i++)
-		{
-			BlendshapeVector.push_back(BlendShapes[i]);
-		}
 		myMeshData.push_back(aMeshData);
 		myPath = aPath;
 	}
