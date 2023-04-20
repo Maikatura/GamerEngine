@@ -1,5 +1,5 @@
 Windows:
-  - Name: Console
+  - Name: Console Window
     IsOpen: false
   - Name: File Explorer
     IsOpen: true

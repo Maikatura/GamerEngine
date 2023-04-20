@@ -67,6 +67,7 @@ namespace TGA
 			}
 		};
 
+
 		bool Importer::LoadModel(const std::wstring& someFilePath, Model& outModel, bool bRegenerateNormals, bool bMergeDuplicateVertices)
 		{
 			const std::string ansiFileName = Internals::WideStringtoAnsi(someFilePath);
@@ -244,6 +245,7 @@ namespace TGA
 
 				// Handle any meshes not part of a LOD group
 				std::vector<Model::Mesh> mdlMeshes;
+				std::vector<Blendshape> blendVector;
 
 				for(FbxNode* meshNode : sceneMeshNodes)
 				{
@@ -256,7 +258,20 @@ namespace TGA
 						mdlBounds = mdlBounds + bounds;
 					}
 
+					Internals::GatherBlendshapes(meshNode, blendVector);
+
 					mdlMeshes.insert(mdlMeshes.end(), nodeMeshes.begin(), nodeMeshes.end());
+				}
+
+				for (int i = 0; i < mdlMeshes.size(); i++)
+				{
+					for(int x = 0; x < blendVector.size(); x++)
+					{
+						if (mdlMeshes[i].MeshName == blendVector[x].MeshName)
+						{
+							mdlMeshes[i].Blendshapes.push_back(blendVector[x]);
+						}
+					}
 				}
 
 				if(!mdlMeshes.empty() || !mdlLodGroups.empty())

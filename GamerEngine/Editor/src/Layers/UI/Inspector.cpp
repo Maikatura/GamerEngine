@@ -150,21 +150,28 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			{
 				ImGui::BeginGroup();
 
-
-				if(model.GetModel())
+				if(ImGui::TreeNodeEx("Blendshapes"))
 				{
-					for(int i = 0; i < model.GetModel()->GetModel()->GetNumMeshes(); i++)
+					if(model.GetModel())
 					{
-						auto& meshData = model.GetModel()->GetModel()->GetMeshData(i);
-
-						for(int blendIndex = 0; blendIndex < meshData.Blendshapes.size(); blendIndex++)
+						for(int i = 0; i < model.GetModel()->GetModel()->GetNumMeshes(); i++)
 						{
-							ImGui::Text(meshData.Blendshapes[blendIndex].BlendShapeName.c_str());
+							auto& meshData = model.GetModel()->GetModel()->GetMeshData(i);
+
+							if(ImGui::TreeNodeEx(meshData.myMeshName.c_str()))
+							{
+								for(int blendIndex = 0; blendIndex < meshData.Blendshapes.size(); blendIndex++)
+								{
+									ImGui::SliderFloat(meshData.Blendshapes[blendIndex].BlendShapeName.c_str(), &meshData.Blendshapes[blendIndex].WeightPercent, 0.0f, 100.0f);
+								}
+
+								ImGui::TreePop();
+							}
 						}
-
 					}
-				}
 
+					ImGui::TreePop();
+				}
 				ImGui::EndGroup();
 			}
 

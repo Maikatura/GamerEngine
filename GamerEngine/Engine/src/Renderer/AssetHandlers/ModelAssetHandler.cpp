@@ -549,11 +549,11 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 					};
 				}
 
-				/*mdlVertices[v].Binormal = {
-					mesh.Vertices[v].BiNormal[0],
-					mesh.Vertices[v].BiNormal[1],
-					mesh.Vertices[v].BiNormal[2]
-				};*/
+				//mdlVertices[v].Binormal = {
+				//	mesh.Vertices[v].BiNormal[0],
+				//	mesh.Vertices[v].BiNormal[1],
+				//	mesh.Vertices[v].BiNormal[2]
+				//};
 
 				if (mesh->getGeometry()->getNormals())
 				{
@@ -695,6 +695,8 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 	TGA::FBX::Model tgaModel;
 
 	importer.InitImporter();
+
+	std::vector<std::string> addedBlendShapes;
 
 	if(importer.LoadModel(aFilePath, tgaModel))
 	{
@@ -909,8 +911,16 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			mdl->PushMaterial(mat);
 
 
+			
 			for(size_t i = 0; i < mesh.Blendshapes.size(); i++)
 			{
+
+				auto foundIt = std::find(addedBlendShapes.begin(), addedBlendShapes.end(), mesh.Blendshapes[i].Name);
+				if (foundIt != addedBlendShapes.end())
+				{
+					continue;
+				}
+
 				Model::BlendShapeData data;
 
 				data.MeshName = mesh.Blendshapes[i].MeshName;
@@ -927,9 +937,8 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 						mesh.Blendshapes[i].BlendShapePosition[x].w,
 					});
 				}
-
 				modelData.Blendshapes.push_back(data);
-
+				addedBlendShapes.push_back(mesh.Blendshapes[i].Name);
 			}
 
 			if(hasSkeleton)

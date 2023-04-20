@@ -218,7 +218,6 @@ namespace TGA
 
 		bool Internals::GatherBlendshapes(FbxNode* aRootNode, std::vector<Blendshape>& aBlendShapeVector)
 		{
-			std::vector<Blendshape> mdlBlendshapes;
 
 			FbxMesh* mesh = aRootNode->GetMesh();
 
@@ -283,10 +282,10 @@ namespace TGA
 					blendshapeTarget.AffectedIndexes = affectedIndexes;
 					blendshapeTarget.BlendShapePosition = blendShapePosition;
 					blendshapeTarget.WeightPercent = weightPercent;
-					blendshapeTarget.MeshName = mesh->GetName();
+					blendshapeTarget.MeshName = aRootNode->GetName();
 
 					// Add blendshape target to list
-					mdlBlendshapes.push_back(blendshapeTarget);
+					aBlendShapeVector.push_back(blendshapeTarget);
 				}
 			}
 			return true;
@@ -665,6 +664,8 @@ namespace TGA
 							}
 						}
 
+
+
 						vx.BoneIDs[0] = BoneIDs[0];
 						vx.BoneIDs[1] = BoneIDs[1];
 						vx.BoneIDs[2] = BoneIDs[2];
@@ -700,9 +701,6 @@ namespace TGA
 					}
 				}
 
-
-				GatherBlendshapes(aMeshNode, currentMeshData.Blendshapes);
-
 				if(!currentMeshData.Vertices.empty())
 				{
 					float extentsCenter[3];
@@ -722,6 +720,8 @@ namespace TGA
 						{extentsCenter[0], extentsCenter[1], extentsCenter[2]},
 						extentRadius
 					};
+
+
 
 					outMeshes.push_back(currentMeshData);
 				}

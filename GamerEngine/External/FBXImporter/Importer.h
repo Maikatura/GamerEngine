@@ -22,7 +22,6 @@ namespace TGA
 			static void UninitImporter();
 
 
-
 			/**
 			 * Attempts to load a FBX model into the provided Model structure. Supports skeletal meshes, multiple meshes
 			 * and multiple materials. Will treat multiple meshes in the file as belonging to the same Model.

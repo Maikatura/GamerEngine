@@ -129,6 +129,11 @@ Size=358,998
 Collapsed=0
 DockId=0x0000000A,1
 
+[Window][Console Window]
+Pos=60,60
+Size=152,174
+Collapsed=0
+
 [Docking][Data]
 DockSpace           ID=0x8B93E3BD Window=0xA787BDB4 Pos=8,50 Size=1904,1022 Split=X
   DockNode          ID=0x0000000B Parent=0x8B93E3BD SizeRef=263,998 Selected=0x354383ED

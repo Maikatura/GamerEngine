@@ -125,11 +125,11 @@
     <ClInclude Include="src\Layers\UI\MainMenuBar.h">
       <Filter>Layers\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\SettingKeybinds.h" />
     <ClInclude Include="src\Snapshots\SnapshotManager.h">
       <Filter>Snapshots</Filter>
     </ClInclude>
+    <ClInclude Include="src\resource.h" />
     <ClInclude Include="src\targetver.h" />
   </ItemGroup>
   <ItemGroup>

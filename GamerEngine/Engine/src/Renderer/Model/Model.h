@@ -169,6 +169,7 @@ public:
 	FORCEINLINE bool HasSkeleton() const									{ return mySkeleton.GetRoot(); }
 	FORCEINLINE size_t GetNumMeshes() const									{ return myMeshData.size(); }
 	FORCEINLINE const MeshData& GetMeshData(unsigned int anIndex = 0) const { return myMeshData[anIndex]; }
+	FORCEINLINE MeshData& GetMeshData(unsigned int anIndex = 0)				{ return myMeshData[anIndex]; }
 	FORCEINLINE const std::wstring& GetName() const							{ return myPath; }
 };
 
