@@ -173,32 +173,43 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 
 
 	
+	{
+		myRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 		{
-			myRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+			if(!nsc.Instance)
 			{
-				if(!nsc.Instance)
-				{
-					nsc.Instance = nsc.InstantiateScript();
-					nsc.Instance->myEntity = Entity{ entity, this };
-					nsc.Instance->OnCreate();
-				}
+				nsc.Instance = nsc.InstantiateScript();
+				nsc.Instance->myEntity = Entity{ entity, this };
+				nsc.Instance->OnCreate();
+			}
 
-				
-				if(nsc.Instance)
+			if(nsc.Instance)
+			{
+				if((aShouldRunLoop || nsc.Instance->RunInEditor()))
 				{
-					if((aShouldRunLoop || nsc.Instance->RunInEditor()))
-					{
-						nsc.Instance->OnUpdate();
-					}
+					nsc.Instance->OnUpdate();
 				}
+			}
+		});
+	}
 
-			});
+
+	{
+		const auto& view = myRegistry.view<ModelComponent>();
+
+		if(view != nullptr)
+		{
+			for(const auto& entity : view)
+			{
+				auto& component = view.get<ModelComponent>(entity);
+				component.OnEditorUpdate();
+			}
 		}
+	}
 
 	if(aShouldRunLoop)
 	{
 		{
-			
 			const auto& view = myRegistry.view<Network::NetworkComponent>();
 
 			if(view != nullptr)
@@ -216,7 +227,6 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 		}
 
 		{
-		
 			const auto& view = myRegistry.view<TransformComponent, ParticleEmitter>();
 
 			if(view != nullptr)
@@ -249,7 +259,6 @@ void Scene::OnRender()
 {
 	if(mySceneStatus != SceneStatus::Complete) return;
 
-	
 	{
 		Renderer::SetClearColor(mySceneBackgroundColor);
 		myLightToRender.clear();
@@ -259,19 +268,17 @@ void Scene::OnRender()
 		const auto& view = myRegistry.view<TransformComponent, CameraComponent>();
 		if(view != nullptr)
 		{
-		
-
-		for(const auto& entity : view)
-		{
-			auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-
-			if(camera.Primary)
+			for(const auto& entity : view)
 			{
-				camera.BuildTransform(&transform);
-				Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
-				break;
+				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+
+				if(camera.Primary)
+				{
+					camera.BuildTransform(&transform);
+					Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
+					break;
+				}
 			}
-		}
 		}
 	}
 
@@ -280,7 +287,6 @@ void Scene::OnRender()
 		const auto& view = myRegistry.view<TransformComponent, ParticleEmitter>();
 		if(view != nullptr)
 		{
-
 			for(const auto& entity : view)
 			{
 				auto [transform, particleEmitter] = view.get<TransformComponent, ParticleEmitter>(entity);
@@ -292,7 +298,6 @@ void Scene::OnRender()
 		const auto& view = myRegistry.view<TransformComponent, DirectionalLightComponent>();
 		if(view != nullptr)
 		{
-
 			for(const auto& entity : view)
 			{
 				auto [transform, dirLight] = view.get<TransformComponent, DirectionalLightComponent>(entity);
@@ -315,7 +320,6 @@ void Scene::OnRender()
 		const auto& view = myRegistry.view<TransformComponent, PointLightComponent>();
 		if(view != nullptr)
 		{
-
 			for(const auto& entity : view)
 			{
 				auto [transform, pointLight] = view.get<TransformComponent, PointLightComponent>(entity);
@@ -332,7 +336,6 @@ void Scene::OnRender()
 		const auto& view = myRegistry.view<TransformComponent, SpotLightComponent>();
 		if(view != nullptr)
 		{
-
 			for(const auto& entity : view)
 			{
 				auto [transform, spotLight] = view.get<TransformComponent, SpotLightComponent>(entity);
@@ -350,7 +353,6 @@ void Scene::OnRender()
 		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
 		if(view != nullptr)
 		{
-
 			for(const auto& entity : view)
 			{
 				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
@@ -369,7 +371,6 @@ void Scene::OnRender()
 		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
 		if(view != nullptr)
 		{
-
 			for(const auto& entity : view)
 			{
 				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);

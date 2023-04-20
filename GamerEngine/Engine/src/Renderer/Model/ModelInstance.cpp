@@ -61,6 +61,11 @@ void ModelInstance::SetHasBeenRenderer(bool aValue)
 	myHasBeenRendered = aValue;
 }
 
+void ModelInstance::EditorUpdate()
+{
+	myModel->EditorUpdate();
+}
+
 void ModelInstance::Init(std::shared_ptr<Model> aModel)
 {
 	myTransform = std::make_shared<Transform>();
@@ -120,7 +125,6 @@ void ModelInstance::Update()
 
 
 	SceneObject::Update();
-	//myModel->Update();
 	auto anAnimState = GetAnimationState();
 
 	if(GetSkeleton()->GetRoot() && anAnimState->myCurrentAnimation != nullptr)

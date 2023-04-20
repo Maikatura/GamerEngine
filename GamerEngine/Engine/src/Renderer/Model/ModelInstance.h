@@ -66,6 +66,7 @@ public:
 	bool HasBeenRendered();
 	void ClearInstanceData();
 	void SetHasBeenRenderer(bool aValue);
+	void EditorUpdate();
 
 	ModelInstance() = default;
 

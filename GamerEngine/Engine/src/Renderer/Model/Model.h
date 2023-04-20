@@ -113,14 +113,7 @@ public:
 		float Radius;
 	} BoxBounds;
 
-	
-
-
-
 private:
-
-
-
 
 	int myMaterialSize = 0;
 	Skeleton mySkeleton;
@@ -131,38 +124,16 @@ private:
 	
 
 public:
-	void Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
-	{
-		mySkeleton = std::move(aSkeleton);
-		myMeshData.push_back(aMeshData);
-		myPath = aPath;
-	}
-	void Init(const MeshData& aMeshData, const std::wstring& aPath)
-	{
-		myMeshData.push_back(aMeshData);
-		myPath = aPath;
-	}
 
-	int GetMaterialSize()
-	{
-		return static_cast<int>(myMaterial.size());
-	}
-	void SetMaterialSize(int aSize)
-	{
-		if (aSize <= 0)
-		{
-			return;
-		}
+	void EditorUpdate();
 
-		myMaterial.resize(aSize);
-		myMaterialSize = static_cast<int>(myMaterial.size());
-	}
+	void Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton);
+	void Init(const MeshData& aMeshData, const std::wstring& aPath);
 
-	void PushMaterial(const Material aMaterial)
-	{
-		myMaterialSize++;
-		myMaterial.push_back(aMaterial);
-	}
+	int GetMaterialSize();
+	void SetMaterialSize(int aSize);
+	void PushMaterial(const Material aMaterial);
+
 	FORCEINLINE std::vector<Material>& GetMaterial()						{ return myMaterial; }
 	FORCEINLINE Skeleton* GetSkeleton()										{ return &mySkeleton; }
 	FORCEINLINE const Skeleton* GetSkeleton() const							{ return &mySkeleton; }

@@ -150,6 +150,8 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			{
 				ImGui::BeginGroup();
 
+				std::vector<std::string> allMeshNames;
+
 				if(ImGui::TreeNodeEx("Blendshapes"))
 				{
 					if(model.GetModel())
@@ -158,14 +160,19 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 						{
 							auto& meshData = model.GetModel()->GetModel()->GetMeshData(i);
 
-							if(ImGui::TreeNodeEx(meshData.myMeshName.c_str()))
+							if (std::find(allMeshNames.begin(), allMeshNames.end(), meshData.myMeshName) == allMeshNames.end())
 							{
-								for(int blendIndex = 0; blendIndex < meshData.Blendshapes.size(); blendIndex++)
+								if(ImGui::TreeNodeEx(meshData.myMeshName.c_str()))
 								{
-									ImGui::SliderFloat(meshData.Blendshapes[blendIndex].BlendShapeName.c_str(), &meshData.Blendshapes[blendIndex].WeightPercent, 0.0f, 100.0f);
+									for(int blendIndex = 0; blendIndex < meshData.Blendshapes.size(); blendIndex++)
+									{
+										ImGui::SliderFloat(meshData.Blendshapes[blendIndex].BlendShapeName.c_str(), &meshData.Blendshapes[blendIndex].WeightPercent, 0.0f, 100.0f);
+									}
+
+									ImGui::TreePop();
 								}
 
-								ImGui::TreePop();
+								allMeshNames.push_back(meshData.myMeshName.c_str());
 							}
 						}
 					}
