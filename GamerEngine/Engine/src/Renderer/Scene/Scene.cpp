@@ -183,10 +183,6 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 				nsc.Instance->OnCreate();
 			}
 
-<<<<<<< Updated upstream
-=======
-			
->>>>>>> Stashed changes
 			if(nsc.Instance)
 			{
 				if((aShouldRunLoop || nsc.Instance->RunInEditor()))
@@ -194,15 +190,9 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 					nsc.Instance->OnUpdate();
 				}
 			}
-<<<<<<< Updated upstream
-		});
-	}
-
-=======
 
 		});
 	}
->>>>>>> Stashed changes
 
 	{
 		const auto& view = myRegistry.view<ModelComponent>();
@@ -216,10 +206,6 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 			}
 		}
 	}
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
 	if(aShouldRunLoop)
 	{

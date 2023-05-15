@@ -150,13 +150,9 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			{
 				ImGui::BeginGroup();
 
-<<<<<<< Updated upstream
 				std::vector<std::string> allMeshNames;
 
-				if(ImGui::TreeNodeEx("Blendshapes"))
-=======
 				if(ImGui::TreeNodeEx("Blendshapes", 0, "Blendshapes"))
->>>>>>> Stashed changes
 				{
 					if(model.GetModel())
 					{
@@ -164,29 +160,20 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 						{
 							auto& meshData = model.GetModel()->GetModel()->GetMeshData(i);
 
-<<<<<<< Updated upstream
 							if (std::find(allMeshNames.begin(), allMeshNames.end(), meshData.myMeshName) == allMeshNames.end())
 							{
+								allMeshNames.push_back(meshData.myMeshName);
+
 								if(ImGui::TreeNodeEx(meshData.myMeshName.c_str()))
 								{
 									for(int blendIndex = 0; blendIndex < meshData.Blendshapes.size(); blendIndex++)
 									{
-										ImGui::SliderFloat(meshData.Blendshapes[blendIndex].BlendShapeName.c_str(), &meshData.Blendshapes[blendIndex].WeightPercent, 0.0f, 100.0f);
+										ImGui::SliderFloat(meshData.Blendshapes[blendIndex].Name.c_str(), &meshData.Blendshapes[blendIndex].Value, 0.0f, 100.0f);
 									}
 
 									ImGui::TreePop();
 								}
 
-								allMeshNames.push_back(meshData.myMeshName.c_str());
-=======
-							if(ImGui::TreeNodeEx(meshData.myMeshName.c_str(), 0, meshData.myMeshName.c_str()))
-							{
-								for(int blendIndex = 0; blendIndex < meshData.Blendshapes.size(); blendIndex++)
-								{
-									ImGui::SliderFloat(meshData.Blendshapes[blendIndex].BlendShapeName.c_str(), &meshData.Blendshapes[blendIndex].WeightPercent, 0.0f, 100.0f);
-								}
-								ImGui::TreePop();
->>>>>>> Stashed changes
 							}
 						}
 					}

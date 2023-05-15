@@ -162,17 +162,18 @@ namespace TGA
 			const Bone* GetRoot() const { if (!Bones.empty()) { return &Bones[0]; } return nullptr; }
 		};
 
-		struct Blendshape
-		{
-			std::string MeshName;
-			std::string Name;
-			std::vector<unsigned int> AffectedIndexes;     // all Vertices affected by blendshape
-			std::vector<Vec4> BlendShapePosition; // Where the affected Vertex should go to when the blendshape is at 100%
-			float WeightPercent;
-		};
+		
 
 		struct Model
 		{
+
+			struct Blendshape
+			{
+				std::string MeshName;
+				std::string Name;
+				std::vector<Vertex> Vertex;
+			};
+
 			struct Mesh
 			{
 				std::vector<Vertex> Vertices;

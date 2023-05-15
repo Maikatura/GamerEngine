@@ -216,85 +216,7 @@ namespace TGA
 			return result;
 		}
 
-		bool Internals::GatherBlendshapes(FbxNode* aMeshNodes, std::vector<Model::Mesh>& aBlendShapeVector)
-		{
-<<<<<<< Updated upstream
-=======
-			//FbxMesh* mesh = aMeshNodes->GetMesh();
->>>>>>> Stashed changes
-
-			//int numBaseVertices = mesh->GetControlPointsCount();
-			//FbxVector4* baseVertices = mesh->GetControlPoints();
-
-			//// Load blendshape channels
-			//int numChannels = mesh->GetDeformerCount(FbxDeformer::eBlendShape);
-			//for(int i = 0; i < numChannels; i++) {
-			//	FbxBlendShape* blendShape = static_cast<FbxBlendShape*>(mesh->GetDeformer(i, FbxDeformer::eBlendShape));
-
-			//	// Load blendshape targets
-			//	int numTargets = blendShape->GetBlendShapeChannelCount();
-			//	for(int j = 0; j < numTargets; j++) {
-			//		FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(j);
-
-			//		// Create blendshape target
-			//		Blendshape blendshapeTarget;
-			//		blendshapeTarget.Name = channel->GetName();
-			//		blendshapeTarget.MeshName = mesh->GetName();
-
-			//		// Load blendshape weight
-			//		float weightPercent = channel->DeformPercent;
-			//		blendshapeTarget.WeightPercent = weightPercent;
-
-			//		// Load affected vertex indices
-			//		std::vector<unsigned int> affectedIndices;
-			//		std::vector<Vec4> blendShapePositions;
-			//		FbxShape* targetShape = channel->GetTargetShape(0);
-			//		int numTargetVertices = targetShape->GetControlPointsCount();
-			//		FbxVector4* targetVertices = targetShape->GetControlPoints();
-			//		for(int k = 0; k < numTargetVertices; k++) {
-			//			FbxVector4 baseVertex = baseVertices[k];
-			//			FbxVector4 targetVertex = targetVertices[k];
-
-			//			// Check if the vertex is affected by the blendshape
-			//			if(baseVertex != targetVertex) {
-			//				affectedIndices.push_back(k);
-
-			//				// Calculate the blendshape deformation vector
-			//				FbxVector4 deformVector = targetVertex - baseVertex;
-			//				blendShapePositions.push_back(Vec4{
-			//					(float)deformVector[0],
-			//					(float)deformVector[1],
-			//					(float)deformVector[2],
-			//					0.0f
-			//					});
-			//			}
-			//		}
-
-			//		// Save the affected indices for this blendshape target
-			//		blendshapeTarget.AffectedIndexes = affectedIndices;
-			//		blendshapeTarget.BlendShapePosition = blendShapePositions;
-
-<<<<<<< Updated upstream
-					// Create blendshape target
-					Blendshape blendshapeTarget;
-					blendshapeTarget.Name = channel->GetName();
-					blendshapeTarget.AffectedIndexes = affectedIndexes;
-					blendshapeTarget.BlendShapePosition = blendShapePosition;
-					blendshapeTarget.WeightPercent = weightPercent;
-					blendshapeTarget.MeshName = aRootNode->GetName();
-
-					// Add blendshape target to list
-					aBlendShapeVector.push_back(blendshapeTarget);
-				}
-			}
-=======
-			//		// Add blendshape target to list
-			//		aBlendShapeVector[i].Blendshapes.push_back(blendshapeTarget);
-			//	}
-			//}
->>>>>>> Stashed changes
-			return true;
-		}
+		
 
 		void Internals::GetElementMappingData(FbxLayerElementTemplate<FbxVector4>* anElement, int aFbxContolPointIdx,
 			int aPolygonIdx, FbxVector4& outData)
@@ -442,13 +364,85 @@ namespace TGA
 				}
 			}
 
+
+			
+
 			// If we have materials we may need to cut this mesh up into multiple.
 			const bool bHasMaterials = aMeshNode->GetMaterialCount() != 0;
 			FbxSurfaceMaterial* currentSceneMaterial = nullptr;
 
 			// We need to load per material index since each mesh can only have one material when rendering.
 			// This means that if it has more than one they will be separated into two meshes.
+
+
+			const std::string meshName = aMeshNode->GetName();
+
+
 			std::unordered_map<std::string, Model::Mesh> meshMap;
+			for(int deformIdx = 0; deformIdx < fbxMesh->GetDeformerCount(); deformIdx++)
+			{
+				FbxBlendShape* blendShape = reinterpret_cast<FbxBlendShape*>(fbxMesh->GetDeformer(deformIdx, FbxDeformer::eBlendShape));
+
+				// If it's not a skin keep looking.
+				if(!blendShape)
+					continue;
+
+
+
+				// Loop through the blendshape channels in the deformer and extract the target shapes for each channel
+				for(int i = 0; i < blendShape->GetBlendShapeChannelCount(); i++)
+				{
+					FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(i);
+
+					// Extract the vertex positions and normals for the blendshape
+					FbxShape* targetShape = channel->GetTargetShape(0);
+					FbxVector4* targetVertices = targetShape->GetControlPoints();
+					FbxLayerElementNormal* targetNormals = targetShape->GetLayer(0)->GetNormals();
+
+					const char* channelName = channel->GetName();
+					const std::string meshName = aMeshNode->GetName();
+
+					Model::Blendshape blend;
+					blend.Name = channelName;
+					blend.MeshName = meshName;
+
+					for(int j = 0; j < targetShape->GetControlPointsCount(); j++)
+					{
+						Vertex vertex;
+
+						vertex.Position[0] = static_cast<float>(targetVertices[j][0]);
+						vertex.Position[1] = static_cast<float>(targetVertices[j][1]);
+						vertex.Position[2] = static_cast<float>(targetVertices[j][2]),
+							vertex.Position[3] = static_cast<float>(0.0f);
+
+
+						vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[0];
+						vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[1];
+						vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[2];
+						vertex.Normal[0] = 0.0f;
+
+						blend.Vertex.push_back(vertex);
+					}
+
+					auto meshIter = meshMap.find(meshName);
+					if(meshIter == meshMap.end())
+					{
+						// If the mesh doesn't exist in the map, create a new mesh and add it to the map.
+						Model::Mesh currentMeshData = {};
+						currentMeshData.MeshName = meshName;
+						meshMap[meshName] = currentMeshData;
+
+						// Set the current mesh to the new mesh.
+						meshIter = meshMap.find(meshName);
+					}
+
+					Model::Mesh& currentMeshData = meshIter->second;
+					currentMeshData.Blendshapes.push_back(blend);
+				}
+			}
+
+
+			
 			for(int meshMaterialIndex = 0; meshMaterialIndex < aMeshNode->GetMaterialCount() || meshMaterialIndex == 0; meshMaterialIndex++)
 			{
 				const std::string meshName = aMeshNode->GetName();
@@ -466,6 +460,10 @@ namespace TGA
 				}
 
 				Model::Mesh& currentMeshData = meshIter->second;
+
+
+				
+
 
 				if(bHasMaterials)
 				{
@@ -720,10 +718,6 @@ namespace TGA
 					}
 				}
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 				if(!currentMeshData.Vertices.empty())
 				{
 					float extentsCenter[3];
@@ -749,9 +743,12 @@ namespace TGA
 					outMeshes.push_back(currentMeshData);
 				}
 
+
 				VertexDuplicateAccelMap.clear();
 
 			}
+
+			
 
 
 

@@ -265,6 +265,19 @@ bool DeferredRenderer::Initialize()
 	}
 
 
+	/*D3D11_BUFFER_DESC constantBufferDesc;
+	ZeroMemory(&constantBufferDesc, sizeof(constantBufferDesc));
+	constantBufferDesc.ByteWidth = sizeof(BlendShapeData);
+	constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	result = DX11::Device->CreateBuffer(&constantBufferDesc, nullptr, myBlendShapeBuffer.GetAddressOf());
+	if(FAILED(result))
+	{
+		return false;
+	}*/
+
 	myGBufferPS = TextureAssetHandler::GetPixelShader("Shaders\\GBuffer_PS.cso");
 	myDeferredVS = TextureAssetHandler::GetVertexShader("Shaders\\Fullscreen_VS.cso");
 	myDeferredPS = TextureAssetHandler::GetPixelShader("Shaders\\Deferred_PS.cso");
@@ -361,9 +374,48 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 		DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 		DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
+
+
+
 		for(int index = 0; index < model->GetNumMeshes(); index++)
 		{
 			const Model::MeshData& meshData = model->GetMeshData(index);
+
+
+			//if (!meshData.Blendshapes.empty())
+			//{
+			//	int numBlendShapes = static_cast<int>(meshData.Blendshapes.size());
+
+			//	// Update blendshape data in constant buffer
+			//	BlendShapeData blendShapeData;
+			//	blendShapeData.blendShapeCount = numBlendShapes;
+
+			//	// Copy blendshape vertices
+			//	for(int i = 0; i < numBlendShapes; i++)
+			//	{
+			//		for(int j = 0; j < meshData.Blendshapes[i].BlendShapeVertex.size(); j++)
+			//		{
+			//			if (j + i < 1024)
+			//			{
+			//				blendShapeData.blendShapeVertices[j + i] = meshData.Blendshapes[i].BlendShapeVertex[j].Position;
+			//			}
+			//		}
+			//	}
+
+			//	// Copy blendshape weights
+			//	for(int i = 0; i < numBlendShapes; i++)
+			//	{
+			//		blendShapeData.blendShapeWeights[i] = meshData.Blendshapes[i].Value;
+			//	}
+
+			//	// Map the buffer and copy the data
+			//	D3D11_MAPPED_SUBRESOURCE mappedResource;
+			//	DX11::Context->Map(myBlendShapeBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			//	memcpy(mappedResource.pData, &blendShapeData, sizeof(BlendShapeData));
+			//	DX11::Context->Unmap(myBlendShapeBuffer.Get(), 0);
+
+			//	DX11::Context->VSSetConstantBuffers(4, 1, myBlendShapeBuffer.GetAddressOf());
+			//}
 
 			DX11::Context->IASetInputLayout(meshData.myInputLayout.Get());
 			DX11::Context->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);

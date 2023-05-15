@@ -131,14 +131,11 @@ public:
 	}
 
 	void OnEditorUpdate()
-<<<<<<< Updated upstream
 	{
 		myModel->EditorUpdate();
 	}
 
 	void SetModel(std::shared_ptr<ModelInstance> aModel)
-=======
->>>>>>> Stashed changes
 	{
 		if(myModel)
 		{

@@ -35,9 +35,15 @@ VertexToPixel main(VertexInput input)
 
 	float4 viewPosition = mul(FB_ToView, vertexWorldPosition);
 	float4 position = mul(FB_ToProjection, viewPosition);
+
+	/*float3 newPosition = position.xyz;
+	for(int i = 0; i < blendShapeCount; i++) 
+	{
+		newPosition += (blendShapeVertices[i] - position) * blendShapeWeights[i];
+	}*/
+
 	result.myVertexWorldPosition = vertexWorldPosition.xyz;
 	result.myViewPosition = viewPosition.xyz;
-
 
 	result.myPosition = position;
 

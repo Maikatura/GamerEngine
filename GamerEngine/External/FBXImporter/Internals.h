@@ -66,7 +66,6 @@ namespace TGA
 
 			static void GetMaterialData(const FbxSurfaceMaterial* aMaterial, Material& outMaterial);
 
-			static bool GatherBlendshapes(FbxNode* aRootNode, std::vector<Blendshape>& aBlendShapeVector);
 
 			static Texture GetMaterialChannelData(const FbxSurfaceMaterial* aMaterial, const char* aChannel);
 

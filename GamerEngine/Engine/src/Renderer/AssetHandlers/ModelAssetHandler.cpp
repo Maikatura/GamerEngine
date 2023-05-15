@@ -919,31 +919,15 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			
 			for(size_t i = 0; i < mesh.Blendshapes.size(); i++)
 			{
-
-				auto foundIt = std::find(addedBlendShapes.begin(), addedBlendShapes.end(), mesh.Blendshapes[i].Name);
-				if (foundIt != addedBlendShapes.end())
-				{
-					continue;
-				}
-
 				Model::BlendShapeData data;
+				data.Name = mesh.Blendshapes[i].Name;
 
-				data.MeshName = mesh.Blendshapes[i].MeshName;
-				data.BlendShapeName = mesh.Blendshapes[i].Name;
-				data.BlendShape.AffectedIndexes = mesh.Blendshapes[i].AffectedIndexes;
-				data.BlendShape.WeightPercent = mesh.Blendshapes[i].WeightPercent;
-
-				for(size_t x = 0; x < mesh.Blendshapes[i].BlendShapePosition.size(); x++)
+				for(size_t x = 0; x < mesh.Blendshapes[i].Vertex.size(); x++)
 				{
-					data.BlendShape.BlendShapePosition.push_back({
-						mesh.Blendshapes[i].BlendShapePosition[x].x,
-						mesh.Blendshapes[i].BlendShapePosition[x].y,
-						mesh.Blendshapes[i].BlendShapePosition[x].z,
-						mesh.Blendshapes[i].BlendShapePosition[x].w,
-					});
+					data.BlendShapeVertex.push_back(*(Vertex*)&mesh.Blendshapes[i].Vertex[x]);
 				}
+
 				modelData.Blendshapes.push_back(data);
-				addedBlendShapes.push_back(mesh.Blendshapes[i].Name);
 			}
 
 			//D3D11_BUFFER_DESC blendShapeBufferDesc = {};

@@ -77,7 +77,6 @@ public:
 	void PlayAnimation(std::wstring aAnimationPath);
 	virtual void Update() override;
 
-	void EditorUpdate();
 
 	void UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent);
 

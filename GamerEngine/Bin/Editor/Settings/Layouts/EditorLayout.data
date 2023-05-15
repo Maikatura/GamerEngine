@@ -130,13 +130,8 @@ Collapsed=0
 DockId=0x0000000A,1
 
 [Window][Console Window]
-<<<<<<< Updated upstream
-Pos=60,60
-Size=152,174
-=======
 Pos=79,76
 Size=32,35
->>>>>>> Stashed changes
 Collapsed=0
 
 [Docking][Data]

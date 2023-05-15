@@ -17,10 +17,11 @@ public:
 protected:
 	FrameBufferData myFrameBufferData{};
 	ObjectBufferData myObjectBufferData{};
-
+	/*BlendShapeData myBlendshapeBufferData{};*/
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myFrameBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myObjectBuffer;
+	//Microsoft::WRL::ComPtr<ID3D11Buffer> myBlendShapeBuffer;
 	//Microsoft::WRL::ComPtr<ID3D11Buffer> myMaterialBuffer;
 	inline static Microsoft::WRL::ComPtr<ID3D11Buffer> myInstanceBuffer;
 	inline static std::vector<Matrix4x4f> myInstancedTransformBufferData;
