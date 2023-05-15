@@ -216,66 +216,65 @@ namespace TGA
 			return result;
 		}
 
-		bool Internals::GatherBlendshapes(FbxNode* aRootNode, std::vector<Blendshape>& aBlendShapeVector)
+		bool Internals::GatherBlendshapes(FbxNode* aMeshNodes, std::vector<Model::Mesh>& aBlendShapeVector)
 		{
+<<<<<<< Updated upstream
+=======
+			//FbxMesh* mesh = aMeshNodes->GetMesh();
+>>>>>>> Stashed changes
 
-			FbxMesh* mesh = aRootNode->GetMesh();
+			//int numBaseVertices = mesh->GetControlPointsCount();
+			//FbxVector4* baseVertices = mesh->GetControlPoints();
 
-			int blendshapeCount = mesh->GetDeformerCount(FbxDeformer::eBlendShape);
-			for(int i = 0; i < blendshapeCount; i++)
-			{
-				FbxBlendShape* blendshape = (FbxBlendShape*)mesh->GetDeformer(i, FbxDeformer::eBlendShape);
-				const char* blendshapeName = blendshape->GetName();
-				// Do something with blendshape name...
-			}
+			//// Load blendshape channels
+			//int numChannels = mesh->GetDeformerCount(FbxDeformer::eBlendShape);
+			//for(int i = 0; i < numChannels; i++) {
+			//	FbxBlendShape* blendShape = static_cast<FbxBlendShape*>(mesh->GetDeformer(i, FbxDeformer::eBlendShape));
 
-			int numBaseVertices = mesh->GetControlPointsCount();
-			FbxVector4* baseVertices = mesh->GetControlPoints();
+			//	// Load blendshape targets
+			//	int numTargets = blendShape->GetBlendShapeChannelCount();
+			//	for(int j = 0; j < numTargets; j++) {
+			//		FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(j);
 
-			// Load blendshape channels
-			int numChannels = mesh->GetDeformerCount(FbxDeformer::eBlendShape);
-			for(int i = 0; i < numChannels; i++)
-			{
-				FbxBlendShape* blendShape = static_cast<FbxBlendShape*>(mesh->GetDeformer(i, FbxDeformer::eBlendShape));
+			//		// Create blendshape target
+			//		Blendshape blendshapeTarget;
+			//		blendshapeTarget.Name = channel->GetName();
+			//		blendshapeTarget.MeshName = mesh->GetName();
 
-				// Load blendshape targets
-				int numTargets = blendShape->GetBlendShapeChannelCount();
-				for(int j = 0; j < numTargets; j++)
-				{
-					FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(j);
-					FbxShape* targetShape = channel->GetTargetShape(0);
+			//		// Load blendshape weight
+			//		float weightPercent = channel->DeformPercent;
+			//		blendshapeTarget.WeightPercent = weightPercent;
 
-					// Calculate offset between base mesh and target
-					std::vector<unsigned int> affectedIndexes;
-					std::vector<Vec4> blendShapePosition;
-					int numTargetVertices = targetShape->GetControlPointsCount();
-					FbxVector4* targetVertices = targetShape->GetControlPoints();
-					FbxVector4 offset = targetVertices[0] - baseVertices[0];  // Calculate offset for the first vertex
-					for(int k = 0; k < numTargetVertices; k++)
-					{
-						FbxVector4 baseVertex = baseVertices[k];
-						FbxVector4 targetVertex = targetVertices[k];
+			//		// Load affected vertex indices
+			//		std::vector<unsigned int> affectedIndices;
+			//		std::vector<Vec4> blendShapePositions;
+			//		FbxShape* targetShape = channel->GetTargetShape(0);
+			//		int numTargetVertices = targetShape->GetControlPointsCount();
+			//		FbxVector4* targetVertices = targetShape->GetControlPoints();
+			//		for(int k = 0; k < numTargetVertices; k++) {
+			//			FbxVector4 baseVertex = baseVertices[k];
+			//			FbxVector4 targetVertex = targetVertices[k];
 
-						FbxVector4 vertexOffset = targetVertex - baseVertex;
-						if(vertexOffset != offset)
-						{
-							// Error: Target vertices do not match base vertices
-							break;
-						}
+			//			// Check if the vertex is affected by the blendshape
+			//			if(baseVertex != targetVertex) {
+			//				affectedIndices.push_back(k);
 
-						affectedIndexes.push_back(k);
-						blendShapePosition.push_back(Vec4{
-							(float)vertexOffset[0],
-							(float)vertexOffset[1],
-							(float)vertexOffset[2],
-							0.0f
-							}
-						);
-					}
+			//				// Calculate the blendshape deformation vector
+			//				FbxVector4 deformVector = targetVertex - baseVertex;
+			//				blendShapePositions.push_back(Vec4{
+			//					(float)deformVector[0],
+			//					(float)deformVector[1],
+			//					(float)deformVector[2],
+			//					0.0f
+			//					});
+			//			}
+			//		}
 
-					// Load blendshape weight
-					float weightPercent = channel->DeformPercent;
+			//		// Save the affected indices for this blendshape target
+			//		blendshapeTarget.AffectedIndexes = affectedIndices;
+			//		blendshapeTarget.BlendShapePosition = blendShapePositions;
 
+<<<<<<< Updated upstream
 					// Create blendshape target
 					Blendshape blendshapeTarget;
 					blendshapeTarget.Name = channel->GetName();
@@ -288,6 +287,12 @@ namespace TGA
 					aBlendShapeVector.push_back(blendshapeTarget);
 				}
 			}
+=======
+			//		// Add blendshape target to list
+			//		aBlendShapeVector[i].Blendshapes.push_back(blendshapeTarget);
+			//	}
+			//}
+>>>>>>> Stashed changes
 			return true;
 		}
 
@@ -443,10 +448,24 @@ namespace TGA
 
 			// We need to load per material index since each mesh can only have one material when rendering.
 			// This means that if it has more than one they will be separated into two meshes.
+			std::unordered_map<std::string, Model::Mesh> meshMap;
 			for(int meshMaterialIndex = 0; meshMaterialIndex < aMeshNode->GetMaterialCount() || meshMaterialIndex == 0; meshMaterialIndex++)
 			{
-				Model::Mesh currentMeshData = {};
-				currentMeshData.MeshName = aMeshNode->GetName();
+				const std::string meshName = aMeshNode->GetName();
+
+				auto meshIter = meshMap.find(meshName);
+				if(meshIter == meshMap.end())
+				{
+					// If the mesh doesn't exist in the map, create a new mesh and add it to the map.
+					Model::Mesh currentMeshData = {};
+					currentMeshData.MeshName = meshName;
+					meshMap[meshName] = currentMeshData;
+
+					// Set the current mesh to the new mesh.
+					meshIter = meshMap.find(meshName);
+				}
+
+				Model::Mesh& currentMeshData = meshIter->second;
 
 				if(bHasMaterials)
 				{
@@ -701,6 +720,10 @@ namespace TGA
 					}
 				}
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 				if(!currentMeshData.Vertices.empty())
 				{
 					float extentsCenter[3];

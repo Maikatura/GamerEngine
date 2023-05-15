@@ -168,7 +168,7 @@ namespace TGA
 			std::string Name;
 			std::vector<unsigned int> AffectedIndexes;     // all Vertices affected by blendshape
 			std::vector<Vec4> BlendShapePosition; // Where the affected Vertex should go to when the blendshape is at 100%
-			float WeightPercent; // How much the blendshape was when Importing it
+			float WeightPercent;
 		};
 
 		struct Model

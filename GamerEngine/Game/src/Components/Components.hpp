@@ -10,6 +10,8 @@
 #include "Component.h"
 #include "Components/CameraComponent.h"
 #include "Component.h"
+#include "StringCast.h"
+#include "Renderer/AssetHandlers/ModelAssetHandler.h"
 
 struct NativeScriptComponent;
 class ScriptableEntity;
@@ -105,6 +107,11 @@ public:
 	ModelComponent(std::shared_ptr<ModelInstance> aModel) : myModel(aModel)
 	{ }
 
+	ModelComponent(const std::wstring& aModelPath)
+	{
+		myModel = ModelAssetHandler::Get().GetModelInstance(aModelPath);
+	}
+
 	std::shared_ptr<ModelInstance> GetModel()
 	{
 		if (!myModel)
@@ -117,21 +124,31 @@ public:
 
 	void OnUpdate() override
 	{
-		myModel->Update();
+		if(myModel)
+		{
+			myModel->Update();
+		}
 	}
 
 	void OnEditorUpdate()
+<<<<<<< Updated upstream
 	{
 		myModel->EditorUpdate();
 	}
 
 	void SetModel(std::shared_ptr<ModelInstance> aModel)
+=======
+>>>>>>> Stashed changes
 	{
-		if (aModel)
+		if(myModel)
 		{
-			myModel = std::move(aModel);
-			myModel->Init(GetModel()->GetModel());
+			myModel->EditorUpdate();
 		}
+	}
+
+	void SetModel(const std::wstring& aModelPath)
+	{
+		myModel = ModelAssetHandler::Get().GetModelInstance(aModelPath);
 	}
 
 private:

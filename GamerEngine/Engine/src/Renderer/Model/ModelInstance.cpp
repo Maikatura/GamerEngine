@@ -123,6 +123,7 @@ void ModelInstance::Update()
 		}
 	}*/
 
+	
 
 	SceneObject::Update();
 	auto anAnimState = GetAnimationState();
@@ -145,6 +146,14 @@ void ModelInstance::Update()
 
 		myBoneTransform[0] = CommonUtilities::Matrix4x4<float>();
 		UpdateAnimationHierarchy(anAnimState.get(), 0, myBoneTransform[0]);
+	}
+}
+
+void ModelInstance::EditorUpdate()
+{
+	if(myModel)
+	{
+		myModel->Update();
 	}
 }
 

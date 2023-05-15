@@ -249,6 +249,7 @@ bool ModelAssetHandler::InitUnitCube()
 				}
 	};
 
+
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	vertexBufferDesc.ByteWidth = static_cast<UINT>(mdlVertices.size()) * static_cast<UINT>(sizeof(Vertex));
 	vertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
@@ -805,8 +806,12 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 
 			D3D11_BUFFER_DESC vertexBufferDesc = {};
 			vertexBufferDesc.ByteWidth = static_cast<UINT>(mdlVertices.size()) * static_cast<UINT>(sizeof(Vertex));
-			vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+			vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+			//vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 			vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+			vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
 
 			D3D11_SUBRESOURCE_DATA vertexSubResourceData = {};
 			vertexSubResourceData.pSysMem = &mdlVertices[0];
@@ -882,7 +887,7 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			modelData.myInputLayout = inputLayout;
 			modelData.myMeshName = mesh.MeshName;
 			modelData.myMaterialIndex = mesh.MaterialIndex;
-			
+			modelData.myOriginalVertex = mdlVertices;
 
 			auto fileName = Helpers::CleanModelName(aFilePath);
 			std::wstring albedoTexture = L"Assets\\Textures\\T_" + fileName + L"_C.dds";
@@ -925,12 +930,12 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 
 				data.MeshName = mesh.Blendshapes[i].MeshName;
 				data.BlendShapeName = mesh.Blendshapes[i].Name;
-				data.AffectedIndexes = mesh.Blendshapes[i].AffectedIndexes;
-				data.WeightPercent = mesh.Blendshapes[i].WeightPercent;
+				data.BlendShape.AffectedIndexes = mesh.Blendshapes[i].AffectedIndexes;
+				data.BlendShape.WeightPercent = mesh.Blendshapes[i].WeightPercent;
 
 				for(size_t x = 0; x < mesh.Blendshapes[i].BlendShapePosition.size(); x++)
 				{
-					data.BlendShapePosition.push_back({
+					data.BlendShape.BlendShapePosition.push_back({
 						mesh.Blendshapes[i].BlendShapePosition[x].x,
 						mesh.Blendshapes[i].BlendShapePosition[x].y,
 						mesh.Blendshapes[i].BlendShapePosition[x].z,
@@ -940,6 +945,28 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 				modelData.Blendshapes.push_back(data);
 				addedBlendShapes.push_back(mesh.Blendshapes[i].Name);
 			}
+
+			//D3D11_BUFFER_DESC blendShapeBufferDesc = {};
+			//blendShapeBufferDesc.ByteWidth = static_cast<UINT>(modelData.Blendshapes.size()) * static_cast<UINT>(sizeof(Vertex));
+			//blendShapeBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+			////blendShapeBuffer.Usage = D3D11_USAGE_DEFAULT;
+			//blendShapeBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			//blendShapeBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+
+			//D3D11_SUBRESOURCE_DATA blendShapeSubResourceData = {};
+			//blendShapeSubResourceData.pSysMem = &mdlVertices[0];
+			//blendShapeSubResourceData.SysMemPitch = 0;
+			//blendShapeSubResourceData.SysMemSlicePitch = 0;
+
+			//ID3D11Buffer* blendBuffer;
+			//result = DX11::Device->CreateBuffer(&blendShapeBufferDesc, &blendShapeSubResourceData, &blendBuffer);
+			//if(FAILED(result))
+			//{
+			//	return false;
+			//}
+
+			//modelData.myBlendShapeBuffer = blendBuffer;
 
 			if(hasSkeleton)
 			{
@@ -1012,17 +1039,24 @@ std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::ws
 	auto model = myModelRegistry.find(aFilePath);
 	if(model == myModelRegistry.end())
 	{
-		LoadModel(aFilePath);
-
-		auto endCheck = myModelRegistry.find(aFilePath);
-		if (endCheck == myModelRegistry.end())
+		if (LoadModel(aFilePath))
 		{
-			return nullptr;
+			auto endCheck = myModelRegistry.find(aFilePath);
+			if(endCheck == myModelRegistry.end())
+			{
+				return nullptr;
+			}
+			else
+			{
+				return endCheck->second;
+			}
 		}
 		else
 		{
-			model = endCheck;
+			return nullptr;
 		}
+
+		
 	}
 
 	if (myModelRegistry.empty())

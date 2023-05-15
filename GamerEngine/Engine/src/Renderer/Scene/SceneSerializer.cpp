@@ -219,24 +219,21 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 		for(size_t i = 0; i < material.size(); i++)
 		{
+			if(const auto albedoTex = material[i].GetAlbedoTexture())
+			{
+				out << YAML::Key << "Albedo" << YAML::Value << Helpers::string_cast<std::string>(albedoTex->GetPath());
+			}
 			
-				auto albedoTex = material[i].GetAlbedoTexture();
-				if(albedoTex)
-				{
-					out << YAML::Key << "Albedo" << YAML::Value << Helpers::string_cast<std::string>(albedoTex->GetPath());
-				}
+			if(const auto normalTex = material[i].GetNormalTexture())
+			{
+				out << YAML::Key << "Normal" << YAML::Value << Helpers::string_cast<std::string>(normalTex->GetPath());
+			}
 
-				auto normalTex = material[i].GetNormalTexture();
-				if(normalTex)
-				{
-					out << YAML::Key << "Normal" << YAML::Value << Helpers::string_cast<std::string>(normalTex->GetPath());
-				}
-
-				auto materialTex = material[i].GetMaterialTexture();
-				if(materialTex)
-				{
-					out << YAML::Key << "Material" << YAML::Value << Helpers::string_cast<std::string>(materialTex->GetPath());
-				}
+			
+			if(const auto materialTex = material[i].GetMaterialTexture())
+			{
+				out << YAML::Key << "Material" << YAML::Value << Helpers::string_cast<std::string>(materialTex->GetPath());
+			}
 		}
 
 
@@ -464,25 +461,15 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 	auto modelComponent = aEntityNode["ModelComponent"];
 	if(modelComponent)
 	{
-		auto& modelComp = deserializedEntity.AddComponent<ModelComponent>();
-		auto path = Helpers::string_cast<std::wstring>(modelComponent["Path"].as<std::string>());
-
-
-		auto modelInstance = ModelAssetHandler::Get().GetModelInstance(path);
-
-		if (!modelInstance)
-		{
-			return;
-		}
-
-		modelComp.SetModel(modelInstance);
+		auto path = modelComponent["Path"].as<std::string>();
+		auto& modelComp = deserializedEntity.AddComponent<ModelComponent>(Helpers::string_cast<std::wstring>(path));
 
 
 		auto textures = modelComponent["Texture"];
 
 		if (!isHeadless)
 		{
-			auto& materials = modelComp.GetModel()->GetMaterial();
+			/*auto& materials = modelComp.GetModel()->GetMaterial();
 
 			Material mat;
 
@@ -503,7 +490,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 				mat.SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Material"].as<std::string>())));
 			}
 
-			materials.push_back( mat);
+			materials.push_back( mat);*/
 		}
 	}
 

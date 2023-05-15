@@ -1,4 +1,5 @@
-#define MAX_MODEL_BONES 128
+#define MAX_MODEL_BONES 256
+#define BLENDSHAPE_ARRAY_SIZE 25000
 
 struct VertexInput
 {
@@ -38,6 +39,7 @@ struct VertexToPixel
 	float3 myTangent		:	TANGENT;
 	float3 myBinormal		:	BINORMAL;
 	float3 myNormal			:	NORMAL;
+	float4 Blendshape		: BLENDPOSITION;
 };
 
 struct PixelOutput
@@ -118,3 +120,4 @@ cbuffer LineCBuffer : register(b2)
 	float4x4 LCB_ToView;
 	float4x4 LCB_ToProjection;
 };
+

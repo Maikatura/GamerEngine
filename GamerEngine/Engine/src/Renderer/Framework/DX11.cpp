@@ -351,7 +351,7 @@ bool DX11::CreateSelectionView()
 	if(FAILED(result))
 		return false;
 
-	D3D11_RENDER_TARGET_VIEW_DESC IDBufferViewDesc;
+	D3D11_RENDER_TARGET_VIEW_DESC IDBufferViewDesc{};
 	IDBufferViewDesc.Format = IDBufferDesc.Format;
 	IDBufferViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	IDBufferViewDesc.Texture2D.MipSlice = 0;

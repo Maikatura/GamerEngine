@@ -10,6 +10,8 @@
 #include "Material.h"
 #include <Renderer/EngineSettings/Settings.h>
 
+#include "Vertex.h"
+
 using namespace Microsoft::WRL;
 
 struct Animation
@@ -84,6 +86,7 @@ public:
 		std::vector<unsigned int> AffectedIndexes;     // all Vertices affected by blendshape
 		std::vector<Vector4f> BlendShapePosition; // Where the affected Vertex should go to when the blendshape is at 100%
 		float WeightPercent;
+		float WeightPercentOld;
 	};
 
 	struct MeshData 
@@ -104,6 +107,7 @@ public:
 		UINT myMaterialIndex;
 		std::string myMeshName;
 		std::vector<BlendShapeData> Blendshapes;
+		std::vector<Vertex> myOriginalVertex;
 	};
 
 	struct BoxSphereBounds
@@ -124,6 +128,24 @@ private:
 	
 
 public:
+<<<<<<< Updated upstream
+=======
+
+
+	void Update() override;
+
+	void Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
+	{
+		mySkeleton = std::move(aSkeleton);
+		myMeshData.push_back(aMeshData);
+		myPath = aPath;
+	}
+	void Init(const MeshData& aMeshData, const std::wstring& aPath)
+	{
+		myMeshData.push_back(aMeshData);
+		myPath = aPath;
+	}
+>>>>>>> Stashed changes
 
 	void EditorUpdate();
 
@@ -140,7 +162,11 @@ public:
 	FORCEINLINE bool HasSkeleton() const									{ return mySkeleton.GetRoot(); }
 	FORCEINLINE size_t GetNumMeshes() const									{ return myMeshData.size(); }
 	FORCEINLINE const MeshData& GetMeshData(unsigned int anIndex = 0) const { return myMeshData[anIndex]; }
+<<<<<<< Updated upstream
 	FORCEINLINE MeshData& GetMeshData(unsigned int anIndex = 0)				{ return myMeshData[anIndex]; }
+=======
+	FORCEINLINE MeshData& GetMeshData(unsigned int anIndex = 0)		{ return myMeshData[anIndex]; }
+>>>>>>> Stashed changes
 	FORCEINLINE const std::wstring& GetName() const							{ return myPath; }
 };
 
