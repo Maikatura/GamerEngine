@@ -10,6 +10,17 @@
 namespace TurNet
 {
 
+
+	struct MessageSuccess
+	{
+		const char* dataBuffer = nullptr;
+		int dataSize{0};
+		uint32_t myGuaranteedMessages {0};
+		const sockaddr* serverAddr = nullptr;
+		std::condition_variable ackReceivedCV {};
+		bool ackReceived = false;
+	};
+
 	class TurNetworkBase
 	{
 	protected:
@@ -50,6 +61,13 @@ namespace TurNet
 
 		std::mutex myThreadLock;
 		std::unique_ptr<std::thread> myWorkerThread;
+		std::vector<std::thread> mySenderThreads;
+		std::vector<MessageSuccess> myGuaranteedMessages;
+
+		
+		std::mutex myGuaranteedMessagesMutex;
+		
+
 	
 	};
 }

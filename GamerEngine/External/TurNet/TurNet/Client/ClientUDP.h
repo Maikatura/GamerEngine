@@ -7,6 +7,8 @@
 #include "TurNet/Shared/DataHandling/NetworkDataTypes.h"
 #include "TurNet/Shared/DataHandling/TurOverloads.h"
 
+
+
 namespace TurNet
 {
 	class ClientUDP : public TurNetworkBase
@@ -20,6 +22,8 @@ namespace TurNet
 		u_short myServerPort;
 
 
+		const int MAX_RETRIES = 3;  // Maximum number of retransmissions
+		const int TIMEOUT_MS = 1000;  // Timeout for waiting for ACK in milliseconds
 
 	public:
 		ClientUDP();
@@ -31,10 +35,11 @@ namespace TurNet
 		void Stop();
 		void StartWorker() override;
 
-		int SendToServer(TurNet::TurMessage& aMessage);
+		int SendToServer(TurNet::TurMessage& aMessage, bool aShouldGuaranteed = false);
 
 	private:
 
+		int SendToClientRawSuccess();
 		int SendToServerRaw(char aDataBuffer[DEFAULT_BUFFER_SIZE], int aSize);
 		void WorkerThread() override;
 	};

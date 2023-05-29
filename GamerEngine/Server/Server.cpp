@@ -155,14 +155,14 @@ int main()
 
 						if(!myClientsConnected[i].IsBot)
 						{
-							myServer.SendToClient(myClientsConnected[i].Address, msgOutNewPlayer);
+							myServer.SendToClient(myClientsConnected[i].Address, msgOutNewPlayer, true);
 						}
 
-						myServer.SendToClient(someData.Header.Connection, msgOut2);
+						myServer.SendToClient(someData.Header.Connection, msgOut2, true);
 					}
 					else
 					{
-						myServer.SendToClient(someData.Header.Connection, msgOut);
+						myServer.SendToClient(someData.Header.Connection, msgOut, true);
 					}
 				}
 
@@ -192,7 +192,7 @@ int main()
 				{
 					if(!myClientsConnected[i].IsBot)
 					{
-						myServer.SendToClient(myClientsConnected[i].Address, outMsg);
+						myServer.SendToClient(myClientsConnected[i].Address, outMsg, true);
 					}
 				}
 				break;
@@ -236,7 +236,7 @@ int main()
 						{
 							if(!TurNet::CompareClients(someData.Header.Connection, myClientsConnected[i].Address) && !myClientsConnected[i].IsBot)
 							{
-								myServer.SendToClient(myClientsConnected[i].Address, outMsg);
+								myServer.SendToClient(myClientsConnected[i].Address, outMsg, true);
 							}
 						}
 
@@ -279,7 +279,7 @@ int main()
 								TurNet::TurMessage outMsg;
 								outMsg << skinMsg;
 
-								myServer.SendToClient(myClientsConnected[i].Address, outMsg);
+								myServer.SendToClient(myClientsConnected[i].Address, outMsg, true);
 							}
 						}
 

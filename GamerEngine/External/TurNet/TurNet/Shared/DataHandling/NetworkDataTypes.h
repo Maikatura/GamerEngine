@@ -13,6 +13,8 @@ namespace TurNet
 		ClientDisconnected,
 
 		Message,
+		MessageGuaranteed,
+		MessageAcknowledge,
 		SyncMessage,
 		Heartbeat,
 		Ping,

@@ -26,13 +26,20 @@ namespace TurNet
 		ClientAddress Connection {};
 	};
 
+	inline std::random_device rd; // obtain a random number from hardware
+	inline std::mt19937 gen(rd());
+	inline std::uniform_int_distribution<> distr(-7777, 7777);
 
 	struct TurMessage
 	{
 		TurMessageHeader Header{};
 		std::vector<char> Body;
 
-		TurMessage() { Header.ID = NetworkDataTypes::Message; }
+		TurMessage()
+		{
+			Header.ID = NetworkDataTypes::Message;
+			Header.MessageID = static_cast<uint32_t>(distr(gen));
+		}
 		TurMessage(const TurMessage& someData) = default;
 		~TurMessage() = default;
 

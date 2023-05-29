@@ -12,6 +12,6 @@ Windows:
   - Name: Scene
     IsOpen: true
   - Name: Networking
-    IsOpen: false
+    IsOpen: true
   - Name: Help Panel
     IsOpen: false

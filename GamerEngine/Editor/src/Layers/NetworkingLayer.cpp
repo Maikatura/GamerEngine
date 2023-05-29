@@ -135,8 +135,8 @@ void NetworkingLayer::OnUpdate()
 
 		auto& transComp = myPlayers[i].myEntity.GetComponent<TransformComponent>();
 
-		//float distance = (myPlayers[i].Translation - transComp.Translation).Length();
-		//
+		float distance = (myPlayers[i].Translation - transComp.Translation).Length();
+		
 		//float distanceRot = (myPlayers[i].Rotation - transComp.Rotation).Length();
 
 		Renderer::GetCamera()->GetCameraSpeed();
@@ -144,11 +144,11 @@ void NetworkingLayer::OnUpdate()
 		std::chrono::steady_clock::time_point clockNow = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double, std::milli> time = clockNow - myPlayers[i].Time;
 
-		/*Vector3f oldPosition = transComp.Translation;
-		Vector3f newPosition = oldPosition + (myPlayers[i].MoveSpeed * Time::GetDeltaTime());*/
+		Vector3f oldPosition = transComp.Translation;
+		//Vector3f newPosition = oldPosition + (myPlayers[i].MoveSpeed * Time::GetDeltaTime());
 
-		//float lerpTime = static_cast<float>(time.count()) / 1000.0f;
-		//float time_to_reach_targetTan = CommonUtilities::Max(0.0f, (distance / myPlayers[i].MoveSpeed) - lerpTime);
+		float lerpTime = static_cast<float>(time.count()) / 1000.0f;
+		float time_to_reach_targetTan = CommonUtilities::Max(0.0f, (distance / myPlayers[i].MoveSpeed) - lerpTime);
 		transComp.Translation = Vector3f::Lerp(transComp.Translation, myPlayers[i].Translation, Time::GetDeltaTime());
 		transComp.Rotation = myPlayers[i].Rotation;
 	}
@@ -379,7 +379,7 @@ void NetworkingLayer::StartNetworkingClient()
 	TurNet::TurMessage connectMessage;
 	connectMessage.Header.ID = TurNet::NetworkDataTypes::Connect;
 
-	myClient.SendToServer(connectMessage);
+	myClient.SendToServer(connectMessage, true);
 }
 
 void NetworkingLayer::StartNetworkingServer()

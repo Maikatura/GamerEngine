@@ -132,7 +132,10 @@ public:
 
 	void OnEditorUpdate()
 	{
-		myModel->EditorUpdate();
+		if (myModel)
+		{
+			myModel->EditorUpdate();
+		}
 	}
 
 	void SetModel(std::shared_ptr<ModelInstance> aModel)

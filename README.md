@@ -19,6 +19,7 @@ I will try to not have compile errors on the main branch.
 - [ ] Prefabs
 - [x] File Explorer (For project)
 - [x] Dark mode
+- [ ] Fix Lightning
 
 #### Table of content
 <a href="/README/FILEFORMATS.md">File formats</a>

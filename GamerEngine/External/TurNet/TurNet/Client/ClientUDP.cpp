@@ -91,7 +91,7 @@ void TurNet::ClientUDP::Stop()
 	{
 		TurNet::TurMessage outMsg;
 		outMsg.Header.ID = NetworkDataTypes::Disconnect;
-		SendToServer(outMsg);
+		SendToServer(outMsg, true);
 
 		myReturnResult = shutdown(myConnectSocket, SD_SEND);
 		if(myReturnResult == SOCKET_ERROR)
@@ -124,14 +124,20 @@ void TurNet::ClientUDP::StartWorker()
 
 	myWorkerShouldRun = true;
 	myWorkerThread.reset(new std::thread([&]() { WorkerThread(); }));
+
+	mySenderThreads.push_back(std::thread([&]()
+		{
+			SendToClientRawSuccess();
+		}));
 }
 
-int TurNet::ClientUDP::SendToServer(TurNet::TurMessage& aMessage)
+int TurNet::ClientUDP::SendToServer(TurNet::TurMessage& aMessage, bool aShouldGuaranteed)
 {
 	if(myStatus.Status != Status::Connected && aMessage.Header.ID != NetworkDataTypes::Ping)
 	{
 		return -1;
 	}
+
 
 	std::string messageToServer = aMessage.BufferRaw();
 
@@ -146,7 +152,22 @@ int TurNet::ClientUDP::SendToServer(TurNet::TurMessage& aMessage)
 	char aDataBuffer[DEFAULT_BUFFER_SIZE];
 	std::memcpy(aDataBuffer, crypted.c_str(), crypted.size());
 
+	if (aShouldGuaranteed)
+	{
+		myGuaranteedMessages.push_back(MessageSuccess( aDataBuffer, static_cast<int>(crypted.size()) ,aMessage.Header.MessageID, reinterpret_cast<sockaddr*>(&myServer) ));
+		return 0;
+	}
+
 	return SendToServerRaw(aDataBuffer, static_cast<int>(crypted.size()));
+}
+
+int TurNet::ClientUDP::SendToClientRawSuccess()
+{
+	int retries = 0;
+	
+
+
+	return 0;
 }
 
 int TurNet::ClientUDP::SendToServerRaw(char aDataBuffer[DEFAULT_BUFFER_SIZE], int aSize)
@@ -183,9 +204,6 @@ void TurNet::ClientUDP::WorkerThread()
 
 			int nRet = 0;
 
-			
-
-			
 				sockaddr connection;
 				int slen = sizeof(sockaddr);
 				nRet = recvfrom(myConnectSocket, messageData.Buffer, messageData.BufferLength, 0, (struct sockaddr*)&connection, &slen);
@@ -229,8 +247,6 @@ void TurNet::ClientUDP::WorkerThread()
 					TurNet::MessageDecoder(data, messageData);
 
 
-
-
 					sockaddr_in* sin = reinterpret_cast<sockaddr_in*>(&connection);
 					const char* ipAddress = inet_ntoa(sin->sin_addr);
 					std::cout << "Packet from " << ipAddress << ":" << sin->sin_port << "\n";
@@ -247,6 +263,27 @@ void TurNet::ClientUDP::WorkerThread()
 					}
 
 					TurNet::NetworkDataTypes type = data.Header.ID;
+
+
+					bool shouldAcknowledge = false;
+					{
+						std::lock_guard<std::mutex> lock(myGuaranteedMessagesMutex);
+						// Check if the received message matches a guaranteed message
+						// and add it to the list of acknowledged messages
+						for(int i = 0; i < myGuaranteedMessages.size(); i++)
+						{
+							if(myGuaranteedMessages[i].myGuaranteedMessages == data.Header.MessageID)
+							{
+								shouldAcknowledge = true;
+								myGuaranteedMessages[i].ackReceived = true;
+								myGuaranteedMessages[i].ackReceivedCV.notify_one();
+								break;
+							}
+						}
+					}
+
+
+					
 
 					if(type == NetworkDataTypes::Ping)
 					{
@@ -306,9 +343,6 @@ void TurNet::ClientUDP::WorkerThread()
 						myMessageLoop(data);
 					}
 				}
-
-
-			
 		}
 		catch(const std::overflow_error& e)
 		{

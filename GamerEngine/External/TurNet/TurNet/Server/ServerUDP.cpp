@@ -89,11 +89,16 @@ void TurNet::ServerUDP::StartWorker()
 		HeartbeatThread();
 	}));
 
+	mySenderThreads.push_back(std::thread([&]()
+		{
+			SendToClientRawSuccess();
+		}));
+
 	myStatus.Status = Status::Connected;
 }
 
 
-int TurNet::ServerUDP::SendToClient(ClientAddress aAddress, TurNet::TurMessage& aMessage)
+int TurNet::ServerUDP::SendToClient(ClientAddress aAddress, TurNet::TurMessage& aMessage, bool aShouldGuaranteed)
 {
 	std::string messageToClient = aMessage.BufferRaw();
 
@@ -108,6 +113,12 @@ int TurNet::ServerUDP::SendToClient(ClientAddress aAddress, TurNet::TurMessage& 
 	char aDataBuffer[DEFAULT_BUFFER_SIZE];
 	std::memcpy(aDataBuffer, crypted.c_str(), crypted.size());
 
+
+	if (aShouldGuaranteed)
+	{
+		myGuaranteedMessages.push_back(MessageSuccess(aDataBuffer, static_cast<int>(crypted.size()) ,aMessage.Header.MessageID, reinterpret_cast<sockaddr*>(&aAddress.RealAddress)));
+		return 0;
+	}
 
 	return SendToClientRaw(aAddress.ToAddress(), aDataBuffer, static_cast<int>(crypted.size()));
 }
@@ -135,6 +146,32 @@ void TurNet::ServerUDP::Stop()
 		myHeartbeatThread.reset();
 	}
 
+}
+
+int TurNet::ServerUDP::SendToClientRawSuccess()
+{
+	while(myWorkerShouldRun)
+	{
+		for(size_t i = 0; i < myGuaranteedMessages.size(); i++)
+		{
+
+			// Send the message
+			int length = sizeof(myGuaranteedMessages[i].serverAddr);
+			sendto(myListenSocket, myGuaranteedMessages[i].dataBuffer, myGuaranteedMessages[i].dataSize, 0, myGuaranteedMessages[i].serverAddr, length);
+
+			std::unique_lock<std::mutex> lock(myGuaranteedMessagesMutex);
+			myGuaranteedMessages[i].ackReceivedCV.wait_for(lock, std::chrono::milliseconds(TIMEOUT_MS), [&]()
+			{
+				myGuaranteedMessages.erase(myGuaranteedMessages.begin() + i);
+				i--;
+
+				return myGuaranteedMessages[i].ackReceived;
+			});
+		}
+	}
+
+
+	return 0;
 }
 
 int TurNet::ServerUDP::SendToClientRaw(sockaddr_in aAddress, char aDataBuffer[DEFAULT_BUFFER_SIZE], int aSize)
@@ -258,6 +295,23 @@ void TurNet::ServerUDP::WorkerThread()
 					}
 
 
+					bool shouldAcknowledge = false;
+					{
+						std::lock_guard<std::mutex> lock(myGuaranteedMessagesMutex);
+						// Check if the received message matches a guaranteed message
+						// and add it to the list of acknowledged messages
+						for(int i = 0; i < myGuaranteedMessages.size(); i++)
+						{
+							if(myGuaranteedMessages[i].myGuaranteedMessages == data.Header.MessageID)
+							{
+								shouldAcknowledge = true;
+								myGuaranteedMessages[i].ackReceived = true;
+								myGuaranteedMessages[i].ackReceivedCV.notify_one();
+								break;
+							}
+						}
+					}
+
 
 					switch(data.Header.ID)
 					{
@@ -267,7 +321,7 @@ void TurNet::ServerUDP::WorkerThread()
 							message.Header.ID = TurNet::NetworkDataTypes::Connect;
 							std::string connectMessage = "Client connected to server.";
 							message << connectMessage;
-							SendToClient(data.Header.Connection, message);
+							SendToClient(data.Header.Connection, message, true);
 							ClientConnection client;
 
 
@@ -275,6 +329,8 @@ void TurNet::ServerUDP::WorkerThread()
 							client.Address = messageData.Connection;
 							client.ResetTimers(myServerConfig.TimerValue, myServerConfig.TimeoutValue);
 							myClients.push_back(std::move(client));
+
+							
 
 							break;
 						}
@@ -288,6 +344,8 @@ void TurNet::ServerUDP::WorkerThread()
 									myClients.erase(myClients.begin() + i);
 								}
 							}
+
+								
 
 							break;
 						}
