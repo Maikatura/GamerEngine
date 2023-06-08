@@ -15,6 +15,7 @@
 
 
 // GamerEngine
+GamerEngine/Bin/results.json
 GamerEngine/Bin/Shaders/*
 GamerEngine/Bin/Assets/Exclude/*
 !GamerEngine/Bin/Assets/Exclude/DONT.txt
