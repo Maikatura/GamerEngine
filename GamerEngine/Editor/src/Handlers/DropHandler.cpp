@@ -48,9 +48,7 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 
 			if(fbxExt == extension)
 			{
-
-				auto& modelComp = SceneManager::GetScene()->CreateEntity("").AddComponent<ModelComponent>();
-				modelComp.SetModel(ModelAssetHandler::Get().GetModelInstance(wPath));
+				auto& modelComp = SceneManager::GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
 				ConsoleHelper::Log(LogType::Info, "Loaded a model '" + path.filename().string() + "' into the scene");
 			}
 

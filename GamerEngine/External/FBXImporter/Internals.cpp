@@ -379,67 +379,67 @@ namespace TGA
 
 
 			std::unordered_map<std::string, Model::Mesh> meshMap;
-			for(int deformIdx = 0; deformIdx < fbxMesh->GetDeformerCount(); deformIdx++)
-			{
-				FbxBlendShape* blendShape = reinterpret_cast<FbxBlendShape*>(fbxMesh->GetDeformer(deformIdx, FbxDeformer::eBlendShape));
+			//for(int deformIdx = 0; deformIdx < fbxMesh->GetDeformerCount(); deformIdx++)
+			//{
+			//	FbxBlendShape* blendShape = reinterpret_cast<FbxBlendShape*>(fbxMesh->GetDeformer(deformIdx, FbxDeformer::eBlendShape));
 
-				// If it's not a skin keep looking.
-				if(!blendShape)
-					continue;
-
-
-
-				// Loop through the blendshape channels in the deformer and extract the target shapes for each channel
-				for(int i = 0; i < blendShape->GetBlendShapeChannelCount(); i++)
-				{
-					FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(i);
-
-					// Extract the vertex positions and normals for the blendshape
-					FbxShape* targetShape = channel->GetTargetShape(0);
-					FbxVector4* targetVertices = targetShape->GetControlPoints();
-					FbxLayerElementNormal* targetNormals = targetShape->GetLayer(0)->GetNormals();
-
-					const char* channelName = channel->GetName();
-					const std::string meshName = aMeshNode->GetName();
-
-					Model::Blendshape blend;
-					blend.Name = channelName;
-					blend.MeshName = meshName;
-
-					for(int j = 0; j < targetShape->GetControlPointsCount(); j++)
-					{
-						Vertex vertex;
-
-						vertex.Position[0] = static_cast<float>(targetVertices[j][0]);
-						vertex.Position[1] = static_cast<float>(targetVertices[j][1]);
-						vertex.Position[2] = static_cast<float>(targetVertices[j][2]),
-							vertex.Position[3] = static_cast<float>(0.0f);
+			//	// If it's not a skin keep looking.
+			//	if(!blendShape)
+			//		continue;
 
 
-						vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[0];
-						vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[1];
-						vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[2];
-						vertex.Normal[0] = 0.0f;
 
-						blend.Vertex.push_back(vertex);
-					}
+			//	// Loop through the blendshape channels in the deformer and extract the target shapes for each channel
+			//	for(int i = 0; i < blendShape->GetBlendShapeChannelCount(); i++)
+			//	{
+			//		FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(i);
 
-					auto meshIter = meshMap.find(meshName);
-					if(meshIter == meshMap.end())
-					{
-						// If the mesh doesn't exist in the map, create a new mesh and add it to the map.
-						Model::Mesh currentMeshData = {};
-						currentMeshData.MeshName = meshName;
-						meshMap[meshName] = currentMeshData;
+			//		// Extract the vertex positions and normals for the blendshape
+			//		FbxShape* targetShape = channel->GetTargetShape(0);
+			//		FbxVector4* targetVertices = targetShape->GetControlPoints();
+			//		FbxLayerElementNormal* targetNormals = targetShape->GetLayer(0)->GetNormals();
 
-						// Set the current mesh to the new mesh.
-						meshIter = meshMap.find(meshName);
-					}
+			//		const char* channelName = channel->GetName();
+			//		const std::string meshName = aMeshNode->GetName();
 
-					Model::Mesh& currentMeshData = meshIter->second;
-					currentMeshData.Blendshapes.push_back(blend);
-				}
-			}
+			//		Model::Blendshape blend;
+			//		blend.Name = channelName;
+			//		blend.MeshName = meshName;
+
+			//		for(int j = 0; j < targetShape->GetControlPointsCount(); j++)
+			//		{
+			//			Vertex vertex;
+
+			//			vertex.Position[0] = static_cast<float>(targetVertices[j][0]);
+			//			vertex.Position[1] = static_cast<float>(targetVertices[j][1]);
+			//			vertex.Position[2] = static_cast<float>(targetVertices[j][2]),
+			//				vertex.Position[3] = static_cast<float>(0.0f);
+
+
+			//			vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[0];
+			//			vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[1];
+			//			vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[2];
+			//			vertex.Normal[0] = 0.0f;
+
+			//			blend.Vertex.push_back(vertex);
+			//		}
+
+			//		auto meshIter = meshMap.find(meshName);
+			//		if(meshIter == meshMap.end())
+			//		{
+			//			// If the mesh doesn't exist in the map, create a new mesh and add it to the map.
+			//			Model::Mesh currentMeshData = {};
+			//			currentMeshData.MeshName = meshName;
+			//			meshMap[meshName] = currentMeshData;
+
+			//			// Set the current mesh to the new mesh.
+			//			meshIter = meshMap.find(meshName);
+			//		}
+
+			//		Model::Mesh& currentMeshData = meshIter->second;
+			//		currentMeshData.Blendshapes.push_back(blend);
+			//	}
+			//}
 
 
 			

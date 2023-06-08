@@ -1,96 +1,19 @@
 Scene: SceneTesting
 Path: .csf
 Entities:
-  - Entity: 18283658003262536268
+  - Entity: 12384009226593974946
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [2860.95557, -64.0877686, -250.489227]
-      Rotation: [-87.2264252, 16.9155025, 0]
-      Scale: [562.549255, 562.551086, 562.549988]
+      Translation: [0, 417.237732, 325.380493]
+      Rotation: [89.9999466, 89.7499542, -179.999893]
+      Scale: [159.289368, 159.292175, 159.295685]
     ChildComponent:
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Path: Assets\Ruska.fbx
-      Texture:
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
-  - Entity: 11109135878048847649
-    TagComponent:
-      Tag: Default Entity Name
-    TransformComponent:
-      Translation: [0, 88.2810516, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Path: Assets\SmallerBlendTest.fbx
+      Path: Assets\Exclude\Ruska_test.fbx
       Texture:
         Albedo: Resources\Textures\T_Default_C.dds
         Normal: resources\Textures\T_Default_N.dds
@@ -114,8 +37,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [1138.16541, 640.64563, 853.389771]
-      Rotation: [24.5225983, -136.450912, 0.000104271501]
+      Translation: [681.012634, 844.629578, 744.541199]
+      Rotation: [24.6876411, -124.042511, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
     ChildComponent:
       ChildrenSize: 0
@@ -126,20 +49,3 @@ Entities:
       NearPlane: 0.100000001
       FarPlane: 25000
       Primary: true
-  - Entity: 1828353707181980437
-    TagComponent:
-      Tag: Default Entity Name
-    TransformComponent:
-      Translation: [0, -508.054779, 0.917554855]
-      Rotation: [0, -0, 0]
-      Scale: [1000, 10, 1000]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Path: Assets\Models\Shapes\Cube.fbx
-      Texture:
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds

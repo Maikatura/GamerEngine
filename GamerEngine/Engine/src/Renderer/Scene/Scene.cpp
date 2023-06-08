@@ -43,7 +43,7 @@ Scene::~Scene()
 bool Scene::Initialize()
 {
 	myDirectionalLight = nullptr;
-	myEnvironmentLight = LightAssetHandler::CreateEnvironmentLight(L"Assets\\Textures\\studio_cubemap.dds");
+	myEnvironmentLight = LightAssetHandler::CreateEnvironmentLight(L"resources\\textures\\studio_cubemap.dds");
 
 	myComponentMap[entt::type_id<ModelComponent>().hash()] = "ModelComponent";
 

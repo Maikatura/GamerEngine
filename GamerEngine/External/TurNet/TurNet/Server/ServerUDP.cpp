@@ -116,7 +116,7 @@ int TurNet::ServerUDP::SendToClient(ClientAddress aAddress, TurNet::TurMessage& 
 
 	if (aShouldGuaranteed)
 	{
-		myGuaranteedMessages.push_back(MessageSuccess(aDataBuffer, static_cast<int>(crypted.size()) ,aMessage.Header.MessageID, reinterpret_cast<sockaddr*>(&aAddress.RealAddress)));
+		//myGuaranteedMessages.push_back(MessageSuccess(aDataBuffer, static_cast<int>(crypted.size()) ,aMessage.Header.MessageID, reinterpret_cast<sockaddr*>(&aAddress.RealAddress)));
 		return 0;
 	}
 
@@ -152,22 +152,22 @@ int TurNet::ServerUDP::SendToClientRawSuccess()
 {
 	while(myWorkerShouldRun)
 	{
-		for(size_t i = 0; i < myGuaranteedMessages.size(); i++)
-		{
+		//for(size_t i = 0; i < myGuaranteedMessages.size(); i++)
+		//{
 
-			// Send the message
-			int length = sizeof(myGuaranteedMessages[i].serverAddr);
-			sendto(myListenSocket, myGuaranteedMessages[i].dataBuffer, myGuaranteedMessages[i].dataSize, 0, myGuaranteedMessages[i].serverAddr, length);
+		//	// Send the message
+		//	int length = sizeof(myGuaranteedMessages[i].serverAddr);
+		//	sendto(myListenSocket, myGuaranteedMessages[i].dataBuffer, myGuaranteedMessages[i].dataSize, 0, myGuaranteedMessages[i].serverAddr, length);
 
-			std::unique_lock<std::mutex> lock(myGuaranteedMessagesMutex);
-			myGuaranteedMessages[i].ackReceivedCV.wait_for(lock, std::chrono::milliseconds(TIMEOUT_MS), [&]()
-			{
-				myGuaranteedMessages.erase(myGuaranteedMessages.begin() + i);
-				i--;
+		//	std::unique_lock<std::mutex> lock(myGuaranteedMessagesMutex);
+		//	myGuaranteedMessages[i].ackReceivedCV.wait_for(lock, std::chrono::milliseconds(TIMEOUT_MS), [&]()
+		//	{
+		//		myGuaranteedMessages.erase(myGuaranteedMessages.begin() + i);
+		//		i--;
 
-				return myGuaranteedMessages[i].ackReceived;
-			});
-		}
+		//		return myGuaranteedMessages[i].ackReceived;
+		//	});
+		//}
 	}
 
 
@@ -294,23 +294,7 @@ void TurNet::ServerUDP::WorkerThread()
 						std::cout << "Buffer was too big" << std::endl;
 					}
 
-
-					bool shouldAcknowledge = false;
-					{
-						std::lock_guard<std::mutex> lock(myGuaranteedMessagesMutex);
-						// Check if the received message matches a guaranteed message
-						// and add it to the list of acknowledged messages
-						for(int i = 0; i < myGuaranteedMessages.size(); i++)
-						{
-							if(myGuaranteedMessages[i].myGuaranteedMessages == data.Header.MessageID)
-							{
-								shouldAcknowledge = true;
-								myGuaranteedMessages[i].ackReceived = true;
-								myGuaranteedMessages[i].ackReceivedCV.notify_one();
-								break;
-							}
-						}
-					}
+					
 
 
 					switch(data.Header.ID)
@@ -332,6 +316,21 @@ void TurNet::ServerUDP::WorkerThread()
 
 							
 
+							break;
+						}
+						case TurNet::NetworkDataTypes::MessageGuaranteed:
+						{
+
+							TurNet::TurMessage okMsg;
+							okMsg.Header.ID = TurNet::NetworkDataTypes::MessageAcknowledge;
+
+							SendToClient(data.Header.Connection, okMsg, true);
+
+
+							if(sendto(myListenSocket, "OK", 2, 0, (struct sockaddr*)&connection, sizeof(connection)) < 0)
+							{
+								perror("Error sending acknowledgment");
+							}
 							break;
 						}
 						case TurNet::NetworkDataTypes::Disconnect:

@@ -16,8 +16,11 @@
 
 // GamerEngine
 GamerEngine/Bin/Shaders/*
+GamerEngine/Bin/Assets/Exclude/*
+!GamerEngine/Bin/Assets/Exclude/DONT.txt
 !**/Layers/Debug
 !**/ThirdParty/FBXSDK/lib/debug
 !**/ThirdParty/FBXSDK/lib/release
+
 
 

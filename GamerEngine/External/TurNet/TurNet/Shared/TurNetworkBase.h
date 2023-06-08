@@ -62,7 +62,7 @@ namespace TurNet
 		std::mutex myThreadLock;
 		std::unique_ptr<std::thread> myWorkerThread;
 		std::vector<std::thread> mySenderThreads;
-		std::vector<MessageSuccess> myGuaranteedMessages;
+		/*std::vector<MessageSuccess> myGuaranteedMessages;*/
 
 		
 		std::mutex myGuaranteedMessagesMutex;

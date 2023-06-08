@@ -154,7 +154,7 @@ int TurNet::ClientUDP::SendToServer(TurNet::TurMessage& aMessage, bool aShouldGu
 
 	if (aShouldGuaranteed)
 	{
-		myGuaranteedMessages.push_back(MessageSuccess( aDataBuffer, static_cast<int>(crypted.size()) ,aMessage.Header.MessageID, reinterpret_cast<sockaddr*>(&myServer) ));
+		//myGuaranteedMessages.push_back(MessageSuccess( aDataBuffer, static_cast<int>(crypted.size()) ,aMessage.Header.MessageID, reinterpret_cast<sockaddr*>(&myServer) ));
 		return 0;
 	}
 
@@ -267,19 +267,19 @@ void TurNet::ClientUDP::WorkerThread()
 
 					bool shouldAcknowledge = false;
 					{
-						std::lock_guard<std::mutex> lock(myGuaranteedMessagesMutex);
-						// Check if the received message matches a guaranteed message
-						// and add it to the list of acknowledged messages
-						for(int i = 0; i < myGuaranteedMessages.size(); i++)
-						{
-							if(myGuaranteedMessages[i].myGuaranteedMessages == data.Header.MessageID)
-							{
-								shouldAcknowledge = true;
-								myGuaranteedMessages[i].ackReceived = true;
-								myGuaranteedMessages[i].ackReceivedCV.notify_one();
-								break;
-							}
-						}
+						//std::lock_guard<std::mutex> lock(myGuaranteedMessagesMutex);
+						//// Check if the received message matches a guaranteed message
+						//// and add it to the list of acknowledged messages
+						//for(int i = 0; i < myGuaranteedMessages.size(); i++)
+						//{
+						//	if(myGuaranteedMessages[i].myGuaranteedMessages == data.Header.MessageID)
+						//	{
+						//		shouldAcknowledge = true;
+						//		myGuaranteedMessages[i].ackReceived = true;
+						//		myGuaranteedMessages[i].ackReceivedCV.notify_one();
+						//		break;
+						//	}
+						//}
 					}
 
 
