@@ -6,7 +6,7 @@
 
 #include "Renderer/Light/Light.h"
 #include "Sort/Sort.hpp"
-#include "flecs.h"
+//#include "flecs.h"
 
 class ModelInstance;
 class DirectionalLight;
@@ -86,7 +86,7 @@ private:
 	std::shared_ptr<EnvironmentLight> myEnvironmentLight;
 	std::mutex myLock;
 
-	flecs::world myWorld;
+	//flecs::world myWorld;
 
 	Vector4f mySceneBackgroundColor = {0.0f,0.0f,0.0f,1.0f};
 	

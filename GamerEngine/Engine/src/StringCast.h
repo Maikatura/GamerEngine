@@ -5,10 +5,11 @@
 namespace Helpers
 {
 
+
 	inline std::random_device rnd;
 	inline std::default_random_engine rndEngine(rnd());
 
-	inline float DegToRad(float aDegree)
+	inline float DegToRadFunction(float aDegree)
 	{
 		return aDegree * (3.141f / 180.0f);
 	}

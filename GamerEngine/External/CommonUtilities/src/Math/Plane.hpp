@@ -29,6 +29,9 @@ namespace CommonUtilities
 
 		const Vector3<T>& GetCenter() const;
 
+		T GetSignedDistanceToPlane(const Vector3<T>& aPoint) const;
+		T GetDistance() const;
+
 	private:
 		Vector3<T> myPoint0;
 		Vector3<T> myPoint1;
@@ -144,5 +147,17 @@ namespace CommonUtilities
 	const Vector3<T>& Plane<T>::GetCenter() const
 	{
 		return myPoint0;
+	}
+
+	template <typename T>
+	T Plane<T>::GetSignedDistanceToPlane(const Vector3<T>& aPoint) const
+	{
+		return Vector3<T>::Dot(myNormal, aPoint) - GetDistance();
+	}
+
+	template <typename T>
+	T Plane<T>::GetDistance() const
+	{
+		return Vector3<T>::Dot(myNormal, myPoint0);
 	}
 }

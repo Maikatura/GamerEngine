@@ -122,6 +122,9 @@
     <ClInclude Include="src\Utilites\VisualProfiler.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
+    <ClInclude Include="src\Math\Frustum.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

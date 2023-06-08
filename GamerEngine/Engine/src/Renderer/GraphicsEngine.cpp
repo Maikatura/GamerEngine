@@ -329,7 +329,7 @@ void GraphicsEngine::OnFrameRender()
 
 	scene->OnRender();
 
-	std::vector<Light*> someLightList = scene->GetLights();
+	std::vector<Light*>& someLightList = scene->GetLights();
 
 	const std::shared_ptr<DirectionalLight>& directionalLight = scene->GetDirLight();
 	const std::shared_ptr<EnvironmentLight>& environmentLight = scene->GetEnvLight();
@@ -345,7 +345,11 @@ void GraphicsEngine::OnFrameRender()
 		{
 			PROFILE_SCOPE("Render Shadows");
 			myShadowRenderer->ClearResources();
-			for (auto light : someLightList)
+			
+			/*myShadowRenderer->Render(environmentLight.get(), modelList);
+			myShadowRenderer->Render(directionalLight.get(), modelList);*/
+
+			for (auto& light : someLightList)
 			{
 				myShadowRenderer->Render(light, modelList);
 			}
@@ -353,7 +357,6 @@ void GraphicsEngine::OnFrameRender()
 		}
 	}
 	myShadowRenderer->ClearTarget();
-
 
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetBlendState(BlendState::None);
@@ -369,6 +372,7 @@ void GraphicsEngine::OnFrameRender()
 	myGBuffer->ClearTarget();
 	myGBuffer->SetAsResource(0);
 	
+
 	{
 		PROFILE_SCOPE("Render With Deferred Renderer");
 		RendererBase::SetBlendState(BlendState::Alpha);
@@ -396,7 +400,7 @@ void GraphicsEngine::OnFrameRender()
 			RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 			RendererBase::SetBlendState(BlendState::None);
 
-			myForwardRenderer->Render(modelList, directionalLight, environmentLight, someLightList);
+			//myForwardRenderer->Render(modelList, directionalLight, environmentLight, someLightList);
 		}
 
 		{

@@ -50,6 +50,8 @@ void CameraComponent::Resize(Vector2ui aResolution)
 	Projection(3, 4) = 1.0f / Q;
 	Projection(4, 3) = -Q * myNearPlane;
 	Projection(4, 4) = 1.0f;
+
+	
 }
 
 float CameraComponent::GetResScale()
@@ -101,6 +103,7 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 {
 	myPosition = aTransform->Translation;
 	ViewProjection = Matrix4x4f::BuildTransform(aTransform->Translation, aTransform->Rotation, aTransform->Scale);
+	myFrustum = CommonUtilities::CreateFrustumFromCamera(ViewProjection, myVerticalFoV, myHorizontalFoV, myNearPlane, myFarPlane);
 }
 
 

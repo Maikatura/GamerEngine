@@ -142,7 +142,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 	const float metalness = material.r;
 	const float roughness = material.g;
 	const float emissive = material.b;
-	const float emissiveStr = material.a;
+	const float emissiveIntensity = material.a;
 
 	const float3 toEye = normalize(FB_CamTranslation.xyz - worldPosition.xyz);
 	float3 specularColor = lerp(float3(0.04f, 0.04f, 0.04f), albedo.rgb, metalness);
@@ -162,15 +162,14 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 	);
 
 	ambientLighting *= ssao;
+    ambientLighting *= 0.2f;
 
 	float3 pointLight = 0;
 	float3 spotLight = 0;
 
-	float directShadow = 1.0f;
-	float pointLightShadow = 1.0f;
+	//float interleavedGradientNoise = InterleavedGradientNoise(input.myUV * float2(512, 512));
 
-
-	float3 directLighting = EvaluateDirectionalLight(
+    float3 directLighting = EvaluateDirectionalLight(
 		diffuseColor,
 		specularColor,
 		normal,
@@ -181,8 +180,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 		toEye
 	);
 
-	float interleavedGradientNoise = InterleavedGradientNoise(input.myUV * float2(512, 512));
-
+	float directShadow = 1.0f;
 
 	if(LB_DirectionalLight.CastShadows)
 	{
@@ -203,7 +201,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 			if(lightDepth < viewDepth)
 			{
 				float flaking = 0.8f;
-				float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / 8192.0f);
+				float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / 8192);
 				directShadow *= saturate(shadow * (1 - flaking) + flaking);
 				directLighting *= shadow;
 			}
@@ -255,8 +253,8 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 		}
 	}
 
-	float emissiveStrength = 0.0f;
-	float3 emissiveColor = emissive * emissiveStr * albedo.xyz * emissiveStrength;
+    float emissiveStrength = 0.0f;
+	float3 emissiveColor = emissive * emissiveIntensity * albedo.xyz * emissiveStrength;
 	float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight) * directShadow);
 
 

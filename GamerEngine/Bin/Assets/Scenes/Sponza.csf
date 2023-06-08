@@ -1,44 +1,12 @@
 Scene: SceneTesting
 Path: C:\Users\simon.igelstrom\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\Sponza.csf
 Entities:
-  - Entity: 591335072902142370
-    TagComponent:
-      Tag: Spot Light
-    TransformComponent:
-      Translation: [371.668396, 30.3623009, -116.683182]
-      Rotation: [-12.9312534, -52.62286, 106.115654]
-      Scale: [0.999953985, 0.999997914, 0.999989986]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    SpotLightComponent:
-      Color: [0.647058487, 0, 1, 1]
-      Intensity: 1641
-      Range: 83
-      InnerCone: 69
-      OuterCone: 92
-  - Entity: 13011942566925782884
-    TagComponent:
-      Tag: Point Light
-    TransformComponent:
-      Translation: [-69.105484, 67.9020233, -58.2098808]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    PointLightComponent:
-      Color: [1, 1, 0, 1]
-      Intensity: 960
-      Range: 593
   - Entity: 4488255876943964703
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [-556.145874, 743.307678, -166.692032]
-      Rotation: [52.1106682, -301.58316, 0.000104271501]
+      Translation: [-818.377075, 392.189972, 77.7888947]
+      Rotation: [35.1817093, -633.827759, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
     ChildComponent:
       ChildrenSize: 0
@@ -54,8 +22,8 @@ Entities:
       Tag: Directional Light
     TransformComponent:
       Translation: [-511.185791, 926.743469, -159.69783]
-      Rotation: [-65.0641632, -76.8711624, 162.594589]
-      Scale: [0.99582994, 0.999665082, 0.999684632]
+      Rotation: [-95.8139877, -0, 174.586914]
+      Scale: [0.995821357, 0.999631822, 0.999690115]
     ChildComponent:
       ChildrenSize: 0
       Children:
@@ -68,7 +36,7 @@ Entities:
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [0, 0, 0]
+      Translation: [0, 0, 78.2058182]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     ChildComponent:

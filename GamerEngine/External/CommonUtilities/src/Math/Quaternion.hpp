@@ -194,7 +194,7 @@ namespace CommonUtilities
 		forward.y = static_cast<T>(2) * (y * z - w * x);
 		forward.z = static_cast<T>(1) - static_cast<T>(2) * (x * x + y * y);
 
-		return forward.GetNormalized();
+		return forward.Normalized();
 	}
 
 	template <typename T>
@@ -206,7 +206,7 @@ namespace CommonUtilities
 		right.y = static_cast<T>(2) * (x * y + w * z);
 		right.z = static_cast<T>(2) * (x * z - w * y);
 
-		return right.GetNormalized();
+		return right.Normalized();
 	}
 
 	template <typename T>
@@ -218,7 +218,7 @@ namespace CommonUtilities
 		up.y = static_cast<T>(1) - static_cast<T>(2) * (x * x + z * z);
 		up.z = static_cast<T>(2) * (y * z + w * x);
 
-		return up.GetNormalized();
+		return up.Normalized();
 	}
 
 	template <typename T>

@@ -794,10 +794,10 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			{
 				for(size_t i = 0; i < tgaModel.Skeleton.Bones.size(); i++)
 				{
-					mdlSkeleton.Bones.push_back(Skeleton::Bone());
+					mdlSkeleton.Bones.push_back(Bone());
 					mdlSkeleton.Bones[i].BindPoseInverse = *((Matrix4x4f*)&tgaModel.Skeleton.Bones[i].BindPoseInverse);
 					mdlSkeleton.Bones[i].Children = tgaModel.Skeleton.Bones[i].Children;
-					mdlSkeleton.Bones[i].Name = tgaModel.Skeleton.Bones[i].Name;
+					//mdlSkeleton.Bones[i].Name = tgaModel.Skeleton.Bones[i].Name;
 					mdlSkeleton.Bones[i].ParentIdx = tgaModel.Skeleton.Bones[i].ParentIdx;
 					mdlSkeleton.BoneNames.push_back(tgaModel.Skeleton.Bones[i].Name);
 					mdlSkeleton.BoneNameToIndex[tgaModel.Skeleton.Bones[i].Name] = i;

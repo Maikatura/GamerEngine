@@ -109,6 +109,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="src\Math\Frustum.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="src\Data\HashTable.hpp" />
     <ClInclude Include="src\Data\Pointer.h" />

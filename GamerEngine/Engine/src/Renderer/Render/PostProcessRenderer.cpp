@@ -195,21 +195,22 @@ void PostProcessRenderer::Render(PostProcessPass aPass)
 				static_cast<unsigned int>(clientRect.bottom - clientRect.top)
 			};
 
-
-			myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
-			myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
-			myFrameBufferData.Resolution = Resolution;
-			myFrameBufferData.DeltaTime = 0;
-			myFrameBufferData.TotalTime = 0;
 			myFrameBufferData.View = Matrix4x4f::GetFastInverse(Renderer::GetViewMatrix());
 			myFrameBufferData.CamTranslation = Renderer::GetViewMatrix().GetPosition();
 			myFrameBufferData.Projection = Renderer::GetProjectionMatrix();
 			myFrameBufferData.RenderMode = 0;
 
+			myFrameBufferData.Resolution = Resolution;
+			myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
+			myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
+
+			myFrameBufferData.DeltaTime = 0;
+			myFrameBufferData.TotalTime = 0;
 			const float aspectRatio = (float)myFrameBufferData.Resolution.x / (float)myFrameBufferData.Resolution.y;
 			float farPlane = Renderer::GetCamera()->myFarPlane;
 			float halfHeight = farPlane * tanf(0.5f * Renderer::GetCamera()->GetVerticalFoV());
 			float halfWidth = aspectRatio * halfHeight;
+
 
 			myFrameBufferData.FrustrumCorners[0] = Vector4f(-halfWidth, -halfHeight, farPlane, 0);
 			myFrameBufferData.FrustrumCorners[1] = Vector4f(-halfWidth, halfHeight, farPlane, 0);

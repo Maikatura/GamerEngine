@@ -24,11 +24,12 @@ namespace CommonUtilities
 
 		Vector3<T>& operator=(const Vector3<T>& aVector3) = default; 	//Assignment operator (compiler generated) 
 		void operator=(const T& aScaler);
+		Vector3<T> operator-() const;
 
 		T LengthSqr() const; //Returns the squared length of the vector 
 		T Length() const; //Returns the length of the vector 
 
-		Vector3<T> GetNormalized() const; //Returns a normalized copy of this 
+		Vector3<T> Normalized() const; //Returns a normalized copy of this 
 		void Normalize(); //Normalizes the vector
 
 		T Dot(const Vector3<T>& aVector) const; //Returns the dot product of this and aVector 
@@ -39,7 +40,13 @@ namespace CommonUtilities
 		const Vector3<T> operator* (const T& aRval) const;
 
 		static Vector3<T> Lerp(Vector3<T> aStart, Vector3<T> aEnd, float aTime);
+		static Vector3<T> Normalize(const Vector3<T>& aVec);
+		static Vector3<T> Cross(const Vector3<T>& aFirst, const Vector3<T>& aSecond);
+		static float Dot(const Vector3<T>& aFirst, const Vector3<T>& aSecond);
 		static Vector3<T> Zero();
+		static Vector3<T> Right();
+		static Vector3<T> Up();
+		static Vector3<T> Forward();
 	};
 
 	template <class T>
@@ -67,6 +74,12 @@ namespace CommonUtilities
 	}
 
 	template <class T>
+	Vector3<T> Vector3<T>::operator-() const
+	{
+		return Vector3<T>(-x, -y, -z);
+	}
+
+	template <class T>
 	T Vector3<T>::LengthSqr() const
 	{
 		return ((x * x) + (y * y) + (z * z));
@@ -79,7 +92,7 @@ namespace CommonUtilities
 	}
 
 	template <class T>
-	Vector3<T> Vector3<T>::GetNormalized() const
+	Vector3<T> Vector3<T>::Normalized() const
 	{
 		T length = Length();
 
@@ -101,7 +114,7 @@ namespace CommonUtilities
 		assert(y != 0 && "X is 0 and cant be normilized");
 		assert(z != 0 && "X is 0 and cant be normilized");
 
-		Vector3<T> normalized = GetNormalized();
+		Vector3<T> normalized = Normalized();
 
 		x = normalized.x;
 		y = normalized.y;
@@ -162,6 +175,44 @@ namespace CommonUtilities
 	Vector3<T> Vector3<T>::Zero()
 	{
 		return Vector3<T>(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0));
+	}
+
+	template <class T>
+	Vector3<T> Vector3<T>::Right()
+	{
+		return Vector3<T> { static_cast<T>(1), static_cast<T>(0), static_cast<T>(0) };
+	}
+
+	template <class T>
+	Vector3<T> Vector3<T>::Up()
+	{
+		return Vector3<T> { static_cast<T>(0), static_cast<T>(1), static_cast<T>(0) };
+	}
+
+	template <class T>
+	Vector3<T> Vector3<T>::Forward()
+	{
+		return Vector3<T> { static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) };
+	}
+
+	template <class T>
+	Vector3<T> Vector3<T>::Normalize(const Vector3<T>& aVec)
+	{
+		Vector3<T> normalizedCopy = aVec;
+		normalizedCopy.Normalize();
+		return normalizedCopy;
+	}
+
+	template <class T>
+	Vector3<T> Vector3<T>::Cross(const Vector3<T>& aFirst, const Vector3<T>& aSecond)
+	{
+		return Vector3<T>((aFirst.y * aSecond.z) - (aFirst.z * aSecond.y), (aFirst.z * aSecond.x) - (aFirst.x * aSecond.z), (aFirst.x * aSecond.y) - (aFirst.y * aSecond.x));
+	}
+
+	template <class T>
+	float Vector3<T>::Dot(const Vector3<T>& aFirst, const Vector3<T>& aSecond)
+	{
+		return aFirst.x * aSecond.x + aFirst.y * aSecond.y + aFirst.z * aSecond.z;
 	}
 
 	//Returns the vector sum of aVector0 and aVector1 

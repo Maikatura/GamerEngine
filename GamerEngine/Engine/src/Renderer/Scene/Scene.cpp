@@ -18,9 +18,10 @@
 #include "Components/ChildComponent.h"
 #include "Components/NativeScriptComponent.h"
 #include "Components/Network/NetworkComponent.h"
+#include "Math/AABB3D.hpp"
 #include "TurNet/Shared/DataHandling/TurMessage.h"
 
-#include "flecs.h"
+//#include "flecs.h"
 
 
 Scene::Scene() : mySceneIsReady(false), mySceneStatus(SceneStatus::None)
@@ -30,7 +31,7 @@ Scene::Scene() : mySceneIsReady(false), mySceneStatus(SceneStatus::None)
 
 Scene::~Scene()
 {
-	myWorld.quit();
+	//myWorld.quit();
 
 	if(myStatisticThread.joinable())
 	{
@@ -49,13 +50,13 @@ bool Scene::Initialize()
 
 	mySceneIsReady = false;
 
-	myWorld.set<flecs::Rest>({});
+	/*myWorld.set<flecs::Rest>({});
 	myWorld.import<flecs::monitor>();
 
 	myStatisticThread = std::thread([&]()
 	{
 		myWorld.app().enable_rest().run();
-	});
+	});*/
 
 
 
@@ -260,8 +261,7 @@ void Scene::OnRender()
 	if(mySceneStatus != SceneStatus::Complete) return;
 
 	{
-		Renderer::SetClearColor(mySceneBackgroundColor);
-		myLightToRender.clear();
+		Clear();
 	}
 
 	{
@@ -302,16 +302,9 @@ void Scene::OnRender()
 			{
 				auto [transform, dirLight] = view.get<TransformComponent, DirectionalLightComponent>(entity);
 
-				if(&dirLight != nullptr)
-				{
-					myDirectionalLight = dirLight.myDirectionalLight;
-
-					if(myDirectionalLight)
-					{
-						myDirectionalLight->SetData(&transform, &dirLight);
-						myLightToRender.push_back(myDirectionalLight.get());
-					}
-				}
+				myDirectionalLight = dirLight.myDirectionalLight;
+				myDirectionalLight->SetData(&transform, &dirLight);
+				RenderLight(myDirectionalLight.get());
 			}
 		}
 	}
@@ -326,7 +319,8 @@ void Scene::OnRender()
 				if(pointLight.myPointLight)
 				{
 					pointLight.myPointLight->SetData(&transform);
-					pointLight.OnUpdate();
+					RenderLight(pointLight.myPointLight.get());
+					
 				}
 			}
 		}
@@ -342,7 +336,7 @@ void Scene::OnRender()
 				if(spotLight.mySpotLight)
 				{
 					spotLight.mySpotLight->SetData(&transform);
-					spotLight.OnUpdate();
+					RenderLight(spotLight.mySpotLight.get());
 				}
 			}
 		}
@@ -376,16 +370,38 @@ void Scene::OnRender()
 				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
 				if(model.GetModel())
 				{
-					Entity entityPtr = Entity{ entity, this };
-					model.GetModel()->AddRenderedInstance(&transform);
-					Renderer::Render(&entityPtr, model, transform);
+
+					for(int i = 0; i < model.GetModel()->GetNumMeshes(); i++)
+					{
+						auto transformedBounds = CommonUtilities::AABB({
+								model.GetModel()->GetModel()->BoxBounds.Center[0],
+								model.GetModel()->GetModel()->BoxBounds.Center[1],
+								model.GetModel()->GetModel()->BoxBounds.Center[2]
+							},
+
+							{
+								model.GetModel()->GetModel()->BoxBounds.BoxExtents[0],
+								model.GetModel()->GetModel()->BoxBounds.BoxExtents[1],
+								model.GetModel()->GetModel()->BoxBounds.BoxExtents[2]
+							}).Transform(transform.GetMatrix());
+						if(transformedBounds.IsOnFrustum(Renderer::GetCamera()->myFrustum))
+						{
+							Entity entityPtr = Entity{ entity, this };
+							model.GetModel()->AddRenderedInstance(&transform);
+							Renderer::Render(&entityPtr, model, transform);
+						}
+
+
+
+
+					}
 				}
 			}
 		}
 	}
 
 	{
-		myLightToRender.push_back(myEnvironmentLight.get());
+		//myLightToRender.push_back(myEnvironmentLight.get());
 		for(size_t i = 0; i < myLightToRender.size(); i++)
 		{
 			myLightToRender[i]->Update();

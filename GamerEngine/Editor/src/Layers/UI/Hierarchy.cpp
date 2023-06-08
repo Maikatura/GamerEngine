@@ -360,29 +360,24 @@ void Hierarchy::DrawArmature(Entity& aEntity, std::shared_ptr<ModelInstance> aMo
 
 }
 
-void Hierarchy::LoopBones(const Skeleton* aSkeleton, const Skeleton::Bone* aBone)
+void Hierarchy::LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned int aBoneID)
 {
-	std::string nameID = aBone->Name;
+	const std::string& nameID = aSkeleton->BoneNames[aBoneID];
 
-	for(int i = 0; i < aBone->Children.size(); i++)
-	{
-		nameID += std::to_string(aBone->Children[i]);
-	}
-
-	uint32_t name = CommonUtilities::HashString(nameID);
+	uint32_t name = CommonUtilities::HashString(nameID + std::to_string(aBoneID));
 
 	ImGuiTreeNodeFlags flags = 0;
 	flags |= (aBone->Children.size() != 0) ? ImGuiTreeNodeFlags_OpenOnArrow : 0;
 	flags |= (aBone->Children.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0;
 	flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
-	bool opened = ImGui::TreeNodeEx((void*)(uint64_t)name, flags, aBone->Name.c_str());
+	bool opened = ImGui::TreeNodeEx((void*)(uint64_t)name, flags, nameID.c_str());
 
 	if(opened)
 	{
 		for(int i = 0; i < aBone->Children.size(); i++)
 		{
-			LoopBones(aSkeleton, &aSkeleton->Bones[aBone->Children[i]]);
+			LoopBones(aSkeleton, &aSkeleton->Bones[aBone->Children[i]], aBone->Children[i]);
 		}
 
 		ImGui::TreePop();

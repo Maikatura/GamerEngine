@@ -116,14 +116,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		myLayers.BeginFrame();
 		graphicsEngine.BeginFrame();
 
-		Physics::Get().Update();
+		//Physics::Get().Update();
 
 		//graphicsEngine.SetEngineUpdateRuntime(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameRender();
 
-		LineRenderer::Render();
-		LineRenderer::Clear();
+		/*LineRenderer::Render();
+		LineRenderer::Clear();*/
 
 		myLayers.OnUpdate();
 		myLayers.OnImGuiRender();

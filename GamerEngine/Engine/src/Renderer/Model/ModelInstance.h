@@ -9,10 +9,6 @@ class TransformComponent;
 
 class ModelInstance : public SceneObject
 {
-	bool myFirstTimeInit = true;
-	bool myDoneRendering = true;
-	bool myHasBeenRendered = false;
-	bool myIsLoaded = false;
 
 public:
 	struct RenderedInstanceData
@@ -20,20 +16,24 @@ public:
 		TransformComponent* World;
 	};
 
-
-
 private:
 
-	
-	std::shared_ptr<Model> myModel;
-	int myModelMeshes;
-	std::array<CommonUtilities::Matrix4x4<float>,MAX_MODEL_BONES> myBoneTransform{};
-	std::shared_ptr<AnimationStatus> myAnimState;
-
-
-
 	ComPtr<ID3D11Buffer> myInstanceBuffer;
+
+	std::shared_ptr<Model> myModel;
+	std::array<CommonUtilities::Matrix4x4<float>, MAX_MODEL_BONES> myBoneTransform{};
+	std::shared_ptr<AnimationStatus> myAnimState;
 	std::vector<RenderedInstanceData> myRenderedInstances;
+
+	int myModelMeshes;
+
+	bool myFirstTimeInit = true;
+	bool myDoneRendering = true;
+	bool myHasBeenRendered = false;
+	bool myIsLoaded = false;
+
+	
+
 
 public:
 
@@ -62,6 +62,7 @@ public:
 	{
 		return myRenderedInstances;
 	}
+
 
 	bool HasBeenRendered();
 	void ClearInstanceData();

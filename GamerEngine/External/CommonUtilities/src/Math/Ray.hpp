@@ -46,14 +46,14 @@ template <typename T>
 CommonUtilities::Ray<T>::Ray(const Vector3<T>& aOrigin, const Vector3<T>& aPoint)
 {
 	myOrigin = aOrigin;
-	myDirection = (aOrigin - aPoint).GetNormalized();
+	myDirection = (aOrigin - aPoint).Normalized();
 }
 
 template <typename T>
 void CommonUtilities::Ray<T>::InitWith2Points(const Vector3<T>& aOrigin, const Vector3<T>& aPoint)
 {
 	myOrigin = aOrigin;
-	myDirection = (aOrigin - aPoint).GetNormalized();
+	myDirection = (aOrigin - aPoint).Normalized();
 }
 
 template <typename T>

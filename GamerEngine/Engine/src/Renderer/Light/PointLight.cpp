@@ -18,11 +18,6 @@ void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer
 {
 	if(myLightData.CastShadows)
 	{
-		ID3D11ShaderResourceView* nullsrv = nullptr;
-		DX11::Context->PSSetShaderResources(myLightData.ShadowMapIndex, 1, &nullsrv);
-		DX11::Context->VSSetShaderResources(myLightData.ShadowMapIndex, 1, &nullsrv);
-
-		DX11::Context->VSSetShaderResources(myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
 		DX11::Context->PSSetShaderResources(myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }

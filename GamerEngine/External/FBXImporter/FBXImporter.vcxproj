@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Importer.h" />
     <ClInclude Include="Internals.h" />
+    <ClInclude Include="New\FbxImporter.h" />
     <ClInclude Include="TGAFbx.h" />
     <ClInclude Include="TGAFbx.pch.h" />
     <ClInclude Include="TgaFbxStructs.h" />

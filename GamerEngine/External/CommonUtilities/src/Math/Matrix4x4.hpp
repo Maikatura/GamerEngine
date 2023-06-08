@@ -25,6 +25,9 @@ namespace CommonUtilities
 		T& operator()(const size_t anIndex);
 		const T& operator()(const size_t anIndex) const;
 
+		Vector3<T> operator[](const size_t anIndex);
+		const Vector3<T> operator[](const size_t anIndex) const;
+
 		static Matrix4x4<T> CreateRotationAroundX(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundY(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundZ(T aAngleInRadians);
@@ -75,7 +78,8 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Vector3<T> Matrix4x4<T>::TransformPoint(const Vector3<T>& aPoint) const
 	{
-		return operator*(Vector4<T>(aPoint.x, aPoint.y, aPoint.z, 1.0f), *this);
+		Vector4<T> returnValue = operator*(Vector4<T>(aPoint.x, aPoint.y, aPoint.z, 1.0f), *this);
+		return Vector3<T>(aPoint.x, aPoint.y, aPoint.z);
 	}
 
 	template <typename T>
@@ -146,6 +150,18 @@ namespace CommonUtilities
 	const T& Matrix4x4<T>::operator()(const size_t anIndex) const
 	{
 		return myMatrix[anIndex];
+	}
+
+	template <class T>
+	Vector3<T> Matrix4x4<T>::operator[](const size_t anIndex)
+	{
+		return Vector3<T>(myMatrix[(4 * anIndex) + 0], myMatrix[(4 * anIndex) + 1], myMatrix[(4 * anIndex) + 2]);
+	}
+
+	template <class T>
+	const Vector3<T> Matrix4x4<T>::operator[](const size_t anIndex) const
+	{
+		return Vector3<T>(myMatrix[(4 * anIndex) + 0], myMatrix[(4 * anIndex) + 1], myMatrix[(4 * anIndex) + 2]);
 	}
 
 	template <class T>

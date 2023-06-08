@@ -29,23 +29,22 @@ struct Animation
 };
 
 
+struct Bone
+{
+	Matrix4x4f BindPoseInverse;
+	int ParentIdx = -1;
+	std::vector<unsigned> Children;
+};
+
 struct Skeleton
 {
-	std::string Name;
-
-	struct Bone
-	{
-		Matrix4x4f BindPoseInverse;
-		int ParentIdx = -1;
-		std::string Name;
-		std::vector<unsigned> Children;
-	};
+	
 
 	std::vector<Bone> Bones;
 	std::unordered_map<std::string, size_t> BoneNameToIndex;
 	std::vector<std::string> BoneNames;
-
 	std::unordered_map<std::wstring, Animation> Animations;
+	std::string Name;
 
 	FORCEINLINE const Bone* GetRoot() const
 	{
@@ -81,9 +80,9 @@ public:
 
 	struct BlendShapeData
 	{
+		std::vector<Vertex> BlendShapeVertex;
 		std::string Name;
 		float Value = 0.0f;
-		std::vector<Vertex> BlendShapeVertex;
 	};
 
 	struct MeshData 
@@ -95,16 +94,18 @@ public:
 		ComPtr<ID3D11PixelShader> myPixelShader;
 		ComPtr<ID3D11InputLayout> myInputLayout;
 
-		UINT myPrimitiveTopology;
+
+		std::vector<Vertex> myOriginalVertex;
+		std::vector<BlendShapeData> Blendshapes;
+
 		UINT myNumberOfVertices;
 		UINT myNumberOfIndices;
+		UINT myMaterialIndex;
 		UINT myStride;
 		UINT myOffset;
+		UINT myPrimitiveTopology;
 
-		UINT myMaterialIndex;
 		std::string myMeshName;
-		std::vector<BlendShapeData> Blendshapes;
-		std::vector<Vertex> myOriginalVertex;
 	};
 
 	struct BoxSphereBounds
@@ -117,11 +118,11 @@ public:
 private:
 
 	int myMaterialSize = 0;
-	Skeleton mySkeleton;
+	std::wstring myPath;
 	std::vector<Material> myMaterial;
 	std::vector<MeshData> myMeshData = {};
 	
-	std::wstring myPath;
+	Skeleton mySkeleton;
 	
 
 public:

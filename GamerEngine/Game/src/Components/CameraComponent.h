@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Math/Frustum.h"
 
 class TransformComponent;
 
@@ -9,6 +10,7 @@ class CameraComponent : public Component
 public:
 	Matrix4x4f Projection;
 	Matrix4x4f ViewProjection;
+	CommonUtilities::Frustum myFrustum;
 
 	float myNearPlane = 0.1f;
 	float myFarPlane = 1500.0f;

@@ -915,6 +915,7 @@
       <Filter>ThirdParty\FBXSDK\include\libxml2\libxml</Filter>
     </ClInclude>
     <ClInclude Include="Version.h" />
+    <ClInclude Include="New\FbxImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Importer.cpp" />

@@ -512,15 +512,15 @@ void DeferredRenderer::Render(const std::shared_ptr<DirectionalLight>& aDirectio
 	DX11::Context->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 	DX11::Context->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
+	if(anEnvironmentLight)
+	{
+		anEnvironmentLight->SetAsResource(nullptr);
+	}
+
 	if(aDirectionalLight)
 	{
 		mySceneLightBufferData.DirectionalLight = aDirectionalLight->GetLightBufferData();
 		aDirectionalLight->SetAsResource(nullptr);
-	}
-
-	if(anEnvironmentLight)
-	{
-		anEnvironmentLight->SetAsResource(nullptr);
 	}
 
 	mySceneLightBufferData.NumLights = 0;
@@ -571,7 +571,7 @@ void DeferredRenderer::Render(const std::shared_ptr<DirectionalLight>& aDirectio
 
 void DeferredRenderer::RenderLate()
 {
-	DX11::Context->OMSetRenderTargets(1, DX11::BackBuffer.GetAddressOf(), DX11::DepthBuffer.Get());
+	/*DX11::Context->OMSetRenderTargets(1, DX11::BackBuffer.GetAddressOf(), DX11::DepthBuffer.Get());
 	DX11::Context->PSSetShaderResources(0, 1, DX11::RenderSRV.GetAddressOf());
 	DX11::Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	DX11::Context->IASetInputLayout(nullptr);
@@ -581,7 +581,7 @@ void DeferredRenderer::RenderLate()
 	DX11::Context->GSSetShader(nullptr, nullptr, 0);
 	DX11::Context->PSSetShader(myRenderTexPS.Get(), nullptr, 0);
 
-	DX11::Context->Draw(3, 0);
+	DX11::Context->Draw(3, 0);*/
 }
 
 void DeferredRenderer::ClearTarget()

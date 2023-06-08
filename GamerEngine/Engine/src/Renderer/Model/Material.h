@@ -17,19 +17,17 @@ namespace MaterialTextureChannel
 
 class Material
 {
-	std::wstring myName;
-
 public:
 	struct MaterialData
 	{
-		Vector3f Albedo = {1.0f,1.0f,1.0f };
+		Vector3f Albedo = { 1.0f,1.0f,1.0f };
 		float padding_1;
 	};
 
 private:
-	MaterialData myMaterialData;
-
 	std::array<std::shared_ptr<Texture>, MaterialTextureChannel::COUNT> myTextures;
+	MaterialData myMaterialData;
+	std::wstring myName;
 
 public:
 	Material();
