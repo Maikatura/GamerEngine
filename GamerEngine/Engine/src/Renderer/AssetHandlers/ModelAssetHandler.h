@@ -43,8 +43,8 @@ public:
 
 	bool LoadModelNewTesting(const std::wstring& aFilePath);
 
-	bool LoadModel(const std::wstring& aFilePath);
-	bool LoadAnimation(const std::wstring& aModelName, const std::wstring& someFilePath);
+	bool LoadModelData(const std::wstring& aFilePath);
+	bool LoadAnimationData(const std::wstring& aModelName, const std::wstring& someFilePath);
 
 	std::shared_ptr<Model> GetModel(const std::wstring& aFilePath);
 	std::shared_ptr<ModelInstance> GetModelInstance(const std::wstring& aModelName);

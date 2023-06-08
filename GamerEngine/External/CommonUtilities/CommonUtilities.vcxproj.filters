@@ -47,6 +47,9 @@
     <ClInclude Include="src\Math\AABB3D.hpp">
       <Filter>src\Math</Filter>
     </ClInclude>
+    <ClInclude Include="src\Math\Frustum.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
     <ClInclude Include="src\Math\Intersection.hpp">
       <Filter>src\Math</Filter>
     </ClInclude>
@@ -121,9 +124,6 @@
     </ClInclude>
     <ClInclude Include="src\Utilites\VisualProfiler.h">
       <Filter>src\Utilites</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\Frustum.h">
-      <Filter>src\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

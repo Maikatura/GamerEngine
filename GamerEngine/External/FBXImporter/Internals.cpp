@@ -1,7 +1,6 @@
 #include "TGAFbx.pch.h"
 #include "Internals.h"
 #define NOMINMAX
-#define _WINSOCKAPI_ 
 #include "Windows.h"
 
 namespace TGA
@@ -81,13 +80,13 @@ namespace TGA
 		size_t Internals::GatherMeshNodes(FbxNode* aRootNode, std::vector<FbxNode*>& outNodes)
 		{
 			// For each child of our current node...
-			for(int i = 0; i < aRootNode->GetChildCount(); i++)
+			for (int i = 0; i < aRootNode->GetChildCount(); i++)
 			{
 				// Get the node attribute if it has one, the data that denotes what type this node is.
 				// If there is no type it's usually just an organizational node (folder).
 				FbxNode* childNode = aRootNode->GetChild(i);
 				const FbxNodeAttribute* childAttribute = childNode->GetNodeAttribute();
-				if(!childAttribute)
+				if (!childAttribute)
 				{
 					// Even if it's not a valid node, step down since it may contain meshes.
 					GatherMeshNodes(childNode, outNodes);
@@ -97,7 +96,7 @@ namespace TGA
 					const FbxNodeAttribute::EType childAttributeType = childAttribute->GetAttributeType();
 
 					// Check if this is a mesh node.			        
-					if(childAttributeType == FbxNodeAttribute::eMesh)
+					if (childAttributeType == FbxNodeAttribute::eMesh)
 					{
 						// If it is, gather the node.
 						outNodes.push_back(childNode);
@@ -113,11 +112,11 @@ namespace TGA
 
 		size_t Internals::GatherLODGroups(FbxNode* aRootNode, std::vector<FbxNode*>& outNodes)
 		{
-			for(int i = 0; i < aRootNode->GetChildCount(); i++)
+			for (int i = 0; i < aRootNode->GetChildCount(); i++)
 			{
 				FbxNode* childNode = aRootNode->GetChild(i);
 				const FbxNodeAttribute* childAttribute = childNode->GetNodeAttribute();
-				if(!childAttribute)
+				if (!childAttribute)
 				{
 					GatherLODGroups(childNode, outNodes);
 				}
@@ -125,7 +124,7 @@ namespace TGA
 				{
 					const FbxNodeAttribute::EType childAttributeType = childAttribute->GetAttributeType();
 
-					if(childAttributeType == FbxNodeAttribute::eLODGroup)
+					if (childAttributeType == FbxNodeAttribute::eLODGroup)
 					{
 						outNodes.push_back(childNode);
 					}
@@ -139,43 +138,93 @@ namespace TGA
 			return static_cast<unsigned int>(outNodes.size());
 		}
 
-		bool Internals::GatherSkeleton(FbxNode* aRootNode, Skeleton& inOutSkeleton, std::vector<Skeleton::Bone>& outEventBones, int someParentIndex)
+		bool Internals::GatherSkeleton(FbxNode* aRootNode, Skeleton& inOutSkeleton, std::vector<Skeleton::Bone>& outEventBones, std::vector<Skeleton::Socket>& outSockets, int someParentIndex)
 		{
 			int myIndex = someParentIndex;
-			if(aRootNode->GetNodeAttribute() &&
-				aRootNode->GetNodeAttribute()->GetAttributeType() &&
-				aRootNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton)
+#if _DEBUG
+			if(FbxNodeAttribute* tempAttribute = aRootNode->GetNodeAttribute())
 			{
-				Skeleton::Bone bone;
-				bone.Name = aRootNode->GetName();
-				bone.ParentIdx = someParentIndex;
-				if(StringEndsWith(bone.Name, "_evt") || StringEndsWith(bone.Name, "_event"))
+				FbxNodeAttribute::EType tempAttributeType = tempAttribute->GetAttributeType();
+				std::string nodeName = aRootNode->GetName();
+				int a = 1;
+			}
+#endif
+
+			if (aRootNode->GetNodeAttribute()
+				/*aRootNode->GetNodeAttribute()->GetAttributeType() &&*/
+				/*aRootNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton*/)
+			{
+
+				switch(aRootNode->GetNodeAttribute()->GetAttributeType())
 				{
-					outEventBones.push_back(bone);
-				}
-				else
-				{
-					inOutSkeleton.Bones.push_back(bone);
-
-					myIndex = static_cast<int>(inOutSkeleton.Bones.size() - 1ULL);
-
-					if(inOutSkeleton.BoneNameToIndex.find(bone.Name) != inOutSkeleton.BoneNameToIndex.end())
+				case FbxNodeAttribute::eSkeleton:
 					{
-						std::throw_with_nested(std::runtime_error("Found more than one bone with the same name [" + bone.Name + "]!"));
+						// We're a bone, process as normal
+						Skeleton::Bone bone;
+						bone.NamespaceName = aRootNode->GetName();
+						bone.ParentIdx = someParentIndex;
+
+						bone.Name = bone.NamespaceName;
+						if(const size_t pos = bone.Name.find_last_of(':'); pos != std::string::npos)
+						{
+							bone.Name = bone.Name.substr(pos + 1);
+						}
+						inOutSkeleton.Bones.push_back(bone);
+
+						myIndex = static_cast<int>(inOutSkeleton.Bones.size() - 1ULL);
+
+						if (inOutSkeleton.BoneNameToIndex.find(bone.Name) != inOutSkeleton.BoneNameToIndex.end())
+						{
+							std::throw_with_nested(std::runtime_error("Found more than one bone with the same name [" + bone.NamespaceName + "]!"));
+						}
+
+						inOutSkeleton.BoneNameToIndex.insert({ bone.Name, myIndex });
+
+						if (someParentIndex >= 0)
+						{
+							inOutSkeleton.Bones[someParentIndex].Children.push_back(myIndex);
+						}
 					}
-
-					inOutSkeleton.BoneNameToIndex.insert({ bone.Name, myIndex });
-
-					if(someParentIndex >= 0)
+					break;
+				case FbxNodeAttribute::eNull:
 					{
-						inOutSkeleton.Bones[someParentIndex].Children.push_back(myIndex);
+						// We're a something or other. Might be an Event or Socket.
+						
+						const std::string nodeName = aRootNode->GetName();
+
+						if (StringEndsWith(nodeName, "_evt") || StringEndsWith(nodeName, "_event"))
+						{
+							Skeleton::Bone bone;
+							bone.NamespaceName = nodeName;
+							bone.ParentIdx = someParentIndex;
+
+							outEventBones.push_back(bone);
+						}
+						else if (StringEndsWith(nodeName, "_skt") || StringEndsWith(nodeName, "_socket"))
+						{
+							Skeleton::Socket socket;
+							socket.Name = nodeName;
+							socket.ParentBoneIdx = someParentIndex;
+
+							FbxAMatrix globalFrameTransform;
+							globalFrameTransform = aRootNode->EvaluateGlobalTransform(0);
+							Matrix GlobalTransform;
+							Internals::FBXMatrixToArray(globalFrameTransform, GlobalTransform.Data);
+							outSockets.emplace_back(socket);
+						}
 					}
+					break;
+				default:
+					{
+						
+					}
+					break;
 				}
 			}
 
-			for(int i = 0; i < aRootNode->GetChildCount(); i++)
+			for (int i = 0; i < aRootNode->GetChildCount(); i++)
 			{
-				GatherSkeleton(aRootNode->GetChild(i), inOutSkeleton, outEventBones, myIndex);
+				GatherSkeleton(aRootNode->GetChild(i), inOutSkeleton, outEventBones, outSockets, myIndex);
 			}
 
 			return !inOutSkeleton.Bones.empty();
@@ -186,25 +235,25 @@ namespace TGA
 			Texture result;
 			const FbxProperty channelProperty = aMaterial->FindProperty(aChannel);
 			const int layerCount = channelProperty.GetSrcObjectCount<FbxLayeredTexture>();
-			if(layerCount > 0)
+			if (layerCount > 0)
 			{
 				// We don't use these, hua.
 			}
 			else
 			{
 				const int textureCount = channelProperty.GetSrcObjectCount<FbxTexture>();
-				if(textureCount > 0)
+				if (textureCount > 0)
 				{
 					// We should only care about the first texture here presumably.
-					if(FbxTexture* texture = FbxCast<FbxTexture>(channelProperty.GetSrcObject<FbxTexture>(0)))
+					if (FbxTexture* texture = FbxCast<FbxTexture>(channelProperty.GetSrcObject<FbxTexture>(0)))
 					{
-						if(const FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture))
+						if (const FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture))
 						{
 							result.Path = fileTexture->GetFileName();
 							result.RelativePath = fileTexture->GetRelativeFileName();
 
 							const size_t startPos = result.RelativePath.find_last_of('\\');
-							if(startPos != std::string::npos)
+							if (startPos != std::string::npos)
 								result.Name = result.RelativePath.substr(startPos + 1, result.RelativePath.size() - startPos);
 							else
 								result.Name = result.RelativePath;
@@ -216,25 +265,23 @@ namespace TGA
 			return result;
 		}
 
-		
-
 		void Internals::GetElementMappingData(FbxLayerElementTemplate<FbxVector4>* anElement, int aFbxContolPointIdx,
 			int aPolygonIdx, FbxVector4& outData)
 		{
-			switch(anElement->GetMappingMode())
+			switch (anElement->GetMappingMode())
 			{
-				case FbxGeometryElement::eByControlPoint:
+			case FbxGeometryElement::eByControlPoint:
 				{
-					switch(anElement->GetReferenceMode())
+					switch (anElement->GetReferenceMode())
 					{
-						case FbxGeometryElement::eDirect:
+					case FbxGeometryElement::eDirect:
 						{
 							outData.mData[0] = anElement->GetDirectArray().GetAt(aFbxContolPointIdx).mData[0];
 							outData.mData[1] = anElement->GetDirectArray().GetAt(aFbxContolPointIdx).mData[1];
 							outData.mData[2] = anElement->GetDirectArray().GetAt(aFbxContolPointIdx).mData[2];
 						}
 						break;
-						case FbxGeometryElement::eIndexToDirect:
+					case FbxGeometryElement::eIndexToDirect:
 						{
 							const int Idx = anElement->GetIndexArray().GetAt(aFbxContolPointIdx);
 							outData.mData[0] = anElement->GetDirectArray().GetAt(Idx).mData[0];
@@ -242,24 +289,24 @@ namespace TGA
 							outData.mData[2] = anElement->GetDirectArray().GetAt(Idx).mData[2];
 						}
 						break;
-						default:
-							throw std::exception("Invalid Reference Mode!");
+					default:
+						throw std::exception("Invalid Reference Mode!");
 					}
 				}
 				break;
 
-				case FbxGeometryElement::eByPolygonVertex:
+			case FbxGeometryElement::eByPolygonVertex:
 				{
-					switch(anElement->GetReferenceMode())
+					switch (anElement->GetReferenceMode())
 					{
-						case FbxGeometryElement::eDirect:
+					case FbxGeometryElement::eDirect:
 						{
 							outData.mData[0] = anElement->GetDirectArray().GetAt(aPolygonIdx).mData[0];
 							outData.mData[1] = anElement->GetDirectArray().GetAt(aPolygonIdx).mData[1];
 							outData.mData[2] = anElement->GetDirectArray().GetAt(aPolygonIdx).mData[2];
 						}
 						break;
-						case FbxGeometryElement::eIndexToDirect:
+					case FbxGeometryElement::eIndexToDirect:
 						{
 							const int Idx = anElement->GetIndexArray().GetAt(aPolygonIdx);
 							outData.mData[0] = anElement->GetDirectArray().GetAt(Idx).mData[0];
@@ -267,8 +314,8 @@ namespace TGA
 							outData.mData[2] = anElement->GetDirectArray().GetAt(Idx).mData[2];
 						}
 						break;
-						default:
-							throw std::exception("Invalid Reference Mode!");
+					default:
+						throw std::exception("Invalid Reference Mode!");
 					}
 				}
 				break;
@@ -292,7 +339,7 @@ namespace TGA
 		}
 
 		bool Internals::FbxMeshToMesh(FbxScene* aScene, FbxNode* aMeshNode, Skeleton& aSkeleton,
-			std::vector<Model::Mesh>& outMeshes, bool bMergeDuplicateVertices)
+		                              std::vector<Mesh::Element>& outMeshes, bool bMergeDuplicateVertices)
 		{
 			const unsigned int numMeshMaterials = aMeshNode->GetMaterialCount();
 			outMeshes.reserve(numMeshMaterials);
@@ -310,15 +357,15 @@ namespace TGA
 				const FbxVector4 fbxScale = aMeshNode->GetGeometricScaling(FbxNode::eSourcePivot);
 				const fbxsdk::FbxAMatrix rootTransform = FbxAMatrix(fbxTranslation, fbxRotation, fbxScale);
 
-				for(int deformIdx = 0; deformIdx < fbxMesh->GetDeformerCount(); deformIdx++)
+				for (int deformIdx = 0; deformIdx < fbxMesh->GetDeformerCount(); deformIdx++)
 				{
 					FbxSkin* fbxSkin = reinterpret_cast<FbxSkin*>(fbxMesh->GetDeformer(deformIdx, FbxDeformer::eSkin));
 
 					// If it's not a skin keep looking.
-					if(!fbxSkin)
+					if (!fbxSkin)
 						continue;
 
-					for(int clusterIdx = 0; clusterIdx < fbxSkin->GetClusterCount(); clusterIdx++)
+					for (int clusterIdx = 0; clusterIdx < fbxSkin->GetClusterCount(); clusterIdx++)
 					{
 						// So we go through each cluster.
 						FbxCluster* fbxCluster = fbxSkin->GetCluster(clusterIdx);
@@ -342,7 +389,13 @@ namespace TGA
 						// The Link in the skin cluster is the actual joint.
 						// Because we already collected all joints we should be able to find it using
 						// the acceleration map in the Skeleton.
-						size_t jointIndex = aSkeleton.BoneNameToIndex[fbxCluster->GetLink()->GetName()];
+
+						std::string jointName = fbxCluster->GetLink()->GetName();
+						if(size_t namePos = jointName.find_last_of(':'); namePos != std::string::npos)
+						{
+							jointName = jointName.substr(namePos + 1);
+						}
+						size_t jointIndex = aSkeleton.BoneNameToIndex[jointName];
 
 						// Store the bind pose on the joint so we can access it later.
 						Internals::FBXMatrixToArray(bindPoseInverseTransform, aSkeleton.Bones[jointIndex].BindPoseInverse.Data);
@@ -350,7 +403,7 @@ namespace TGA
 						// Here comes some more control point stuff.
 						// We need to collect all the control points that this skin cluster affects.
 						// And for those we need to store which joint affects it and its weights.
-						for(int i = 0; i < fbxCluster->GetControlPointIndicesCount(); i++)
+						for (int i = 0; i < fbxCluster->GetControlPointIndicesCount(); i++)
 						{
 							const unsigned int c = fbxCluster->GetControlPointIndices()[i];
 							const float w = static_cast<float>(fbxCluster->GetControlPointWeights()[i]);
@@ -364,8 +417,8 @@ namespace TGA
 				}
 			}
 
-
-			
+			FbxAMatrix tempmatrix = aMeshNode->EvaluateGlobalTransform();
+			FbxTransform tempxform = aMeshNode->GetTransform();
 
 			// If we have materials we may need to cut this mesh up into multiple.
 			const bool bHasMaterials = aMeshNode->GetMaterialCount() != 0;
@@ -373,105 +426,18 @@ namespace TGA
 
 			// We need to load per material index since each mesh can only have one material when rendering.
 			// This means that if it has more than one they will be separated into two meshes.
-
-
-			const std::string meshName = aMeshNode->GetName();
-
-
-			std::unordered_map<std::string, Model::Mesh> meshMap;
-			//for(int deformIdx = 0; deformIdx < fbxMesh->GetDeformerCount(); deformIdx++)
-			//{
-			//	FbxBlendShape* blendShape = reinterpret_cast<FbxBlendShape*>(fbxMesh->GetDeformer(deformIdx, FbxDeformer::eBlendShape));
-
-			//	// If it's not a skin keep looking.
-			//	if(!blendShape)
-			//		continue;
-
-
-
-			//	// Loop through the blendshape channels in the deformer and extract the target shapes for each channel
-			//	for(int i = 0; i < blendShape->GetBlendShapeChannelCount(); i++)
-			//	{
-			//		FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(i);
-
-			//		// Extract the vertex positions and normals for the blendshape
-			//		FbxShape* targetShape = channel->GetTargetShape(0);
-			//		FbxVector4* targetVertices = targetShape->GetControlPoints();
-			//		FbxLayerElementNormal* targetNormals = targetShape->GetLayer(0)->GetNormals();
-
-			//		const char* channelName = channel->GetName();
-			//		const std::string meshName = aMeshNode->GetName();
-
-			//		Model::Blendshape blend;
-			//		blend.Name = channelName;
-			//		blend.MeshName = meshName;
-
-			//		for(int j = 0; j < targetShape->GetControlPointsCount(); j++)
-			//		{
-			//			Vertex vertex;
-
-			//			vertex.Position[0] = static_cast<float>(targetVertices[j][0]);
-			//			vertex.Position[1] = static_cast<float>(targetVertices[j][1]);
-			//			vertex.Position[2] = static_cast<float>(targetVertices[j][2]),
-			//				vertex.Position[3] = static_cast<float>(0.0f);
-
-
-			//			vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[0];
-			//			vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[1];
-			//			vertex.Normal[0] = targetNormals->GetDirectArray().GetAt(j)[2];
-			//			vertex.Normal[0] = 0.0f;
-
-			//			blend.Vertex.push_back(vertex);
-			//		}
-
-			//		auto meshIter = meshMap.find(meshName);
-			//		if(meshIter == meshMap.end())
-			//		{
-			//			// If the mesh doesn't exist in the map, create a new mesh and add it to the map.
-			//			Model::Mesh currentMeshData = {};
-			//			currentMeshData.MeshName = meshName;
-			//			meshMap[meshName] = currentMeshData;
-
-			//			// Set the current mesh to the new mesh.
-			//			meshIter = meshMap.find(meshName);
-			//		}
-
-			//		Model::Mesh& currentMeshData = meshIter->second;
-			//		currentMeshData.Blendshapes.push_back(blend);
-			//	}
-			//}
-
-
-			
-			for(int meshMaterialIndex = 0; meshMaterialIndex < aMeshNode->GetMaterialCount() || meshMaterialIndex == 0; meshMaterialIndex++)
+			for (int meshMaterialIndex = 0; meshMaterialIndex < aMeshNode->GetMaterialCount() || meshMaterialIndex == 0; meshMaterialIndex++)
 			{
-				const std::string meshName = aMeshNode->GetName();
+				Mesh::Element currentMeshData = {};
+				currentMeshData.MeshName = aMeshNode->GetName();
 
-				auto meshIter = meshMap.find(meshName);
-				if(meshIter == meshMap.end())
+				if (bHasMaterials)
 				{
-					// If the mesh doesn't exist in the map, create a new mesh and add it to the map.
-					Model::Mesh currentMeshData = {};
-					currentMeshData.MeshName = meshName;
-					meshMap[meshName] = currentMeshData;
-
-					// Set the current mesh to the new mesh.
-					meshIter = meshMap.find(meshName);
-				}
-
-				Model::Mesh& currentMeshData = meshIter->second;
-
-
-				
-
-
-				if(bHasMaterials)
-				{
-					for(int sceneMaterialIndex = 0; sceneMaterialIndex < aScene->GetMaterialCount(); sceneMaterialIndex++)
+					for (int sceneMaterialIndex = 0; sceneMaterialIndex < aScene->GetMaterialCount(); sceneMaterialIndex++)
 					{
 						FbxSurfaceMaterial* sceneMaterial = aScene->GetMaterial(sceneMaterialIndex);
 						FbxSurfaceMaterial* meshNodeMaterial = aMeshNode->GetMaterial(meshMaterialIndex);
-						if(sceneMaterial == meshNodeMaterial)
+						if (sceneMaterial == meshNodeMaterial)
 						{
 							currentSceneMaterial = sceneMaterial;
 							currentMeshData.MaterialIndex = sceneMaterialIndex;
@@ -483,7 +449,7 @@ namespace TGA
 				{
 					currentMeshData.MaterialIndex = 0;
 				}
-
+				
 				FbxLayerElementMaterial* fbxElementMaterial = fbxMesh->GetElementMaterial();
 
 				const int fbxMeshPolygonCount = fbxMesh->GetPolygonCount();
@@ -495,22 +461,22 @@ namespace TGA
 				VertexDuplicateAccelMap.reserve(currentMeshData.Vertices.capacity());
 
 				unsigned int IndexCounter = 0;
-				for(int p = 0; p < fbxMeshPolygonCount; p++)
+				for (int p = 0; p < fbxMeshPolygonCount; p++)
 				{
-					if(bHasMaterials)
+					if (bHasMaterials && fbxElementMaterial)
 					{
 						// This is the index of the materials in the mesh element array.
 						// It doesn't always correspond to the scene material list since the first
 						// material here might be material n in the scene.
 						const int IndexAtP = fbxElementMaterial->GetIndexArray().GetAt(p);
 						FbxSurfaceMaterial* polygonMaterial = aMeshNode->GetMaterial(IndexAtP);
-						if(currentSceneMaterial != polygonMaterial)
+						if (currentSceneMaterial != polygonMaterial)
 						{
 							continue;
 						}
 					}
 
-					for(int v = 0; v < 3; v++)
+					for (int v = 0; v < 3; v++)
 					{
 						const int fbxControlPtIndex = fbxMesh->GetPolygonVertex(p, v);
 						const FbxVector4 fbxVxPos = fbxMesh->GetControlPointAt(fbxControlPtIndex);
@@ -518,7 +484,7 @@ namespace TGA
 						const int fbxNumUVs = fbxMesh->GetElementUVCount();
 
 						const int fbxTextureUVIndex = fbxMesh->GetTextureUVIndex(p, v);
-						for(int uv = 0; uv < fbxNumUVs && uv < 4; uv++)
+						for (int uv = 0; uv < fbxNumUVs && uv < 4; uv++)
 						{
 							FbxGeometryElementUV* fbxUvElement = fbxMesh->GetElementUV(uv);
 							fbxVxUVs[uv] = fbxUvElement->GetDirectArray().GetAt(fbxTextureUVIndex);
@@ -543,17 +509,17 @@ namespace TGA
 						// Needs more testing.
 
 						int windCorrection;
-						switch(polygonIndex)
+						switch (polygonIndex)
 						{
-							case 1:
-								windCorrection = 2;
-								break;
-							case 2:
-								windCorrection = 1;
-								break;
-							default:
-								windCorrection = polygonIndex;
-								break;
+						case 1:
+							windCorrection = 2;
+							break;
+						case 2:
+							windCorrection = 1;
+							break;
+						default:
+							windCorrection = polygonIndex;
+							break;
 						}
 
 						//const int windedPolygonIndex = p * 3 + windCorrection;
@@ -561,54 +527,54 @@ namespace TGA
 
 						FbxColor fbxColors[4];
 						const int fbxNumVxColorChannels = fbxMesh->GetElementVertexColorCount();
-						for(int col = 0; col < fbxNumVxColorChannels && col < 4; col++)
+						for (int col = 0; col < fbxNumVxColorChannels && col < 4; col++)
 						{
 							FbxGeometryElementVertexColor* colElement = fbxMesh->GetElementVertexColor(col);
-							switch(colElement->GetMappingMode())
+							switch (colElement->GetMappingMode())
 							{
-								case FbxGeometryElement::eByControlPoint:
+							case FbxGeometryElement::eByControlPoint:
+							{
+								switch (fbxNormalElement->GetReferenceMode())
 								{
-									switch(fbxNormalElement->GetReferenceMode())
-									{
-										case FbxGeometryElement::eDirect:
-										{
-											fbxColors[col] = colElement->GetDirectArray().GetAt(fbxControlPtIndex);
-										}
-										break;
-										case FbxGeometryElement::eIndexToDirect:
-										{
-											const int Idx = colElement->GetIndexArray().GetAt(fbxControlPtIndex);
-											fbxColors[col] = colElement->GetDirectArray().GetAt(Idx);
-										}
-										break;
-										default:
-											throw std::exception("Invalid Reference Mode!");
-									}
+								case FbxGeometryElement::eDirect:
+								{
+									fbxColors[col] = colElement->GetDirectArray().GetAt(fbxControlPtIndex);
 								}
 								break;
+								case FbxGeometryElement::eIndexToDirect:
+								{
+									const int Idx = colElement->GetIndexArray().GetAt(fbxControlPtIndex);
+									fbxColors[col] = colElement->GetDirectArray().GetAt(Idx);
+								}
+								break;
+								default:
+									throw std::exception("Invalid Reference Mode!");
+								}
+							}
+							break;
 
-								case FbxGeometryElement::eByPolygonVertex:
+							case FbxGeometryElement::eByPolygonVertex:
+							{
+								// DB 221006 Possible that this works as intended without having to use
+								// the corrected winding? Needs testing.
+								switch (colElement->GetReferenceMode())
 								{
-									// DB 221006 Possible that this works as intended without having to use
-									// the corrected winding? Needs testing.
-									switch(colElement->GetReferenceMode())
-									{
-										case FbxGeometryElement::eDirect:
-										{
-											fbxColors[col] = colElement->GetDirectArray().GetAt(windedPolygonIndex);
-										}
-										break;
-										case FbxGeometryElement::eIndexToDirect:
-										{
-											const int Idx = colElement->GetIndexArray().GetAt(windedPolygonIndex);
-											fbxColors[col] = colElement->GetDirectArray().GetAt(Idx);
-										}
-										break;
-										default:
-											throw std::exception("Invalid Reference Mode!");
-									}
+								case FbxGeometryElement::eDirect:
+								{
+									fbxColors[col] = colElement->GetDirectArray().GetAt(windedPolygonIndex);
 								}
 								break;
+								case FbxGeometryElement::eIndexToDirect:
+								{
+									const int Idx = colElement->GetIndexArray().GetAt(windedPolygonIndex);
+									fbxColors[col] = colElement->GetDirectArray().GetAt(Idx);
+								}
+								break;
+								default:
+									throw std::exception("Invalid Reference Mode!");
+								}
+							}
+							break;
 							}
 						}
 
@@ -636,7 +602,7 @@ namespace TGA
 						vx.BiNormal[1] = static_cast<float>(fbxBinormal[1]);
 						vx.BiNormal[2] = static_cast<float>(fbxBinormal[2]);
 
-						for(int vxColSet = 0; vxColSet < fbxNumVxColorChannels; vxColSet++)
+						for (int vxColSet = 0; vxColSet < fbxNumVxColorChannels; vxColSet++)
 						{
 							vx.VertexColors[vxColSet][0] = static_cast<float>(fbxColors[vxColSet][0]);
 							vx.VertexColors[vxColSet][1] = static_cast<float>(fbxColors[vxColSet][1]);
@@ -644,24 +610,24 @@ namespace TGA
 							vx.VertexColors[vxColSet][3] = static_cast<float>(fbxColors[vxColSet][3]);
 						}
 
-						if(vx.Position[0] > maxExtents[0])
+						if (vx.Position[0] > maxExtents[0])
 							maxExtents[0] = vx.Position[0];
-						if(vx.Position[1] > maxExtents[1])
+						if (vx.Position[1] > maxExtents[1])
 							maxExtents[1] = vx.Position[1];
-						if(vx.Position[2] > maxExtents[2])
+						if (vx.Position[2] > maxExtents[2])
 							maxExtents[2] = vx.Position[2];
 
-						if(vx.Position[0] < minExtents[0])
+						if (vx.Position[0] < minExtents[0])
 							minExtents[0] = vx.Position[0];
-						if(vx.Position[1] < minExtents[1])
+						if (vx.Position[1] < minExtents[1])
 							minExtents[1] = vx.Position[1];
-						if(vx.Position[2] < minExtents[2])
+						if (vx.Position[2] < minExtents[2])
 							minExtents[2] = vx.Position[2];
 
 						unsigned int BoneIDs[] = { 0, 0, 0, 0 };
 						float BoneWeights[] = { 0, 0, 0, 0 };
 
-						if(aSkeleton.GetRoot())
+						if (aSkeleton.GetRoot())
 						{
 							// Since we're making a bit of a complex iteration we need to define the iterator.
 							// It's a lot less to type that way.
@@ -672,7 +638,7 @@ namespace TGA
 
 							// This idx is to loop on the 4 indices of ID and Weight.
 							int idx = 0;
-							for(MMIter it = values.first; it != values.second && idx < 4; ++it)
+							for (MMIter it = values.first; it != values.second && idx < 4; ++it)
 							{
 								std::pair<size_t, float> BoneAndWeight = it->second;
 								BoneIDs[idx] = static_cast<unsigned>(BoneAndWeight.first);
@@ -680,8 +646,6 @@ namespace TGA
 								idx++;
 							}
 						}
-
-
 
 						vx.BoneIDs[0] = BoneIDs[0];
 						vx.BoneIDs[1] = BoneIDs[1];
@@ -699,7 +663,7 @@ namespace TGA
 							// This means we'll need to compare and ensure that it is a unique vert.
 							VertexHash Hasher;
 							size_t hash = Hasher(vx);
-							if(VertexDuplicateAccelMap.find(hash) == VertexDuplicateAccelMap.end())
+							if (VertexDuplicateAccelMap.find(hash) == VertexDuplicateAccelMap.end())
 							{
 								VertexDuplicateAccelMap[hash] = { /*{ vx },*/ IndexCounter, hash };
 								currentMeshData.Vertices.push_back(vx);
@@ -738,19 +702,14 @@ namespace TGA
 						extentRadius
 					};
 
-
+					currentMeshData.BoxBounds = Box::FromAABB(currentMeshData.BoxSphereBounds.Center, currentMeshData.BoxSphereBounds.BoxExtents);
 
 					outMeshes.push_back(currentMeshData);
 				}
 
-
 				VertexDuplicateAccelMap.clear();
 
 			}
-
-			
-
-
 
 			ControlPointWeights.clear();
 

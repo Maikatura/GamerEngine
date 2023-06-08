@@ -112,7 +112,7 @@ std::wstring DropHandler::DropFileEntity(Entity& aEntity)
 				}
 				auto& modelComp = aEntity.GetComponent<ModelComponent>();
 
-				ModelAssetHandler::Get().LoadAnimation(modelComp.GetModel()->GetModel()->GetName(), wPath);
+				ModelAssetHandler::Get().LoadAnimationData(modelComp.GetModel()->GetModel()->GetName(), wPath);
 				modelComp.GetModel()->PlayAnimation(wPath);
 				std::filesystem::path modelName = modelComp.GetModel()->GetModel()->GetName();
 

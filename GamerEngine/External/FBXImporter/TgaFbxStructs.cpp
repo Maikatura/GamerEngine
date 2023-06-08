@@ -121,6 +121,21 @@ TGA::FBX::Box& TGA::FBX::Box::operator+=(const std::array<float, 3> aVector)
 	return *this;
 }
 
+TGA::FBX::Box TGA::FBX::Box::FromAABB(const std::array<float, 3> anOrigin, const std::array<float, 3> anExtent)
+{
+	Box result;
+	result.Min[0] = anOrigin[0] - anExtent[0];
+	result.Min[1] = anOrigin[1] - anExtent[1];
+	result.Min[2] = anOrigin[2] - anExtent[2];
+
+	result.Max[0] = anOrigin[0] + anExtent[0];
+	result.Max[1] = anOrigin[1] + anExtent[1];
+	result.Max[2] = anOrigin[2] + anExtent[2];
+	result.IsValid = true;
+
+	return result;
+}
+
 TGA::FBX::BoxSphereBounds TGA::FBX::BoxSphereBounds::operator+(const BoxSphereBounds& aBounds) const
 {
 	BoxSphereBounds result;

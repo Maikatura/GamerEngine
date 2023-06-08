@@ -345,34 +345,11 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 
 
 
-		bool isInstanced = model->HasRenderedInstance();
+		//bool isInstanced = model->HasRenderedInstance();
 
 		DX11::Context->PSSetShader(myGBufferPS.Get(), nullptr, 0);
 
-		myObjectBufferData.IsInstanced = isInstanced;
-		myObjectBufferData.World = modelBuffer.myTransform;
-		myObjectBufferData.WorldInv = Matrix4x4f::GetFastInverse(modelBuffer.myTransform);
-		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-
-
-		myObjectBufferData.myHasBones = false;
-		if(model->GetSkeleton()->GetRoot())
-		{
-			auto bones = model->GetBoneTransform();
-			myObjectBufferData.myHasBones = true;
-			memcpy_s(
-				&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
-				&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
-			);
-		}
-
-		result = DX11::Context->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-		DX11::Context->Unmap(myObjectBuffer.Get(), 0);
-
-
-		DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-		DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		
 
 
 
@@ -417,6 +394,31 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 			//	DX11::Context->VSSetConstantBuffers(4, 1, myBlendShapeBuffer.GetAddressOf());
 			//}
 
+			myObjectBufferData.IsInstanced = false;
+			myObjectBufferData.World = modelBuffer.myTransform;
+			myObjectBufferData.WorldInv = Matrix4x4f::GetFastInverse(modelBuffer.myTransform);
+			ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
+
+
+			myObjectBufferData.myHasBones = false;
+			if(model->GetSkeleton()->GetRoot())
+			{
+				auto bones = model->GetBoneTransform();
+				myObjectBufferData.myHasBones = true;
+				memcpy_s(
+					&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
+					&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
+				);
+			}
+
+			result = DX11::Context->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+			memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
+			DX11::Context->Unmap(myObjectBuffer.Get(), 0);
+
+
+			DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+			DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+
 			DX11::Context->IASetInputLayout(meshData.myInputLayout.Get());
 			DX11::Context->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
 			DX11::Context->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
@@ -431,7 +433,7 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 				model->GetMaterial()[0].SetAsResource(nullptr);
 			}
 
-			if(isInstanced && !model->HasBeenRendered())
+			/*if(isInstanced && !model->HasBeenRendered())
 			{
 				myInstancedTransformBufferData.clear();
 				std::vector<ModelInstance::RenderedInstanceData> myTransformData = model->GetTransformVector();
@@ -459,18 +461,18 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 					0, 0, 0
 				);
 			}
-			else
-			{
+			else*/
+			//{
 				DX11::Context->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
 				DX11::Context->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
-			}
+			//}
 
 		}
 
-		if(isInstanced)
+		/*if(isInstanced)
 		{
 			model->SetHasBeenRenderer(true);
-		}
+		}*/
 	}
 }
 

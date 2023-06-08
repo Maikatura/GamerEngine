@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <array>
 #include <cstring>
 #include <string>
 #include <unordered_map>
@@ -63,14 +64,6 @@ namespace TGA
 			Matrix& operator*=(const Matrix& aMatrix);
 		};
 
-		struct Vec4
-		{
-			float x;
-			float y;
-			float z;
-			float w;
-		};
-
 		struct Box
 		{
 			float Min[3]{ 0, 0, 0 };
@@ -78,12 +71,13 @@ namespace TGA
 			bool IsValid = false;
 
 			Box& operator+=(const std::array<float, 3> aVector);
+			static Box FromAABB(const std::array<float, 3> anOrigin, const std::array<float, 3> anExtent);
 		};
 
 		struct BoxSphereBounds
 		{
-			float BoxExtents[3]{ 0, 0, 0 };
-			float Center[3]{ 0, 0, 0 };
+			std::array<float, 3> BoxExtents = { 0, 0, 0 };
+			std::array<float, 3> Center = { 0, 0, 0 };
 			float Radius{ 0 };
 			BoxSphereBounds operator+(const BoxSphereBounds& aBounds) const;
 		};
@@ -152,29 +146,29 @@ namespace TGA
 			{
 				Matrix BindPoseInverse;
 				int ParentIdx = -1;
+				std::string NamespaceName;
 				std::string Name;
 				std::vector<unsigned> Children;
 			};
 
+			struct Socket
+			{
+				Matrix RestTransform;
+				int ParentBoneIdx = -1;
+				std::string Name;
+				std::string NamespaceName;
+			};
+
 			std::vector<Bone> Bones;
+			std::unordered_map<std::string, Socket> Sockets;
 			std::unordered_map<std::string, size_t> BoneNameToIndex;
 
 			const Bone* GetRoot() const { if (!Bones.empty()) { return &Bones[0]; } return nullptr; }
 		};
 
-		
-
-		struct Model
+		struct Mesh
 		{
-
-			struct Blendshape
-			{
-				std::string MeshName;
-				std::string Name;
-				std::vector<Vertex> Vertex;
-			};
-
-			struct Mesh
+			struct Element
 			{
 				std::vector<Vertex> Vertices;
 				std::vector<unsigned int> Indices;
@@ -182,7 +176,7 @@ namespace TGA
 				unsigned int MaterialIndex;
 				std::string MeshName;
 				BoxSphereBounds BoxSphereBounds;
-				std::vector<Blendshape> Blendshapes;
+				Box BoxBounds;
 			};
 
 			struct LODGroup
@@ -191,7 +185,7 @@ namespace TGA
 				{
 					unsigned int Level;
 					float Distance;
-					std::vector<Mesh> Meshes;
+					std::vector<Element> Elements;
 					BoxSphereBounds BoxSphereBounds;
 				};
 
@@ -200,19 +194,18 @@ namespace TGA
 
 			Skeleton Skeleton;
 
-			std::vector<Mesh> Meshes;
+			std::vector<Element> Elements;
 			std::vector<Material> Materials;
 			std::vector<LODGroup> LODGroups;
 
 			std::string Name;
 
 			BoxSphereBounds BoxSphereBounds;
-
-			
+			Box BoxBounds;
 
 			__forceinline bool IsValid() const
 			{
-				return (!Meshes.empty() || !LODGroups.empty());
+				return (!Elements.empty() || !LODGroups.empty());
 			}
 		};
 
@@ -248,6 +241,8 @@ namespace TGA
 				// Lets you use .find to see if it's here or not instead of
 				// looping.
 				std::unordered_map<std::string, bool> TriggeredEvents;
+
+				std::unordered_map<std::string, Matrix> SocketTransforms;
 			};
 
 			// The animation frames.
@@ -267,7 +262,6 @@ namespace TGA
 
 			std::string Name;
 		};
-
 	}
 }
 

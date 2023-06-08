@@ -60,12 +60,12 @@ namespace TGA
 			static size_t GatherMeshNodes(FbxNode* aRootNode, std::vector<FbxNode*>& outNodes);
 			static size_t GatherLODGroups(FbxNode* aRootNode, std::vector<FbxNode*>& outNodes);
 
-			static bool GatherSkeleton(FbxNode* aRootNode, Skeleton& inOutSkeleton, std::vector<Skeleton::Bone>& outEventBones, int someParentIndex = -1);
+			static bool GatherSkeleton(FbxNode* aRootNode, Skeleton& inOutSkeleton, std::vector<Skeleton::Bone>& outEventBones, std::vector<Skeleton::Socket>&
+			                           outSockets, int someParentIndex = -1);
 
-			static bool FbxMeshToMesh(FbxScene* aScene, FbxNode* aMeshNode, Skeleton& aSkeleton, std::vector<Model::Mesh>& outMeshes, bool bMergeDuplicateVertices);
+			static bool FbxMeshToMesh(FbxScene* aScene, FbxNode* aMeshNode, Skeleton& aSkeleton, std::vector<Mesh::Element>& outMeshes, bool bMergeDuplicateVertices);
 
 			static void GetMaterialData(const FbxSurfaceMaterial* aMaterial, Material& outMaterial);
-
 
 			static Texture GetMaterialChannelData(const FbxSurfaceMaterial* aMaterial, const char* aChannel);
 

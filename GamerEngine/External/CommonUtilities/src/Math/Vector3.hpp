@@ -96,8 +96,7 @@ namespace CommonUtilities
 	{
 		T length = Length();
 
-		assert(length != 0 && "Length is 0");
-
+		
 		if(length != 0.0f)
 		{
 			T lengthInverse = 1 / length;
@@ -111,8 +110,8 @@ namespace CommonUtilities
 	void Vector3<T>::Normalize()
 	{
 		assert(x != 0 && "X is 0 and cant be normilized");
-		assert(y != 0 && "X is 0 and cant be normilized");
-		assert(z != 0 && "X is 0 and cant be normilized");
+		assert(y != 0 && "Y is 0 and cant be normilized");
+		assert(z != 0 && "Z is 0 and cant be normilized");
 
 		Vector3<T> normalized = Normalized();
 

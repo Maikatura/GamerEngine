@@ -676,7 +676,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 
 
-bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
+bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 {
 	if(SceneManager::IsHeadless())
 	{
@@ -693,7 +693,9 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 
 	HRESULT result = S_FALSE;
 
-	TGA::FBX::Model tgaModel;
+	TGA::FBX::Mesh tgaModel;
+
+	
 
 	importer.InitImporter();
 
@@ -703,12 +705,12 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 	{
 		std::shared_ptr<Model> mdl = std::make_shared<Model>();
 
-		for(size_t i = 0; i < tgaModel.Meshes.size(); i++)
+		for(size_t i = 0; i < tgaModel.Elements.size(); i++)
 		{
 			std::vector<Vertex> mdlVertices;
 
 			std::vector<unsigned int> mdlIndices;
-			TGA::FBX::Model::Mesh& mesh = tgaModel.Meshes[i];
+			auto& mesh = tgaModel.Elements[i];
 			mdlVertices.resize(mesh.Vertices.size());
 
 
@@ -775,7 +777,7 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 			}
 
 
-			for(size_t i = 0; i < 4; i++)
+			for(size_t i = 0; i < 3; i++)
 			{
 				mdl->BoxBounds.BoxExtents.push_back(tgaModel.BoxSphereBounds.BoxExtents[i]);
 				mdl->BoxBounds.Center.push_back(tgaModel.BoxSphereBounds.Center[i]);
@@ -917,7 +919,7 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 
 
 			
-			for(size_t i = 0; i < mesh.Blendshapes.size(); i++)
+			/*for(size_t i = 0; i < mesh.Blendshapes.size(); i++)
 			{
 				Model::BlendShapeData data;
 				data.Name = mesh.Blendshapes[i].Name;
@@ -928,7 +930,7 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 				}
 
 				modelData.Blendshapes.push_back(data);
-			}
+			}*/
 
 			//D3D11_BUFFER_DESC blendShapeBufferDesc = {};
 			//blendShapeBufferDesc.ByteWidth = static_cast<UINT>(modelData.Blendshapes.size()) * static_cast<UINT>(sizeof(Vertex));
@@ -979,7 +981,7 @@ bool ModelAssetHandler::LoadModel(const std::wstring& aFilePath)
 #endif
 }
 
-bool ModelAssetHandler::LoadAnimation(const std::wstring& aModelName, const std::wstring& someFilePath)
+bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const std::wstring& someFilePath)
 {
 	const std::string ansiFileName = Helpers::string_cast<std::string>(someFilePath);
 	std::shared_ptr<ModelInstance> model = GetModelInstance(aModelName);
@@ -1010,7 +1012,7 @@ std::shared_ptr<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath
 
 	if(model->second == nullptr)
 	{
-		LoadModel(aFilePath);
+		LoadModelData(aFilePath);
 		model = myModelRegistry.find(aFilePath);
 	}
 
@@ -1023,7 +1025,7 @@ std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::ws
 	auto model = myModelRegistry.find(aFilePath);
 	if(model == myModelRegistry.end())
 	{
-		if (LoadModel(aFilePath))
+		if (LoadModelData(aFilePath))
 		{
 			auto endCheck = myModelRegistry.find(aFilePath);
 			if(endCheck == myModelRegistry.end())

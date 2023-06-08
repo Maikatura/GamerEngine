@@ -109,7 +109,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="src\Math\Frustum.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="src\Data\HashTable.hpp" />
     <ClInclude Include="src\Data\Pointer.h" />
@@ -119,6 +118,7 @@
     <ClInclude Include="src\List\DoublyLinkedList.hpp" />
     <ClInclude Include="src\List\DoublyLinkedListNode.hpp" />
     <ClInclude Include="src\Math\AABB3D.hpp" />
+    <ClInclude Include="src\Math\Frustum.h" />
     <ClInclude Include="src\Math\Intersection.hpp" />
     <ClInclude Include="src\Math\Line.hpp" />
     <ClInclude Include="src\Math\LineVolume.hpp" />

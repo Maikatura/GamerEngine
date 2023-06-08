@@ -39,22 +39,22 @@ public:
 
     void BeginSession(const std::string& name, const std::string& filepath = "results.json")
     {
-        /*
+        
         m_OutputStream.open(filepath);
         WriteHeader();
         m_CurrentSession = new InstrumentationSession{ name };
-        */
+        
     }
 
     void EndSession()
     {
-        /*
+        
         WriteFooter();
         m_OutputStream.close();
         delete m_CurrentSession;
         m_CurrentSession = nullptr;
         m_ProfileCount = 0;
-        */
+        
     }
 
     void WriteProfile(const ProfileResult& result)
@@ -114,13 +114,13 @@ public:
 
     void Stop()
     {
-        /*auto endTimepoint = std::chrono::high_resolution_clock::now();
+        auto endTimepoint = std::chrono::high_resolution_clock::now();
 
         long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
         long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
 
         const uint32_t threadID = static_cast<uint32_t>(std::hash<std::thread::id>{}(std::this_thread::get_id()));
-        Instrumentor::Get().WriteProfile({ m_Name, start, end, threadID });*/
+        Instrumentor::Get().WriteProfile({ m_Name, start, end, threadID });
 
         m_Stopped = true;
     }

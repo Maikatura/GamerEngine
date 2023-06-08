@@ -1,15 +1,11 @@
 ﻿#include "TGAFbx.pch.h"
 #include "Importer.h"
 
+#include <cassert>
 #include <filesystem>
 
 #include "Internals.h"
 #include <unordered_map>
-
-#include "fbxsdk/core/base/fbxstatus.h"
-#include "fbxsdk/fileio/fbximporter.h"
-#include "fbxsdk/scene/fbxscene.h"
-#include "fbxsdk/scene/geometry/fbxblendshape.h"
 
 namespace TGA
 {
@@ -67,14 +63,19 @@ namespace TGA
 			}
 		};
 
-
-		bool Importer::LoadModel(const std::wstring& someFilePath, Model& outModel, bool bRegenerateNormals, bool bMergeDuplicateVertices)
+		bool Importer::LoadMeshW(const std::wstring& someFilePath, Mesh& outMesh, bool bRegenerateNormals, bool bMergeDuplicateVertices)
 		{
 			const std::string ansiFileName = Internals::WideStringtoAnsi(someFilePath);
 
+			return LoadMeshA(ansiFileName, outMesh, bRegenerateNormals, bMergeDuplicateVertices);
+		}
+
+		bool Importer::LoadMeshA(const std::string& someFilePath, Mesh& outMesh, bool bRegenerateNormals,
+			bool bMergeDuplicateVertices)
+		{
 			if(!std::filesystem::exists(someFilePath))
 			{
-				const std::string errorMessage = "FBX File not found! (" + ansiFileName + ")";
+				const std::string errorMessage = "FBX File not found! (" + someFilePath + ")";
 				std::throw_with_nested(std::runtime_error(errorMessage));
 			}
 
@@ -82,12 +83,11 @@ namespace TGA
 
 			if (!fbxImporter)
 			{
-				const FbxStatus& fbxStatus = fbxImporter->GetStatus();
-				const std::string errorMessage = "Failed to create the FBX Importer! Error was: " + std::string(fbxStatus.GetErrorString()) + ".";
+				const std::string errorMessage = "Failed to create the FBX Importer! Did you call InitImporter()?";
 				std::throw_with_nested(std::runtime_error(errorMessage));
 			}
 
-			if (!fbxImporter->Initialize(ansiFileName.c_str(), -1, FbxEnvironment::Get().fbxIOSettings) || !fbxImporter->IsFBX())
+			if (!fbxImporter->Initialize(someFilePath.c_str(), -1, FbxEnvironment::Get().fbxIOSettings) || !fbxImporter->IsFBX())
 			{
 				const FbxStatus& fbxStatus = fbxImporter->GetStatus();
 				const std::string errorMessage = "Failed to initialize the FBX Importer! Error was: " + std::string(fbxStatus.GetErrorString()) + ".";
@@ -98,6 +98,22 @@ namespace TGA
 
 			if (fbxImporter->Import(fbxScene))
 			{
+				if(fbxScene->GetGlobalSettings().GetSystemUnit() != FbxSystemUnit::cm)
+				{
+					constexpr FbxSystemUnit::ConversionOptions sysUnitConversion =
+					{
+						false,
+						true,
+						true,
+						true,
+						true,
+						true
+					};
+
+					FbxSystemUnit::cm.ConvertScene(fbxScene, sysUnitConversion);
+					assert(fbxScene->GetGlobalSettings().GetSystemUnit() == FbxSystemUnit::cm);
+				}
+
 				// Load and set up Material data
 				// This is flagged as Internal and might not be needed?
 				fbxScene->ConnectMaterials();
@@ -135,16 +151,23 @@ namespace TGA
 				for(FbxNode* meshNode : sceneMeshNodes)
 				{
 					FbxMesh* fbxMesh = meshNode->GetMesh();
-
-					fbxMesh->GenerateNormals(bRegenerateNormals);
+					
+					const int numUvLayers = fbxMesh->GetUVLayerCount();
+					if(numUvLayers == 0)
+					{
+						std::throw_with_nested(std::runtime_error("Cannot load FBX file! No UV layers are present in the file."));
+					}
+					
 					if(fbxMesh->GetElementBinormalCount() == 0 || fbxMesh->GetElementTangentCount() == 0 || bRegenerateNormals)
 					{
-						if (!fbxMesh->GenerateTangentsData(0, true, false))
+						if (!fbxMesh->GenerateTangentsData(0, false, false))
 						{
-							std::throw_with_nested(std::runtime_error("Failed to generate Tangent/BiNormal data for the mesh " + std::string(fbxMesh->GetName()) + "!"));
+							const FbxStatus& Status = fbxImporter->GetStatus();
+							const bool StatusError = Status.Error();
+							std::throw_with_nested(std::runtime_error("Failed to generate Tangent/BiNormal data for the mesh " + std::string(fbxMesh->GetName()) + "! FBX Error was: " + Status.GetErrorString()));
 						}
 					}
-				}
+				}				
 
 				// This has to happen after ALL changes have been made to the scene. I.e. you need to
 				// run Triangulate and generate missing Tangents and BiNormals before you run this or
@@ -152,17 +175,18 @@ namespace TGA
 				FbxEnvironment::Get().fbxAxisSystem.DeepConvertScene(fbxScene);
 
 				// Now we can fetch things from the scene and convert to TGA format.
-				std::vector<Model::LODGroup> mdlLodGroups;
+				std::vector<Mesh::LODGroup> mdlLodGroups;
 
 				Skeleton mdlSkeleton;
 				std::vector<Skeleton::Bone> skeletonEventBones;
-				const bool fbxHasBones = Internals::GatherSkeleton(fbxScene->GetRootNode(), mdlSkeleton, skeletonEventBones);
+				std::vector<Skeleton::Socket> skeletonSockets;
+				const bool fbxHasBones = Internals::GatherSkeleton(fbxScene->GetRootNode(), mdlSkeleton, skeletonEventBones, skeletonSockets);
 				if(fbxHasBones)
 				{
 					// Try to extract a sensible skeleton name.
 					if (const Skeleton::Bone* rootBone = mdlSkeleton.GetRoot())
 					{
-						const std::string rootBoneName = rootBone->Name;
+						const std::string rootBoneName = rootBone->NamespaceName;
 						if (const size_t pos = rootBoneName.find_first_of(':'); pos != std::string::npos)
 						{
 							mdlSkeleton.Name = rootBoneName.substr(0, pos);
@@ -170,7 +194,7 @@ namespace TGA
 						else
 						{
 							// We have no namespace to use so we'll just use the model name.
-							std::string filePathCopy = ansiFileName;
+							std::string filePathCopy = someFilePath;
 							std::replace(filePathCopy.begin(), filePathCopy.end(), '/', '\\');
 							if (const size_t slashPos = filePathCopy.find_last_of('\\'); slashPos != std::string::npos)
 							{
@@ -179,6 +203,12 @@ namespace TGA
 							mdlSkeleton.Name = filePathCopy.substr(0, filePathCopy.length() - 4);
 						}
 					}
+
+
+					for (Skeleton::Socket& socket : skeletonSockets)
+					{
+						mdlSkeleton.Sockets.insert({ socket.Name, socket });
+					}
 				}
 
 				BoxSphereBounds mdlBounds;
@@ -186,7 +216,7 @@ namespace TGA
 				// We need a definitive list of meshes that we can look at. Some meshes may be in LOD groups.
 				for(FbxNode* lodGroupNode : sceneLODGroups)
 				{
-					Model::LODGroup lodGroup;
+					Mesh::LODGroup lodGroup;
 
 					// Go through all LOD groups and process meshes found there, and make LOD structs of them.
 					// Remove the node from the sceneMeshNodes list.
@@ -196,7 +226,7 @@ namespace TGA
 
 					for(int lodLv = 0; lodLv < numLodLevels; lodLv++)
 					{
-						Model::LODGroup::LODLevel lodLevel;
+						Mesh::LODGroup::LODLevel lodLevel;
 						lodLevel.Level = lodLv;
 
 						FbxDistance lodDistance;
@@ -213,7 +243,7 @@ namespace TGA
 						lodLevelMeshNodes.reserve(numSceneMaterials);
 
 						const size_t numLodLevelMeshes = Internals::GatherMeshNodes(lodLevelRoot, lodLevelMeshNodes);
-						lodLevel.Meshes.reserve(numLodLevelMeshes);
+						lodLevel.Elements.reserve(numLodLevelMeshes);
 						for(FbxNode* lodLevelMeshNode : lodLevelMeshNodes)
 						{
 							for(auto it = sceneMeshNodes.begin(); it != sceneMeshNodes.end(); ++it)
@@ -226,14 +256,14 @@ namespace TGA
 							}
 
 							// Convert the mesh here.
-							std::vector<Model::Mesh> lodLevelNodeMeshes;
+							std::vector<Mesh::Element> lodLevelNodeMeshes;
 							Internals::FbxMeshToMesh(fbxScene, lodLevelMeshNode, mdlSkeleton, lodLevelNodeMeshes, bMergeDuplicateVertices);
 
 							for(auto meshIt = lodLevelNodeMeshes.begin(); meshIt != lodLevelNodeMeshes.end(); ++meshIt)
 							{
 								const BoxSphereBounds& bounds = meshIt->BoxSphereBounds;
 								mdlBounds = mdlBounds + bounds;
-								lodLevel.Meshes.push_back(*meshIt);
+								lodLevel.Elements.push_back(*meshIt);
 							}
 						}
 
@@ -244,11 +274,11 @@ namespace TGA
 				}
 
 				// Handle any meshes not part of a LOD group
-				std::vector<Model::Mesh> mdlMeshes;
+				std::vector<Mesh::Element> mdlMeshes;
 
 				for(FbxNode* meshNode : sceneMeshNodes)
 				{
-					std::vector<Model::Mesh> nodeMeshes;
+					std::vector<Mesh::Element> nodeMeshes;
 					Internals::FbxMeshToMesh(fbxScene, meshNode, mdlSkeleton, nodeMeshes, bMergeDuplicateVertices);
 
 					for(auto meshIt = nodeMeshes.begin(); meshIt != nodeMeshes.end(); ++meshIt)
@@ -257,19 +287,20 @@ namespace TGA
 						mdlBounds = mdlBounds + bounds;
 					}
 
-					
 					mdlMeshes.insert(mdlMeshes.end(), nodeMeshes.begin(), nodeMeshes.end());
 				}
 
 				if(!mdlMeshes.empty() || !mdlLodGroups.empty())
 				{
-					outModel.Name = ansiFileName;
-					outModel.Meshes = std::move(mdlMeshes);
-					outModel.LODGroups = std::move(mdlLodGroups);
-					outModel.Skeleton = std::move(mdlSkeleton);
-					outModel.Materials = std::move(mdlMaterials);
-					outModel.BoxSphereBounds = mdlBounds;
-					//outModel.Blendshapes = std::move(mdlBlendshapes);
+					outMesh.Name = someFilePath;
+					outMesh.Elements = std::move(mdlMeshes);
+					outMesh.LODGroups = std::move(mdlLodGroups);
+
+					outMesh.Skeleton = std::move(mdlSkeleton);
+
+					outMesh.Materials = std::move(mdlMaterials);
+					outMesh.BoxSphereBounds = mdlBounds;
+					outMesh.BoxBounds = Box::FromAABB(mdlBounds.Center, mdlBounds.BoxExtents);
 				}
 			}
 
@@ -288,13 +319,12 @@ namespace TGA
 			return !StatusError;
 		}
 
-		bool Importer::LoadAnimation(const std::wstring& someFilePath, Animation& outAnimation)
+		bool Importer::LoadAnimationA(const std::string& someFilePath, Animation& outAnimation)
 		{
-			const std::string ansiFileName = Internals::WideStringtoAnsi(someFilePath);
 
 			if (!std::filesystem::exists(someFilePath))
 			{
-				const std::string errorMessage = "FBX File not found! (" + ansiFileName + ")";
+				const std::string errorMessage = "FBX File not found! (" + someFilePath + ")";
 				std::throw_with_nested(std::runtime_error(errorMessage));
 			}
 
@@ -306,7 +336,7 @@ namespace TGA
 				std::throw_with_nested(std::runtime_error(errorMessage));
 			}
 
-			if (!fbxImporter->Initialize(ansiFileName.c_str(), -1, FbxEnvironment::Get().fbxIOSettings) || !fbxImporter->IsFBX())
+			if (!fbxImporter->Initialize(someFilePath.c_str(), -1, FbxEnvironment::Get().fbxIOSettings) || !fbxImporter->IsFBX())
 			{
 				const FbxStatus& fbxStatus = fbxImporter->GetStatus();
 				const std::string errorMessage = "Failed to initialize the FBX Importer! Error was: " + std::string(fbxStatus.GetErrorString()) + ".";
@@ -321,20 +351,21 @@ namespace TGA
 
 				Skeleton mdlSkeleton;
 				std::vector<Skeleton::Bone> skeletonEventBones;
-				const bool fbxHasBones = Internals::GatherSkeleton(fbxScene->GetRootNode(), mdlSkeleton, skeletonEventBones);
+				std::vector<Skeleton::Socket> skeletonSockets;
+				const bool fbxHasBones = Internals::GatherSkeleton(fbxScene->GetRootNode(), mdlSkeleton, skeletonEventBones, skeletonSockets);
 				if (!fbxHasBones)
 				{
-					std::throw_with_nested(std::runtime_error("The file [" + ansiFileName + "] has no skeleton!"));
+					std::throw_with_nested(std::runtime_error("The file [" + someFilePath + "] has no skeleton!"));
 				}
 
 				// Register all events that exist for this animation.
 				for(const Skeleton::Bone& EventBone : skeletonEventBones)
 				{
-					outAnimation.EventNames.push_back(EventBone.Name);
+					outAnimation.EventNames.push_back(EventBone.NamespaceName);
 				}
 
 				const Skeleton::Bone* rootBone = mdlSkeleton.GetRoot();
-				const FbxNode* skeletonRoot = fbxScene->FindNodeByName(FbxString(rootBone->Name.c_str()));
+				const FbxNode* skeletonRoot = fbxScene->FindNodeByName(FbxString(rootBone->NamespaceName.c_str()));
 				const FbxVector4 fbxTranslation = skeletonRoot->GetGeometricTranslation(::FbxNode::eSourcePivot);
 				const FbxVector4 fbxRotation = skeletonRoot->GetGeometricRotation(::FbxNode::eSourcePivot);
 				const FbxVector4 fbxScale = skeletonRoot->GetGeometricScaling(::FbxNode::eSourcePivot);
@@ -343,7 +374,7 @@ namespace TGA
 				const int animStackCount = fbxImporter->GetAnimStackCount();
 				if(animStackCount == 0)
 				{
-					std::throw_with_nested(std::runtime_error("The file [" + ansiFileName + "] has no animation stack!"));
+					std::throw_with_nested(std::runtime_error("The file [" + someFilePath + "] has no animation stack!"));
 				}
 
 				const FbxAnimStack* fbxAnimStack = fbxScene->GetSrcObject<FbxAnimStack>(0);
@@ -367,7 +398,7 @@ namespace TGA
 				const FbxLongLong endFrame = fbxAnimEnd.GetFrameCount(fbxGlobalTimeMode);
 				const FbxLongLong animTime = endFrame - startFrame + 1;
 
-				outAnimation.Name = ansiFileName;
+				outAnimation.Name = someFilePath;
 				outAnimation.Length = static_cast<unsigned int>(animTime);
 				outAnimation.FramesPerSecond = static_cast<float>(fbxFramesPerSecond);
 				outAnimation.Frames.resize(animTime);
@@ -388,7 +419,7 @@ namespace TGA
 						FbxAMatrix localFrameTransform;
 						FbxAMatrix globalFrameTransform;
 
-						if (FbxNode* jointNode = fbxScene->FindNodeByName(FbxString(Bone.Name.c_str())))
+						if (FbxNode* jointNode = fbxScene->FindNodeByName(FbxString(Bone.NamespaceName.c_str())))
 						{
 							localFrameTransform = jointNode->EvaluateLocalTransform(currentTime);
 							globalFrameTransform = jointNode->EvaluateGlobalTransform(currentTime);
@@ -404,9 +435,25 @@ namespace TGA
 						outAnimation.Frames[localFrameCounter].GlobalTransforms.insert({Bone.Name, GlobalTransform });
 					}
 
+					for (Skeleton::Socket& socket : skeletonSockets)
+					{
+						FbxAMatrix globalFrameTransform;
+
+						if (FbxNode* jointNode = fbxScene->FindNodeByName(FbxString(socket.Name.c_str())))
+						{
+							globalFrameTransform = jointNode->EvaluateGlobalTransform(currentTime);
+						}
+
+						Matrix GlobalTransform;
+
+						Internals::FBXMatrixToArray(globalFrameTransform, GlobalTransform.Data);
+
+						outAnimation.Frames[localFrameCounter].SocketTransforms.insert({ socket.Name, GlobalTransform });
+					}
+
 					for(Skeleton::Bone& EventBone : skeletonEventBones)
 					{
-						if (FbxNode* jointNode = fbxScene->FindNodeByName(FbxString(EventBone.Name.c_str())))
+						if (FbxNode* jointNode = fbxScene->FindNodeByName(FbxString(EventBone.NamespaceName.c_str())))
 						{
 							FbxAMatrix localFrameTransform = jointNode->EvaluateLocalTransform(currentTime);
 
@@ -439,19 +486,17 @@ namespace TGA
 			return !StatusError;
 		}
 
-		bool Importer::LoadNavMesh(const std::wstring& someFilePath, NavMesh& outNavMesh, bool shouldTriangulate)
+		bool Importer::LoadNavMeshA(const std::string& someFilePath, NavMesh& outNavMesh, bool shouldTriangulate)
 		{
-			const std::string ansiFileName = Internals::WideStringtoAnsi(someFilePath);
-
 			if (!std::filesystem::exists(someFilePath))
 			{
-				const std::string errorMessage = "FBX File not found! (" + ansiFileName + ")";
+				const std::string errorMessage = "FBX File not found! (" + someFilePath + ")";
 				std::throw_with_nested(std::runtime_error(errorMessage));
 			}
 
 			FbxImporter* fbxImporter = FbxImporter::Create(FbxEnvironment::Get().fbxManager, "");
 
-			if (!fbxImporter || !fbxImporter->Initialize(ansiFileName.c_str(), -1, FbxEnvironment::Get().fbxIOSettings) || !fbxImporter->IsFBX())
+			if (!fbxImporter || !fbxImporter->Initialize(someFilePath.c_str(), -1, FbxEnvironment::Get().fbxIOSettings) || !fbxImporter->IsFBX())
 			{
 				const FbxStatus& fbxStatus = fbxImporter->GetStatus();
 				const std::string errorMessage = "Failed to initialize the FBX Importer! Error was: " + std::string(fbxStatus.GetErrorString()) + ".";
@@ -556,7 +601,7 @@ namespace TGA
 				VertexDuplicateAccelMap.clear();
 			}
 
-			outNavMesh.Name = ansiFileName;
+			outNavMesh.Name = someFilePath;
 			outNavMesh.Chunks = std::move(navMeshChunks);
 
 			float extentsCenter[3];
@@ -590,6 +635,19 @@ namespace TGA
 			fbxImporter->Destroy();
 
 			return !StatusError;
+		}
+
+		bool Importer::LoadAnimationW(const std::wstring& someFilePath, Animation& outAnimation)
+		{
+			const std::string ansiFileName = Internals::WideStringtoAnsi(someFilePath);
+			return LoadAnimationA(ansiFileName, outAnimation);
+		}
+
+		bool Importer::LoadNavMeshW(const std::wstring& someFilePath, NavMesh& outNavMesh, bool shouldTriangulate)
+		{
+			const std::string ansiFileName = Internals::WideStringtoAnsi(someFilePath);
+
+			return LoadNavMeshA(ansiFileName, outNavMesh, shouldTriangulate);
 		}
 
 		void Importer::InitImporter()

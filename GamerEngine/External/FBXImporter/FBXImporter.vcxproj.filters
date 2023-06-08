@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="New">
+      <UniqueIdentifier>{2F0C880B-9B15-887C-2491-9E7C9099937C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ThirdParty">
       <UniqueIdentifier>{107145F9-FC28-8746-6530-60A251072237}</UniqueIdentifier>
     </Filter>
@@ -65,6 +68,9 @@
   <ItemGroup>
     <ClInclude Include="Importer.h" />
     <ClInclude Include="Internals.h" />
+    <ClInclude Include="New\FbxImporter.h">
+      <Filter>New</Filter>
+    </ClInclude>
     <ClInclude Include="TGAFbx.h" />
     <ClInclude Include="TGAFbx.pch.h" />
     <ClInclude Include="TgaFbxStructs.h" />
@@ -915,7 +921,6 @@
       <Filter>ThirdParty\FBXSDK\include\libxml2\libxml</Filter>
     </ClInclude>
     <ClInclude Include="Version.h" />
-    <ClInclude Include="New\FbxImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Importer.cpp" />

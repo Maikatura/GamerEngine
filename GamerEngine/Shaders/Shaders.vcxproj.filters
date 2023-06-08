@@ -12,6 +12,7 @@
     <FxCompile Include="Shaders\Default_PS.hlsl" />
     <FxCompile Include="Shaders\Default_VS.hlsl" />
     <FxCompile Include="Shaders\Deferred_PS.hlsl" />
+    <FxCompile Include="Shaders\Environment_PS.hlsl" />
     <FxCompile Include="Shaders\Fullscreen_VS.hlsl" />
     <FxCompile Include="Shaders\GBuffer_PS.hlsl" />
     <FxCompile Include="Shaders\Lineshader_PS.hlsl" />
