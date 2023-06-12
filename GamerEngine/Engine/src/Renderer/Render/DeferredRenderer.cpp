@@ -352,7 +352,30 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 		
 
 
+		myObjectBufferData.IsInstanced = false;
+		myObjectBufferData.World = modelBuffer.myTransform;
+		myObjectBufferData.WorldInv = Matrix4x4f::GetFastInverse(modelBuffer.myTransform);
+		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
+
+		myObjectBufferData.myHasBones = false;
+		if(model->GetSkeleton()->GetRoot())
+		{
+			auto bones = model->GetBoneTransform();
+			myObjectBufferData.myHasBones = true;
+			memcpy_s(
+				&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
+				&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
+			);
+		}
+
+		result = DX11::Context->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
+		DX11::Context->Unmap(myObjectBuffer.Get(), 0);
+
+
+		DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
 		for(int index = 0; index < model->GetNumMeshes(); index++)
 		{
@@ -394,30 +417,7 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 			//	DX11::Context->VSSetConstantBuffers(4, 1, myBlendShapeBuffer.GetAddressOf());
 			//}
 
-			myObjectBufferData.IsInstanced = false;
-			myObjectBufferData.World = modelBuffer.myTransform;
-			myObjectBufferData.WorldInv = Matrix4x4f::GetFastInverse(modelBuffer.myTransform);
-			ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-
-
-			myObjectBufferData.myHasBones = false;
-			if(model->GetSkeleton()->GetRoot())
-			{
-				auto bones = model->GetBoneTransform();
-				myObjectBufferData.myHasBones = true;
-				memcpy_s(
-					&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
-					&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
-				);
-			}
-
-			result = DX11::Context->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-			memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-			DX11::Context->Unmap(myObjectBuffer.Get(), 0);
-
-
-			DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-			DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+			
 
 			DX11::Context->IASetInputLayout(meshData.myInputLayout.Get());
 			DX11::Context->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);

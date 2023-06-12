@@ -370,19 +370,22 @@ void Scene::OnRender()
 				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
 				if(model.GetModel())
 				{
-
+					const auto& realModel =  model.GetModel()->GetModel();
 					for(int i = 0; i < model.GetModel()->GetNumMeshes(); i++)
 					{
+
+
+
 						auto transformedBounds = CommonUtilities::AABB({
-								model.GetModel()->GetModel()->BoxBounds.Center[0],
-								model.GetModel()->GetModel()->BoxBounds.Center[1],
-								model.GetModel()->GetModel()->BoxBounds.Center[2]
+								realModel->BoxBounds.Center[0],
+								realModel->BoxBounds.Center[1],
+								realModel->BoxBounds.Center[2]
 							},
 
 							{
-								model.GetModel()->GetModel()->BoxBounds.BoxExtents[0],
-								model.GetModel()->GetModel()->BoxBounds.BoxExtents[1],
-								model.GetModel()->GetModel()->BoxBounds.BoxExtents[2]
+								realModel->BoxBounds.BoxExtents[0] * 10.0f,
+								realModel->BoxBounds.BoxExtents[1] * 10.0f,
+								realModel->BoxBounds.BoxExtents[2] * 10.0f
 							}).Transform(transform.GetMatrix());
 						if(transformedBounds.IsOnFrustum(Renderer::GetCamera()->myFrustum))
 						{
