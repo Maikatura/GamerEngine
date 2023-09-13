@@ -241,21 +241,21 @@ void ParticleEmitter::SetAsResource()
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-	const HRESULT result = DX11::Context->Map(myVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	const HRESULT result = DX11::GetContext()->Map(myVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if (FAILED(result))
 	{
 		// BOOM KABOOM THIS IS BAD
 		return;
 	}
 	memcpy(bufferData.pData, &particleVertexData[0], sizeof(SpriteVertex) * myAbsoluteMaxSimultaniousParticles);
-	DX11::Context->Unmap(myVertexBuffer.Get(), 0);
+	DX11::GetContext()->Unmap(myVertexBuffer.Get(), 0);
 
-	DX11::Context->IASetVertexBuffers(0, 1, myVertexBuffer.GetAddressOf(), &myVertexStride, &myVertexOffset);
-	DX11::Context->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)myPrimitiveTopology);
-	DX11::Context->IASetInputLayout(myInputLayout.Get());
-	DX11::Context->VSSetShader(myVertexShader.Get(), nullptr, 0);
-	DX11::Context->GSSetShader(myGeometryShader.Get(), nullptr, 0);
-	DX11::Context->PSSetShader(myPixelShader.Get(), nullptr, 0);
+	DX11::GetContext()->IASetVertexBuffers(0, 1, myVertexBuffer.GetAddressOf(), &myVertexStride, &myVertexOffset);
+	DX11::GetContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)myPrimitiveTopology);
+	DX11::GetContext()->IASetInputLayout(myInputLayout.Get());
+	DX11::GetContext()->VSSetShader(myVertexShader.Get(), nullptr, 0);
+	DX11::GetContext()->GSSetShader(myGeometryShader.Get(), nullptr, 0);
+	DX11::GetContext()->PSSetShader(myPixelShader.Get(), nullptr, 0);
 
 	if(myTexture)
 	{
@@ -267,5 +267,5 @@ void ParticleEmitter::Draw() const
 {
 	if(myParticles.empty()) return;
 
-	DX11::Context->Draw((UINT)particleVertexData.size(), 0);
+	DX11::GetContext()->Draw((UINT)particleVertexData.size(), 0);
 }

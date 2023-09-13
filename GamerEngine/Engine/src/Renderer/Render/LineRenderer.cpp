@@ -248,7 +248,7 @@ void LineRenderer::Render()
 	myLineCBufferData.World = Matrix4x4f();
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	HRESULT result = DX11::Context->Map(myLineCBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	HRESULT result = DX11::GetContext()->Map(myLineCBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if(FAILED(result))
 	{
 		// BOOM?
@@ -256,7 +256,7 @@ void LineRenderer::Render()
 	}
 
 	memcpy(bufferData.pData, &myLineCBufferData, sizeof(LineCBufferData));
-	DX11::Context->Unmap(myLineCBuffer.Get(), 0);
+	DX11::GetContext()->Unmap(myLineCBuffer.Get(), 0);
 
 	UINT stride = sizeof(LineVertex);
 	UINT offset = 0;
@@ -265,16 +265,16 @@ void LineRenderer::Render()
 
 	for(int i = 0; i < myLinesToRender.size(); i++)
 	{
-		DX11::Context->VSSetConstantBuffers(3, 1, myLineCBuffer.GetAddressOf());
+		DX11::GetContext()->VSSetConstantBuffers(3, 1, myLineCBuffer.GetAddressOf());
 
-		DX11::Context->IASetInputLayout(myInputLayout.Get());
-		DX11::Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		DX11::GetContext()->IASetInputLayout(myInputLayout.Get());
+		DX11::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-		DX11::Context->VSSetShader(myLineVertexShader.Get(), NULL, 0);
-		DX11::Context->PSSetShader(myLinePixelShader.Get(), NULL, 0);
+		DX11::GetContext()->VSSetShader(myLineVertexShader.Get(), NULL, 0);
+		DX11::GetContext()->PSSetShader(myLinePixelShader.Get(), NULL, 0);
 
 		D3D11_MAPPED_SUBRESOURCE lineData;
-		HRESULT hResult = DX11::Context->Map(myBuffer.Get(), 0,D3D11_MAP_WRITE_DISCARD, 0, &lineData);
+		HRESULT hResult = DX11::GetContext()->Map(myBuffer.Get(), 0,D3D11_MAP_WRITE_DISCARD, 0, &lineData);
 
 		if(FAILED(hResult))
 		{
@@ -282,10 +282,10 @@ void LineRenderer::Render()
 		}
 
 		memcpy(lineData.pData, myLinesToRender[i].data(), sizeof(LineVertex) * 2);
-		DX11::Context->Unmap(myBuffer.Get(), 0);
+		DX11::GetContext()->Unmap(myBuffer.Get(), 0);
 
-		DX11::Context->IASetVertexBuffers(0, 1, myBuffer.GetAddressOf(), &stride, &offset);
-		DX11::Context->Draw(2, 0);
+		DX11::GetContext()->IASetVertexBuffers(0, 1, myBuffer.GetAddressOf(), &stride, &offset);
+		DX11::GetContext()->Draw(2, 0);
 	}
 #endif
 }

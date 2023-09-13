@@ -35,7 +35,7 @@ GraphicsEngine::~GraphicsEngine()
 
 bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	unsigned someWidth, unsigned someHeight,
-	bool enableDeviceDebug, std::wstring aName, bool aBoolToUseEditor)
+	bool enableDeviceDebug, std::wstring aName, bool aBoolToUseEditor, bool isVRMode)
 {
 	OleInitialize(NULL);
 
@@ -72,7 +72,8 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	myDropManager = std::make_shared<DropManager>();
 	RegisterDragDrop(myWindowHandle, myDropManager.get());
 
-	if(!DX11::Init(myWindowHandle, enableDeviceDebug))
+	
+	if (!DX11::Init(myWindowHandle, enableDeviceDebug, isVRMode))
 	{
 		return false;
 	}
@@ -82,12 +83,6 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	myShadowRenderer = std::make_shared<ShadowRenderer>();
 	myPostProcessRenderer = std::make_shared<PostProcessRenderer>();
 	myGBuffer = std::make_shared<GBuffer>();
-
-	Time::Update();
-	Input::Init();
-	AudioManager::Init();
-	SceneManager::Initialize();
-
 
 	if(!myForwardRenderer->Initialize())
 	{
@@ -119,12 +114,82 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		return false;
 	}
 
+	Time::Update();
+	Input::Init();
+	AudioManager::Init();
+	SceneManager::Initialize();
 
 	START_PROFILE("Start of Program");
 
 	return true;
 }
 
+Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t& matPose)
+{
+	Matrix4x4f matrixObj;
+	matrixObj(0) = matPose.m[0][0];
+	matrixObj(1) = matPose.m[1][0];
+	matrixObj(2) = matPose.m[2][0];
+	matrixObj(3) = 0.0;
+
+	matrixObj(4) = matPose.m[0][1]; 
+	matrixObj(5) = matPose.m[1][1]; 
+	matrixObj(6) = matPose.m[2][1];
+	matrixObj(7) = 0.0;
+
+	matrixObj(8) = matPose.m[0][2]; 
+	matrixObj(9) = matPose.m[1][2]; 
+	matrixObj(10) = matPose.m[2][2];
+	matrixObj(11) = 0.0;
+
+	matrixObj(12) = matPose.m[0][3]; 
+	matrixObj(13) = matPose.m[1][3]; 
+	matrixObj(14) = matPose.m[2][3];
+	matrixObj(15) = 1.0f;
+
+	return matrixObj;
+}
+
+void GraphicsEngine::UpdateHMDMatrixPose()
+{
+	if (!DX11::m_pHMD)
+		return;
+
+	vr::VRCompositor()->WaitGetPoses(DX11::m_rTrackedDevicePose, vr::k_unMaxTrackedDeviceCount, NULL, 0);
+
+	m_iValidPoseCount = 0;
+	m_strPoseClasses = "";
+	for (int nDevice = 0; nDevice < vr::k_unMaxTrackedDeviceCount; ++nDevice)
+	{
+		if (DX11::m_rTrackedDevicePose[nDevice].bPoseIsValid)
+		{
+			m_iValidPoseCount++;
+			DX11::m_rmat4DevicePose[nDevice] = ConvertSteamVRMatrixToMatrix4(DX11::m_rTrackedDevicePose[nDevice].mDeviceToAbsoluteTracking);
+			if (m_rDevClassChar[nDevice] == 0)
+			{
+				switch (DX11::m_pHMD->GetTrackedDeviceClass(nDevice))
+				{
+				case vr::TrackedDeviceClass_Controller:        m_rDevClassChar[nDevice] = 'C'; break;
+				case vr::TrackedDeviceClass_HMD:               m_rDevClassChar[nDevice] = 'H'; break;
+				case vr::TrackedDeviceClass_Invalid:           m_rDevClassChar[nDevice] = 'I'; break;
+				case vr::TrackedDeviceClass_GenericTracker:    m_rDevClassChar[nDevice] = 'O'; break;
+				case vr::TrackedDeviceClass_TrackingReference: m_rDevClassChar[nDevice] = 'T'; break;
+				default:                                       m_rDevClassChar[nDevice] = '?'; break;
+				}
+			}
+			m_strPoseClasses += m_rDevClassChar[nDevice];
+		}
+	}
+
+	if (DX11::m_rTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid)
+	{
+		//m_mat4HMDPose = DX11::m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd].invert();
+	}
+	else
+	{
+		printf("pose not valid");
+	}
+}
 
 LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
@@ -237,7 +302,7 @@ void GraphicsEngine::BeginFrame()
 
 
 
-	if(myWantToResizeBuffers)
+	/*if(myWantToResizeBuffers)
 	{
 		if(DX11::SwapChain)
 		{
@@ -255,12 +320,12 @@ void GraphicsEngine::BeginFrame()
 			
 		}
 		myWantToResizeBuffers = false;
-	}
+	}*/
 
-	Vector4f clearColor = Renderer::GetClearColor();
-	DX11::BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
-
-	ResetStates();
+	//Vector4f clearColor = Renderer::GetClearColor();
+	//DX11::BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
+	//
+	//ResetStates();
 }
 
 void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
@@ -299,6 +364,117 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	//}
 }
 
+void GraphicsEngine::RenderScene(vr::Hmd_Eye evr_eye)
+{
+	auto scene = SceneManager::GetScene();
+
+	if (!scene)
+	{
+		return;
+	}
+
+	Matrix4x4f projection = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(evr_eye);
+	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewMatrix(evr_eye);
+
+
+
+	std::vector<Light*>& someLightList = scene->GetLights();
+
+	const std::shared_ptr<DirectionalLight>& directionalLight = scene->GetDirLight();
+	const std::shared_ptr<EnvironmentLight>& environmentLight = scene->GetEnvLight();
+	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
+	std::vector<RenderBuffer2D>& spriteList = Renderer::GetSprites();
+
+	float deltaTime = Time::GetDeltaTime();
+
+	// TODO : CLEAN THIS MESS UP
+
+	//if (GetRenderModeInt() != 9)
+	//{
+	//	{
+	//		PROFILE_SCOPE("Render Shadows");
+	//		myShadowRenderer->ClearResources();
+
+	//		/*myShadowRenderer->Render(environmentLight.get(), modelList);
+	//		myShadowRenderer->Render(directionalLight.get(), modelList);*/
+
+	//		for (auto& light : someLightList)
+	//		{
+	//			myShadowRenderer->Render(light, modelList);
+	//		}
+	//		//myShadowRenderer->ClearResources();
+	//	}
+	//}
+	//myShadowRenderer->ClearTarget();
+
+	//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+	//RendererBase::SetBlendState(BlendState::None);
+
+	//myGBuffer->ClearResource(0);
+	//myGBuffer->SetAsTarget();
+
+	//{
+	//	PROFILE_SCOPE("Generate GBuffer");
+	//	myDeferredRenderer->GenerateGBuffer(modelList, deltaTime, 0);
+	//}
+
+	//myGBuffer->ClearTarget();
+	//myGBuffer->SetAsResource(0);
+
+
+	//{
+	//	PROFILE_SCOPE("Render With Deferred Renderer");
+	//	RendererBase::SetBlendState(BlendState::Alpha);
+	//	myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0);
+	//	//myDeferredRenderer->ClearTarget();
+	//}
+	//myGBuffer->ClearTarget();
+
+	//{
+	//	PROFILE_SCOPE("Render SSAO");
+	//	/*if (sssaoOn)
+	//	{
+	//		myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO);
+	//	}
+	//	else
+	//	{
+	//		myPostProcessRenderer->ClearTargets();
+	//	}*/
+	//}
+
+	if (GetRenderModeInt() != 9)
+	{
+		{
+			//PROFILE_SCOPE("Render With Forward Renderer (Models)");
+			//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+			//RendererBase::SetBlendState(BlendState::None);
+
+			myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList);
+		}
+
+		/*{
+			PROFILE_SCOPE("Render With Forward Renderer (Sprites)");
+			RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
+			myForwardRenderer->RenderSprites(spriteList, directionalLight, environmentLight);
+		}
+
+		{
+			PROFILE_SCOPE("Render Bloom");
+			myPostProcessRenderer->Render(PostProcessRenderer::PP_BLOOM);
+		}
+
+		{
+			PROFILE_SCOPE("Render Tonemap");
+			myPostProcessRenderer->Render(PostProcessRenderer::PP_TONEMAP);
+		}
+
+		PROFILE_SCOPE("Final Render Call");
+		myDeferredRenderer->RenderLate();
+		RendererBase::SetBlendState(BlendState::Alpha);*/
+	}
+
+}
+
 void GraphicsEngine::OnFrameRender()
 {
 	if(myIsMinimized) return;
@@ -329,105 +505,36 @@ void GraphicsEngine::OnFrameRender()
 
 	scene->OnRender();
 
-	std::vector<Light*>& someLightList = scene->GetLights();
+	DX11::m_RenderTextureLeft->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+	//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
-	const std::shared_ptr<DirectionalLight>& directionalLight = scene->GetDirLight();
-	const std::shared_ptr<EnvironmentLight>& environmentLight = scene->GetEnvLight();
-	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
-	std::vector<RenderBuffer2D>& spriteList = Renderer::GetSprites();
+		// Clear the render to texture.
+	DX11::m_RenderTextureLeft->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
-	float deltaTime = Time::GetDeltaTime();
-
-	// TODO : CLEAN THIS MESS UP
-
-	if(GetRenderModeInt() != 9)
-	{
-		{
-			PROFILE_SCOPE("Render Shadows");
-			myShadowRenderer->ClearResources();
-			
-			/*myShadowRenderer->Render(environmentLight.get(), modelList);
-			myShadowRenderer->Render(directionalLight.get(), modelList);*/
-
-			for (auto& light : someLightList)
-			{
-				myShadowRenderer->Render(light, modelList);
-			}
-			//myShadowRenderer->ClearResources();
-		}
-	}
-	myShadowRenderer->ClearTarget();
-
-	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-	RendererBase::SetBlendState(BlendState::None);
-
-	myGBuffer->ClearResource(0);
-	myGBuffer->SetAsTarget();
-
-	{
-		PROFILE_SCOPE("Generate GBuffer");
-		myDeferredRenderer->GenerateGBuffer(modelList, deltaTime, 0);
-	}
-
-	myGBuffer->ClearTarget();
-	myGBuffer->SetAsResource(0);
+	// Render the scene now and it will draw to the render to texture instead of the back buffer.
+	RenderScene(vr::Hmd_Eye::Eye_Left);
 	
 
-	{
-		PROFILE_SCOPE("Render With Deferred Renderer");
-		RendererBase::SetBlendState(BlendState::Alpha);
-		myDeferredRenderer->Render(directionalLight, environmentLight, someLightList, deltaTime, 0);
-		//myDeferredRenderer->ClearTarget();
-	}
-	myGBuffer->ClearTarget();
 
-	{
-		PROFILE_SCOPE("Render SSAO");
-		if(sssaoOn)
-		{
-			myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO);
-		}
-		else
-		{
-			myPostProcessRenderer->ClearTargets();
-		}
-	}
+	// Set the render target to be the render to texture.
+	DX11::m_RenderTextureRight->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+	//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
-	if(GetRenderModeInt() != 9)
-	{
-		{
-			PROFILE_SCOPE("Render With Forward Renderer (Models)");
-			RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-			RendererBase::SetBlendState(BlendState::None);
+		// Clear the render to texture.
+	DX11::m_RenderTextureRight->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
-			//myForwardRenderer->Render(modelList, directionalLight, environmentLight, someLightList);
-		}
+	// Render the scene now and it will draw to the render to texture instead of the back buffer.
+	RenderScene(vr::Hmd_Eye::Eye_Right);
+	
 
-		{
-			PROFILE_SCOPE("Render With Forward Renderer (Sprites)");
-			RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
-			myForwardRenderer->RenderSprites(spriteList, directionalLight, environmentLight);
-		}
+	// Reset the render target back to the original back buffer and not the render to texture anymore.
+	DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
 
-		{
-			PROFILE_SCOPE("Render Bloom");
-			myPostProcessRenderer->Render(PostProcessRenderer::PP_BLOOM);
-		}
+	
 
-		{
-			PROFILE_SCOPE("Render Tonemap");
-			myPostProcessRenderer->Render(PostProcessRenderer::PP_TONEMAP);
-		}
+	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
-		PROFILE_SCOPE("Final Render Call");
-		myDeferredRenderer->RenderLate();
-		RendererBase::SetBlendState(BlendState::Alpha);
-	}
-
-
-	DX11::Context->GSSetShader(nullptr, nullptr, 0);
-
-	Renderer::Clear();
+	Renderer::Clear();*/
 
 	scene->Clean();
 }
@@ -461,12 +568,14 @@ void GraphicsEngine::EndFrame()
 	if(myIsMinimized) return;
 
 
-	DX11::Context->GSSetShader(nullptr, nullptr, 0);
+	//DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	DX11::EndFrame();
 
-	myGBuffer->Clear();
-	myDropManager->ClearPaths();
+	UpdateHMDMatrixPose();
+
+	/*myGBuffer->Clear();
+	myDropManager->ClearPaths();*/
 
 	if(SceneManager::GetStatus() == SceneStatus::NeedSwap)
 	{

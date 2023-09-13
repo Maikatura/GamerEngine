@@ -24,6 +24,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
     UNREFERENCED_PARAMETER(nCmdShow);
 
+
+#if _DEBUG
+#pragma warning( push )
+#pragma warning( disable : 4996 )
+    AllocConsole();
+    freopen("CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
+
+    setbuf(stdin, NULL);
+    setbuf(stdout, NULL);
+    setbuf(stderr, NULL);
+#pragma warning( pop )
+#endif
+
     MSG msg = { 0 };
 
     GraphicsEngine graphicsEngine;
@@ -37,10 +52,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		windowSize.cy,
 		false,
         L"Cool",
-        false
+        false,
+        true
     );
 
-    SceneManager::LoadScene("Assets\\Scenes\\FastTest.csf");
+    SceneManager::LoadScene("Assets\\Scenes\\Default.csf");
  
     while(bShouldRun)
     {
@@ -70,7 +86,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		#endif
     }
 
-
-
+#if _DEBUG
+#pragma warning( push )
+#pragma warning( disable : 4996 )
+    fclose(stdin);
+    fclose(stdout);
+    fclose(stderr);
+#pragma warning( pop )
+#endif
     return 0;
 }

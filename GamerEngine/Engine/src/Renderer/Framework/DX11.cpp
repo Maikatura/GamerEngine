@@ -5,6 +5,8 @@
 #include <fstream>
 #include <Renderer/Model/Model.h>
 
+#include "openvr.h"
+
 ComPtr<ID3D11Device> DX11::Device;
 ComPtr<ID3D11DeviceContext> DX11::Context;
 ComPtr<IDXGISwapChain> DX11::SwapChain;
@@ -26,57 +28,462 @@ ComPtr<ID3D11Texture2D> DX11::StagingTex;
 D3D11_TEXTURE2D_DESC DX11::IDBufferDesc;
 D3D11_TEXTURE2D_DESC DX11::StagingTexDesc;
 
+
+vr::IVRSystem* DX11::m_pHMD;
+vr::IVRRenderModels* DX11::m_pRenderModels;
+vr::TrackedDevicePose_t DX11::m_rTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
+Matrix4x4f DX11::m_rmat4DevicePose[vr::k_unMaxTrackedDeviceCount];
+Matrix4x4f DX11::m_mat4HMDPose;
+
+D3D_FEATURE_LEVEL		DX11::featureLevel;
+D3D_DRIVER_TYPE			DX11::driverType;
+
+ID3D11Texture2D* DX11::myBackBufferTex;
+
+uint32_t DX11::m_nRenderWidth;
+uint32_t DX11::m_nRenderHeight;
+
+ID3D11RenderTargetView* DX11::myRenderTargetView = nullptr;
+ID3D11DepthStencilView* DX11::myDepthStencilView = nullptr;
+
+D3D11_VIEWPORT DX11::myViewport;
+ID3D11DepthStencilState* DX11::pDSState;
+ID3D11DepthStencilState* DX11::myDepthDisabledStencilState;
+ID3D11DeviceContext* DX11::myImmediateContext = nullptr;
+
+std::shared_ptr<RenderTexture> DX11::m_RenderTextureLeft;
+std::shared_ptr<RenderTexture> DX11::m_RenderTextureRight;
+
 DX11::DX11()
 {}
 
 DX11::~DX11()
 {}
 
-bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug)
+ID3D11Device* DX11::GetDevice()
 {
-	bool result = true;
+	return Device.Get();
+}
 
+ID3D11DeviceContext* DX11::GetContext()
+{
+	return myImmediateContext;
+}
+
+ID3D11DepthStencilView* DX11::GetDepthStencilView()
+{
+	return myDepthStencilView;
+}
+
+
+bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
+{
 	WindowHandle = aWindowHandle;
 
-	result = CreateSwapChain(aEnableDeviceDebug);
-	if(!result)
+
+	UINT createDeviceFlags = 0;
+
+#ifdef DEBUG
+	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
+#ifndef VR_DISABLED
+
+	// Loading the SteamVR Runtime
+	vr::EVRInitError eError = vr::VRInitError_None;
+
+	m_pHMD = vr::VR_Init(&eError, vr::VRApplication_Scene);
+
+	if (eError != vr::VRInitError_None)
+	{
+		m_pHMD = NULL;
+		char buf[1024];
+		sprintf_s(buf, ARRAYSIZE(buf), "Unable to init VR runtime: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
+		std::string temp(buf);
+		std::wstring wtemp(temp.begin(), temp.end());
+		MessageBox(WindowHandle, wtemp.c_str(), L"VR_Init Failed", 0);
+		return false;
+	}
+
+	m_pHMD->GetRecommendedRenderTargetSize(&m_nRenderWidth, &m_nRenderHeight);
+
+	printf("width = %d, height = %d", m_nRenderWidth, m_nRenderHeight);
+
+	//m_nRenderWidth /= 2;
+	//m_nRenderHeight /= 4;
+
+	//clientWidth = m_nRenderWidth;
+	//clientHeight = m_nRenderHeight;
+
+	m_pRenderModels = (vr::IVRRenderModels*)vr::VR_GetGenericInterface(vr::IVRRenderModels_Version, &eError);
+	if (!m_pRenderModels)
+	{
+		m_pHMD = NULL;
+		vr::VR_Shutdown();
+
+		char buf[1024];
+		sprintf_s(buf, ARRAYSIZE(buf), "Unable to get render model interface: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
+		std::string temp(buf);
+		std::wstring wtemp(temp.begin(), temp.end());
+		MessageBox(WindowHandle, wtemp.c_str(), L"VR_Init Failed", NULL);
+		return false;
+	}
+
+	if (!vr::VRCompositor())
+	{
+		printf("Compositor initialization failed. See log file for details\n");
+		return false;
+	}
+
+#endif
+
+	// CREATE DEVICE AND SWAP CHAIN
+	D3D_DRIVER_TYPE driverTypes[] =
+	{
+		D3D_DRIVER_TYPE_HARDWARE, // the first thing to try, if failed, go to the next
+		D3D_DRIVER_TYPE_WARP,
+		D3D_DRIVER_TYPE_REFERENCE
+	};
+	UINT numDriverTypes = ARRAYSIZE(driverTypes);
+
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_0, // texture size and others..
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+		D3D_FEATURE_LEVEL_9_3
+	};
+	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+
+	DXGI_SWAP_CHAIN_DESC swapDesc;
+	ZeroMemory(&swapDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
+	swapDesc.BufferCount = 1;
+	swapDesc.BufferDesc.Width = 1280;
+	swapDesc.BufferDesc.Height = 720;
+	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // unsigned normal
+	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
+	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
+	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapDesc.OutputWindow = WindowHandle;
+	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	swapDesc.Windowed = true;
+	swapDesc.SampleDesc.Count = 1; // multisampling, which antialiasing for geometry. Turn it off
+	swapDesc.SampleDesc.Quality = 0;
+	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // alt-enter fullscreen
+
+	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+	HRESULT errorCode;
+	for (unsigned i = 0; i < numDriverTypes; ++i)
+	{
+		errorCode = D3D11CreateDeviceAndSwapChain(NULL, driverTypes[i], NULL, createDeviceFlags,
+			featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &SwapChain, &Device,
+			&featureLevel, &myImmediateContext);
+
+		if (SUCCEEDED(errorCode))
+		{
+			driverType = driverTypes[i];
+			break;
+		}
+	}
+
+	if (FAILED(errorCode))
+	{
+		//OutputDebugString(_T("FAILED TO CREATE DEVICE AND SWAP CHAIN"));
+		//MyDebug(_T("FAILED TO CREATE DEVICE AND SWAP CHAIN"));
+		return false;
+	}
+
+	HRESULT result;
+	// CREATE RENDER TARGET VIEW
+	result = SwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&myBackBufferTex));
+	if (FAILED(result))
 	{
 		return false;
 	}
 
-	result = CreateTexture2D();
-	if(!result)
+	D3D11_TEXTURE2D_DESC BBDesc;
+	ZeroMemory(&BBDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	myBackBufferTex->GetDesc(&BBDesc);
+
+	D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
+	ZeroMemory(&RTVDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+	RTVDesc.Format = BBDesc.Format;
+	RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	//RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+	RTVDesc.Texture2D.MipSlice = 0;
+
+	result = Device->CreateRenderTargetView(myBackBufferTex, &RTVDesc, &myRenderTargetView);
+	if (FAILED(result))
+	{
+		//MyDebug(_T("ERROR"));
+	}
+	SafeRelease(myBackBufferTex);
+
+	// CREATE DEPTH STENCIL
+	ID3D11Texture2D* pDepthStencil = NULL;
+	D3D11_TEXTURE2D_DESC descDepth;
+	ZeroMemory(&descDepth, sizeof(descDepth));
+	descDepth.Width = m_nRenderWidth;// swapDesc.BufferDesc.Width;
+	descDepth.Height = m_nRenderHeight;// swapDesc.BufferDesc.Height;
+	descDepth.MipLevels = 1;
+	descDepth.ArraySize = 1;
+	descDepth.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;// DXGI_FORMAT_D32_FLOAT;//DXGI_FORMAT_D24_UNORM_S8_UINT;;//pDeviceSettings->d3d11.AutoDepthStencilFormat;
+	// DXGI_FORMAT_D32_FLOAT_S8X24_UINT
+	descDepth.SampleDesc.Count = 1;
+	descDepth.SampleDesc.Quality = 0;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	descDepth.CPUAccessFlags = 0;
+	descDepth.MiscFlags = 0;
+	result = Device->CreateTexture2D(&descDepth, NULL, &pDepthStencil);
+	if (FAILED(result))
+		return false;
+
+
+	D3D11_DEPTH_STENCIL_DESC dsDesc;
+	ZeroMemory(&dsDesc, sizeof(dsDesc));
+	// Depth test parameters
+	dsDesc.DepthEnable = true;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	// Stencil test parameters
+	dsDesc.StencilEnable = true;
+	dsDesc.StencilReadMask = 0xFF;
+	dsDesc.StencilWriteMask = 0xFF;
+
+	// Stencil operations if pixel is front-facing
+	dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Stencil operations if pixel is back-facing
+	dsDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	dsDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	dsDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	dsDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Create depth stencil state
+	result = Device->CreateDepthStencilState(&dsDesc, &pDSState);
+	if (FAILED(result))
 	{
 		return false;
 	}
 
-	result = CreateDepthBuffer();
-	if(!result)
+	// Bind depth stencil state
+	myImmediateContext->OMSetDepthStencilState(pDSState, 1);
+
+
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	ZeroMemory(&descDSV, sizeof(descDSV));
+	descDSV.Format = descDepth.Format;// DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	//descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+	descDSV.Texture2D.MipSlice = 0;
+
+	// Create the depth stencil view
+	result = Device->CreateDepthStencilView(pDepthStencil, // Depth stencil texture
+		&descDSV, // Depth stencil desc
+		&myDepthStencilView);  // [out] Depth stencil view
+
+	if (FAILED(result))
+	{
+		WCHAR buf[100];
+		wsprintf(buf, L"%x", result);
+		/*MyDebug(buf);
+		MyDebug(L"CreateDepthStencilView failed.");*/
+		return false;
+	}
+
+	//BIND RENDER TARGET VIEW
+	myImmediateContext->OMSetRenderTargets(1, &myRenderTargetView, myDepthStencilView); // depth stencil view is for shadow map
+
+
+	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+	// Clear the second depth stencil state before setting the parameters.
+	ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
+
+	// Now create a second depth stencil state which turns off the Z buffer for 2D rendering.  The only difference is 
+	// that DepthEnable is set to false, all other parameters are the same as the other depth stencil state.
+	depthDisabledStencilDesc.DepthEnable = false;
+	depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	depthDisabledStencilDesc.StencilEnable = true;
+	depthDisabledStencilDesc.StencilReadMask = 0xFF;
+	depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+	depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Create the state using the device.
+	result = Device->CreateDepthStencilState(&depthDisabledStencilDesc, &myDepthDisabledStencilState);
+	if (FAILED(result))
 	{
 		return false;
 	}
 
-	result = ResizeViewport();
-	if(!result)
+	//VIEWPORT CREATION
+	myViewport.Width = static_cast<float>(m_nRenderWidth);
+	myViewport.Height = static_cast<float>(m_nRenderHeight);
+	myViewport.TopLeftX = 0;
+	myViewport.TopLeftY = 0;
+	myViewport.MinDepth = 0.0f;
+	myViewport.MaxDepth = 1.0f;
+
+	// BIND VIEWPORT
+	myImmediateContext->RSSetViewports(1, &myViewport);
+
+	// Create the render to texture object.
+	m_RenderTextureLeft = std::make_shared<RenderTexture>();
+	if (!m_RenderTextureLeft)
 	{
 		return false;
 	}
 
-	result = CreateShaderResourceView();
-	if(!result)
+	// Initialize the render to texture object.
+	result = m_RenderTextureLeft->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	if (!result)
 	{
 		return false;
 	}
 
-	result = CreateSampler();
-	if(!result)
+	m_RenderTextureRight = std::make_shared<RenderTexture>();
+	if (!m_RenderTextureRight)
 	{
 		return false;
 	}
 
-	result = CreateSelectionView();
-	if(!result)
+	// Initialize the render to texture object.
+	result = m_RenderTextureRight->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	if (!result)
 	{
+		return false;
+	}
+
+	//if (aEnabledVR)
+	//{
+	//	// Loading the SteamVR Runtime
+	//	vr::EVRInitError eError = vr::VRInitError_None;
+
+	//	m_pHMD = vr::VR_Init(&eError, vr::VRApplication_Scene);
+
+	//	if (eError != vr::VRInitError_None)
+	//	{
+	//		m_pHMD = NULL;
+	//		char buf[1024];
+	//		sprintf_s(buf, ARRAYSIZE(buf), "Unable to init VR runtime: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
+	//		std::string temp(buf);
+	//		std::wstring wtemp(temp.begin(), temp.end());
+	//		MessageBox(aWindowHandle, wtemp.c_str(), L"VR_Init Failed", 0);
+	//		return false;
+	//	}
+
+	//	m_pHMD->GetRecommendedRenderTargetSize(&m_nRenderWidth, &m_nRenderHeight);
+
+	//	printf("width = %d, height = %d", m_nRenderWidth, m_nRenderHeight);
+
+	//	//m_nRenderWidth /= 2;
+	//	//m_nRenderHeight /= 4;
+
+	//	//clientWidth = m_nRenderWidth;
+	//	//clientHeight = m_nRenderHeight;
+
+	//	m_pRenderModels = (vr::IVRRenderModels*)vr::VR_GetGenericInterface(vr::IVRRenderModels_Version, &eError);
+	//	if (!m_pRenderModels)
+	//	{
+	//		m_pHMD = NULL;
+	//		vr::VR_Shutdown();
+
+	//		char buf[1024];
+	//		sprintf_s(buf, ARRAYSIZE(buf), "Unable to get render model interface: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
+	//		std::string temp(buf);
+	//		std::wstring wtemp(temp.begin(), temp.end());
+	//		MessageBox(aWindowHandle, wtemp.c_str(), L"VR_Init Failed", NULL);
+	//		return false;
+	//	}
+
+	//	if (!vr::VRCompositor())
+	//	{
+	//		//dprintf("Compositor initialization failed. See log file for details\n");
+	//		return false;
+	//	}
+	//}
+	//
+
+	//result = CreateSwapChain(aEnableDeviceDebug);
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//result = CreateTexture2D();
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//result = CreateDepthBuffer();
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//result = ResizeViewport();
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//result = CreateShaderResourceView();
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//result = CreateSampler();
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//result = CreateSelectionView();
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//if (aEnabledVR)
+	//{
+
+	//	// Initialize the render to texture object.
+	//	m_RenderTextureLeft = RenderTexture::Create(m_nRenderWidth, m_nRenderHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
+	//	if (!result)
+	//	{
+	//		return false;
+	//	}
+
+	//	
+
+	//	// Initialize the render to texture object.
+	//	m_RenderTextureRight = RenderTexture::Create(m_nRenderWidth, m_nRenderHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
+	//	if (!result)
+	//	{
+	//		return false;
+	//	}
+	//}
+
+	if (!vr::VRCompositor())
+	{
+		printf("Compositor initialization failed. See log file for details\n");
 		return false;
 	}
 
@@ -85,15 +492,24 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug)
 
 void DX11::BeginFrame(std::array<float, 4> aClearColor)
 {
-	Context->ClearRenderTargetView(BackBuffer.Get(), &aClearColor[0]);
-	Context->ClearRenderTargetView(RenderRTV.Get(), &aClearColor[0]);
-	Context->ClearDepthStencilView(DepthBuffer.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	Context->ClearRenderTargetView(IDBuffer.Get(), &aClearColor[0]);
+	GetContext()->ClearRenderTargetView(BackBuffer.Get(), &aClearColor[0]);
+	GetContext()->ClearRenderTargetView(RenderRTV.Get(), &aClearColor[0]);
+	GetContext()->ClearDepthStencilView(DepthBuffer.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	GetContext()->ClearRenderTargetView(IDBuffer.Get(), &aClearColor[0]);
 }
 
 void DX11::EndFrame()
 {
 	SwapChain->Present(0, 0);
+
+	vr::Texture_t leftEyeTexture = { m_RenderTextureLeft->GetTexture(), vr::TextureType_DirectX, vr::ColorSpace_Auto };
+	vr::EVRCompositorError error1 = vr::VRCompositor()->Submit(vr::Eye_Left, &leftEyeTexture);
+	vr::Texture_t rightEyeTexture = { m_RenderTextureRight->GetTexture(), vr::TextureType_DirectX, vr::ColorSpace_Auto };
+	vr::VRCompositor()->Submit(vr::Eye_Right, &rightEyeTexture);
+	if (error1)
+		printf("error is %d \n", error1);
+
+	
 }
 
 RECT DX11::GetClientSize()
@@ -109,12 +525,12 @@ UINT DX11::GetScreenObjectId(UINT x, UINT y)
 	if(y >= IDBufferDesc.Height) return 0;
 
 	D3D11_BOX b = { x, y, 0, x + 1, y + 1, 1 };
-	Context->CopySubresourceRegion(StagingTex.Get(), 0, 0, 0, 0, IDBufferTex.Get(), 0, &b);
+	GetContext()->CopySubresourceRegion(StagingTex.Get(), 0, 0, 0, 0, IDBufferTex.Get(), 0, &b);
 
 	D3D11_MAPPED_SUBRESOURCE mapped;
-	HRESULT h = Context->Map(StagingTex.Get(), 0, D3D11_MAP_READ, 0, &mapped);
+	HRESULT h = GetContext()->Map(StagingTex.Get(), 0, D3D11_MAP_READ, 0, &mapped);
 	UINT32* p = (UINT32*)mapped.pData;
-	Context->Unmap(StagingTex.Get(), 0);
+	GetContext()->Unmap(StagingTex.Get(), 0);
 	//const FLOAT clear[4] = { 0, 0, 0, 0 };
 	//DX11::ourContext->ClearRenderTargetView(DX11::ourIDBuffer.Get(), clear);
 	if(p == NULL) return 0;
@@ -123,7 +539,6 @@ UINT DX11::GetScreenObjectId(UINT x, UINT y)
 
 bool DX11::CreateSwapChain(bool aEnableDeviceDebug)
 {
-
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
@@ -168,8 +583,9 @@ bool DX11::CreateSwapChain(bool aEnableDeviceDebug)
 		nullptr,
 		Context.GetAddressOf()
 	);
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
+
 
 	return true;
 }
@@ -226,7 +642,7 @@ bool DX11::CreateDepthBuffer()
 
 bool DX11::ResizeViewport()
 {
-	RECT clientRect = { 0,0,0,0 };
+	/*RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
 
@@ -237,7 +653,7 @@ bool DX11::ResizeViewport()
 	viewport.Height = static_cast<FLOAT>(clientRect.bottom - clientRect.top);
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
-	Context->RSSetViewports(1, &viewport);
+	GetContext()->RSSetViewports(1, &viewport);*/
 
 	return true;
 }
@@ -317,7 +733,7 @@ bool DX11::CreateSampler()
 	if(FAILED(result))
 		return false;
 
-	Context->PSSetSamplers(0, 1, SampleStateDefault.GetAddressOf());
+	GetContext()->PSSetSamplers(0, 1, SampleStateDefault.GetAddressOf());
 
 	return true;
 }
@@ -377,56 +793,56 @@ bool DX11::CreateSelectionView()
 
 void DX11::Resize()
 {
-	Context->ClearState();
-	ID3D11RenderTargetView* nullViews[] = { nullptr };
-	Context->OMSetRenderTargets(ARRAYSIZE(nullViews), nullViews, nullptr);
-	BackBuffer->Release();
-	DepthBuffer->Release();
-	SampleStateDefault->Release();
-	//SamplerStateWrap->Release();
-	//BackBufferTex[0] = nullptr;
-
-
-	if(BackBufferTex != nullptr)
-	{
-		BackBufferTex->Release();
-	}
-
-	RenderRTV->Release();
-	RenderSRV->Release();
-	IDBuffer->Release();
-	IDBufferTex->Release();
-	StagingTex->Release();
-
-
-	RECT clientRect = { 0,0,0,0 };
-	GetClientRect(WindowHandle, &clientRect);
-
-	Context->Flush();
-
-
-#if _DEBUG
-	ReportDX11();
-#endif
-
-	HRESULT result;
-	result = SwapChain->ResizeBuffers(1, static_cast<UINT>(clientRect.right - clientRect.left), static_cast<UINT>(clientRect.bottom - clientRect.top), DXGI_FORMAT_UNKNOWN, 0);
-	if(result != S_OK)
-	{
-		std::cout << "SwapChain Could not resize." << "\n";
-	}
-
-	ComPtr<ID3D11Texture2D> spBackBuffer;
-	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(spBackBuffer.GetAddressOf()));
-	if(result != S_OK)
-	{
-		std::cout << "SwapChain could not get backbuffer 0." << "\n";
-	}
-
-	CreateTexture2D();
-	CreateDepthBuffer();
-	ResizeViewport();
-	CreateShaderResourceView();
-	CreateSampler();
-	CreateSelectionView();
+//	GetContext()->ClearState();
+//	ID3D11RenderTargetView* nullViews[] = { nullptr };
+//	GetContext()->OMSetRenderTargets(ARRAYSIZE(nullViews), nullViews, nullptr);
+//	BackBuffer->Release();
+//	DepthBuffer->Release();
+//	SampleStateDefault->Release();
+//	//SamplerStateWrap->Release();
+//	//BackBufferTex[0] = nullptr;
+//
+//
+//	if(BackBufferTex != nullptr)
+//	{
+//		BackBufferTex->Release();
+//	}
+//
+//	RenderRTV->Release();
+//	RenderSRV->Release();
+//	IDBuffer->Release();
+//	IDBufferTex->Release();
+//	StagingTex->Release();
+//
+//
+//	RECT clientRect = { 0,0,0,0 };
+//	GetClientRect(WindowHandle, &clientRect);
+//
+//	GetContext()->Flush();
+//
+//
+//#if _DEBUG
+//	ReportDX11();
+//#endif
+//
+//	HRESULT result;
+//	result = SwapChain->ResizeBuffers(1, static_cast<UINT>(clientRect.right - clientRect.left), static_cast<UINT>(clientRect.bottom - clientRect.top), DXGI_FORMAT_UNKNOWN, 0);
+//	if(result != S_OK)
+//	{
+//		std::cout << "SwapChain Could not resize." << "\n";
+//	}
+//
+//	ComPtr<ID3D11Texture2D> spBackBuffer;
+//	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(spBackBuffer.GetAddressOf()));
+//	if(result != S_OK)
+//	{
+//		std::cout << "SwapChain could not get backbuffer 0." << "\n";
+//	}
+//
+//	CreateTexture2D();
+//	CreateDepthBuffer();
+//	ResizeViewport();
+//	CreateShaderResourceView();
+//	CreateSampler();
+//	CreateSelectionView();
 }

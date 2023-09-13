@@ -299,6 +299,8 @@ namespace CommonUtilities
 		return result;
 	}
 
+	
+
 	template<typename T>
 	void operator+=(Matrix4x4<T>& aFirstMatrix4, const Matrix4x4<T>& aSecondMatrix4)
 	{

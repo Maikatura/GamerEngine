@@ -30,7 +30,7 @@ include "External/PyBullet"
 include "External/OpenCL"
 include "External/flecs"
 include "External/OpenFBX"
-
+include "External/OpenVR"
 	
 group "Backend"
 include "Shaders"

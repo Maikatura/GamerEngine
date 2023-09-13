@@ -33,7 +33,9 @@ void Material::SetAsResource(ComPtr<ID3D11Resource> aMaterialBuffer)
 	//D3D11_MAPPED_SUBRESOURCE bufferData;
 	//ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-	//const HRESULT result = DX11::Context->Map(
+	//const HRESULT result = 
+	//
+	// ->Map(
 	//	aMaterialBuffer.Get(),
 	//	0,
 	//	D3D11_MAP_WRITE_DISCARD,
@@ -48,7 +50,7 @@ void Material::SetAsResource(ComPtr<ID3D11Resource> aMaterialBuffer)
 
 	//memcpy(bufferData.pData, &myMaterialData, sizeof(MaterialData));
 
-	//DX11::Context->Unmap(aMaterialBuffer.Get(), 0);
+	//DX11::GetContext()->Unmap(aMaterialBuffer.Get(), 0);
 
 	if (myTextures[MaterialTextureChannel::Albedo])
 	{

@@ -51,7 +51,8 @@ includedirs{
 	"%{IncludeDirs.RapidJson}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
-    "%{IncludeDirs.FBXSDK}",
+	"%{IncludeDirs.OpenVR}",
+    	"%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.Flecs}",
 	
 	"%{IncludeDirs.TurNet}"
@@ -71,12 +72,14 @@ links
 	"RapidJson",
 	"YamlCpp",
 	"Flecs",
+	"OpenVR",
 	
 	"d3d11.lib",
 	"dxguid.lib",
 	
 	"TurNet",
-	"ws2_32.lib"
+	"ws2_32.lib",
+	"%{Libs.OpenVR}"
 }
 
 files 

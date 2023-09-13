@@ -8,6 +8,8 @@
 #include <thread>
 #include <functional>
 
+#include "openvr.h"
+
 class DX11;
 class ForwardRenderer;
 class DeferredRenderer;
@@ -50,11 +52,13 @@ public:
 
 	~GraphicsEngine();
 
-	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug, std::wstring aName = L"GamerEngine", bool aBoolToUseEditor = false);
+	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug, std::wstring aName = L"GamerEngine", bool aBoolToUseEditor = false, bool isVRMode = false);
+	void UpdateHMDMatrixPose();
 
 	void BeginFrame();
 	void EndFrame();
 	void OnFrameUpdate(bool aShouldRunLoop);
+	void RenderScene(vr::Hmd_Eye evr_eye);
 	void OnFrameRender();
 
 	void StartUpdateThread();
@@ -95,6 +99,15 @@ public:
 
 
 private:
+
+	int m_iTrackedControllerCount;
+	int m_iTrackedControllerCount_Last;
+	int m_iValidPoseCount;
+	int m_iValidPoseCount_Last;
+	bool m_bShowCubes;
+
+	std::string m_strPoseClasses;                            // what classes we saw poses for this frame
+	char m_rDevClassChar[vr::k_unMaxTrackedDeviceCount];   // for each device, a character representing its class
 	
 };
 

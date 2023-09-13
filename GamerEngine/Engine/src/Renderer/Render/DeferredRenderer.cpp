@@ -15,7 +15,10 @@ void GBuffer::SetAsTarget() const
 		rtvList[i] = myRTVs[i].Get();
 	}
 	//rtvList[ID] = DX11::ourIDBuffer.Get();
-	DX11::Context->OMSetRenderTargets(GBufferTexture::GBufferTexture_Count, &rtvList[0], DX11::DepthBuffer.Get());
+	
+
+
+	DX11::GetContext()->OMSetRenderTargets(GBufferTexture::GBufferTexture_Count, &rtvList[0], DX11::DepthBuffer.Get());
 }
 
 void GBuffer::ClearTarget() const
@@ -25,9 +28,9 @@ void GBuffer::ClearTarget() const
 	{
 		rtvList[i] = nullptr;
 		/*Vector4f color = { 0,0,0,0 };
-		DX11::Context->ClearRenderTargetView(myRTVs[i].Get(), &color.x);*/
+		DX11::GetContext()->ClearRenderTargetView(myRTVs[i].Get(), &color.x);*/
 	}
-	DX11::Context->OMSetRenderTargets(1, DX11::RenderRTV.GetAddressOf(), DX11::DepthBuffer.Get());
+	DX11::GetContext()->OMSetRenderTargets(1, DX11::RenderRTV.GetAddressOf(), DX11::DepthBuffer.Get());
 }
 
 void GBuffer::SetAsResource(unsigned aStartSlot) const
@@ -38,8 +41,8 @@ void GBuffer::SetAsResource(unsigned aStartSlot) const
 		mySRVList[t] = mySRVs[t].Get();
 	}
 
-	DX11::Context->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &mySRVList[0]);
-	DX11::Context->PSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &mySRVList[0]);
+	DX11::GetContext()->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &mySRVList[0]);
+	DX11::GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &mySRVList[0]);
 }
 
 void GBuffer::ClearResource(unsigned aStartSlot) const
@@ -50,8 +53,8 @@ void GBuffer::ClearResource(unsigned aStartSlot) const
 	{
 		srvList[i] = nullptr;
 	}
-	DX11::Context->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
-	DX11::Context->PSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
+	DX11::GetContext()->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
+	DX11::GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
 }
 
 void GBuffer::Clear()
@@ -59,7 +62,7 @@ void GBuffer::Clear()
 	Vector4f clCol = { 0, 0, 0, 0 };
 	for(int i = 0; i < GBufferTexture::GBufferTexture_Count; i++)
 	{
-		DX11::Context->ClearRenderTargetView(myRTVs[i].Get(), &clCol.x);
+		DX11::GetContext()->ClearRenderTargetView(myRTVs[i].Get(), &clCol.x);
 	}
 }
 
@@ -328,7 +331,7 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 		myFrameBufferData.Resolution = Resolution;
 
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		result = DX11::Context->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		if(FAILED(result))
 		{
 			// BOOM?
@@ -336,10 +339,10 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 		}
 
 		memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-		DX11::Context->Unmap(myFrameBuffer.Get(), 0);
+		DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
 
-		DX11::Context->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-		DX11::Context->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+		DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+		DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
 		ModelAssetHandler::Get().ResetRenderedModels();
 
@@ -347,7 +350,7 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 
 		//bool isInstanced = model->HasRenderedInstance();
 
-		DX11::Context->PSSetShader(myGBufferPS.Get(), nullptr, 0);
+		DX11::GetContext()->PSSetShader(myGBufferPS.Get(), nullptr, 0);
 
 		
 
@@ -369,13 +372,13 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 			);
 		}
 
-		result = DX11::Context->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		result = DX11::GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-		DX11::Context->Unmap(myObjectBuffer.Get(), 0);
+		DX11::GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
 
-		DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-		DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		DX11::GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		DX11::GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
 		for(int index = 0; index < model->GetNumMeshes(); index++)
 		{
@@ -410,19 +413,19 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 
 			//	// Map the buffer and copy the data
 			//	D3D11_MAPPED_SUBRESOURCE mappedResource;
-			//	DX11::Context->Map(myBlendShapeBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			//	DX11::GetContext()->Map(myBlendShapeBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 			//	memcpy(mappedResource.pData, &blendShapeData, sizeof(BlendShapeData));
-			//	DX11::Context->Unmap(myBlendShapeBuffer.Get(), 0);
+			//	DX11::GetContext()->Unmap(myBlendShapeBuffer.Get(), 0);
 
-			//	DX11::Context->VSSetConstantBuffers(4, 1, myBlendShapeBuffer.GetAddressOf());
+			//	DX11::GetContext()->VSSetConstantBuffers(4, 1, myBlendShapeBuffer.GetAddressOf());
 			//}
 
 			
 
-			DX11::Context->IASetInputLayout(meshData.myInputLayout.Get());
-			DX11::Context->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
-			DX11::Context->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-			DX11::Context->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology));
+			DX11::GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
+			DX11::GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
+			DX11::GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+			DX11::GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology));
 
 			if(!model->GetMaterial().empty() && static_cast<int>(meshData.myMaterialIndex) < model->GetMaterialSize())
 			{
@@ -444,9 +447,9 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 				}
 
 				ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-				result = DX11::Context->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+				result = DX11::GetContext()->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 				memcpy(bufferData.pData, &myInstancedTransformBufferData[0], sizeof(Matrix4x4f) * model->GetNumberOfInstances());
-				DX11::Context->Unmap(myInstanceBuffer.Get(), 0);
+				DX11::GetContext()->Unmap(myInstanceBuffer.Get(), 0);
 
 				ID3D11Buffer* buffers[2] = { meshData.myVertexBuffer.Get(), myInstanceBuffer.Get() };
 
@@ -454,8 +457,8 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 
 				UINT offset[2] = { meshData.myOffset, 0 };
 
-				DX11::Context->IASetVertexBuffers(0, 2, buffers, stride, offset);
-				DX11::Context->DrawIndexedInstanced(
+				DX11::GetContext()->IASetVertexBuffers(0, 2, buffers, stride, offset);
+				DX11::GetContext()->DrawIndexedInstanced(
 					meshData.myNumberOfIndices,
 					model->GetNumberOfInstances(),
 					0, 0, 0
@@ -463,8 +466,8 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 			}
 			else*/
 			//{
-				DX11::Context->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
-				DX11::Context->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
+				DX11::GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
+				DX11::GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
 			//}
 
 		}
@@ -476,7 +479,7 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 	}
 }
 
-void DeferredRenderer::Render(const std::shared_ptr<DirectionalLight>& aDirectionalLight,
+void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::shared_ptr<DirectionalLight>& aDirectionalLight,
 	const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime)
 {
 	if(!Renderer::GetCamera())
@@ -488,9 +491,12 @@ void DeferredRenderer::Render(const std::shared_ptr<DirectionalLight>& aDirectio
 	HRESULT result = S_FALSE;
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
-	myFrameBufferData.View = Matrix4x4f::GetFastInverse(Renderer::GetViewMatrix());
-	myFrameBufferData.Projection = Renderer::GetProjectionMatrix();
-	myFrameBufferData.CamTranslation = Renderer::GetViewMatrix().GetPosition();
+
+
+
+	myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
+	myFrameBufferData.Projection = aProjection;
+	myFrameBufferData.CamTranslation = aView.GetPosition();
 	myFrameBufferData.RenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
 	RECT clientRect = DX11::GetClientSize();
 	const Vector2ui Resolution = {
@@ -502,17 +508,17 @@ void DeferredRenderer::Render(const std::shared_ptr<DirectionalLight>& aDirectio
 	myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	result = DX11::Context->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if(FAILED(result))
 	{
 		// BOOM?
 	}
 
 	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-	DX11::Context->Unmap(myFrameBuffer.Get(), 0);
+	DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
 
-	DX11::Context->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::Context->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
 	if(anEnvironmentLight)
 	{
@@ -542,7 +548,7 @@ void DeferredRenderer::Render(const std::shared_ptr<DirectionalLight>& aDirectio
 		}
 	}
 
-	result = DX11::Context->Map(
+	result = DX11::GetContext()->Map(
 		myLightBuffer.Get(),
 		0,
 		D3D11_MAP_WRITE_DISCARD,
@@ -556,34 +562,34 @@ void DeferredRenderer::Render(const std::shared_ptr<DirectionalLight>& aDirectio
 
 	memcpy(bufferData.pData, &mySceneLightBufferData, sizeof(SceneLightBuffer));
 
-	DX11::Context->Unmap(myLightBuffer.Get(), 0);
+	DX11::GetContext()->Unmap(myLightBuffer.Get(), 0);
 
-	DX11::Context->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
+	DX11::GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
 
-	DX11::Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	DX11::Context->IASetInputLayout(nullptr);
-	DX11::Context->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
-	DX11::Context->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
-	DX11::Context->VSSetShader(myDeferredVS.Get(), nullptr, 0);
-	DX11::Context->GSSetShader(nullptr, nullptr, 0);
-	DX11::Context->PSSetShader(myDeferredPS.Get(), nullptr, 0);
+	DX11::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	DX11::GetContext()->IASetInputLayout(nullptr);
+	DX11::GetContext()->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
+	DX11::GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+	DX11::GetContext()->VSSetShader(myDeferredVS.Get(), nullptr, 0);
+	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
+	DX11::GetContext()->PSSetShader(myDeferredPS.Get(), nullptr, 0);
 
-	DX11::Context->Draw(3, 0);
+	DX11::GetContext()->Draw(3, 0);
 }
 
 void DeferredRenderer::RenderLate()
 {
-	/*DX11::Context->OMSetRenderTargets(1, DX11::BackBuffer.GetAddressOf(), DX11::DepthBuffer.Get());
-	DX11::Context->PSSetShaderResources(0, 1, DX11::RenderSRV.GetAddressOf());
-	DX11::Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	DX11::Context->IASetInputLayout(nullptr);
-	DX11::Context->IAGetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
-	DX11::Context->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
-	DX11::Context->VSSetShader(myDeferredVS.Get(), nullptr, 0);
-	DX11::Context->GSSetShader(nullptr, nullptr, 0);
-	DX11::Context->PSSetShader(myRenderTexPS.Get(), nullptr, 0);
+	DX11::GetContext()->OMSetRenderTargets(1, DX11::BackBuffer.GetAddressOf(), DX11::DepthBuffer.Get());
+	DX11::GetContext()->PSSetShaderResources(0, 1, DX11::RenderSRV.GetAddressOf());
+	DX11::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	DX11::GetContext()->IASetInputLayout(nullptr);
+	DX11::GetContext()->IAGetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
+	DX11::GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+	DX11::GetContext()->VSSetShader(myDeferredVS.Get(), nullptr, 0);
+	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
+	DX11::GetContext()->PSSetShader(myRenderTexPS.Get(), nullptr, 0);
 
-	DX11::Context->Draw(3, 0);*/
+	DX11::GetContext()->Draw(3, 0);
 }
 
 void DeferredRenderer::ClearTarget()
@@ -593,6 +599,6 @@ void DeferredRenderer::ClearTarget()
 	{
 		srvList[i] = nullptr;
 	}
-	DX11::Context->PSSetShaderResources(0, 1, &srvList[0]);
-	DX11::Context->VSSetShaderResources(0, 1, &srvList[0]);
+	DX11::GetContext()->PSSetShaderResources(0, 1, &srvList[0]);
+	DX11::GetContext()->VSSetShaderResources(0, 1, &srvList[0]);
 }

@@ -2,7 +2,19 @@
 #include <array>
 #include <wrl.h>
 
+#include <openvr.h>
+
+#include "Renderer/Render/RenderTexture.h"
+
+
 using namespace Microsoft::WRL;
+
+namespace vr
+{
+	class IVRSystem;
+	class IVRRenderModels;
+	struct TrackedDevicePose_t;
+}
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;
@@ -39,10 +51,43 @@ public:
 	static D3D11_TEXTURE2D_DESC IDBufferDesc;
 	static D3D11_TEXTURE2D_DESC StagingTexDesc;
 
+	// NEW
+
+	static D3D_FEATURE_LEVEL		featureLevel;
+	static D3D_DRIVER_TYPE			driverType;
+
+	static ID3D11Texture2D* myBackBufferTex;
+
+	static ID3D11RenderTargetView* myRenderTargetView;
+	static ID3D11DepthStencilView* myDepthStencilView;
+
+	static D3D11_VIEWPORT myViewport;
+	static ID3D11DepthStencilState* pDSState;
+	static ID3D11DepthStencilState* myDepthDisabledStencilState;
+	static ID3D11DeviceContext* myImmediateContext;
+
+	static vr::IVRSystem* m_pHMD;
+	static vr::IVRRenderModels* m_pRenderModels;
+	static vr::TrackedDevicePose_t m_rTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
+	static Matrix4x4f m_rmat4DevicePose[vr::k_unMaxTrackedDeviceCount];
+	static Matrix4x4f m_mat4HMDPose;
+	static uint32_t m_nRenderWidth;
+	static uint32_t m_nRenderHeight;
+
+	static std::shared_ptr<RenderTexture> m_RenderTextureLeft;
+	static std::shared_ptr<RenderTexture> m_RenderTextureRight;
+
 	DX11();
 	~DX11();
+	static ID3D11Device* GetDevice();
 
-	static bool Init(HWND aWindowHandle, bool aEnableDeviceDebug);
+	static ID3D11DeviceContext* GetContext();
+
+	static ID3D11DepthStencilView* GetDepthStencilView();
+
+
+	static void UpdateHMDMatrixPose();
+	static bool Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR = false);
 	static void BeginFrame(std::array<float, 4> aClearColor = { 0.0f, 0.0f, 0.0f, 0.0f });
 	static void EndFrame();
 

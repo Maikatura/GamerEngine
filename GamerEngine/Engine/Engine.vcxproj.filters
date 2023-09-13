@@ -337,5 +337,8 @@
     <ClCompile Include="src\Renderer\Scene\UUID.cpp">
       <Filter>Renderer\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Render\RenderTexture.cpp">
+      <Filter>Renderer\Render</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

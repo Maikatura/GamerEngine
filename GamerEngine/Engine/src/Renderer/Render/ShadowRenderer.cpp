@@ -88,22 +88,23 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 	myFrameBufferData.RenderMode = static_cast<unsigned int>(0);
 
 
-	DX11::Context->RSSetViewports(1, &aLight->GetViewport());
+	
+	DX11::GetContext()->RSSetViewports(1, &aLight->GetViewport());
 
 
-	DX11::Context->PSSetShader(nullptr, nullptr, 0);
-	DX11::Context->GSSetShader(nullptr, nullptr, 0);
+	DX11::GetContext()->PSSetShader(nullptr, nullptr, 0);
+	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	result = DX11::Context->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-	DX11::Context->Unmap(myFrameBuffer.Get(), 0);
-	DX11::Context->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::Context->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
+	DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
 	if(isCubeMap)
 	{
-		DX11::Context->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+		DX11::GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 		myPointLightView.myPointLightViews[0] = lightData.LightView[0];
 		myPointLightView.myPointLightViews[1] = lightData.LightView[1];
 		myPointLightView.myPointLightViews[2] = lightData.LightView[2];
@@ -116,10 +117,10 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		DX11::Context->Map(myPointLightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		DX11::GetContext()->Map(myPointLightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		memcpy(bufferData.pData, &myPointLightView, sizeof(PointLightView));
-		DX11::Context->Unmap(myPointLightBuffer.Get(), 0);
-		DX11::Context->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
+		DX11::GetContext()->Unmap(myPointLightBuffer.Get(), 0);
+		DX11::GetContext()->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
 	}
 
 	ModelAssetHandler::Get().ResetRenderedModels();
@@ -156,14 +157,14 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 				);
 			}
 
-			result = DX11::Context->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+			result = DX11::GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 			if(FAILED(result))
 			{
 
 			}
 
 			memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-			DX11::Context->Unmap(myObjectBuffer.Get(), 0);
+			DX11::GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
 
 			if(!model->GetMaterial().empty())
@@ -172,38 +173,38 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 				//if(model->RenderWithDeferred())
 				//{
-				//	//DX11::Context->VSSetShader(myDeferredVS.Get(), nullptr, 0);
-				//	//DX11::Context->PSSetShader(myDeferredPS.Get(), nullptr, 0);
+				//	//DX11::GetContext()->VSSetShader(myDeferredVS.Get(), nullptr, 0);
+				//	//DX11::GetContext()->PSSetShader(myDeferredPS.Get(), nullptr, 0);
 				//}
 				//else
 				//{
-					DX11::Context->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
-					DX11::Context->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
+					DX11::GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
+					DX11::GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
 				//}
 
 			}
 
-			DX11::Context->IASetInputLayout(meshData.myInputLayout.Get());
+			DX11::GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
 
 			if(isCubeMap)
 			{
-				DX11::Context->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-				DX11::Context->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
-				DX11::Context->GSSetShader(myShadowGeometryShader.Get(), nullptr, 0);
+				DX11::GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+				DX11::GetContext()->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
+				DX11::GetContext()->GSSetShader(myShadowGeometryShader.Get(), nullptr, 0);
 			}
 			else
 			{
-				DX11::Context->GSSetShader(nullptr, nullptr, 0);
+				DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 			}
-			DX11::Context->PSSetShader(nullptr, nullptr, 0);
+			DX11::GetContext()->PSSetShader(nullptr, nullptr, 0);
 
 
-			DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-			//DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+			DX11::GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+			//DX11::GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 			
 
-			DX11::Context->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-			DX11::Context->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)meshData.myPrimitiveTopology);
+			DX11::GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+			DX11::GetContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)meshData.myPrimitiveTopology);
 
 			if(isInstanced && !model->HasBeenRendered())
 			{
@@ -217,9 +218,9 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 
 				ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-				result = DX11::Context->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+				result = DX11::GetContext()->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 				memcpy(bufferData.pData, &myInstancedTransformBufferData[0], sizeof(Matrix4x4f) * model->GetNumberOfInstances());
-				DX11::Context->Unmap(myInstanceBuffer.Get(), 0);
+				DX11::GetContext()->Unmap(myInstanceBuffer.Get(), 0);
 
 				ID3D11Buffer* buffers[2] = { meshData.myVertexBuffer.Get(), myInstanceBuffer.Get() };
 
@@ -227,8 +228,8 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 				UINT offset[2] = { meshData.myOffset, 0 };
 
-				DX11::Context->IASetVertexBuffers(0, 2, buffers, stride, offset);
-				DX11::Context->DrawIndexedInstanced(
+				DX11::GetContext()->IASetVertexBuffers(0, 2, buffers, stride, offset);
+				DX11::GetContext()->DrawIndexedInstanced(
 					meshData.myNumberOfIndices,
 					model->GetNumberOfInstances(),
 					0, 0, 0
@@ -237,8 +238,8 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			}
 			else
 			{
-				DX11::Context->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
-				DX11::Context->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
+				DX11::GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
+				DX11::GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
 			}
 		}
 
@@ -249,21 +250,21 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 	}
 
 
-	DX11::Context->GSSetShader(nullptr, nullptr, 0);
+	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 	DX11::ResizeViewport();
-	DX11::Context->OMSetRenderTargets(0, nullptr, nullptr);
+	DX11::GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
 }
 
 void ShadowRenderer::ClearResources()
 {
 	ID3D11ShaderResourceView* srvnull = nullptr;
-	//DX11::Context->VSSetShaderResources(19, 1, &srvnull);
-	DX11::Context->PSSetShaderResources(19, 1, &srvnull);
+	//DX11::GetContext()->VSSetShaderResources(19, 1, &srvnull);
+	DX11::GetContext()->PSSetShaderResources(19, 1, &srvnull);
 
 	for(int i = 0; i < 40; i++)
 	{
-		//DX11::Context->VSSetShaderResources(20 + i, 1, &srvnull);
-		DX11::Context->PSSetShaderResources(20 + i, 1, &srvnull);
+		//DX11::GetContext()->VSSetShaderResources(20 + i, 1, &srvnull);
+		DX11::GetContext()->PSSetShaderResources(20 + i, 1, &srvnull);
 	}
 }
 

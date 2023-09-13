@@ -25,6 +25,7 @@ IncludeDirs["WICTextureLoader"] = "%{wks.location}/External/WICTextureLoader/"
 IncludeDirs["RapidJson"] = "%{wks.location}/External/rapidjson/"
 IncludeDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/include/"
 IncludeDirs["OpenFBX"] = "%{wks.location}/External/OpenFBX/src/"
+IncludeDirs["OpenVR"] = "%{wks.location}/External/openvr/headers/"
 
 --Libaries
 LibDirs = {}
@@ -32,9 +33,10 @@ LibDirs["CommonUtilities"] = "%{wks.location}/External/CommonUtilities/src/"
 LibDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/lib/"
 
 --IncludeDirs["Example"] = "%{wks.location}/External/External/Example/include"
--- LibDirs["Example"] = "%{wks.location}/External/Example/Lib"
+-- LibDirs["Example"] = "%{wks.location}/External/openvr/lib/openvr_api.lib"
 --Libs["Example"] = "%{LibDirs.Example}/example.lib"
 
 Libs = {}
 Libs["FBXSDK_DEBUG"] = "%{LibDirs.FBXSDK}/debug/libfbxsdk.lib"
 Libs["FBXSDK_RELEASE"] = "%{LibDirs.FBXSDK}/release/libfbxsdk.lib"
+Libs["OpenVR"] = "%{wks.location}/External/openvr/lib/openvr_api.lib"

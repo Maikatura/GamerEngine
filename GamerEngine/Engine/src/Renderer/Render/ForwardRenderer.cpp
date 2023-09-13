@@ -54,7 +54,7 @@ bool ForwardRenderer::Initialize()
 	return true;
 }
 
-void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList)
+void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList)
 {
 	if(!Renderer::GetCamera())
 	{
@@ -77,30 +77,36 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 			return;
 		}
 
-		if(model->RenderWithDeferred())
+		/*if(model->RenderWithDeferred())
 		{
 			continue;
-		}
+		}*/
 
 		HRESULT result = S_FALSE;
 		D3D11_MAPPED_SUBRESOURCE bufferData;
 
-		myFrameBufferData.View = Matrix4x4f::GetFastInverse(Renderer::GetViewMatrix());
-		myFrameBufferData.CamTranslation = Renderer::GetViewMatrix().GetPosition();
-		myFrameBufferData.Projection = Renderer::GetProjectionMatrix();
+
+
+
+		std::cout << aView.GetPosition().x << " " << aView.GetPosition().y << " " << aView.GetPosition().z << " Proj: " << aProjection.GetPosition().x << " " << aProjection.GetPosition().y << " " << aProjection.GetPosition().z << std::endl;
+
+		myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
+		myFrameBufferData.CamTranslation = aView.GetPosition();
+		myFrameBufferData.Projection = aProjection;
 		myFrameBufferData.RenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
 		myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
 		myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
 
 		RECT clientRect = DX11::GetClientSize();
 		const Vector2ui Resolution = {
-					static_cast<unsigned int>(clientRect.right - clientRect.left),
-					static_cast<unsigned int>(clientRect.bottom - clientRect.top)
+					DX11::m_nRenderWidth,
+				DX11::m_nRenderHeight
+
 		};
 		myFrameBufferData.Resolution = Resolution;
 
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		result = DX11::Context->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		if(FAILED(result))
 		{
 			// BOOM?
@@ -108,10 +114,10 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 		}
 
 		memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-		DX11::Context->Unmap(myFrameBuffer.Get(), 0);
+		DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
 
-		DX11::Context->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-		DX11::Context->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+		DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+		DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
 		/*SetBlendState(BlendState::Alpha);
 		SetDepthStencilState(DepthStencilState::DSS_ReadWrite);*/
@@ -146,7 +152,7 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 		}
 
 
-		result = DX11::Context->Map(
+		result = DX11::GetContext()->Map(
 			myLightBuffer.Get(),
 			0,
 			D3D11_MAP_WRITE_DISCARD,
@@ -160,8 +166,8 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 
 		memcpy(bufferData.pData, &mySceneLightBufferData, sizeof(SceneLightBuffer));
 
-		DX11::Context->Unmap(myLightBuffer.Get(), 0);
-		DX11::Context->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
+		DX11::GetContext()->Unmap(myLightBuffer.Get(), 0);
+		DX11::GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
 
 		ModelAssetHandler::Get().ResetRenderedModels();
 
@@ -170,6 +176,7 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 		std::shared_ptr<ModelInstance> modelInstance = model;
 
 		bool isInstanced = modelInstance->HasRenderedInstance();
+		//bool isInstanced = false;
 
 		myObjectBufferData.IsInstanced = isInstanced;
 		myObjectBufferData.World = modelBuffer.myTransform;
@@ -187,26 +194,26 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 			);
 		}
 
-		result = DX11::Context->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		result = DX11::GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		if(FAILED(result))
 		{
 			// WTF
 		}
 
 		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-		DX11::Context->Unmap(myObjectBuffer.Get(), 0);
+		DX11::GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
-		DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-		DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		DX11::GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		DX11::GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
 		for(int index = 0; index < modelInstance->GetNumMeshes(); index++)
 		{
 			const Model::MeshData& meshData = modelInstance->GetMeshData(index);
 
-			DX11::Context->IASetInputLayout(meshData.myInputLayout.Get());
-			DX11::Context->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
-			DX11::Context->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
-			DX11::Context->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+			DX11::GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
+			DX11::GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
+			DX11::GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
+			DX11::GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 
 			if(!model->GetMaterial().empty() && static_cast<int>(meshData.myMaterialIndex) < model->GetMaterialSize())
@@ -218,8 +225,8 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 				model->GetMaterial()[0].SetAsResource(nullptr);
 			}
 
-			/*DX11::Context->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
-			DX11::Context->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+			/*DX11::GetContext()->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+			DX11::GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 */
 
 //SetSamplerState(SamplerState::SS_Wrap);
@@ -235,9 +242,9 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 				}
 
 				ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-				result = DX11::Context->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+				result = DX11::GetContext()->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 				memcpy(bufferData.pData, &myInstancedTransformBufferData[0], sizeof(Matrix4x4f) * model->GetNumberOfInstances());
-				DX11::Context->Unmap(myInstanceBuffer.Get(), 0);
+				DX11::GetContext()->Unmap(myInstanceBuffer.Get(), 0);
 
 				ID3D11Buffer* buffers[2] = { meshData.myVertexBuffer.Get(), myInstanceBuffer.Get() };
 
@@ -245,8 +252,8 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 
 				UINT offset[2] = { meshData.myOffset, 0 };
 
-				DX11::Context->IASetVertexBuffers(0, 2, buffers, stride, offset);
-				DX11::Context->DrawIndexedInstanced(
+				DX11::GetContext()->IASetVertexBuffers(0, 2, buffers, stride, offset);
+				DX11::GetContext()->DrawIndexedInstanced(
 					meshData.myNumberOfIndices,
 					model->GetNumberOfInstances(),
 					0, 0, 0
@@ -254,8 +261,8 @@ void ForwardRenderer::Render(const std::vector<RenderBuffer>& aModelList, const 
 			}
 			else
 			{
-				DX11::Context->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
-				DX11::Context->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
+				DX11::GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
+				DX11::GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
 			}
 		}
 
@@ -279,35 +286,35 @@ void ForwardRenderer::RenderSprites(std::vector<RenderBuffer2D>& aSpriteList,
 	myFrameBufferData.Projection = Renderer::GetProjectionMatrix();
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	result = DX11::Context->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if(FAILED(result))
 	{
 		// it ded
 	}
 	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
 
-	DX11::Context->Unmap(myFrameBuffer.Get(), 0);
+	DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
 	//SetDepthStencilState(DepthStencilState::DSS_ReadOnly);
 
 
-	DX11::Context->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::Context->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::Context->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::Context->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-	DX11::Context->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+	DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+	DX11::GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 	CommonUtilities::MergeSort(aSpriteList);
 
 
 	for(RenderBuffer2D rc : aSpriteList)
 	{
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		result = DX11::Context->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		result = DX11::GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		if(FAILED(result))
 		{
 			// it ded
 		}
 		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-		DX11::Context->Unmap(myObjectBuffer.Get(), 0);
+		DX11::GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
 		//SetDepthStencilState(DepthStencilState::DSS_ReadOnly);
 

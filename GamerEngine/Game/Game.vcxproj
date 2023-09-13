@@ -45,14 +45,14 @@
     <IntDir>..\Temp\Intermediate\Game\Debug\</IntDir>
     <TargetName>Game_Debug</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\flecs\include;..\External\openvr\headers;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\Temp\lib\</OutDir>
     <IntDir>..\Temp\Intermediate\Game\Release\</IntDir>
     <TargetName>Game_Release</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\flecs\include;..\External\openvr\headers;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

@@ -26,8 +26,8 @@ VertexToPixel main(VertexInput input)
 
 	
 
-	const float4 vertexViewPosition = mul(FB_ToView, vertexWorldPosition);
-	const float4 vertexProjectionPosition = mul(FB_ToProjection, vertexViewPosition);
+	//const float4 vertexViewPosition = mul(FB_ToView, vertexWorldPosition);
+	//const float4 vertexProjectionPosition = mul(FB_ToProjection, vertexViewPosition);
 
 	const float3x3 worldNormalRotation = (float3x3)OB_ToWorld;
 	const float3x3 skinNormalRotation = (float3x3)skinningMatrix;

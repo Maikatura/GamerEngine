@@ -38,7 +38,7 @@ public:
 
 	bool Initialize();
 
-	void Render(const std::vector<RenderBuffer>& aModelList, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::
+	void Render(Matrix4x4f aView, Matrix4x4f aProjection,const std::vector<RenderBuffer>& aModelList, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::
 	            shared_ptr<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList);
 
 	void RenderSprites(std::vector<RenderBuffer2D>& aSpriteList, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::

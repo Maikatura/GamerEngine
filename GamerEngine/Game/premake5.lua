@@ -50,7 +50,8 @@ externalincludedirs {
 	"%{IncludeDirs.GraphicsEngine}",
 	"%{IncludeDirs.CommonUtilities}",
 	"%{IncludeDirs.Entt}",
-	"%{IncludeDirs.Flecs}"
+	"%{IncludeDirs.Flecs}",
+	"%{IncludeDirs.OpenVR}",
 }
 
 externalwarnings "Off"

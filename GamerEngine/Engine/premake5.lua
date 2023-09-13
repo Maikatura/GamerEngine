@@ -50,6 +50,7 @@ includedirs{
 	"%{IncludeDirs.CommonUtilities}",
 	"%{IncludeDirs.FBXImporter}",
 	"%{IncludeDirs.OpenFBX}",
+	"%{IncludeDirs.OpenVR}",
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.YamlCpp}",

@@ -172,7 +172,6 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 	if(!mySceneIsReady) return;
 	if(mySceneStatus != SceneStatus::Complete) return;
 
-
 	
 	{
 		myRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
@@ -370,7 +369,7 @@ void Scene::OnRender()
 				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
 				if(model.GetModel())
 				{
-					const auto& realModel =  model.GetModel()->GetModel();
+					/*const auto& realModel =  model.GetModel()->GetModel();
 					for(int i = 0; i < model.GetModel()->GetNumMeshes(); i++)
 					{
 
@@ -388,16 +387,12 @@ void Scene::OnRender()
 								realModel->BoxBounds.BoxExtents[2] * 10.0f
 							}).Transform(transform.GetMatrix());
 						if(transformedBounds.IsOnFrustum(Renderer::GetCamera()->myFrustum))
-						{
+						{*/
 							Entity entityPtr = Entity{ entity, this };
 							model.GetModel()->AddRenderedInstance(&transform);
 							Renderer::Render(&entityPtr, model, transform);
-						}
-
-
-
-
-					}
+						//}
+					//}
 				}
 			}
 		}
