@@ -174,7 +174,7 @@ public:
 		{
 			if(myShadowMap->myDSV)
 			{
-				DX11::GetContext()->OMSetRenderTargets(0, nullptr, myShadowMap->myDSV.Get());
+				//DX11::GetContext()->OMSetRenderTargets(0, nullptr, myShadowMap->myDSV.Get());
 			}
 		}
 	}

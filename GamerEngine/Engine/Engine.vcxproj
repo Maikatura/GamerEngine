@@ -170,7 +170,6 @@
     <ClInclude Include="src\Time.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Renderer\Render\RenderTexture.cpp" />
     <ClCompile Include="src\GraphicsEngine.pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -205,6 +204,7 @@
     <ClCompile Include="src\Renderer\Render\PostProcessRenderer.cpp" />
     <ClCompile Include="src\Renderer\Render\Render2D.cpp" />
     <ClCompile Include="src\Renderer\Render\RenderBuffer.cpp" />
+    <ClCompile Include="src\Renderer\Render\RenderTexture.cpp" />
     <ClCompile Include="src\Renderer\Render\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Render\RendererBase.cpp" />
     <ClCompile Include="src\Renderer\Render\ShadowRenderer.cpp" />

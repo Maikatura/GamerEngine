@@ -36,6 +36,7 @@ void SceneManager::Initialize()
 	}*/
 
 	myScene = std::make_shared<Scene>();
+	mySceneStatus = SceneStatus::Complete;
 }
 
 void SceneManager::LoadScene(const std::string& aFilepath)
@@ -48,6 +49,8 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 
 	if (!aFilepath.empty())
 	{
+		myScene->SceneReady(false);
+		
 		SelectionData::SetEntityObject(Entity{ entt::null, nullptr });
 
 		if(GraphicsEngine::Get())
@@ -62,6 +65,8 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 			myLoadThread = nullptr;
 		}
 
+
+
 		if (GraphicsEngine::Get())
 		{
 			GraphicsEngine::Get()->StopUpdateThread();
@@ -72,9 +77,14 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 			std::scoped_lock<std::mutex> lock(mySceneMutex);
 			mySceneStatus = SceneStatus::Loading;
 
+			
+
+
 			if (!myScene)
 			{
 				std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
+				//newScene->SceneReady(false);
+
 				SceneSerializer sceneLoad(newScene.get());
 				if(sceneLoad.Deserialize(aFilepath, myIsHeadless))
 				{
@@ -86,10 +96,11 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 			else
 			{
 				std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
+				//newScene->SceneReady(false);
+
 				SceneSerializer sceneLoad(newScene.get());
 				if(sceneLoad.Deserialize(aFilepath, myIsHeadless))
 				{
-					//newScene->Initialize();
 					mySwapScene = newScene;
 					mySceneStatus = SceneStatus::NeedSwap;
 				}
@@ -220,11 +231,12 @@ void SceneManager::SwapScene()
 {
 	if (mySceneStatus == SceneStatus::NeedSwap)
 	{
-		myScene = mySwapScene;
-		myScene->SceneReady();
+		myScene = std::move(mySwapScene);
 		mySwapScene = nullptr;
 		mySceneStatus = SceneStatus::Complete;
 		myScene->SetSceneStatus(SceneStatus::Complete);
+		myScene->SceneReady(true);
+
 
 		if(GraphicsEngine::Get())
 		{
@@ -235,5 +247,7 @@ void SceneManager::SwapScene()
 		{
 			GraphicsEngine::Get()->SetPauseState(false);
 		}
+
+
 	}
 }

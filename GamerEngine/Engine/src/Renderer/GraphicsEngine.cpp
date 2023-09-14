@@ -124,7 +124,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	return true;
 }
 
-Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t& matPose)
+inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t& matPose)
 {
 	Matrix4x4f matrixObj;
 	matrixObj(0) = matPose.m[0][0];
@@ -183,7 +183,7 @@ void GraphicsEngine::UpdateHMDMatrixPose()
 
 	if (DX11::m_rTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid)
 	{
-		//m_mat4HMDPose = DX11::m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd].invert();
+		DX11::m_mat4HMDPose = Matrix4x4f::GetFastInverse(DX11::m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd]);
 	}
 	else
 	{
@@ -325,7 +325,7 @@ void GraphicsEngine::BeginFrame()
 	//Vector4f clearColor = Renderer::GetClearColor();
 	//DX11::BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
 	//
-	//ResetStates();
+	ResetStates();
 }
 
 void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
@@ -373,11 +373,10 @@ void GraphicsEngine::RenderScene(vr::Hmd_Eye evr_eye)
 		return;
 	}
 
-	Matrix4x4f projection = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(evr_eye);
-	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewMatrix(evr_eye);
+	Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(evr_eye);
+	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(evr_eye);
 
-
-
+	
 	std::vector<Light*>& someLightList = scene->GetLights();
 
 	const std::shared_ptr<DirectionalLight>& directionalLight = scene->GetDirLight();
@@ -480,7 +479,7 @@ void GraphicsEngine::OnFrameRender()
 	if(myIsMinimized) return;
 
 
-
+	
 
 	bool renderSSAO = true;
 	if(Input::IsKeyDown('P'))
@@ -502,6 +501,8 @@ void GraphicsEngine::OnFrameRender()
 	{
 		return;
 	}
+
+	OnFrameUpdate(GetEngineUpdateRuntime());
 
 	scene->OnRender();
 
@@ -527,25 +528,27 @@ void GraphicsEngine::OnFrameRender()
 	RenderScene(vr::Hmd_Eye::Eye_Right);
 	
 
-	// Reset the render target back to the original back buffer and not the render to texture anymore.
-	DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
+	//// Reset the render target back to the original back buffer and not the render to texture anymore.
+	//DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
 
 	
 
 	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	Renderer::Clear();*/
-
+	DX11::TurnZBufferOff();
 	scene->Clean();
 }
 
 void GraphicsEngine::StartUpdateThread()
 {
+
+	/*myUpdateThread = std::make_shared<std::thread>([&]()
+		{
+		});*/
+
 	myIsRunning = true;
-	myUpdateThread.reset(new std::thread([&]()
-	{
-		OnFrameUpdate(GetEngineUpdateRuntime());
-	}));
+
 }
 
 void GraphicsEngine::StopUpdateThread()
@@ -559,7 +562,9 @@ void GraphicsEngine::StopUpdateThread()
 			
 		}
 
-		myUpdateThread->join();
+		if (myUpdateThread && myUpdateThread->joinable()) {
+			myUpdateThread->join();
+		}
 	}
 }
 
@@ -579,6 +584,14 @@ void GraphicsEngine::EndFrame()
 
 	if(SceneManager::GetStatus() == SceneStatus::NeedSwap)
 	{
+		if (myUpdateThread)
+		{
+			while (!myUpdateThread->joinable())
+			{
+
+			}
+		}
+
 		SceneManager::SwapScene();
 	}
 }
@@ -600,8 +613,8 @@ void GraphicsEngine::SetWinProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> 
 
 void GraphicsEngine::ResetStates() const
 {
-	RendererBase::SetBlendState(BlendState::None);
-	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+	//RendererBase::SetBlendState(BlendState::None);
+	//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetSamplerState(0u, SamplerState::Default);
 	RendererBase::SetSamplerState(1u, SamplerState::PointClamp);
 	RendererBase::SetSamplerState(2u, SamplerState::Wrap);

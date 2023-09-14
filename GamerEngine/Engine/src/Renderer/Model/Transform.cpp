@@ -68,25 +68,24 @@ void Transform::DecomposeTransform(Vector3f& somePosition, Vector3f& someRotatio
 
 void Transform::ComposeTransform(Vector3f somePosition, Vector3f someRotation, Vector3f someScale)
 {
-	myRotation = someRotation;
+	//myRotation = someRotation;
 
-	Matrix4x4f output = Matrix4x4f();
+	// Create translation matrix
+	Matrix4x4f translationMatrix = Matrix4x4f::CreateTranslation(somePosition);
 
-	output(1, 1) *= someScale.x;
-	output(2, 2) *= someScale.y;
-	output(3, 3) *= someScale.z;
+	// Create rotation matrix (order of rotations: pitch, yaw, roll)
+	Matrix4x4f rotationMatrix = Matrix4x4f::CreateRotationAroundX(someRotation.x) *
+		Matrix4x4f::CreateRotationAroundY(someRotation.y) *
+		Matrix4x4f::CreateRotationAroundZ(someRotation.z);
 
-	someRotation *= 3.14159f / 180;
-	output *= Matrix4x4f::CreateRotationAroundX(someRotation.x);
-	output *= Matrix4x4f::CreateRotationAroundY(someRotation.y);
-	output *= Matrix4x4f::CreateRotationAroundZ(someRotation.z);
+	// Create scale matrix
+	Matrix4x4f scaleMatrix = Matrix4x4f::CreateScale(someScale);
 
-	output(4, 1) = somePosition.x;
-	output(4, 2) = somePosition.y;
-	output(4, 3) = somePosition.z;
-	output(4, 4) = 1;
+	// Combine the matrices in SRT order (scale, then rotate, then translate)
+	Matrix4x4f transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
 
-	myTransformMatrix = output;
+	
+	myTransformMatrix = transformMatrix;
 }
 
 void Transform::SetPosition(Vector3f aPosition)

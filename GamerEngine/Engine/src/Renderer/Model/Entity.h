@@ -31,7 +31,7 @@ public:
 	template<typename T, typename... Args>
 	T& AddComponent(Args&&... args)
 	{
-		T& component = myScene->myRegistry.emplace<T>(myEntityHandle, std::forward<Args>(args)...);
+		T& component = myScene->GetRegistry().emplace<T>(myEntityHandle, std::forward<Args>(args)...);
 		//myScene->OnComponentAdded<T>(*this, component);
 		return component;
 	}
@@ -39,7 +39,7 @@ public:
 	template<typename T, typename... Args>
 	T& AddOrReplaceComponent(Args&&... args)
 	{
-		T& component = myScene->myRegistry.emplace_or_replace<T>(myEntityHandle, std::forward<Args>(args)...);
+		T& component = myScene->GetRegistry().emplace_or_replace<T>(myEntityHandle, std::forward<Args>(args)...);
 		//myScene->OnComponentAdded<T>(*this, component);
 		return component;
 	}
@@ -50,19 +50,19 @@ public:
 	template<typename T>
 	T& GetComponent()
 	{
-		return myScene->myRegistry.get<T>(myEntityHandle);
+		return myScene->GetRegistry().get<T>(myEntityHandle);
 	}
 
 	template<typename T>
 	bool HasComponent() const
 	{
-		return myScene->myRegistry.all_of<T>(myEntityHandle);
+		return myScene->GetRegistry().all_of<T>(myEntityHandle);
 	}
 
 	template<typename T>
 	void RemoveComponent()
 	{
-		myScene->myRegistry.remove<T>(myEntityHandle);
+		myScene->GetRegistry().remove<T>(myEntityHandle);
 	}
 
 	operator bool() const { return myEntityHandle != entt::null; }

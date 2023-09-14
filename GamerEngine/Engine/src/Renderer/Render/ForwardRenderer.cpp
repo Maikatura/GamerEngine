@@ -87,8 +87,9 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 
 
-
-		std::cout << aView.GetPosition().x << " " << aView.GetPosition().y << " " << aView.GetPosition().z << " Proj: " << aProjection.GetPosition().x << " " << aProjection.GetPosition().y << " " << aProjection.GetPosition().z << std::endl;
+		
+		std::cout << "View: " << aView.GetPosition().x << " " << aView.GetPosition().y << " " << aView.GetPosition().z << " Rotation: " << aView.GetRotation().x << " " << aView.GetRotation().y << " " << aView.GetRotation().z << std::endl;
+		std::cout << "Proj: " << aProjection.GetPosition().x << " " << aProjection.GetPosition().y << " " << aProjection.GetPosition().z << " Rotation: " << aProjection.GetRotation().x << " " << aProjection.GetRotation().y << " " << aProjection.GetRotation().z << std::endl;
 
 		myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
 		myFrameBufferData.CamTranslation = aView.GetPosition();
@@ -175,8 +176,8 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 		std::shared_ptr<ModelInstance> modelInstance = model;
 
-		bool isInstanced = modelInstance->HasRenderedInstance();
-		//bool isInstanced = false;
+		//bool isInstanced = modelInstance->HasRenderedInstance();
+		bool isInstanced = false;
 
 		myObjectBufferData.IsInstanced = isInstanced;
 		myObjectBufferData.World = modelBuffer.myTransform;
@@ -214,7 +215,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			DX11::GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
 			DX11::GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
 			DX11::GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-
+			DX11::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // Use D3D11_PRIMITIVE_TOPOLOGY_... for your specific primitive type
 
 			if(!model->GetMaterial().empty() && static_cast<int>(meshData.myMaterialIndex) < model->GetMaterialSize())
 			{
@@ -231,7 +232,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 //SetSamplerState(SamplerState::SS_Wrap);
 
-			if(isInstanced && !model->HasBeenRendered())
+			/*if(isInstanced && !model->HasBeenRendered())
 			{
 				myInstancedTransformBufferData.clear();
 				std::vector<ModelInstance::RenderedInstanceData> myTransformData = model->GetTransformVector();
@@ -260,16 +261,16 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 				);
 			}
 			else
-			{
+			{*/
 				DX11::GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
 				DX11::GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
-			}
+			//}
 		}
 
-		if(isInstanced)
-		{
-			modelInstance->SetHasBeenRenderer(true);
-		}
+		//if(isInstanced)
+		//{
+		//	modelInstance->SetHasBeenRenderer(true);
+		//}
 
 	}
 

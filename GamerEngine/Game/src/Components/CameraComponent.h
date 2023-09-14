@@ -62,5 +62,7 @@ private:
 	Vector2ui myRes;
 	Vector3f myPosition;
 
+	Matrix4x4f viewProjectionMatrixVR;
+
 };
 

@@ -75,6 +75,19 @@ ID3D11DepthStencilView* DX11::GetDepthStencilView()
 	return myDepthStencilView;
 }
 
+void DX11::TurnZBufferOn()
+{
+	myImmediateContext->OMSetDepthStencilState(pDSState, 1);
+	return;
+}
+
+void DX11::TurnZBufferOff()
+{
+
+	myImmediateContext->OMSetDepthStencilState(myDepthDisabledStencilState, 1);
+	return;
+}
+
 
 bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 {
@@ -83,7 +96,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	UINT createDeviceFlags = 0;
 
-#ifdef DEBUG
+#if _DEBUG
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
@@ -324,6 +337,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
+
+
 	// Create the state using the device.
 	result = Device->CreateDepthStencilState(&depthDisabledStencilDesc, &myDepthDisabledStencilState);
 	if (FAILED(result))
@@ -500,6 +515,8 @@ void DX11::BeginFrame(std::array<float, 4> aClearColor)
 
 void DX11::EndFrame()
 {
+	TurnZBufferOn();
+
 	SwapChain->Present(0, 0);
 
 	vr::Texture_t leftEyeTexture = { m_RenderTextureLeft->GetTexture(), vr::TextureType_DirectX, vr::ColorSpace_Auto };
@@ -509,7 +526,7 @@ void DX11::EndFrame()
 	if (error1)
 		printf("error is %d \n", error1);
 
-	
+
 }
 
 RECT DX11::GetClientSize()
@@ -521,8 +538,8 @@ RECT DX11::GetClientSize()
 
 UINT DX11::GetScreenObjectId(UINT x, UINT y)
 {
-	if(x >= IDBufferDesc.Width) return 0;
-	if(y >= IDBufferDesc.Height) return 0;
+	if (x >= IDBufferDesc.Width) return 0;
+	if (y >= IDBufferDesc.Height) return 0;
 
 	D3D11_BOX b = { x, y, 0, x + 1, y + 1, 1 };
 	GetContext()->CopySubresourceRegion(StagingTex.Get(), 0, 0, 0, 0, IDBufferTex.Get(), 0, &b);
@@ -533,7 +550,7 @@ UINT DX11::GetScreenObjectId(UINT x, UINT y)
 	GetContext()->Unmap(StagingTex.Get(), 0);
 	//const FLOAT clear[4] = { 0, 0, 0, 0 };
 	//DX11::ourContext->ClearRenderTargetView(DX11::ourIDBuffer.Get(), clear);
-	if(p == NULL) return 0;
+	if (p == NULL) return 0;
 	return *p;
 }
 
@@ -600,12 +617,12 @@ bool DX11::CreateTexture2D()
 
 
 	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBufferTex);
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 
 	result = Device->CreateRenderTargetView(BackBufferTex, nullptr, BackBuffer.GetAddressOf());
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	SafeRelease(BackBufferTex);
@@ -630,11 +647,11 @@ bool DX11::CreateDepthBuffer()
 
 
 	result = Device->CreateTexture2D(&depthBufferDesc, nullptr, depthBufferTexture.GetAddressOf());
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	result = Device->CreateDepthStencilView(depthBufferTexture.Get(), nullptr, DepthBuffer.GetAddressOf());
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	return true;
@@ -681,9 +698,9 @@ bool DX11::CreateShaderResourceView()
 	textureDesc.MiscFlags = 0;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.SampleDesc.Quality = 0;
-	
+
 	result = Device->CreateTexture2D(&textureDesc, nullptr, &BackBufferTex);
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc{};
@@ -699,11 +716,11 @@ bool DX11::CreateShaderResourceView()
 
 
 	result = Device->CreateRenderTargetView(BackBufferTex, &renderTargetViewDesc, RenderRTV.GetAddressOf());
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	result = Device->CreateShaderResourceView(BackBufferTex, &shaderResourceViewDesc, RenderSRV.GetAddressOf());
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	SafeRelease(BackBufferTex);
@@ -730,7 +747,7 @@ bool DX11::CreateSampler()
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	result = Device->CreateSamplerState(&samplerDesc, SampleStateDefault.GetAddressOf());
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	GetContext()->PSSetSamplers(0, 1, SampleStateDefault.GetAddressOf());
@@ -764,7 +781,7 @@ bool DX11::CreateSelectionView()
 	IDBufferDesc = textureDesc;
 
 	Device->CreateTexture2D(&textureDesc, nullptr, IDBufferTex.GetAddressOf());
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	D3D11_RENDER_TARGET_VIEW_DESC IDBufferViewDesc{};
@@ -773,7 +790,7 @@ bool DX11::CreateSelectionView()
 	IDBufferViewDesc.Texture2D.MipSlice = 0;
 
 	result = Device->CreateRenderTargetView(IDBufferTex.Get(), &IDBufferViewDesc, IDBuffer.GetAddressOf());
-	if(FAILED(result)) return false;
+	if (FAILED(result)) return false;
 
 	StagingTexDesc.Width = 1;
 	StagingTexDesc.Height = 1;
@@ -785,7 +802,7 @@ bool DX11::CreateSelectionView()
 	StagingTexDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	StagingTexDesc.MiscFlags = 0;
 	result = Device->CreateTexture2D(&StagingTexDesc, NULL, StagingTex.GetAddressOf());
-	if(FAILED(result))
+	if (FAILED(result))
 		return false;
 
 	return true;
@@ -793,56 +810,56 @@ bool DX11::CreateSelectionView()
 
 void DX11::Resize()
 {
-//	GetContext()->ClearState();
-//	ID3D11RenderTargetView* nullViews[] = { nullptr };
-//	GetContext()->OMSetRenderTargets(ARRAYSIZE(nullViews), nullViews, nullptr);
-//	BackBuffer->Release();
-//	DepthBuffer->Release();
-//	SampleStateDefault->Release();
-//	//SamplerStateWrap->Release();
-//	//BackBufferTex[0] = nullptr;
-//
-//
-//	if(BackBufferTex != nullptr)
-//	{
-//		BackBufferTex->Release();
-//	}
-//
-//	RenderRTV->Release();
-//	RenderSRV->Release();
-//	IDBuffer->Release();
-//	IDBufferTex->Release();
-//	StagingTex->Release();
-//
-//
-//	RECT clientRect = { 0,0,0,0 };
-//	GetClientRect(WindowHandle, &clientRect);
-//
-//	GetContext()->Flush();
-//
-//
-//#if _DEBUG
-//	ReportDX11();
-//#endif
-//
-//	HRESULT result;
-//	result = SwapChain->ResizeBuffers(1, static_cast<UINT>(clientRect.right - clientRect.left), static_cast<UINT>(clientRect.bottom - clientRect.top), DXGI_FORMAT_UNKNOWN, 0);
-//	if(result != S_OK)
-//	{
-//		std::cout << "SwapChain Could not resize." << "\n";
-//	}
-//
-//	ComPtr<ID3D11Texture2D> spBackBuffer;
-//	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(spBackBuffer.GetAddressOf()));
-//	if(result != S_OK)
-//	{
-//		std::cout << "SwapChain could not get backbuffer 0." << "\n";
-//	}
-//
-//	CreateTexture2D();
-//	CreateDepthBuffer();
-//	ResizeViewport();
-//	CreateShaderResourceView();
-//	CreateSampler();
-//	CreateSelectionView();
+	//	GetContext()->ClearState();
+	//	ID3D11RenderTargetView* nullViews[] = { nullptr };
+	//	GetContext()->OMSetRenderTargets(ARRAYSIZE(nullViews), nullViews, nullptr);
+	//	BackBuffer->Release();
+	//	DepthBuffer->Release();
+	//	SampleStateDefault->Release();
+	//	//SamplerStateWrap->Release();
+	//	//BackBufferTex[0] = nullptr;
+	//
+	//
+	//	if(BackBufferTex != nullptr)
+	//	{
+	//		BackBufferTex->Release();
+	//	}
+	//
+	//	RenderRTV->Release();
+	//	RenderSRV->Release();
+	//	IDBuffer->Release();
+	//	IDBufferTex->Release();
+	//	StagingTex->Release();
+	//
+	//
+	//	RECT clientRect = { 0,0,0,0 };
+	//	GetClientRect(WindowHandle, &clientRect);
+	//
+	//	GetContext()->Flush();
+	//
+	//
+	//#if _DEBUG
+	//	ReportDX11();
+	//#endif
+	//
+	//	HRESULT result;
+	//	result = SwapChain->ResizeBuffers(1, static_cast<UINT>(clientRect.right - clientRect.left), static_cast<UINT>(clientRect.bottom - clientRect.top), DXGI_FORMAT_UNKNOWN, 0);
+	//	if(result != S_OK)
+	//	{
+	//		std::cout << "SwapChain Could not resize." << "\n";
+	//	}
+	//
+	//	ComPtr<ID3D11Texture2D> spBackBuffer;
+	//	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(spBackBuffer.GetAddressOf()));
+	//	if(result != S_OK)
+	//	{
+	//		std::cout << "SwapChain could not get backbuffer 0." << "\n";
+	//	}
+	//
+	//	CreateTexture2D();
+	//	CreateDepthBuffer();
+	//	ResizeViewport();
+	//	CreateShaderResourceView();
+	//	CreateSampler();
+	//	CreateSelectionView();
 }

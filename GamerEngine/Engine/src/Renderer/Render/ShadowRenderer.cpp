@@ -252,7 +252,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 	DX11::ResizeViewport();
-	DX11::GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
+	//DX11::GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
 }
 
 void ShadowRenderer::ClearResources()

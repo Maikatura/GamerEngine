@@ -86,6 +86,11 @@ public:
 	static ID3D11DepthStencilView* GetDepthStencilView();
 
 
+	static void TurnZBufferOn();
+
+
+	static void TurnZBufferOff();
+
 	static void UpdateHMDMatrixPose();
 	static bool Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR = false);
 	static void BeginFrame(std::array<float, 4> aClearColor = { 0.0f, 0.0f, 0.0f, 0.0f });

@@ -60,7 +60,7 @@ public:
 	std::shared_ptr<DirectionalLight> GetDirLight();
 	std::shared_ptr<EnvironmentLight> GetEnvLight();
 
-	void SceneReady();
+	void SceneReady(bool isSceneReady);
 
 	void Clean();
 	std::vector<Light*> GetSomeLights();
@@ -78,10 +78,10 @@ public:
 
 private:
 	SceneStatus mySceneStatus;
-	bool mySceneIsReady;
+	bool mySceneIsReady = false;
 
 	std::string myPath;
-	entt::registry myRegistry;
+	entt::registry* myRegistry;
 
 	std::shared_ptr<DirectionalLight> myDirectionalLight;
 	std::shared_ptr<EnvironmentLight> myEnvironmentLight;

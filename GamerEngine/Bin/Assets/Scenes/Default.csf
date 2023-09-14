@@ -1,23 +1,56 @@
 Scene: SceneTesting
 Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\Default.csf
 Entities:
-  - Entity: 17702716414147979262
+  - Entity: 1672627168376087648
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [0, 0, -868.211609]
-      Rotation: [89.574234, -0, 0]
-      Scale: [14.8049908, 14.8050032, 14.8050032]
+      Translation: [525.765381, -382.252472, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
     ChildComponent:
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Path: Assets\Models\Shapes\plane.fbx
+      Path: Cube
       Texture:
         Albedo: Resources\Textures\T_Default_C.dds
         Normal: resources\Textures\T_Default_N.dds
         Material: resources\Textures\T_Default_M.dds
+  - Entity: 1828353707181980437
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, -508.054779, 0.917554855]
+      Rotation: [0, -0, 0]
+      Scale: [336.773804, 10, 403.698639]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Path: Cube
+      Texture:
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [632.685486, 141.992783, 561.56427]
+      Rotation: [33.8947906, -150.508774, 0.000104271501]
+      Scale: [0.999961138, 0.999956548, 0.999987185]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 25000
+      Primary: true
   - Entity: 16032452205484422433
     TagComponent:
       Tag: Directional Light
@@ -33,35 +66,19 @@ Entities:
       Color: [1, 1, 1]
       Direction: [-44, 100, 85]
       Intensity: 1
-  - Entity: 4488255876943964703
-    TagComponent:
-      Tag: EditorCamera
-    TransformComponent:
-      Translation: [82.5334702, 578.050354, 105.231506]
-      Rotation: [20.8266468, -161.299805, 0.000104271501]
-      Scale: [0.999961138, 0.999956548, 0.999987185]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    CameraComponent:
-      FOV: 90
-      NearPlane: 0.100000001
-      FarPlane: 25000
-      Primary: true
-  - Entity: 1828353707181980437
+  - Entity: 17702716414147979262
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [0, -508.054779, 0.917554855]
-      Rotation: [0, -0, 0]
-      Scale: [1000, 10, 1000]
+      Translation: [0, 0, -868.211609]
+      Rotation: [99.5699768, -0, 0]
+      Scale: [14.8028879, 14.8049841, 14.8049841]
     ChildComponent:
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Path: Assets\Models\Shapes\Cube.fbx
+      Path: Assets\Models\Shapes\plane.fbx
       Texture:
         Albedo: Resources\Textures\T_Default_C.dds
         Normal: resources\Textures\T_Default_N.dds

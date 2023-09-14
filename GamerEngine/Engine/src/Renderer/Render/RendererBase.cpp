@@ -342,13 +342,13 @@ bool RendererBase::Init()
 
 void RendererBase::SetDepthStencilState(DepthStencilState aDepthStencilState)
 {
-	
-	DX11::GetContext()->OMSetDepthStencilState(myDepthStencilStates[(int)aDepthStencilState].Get(), 0xffffffff);
+	DX11::GetContext()->OMSetDepthStencilState(DX11::pDSState, 1);
+	//DX11::GetContext()->OMSetDepthStencilState(myDepthStencilStates[(int)aDepthStencilState].Get(), 0xffffffff);
 }
 
 void RendererBase::SetBlendState(BlendState aBlendState)
 {
-	DX11::GetContext()->OMSetBlendState(myBlendStates[(int)aBlendState].Get(), nullptr, 0xffffffff);
+	//DX11::GetContext()->OMSetBlendState(myBlendStates[(int)aBlendState].Get(), nullptr, 0xffffffff);
 }
 
 void RendererBase::SetSamplerState(int aSlot, SamplerState aSamplerState) 
@@ -358,6 +358,6 @@ void RendererBase::SetSamplerState(int aSlot, SamplerState aSamplerState)
 
 void RendererBase::RemoveResource(int aSlot)
 {
-	ID3D11ShaderResourceView* nullsrv = nullptr;
-	DX11::GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
+	//ID3D11ShaderResourceView* nullsrv = nullptr;
+	//DX11::GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
 }

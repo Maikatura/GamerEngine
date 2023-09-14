@@ -236,7 +236,7 @@ PixelOutput main(VertexToPixel input)
 		}
 	}
 
-	float emissiveStrength = 0.0f;
+	float emissiveStrength = 1.0f;
 	float3 emissiveColor = emissive * emissiveStr * albedo.xyz * emissiveStrength;
 	float3 finalColor = directLighting + ambientLighting + emissiveColor +((pointLight + spotLight));
 

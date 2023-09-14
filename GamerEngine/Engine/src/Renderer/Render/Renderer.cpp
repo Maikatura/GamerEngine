@@ -4,6 +4,14 @@
 
 #include "Renderer/Scene/SceneManager.h"
 
+
+inline Matrix4x4f ComposeFromTRS(const Vector3f& aTranslation, const CommonUtilities::Quaternion<float>& aRotationQuat, const Vector3f& aScale)
+{
+	return Matrix4x4f::CreateScale(aScale)
+		* aRotationQuat.GetRotationMatrix4x4()
+		* Matrix4x4f::CreateTranslation(aTranslation);
+}
+
 void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom)
 {
 
@@ -13,10 +21,12 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 	}
 
 	Transform transform = Transform();
+
+
 	transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
 	aModel.GetModel()->SetTransform(transform);
 
-	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(),aTransfrom.GetMatrix(), aModel.GetModel()});
+	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(),transform.GetMatrix(), aModel.GetModel()});
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)

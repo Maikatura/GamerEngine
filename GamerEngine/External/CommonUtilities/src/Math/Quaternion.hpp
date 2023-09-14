@@ -361,28 +361,23 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Vector3<T> Quaternion<T>::Eulers() const
 	{
-		Vector3<T> angles{ 0.0f };
+		Vector3<T> angles{ 0.0f , 0.0f, 0.0f };
 
-		// x-axis rotation
-		T sinXCosY = static_cast<T>(2) * (w * x + y * z);
-		T cosXSinY = static_cast<T>(1) - static_cast<T>(2) * (x * x + y * y);
-		angles.x = std::atan2(sinXCosY, cosXSinY);
+		float sinr_cosp = 2 * (w * x + y * z);
+		float cosr_cosp = 1 - 2 * (x * x + y * y);
+		angles.x = std::atan2(sinr_cosp, cosr_cosp);
 
-		// y-axis rotation
-		T sinY = static_cast<T>(2) * (w * y - z * x);
-		if(std::abs(sinY) >= static_cast<T>(1))
-		{
-			angles.y = std::copysign(PI_NUMBER / 2, sinY); // use 90 degrees if out of range
-		}
+		// Pitch (y-axis rotation)
+		float sinp = 2 * (w * y - z * x);
+		if (std::abs(sinp) >= 1)
+			angles.y = std::copysign(PI_NUMBER / 2, sinp); // Use 90 degrees if out of range
 		else
-		{
-			angles.y = std::asin(sinY);
-		}
+			angles.y = std::asin(sinp);
 
-		// z-axis rotation
-		T sinZCosY = static_cast<T>(2) * (w * z + x * y);
-		T cosZCosY = static_cast<T>(1) - static_cast<T>(2) * (y * y + z * z);
-		angles.z = std::atan2(sinZCosY, cosZCosY);
+		// Yaw (z-axis rotation)
+		float siny_cosp = 2 * (w * z + x * y);
+		float cosy_cosp = 1 - 2 * (y * y + z * z);
+		angles.z = std::atan2(siny_cosp, cosy_cosp);
 
 		return angles;
 	}
@@ -391,15 +386,24 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::FromEulers(const Vector3<T>& aEulers)
 	{
-		Vector3<T> halfAngle = aEulers * static_cast<T>(0.5);
-		Quaternion<T> pitch{ std::cos(halfAngle.x), std::sin(halfAngle.x), static_cast<T>(0), static_cast<T>(0) };
-		Quaternion<T> yaw{ std::cos(halfAngle.y), static_cast<T>(0), std::sin(halfAngle.y), static_cast<T>(0) };
-		Quaternion<T> roll{ std::cos(halfAngle.z), static_cast<T>(0), static_cast<T>(0), std::sin(halfAngle.z) };
+		// Convert Euler angles to radians
+		Vector3<T> eulerRadians = aEulers * static_cast<T>(0.5);
 
-		Quaternion<T> result = roll * yaw * pitch;
-		result.Normalize();
+		T cosYaw = std::cos(eulerRadians.z);
+		T sinYaw = std::sin(eulerRadians.z);
+		T cosPitch = std::cos(eulerRadians.y);
+		T sinPitch = std::sin(eulerRadians.y);
+		T cosRoll = std::cos(eulerRadians.x);
+		T sinRoll = std::sin(eulerRadians.x);
 
-		return result;
+		Quaternion<T> yawQuat(cosYaw, static_cast<T>(0), static_cast<T>(0), sinYaw);
+		Quaternion<T> pitchQuat(static_cast<T>(0), cosPitch, static_cast<T>(0), sinPitch);
+		Quaternion<T> rollQuat(static_cast<T>(0), static_cast<T>(0), cosRoll, sinRoll);
+
+		// Combine the quaternions in the desired order
+		Quaternion<T> result = yawQuat * pitchQuat * rollQuat;
+
+		return result.Normalized();
 	}
 
 	template <typename T>

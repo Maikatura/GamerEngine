@@ -3,6 +3,11 @@
 #include <cassert>
 #include <cmath>
 #include <math.h>
+
+#include "MathTypes.hpp"
+#include "MathTypes.hpp"
+#include "MathTypes.hpp"
+#include "Quaternion.hpp"
 #include "Vector.h"
 
 
@@ -19,6 +24,7 @@ namespace CommonUtilities
 	public:
 		Matrix4x4<T>();
 		Matrix4x4<T>(const Matrix4x4<T>& aMatrix);
+		Matrix4x4(T aValue);
 
 		T& operator()(const size_t aRow, const size_t aColumn);
 		const T& operator()(const size_t aRow, const size_t aColumn) const;
@@ -27,6 +33,8 @@ namespace CommonUtilities
 
 		Vector3<T> operator[](const size_t anIndex);
 		const Vector3<T> operator[](const size_t anIndex) const;
+		Vector3<T> ToEularAngles();
+		CommonUtilities::Quaternion<T> GetQuat();
 
 		static Matrix4x4<T> CreateRotationAroundX(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundY(T aAngleInRadians);
@@ -133,6 +141,15 @@ namespace CommonUtilities
 		}
 	}
 
+	template<typename T>
+	Matrix4x4<T>::Matrix4x4(T aValue)
+	{
+		for (int i = 0; i < 16; i++)
+		{
+			myMatrix[i] = aValue;
+		}
+	}
+
 
 	template <typename T>
 	T& Matrix4x4<T>::operator()(const size_t aRow, const size_t aColumn)
@@ -162,6 +179,74 @@ namespace CommonUtilities
 	const Vector3<T> Matrix4x4<T>::operator[](const size_t anIndex) const
 	{
 		return Vector3<T>(myMatrix[(4 * anIndex) + 0], myMatrix[(4 * anIndex) + 1], myMatrix[(4 * anIndex) + 2]);
+	}
+
+	template <class T>
+	Vector3<T> Matrix4x4<T>::ToEularAngles()
+	{
+		Vector3<T> angles;
+
+		// Calculate yaw (around Y-axis)
+		angles.y = std::atan2(-myMatrix[2], std::sqrt(myMatrix[0] * myMatrix[0] + myMatrix[1] * myMatrix[1]));
+
+		// Calculate pitch (around X-axis)
+		if (std::abs(myMatrix[2]) < 1.0) {
+			angles.x = std::atan2(myMatrix[6], myMatrix[10]);
+			angles.z = std::atan2(myMatrix[1], myMatrix[0]);
+		}
+		else {
+			angles.x = std::atan2(myMatrix[6], myMatrix[5]);
+			angles.z = 0.0f;
+		}
+
+		// Convert radians to degrees if needed
+		angles.x = angles.x * 180.0f / 3.14159f;
+		angles.y = angles.y * 180.0f / 3.14159f;
+		angles.z = angles.z * 180.0f / 3.14159f;
+
+		return angles;
+	}
+
+	template <class T>
+	Quaternion<T> Matrix4x4<T>::GetQuat()
+	{
+		Quaternion<T> quaternion;
+
+		T trace = myMatrix[0] + myMatrix[5] + myMatrix[10];
+		T S;
+
+		if (trace > 0.0f) {
+			S = 0.5f / sqrt(trace + 1.0f);
+			quaternion.w = 0.25f / S;
+			quaternion.x = (myMatrix[9] - myMatrix[6]) * S;
+			quaternion.y = (myMatrix[2] - myMatrix[8]) * S;
+			quaternion.z = (myMatrix[4] - myMatrix[1]) * S;
+		}
+		else {
+			if (myMatrix[0] > myMatrix[5] && myMatrix[0] > myMatrix[10]) {
+				S = 2.0f * sqrt(1.0f + myMatrix[0] - myMatrix[5] - myMatrix[10]);
+				quaternion.w = (myMatrix[9] - myMatrix[6]) / S;
+				quaternion.x = 0.25f * S;
+				quaternion.y = (myMatrix[1] + myMatrix[4]) / S;
+				quaternion.z = (myMatrix[2] + myMatrix[8]) / S;
+			}
+			else if (myMatrix[5] > myMatrix[10]) {
+				S = 2.0f * sqrt(1.0f + myMatrix[5] - myMatrix[0] - myMatrix[10]);
+				quaternion.w = (myMatrix[2] - myMatrix[8]) / S;
+				quaternion.x = (myMatrix[1] + myMatrix[4]) / S;
+				quaternion.y = 0.25f * S;
+				quaternion.z = (myMatrix[6] + myMatrix[9]) / S;
+			}
+			else {
+				S = 2.0f * sqrt(1.0f + myMatrix[10] - myMatrix[0] - myMatrix[5]);
+				quaternion.w = (myMatrix[4] - myMatrix[1]) / S;
+				quaternion.x = (myMatrix[2] + myMatrix[8]) / S;
+				quaternion.y = (myMatrix[6] + myMatrix[9]) / S;
+				quaternion.z = 0.25f * S;
+			}
+		}
+
+		return quaternion;
 	}
 
 	template <class T>
@@ -218,6 +303,33 @@ namespace CommonUtilities
 
 		return result;
 	}
+
+	template<typename T>
+	CommonUtilities::Matrix4x4<T> operator*(Matrix4x4<T>& aMatrix, const Quaternion<T>& quaternion)
+	{
+		float qx = quaternion.x;
+		float qy = quaternion.y;
+		float qz = quaternion.z;
+		float qw = quaternion.w;
+
+		float rotationMatrix[16] = {
+			1.0f - 2.0f * (qy * qy + qz * qz), 2.0f * (qx * qy - qz * qw), 2.0f * (qx * qz + qy * qw), 0.0f,
+			2.0f * (qx * qy + qz * qw), 1.0f - 2.0f * (qx * qx + qz * qz), 2.0f * (qy * qz - qx * qw), 0.0f,
+			2.0f * (qx * qz - qy * qw), 2.0f * (qy * qz + qx * qw), 1.0f - 2.0f * (qx * qx + qy * qy), 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+
+		Matrix4x4<T> result;
+
+		for (int i = 0; i < 16; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				result(i) += aMatrix(j) * rotationMatrix[j * 4 + i % 4];
+			}
+		}
+
+		return result;
+	}
+
 
 	template<typename T>
 	Matrix4x4<T> operator-(const Matrix4x4<T>& aFirstMatrix4, const Matrix4x4<T>& aSecondMatrix4)
@@ -474,20 +586,22 @@ namespace CommonUtilities
 	{
 		Matrix4x4<T> output = Matrix4x4<T>();
 
-		output(1, 1) *= aScale.x;
-		output(2, 2) *= aScale.y;
-		output(3, 3) *= aScale.z;
+		output(3, 1) = aTranslate.x;
+		output(3, 2) = aTranslate.y;
+		output(3, 3) = aTranslate.z;
 
-		aRotation *= 3.14159f / 180.0f;
+		// Apply rotation (in radians)
+		aRotation *= static_cast<T>(3.14159 / 180.0); // Convert degrees to radians
 		output *= Matrix4x4<T>::CreateRotationAroundX(aRotation.x);
 		output *= Matrix4x4<T>::CreateRotationAroundY(aRotation.y);
 		output *= Matrix4x4<T>::CreateRotationAroundZ(aRotation.z);
 
-		output(4, 1) = aTranslate.x;
-		output(4, 2) = aTranslate.y;
-		output(4, 3) = aTranslate.z;
-		output(4, 4) = static_cast<T>(1);
+		// Apply scaling
+		output(1, 1) *= aScale.x;
+		output(2, 2) *= aScale.y;
+		output(3, 3) *= aScale.z;
 
+		
 		return output;
 	}
 
@@ -622,8 +736,8 @@ namespace CommonUtilities
 
 		T radToDeg = 180.0f / 3.14159f;
 		aRotation.x = radToDeg * static_cast<T>(std::atan2(myMatrix[6], myMatrix[10]));
-		aRotation.y = radToDeg * static_cast<T>(std::atan2(-myMatrix[2], std::sqrtf(myMatrix[6] * myMatrix[6] + myMatrix[10] * myMatrix[10])));
-		aRotation.z = radToDeg * static_cast<T>(std::atan2(myMatrix[1], myMatrix[0]));
+		aRotation.y = radToDeg * static_cast<T>(std::atan2(-myMatrix[2], myMatrix[0]));
+		aRotation.z = radToDeg * static_cast<T>(std::atan2(myMatrix[1], myMatrix[5]));
 		return aRotation;
 	}
 

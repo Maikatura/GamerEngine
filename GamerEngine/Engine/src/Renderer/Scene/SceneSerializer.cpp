@@ -702,7 +702,7 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 
 	ModelAssetHandler::Get().Clear();
 
-
+	myScene->Initialize();
 
 	YAML::Node data;
 	try
@@ -735,8 +735,6 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 			DeserializeEntity(entity, myScene, isHeadless);
 		}
 	}
-
-	myScene->Initialize();
 
 	// Fix parenting :)
 	const auto& view = myScene->GetRegistry().view<ChildComponent>();

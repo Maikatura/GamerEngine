@@ -7,7 +7,7 @@ float3 UnpackNormal(float3 aNormal)
     aNormal = 2.0f * aNormal - 1;
     aNormal.z = sqrt(1 - saturate(dot(aNormal.xy, aNormal.xy)));
 
-    return  normalize(aNormal);
+    return normalize(aNormal);
 }
 
 float3x3 ComposeTBN(float3 aTangent, float3 aBinormal, float3 aNormal)

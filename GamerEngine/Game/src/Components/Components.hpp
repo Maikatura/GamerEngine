@@ -90,7 +90,6 @@ public:
 
 
 		Rotation = { pitch * (180.0f / 3.14f), yaw * (180.0f / 3.14f), 0.0f };
-		Rotation;
 	}
 
 	Matrix4x4f GetMatrix()
