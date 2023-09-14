@@ -376,9 +376,6 @@ void Scene::OnRender()
 					/*const auto& realModel =  model.GetModel()->GetModel();
 					for(int i = 0; i < model.GetModel()->GetNumMeshes(); i++)
 					{
-
-
-
 						auto transformedBounds = CommonUtilities::AABB({
 								realModel->BoxBounds.Center[0],
 								realModel->BoxBounds.Center[1],
@@ -386,9 +383,9 @@ void Scene::OnRender()
 							},
 
 							{
-								realModel->BoxBounds.BoxExtents[0] * 10.0f,
-								realModel->BoxBounds.BoxExtents[1] * 10.0f,
-								realModel->BoxBounds.BoxExtents[2] * 10.0f
+								realModel->BoxBounds.BoxExtents[0],
+								realModel->BoxBounds.BoxExtents[1],
+								realModel->BoxBounds.BoxExtents[2]
 							}).Transform(transform.GetMatrix());
 						if(transformedBounds.IsOnFrustum(Renderer::GetCamera()->myFrustum))
 						{*/

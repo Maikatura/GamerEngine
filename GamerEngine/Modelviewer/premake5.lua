@@ -9,7 +9,7 @@ configurations { Debug, Release}
 configmap {
     ["Debug"] = "Debug",
     ["Release"] = "Release",
-    ["Distribution"] = "Release"
+    ["Distribution"] = "Distribution"
 }
 targetdir ("%{wks.location}/Bin/")
 objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}")
@@ -111,6 +111,14 @@ filter "configurations:Debug"
 	
 filter "configurations:Release"
     defines "_RELEASE"
+    runtime "Release"
+    optimize "On"
+	links { 
+        "%{Libs.FBXSDK_RELEASE}"
+    }
+
+filter "configurations:Distribution"
+    defines "_Distribution"
     runtime "Release"
     optimize "On"
 	links { 

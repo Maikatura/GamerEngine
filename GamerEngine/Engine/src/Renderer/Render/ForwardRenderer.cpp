@@ -88,9 +88,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 
 		
-		std::cout << "View: " << aView.GetPosition().x << " " << aView.GetPosition().y << " " << aView.GetPosition().z << " Rotation: " << aView.GetRotation().x << " " << aView.GetRotation().y << " " << aView.GetRotation().z << std::endl;
-		std::cout << "Proj: " << aProjection.GetPosition().x << " " << aProjection.GetPosition().y << " " << aProjection.GetPosition().z << " Rotation: " << aProjection.GetRotation().x << " " << aProjection.GetRotation().y << " " << aProjection.GetRotation().z << std::endl;
-
+		
 		myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
 		myFrameBufferData.CamTranslation = aView.GetPosition();
 		myFrameBufferData.Projection = aProjection;

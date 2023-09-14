@@ -18,7 +18,7 @@ void GBuffer::SetAsTarget() const
 	
 
 
-	DX11::GetContext()->OMSetRenderTargets(GBufferTexture::GBufferTexture_Count, &rtvList[0], DX11::DepthBuffer.Get());
+	//DX11::GetContext()->OMSetRenderTargets(GBufferTexture::GBufferTexture_Count, &rtvList[0], DX11::DepthBuffer.Get());
 }
 
 void GBuffer::ClearTarget() const

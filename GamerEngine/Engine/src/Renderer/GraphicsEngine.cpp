@@ -127,25 +127,24 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t& matPose)
 {
 	Matrix4x4f matrixObj;
-	matrixObj(0) = matPose.m[0][0];
-	matrixObj(1) = matPose.m[1][0];
-	matrixObj(2) = matPose.m[2][0];
-	matrixObj(3) = 0.0;
+	for (int row = 0; row < 4; ++row) {
+		for (int col = 0; col < 4; ++col) {
+			matrixObj(row + 1, col + 1) = matPose.m[col][row]; // Transpose the matrix during conversion
+		}
+	}
 
-	matrixObj(4) = matPose.m[0][1]; 
-	matrixObj(5) = matPose.m[1][1]; 
-	matrixObj(6) = matPose.m[2][1];
-	matrixObj(7) = 0.0;
+	return matrixObj;
+}
 
-	matrixObj(8) = matPose.m[0][2]; 
-	matrixObj(9) = matPose.m[1][2]; 
-	matrixObj(10) = matPose.m[2][2];
-	matrixObj(11) = 0.0;
+inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix44_t& matPose)
+{
+	Matrix4x4f matrixObj;
 
-	matrixObj(12) = matPose.m[0][3]; 
-	matrixObj(13) = matPose.m[1][3]; 
-	matrixObj(14) = matPose.m[2][3];
-	matrixObj(15) = 1.0f;
+	for (int row = 0; row < 4; ++row) {
+		for (int col = 0; col < 4; ++col) {
+			matrixObj(row + 1, col + 1) = matPose.m[col][row]; // Transpose the matrix during conversion
+		}
+	}
 
 	return matrixObj;
 }
@@ -356,10 +355,31 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 				}
 			}
 
+
+#if _DEBUG
+
+			if (Input::IsKeyPressed(VK_F6))
+			{
+				unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
+				currentRenderMode++;
+				if (currentRenderMode == static_cast<unsigned char>(RenderMode::COUNT))
+				{
+					currentRenderMode = 0;
+				}
+
+				std::cout << "Render Mode: " << currentRenderMode << "\n";
+
+				GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
+			}
+#endif
+
 			scene->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::GetStatus() == SceneStatus::Complete);
 		}
 
-		
+#ifndef _Distribution
+		std::string fps = "FPS: " + std::to_string(Time::GetFPS());
+		std::cout << fps.c_str() << std::endl;
+#endif
 		
 	//}
 }
@@ -529,14 +549,21 @@ void GraphicsEngine::OnFrameRender()
 	
 
 	//// Reset the render target back to the original back buffer and not the render to texture anymore.
-	//DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
-
 	
+	DX11::TurnZBufferOff();
+	Vector4f clearColor = Renderer::GetClearColor();
+	DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
+	DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
+
+
 
 	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	Renderer::Clear();*/
-	DX11::TurnZBufferOff();
+
+
+	RenderScene(vr::Hmd_Eye::Eye_Right);
+
 	scene->Clean();
 }
 

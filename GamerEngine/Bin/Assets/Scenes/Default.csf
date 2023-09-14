@@ -1,36 +1,19 @@
 Scene: SceneTesting
-Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\Default.csf
+Path: C:\Users\zyro\Documents\Github\GamerEngine\GamerEngine\Bin\Assets\Scenes\Default.csf
 Entities:
-  - Entity: 1672627168376087648
-    TagComponent:
-      Tag: Default Entity Name
-    TransformComponent:
-      Translation: [525.765381, -382.252472, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Path: Cube
-      Texture:
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
   - Entity: 1828353707181980437
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [0, -508.054779, 0.917554855]
+      Translation: [0, -497.385345, -81.3330383]
       Rotation: [0, -0, 0]
-      Scale: [336.773804, 10, 403.698639]
+      Scale: [1000, 10, 1000]
     ChildComponent:
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Path: Cube
+      Path: Assets\Models\Shapes\Cube.fbx
       Texture:
         Albedo: Resources\Textures\T_Default_C.dds
         Normal: resources\Textures\T_Default_N.dds
@@ -39,8 +22,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [632.685486, 141.992783, 561.56427]
-      Rotation: [33.8947906, -150.508774, 0.000104271501]
+      Translation: [-658.664001, 612.239258, 1028.39185]
+      Rotation: [25.2816505, -215.287781, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
     ChildComponent:
       ChildrenSize: 0
@@ -66,20 +49,50 @@ Entities:
       Color: [1, 1, 1]
       Direction: [-44, 100, 85]
       Intensity: 1
-  - Entity: 17702716414147979262
+  - Entity: 4221050999276069486
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [0, 0, -868.211609]
-      Rotation: [99.5699768, -0, 0]
-      Scale: [14.8028879, 14.8049841, 14.8049841]
+      Translation: [0, 0, 0]
+      Rotation: [-89.7849045, -0, 0]
+      Scale: [283.316467, 283.317291, 283.317291]
     ChildComponent:
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Path: Assets\Models\Shapes\plane.fbx
+      Path: Assets\Exclude\Ruska_test.fbx
       Texture:
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
+        Albedo: Resources\Textures\T_Default_C.dds
+        Normal: resources\Textures\T_Default_N.dds
+        Material: resources\Textures\T_Default_M.dds
         Albedo: Resources\Textures\T_Default_C.dds
         Normal: resources\Textures\T_Default_N.dds
         Material: resources\Textures\T_Default_M.dds

@@ -162,9 +162,6 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	D3D_FEATURE_LEVEL featureLevels[] =
 	{
 		D3D_FEATURE_LEVEL_11_0, // texture size and others..
-		D3D_FEATURE_LEVEL_10_1,
-		D3D_FEATURE_LEVEL_10_0,
-		D3D_FEATURE_LEVEL_9_3
 	};
 	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
@@ -250,6 +247,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	descDepth.CPUAccessFlags = 0;
 	descDepth.MiscFlags = 0;
+
+
 	result = Device->CreateTexture2D(&descDepth, NULL, &pDepthStencil);
 	if (FAILED(result))
 		return false;
@@ -338,6 +337,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 
+	
 
 	// Create the state using the device.
 	result = Device->CreateDepthStencilState(&depthDisabledStencilDesc, &myDepthDisabledStencilState);
@@ -345,6 +345,20 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	{
 		return false;
 	}
+
+
+	D3D11_RASTERIZER_DESC rasterizerDesc = {};
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;  // or D3D11_CULL_NONE to disable backface culling
+	rasterizerDesc.FrontCounterClockwise = FALSE; // Set to TRUE if your models use counterclockwise winding order for front faces
+	rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
+
+	// Create the rasterizer state
+	ID3D11RasterizerState* rasterizerState;
+	Device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+
+	// Set the rasterizer state
+	myImmediateContext->RSSetState(rasterizerState);
 
 	//VIEWPORT CREATION
 	myViewport.Width = static_cast<float>(m_nRenderWidth);
@@ -384,55 +398,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 		return false;
 	}
 
-	//if (aEnabledVR)
-	//{
-	//	// Loading the SteamVR Runtime
-	//	vr::EVRInitError eError = vr::VRInitError_None;
 
-	//	m_pHMD = vr::VR_Init(&eError, vr::VRApplication_Scene);
-
-	//	if (eError != vr::VRInitError_None)
-	//	{
-	//		m_pHMD = NULL;
-	//		char buf[1024];
-	//		sprintf_s(buf, ARRAYSIZE(buf), "Unable to init VR runtime: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
-	//		std::string temp(buf);
-	//		std::wstring wtemp(temp.begin(), temp.end());
-	//		MessageBox(aWindowHandle, wtemp.c_str(), L"VR_Init Failed", 0);
-	//		return false;
-	//	}
-
-	//	m_pHMD->GetRecommendedRenderTargetSize(&m_nRenderWidth, &m_nRenderHeight);
-
-	//	printf("width = %d, height = %d", m_nRenderWidth, m_nRenderHeight);
-
-	//	//m_nRenderWidth /= 2;
-	//	//m_nRenderHeight /= 4;
-
-	//	//clientWidth = m_nRenderWidth;
-	//	//clientHeight = m_nRenderHeight;
-
-	//	m_pRenderModels = (vr::IVRRenderModels*)vr::VR_GetGenericInterface(vr::IVRRenderModels_Version, &eError);
-	//	if (!m_pRenderModels)
-	//	{
-	//		m_pHMD = NULL;
-	//		vr::VR_Shutdown();
-
-	//		char buf[1024];
-	//		sprintf_s(buf, ARRAYSIZE(buf), "Unable to get render model interface: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
-	//		std::string temp(buf);
-	//		std::wstring wtemp(temp.begin(), temp.end());
-	//		MessageBox(aWindowHandle, wtemp.c_str(), L"VR_Init Failed", NULL);
-	//		return false;
-	//	}
-
-	//	if (!vr::VRCompositor())
-	//	{
-	//		//dprintf("Compositor initialization failed. See log file for details\n");
-	//		return false;
-	//	}
-	//}
-	//
+	//CreateSampler();
 
 	//result = CreateSwapChain(aEnableDeviceDebug);
 	//if(!result)
@@ -507,10 +474,10 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 void DX11::BeginFrame(std::array<float, 4> aClearColor)
 {
-	GetContext()->ClearRenderTargetView(BackBuffer.Get(), &aClearColor[0]);
+	/*GetContext()->ClearRenderTargetView(BackBuffer.Get(), &aClearColor[0]);
 	GetContext()->ClearRenderTargetView(RenderRTV.Get(), &aClearColor[0]);
 	GetContext()->ClearDepthStencilView(DepthBuffer.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	GetContext()->ClearRenderTargetView(IDBuffer.Get(), &aClearColor[0]);
+	GetContext()->ClearRenderTargetView(IDBuffer.Get(), &aClearColor[0]);*/
 }
 
 void DX11::EndFrame()

@@ -389,19 +389,20 @@ namespace CommonUtilities
 		// Convert Euler angles to radians
 		Vector3<T> eulerRadians = aEulers * static_cast<T>(0.5);
 
-		T cosYaw = std::cos(eulerRadians.z);
-		T sinYaw = std::sin(eulerRadians.z);
-		T cosPitch = std::cos(eulerRadians.y);
-		T sinPitch = std::sin(eulerRadians.y);
-		T cosRoll = std::cos(eulerRadians.x);
-		T sinRoll = std::sin(eulerRadians.x);
+		T cosYaw = std::cos(eulerRadians.y);
+		T sinYaw = std::sin(eulerRadians.y);
+		T cosPitch = std::cos(eulerRadians.x);
+		T sinPitch = std::sin(eulerRadians.x);
+		T cosRoll = std::cos(eulerRadians.z);
+		T sinRoll = std::sin(eulerRadians.z);
 
-		Quaternion<T> yawQuat(cosYaw, static_cast<T>(0), static_cast<T>(0), sinYaw);
-		Quaternion<T> pitchQuat(static_cast<T>(0), cosPitch, static_cast<T>(0), sinPitch);
-		Quaternion<T> rollQuat(static_cast<T>(0), static_cast<T>(0), cosRoll, sinRoll);
+		Quaternion<T> yawQuat(cosYaw, static_cast<T>(0), sinYaw, static_cast<T>(0));
+		Quaternion<T> pitchQuat(cosPitch, sinPitch, static_cast<T>(0), static_cast<T>(0));
+		Quaternion<T> rollQuat(cosRoll, static_cast<T>(0), static_cast<T>(0), sinRoll);
 
 		// Combine the quaternions in the desired order
-		Quaternion<T> result = yawQuat * pitchQuat * rollQuat;
+		Quaternion<T> result = rollQuat * pitchQuat * yawQuat;
+
 
 		return result.Normalized();
 	}

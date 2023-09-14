@@ -20,13 +20,15 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 		return;
 	}
 
-	Transform transform = Transform();
+	//Transform transform = Transform();
 
 
-	transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
-	aModel.GetModel()->SetTransform(transform);
+	auto test = ComposeFromTRS(aTransfrom.Translation, CommonUtilities::Quaternionf::FromEulers(aTransfrom.Rotation), aTransfrom.Scale);
+	//auto test2 = ComposeFromTRS(aTransfrom.Translation, test.GetQuat(), aTransfrom.Scale);
+	//transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
+	aModel.GetModel()->SetTransform(test);
 
-	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(),transform.GetMatrix(), aModel.GetModel()});
+	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(), test, aModel.GetModel()});
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)

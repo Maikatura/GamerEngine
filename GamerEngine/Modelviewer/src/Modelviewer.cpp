@@ -25,7 +25,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(nCmdShow);
 
 
-#if _DEBUG
+#ifndef _Distribution
 #pragma warning( push )
 #pragma warning( disable : 4996 )
     AllocConsole();
@@ -43,7 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     GraphicsEngine graphicsEngine;
 
-    const SIZE windowSize = { 1920, 1080 };
+    const SIZE windowSize = { 1280, 720 };
 
     bool bShouldRun = graphicsEngine.Initialize(
 		(GetSystemMetrics(SM_CXSCREEN) - windowSize.cx) / 2,
@@ -81,12 +81,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         graphicsEngine.OnFrameRender();
         graphicsEngine.EndFrame();
 
-		#if _DEBUG
+
+
+		#ifndef _Distribution
         LineRenderer::Clear();
 		#endif
     }
 
-#if _DEBUG
+#ifndef _Distribution
 #pragma warning( push )
 #pragma warning( disable : 4996 )
     fclose(stdin);
