@@ -54,7 +54,7 @@ bool ForwardRenderer::Initialize()
 	return true;
 }
 
-void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList)
+void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, VREye anEye)
 {
 	if(!Renderer::GetCamera())
 	{
@@ -96,11 +96,14 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 		myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
 		myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
 
-		RECT clientRect = DX11::GetClientSize();
-		const Vector2ui Resolution = {
-					DX11::m_nRenderWidth,
-				DX11::m_nRenderHeight
 
+		RECT clientRect = DX11::GetClientSize();
+		uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::m_nRenderWidth;
+		uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::m_nRenderHeight;
+
+		const Vector2ui Resolution = {
+			width,
+			height
 		};
 		myFrameBufferData.Resolution = Resolution;
 

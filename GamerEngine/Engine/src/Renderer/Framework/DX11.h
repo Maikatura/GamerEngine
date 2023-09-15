@@ -6,16 +6,9 @@
 
 #include "Renderer/Render/RenderTexture.h"
 
+//#define VR_DISABLED
 
 using namespace Microsoft::WRL;
-
-
-enum class VR_Eyes
-{
-	None,
-	Left,
-	Right
-};
 
 namespace vr
 {
@@ -33,6 +26,13 @@ struct ID3D11DepthStencilView;
 struct ID3D11Texture2D;
 struct ID3D11ShaderResourceView;
 struct D3D11_TEXTURE2D_DESC;
+
+enum class VREye
+{
+	None,
+	Right,
+	Left
+};
 
 class DX11 
 {
@@ -85,6 +85,9 @@ public:
 	static std::shared_ptr<RenderTexture> m_RenderTextureLeft;
 	static std::shared_ptr<RenderTexture> m_RenderTextureRight;
 	static std::shared_ptr<RenderTexture> myScreenView;
+
+	static ID3D11RasterizerState* myFrontCulling;
+	static ID3D11RasterizerState* myBackCulling;
 
 	DX11();
 	~DX11();

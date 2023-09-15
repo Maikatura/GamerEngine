@@ -30,7 +30,7 @@ void GBuffer::ClearTarget() const
 		/*Vector4f color = { 0,0,0,0 };
 		DX11::GetContext()->ClearRenderTargetView(myRTVs[i].Get(), &color.x);*/
 	}
-	DX11::GetContext()->OMSetRenderTargets(1, DX11::RenderRTV.GetAddressOf(), DX11::DepthBuffer.Get());
+	//DX11::GetContext()->OMSetRenderTargets(1, DX11::RenderRTV.GetAddressOf(), DX11::DepthBuffer.Get());
 }
 
 void GBuffer::SetAsResource(unsigned aStartSlot) const

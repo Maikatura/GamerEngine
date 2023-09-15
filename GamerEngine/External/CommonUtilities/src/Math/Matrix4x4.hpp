@@ -246,6 +246,10 @@ namespace CommonUtilities
 			}
 		}
 
+		quaternion.x = quaternion.x;
+		quaternion.y = quaternion.y;
+		quaternion.z = quaternion.z;
+
 		return quaternion;
 	}
 
@@ -584,23 +588,26 @@ namespace CommonUtilities
 	template <class T>
 	Matrix4x4<T> Matrix4x4<T>::BuildTransform(Vector3<T> aTranslate, Vector3<T> aRotation, Vector3<T> aScale)
 	{
-		Matrix4x4<T> output = Matrix4x4<T>();
+		Matrix4x4<T> scaleMatrix = Matrix4x4<T>();
+		scaleMatrix(1, 1) = aScale.x;
+		scaleMatrix(2, 2) = aScale.y;
+		scaleMatrix(3, 3) = aScale.z;
 
-		output(1, 1) *= aScale.x;
-		output(2, 2) *= aScale.y;
-		output(3, 3) *= aScale.z;
+		//aRotation *= static_cast<T>(3.14159f) / static_cast<T>(180.0); // Convert degrees to radians
 
-		aRotation *= 3.14159f / 180.0f;
-		output *= Matrix4x4<T>::CreateRotationAroundX(aRotation.x);
-		output *= Matrix4x4<T>::CreateRotationAroundY(aRotation.y);
-		output *= Matrix4x4<T>::CreateRotationAroundZ(aRotation.z);
+		Matrix4x4<T> rotationMatrix = Matrix4x4<T>::CreateRotationAroundX(aRotation.x) *
+			Matrix4x4<T>::CreateRotationAroundY(aRotation.y) *
+			Matrix4x4<T>::CreateRotationAroundZ(aRotation.z);
 
-		output(4, 1) = aTranslate.x;
-		output(4, 2) = aTranslate.y;
-		output(4, 3) = aTranslate.z;
-		output(4, 4) = static_cast<T>(1);
-		
-		return output;
+		Matrix4x4<T> translationMatrix = Matrix4x4<T>();
+		translationMatrix(4, 1) = aTranslate.x;
+		translationMatrix(4, 2) = aTranslate.y;
+		translationMatrix(4, 3) = aTranslate.z;
+
+		// Combine the transformations in the correct order (scale * rotate * translate)
+		Matrix4x4<T> transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
+		return transformMatrix;
 	}
 
 	template <typename T>

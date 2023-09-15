@@ -7,7 +7,7 @@
 
 CameraComponent::CameraComponent()
 {
-	Initialize(90, 0.1f, 25000.0f, { DX11::m_nRenderWidth, DX11::m_nRenderHeight});
+	Initialize(90, 0.1f, 25000.0f, { DX11::m_nRenderWidth, DX11::m_nRenderHeight });
 }
 
 inline Matrix4x4f ComposeFromTRS(const Vector3f& aTranslation, const CommonUtilities::Quaternion<float>& aRotationQuat, const Vector3f& aScale)
@@ -59,8 +59,6 @@ void CameraComponent::Resize(Vector2ui aResolution)
 	Projection(3, 4) = 1.0f / Q;
 	Projection(4, 3) = -Q * myNearPlane;
 	Projection(4, 4) = 1.0f;
-
-	
 }
 
 float CameraComponent::GetResScale()
@@ -124,56 +122,41 @@ inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix44_t& matPose
 	return matrixObj;
 }
 
-Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(VR_Eyes anEye)
+Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(VREye anEye)
 {
-	//Matrix4x4f matMVP;
-	/*if (anEye == VR_Eyes::None)
+	if (anEye == VREye::None)
 	{
-		return ;
-	}*/
-
-
-	//Matrix4x4f eyeToHeadMatrix = ;
-
-	Matrix4x4f eyeToHeadTransform = ConvertSteamVRMatrixToMatrix4(vr::VRSystem()->GetEyeToHeadTransform(VR_Eyes::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right));
-	Matrix4x4f inverseEyeTransform = eyeToHeadTransform;
-	Matrix4x4f viewMatrix = inverseEyeTransform;
-
-	// Get the projection matrix for the specified eye
-	Matrix4x4f projectionMatrix = DX11::m_mat4HMDPose;
-
-	viewProjectionMatrixVR = Matrix4x4f();
-	viewProjectionMatrixVR = ComposeFromTRS({0,0,0}, projectionMatrix.GetQuat(), {1, 1, 1}) * viewMatrix;
-	viewProjectionMatrixVR.SetPosition({ myPosition.x,myPosition.y,myPosition.z, 1.0f });
+		return ViewFlatProjection;
+	}
 
 	return ViewProjection;
 }
 
-Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VR_Eyes anEye)
+Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VREye anEye)
 {
 	if (!DX11::m_pHMD)
 		return Matrix4x4f();
 
-	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetEyeToHeadTransform(VR_Eyes::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right));
+	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetEyeToHeadTransform(VREye::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right));
 
 
 	return Matrix4x4f::GetFastInverse(matrixObj);
 }
 
 
-Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VR_Eyes anEye)
+Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VREye anEye)
 {
 	if (!DX11::m_pHMD)
-		return Matrix4x4f();
+		return Projection;
 
-	if (anEye == VR_Eyes::None)
+	if (anEye == VREye::None)
 	{
 		//Matrix4x4f matrix = ConvertXMMatrixToMyMatrix(DirectX::XMMatrixOrthographicLH(1280, 720, myNearPlane, myFarPlane));
 		//return matrix;
 	}
 
 	// TODO check here
-	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetProjectionMatrix(VR_Eyes::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right, myNearPlane, myFarPlane));
+	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetProjectionMatrix(VREye::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right, myNearPlane, myFarPlane));
 
 	return matrixObj;
 }
@@ -200,10 +183,14 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	//rotation.y = -rotation.y;
 	////rotation.z = 0.0f;
 
-	myPosition = aTransform->Translation;
-	ViewProjection = ComposeFromTRS(aTransform->Translation, rotation, aTransform->Scale);
-	//ViewProjection = ViewProjection * rotationQuat;
 
+	myPosition = aTransform->Translation;
+#ifndef VR_DISABLED
+	ViewProjection = ComposeFromTRS(aTransform->Translation, rotation, aTransform->Scale);
+	ViewFlatProjection = ComposeFromTRS(aTransform->Translation, CommonUtilities::Quat::FromEulers(aTransform->Rotation), aTransform->Scale);
+#else
+	ViewProjection = ComposeFromTRS(aTransform->Translation, CommonUtilities::Quat::FromEulers(ToRadians(aTransform->Rotation)), aTransform->Scale);;
+#endif
 
 	//ViewProjection = Matrix4x4f(1.0f);
 
@@ -211,15 +198,15 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	//ViewProjection.SetPosition({ aTransform->Translation.x,aTransform->Translation.y,aTransform->Translation.z, 1.0f });
 
 
-	myFrustum = CommonUtilities::CreateFrustumFromCamera(ViewProjection, myVerticalFoV, myHorizontalFoV, myNearPlane, myFarPlane);
+	//myFrustum = CommonUtilities::CreateFrustumFromCamera(ViewProjection, myVerticalFoV, myHorizontalFoV, myNearPlane, myFarPlane);
 }
 
 void CameraComponent::SetupCameras()
 {
-	ProjectionLeft = GetHMDMatrixProjectionEye(VR_Eyes::Left);
-	ProjectionRight = GetHMDMatrixProjectionEye(VR_Eyes::Right);
-	ViewPosLeft = GetHMDMatrixPoseEye(VR_Eyes::Left);
-	ViewPosRight = GetHMDMatrixPoseEye(VR_Eyes::Right);
+	ProjectionLeft = GetHMDMatrixProjectionEye(VREye::Left);
+	ProjectionRight = GetHMDMatrixProjectionEye(VREye::Right);
+	ViewPosLeft = GetHMDMatrixPoseEye(VREye::Left);
+	ViewPosRight = GetHMDMatrixPoseEye(VREye::Right);
 }
 
 Matrix4x4f CameraComponent::GetCurrentViewMatrix(vr::Hmd_Eye evr_eye)

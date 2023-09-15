@@ -70,8 +70,8 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 		return;
 	}
 
-	SetDepthStencilState(DepthStencilState::ReadWrite);
-	SetBlendState(BlendState::None);
+	//SetDepthStencilState(DepthStencilState::ReadWrite);
+	//SetBlendState(BlendState::None);
 
 	HRESULT result = S_FALSE;
 	D3D11_MAPPED_SUBRESOURCE bufferData;

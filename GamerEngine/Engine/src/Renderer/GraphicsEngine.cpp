@@ -384,7 +384,7 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	//}
 }
 
-void GraphicsEngine::RenderScene(VR_Eyes anEye)
+void GraphicsEngine::RenderScene(VREye anEye)
 {
 	auto scene = SceneManager::GetScene();
 
@@ -468,7 +468,7 @@ void GraphicsEngine::RenderScene(VR_Eyes anEye)
 			//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 			//RendererBase::SetBlendState(BlendState::None);
 
-			myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList);
+			myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 		}
 
 		/*{
@@ -526,6 +526,10 @@ void GraphicsEngine::OnFrameRender()
 
 	scene->OnRender();
 
+#ifndef VR_DISABLED
+
+	DX11::GetContext()->RSSetState(DX11::myFrontCulling);
+
 	DX11::m_RenderTextureLeft->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
 	//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
@@ -533,7 +537,7 @@ void GraphicsEngine::OnFrameRender()
 	DX11::m_RenderTextureLeft->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 	// Render the scene now and it will draw to the render to texture instead of the back buffer.
-	RenderScene(VR_Eyes::Left);
+	RenderScene(VREye::Left);
 	
 
 
@@ -545,9 +549,9 @@ void GraphicsEngine::OnFrameRender()
 	DX11::m_RenderTextureRight->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 	// Render the scene now and it will draw to the render to texture instead of the back buffer.
-	RenderScene(VR_Eyes::Right);
+	RenderScene(VREye::Right);
 	
-
+#endif
 	//// Reset the render target back to the original back buffer and not the render to texture anymore.
 	
 	DX11::TurnZBufferOff();
@@ -556,13 +560,21 @@ void GraphicsEngine::OnFrameRender()
 	DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
 
 
+	DX11::GetContext()->RSSetState(DX11::myBackCulling);
+	DX11::myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+	//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
+
+		// Clear the render to texture.
+	DX11::myScreenView->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+
+	RenderScene(VREye::None);
+
 
 	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	Renderer::Clear();*/
 
 
-	RenderScene(VR_Eyes::None);
 
 	scene->Clean();
 }

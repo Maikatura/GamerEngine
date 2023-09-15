@@ -342,7 +342,7 @@ bool RendererBase::Init()
 
 void RendererBase::SetDepthStencilState(DepthStencilState aDepthStencilState)
 {
-	DX11::GetContext()->OMSetDepthStencilState(DX11::pDSState, 1);
+	//DX11::GetContext()->OMSetDepthStencilState(DX11::pDSState, 1);
 	//DX11::GetContext()->OMSetDepthStencilState(myDepthStencilStates[(int)aDepthStencilState].Get(), 0xffffffff);
 }
 

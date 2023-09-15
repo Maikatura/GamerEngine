@@ -394,6 +394,10 @@ namespace CommonUtilities
 		Quaternion<T> result = roll * yaw * pitch;
 		result.Normalize();
 
+		result.x = result.x;
+		result.y = result.y;
+		result.z = result.z;
+
 		return result;
 	}
 

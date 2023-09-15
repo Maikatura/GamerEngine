@@ -55,6 +55,10 @@ std::shared_ptr<RenderTexture> DX11::m_RenderTextureLeft;
 std::shared_ptr<RenderTexture> DX11::m_RenderTextureRight;
 std::shared_ptr<RenderTexture> DX11::myScreenView;
 
+ID3D11RasterizerState* DX11::myFrontCulling;
+ID3D11RasterizerState* DX11::myBackCulling;
+
+
 DX11::DX11()
 {}
 
@@ -96,7 +100,6 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 
 	UINT createDeviceFlags = 0;
-
 
 #if _DEBUG
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -155,7 +158,6 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
-
 	if (m_nRenderWidth == 0)
 	{
 		m_nRenderWidth = clientRect.right - clientRect.left;
@@ -163,7 +165,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	if (m_nRenderHeight == 0)
 	{
-		m_nRenderWidth = clientRect.bottom - clientRect.top;
+		m_nRenderHeight = clientRect.bottom - clientRect.top;
 	}
 
 	// CREATE DEVICE AND SWAP CHAIN
@@ -178,14 +180,19 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	D3D_FEATURE_LEVEL featureLevels[] =
 	{
 		D3D_FEATURE_LEVEL_11_0, // texture size and others..
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+		D3D_FEATURE_LEVEL_9_3
 	};
 	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+
+	HRESULT result = S_FALSE;
 
 	DXGI_SWAP_CHAIN_DESC swapDesc;
 	ZeroMemory(&swapDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 	swapDesc.BufferCount = 1;
-	swapDesc.BufferDesc.Width = m_nRenderWidth;
-	swapDesc.BufferDesc.Height = m_nRenderWidth;
+	swapDesc.BufferDesc.Width = clientRect.right - clientRect.left;
+	swapDesc.BufferDesc.Height = clientRect.bottom - clientRect.top;
 	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // unsigned normal
 	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -221,7 +228,6 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 		return false;
 	}
 
-	HRESULT result;
 	// CREATE RENDER TARGET VIEW
 	result = SwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&myBackBufferTex));
 	if (FAILED(result))
@@ -363,18 +369,42 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	}
 
 
+	//D3D11_RASTERIZER_DESC rasterizerDesc = {};
+	//rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
+	//rasterizerDesc.CullMode = D3D11_CULL_BACK;  // or D3D11_CULL_NONE to disable backface culling
+	//rasterizerDesc.FrontCounterClockwise = FALSE; // Set to TRUE if your models use counterclockwise winding order for front faces
+	//rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
+
+	//// Create the rasterizer state
+	//ID3D11RasterizerState* rasterizerState;
+	//Device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+
+
 	D3D11_RASTERIZER_DESC rasterizerDesc = {};
 	rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
 	rasterizerDesc.CullMode = D3D11_CULL_NONE;  // or D3D11_CULL_NONE to disable backface culling
+	rasterizerDesc.FrontCounterClockwise = true; // Set to TRUE if your models use counterclockwise winding order for front faces
+	rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
+
+	
+	Device->CreateRasterizerState(&rasterizerDesc, &myFrontCulling);
+
+	// Set the rasterizer state
+	//myImmediateContext->RSSetState(myFrontCulling);
+
+	
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;  // or D3D11_CULL_NONE to disable backface culling
 	rasterizerDesc.FrontCounterClockwise = FALSE; // Set to TRUE if your models use counterclockwise winding order for front faces
 	rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
 
-	// Create the rasterizer state
-	ID3D11RasterizerState* rasterizerState;
-	Device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+	
+	Device->CreateRasterizerState(&rasterizerDesc, &myBackCulling);
 
 	// Set the rasterizer state
-	myImmediateContext->RSSetState(rasterizerState);
+	//myImmediateContext->RSSetState(rasterizerState);
+
+
 
 	//VIEWPORT CREATION
 	myViewport.Width = static_cast<float>(m_nRenderWidth);
@@ -414,14 +444,15 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 		return false;
 	}
 
-
+	// Create the render to texture object.
 	myScreenView = std::make_shared<RenderTexture>();
-	if (!m_RenderTextureRight)
+	if (!myScreenView)
 	{
 		return false;
 	}
 
-
+	//m_nRenderHeight = clientRect.bottom - clientRect.top;
+	
 
 	// Initialize the render to texture object.
 	result = myScreenView->Initialize(Device.Get(), clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
@@ -494,11 +525,13 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	//	}
 	//}
 
+#ifndef VR_DISABLED
 	if (!vr::VRCompositor())
 	{
 		printf("Compositor initialization failed. See log file for details\n");
 		return false;
 	}
+#endif
 
 	return true;
 }
@@ -517,6 +550,8 @@ void DX11::EndFrame()
 
 	SwapChain->Present(0, 0);
 
+#ifndef VR_DISABLED
+
 	vr::Texture_t leftEyeTexture = { m_RenderTextureLeft->GetTexture(), vr::TextureType_DirectX, vr::ColorSpace_Auto };
 	vr::EVRCompositorError error1 = vr::VRCompositor()->Submit(vr::Eye_Left, &leftEyeTexture);
 	vr::Texture_t rightEyeTexture = { m_RenderTextureRight->GetTexture(), vr::TextureType_DirectX, vr::ColorSpace_Auto };
@@ -524,6 +559,7 @@ void DX11::EndFrame()
 	if (error1)
 		printf("error is %d \n", error1);
 
+#endif
 
 }
 
