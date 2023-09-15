@@ -384,7 +384,7 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	//}
 }
 
-void GraphicsEngine::RenderScene(vr::Hmd_Eye evr_eye)
+void GraphicsEngine::RenderScene(VR_Eyes anEye)
 {
 	auto scene = SceneManager::GetScene();
 
@@ -393,8 +393,8 @@ void GraphicsEngine::RenderScene(vr::Hmd_Eye evr_eye)
 		return;
 	}
 
-	Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(evr_eye);
-	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(evr_eye);
+	Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(anEye);
+	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(anEye);
 
 	
 	std::vector<Light*>& someLightList = scene->GetLights();
@@ -533,7 +533,7 @@ void GraphicsEngine::OnFrameRender()
 	DX11::m_RenderTextureLeft->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 	// Render the scene now and it will draw to the render to texture instead of the back buffer.
-	RenderScene(vr::Hmd_Eye::Eye_Left);
+	RenderScene(VR_Eyes::Left);
 	
 
 
@@ -545,7 +545,7 @@ void GraphicsEngine::OnFrameRender()
 	DX11::m_RenderTextureRight->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 	// Render the scene now and it will draw to the render to texture instead of the back buffer.
-	RenderScene(vr::Hmd_Eye::Eye_Right);
+	RenderScene(VR_Eyes::Right);
 	
 
 	//// Reset the render target back to the original back buffer and not the render to texture anymore.
@@ -555,14 +555,14 @@ void GraphicsEngine::OnFrameRender()
 	DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
 	DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
 
-
+	
 
 	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	Renderer::Clear();*/
 
 
-	RenderScene(vr::Hmd_Eye::Eye_Right);
+	RenderScene(VR_Eyes::None);
 
 	scene->Clean();
 }

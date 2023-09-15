@@ -3,6 +3,7 @@
 
 #include "Components.hpp"
 #include "openvr_capi.h"
+//#include <DirectXMath.h>
 
 CameraComponent::CameraComponent()
 {
@@ -123,14 +124,18 @@ inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix44_t& matPose
 	return matrixObj;
 }
 
-Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(vr::Hmd_Eye anEye)
+Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(VR_Eyes anEye)
 {
 	//Matrix4x4f matMVP;
+	/*if (anEye == VR_Eyes::None)
+	{
+		return ;
+	}*/
 
 
 	//Matrix4x4f eyeToHeadMatrix = ;
 
-	Matrix4x4f eyeToHeadTransform = ConvertSteamVRMatrixToMatrix4(vr::VRSystem()->GetEyeToHeadTransform(anEye));
+	Matrix4x4f eyeToHeadTransform = ConvertSteamVRMatrixToMatrix4(vr::VRSystem()->GetEyeToHeadTransform(VR_Eyes::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right));
 	Matrix4x4f inverseEyeTransform = eyeToHeadTransform;
 	Matrix4x4f viewMatrix = inverseEyeTransform;
 
@@ -141,26 +146,50 @@ Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(vr::Hmd_Eye anEye)
 	viewProjectionMatrixVR = ComposeFromTRS({0,0,0}, projectionMatrix.GetQuat(), {1, 1, 1}) * viewMatrix;
 	viewProjectionMatrixVR.SetPosition({ myPosition.x,myPosition.y,myPosition.z, 1.0f });
 
-	return viewProjectionMatrixVR;
+	return ViewProjection;
 }
 
-Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(vr::Hmd_Eye nEye)
+Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VR_Eyes anEye)
 {
 	if (!DX11::m_pHMD)
 		return Matrix4x4f();
 
-	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetEyeToHeadTransform(nEye));
+	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetEyeToHeadTransform(VR_Eyes::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right));
 
 
 	return Matrix4x4f::GetFastInverse(matrixObj);
 }
 
-Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(vr::Hmd_Eye anEye)
+inline Matrix4x4f ConvertXMMatrixToMyMatrix(const DirectX::XMMATRIX& xmMatrix)
+{
+	DirectX::XMFLOAT4X4 float4x4;
+	DirectX::XMStoreFloat4x4(&float4x4, xmMatrix);
+
+	Matrix4x4f output;
+
+	// Copy the components to your custom 1D array matrix
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			output[i * 4 + j] = float4x4.m[i][j];
+		}
+	}
+
+	return output;
+}
+
+Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VR_Eyes anEye)
 {
 	if (!DX11::m_pHMD)
 		return Matrix4x4f();
+
+	if (anEye == VR_Eyes::None)
+	{
+		//Matrix4x4f matrix = ConvertXMMatrixToMyMatrix(DirectX::XMMatrixOrthographicLH(1280, 720, myNearPlane, myFarPlane));
+		//return matrix;
+	}
+
 	// TODO check here
-	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetProjectionMatrix(anEye, myNearPlane, myFarPlane));
+	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetProjectionMatrix(VR_Eyes::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right, myNearPlane, myFarPlane));
 
 	return matrixObj;
 }
@@ -203,10 +232,10 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 
 void CameraComponent::SetupCameras()
 {
-	ProjectionLeft = GetHMDMatrixProjectionEye(vr::Eye_Left);
-	ProjectionRight = GetHMDMatrixProjectionEye(vr::Eye_Right);
-	ViewPosLeft = GetHMDMatrixPoseEye(vr::Eye_Left);
-	ViewPosRight = GetHMDMatrixPoseEye(vr::Eye_Right);
+	ProjectionLeft = GetHMDMatrixProjectionEye(VR_Eyes::Left);
+	ProjectionRight = GetHMDMatrixProjectionEye(VR_Eyes::Right);
+	ViewPosLeft = GetHMDMatrixPoseEye(VR_Eyes::Left);
+	ViewPosRight = GetHMDMatrixPoseEye(VR_Eyes::Right);
 }
 
 Matrix4x4f CameraComponent::GetCurrentViewMatrix(vr::Hmd_Eye evr_eye)

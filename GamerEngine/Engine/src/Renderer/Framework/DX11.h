@@ -9,6 +9,14 @@
 
 using namespace Microsoft::WRL;
 
+
+enum class VR_Eyes
+{
+	None,
+	Left,
+	Right
+};
+
 namespace vr
 {
 	class IVRSystem;

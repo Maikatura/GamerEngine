@@ -36,6 +36,7 @@ namespace CommonUtilities
 		Vector3<T> ToEularAngles();
 		CommonUtilities::Quaternion<T> GetQuat();
 
+
 		static Matrix4x4<T> CreateRotationAroundX(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundY(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundZ(T aAngleInRadians);
@@ -248,6 +249,7 @@ namespace CommonUtilities
 
 		return quaternion;
 	}
+
 
 	template <class T>
 	T& Matrix4x4<T>::operator()(const size_t anIndex)

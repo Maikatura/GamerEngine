@@ -3,6 +3,7 @@
 #include "openvr.h"
 #include "Math/Frustum.h"
 
+enum class VR_Eyes;
 class TransformComponent;
 
 class CameraComponent : public Component
@@ -43,9 +44,9 @@ public:
 
 	Vector3f GetPosition();
 
-	Matrix4x4f GetCurrentViewProjectionMatrix(vr::Hmd_Eye evr_eye);
-	Matrix4x4f GetHMDMatrixPoseEye(vr::Hmd_Eye nEye);
-	Matrix4x4f GetHMDMatrixProjectionEye(vr::Hmd_Eye anEye);
+	Matrix4x4f GetCurrentViewProjectionMatrix(VR_Eyes anEye);
+	Matrix4x4f GetHMDMatrixPoseEye(VR_Eyes anEye);
+	Matrix4x4f GetHMDMatrixProjectionEye(VR_Eyes anEye);
 
 	bool HasMoved();
 	void SetHasMoved(bool aMoveValue);

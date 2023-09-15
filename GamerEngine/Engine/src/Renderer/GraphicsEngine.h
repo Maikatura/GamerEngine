@@ -10,6 +10,7 @@
 
 #include "openvr.h"
 
+enum class VR_Eyes;
 class DX11;
 class ForwardRenderer;
 class DeferredRenderer;
@@ -58,7 +59,7 @@ public:
 	void BeginFrame();
 	void EndFrame();
 	void OnFrameUpdate(bool aShouldRunLoop);
-	void RenderScene(vr::Hmd_Eye evr_eye);
+	void RenderScene(VR_Eyes anEye);
 	void OnFrameRender();
 
 	void StartUpdateThread();
