@@ -160,22 +160,6 @@ Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VR_Eyes anEye)
 	return Matrix4x4f::GetFastInverse(matrixObj);
 }
 
-inline Matrix4x4f ConvertXMMatrixToMyMatrix(const DirectX::XMMATRIX& xmMatrix)
-{
-	DirectX::XMFLOAT4X4 float4x4;
-	DirectX::XMStoreFloat4x4(&float4x4, xmMatrix);
-
-	Matrix4x4f output;
-
-	// Copy the components to your custom 1D array matrix
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			output[i * 4 + j] = float4x4.m[i][j];
-		}
-	}
-
-	return output;
-}
 
 Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VR_Eyes anEye)
 {

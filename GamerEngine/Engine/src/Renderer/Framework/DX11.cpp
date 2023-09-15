@@ -53,6 +53,7 @@ ID3D11DeviceContext* DX11::myImmediateContext = nullptr;
 
 std::shared_ptr<RenderTexture> DX11::m_RenderTextureLeft;
 std::shared_ptr<RenderTexture> DX11::m_RenderTextureRight;
+std::shared_ptr<RenderTexture> DX11::myScreenView;
 
 DX11::DX11()
 {}
@@ -95,6 +96,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 
 	UINT createDeviceFlags = 0;
+
 
 #if _DEBUG
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -150,6 +152,20 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 #endif
 
+	RECT clientRect = { 0,0,0,0 };
+	GetClientRect(WindowHandle, &clientRect);
+
+
+	if (m_nRenderWidth == 0)
+	{
+		m_nRenderWidth = clientRect.right - clientRect.left;
+	}
+
+	if (m_nRenderHeight == 0)
+	{
+		m_nRenderWidth = clientRect.bottom - clientRect.top;
+	}
+
 	// CREATE DEVICE AND SWAP CHAIN
 	D3D_DRIVER_TYPE driverTypes[] =
 	{
@@ -168,8 +184,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	DXGI_SWAP_CHAIN_DESC swapDesc;
 	ZeroMemory(&swapDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 	swapDesc.BufferCount = 1;
-	swapDesc.BufferDesc.Width = 1280;
-	swapDesc.BufferDesc.Height = 720;
+	swapDesc.BufferDesc.Width = m_nRenderWidth;
+	swapDesc.BufferDesc.Height = m_nRenderWidth;
 	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // unsigned normal
 	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -398,6 +414,21 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 		return false;
 	}
 
+
+	myScreenView = std::make_shared<RenderTexture>();
+	if (!m_RenderTextureRight)
+	{
+		return false;
+	}
+
+
+
+	// Initialize the render to texture object.
+	result = myScreenView->Initialize(Device.Get(), clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
+	if (!result)
+	{
+		return false;
+	}
 
 	//CreateSampler();
 

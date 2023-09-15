@@ -67,7 +67,7 @@ void EditorView::RenderSceneView(Entity aEntity)
 	}
 
 	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowSize.x, windowSize.y);
-	ImGui::Image(DX11::RenderSRV.Get(), { windowSize.x, windowSize.y });
+	ImGui::Image(DX11::myScreenView->GetShaderResourceView(), { windowSize.x, windowSize.y });
 	//ImGui::Image(GraphicsEngine::Get()->GetScene()->GetDirLight()->GetShadowMapView(), {windowSize.x, windowSize.y});
 
 	RenderEntityParts(aEntity);

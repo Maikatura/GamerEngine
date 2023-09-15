@@ -36,7 +36,6 @@ namespace CommonUtilities
 		Vector3<T> ToEularAngles();
 		CommonUtilities::Quaternion<T> GetQuat();
 
-
 		static Matrix4x4<T> CreateRotationAroundX(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundY(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundZ(T aAngleInRadians);
@@ -249,7 +248,6 @@ namespace CommonUtilities
 
 		return quaternion;
 	}
-
 
 	template <class T>
 	T& Matrix4x4<T>::operator()(const size_t anIndex)
@@ -588,21 +586,19 @@ namespace CommonUtilities
 	{
 		Matrix4x4<T> output = Matrix4x4<T>();
 
-		output(3, 1) = aTranslate.x;
-		output(3, 2) = aTranslate.y;
-		output(3, 3) = aTranslate.z;
-
-		// Apply rotation (in radians)
-		aRotation *= static_cast<T>(3.14159 / 180.0); // Convert degrees to radians
-		output *= Matrix4x4<T>::CreateRotationAroundX(aRotation.x);
-		output *= Matrix4x4<T>::CreateRotationAroundY(aRotation.y);
-		output *= Matrix4x4<T>::CreateRotationAroundZ(aRotation.z);
-
-		// Apply scaling
 		output(1, 1) *= aScale.x;
 		output(2, 2) *= aScale.y;
 		output(3, 3) *= aScale.z;
 
+		aRotation *= 3.14159f / 180.0f;
+		output *= Matrix4x4<T>::CreateRotationAroundX(aRotation.x);
+		output *= Matrix4x4<T>::CreateRotationAroundY(aRotation.y);
+		output *= Matrix4x4<T>::CreateRotationAroundZ(aRotation.z);
+
+		output(4, 1) = aTranslate.x;
+		output(4, 2) = aTranslate.y;
+		output(4, 3) = aTranslate.z;
+		output(4, 4) = static_cast<T>(1);
 		
 		return output;
 	}

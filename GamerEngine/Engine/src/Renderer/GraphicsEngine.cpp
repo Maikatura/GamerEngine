@@ -555,7 +555,7 @@ void GraphicsEngine::OnFrameRender()
 	DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
 	DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
 
-	
+
 
 	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 

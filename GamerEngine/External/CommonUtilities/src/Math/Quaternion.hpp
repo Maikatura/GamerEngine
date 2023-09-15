@@ -386,25 +386,15 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::FromEulers(const Vector3<T>& aEulers)
 	{
-		// Convert Euler angles to radians
-		Vector3<T> eulerRadians = aEulers * static_cast<T>(0.5);
+		Vector3<T> halfAngle = aEulers * static_cast<T>(0.5);
+		Quaternion<T> pitch{ std::cos(halfAngle.x), std::sin(halfAngle.x), static_cast<T>(0), static_cast<T>(0) };
+		Quaternion<T> yaw{ std::cos(halfAngle.y), static_cast<T>(0), std::sin(halfAngle.y), static_cast<T>(0) };
+		Quaternion<T> roll{ std::cos(halfAngle.z), static_cast<T>(0), static_cast<T>(0), std::sin(halfAngle.z) };
 
-		T cosYaw = std::cos(eulerRadians.y);
-		T sinYaw = std::sin(eulerRadians.y);
-		T cosPitch = std::cos(eulerRadians.x);
-		T sinPitch = std::sin(eulerRadians.x);
-		T cosRoll = std::cos(eulerRadians.z);
-		T sinRoll = std::sin(eulerRadians.z);
+		Quaternion<T> result = roll * yaw * pitch;
+		result.Normalize();
 
-		Quaternion<T> yawQuat(cosYaw, static_cast<T>(0), sinYaw, static_cast<T>(0));
-		Quaternion<T> pitchQuat(cosPitch, sinPitch, static_cast<T>(0), static_cast<T>(0));
-		Quaternion<T> rollQuat(cosRoll, static_cast<T>(0), static_cast<T>(0), sinRoll);
-
-		// Combine the quaternions in the desired order
-		Quaternion<T> result = rollQuat * pitchQuat * yawQuat;
-
-
-		return result.Normalized();
+		return result;
 	}
 
 	template <typename T>

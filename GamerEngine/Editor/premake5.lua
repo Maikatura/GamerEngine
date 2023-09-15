@@ -66,7 +66,8 @@ includedirs{
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
 	"%{IncludeDirs.OpenFBX}",
-    "%{IncludeDirs.FBXSDK}",
+	"%{IncludeDirs.OpenVR}",
+    	"%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.PhysicsEngine}",
 	"%{IncludeDirs.PyBullet}",
 	"%{IncludeDirs.Flecs}"
@@ -89,6 +90,7 @@ links
 	"RapidJson",
 	"YamlCpp",
 	"OpenFBX",
+	"OpenVR",
 	
 	"ImGui",
 	
@@ -98,7 +100,8 @@ links
 	
 	"d3d11.lib",
 	"dxguid.lib",
-	"opengl32.lib"
+	"opengl32.lib",
+	"%{Libs.OpenVR}"
 }
 
 files 

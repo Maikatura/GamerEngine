@@ -84,6 +84,7 @@ public:
 
 	static std::shared_ptr<RenderTexture> m_RenderTextureLeft;
 	static std::shared_ptr<RenderTexture> m_RenderTextureRight;
+	static std::shared_ptr<RenderTexture> myScreenView;
 
 	DX11();
 	~DX11();
