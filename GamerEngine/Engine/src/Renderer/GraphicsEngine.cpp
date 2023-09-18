@@ -41,7 +41,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 	myInstance = this;
 	myUseEditor = aBoolToUseEditor;
-	if(!myUseEditor)
+	if (!myUseEditor)
 	{
 		myUpdateCondition = true;
 	}
@@ -72,7 +72,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	myDropManager = std::make_shared<DropManager>();
 	RegisterDragDrop(myWindowHandle, myDropManager.get());
 
-	
+
 	if (!DX11::Init(myWindowHandle, enableDeviceDebug, isVRMode))
 	{
 		return false;
@@ -84,32 +84,32 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	myPostProcessRenderer = std::make_shared<PostProcessRenderer>();
 	myGBuffer = std::make_shared<GBuffer>();
 
-	if(!myForwardRenderer->Initialize())
+	if (!myForwardRenderer->Initialize())
 	{
 		return false;
 	}
 
-	if(!myDeferredRenderer->Initialize())
+	if (!myDeferredRenderer->Initialize())
 	{
 		return false;
 	}
 
-	if(!myShadowRenderer->Initialize())
+	if (!myShadowRenderer->Initialize())
 	{
 		return false;
 	}
 
-	if(!myPostProcessRenderer->Initialize())
+	if (!myPostProcessRenderer->Initialize())
 	{
 		return false;
 	}
 
-	if(!myGBuffer->CreateGBuffer())
+	if (!myGBuffer->CreateGBuffer())
 	{
 		return false;
 	}
 
-	if(!RendererBase::Init())
+	if (!RendererBase::Init())
 	{
 		return false;
 	}
@@ -208,87 +208,87 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
 	Input::UpdateEvents(uMsg, wParam, lParam);
 
-	switch(uMsg)
+	switch (uMsg)
 	{
-		case WM_CREATE:
-		{
-			const CREATESTRUCT* createdStruct = reinterpret_cast<CREATESTRUCT*>(lParam);
-			graphicsEnginePtr = static_cast<GraphicsEngine*>(createdStruct->lpCreateParams);
-		}
+	case WM_CREATE:
+	{
+		const CREATESTRUCT* createdStruct = reinterpret_cast<CREATESTRUCT*>(lParam);
+		graphicsEnginePtr = static_cast<GraphicsEngine*>(createdStruct->lpCreateParams);
+	}
 
-		case WM_SIZE:
+	case WM_SIZE:
+	{
+		if (DX11::Device != NULL)
 		{
-			if(DX11::Device != NULL)
+			Get()->SetWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+
+			switch (wParam)
 			{
-				Get()->SetWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
-
-				switch(wParam)
-				{
-					case SIZE_MAXIMIZED:
-						graphicsEnginePtr->SetUpdateBuffers(true);
-						graphicsEnginePtr->SetMinimized(false);
-						break;
-
-					case SIZE_MINIMIZED:
-						graphicsEnginePtr->SetMinimized(true);
-						break;
-
-					case SIZE_RESTORED:
-						graphicsEnginePtr->SetUpdateBuffers(true);
-						graphicsEnginePtr->SetMinimized(false);
-						break;
-
-					case SIZE_MAXSHOW:
-						graphicsEnginePtr->SetUpdateBuffers(true);
-						graphicsEnginePtr->SetMinimized(false);
-						break;
-				}
-			}
-		}
-
-		case WM_EXITSIZEMOVE:
-		{
-			if(DX11::Device != NULL)
-			{
+			case SIZE_MAXIMIZED:
 				graphicsEnginePtr->SetUpdateBuffers(true);
+				graphicsEnginePtr->SetMinimized(false);
+				break;
+
+			case SIZE_MINIMIZED:
+				graphicsEnginePtr->SetMinimized(true);
+				break;
+
+			case SIZE_RESTORED:
+				graphicsEnginePtr->SetUpdateBuffers(true);
+				graphicsEnginePtr->SetMinimized(false);
+				break;
+
+			case SIZE_MAXSHOW:
+				graphicsEnginePtr->SetUpdateBuffers(true);
+				graphicsEnginePtr->SetMinimized(false);
+				break;
 			}
 		}
+	}
 
-		case WM_SYSCOMMAND:
+	case WM_EXITSIZEMOVE:
+	{
+		if (DX11::Device != NULL)
 		{
-			if((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-			{
-				return 0;
-			}
-			break;
+			graphicsEnginePtr->SetUpdateBuffers(true);
 		}
+	}
 
-
-
-		case WM_DESTROY:
+	case WM_SYSCOMMAND:
+	{
+		if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
 		{
-			PostQuitMessage(0);
+			return 0;
 		}
+		break;
+	}
 
-		case WM_DROPFILES:
-		{
-			std::cout << "Dropped something\n";
-			break;
-		}
 
-		case WM_QUIT:
-		{
-			graphicsEnginePtr->SetEngineRunning(false);
-			std::cout << "Test\n";
-			break;
-		}
 
-		case WM_CLOSE:
-		{
-			graphicsEnginePtr->SetEngineRunning(false);
-			std::cout << "Dropped something\n";
-			break;
-		}
+	case WM_DESTROY:
+	{
+		PostQuitMessage(0);
+	}
+
+	case WM_DROPFILES:
+	{
+		std::cout << "Dropped something\n";
+		break;
+	}
+
+	case WM_QUIT:
+	{
+		graphicsEnginePtr->SetEngineRunning(false);
+		std::cout << "Test\n";
+		break;
+	}
+
+	case WM_CLOSE:
+	{
+		graphicsEnginePtr->SetEngineRunning(false);
+		std::cout << "Dropped something\n";
+		break;
+	}
 
 	}
 
@@ -297,7 +297,7 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
 void GraphicsEngine::BeginFrame()
 {
-	if(myIsMinimized) return;
+	if (myIsMinimized) return;
 
 
 
@@ -313,10 +313,10 @@ void GraphicsEngine::BeginFrame()
 				scene->Resize({ static_cast<unsigned int>(Get()->GetWindowSize().cx), static_cast<unsigned int>(Get()->GetWindowSize().cy) });
 				myGBuffer->CreateGBuffer();
 				myPostProcessRenderer->ReInitialize();
-				
+
 			}
 
-			
+
 		}
 		myWantToResizeBuffers = false;
 	}*/
@@ -331,56 +331,56 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 {
 	/*while (myIsRunning)
 	{*/
-		Time::Update();
-		Input::Update();
+	Time::Update();
+	Input::Update();
 
-		if(myIsMinimized) return;
-		if(SceneManager::GetStatus() == SceneStatus::Complete)
+	if (myIsMinimized) return;
+	if (SceneManager::GetStatus() == SceneStatus::Complete)
+	{
+		auto scene = SceneManager::GetScene();
+		if (!scene) return;
+
+
+
+		if (!aShouldRunLoop && myIsPaused)
 		{
-			auto scene = SceneManager::GetScene();
-			if(!scene) return;
-
-
-
-			if(!aShouldRunLoop && myIsPaused)
+			if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
 			{
-				if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
-				{
-					CommandManager::Undo();
-				}
-
-				if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
-				{
-					CommandManager::Redo();
-				}
+				CommandManager::Undo();
 			}
+
+			if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
+			{
+				CommandManager::Redo();
+			}
+		}
 
 
 #if _DEBUG
 
-			if (Input::IsKeyPressed(VK_F6))
+		if (Input::IsKeyPressed(VK_F6))
+		{
+			unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
+			currentRenderMode++;
+			if (currentRenderMode == static_cast<unsigned char>(RenderMode::COUNT))
 			{
-				unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
-				currentRenderMode++;
-				if (currentRenderMode == static_cast<unsigned char>(RenderMode::COUNT))
-				{
-					currentRenderMode = 0;
-				}
-
-				std::cout << "Render Mode: " << currentRenderMode << "\n";
-
-				GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
+				currentRenderMode = 0;
 			}
+
+			std::cout << "Render Mode: " << currentRenderMode << "\n";
+
+			GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
+		}
 #endif
 
-			scene->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::GetStatus() == SceneStatus::Complete);
-		}
+		scene->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::GetStatus() == SceneStatus::Complete);
+	}
 
 #ifndef _Distribution
-		std::string fps = "FPS: " + std::to_string(Time::GetFPS());
-		std::cout << fps.c_str() << std::endl;
+	std::string fps = "FPS: " + std::to_string(Time::GetFPS());
+	std::cout << fps.c_str() << std::endl;
 #endif
-		
+
 	//}
 }
 
@@ -396,7 +396,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(anEye);
 	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(anEye);
 
-	
+
 	std::vector<Light*>& someLightList = scene->GetLights();
 
 	const std::shared_ptr<DirectionalLight>& directionalLight = scene->GetDirLight();
@@ -496,13 +496,13 @@ void GraphicsEngine::RenderScene(VREye anEye)
 
 void GraphicsEngine::OnFrameRender()
 {
-	if(myIsMinimized) return;
+	if (myIsMinimized) return;
 
 
-	
+
 
 	bool renderSSAO = true;
-	if(Input::IsKeyDown('P'))
+	if (Input::IsKeyDown('P'))
 	{
 		renderSSAO = false;
 	}
@@ -517,7 +517,7 @@ void GraphicsEngine::OnFrameRender()
 
 	auto scene = SceneManager::GetScene();
 
-	if(!scene)
+	if (!scene)
 	{
 		return;
 	}
@@ -528,44 +528,70 @@ void GraphicsEngine::OnFrameRender()
 
 #ifndef VR_DISABLED
 
-	DX11::GetContext()->RSSetState(DX11::myFrontCulling);
-
-	DX11::m_RenderTextureLeft->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-	//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
-
-		// Clear the render to texture.
-	DX11::m_RenderTextureLeft->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
-
-	// Render the scene now and it will draw to the render to texture instead of the back buffer.
-	RenderScene(VREye::Left);
-	
+	if (!myIsPaused)
+	{
 
 
-	// Set the render target to be the render to texture.
-	DX11::m_RenderTextureRight->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-	//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
-		// Clear the render to texture.
-	DX11::m_RenderTextureRight->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
-	// Render the scene now and it will draw to the render to texture instead of the back buffer.
-	RenderScene(VREye::Right);
-	
+		DX11::GetContext()->RSSetState(DX11::myFrontCulling);
+
+		DX11::m_RenderTextureLeft->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+		//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
+
+			// Clear the render to texture.
+		DX11::m_RenderTextureLeft->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+
+		// Render the scene now and it will draw to the render to texture instead of the back buffer.
+		RenderScene(VREye::Left);
+
+
+
+		// Set the render target to be the render to texture.
+		DX11::m_RenderTextureRight->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+		//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
+
+			// Clear the render to texture.
+		DX11::m_RenderTextureRight->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+
+		// Render the scene now and it will draw to the render to texture instead of the back buffer.
+		RenderScene(VREye::Right);
+	}
+
 #endif
 	//// Reset the render target back to the original back buffer and not the render to texture anymore.
-	
-	DX11::TurnZBufferOff();
-	Vector4f clearColor = Renderer::GetClearColor();
-	DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
-	DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
 
 
-	DX11::GetContext()->RSSetState(DX11::myBackCulling);
-	DX11::myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-	//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
+
+
+
+	if (myUseEditor)
+	{
+		//DX11::TurnZBufferOff();
+		DX11::myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+		//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
 		// Clear the render to texture.
-	DX11::myScreenView->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+		DX11::myScreenView->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+	}
+	else
+	{
+		//DX11::TurnZBufferOff();
+		//DX11::GetContext()->RSSetState(DX11::myBackCulling);
+		Vector4f clearColor = Renderer::GetClearColor();
+		clearColor.z = 1.0f;
+		clearColor.w = 1.0f;
+
+		DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
+		float clearDepth = 1.0f;  // The value to which you want to clear the depth buffer
+		UINT8 clearStencil = 0;  // The value to which you want to clear the stencil buffer (if you have one)
+
+		DX11::GetContext()->ClearDepthStencilView(DX11::GetDepthStencilView(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
+		DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
+
+	}
+
+
 
 	RenderScene(VREye::None);
 
@@ -598,7 +624,7 @@ void GraphicsEngine::StopUpdateThread()
 
 		while (!myUpdateThread->joinable())
 		{
-			
+
 		}
 
 		if (myUpdateThread && myUpdateThread->joinable()) {
@@ -609,7 +635,7 @@ void GraphicsEngine::StopUpdateThread()
 
 void GraphicsEngine::EndFrame()
 {
-	if(myIsMinimized) return;
+	if (myIsMinimized) return;
 
 
 	//DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
@@ -621,7 +647,7 @@ void GraphicsEngine::EndFrame()
 	/*myGBuffer->Clear();
 	myDropManager->ClearPaths();*/
 
-	if(SceneManager::GetStatus() == SceneStatus::NeedSwap)
+	if (SceneManager::GetStatus() == SceneStatus::NeedSwap)
 	{
 		if (myUpdateThread)
 		{

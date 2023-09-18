@@ -94,7 +94,7 @@ public:
 
 	Matrix4x4f GetMatrix()
 	{
-		return Matrix4x4f::BuildTransform(Translation, Rotation, Scale);
+		return ComposeFromTRS(Translation, CommonUtilities::Quat::FromEulers(ToRadians(Rotation)), Scale);
 	}
 };
 

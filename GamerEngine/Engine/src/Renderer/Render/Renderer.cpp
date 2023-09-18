@@ -4,14 +4,6 @@
 
 #include "Renderer/Scene/SceneManager.h"
 
-
-inline Matrix4x4f ComposeFromTRS(const Vector3f& aTranslation, const CommonUtilities::Quaternion<float>& aRotationQuat, const Vector3f& aScale)
-{
-	return Matrix4x4f::CreateScale(aScale)
-		* aRotationQuat.GetRotationMatrix4x4()
-		* Matrix4x4f::CreateTranslation(aTranslation);
-}
-
 void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom)
 {
 
@@ -23,7 +15,7 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 	//Transform transform = Transform();
 
 
-	auto test = ComposeFromTRS(aTransfrom.Translation, CommonUtilities::Quaternionf::FromEulers(aTransfrom.Rotation), aTransfrom.Scale);
+	auto test = ComposeFromTRS(aTransfrom.Translation, CommonUtilities::Quaternionf::FromEulers(ToRadians(aTransfrom.Rotation)), aTransfrom.Scale);
 	//auto test2 = ComposeFromTRS(aTransfrom.Translation, test.GetQuat(), aTransfrom.Scale);
 	//transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
 	aModel.GetModel()->SetTransform(test);

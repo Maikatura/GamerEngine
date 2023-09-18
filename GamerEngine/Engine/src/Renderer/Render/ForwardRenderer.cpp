@@ -67,6 +67,46 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 		return;
 	}
 
+
+	HRESULT result = S_FALSE;
+	D3D11_MAPPED_SUBRESOURCE bufferData;
+
+
+
+
+
+	myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
+	myFrameBufferData.CamTranslation = aView.GetPosition();
+	myFrameBufferData.Projection = aProjection;
+	myFrameBufferData.RenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
+	myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
+	myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
+
+
+	RECT clientRect = DX11::GetClientSize();
+	uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::m_nRenderWidth;
+	uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::m_nRenderHeight;
+
+	const Vector2ui Resolution = {
+		width,
+		height
+	};
+	myFrameBufferData.Resolution = Resolution;
+
+	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	if (FAILED(result))
+	{
+		// BOOM?
+		return;
+	}
+
+	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
+	DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
+
+	DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+
 	for(const RenderBuffer& modelBuffer : aModelList)
 	{
 		std::shared_ptr<ModelInstance> model = modelBuffer.myModel;
@@ -82,44 +122,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			continue;
 		}*/
 
-		HRESULT result = S_FALSE;
-		D3D11_MAPPED_SUBRESOURCE bufferData;
-
-
-
 		
-		
-		myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
-		myFrameBufferData.CamTranslation = aView.GetPosition();
-		myFrameBufferData.Projection = aProjection;
-		myFrameBufferData.RenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
-		myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
-		myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
-
-
-		RECT clientRect = DX11::GetClientSize();
-		uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::m_nRenderWidth;
-		uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::m_nRenderHeight;
-
-		const Vector2ui Resolution = {
-			width,
-			height
-		};
-		myFrameBufferData.Resolution = Resolution;
-
-		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-		if(FAILED(result))
-		{
-			// BOOM?
-			return;
-		}
-
-		memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-		DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
-
-		DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-		DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
 		/*SetBlendState(BlendState::Alpha);
 		SetDepthStencilState(DepthStencilState::DSS_ReadWrite);*/

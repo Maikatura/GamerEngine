@@ -51,3 +51,12 @@ CommonUtilities::Vector3<T> ToRadians(const CommonUtilities::Vector3<T>& aVector
 
 	return returnVector3;
 }
+
+template<class T>
+CommonUtilities::Matrix4x4<T> ComposeFromTRS(const CommonUtilities::Vector3<T>& aTranslation, const CommonUtilities::Quaternion<T>& aRotationQuat, const CommonUtilities::Vector3<T>& aScale)
+{
+	return CommonUtilities::Matrix4x4<T>::CreateScale(aScale)
+		* aRotationQuat.GetRotationMatrix4x4()
+		* CommonUtilities::Matrix4x4<T>::CreateTranslation(aTranslation);
+}
+

@@ -91,9 +91,9 @@ void EditorView::RenderEntityParts(Entity aEntity)
 		return;
 	}
 
-	Matrix4x4f cameraView = Renderer::GetViewMatrix();
-	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(cameraView);
-	Matrix4x4f projectionView = Renderer::GetProjectionMatrix();
+	Matrix4x4f projectionView = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
+	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
+	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(view);
 
 	DirectX::XMFLOAT4X4 localMat{};
 	DirectX::XMFLOAT4X4 viewMat{};

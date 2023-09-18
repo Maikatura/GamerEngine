@@ -260,8 +260,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	descDepth.Width = m_nRenderWidth;// swapDesc.BufferDesc.Width;
 	descDepth.Height = m_nRenderHeight;// swapDesc.BufferDesc.Height;
 	descDepth.MipLevels = 1;
-	descDepth.ArraySize = 1;
-	descDepth.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;// DXGI_FORMAT_D32_FLOAT;//DXGI_FORMAT_D24_UNORM_S8_UINT;;//pDeviceSettings->d3d11.AutoDepthStencilFormat;
+	descDepth.Format = DXGI_FORMAT_D32_FLOAT;// DXGI_FORMAT_D32_FLOAT;//DXGI_FORMAT_D24_UNORM_S8_UINT;;//pDeviceSettings->d3d11.AutoDepthStencilFormat;
 	// DXGI_FORMAT_D32_FLOAT_S8X24_UINT
 	descDepth.SampleDesc.Count = 1;
 	descDepth.SampleDesc.Quality = 0;
@@ -269,6 +268,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	descDepth.CPUAccessFlags = 0;
 	descDepth.MiscFlags = 0;
+	descDepth.ArraySize = 1;
 
 
 	result = Device->CreateTexture2D(&descDepth, NULL, &pDepthStencil);
@@ -455,7 +455,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	
 
 	// Initialize the render to texture object.
-	result = myScreenView->Initialize(Device.Get(), clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
+	result = myScreenView->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
 	if (!result)
 	{
 		return false;
