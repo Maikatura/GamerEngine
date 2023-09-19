@@ -26,6 +26,7 @@ IncludeDirs["RapidJson"] = "%{wks.location}/External/rapidjson/"
 IncludeDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/include/"
 IncludeDirs["OpenFBX"] = "%{wks.location}/External/OpenFBX/src/"
 IncludeDirs["OpenVR"] = "%{wks.location}/External/openvr/headers/"
+IncludeDirs["DirectXTK"] = "%{wks.location}/External/directxtk/inc/"
 
 --Libaries
 LibDirs = {}

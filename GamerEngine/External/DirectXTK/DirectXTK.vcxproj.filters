@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{FFF7870B-6B01-887C-F47C-9E7C6085937C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{1F80880B-8B89-887C-1405-9F7C800D947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Inc\SimpleMath.inl">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Audio.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\BufferHelpers.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CommonStates.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\DDSTextureLoader.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\DirectXHelpers.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Effects.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GamePad.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GeometricPrimitive.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GraphicsMemory.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Keyboard.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Model.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Mouse.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\PostProcess.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\PrimitiveBatch.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ScreenGrab.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SimpleMath.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SpriteBatch.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SpriteFont.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\VertexTypes.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\WICTextureLoader.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\XboxDDSTextureLoader.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AlphaTestEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BasicEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BasicPostProcess.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BinaryReader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BufferHelpers.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CommonStates.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DDSTextureLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DGSLEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DGSLEffectFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DebugEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirectXHelpers.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DualPostProcess.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DualTextureEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffectCommon.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffectFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EnvironmentMapEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GamePad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometricPrimitive.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Geometry.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphicsMemory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Keyboard.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelLoadCMO.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelLoadSDKMESH.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelLoadVBO.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mouse.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NormalMapEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PBREffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PBREffectFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrimitiveBatch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ScreenGrab.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SimpleMath.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkinnedEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteBatch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteFont.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ToneMapPostProcess.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexTypes.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WICTextureLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\XboxDDSTextureLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

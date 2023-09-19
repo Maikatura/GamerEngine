@@ -31,6 +31,7 @@ include "External/OpenCL"
 include "External/flecs"
 include "External/OpenFBX"
 include "External/OpenVR"
+include "External/DirectXTK"
 	
 group "Backend"
 include "Shaders"

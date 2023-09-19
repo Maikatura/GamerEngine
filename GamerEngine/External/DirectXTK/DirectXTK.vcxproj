@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribution|x64">
+      <Configuration>Distribution</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F78B7304-63F6-277B-AC34-D92018DE05D0}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DirectXTK</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\DirectXTK\Debug\</IntDir>
+    <TargetName>DirectXTK_Debug</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <ExternalIncludePath>..\FBXImporter\ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\DirectXTK\Release\</IntDir>
+    <TargetName>DirectXTK_Release</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <ExternalIncludePath>..\FBXImporter\ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\DirectXTK\Distribution\</IntDir>
+    <TargetName>DirectXTK_Distribution</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <ExternalIncludePath>..\FBXImporter\ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;FBXSDK_SHARED;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;FBXSDK_SHARED;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;FBXSDK_SHARED;_DISTRIBUTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Inc\SimpleMath.inl" />
+    <ClInclude Include="inc\Audio.h" />
+    <ClInclude Include="inc\BufferHelpers.h" />
+    <ClInclude Include="inc\CommonStates.h" />
+    <ClInclude Include="inc\DDSTextureLoader.h" />
+    <ClInclude Include="inc\DirectXHelpers.h" />
+    <ClInclude Include="inc\Effects.h" />
+    <ClInclude Include="inc\GamePad.h" />
+    <ClInclude Include="inc\GeometricPrimitive.h" />
+    <ClInclude Include="inc\GraphicsMemory.h" />
+    <ClInclude Include="inc\Keyboard.h" />
+    <ClInclude Include="inc\Model.h" />
+    <ClInclude Include="inc\Mouse.h" />
+    <ClInclude Include="inc\PostProcess.h" />
+    <ClInclude Include="inc\PrimitiveBatch.h" />
+    <ClInclude Include="inc\ScreenGrab.h" />
+    <ClInclude Include="inc\SimpleMath.h" />
+    <ClInclude Include="inc\SpriteBatch.h" />
+    <ClInclude Include="inc\SpriteFont.h" />
+    <ClInclude Include="inc\VertexTypes.h" />
+    <ClInclude Include="inc\WICTextureLoader.h" />
+    <ClInclude Include="inc\XboxDDSTextureLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AlphaTestEffect.cpp" />
+    <ClCompile Include="src\BasicEffect.cpp" />
+    <ClCompile Include="src\BasicPostProcess.cpp" />
+    <ClCompile Include="src\BinaryReader.cpp" />
+    <ClCompile Include="src\BufferHelpers.cpp" />
+    <ClCompile Include="src\CommonStates.cpp" />
+    <ClCompile Include="src\DDSTextureLoader.cpp" />
+    <ClCompile Include="src\DGSLEffect.cpp" />
+    <ClCompile Include="src\DGSLEffectFactory.cpp" />
+    <ClCompile Include="src\DebugEffect.cpp" />
+    <ClCompile Include="src\DirectXHelpers.cpp" />
+    <ClCompile Include="src\DualPostProcess.cpp" />
+    <ClCompile Include="src\DualTextureEffect.cpp" />
+    <ClCompile Include="src\EffectCommon.cpp" />
+    <ClCompile Include="src\EffectFactory.cpp" />
+    <ClCompile Include="src\EnvironmentMapEffect.cpp" />
+    <ClCompile Include="src\GamePad.cpp" />
+    <ClCompile Include="src\GeometricPrimitive.cpp" />
+    <ClCompile Include="src\Geometry.cpp" />
+    <ClCompile Include="src\GraphicsMemory.cpp" />
+    <ClCompile Include="src\Keyboard.cpp" />
+    <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ModelLoadCMO.cpp" />
+    <ClCompile Include="src\ModelLoadSDKMESH.cpp" />
+    <ClCompile Include="src\ModelLoadVBO.cpp" />
+    <ClCompile Include="src\Mouse.cpp" />
+    <ClCompile Include="src\NormalMapEffect.cpp" />
+    <ClCompile Include="src\PBREffect.cpp" />
+    <ClCompile Include="src\PBREffectFactory.cpp" />
+    <ClCompile Include="src\PrimitiveBatch.cpp" />
+    <ClCompile Include="src\ScreenGrab.cpp" />
+    <ClCompile Include="src\SimpleMath.cpp" />
+    <ClCompile Include="src\SkinnedEffect.cpp" />
+    <ClCompile Include="src\SpriteBatch.cpp" />
+    <ClCompile Include="src\SpriteFont.cpp" />
+    <ClCompile Include="src\ToneMapPostProcess.cpp" />
+    <ClCompile Include="src\VertexTypes.cpp" />
+    <ClCompile Include="src\WICTextureLoader.cpp" />
+    <ClCompile Include="src\XboxDDSTextureLoader.cpp" />
+    <ClCompile Include="src\pch.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

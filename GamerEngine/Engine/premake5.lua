@@ -55,6 +55,7 @@ includedirs{
 	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.YamlCpp}",
 	"%{IncludeDirs.WICTextureLoader}",
+	"%{IncludeDirs.DirectXTK}",
 	"%{IncludeDirs.Flecs}../include2"
 	
 }
@@ -73,7 +74,8 @@ links
 	"WICTextureLoader",
 	"Game",
 	"Shaders",
-	"Flecs"
+	"Flecs",
+	"DirectXTK"
 }
 
 files 

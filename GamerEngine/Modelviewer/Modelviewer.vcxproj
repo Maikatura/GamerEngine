@@ -81,7 +81,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\directxtk\inc;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -92,7 +92,7 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\directxtk\inc;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -109,7 +109,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\directxtk\inc;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -122,7 +122,7 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\directxtk\inc;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -140,7 +140,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_Distribution;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\directxtk\inc;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -153,7 +153,7 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_Distribution;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\directxtk\inc;..\External\TurNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -200,6 +200,9 @@
     </ProjectReference>
     <ProjectReference Include="..\External\OpenVR\OpenVR.vcxproj">
       <Project>{7F884AC8-6B2A-759E-54E5-88F24026FCEE}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\DirectXTK\DirectXTK.vcxproj">
+      <Project>{F78B7304-63F6-277B-AC34-D92018DE05D0}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\TurNet\TurNet.vcxproj">
       <Project>{076955D4-F30A-80AA-DCC5-93FEC80607FB}</Project>

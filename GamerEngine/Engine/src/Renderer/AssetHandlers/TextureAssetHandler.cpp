@@ -8,6 +8,8 @@
 #include <Renderer/Framework/DX11.h>
 #include <filesystem>
 #include <fstream>
+
+#include "DDSTextureLoader.h"
 #include "Renderer/Render/DepthStencil.h"
 #include "Renderer/Scene/SceneManager.h"
 

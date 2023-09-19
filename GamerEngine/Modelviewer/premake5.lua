@@ -54,6 +54,7 @@ includedirs{
 	"%{IncludeDirs.OpenVR}",
     	"%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.Flecs}",
+	"%{IncludeDirs.DirectXTK}",
 	
 	"%{IncludeDirs.TurNet}"
 }
@@ -73,6 +74,7 @@ links
 	"YamlCpp",
 	"Flecs",
 	"OpenVR",
+	"DirectXTk",
 	
 	"d3d11.lib",
 	"dxguid.lib",
