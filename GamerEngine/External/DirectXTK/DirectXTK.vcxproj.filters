@@ -78,6 +78,45 @@
     <ClInclude Include="inc\XboxDDSTextureLoader.h">
       <Filter>inc</Filter>
     </ClInclude>
+    <ClInclude Include="src\AlignedNew.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Bezier.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BinaryReader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DDS.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DemandCreate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EffectCommon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geometry.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoaderHelpers.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PlatformHelpers.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDKMesh.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SharedResourcePool.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pch.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vbo.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AlphaTestEffect.cpp">

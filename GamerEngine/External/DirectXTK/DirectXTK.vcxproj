@@ -55,24 +55,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\DirectXTK\Debug\</IntDir>
+    <IntDir>..\..\Temp\Intermediate\DirectXTK_Debug\</IntDir>
     <TargetName>DirectXTK_Debug</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\FBXImporter\ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\DirectXTK\Release\</IntDir>
+    <IntDir>..\..\Temp\Intermediate\DirectXTK_Release\</IntDir>
     <TargetName>DirectXTK_Release</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\FBXImporter\ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\DirectXTK\Distribution\</IntDir>
+    <IntDir>..\..\Temp\Intermediate\DirectXTK_Distribution\</IntDir>
     <TargetName>DirectXTK_Distribution</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\FBXImporter\ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -81,6 +78,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;FBXSDK_SHARED;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -104,6 +102,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;FBXSDK_SHARED;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -130,6 +129,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;FBXSDK_SHARED;_DISTRIBUTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -174,6 +174,19 @@
     <ClInclude Include="inc\VertexTypes.h" />
     <ClInclude Include="inc\WICTextureLoader.h" />
     <ClInclude Include="inc\XboxDDSTextureLoader.h" />
+    <ClInclude Include="src\AlignedNew.h" />
+    <ClInclude Include="src\Bezier.h" />
+    <ClInclude Include="src\BinaryReader.h" />
+    <ClInclude Include="src\DDS.h" />
+    <ClInclude Include="src\DemandCreate.h" />
+    <ClInclude Include="src\EffectCommon.h" />
+    <ClInclude Include="src\Geometry.h" />
+    <ClInclude Include="src\LoaderHelpers.h" />
+    <ClInclude Include="src\PlatformHelpers.h" />
+    <ClInclude Include="src\SDKMesh.h" />
+    <ClInclude Include="src\SharedResourcePool.h" />
+    <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\vbo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AlphaTestEffect.cpp" />

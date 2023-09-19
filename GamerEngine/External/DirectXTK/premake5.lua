@@ -6,7 +6,7 @@ cppdialect "C++17"
 staticruntime "Off"
 
 targetdir ("%{wks.location}/Temp/lib/")
-objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}")
+objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}_%{cfg.buildcfg}")
 targetname("%{prj.name}_%{cfg.buildcfg}")
 
 pchheader "pch.h"
@@ -35,15 +35,22 @@ flags
 }
 
 files {
-	"./inc/**.h",
-	"./src/**.cpp",
-	"./inc/**.hpp",
-	"./src/**.hpp",
+	"./inc/*.h",
+	"./inc/*.cpp",
+	"./src/*.h",
+	"./src/*.cpp",
+	"./inc/*.hpp",
+	"./src/*.hpp",
    	 "**.inl"
 }
 
+includedirs{
+    	"./src",
+    	"./inc"
+}
+
 externalincludedirs {
-    "%{IncludeDirs.FBXSDK}"
+    
 }
 
 externalwarnings "Off"
