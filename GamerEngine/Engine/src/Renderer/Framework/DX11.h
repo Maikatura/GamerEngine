@@ -6,7 +6,7 @@
 
 #include "Renderer/Render/RenderTexture.h"
 
-//#define VR_DISABLED
+#define VR_DISABLED
 
 using namespace Microsoft::WRL;
 
