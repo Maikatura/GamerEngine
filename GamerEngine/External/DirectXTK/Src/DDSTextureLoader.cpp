@@ -48,7 +48,7 @@ namespace
         _Out_ size_t& theight,
         _Out_ size_t& tdepth,
         _Out_ size_t& skipMip,
-        _Out_writes_(mipCount* arraySize) D3D11_SUBRESOURCE_DATA* initData) noexcept
+        _Out_writes_(mipCount*arraySize) D3D11_SUBRESOURCE_DATA* initData) noexcept
     {
         if (!bitData || !initData)
         {
@@ -102,7 +102,7 @@ namespace
                     ++skipMip;
                 }
 
-                if (pSrcBits + (NumBytes * d) > pEndBits)
+                if (pSrcBits + (NumBytes*d) > pEndBits)
                 {
                     return HRESULT_FROM_WIN32(ERROR_HANDLE_EOF);
                 }
@@ -146,7 +146,7 @@ namespace
         _In_ unsigned int miscFlags,
         _In_ DDS_LOADER_FLAGS loadFlags,
         _In_ bool isCubeMap,
-        _In_reads_opt_(mipCount* arraySize) const D3D11_SUBRESOURCE_DATA* initData,
+        _In_reads_opt_(mipCount*arraySize) const D3D11_SUBRESOURCE_DATA* initData,
         _Outptr_opt_ ID3D11Resource** texture,
         _Outptr_opt_ ID3D11ShaderResourceView** textureView) noexcept
     {
@@ -167,202 +167,202 @@ namespace
         switch (resDim)
         {
         case D3D11_RESOURCE_DIMENSION_TEXTURE1D:
-        {
-            D3D11_TEXTURE1D_DESC desc = {};
-            desc.Width = static_cast<UINT>(width);
-            desc.MipLevels = static_cast<UINT>(mipCount);
-            desc.ArraySize = static_cast<UINT>(arraySize);
-            desc.Format = format;
-            desc.Usage = usage;
-            desc.BindFlags = bindFlags;
-            desc.CPUAccessFlags = cpuAccessFlags;
-            desc.MiscFlags = miscFlags & ~static_cast<unsigned int>(D3D11_RESOURCE_MISC_TEXTURECUBE);
-
-            ID3D11Texture1D* tex = nullptr;
-            hr = d3dDevice->CreateTexture1D(&desc,
-                initData,
-                &tex
-            );
-            if (SUCCEEDED(hr) && tex)
             {
-                if (textureView)
-                {
-                    D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
-                    SRVDesc.Format = format;
-
-                    if (arraySize > 1)
-                    {
-                        SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1DARRAY;
-                        SRVDesc.Texture1DArray.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
-                        SRVDesc.Texture1DArray.ArraySize = static_cast<UINT>(arraySize);
-                    }
-                    else
-                    {
-                        SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
-                        SRVDesc.Texture1D.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
-                    }
-
-                    hr = d3dDevice->CreateShaderResourceView(tex,
-                        &SRVDesc,
-                        textureView
-                    );
-                    if (FAILED(hr))
-                    {
-                        tex->Release();
-                        return hr;
-                    }
-                }
-
-                if (texture)
-                {
-                    *texture = tex;
-                }
-                else
-                {
-                    SetDebugObjectName(tex, "DDSTextureLoader");
-                    tex->Release();
-                }
-            }
-        }
-        break;
-
-        case D3D11_RESOURCE_DIMENSION_TEXTURE2D:
-        {
-            D3D11_TEXTURE2D_DESC desc = {};
-            desc.Width = static_cast<UINT>(width);
-            desc.Height = static_cast<UINT>(height);
-            desc.MipLevels = static_cast<UINT>(mipCount);
-            desc.ArraySize = static_cast<UINT>(arraySize);
-            desc.Format = format;
-            desc.SampleDesc.Count = 1;
-            desc.SampleDesc.Quality = 0;
-            desc.Usage = usage;
-            desc.BindFlags = bindFlags;
-            desc.CPUAccessFlags = cpuAccessFlags;
-            if (isCubeMap)
-            {
-                desc.MiscFlags = miscFlags | D3D11_RESOURCE_MISC_TEXTURECUBE;
-            }
-            else
-            {
+                D3D11_TEXTURE1D_DESC desc = {};
+                desc.Width = static_cast<UINT>(width);
+                desc.MipLevels = static_cast<UINT>(mipCount);
+                desc.ArraySize = static_cast<UINT>(arraySize);
+                desc.Format = format;
+                desc.Usage = usage;
+                desc.BindFlags = bindFlags;
+                desc.CPUAccessFlags = cpuAccessFlags;
                 desc.MiscFlags = miscFlags & ~static_cast<unsigned int>(D3D11_RESOURCE_MISC_TEXTURECUBE);
-            }
 
-            ID3D11Texture2D* tex = nullptr;
-            hr = d3dDevice->CreateTexture2D(&desc,
-                initData,
-                &tex
-            );
-            if (SUCCEEDED(hr) && tex)
-            {
-                if (textureView)
+                ID3D11Texture1D* tex = nullptr;
+                hr = d3dDevice->CreateTexture1D(&desc,
+                    initData,
+                    &tex
+                );
+                if (SUCCEEDED(hr) && tex)
                 {
-                    D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
-                    SRVDesc.Format = format;
-
-                    if (isCubeMap)
+                    if (textureView)
                     {
-                        if (arraySize > 6)
-                        {
-                            SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
-                            SRVDesc.TextureCubeArray.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+                        D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
+                        SRVDesc.Format = format;
 
-                            // Earlier we set arraySize to (NumCubes * 6)
-                            SRVDesc.TextureCubeArray.NumCubes = static_cast<UINT>(arraySize / 6);
+                        if (arraySize > 1)
+                        {
+                            SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1DARRAY;
+                            SRVDesc.Texture1DArray.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+                            SRVDesc.Texture1DArray.ArraySize = static_cast<UINT>(arraySize);
                         }
                         else
                         {
-                            SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-                            SRVDesc.TextureCube.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+                            SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
+                            SRVDesc.Texture1D.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+                        }
+
+                        hr = d3dDevice->CreateShaderResourceView(tex,
+                            &SRVDesc,
+                            textureView
+                        );
+                        if (FAILED(hr))
+                        {
+                            tex->Release();
+                            return hr;
                         }
                     }
-                    else if (arraySize > 1)
+
+                    if (texture)
                     {
-                        SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-                        SRVDesc.Texture2DArray.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
-                        SRVDesc.Texture2DArray.ArraySize = static_cast<UINT>(arraySize);
+                        *texture = tex;
                     }
                     else
                     {
-                        SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-                        SRVDesc.Texture2D.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
-                    }
-
-                    hr = d3dDevice->CreateShaderResourceView(tex,
-                        &SRVDesc,
-                        textureView
-                    );
-                    if (FAILED(hr))
-                    {
+                        SetDebugObjectName(tex, "DDSTextureLoader");
                         tex->Release();
-                        return hr;
                     }
                 }
+            }
+            break;
 
-                if (texture)
+        case D3D11_RESOURCE_DIMENSION_TEXTURE2D:
+            {
+                D3D11_TEXTURE2D_DESC desc = {};
+                desc.Width = static_cast<UINT>(width);
+                desc.Height = static_cast<UINT>(height);
+                desc.MipLevels = static_cast<UINT>(mipCount);
+                desc.ArraySize = static_cast<UINT>(arraySize);
+                desc.Format = format;
+                desc.SampleDesc.Count = 1;
+                desc.SampleDesc.Quality = 0;
+                desc.Usage = usage;
+                desc.BindFlags = bindFlags;
+                desc.CPUAccessFlags = cpuAccessFlags;
+                if (isCubeMap)
                 {
-                    *texture = tex;
+                    desc.MiscFlags = miscFlags | D3D11_RESOURCE_MISC_TEXTURECUBE;
                 }
                 else
                 {
-                    SetDebugObjectName(tex, "DDSTextureLoader");
-                    tex->Release();
+                    desc.MiscFlags = miscFlags & ~static_cast<unsigned int>(D3D11_RESOURCE_MISC_TEXTURECUBE);
+                }
+
+                ID3D11Texture2D* tex = nullptr;
+                hr = d3dDevice->CreateTexture2D(&desc,
+                    initData,
+                    &tex
+                );
+                if (SUCCEEDED(hr) && tex)
+                {
+                    if (textureView)
+                    {
+                        D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
+                        SRVDesc.Format = format;
+
+                        if (isCubeMap)
+                        {
+                            if (arraySize > 6)
+                            {
+                                SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+                                SRVDesc.TextureCubeArray.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+
+                                // Earlier we set arraySize to (NumCubes * 6)
+                                SRVDesc.TextureCubeArray.NumCubes = static_cast<UINT>(arraySize / 6);
+                            }
+                            else
+                            {
+                                SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+                                SRVDesc.TextureCube.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+                            }
+                        }
+                        else if (arraySize > 1)
+                        {
+                            SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+                            SRVDesc.Texture2DArray.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+                            SRVDesc.Texture2DArray.ArraySize = static_cast<UINT>(arraySize);
+                        }
+                        else
+                        {
+                            SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+                            SRVDesc.Texture2D.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+                        }
+
+                        hr = d3dDevice->CreateShaderResourceView(tex,
+                            &SRVDesc,
+                            textureView
+                        );
+                        if (FAILED(hr))
+                        {
+                            tex->Release();
+                            return hr;
+                        }
+                    }
+
+                    if (texture)
+                    {
+                        *texture = tex;
+                    }
+                    else
+                    {
+                        SetDebugObjectName(tex, "DDSTextureLoader");
+                        tex->Release();
+                    }
                 }
             }
-        }
-        break;
+            break;
 
         case D3D11_RESOURCE_DIMENSION_TEXTURE3D:
-        {
-            D3D11_TEXTURE3D_DESC desc = {};
-            desc.Width = static_cast<UINT>(width);
-            desc.Height = static_cast<UINT>(height);
-            desc.Depth = static_cast<UINT>(depth);
-            desc.MipLevels = static_cast<UINT>(mipCount);
-            desc.Format = format;
-            desc.Usage = usage;
-            desc.BindFlags = bindFlags;
-            desc.CPUAccessFlags = cpuAccessFlags;
-            desc.MiscFlags = miscFlags & ~UINT(D3D11_RESOURCE_MISC_TEXTURECUBE);
-
-            ID3D11Texture3D* tex = nullptr;
-            hr = d3dDevice->CreateTexture3D(&desc,
-                initData,
-                &tex
-            );
-            if (SUCCEEDED(hr) && tex)
             {
-                if (textureView)
+                D3D11_TEXTURE3D_DESC desc = {};
+                desc.Width = static_cast<UINT>(width);
+                desc.Height = static_cast<UINT>(height);
+                desc.Depth = static_cast<UINT>(depth);
+                desc.MipLevels = static_cast<UINT>(mipCount);
+                desc.Format = format;
+                desc.Usage = usage;
+                desc.BindFlags = bindFlags;
+                desc.CPUAccessFlags = cpuAccessFlags;
+                desc.MiscFlags = miscFlags & ~UINT(D3D11_RESOURCE_MISC_TEXTURECUBE);
+
+                ID3D11Texture3D* tex = nullptr;
+                hr = d3dDevice->CreateTexture3D(&desc,
+                    initData,
+                    &tex
+                );
+                if (SUCCEEDED(hr) && tex)
                 {
-                    D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
-                    SRVDesc.Format = format;
-
-                    SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE3D;
-                    SRVDesc.Texture3D.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
-
-                    hr = d3dDevice->CreateShaderResourceView(tex,
-                        &SRVDesc,
-                        textureView
-                    );
-                    if (FAILED(hr))
+                    if (textureView)
                     {
+                        D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
+                        SRVDesc.Format = format;
+
+                        SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE3D;
+                        SRVDesc.Texture3D.MipLevels = (!mipCount) ? UINT(-1) : desc.MipLevels;
+
+                        hr = d3dDevice->CreateShaderResourceView(tex,
+                            &SRVDesc,
+                            textureView
+                        );
+                        if (FAILED(hr))
+                        {
+                            tex->Release();
+                            return hr;
+                        }
+                    }
+
+                    if (texture)
+                    {
+                        *texture = tex;
+                    }
+                    else
+                    {
+                        SetDebugObjectName(tex, "DDSTextureLoader");
                         tex->Release();
-                        return hr;
                     }
                 }
-
-                if (texture)
-                {
-                    *texture = tex;
-                }
-                else
-                {
-                    SetDebugObjectName(tex, "DDSTextureLoader");
-                    tex->Release();
-                }
             }
-        }
-        break;
+            break;
         }
 
         return hr;
@@ -372,10 +372,10 @@ namespace
     HRESULT CreateTextureFromDDS(
         _In_ ID3D11Device* d3dDevice,
         _In_opt_ ID3D11DeviceContext* d3dContext,
-#if defined(_XBOX_ONE) && defined(_TITLE)
+    #if defined(_XBOX_ONE) && defined(_TITLE)
         _In_opt_ ID3D11DeviceX* d3dDeviceX,
         _In_opt_ ID3D11DeviceContextX* d3dContextX,
-#endif
+    #endif
         _In_ const DDS_HEADER* header,
         _In_reads_bytes_(bitSize) const uint8_t* bitData,
         _In_ size_t bitSize,
@@ -629,10 +629,10 @@ namespace
                     || (d3dDevice->GetFeatureLevel() >= D3D_FEATURE_LEVEL_10_0))
                 {
                     autogen = true;
-#if defined(_XBOX_ONE) && defined(_TITLE)
+                #if defined(_XBOX_ONE) && defined(_TITLE)
                     if (!d3dDeviceX || !d3dContextX)
                         return E_INVALIDARG;
-#endif
+                #endif
                 }
             }
         }
@@ -691,7 +691,7 @@ namespace
                     return E_UNEXPECTED;
                 }
 
-#if defined(_XBOX_ONE) && defined(_TITLE)
+            #if defined(_XBOX_ONE) && defined(_TITLE)
 
                 std::unique_ptr<D3D11_SUBRESOURCE_DATA[]> initData(new (std::nothrow) D3D11_SUBRESOURCE_DATA[arraySize]);
                 if (!initData)
@@ -721,34 +721,34 @@ namespace
                 switch (resDim)
                 {
                 case D3D11_RESOURCE_DIMENSION_TEXTURE1D:
-                {
-                    ID3D11Texture1D* temp = nullptr;
-                    CD3D11_TEXTURE1D_DESC stagingDesc(format, width, arraySize, 1, 0, D3D11_USAGE_STAGING, D3D11_CPU_ACCESS_READ);
-                    hr = d3dDevice->CreateTexture1D(&stagingDesc, initData.get(), &temp);
-                    if (SUCCEEDED(hr))
-                        pStaging = temp;
-                }
-                break;
+                    {
+                        ID3D11Texture1D *temp = nullptr;
+                        CD3D11_TEXTURE1D_DESC stagingDesc(format, width, arraySize, 1, 0, D3D11_USAGE_STAGING, D3D11_CPU_ACCESS_READ);
+                        hr = d3dDevice->CreateTexture1D(&stagingDesc, initData.get(), &temp);
+                        if (SUCCEEDED(hr))
+                            pStaging = temp;
+                    }
+                    break;
 
                 case D3D11_RESOURCE_DIMENSION_TEXTURE2D:
-                {
-                    ID3D11Texture2D* temp = nullptr;
-                    CD3D11_TEXTURE2D_DESC stagingDesc(format, width, height, arraySize, 1, 0, D3D11_USAGE_STAGING, D3D11_CPU_ACCESS_READ, 1, 0, isCubeMap ? D3D11_RESOURCE_MISC_TEXTURECUBE : 0);
-                    hr = d3dDevice->CreateTexture2D(&stagingDesc, initData.get(), &temp);
-                    if (SUCCEEDED(hr))
-                        pStaging = temp;
-                }
-                break;
+                    {
+                        ID3D11Texture2D *temp = nullptr;
+                        CD3D11_TEXTURE2D_DESC stagingDesc(format, width, height, arraySize, 1, 0, D3D11_USAGE_STAGING, D3D11_CPU_ACCESS_READ, 1, 0, isCubeMap ? D3D11_RESOURCE_MISC_TEXTURECUBE : 0);
+                        hr = d3dDevice->CreateTexture2D(&stagingDesc, initData.get(), &temp);
+                        if (SUCCEEDED(hr))
+                            pStaging = temp;
+                    }
+                    break;
 
                 case D3D11_RESOURCE_DIMENSION_TEXTURE3D:
-                {
-                    ID3D11Texture3D* temp = nullptr;
-                    CD3D11_TEXTURE3D_DESC stagingDesc(format, width, height, depth, 1, 0, D3D11_USAGE_STAGING, D3D11_CPU_ACCESS_READ);
-                    hr = d3dDevice->CreateTexture3D(&stagingDesc, initData.get(), &temp);
-                    if (SUCCEEDED(hr))
-                        pStaging = temp;
-                }
-                break;
+                    {
+                        ID3D11Texture3D *temp = nullptr;
+                        CD3D11_TEXTURE3D_DESC stagingDesc(format, width, height, depth, 1, 0, D3D11_USAGE_STAGING, D3D11_CPU_ACCESS_READ);
+                        hr = d3dDevice->CreateTexture3D(&stagingDesc, initData.get(), &temp);
+                        if (SUCCEEDED(hr))
+                            pStaging = temp;
+                    }
+                    break;
                 };
 
                 if (SUCCEEDED(hr))
@@ -763,7 +763,7 @@ namespace
                     while (d3dDeviceX->IsFencePending(copyFence)) { SwitchToThread(); }
                     pStaging->Release();
                 }
-#else
+            #else
                 if (arraySize > 1)
                 {
                     const uint8_t* pSrcBits = bitData;
@@ -787,7 +787,7 @@ namespace
                 {
                     d3dContext->UpdateSubresource(tex, 0, nullptr, bitData, static_cast<UINT>(rowBytes), static_cast<UINT>(numBytes));
                 }
-#endif
+            #endif
 
                 d3dContext->GenerateMips(*textureView);
 
@@ -888,10 +888,10 @@ namespace
         _In_opt_ ID3D11Resource** texture,
         _In_opt_ ID3D11ShaderResourceView** textureView) noexcept
     {
-#if !defined(NO_D3D11_DEBUG_NAME) && ( defined(_DEBUG) || defined(PROFILE) )
+    #if !defined(NO_D3D11_DEBUG_NAME) && ( defined(_DEBUG) || defined(PROFILE) )
         if (texture || textureView)
         {
-#if defined(_XBOX_ONE) && defined(_TITLE)
+        #if defined(_XBOX_ONE) && defined(_TITLE)
             const wchar_t* pstrName = wcsrchr(fileName, '\\');
             if (!pstrName)
             {
@@ -909,7 +909,7 @@ namespace
             {
                 (*textureView)->SetName(pstrName);
             }
-#else
+        #else
             CHAR strFileA[MAX_PATH];
             const int result = WideCharToMultiByte(CP_UTF8,
                 WC_NO_BEST_FIT_CHARS,
@@ -948,13 +948,13 @@ namespace
                     );
                 }
             }
-#endif
+        #endif
         }
-#else
+    #else
         UNREFERENCED_PARAMETER(fileName);
         UNREFERENCED_PARAMETER(texture);
         UNREFERENCED_PARAMETER(textureView);
-#endif
+    #endif
     }
 } // anonymous namespace
 
@@ -987,7 +987,7 @@ HRESULT DirectX::CreateDDSTextureFromMemory(
     HRESULT DirectX::CreateDDSTextureFromMemory(
         ID3D11Device* d3dDevice,
         ID3D11DeviceContext* d3dContext,
-#endif
+    #endif
         const uint8_t* ddsData,
         size_t ddsDataSize,
         ID3D11Resource** texture,
@@ -1057,9 +1057,9 @@ HRESULT DirectX::CreateDDSTextureFromMemoryEx(
     }
 
     hr = CreateTextureFromDDS(d3dDevice, nullptr,
-#if defined(_XBOX_ONE) && defined(_TITLE)
+    #if defined(_XBOX_ONE) && defined(_TITLE)
         nullptr, nullptr,
-#endif
+    #endif
         header, bitData, bitSize,
         maxsize,
         usage, bindFlags, cpuAccessFlags, miscFlags,
@@ -1093,7 +1093,7 @@ HRESULT DirectX::CreateDDSTextureFromMemoryEx(
     HRESULT DirectX::CreateDDSTextureFromMemoryEx(
         ID3D11Device* d3dDevice,
         ID3D11DeviceContext* d3dContext,
-#endif
+    #endif
         const uint8_t* ddsData,
         size_t ddsDataSize,
         size_t maxsize,
@@ -1145,9 +1145,9 @@ HRESULT DirectX::CreateDDSTextureFromMemoryEx(
     }
 
     hr = CreateTextureFromDDS(d3dDevice, d3dContext,
-#if defined(_XBOX_ONE) && defined(_TITLE)
+    #if defined(_XBOX_ONE) && defined(_TITLE)
         d3dDevice, d3dContext,
-#endif
+    #endif
         header, bitData, bitSize,
         maxsize,
         usage, bindFlags, cpuAccessFlags, miscFlags,
@@ -1199,7 +1199,7 @@ HRESULT DirectX::CreateDDSTextureFromFile(
     HRESULT DirectX::CreateDDSTextureFromFile(
         ID3D11Device* d3dDevice,
         ID3D11DeviceContext* d3dContext,
-#endif
+    #endif
         const wchar_t* fileName,
         ID3D11Resource** texture,
         ID3D11ShaderResourceView** textureView,
@@ -1268,9 +1268,9 @@ HRESULT DirectX::CreateDDSTextureFromFileEx(
     }
 
     hr = CreateTextureFromDDS(d3dDevice, nullptr,
-#if defined(_XBOX_ONE) && defined(_TITLE)
+    #if defined(_XBOX_ONE) && defined(_TITLE)
         nullptr, nullptr,
-#endif
+    #endif
         header, bitData, bitSize,
         maxsize,
         usage, bindFlags, cpuAccessFlags, miscFlags,
@@ -1297,7 +1297,7 @@ HRESULT DirectX::CreateDDSTextureFromFileEx(
     HRESULT DirectX::CreateDDSTextureFromFileEx(
         ID3D11Device* d3dDevice,
         ID3D11DeviceContext* d3dContext,
-#endif
+    #endif
         const wchar_t* fileName,
         size_t maxsize,
         D3D11_USAGE usage,
@@ -1349,9 +1349,9 @@ HRESULT DirectX::CreateDDSTextureFromFileEx(
     }
 
     hr = CreateTextureFromDDS(d3dDevice, d3dContext,
-#if defined(_XBOX_ONE) && defined(_TITLE)
+    #if defined(_XBOX_ONE) && defined(_TITLE)
         d3dDevice, d3dContext,
-#endif
+    #endif
         header, bitData, bitSize,
         maxsize,
         usage, bindFlags, cpuAccessFlags, miscFlags,
