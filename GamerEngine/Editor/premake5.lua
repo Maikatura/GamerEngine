@@ -70,7 +70,8 @@ includedirs{
     	"%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.PhysicsEngine}",
 	"%{IncludeDirs.PyBullet}",
-	"%{IncludeDirs.Flecs}"
+	"%{IncludeDirs.Flecs}",
+	"%{IncludeDirs.DirectXTK}"
 }
 
 externalincludedirs {
