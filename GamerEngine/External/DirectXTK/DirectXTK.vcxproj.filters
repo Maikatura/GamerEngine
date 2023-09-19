@@ -81,9 +81,6 @@
     <ClInclude Include="inc\WICTextureLoader.h">
       <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="inc\XboxDDSTextureLoader.h">
-      <Filter>inc</Filter>
-    </ClInclude>
     <ClInclude Include="src\AlignedNew.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -237,9 +234,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\WICTextureLoader.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\XboxDDSTextureLoader.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp">

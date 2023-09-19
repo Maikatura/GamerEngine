@@ -9,7 +9,7 @@ targetdir ("%{wks.location}/Temp/lib/")
 objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}_%{cfg.buildcfg}")
 targetname("%{prj.name}_%{cfg.buildcfg}")
 
-pchheader "src/pch.h"
+pchheader "pch.h"
 pchsource "src/pch.cpp"
 
 linkoptions
