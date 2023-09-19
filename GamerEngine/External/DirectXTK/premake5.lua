@@ -9,8 +9,6 @@ targetdir ("%{wks.location}/Temp/lib/")
 objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}_%{cfg.buildcfg}")
 targetname("%{prj.name}_%{cfg.buildcfg}")
 
-pchheader "pch.h"
-pchsource "pch.cpp"
 
 linkoptions
 {
@@ -41,7 +39,8 @@ files {
 	"./src/*.cpp",
 	"./inc/*.hpp",
 	"./src/*.hpp",
-   	 "**.inl"
+   	 "**.inl",
+	"./src/Shaders/Compiled/*.inc"
 }
 
 includedirs{

@@ -32,11 +32,11 @@ goto continue
 
 :continuepc
 
-set PCFXC="%WindowsSdkVerBinPath%%FXCARCH%\fxc.exe"
+set PCFXC="./fxc.exe"
 if exist %PCFXC% goto continue
-set PCFXC="%WindowsSdkBinPath%%WindowsSDKVersion%\%FXCARCH%\fxc.exe"
+set PCFXC="./fxc.exe"
 if exist %PCFXC% goto continue
-set PCFXC="%WindowsSdkDir%bin\%WindowsSDKVersion%\%FXCARCH%\fxc.exe"
+set PCFXC="./fxc.exe"
 if exist %PCFXC% goto continue
 
 set PCFXC=fxc.exe
@@ -332,3 +332,4 @@ exit /b
 :needxdk
 echo ERROR: CompileShaders xbox requires the Microsoft Xbox One XDK
 echo        (try re-running from the XDK Command Prompt)
+

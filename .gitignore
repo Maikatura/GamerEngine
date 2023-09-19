@@ -12,6 +12,7 @@
 **/build
 *.exe
 *.pdb
+!GamerEngine/External/DirectXTK/Src/Shaders/fxc.exe
 
 
 // GamerEngine
