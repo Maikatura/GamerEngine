@@ -1,4 +1,3 @@
-#define MAX_LIGHTS 8
 #include "Data/ShaderStructs.hlsli"
 #include "Data/Textures.hlsli"
 
@@ -12,7 +11,8 @@ float ResolveShadow(LightData light, Texture2D aShadowMap, float3 projectedTexCo
 {
 	static const int vogelSampleCount = 16;
 
-	return aShadowMap.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0) >= projectedTexCoord.z;
+    const float returnValue = aShadowMap.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0) >= projectedTexCoord.z;
+    return returnValue;
 
 }
 
@@ -71,10 +71,11 @@ bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightPr
 			return true;
 		}
 	}
+	
 	return false;
 }
 
-bool GetShadowPixel(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLightProjection, float aRange, float3 aLightPosition, float3 aWorldPosition)
+bool GetShadowPixel(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLightProjection, float3 aLightPosition, float3 aWorldPosition)
 {
 	float shadowBias = 0.01f;
 
@@ -94,10 +95,40 @@ bool GetShadowPixel(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLi
 		{
 			float vDepth = (v2lProj.z / v2lProj.w) - shadowBias;
 			float lDepth = aShadowMap.Sample(pointClampSampler, fragToLight).r;
-			if(lDepth < vDepth) return true;
-		}
+            if (lDepth < vDepth)
+            {
+                return true;
+            }
+        }
 	}
 	return false;
+}
+
+// Constants
+#define SHADOW_BIAS 0.01f
+#define SHADOW_MAP_TEXCOORD_SCALE 8192.0f
+#define SHADOW_MAP_TEXCOORD_BIAS 0.0001f
+
+// Inline function for shadow sampling
+inline bool SampleShadow(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightProjection, float3 aWorldPosition)
+{
+    float4 w2lView = mul(aLightView, float4(aWorldPosition, 1));
+    float4 v2lProj = mul(aLightProjection, w2lView);
+
+    float2 projectedTexCoord;
+    projectedTexCoord.x = v2lProj.x / v2lProj.w / 2.0f + 0.5f;
+    projectedTexCoord.y = -v2lProj.y / v2lProj.w / 2.0f + 0.5f;
+
+    if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y)
+    {
+        float vDepth = (v2lProj.z / v2lProj.w) - SHADOW_BIAS;
+        float lDepth = aShadowMap.Sample(pointClampSampler, projectedTexCoord).r;
+        if (lDepth < vDepth)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 PixelOutput main(VertexToPixel input)
@@ -164,37 +195,39 @@ PixelOutput main(VertexToPixel input)
 	float interleavedGradientNoise = InterleavedGradientNoise(input.myUV * float2(512, 512));
 
 
-	if(LB_DirectionalLight.CastShadows)
-	{
-		const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
-		const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
+    if (LB_DirectionalLight.CastShadows)
+    {
+        const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
+        const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
 
-		float3 projectedTexCoord;
-		projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
-		projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
+        float3 projectedTexCoord;
+        projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
+        projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
 
-		if(saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
-		{
-			const float shadowBias = 0.0001f;
-			const float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - shadowBias;
-			projectedTexCoord.z = viewDepth;
-			const float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
+        if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
+        {
+            float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - SHADOW_BIAS;
+            projectedTexCoord.z = viewDepth;
+            float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
 
-			if(lightDepth < viewDepth)
-			{
-				float flaking = 0.8f;
-				float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / 8192.0f);
-				directShadow *= saturate(shadow * (1 - flaking) + flaking);
-				directLighting *= shadow;
-			}
-
-		}
-	}
+            if (lightDepth < viewDepth)
+            {
+                float flaking = 0.8f;
+                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / SHADOW_MAP_TEXCOORD_SCALE);
+                directShadow *= saturate(shadow * (1 - flaking) + flaking);
+                directLighting *= shadow;
+            }
+        }
+    }
 
 	[unroll(20)]
 	for(unsigned int l = 0; l < LB_NumLights; l++)
 	{
 		LightData Light = LB_Lights[l];
+
+        Texture2D shadowMapOne = shadowMap[l];
+        TextureCube shadowMapCube = shadowCubeTexture[l];
+
 		switch(Light.LightType)
 		{
 			case 2:
@@ -206,7 +239,7 @@ PixelOutput main(VertexToPixel input)
 				if(Light.CastShadows)
 				{
 
-					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz))
+                        if (GetShadowPixel(shadowMapCube, Light.LightView, Light.LightProjection, /*Light.Range,*/Light.Position, worldPosition.xyz))
 					{
 						const float shadow = 0.001f;
 						pointTemp *= shadow;
@@ -224,7 +257,7 @@ PixelOutput main(VertexToPixel input)
 
 				if(Light.CastShadows)
 				{
-					if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz))
+                        if (GetShadowPixel(shadowMapOne, Light.LightView[0], Light.LightProjection, worldPosition.xyz))
 					{
 						const float shadow = 0.001f;
 						spotTemp *= shadow;
@@ -233,10 +266,12 @@ PixelOutput main(VertexToPixel input)
 				spotLight += spotTemp;
 				break;
 			}
+		default: 
+			break;
 		}
 	}
 
-	float emissiveStrength = 1.0f;
+	float emissiveStrength = 0.0f;
 	float3 emissiveColor = emissive * emissiveStr * albedo.xyz * emissiveStrength;
 	float3 finalColor = directLighting + ambientLighting + emissiveColor +((pointLight + spotLight));
 

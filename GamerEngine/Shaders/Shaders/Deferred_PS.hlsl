@@ -1,5 +1,3 @@
-#define MAX_LIGHTS 96
-
 #include "Data/ShaderStructs.hlsli"
 #include "Data/Textures.hlsli"
 
@@ -301,8 +299,8 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 		}
 		case 5://RenderMode::AlbedoMap:
 		{
-			float3 basemyColorMapSample = albedoTexture.Sample(defaultSampler, input.myUV).rgb;
-			result.myColor = float4(basemyColorMapSample, 1.0f);
+			float3 baseMyColorMapSample = albedoTexture.Sample(defaultSampler, input.myUV).rgb;
+			result.myColor = float4(baseMyColorMapSample, 1.0f);
 			result.myColor.a = 1.0f;
 			break;
 		}

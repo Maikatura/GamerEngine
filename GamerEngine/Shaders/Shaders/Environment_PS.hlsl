@@ -1,4 +1,4 @@
-#define MAX_LIGHTS 96
+
 #include "Data/ShaderStructs.hlsli"
 #include "Data/Textures.hlsli"
 

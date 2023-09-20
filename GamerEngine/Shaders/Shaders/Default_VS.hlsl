@@ -8,10 +8,10 @@ VertexToPixel main(VertexInput input)
 	if(OB_HasBones)
 	{
 		skinningMatrix = 0;
-		skinningMatrix += input.myBoneWeights.x * OB_BoneData[input.myBoneIDs.x];
-		skinningMatrix += input.myBoneWeights.y * OB_BoneData[input.myBoneIDs.y];
-		skinningMatrix += input.myBoneWeights.z * OB_BoneData[input.myBoneIDs.z];
-		skinningMatrix += input.myBoneWeights.w * OB_BoneData[input.myBoneIDs.w];
+		skinningMatrix += OB_BoneData[input.myBoneIDs.x] * input.myBoneWeights.x;
+		skinningMatrix += OB_BoneData[input.myBoneIDs.y] * input.myBoneWeights.y;
+		skinningMatrix += OB_BoneData[input.myBoneIDs.z] * input.myBoneWeights.z;
+		skinningMatrix += OB_BoneData[input.myBoneIDs.w] * input.myBoneWeights.w;
 	}
 
 	float4 vertexWorldPosition = float4(0.0f, 0.0f, 0.0f, 1.0f);

@@ -32,6 +32,8 @@ struct LightData
 
 };
 
+#define MAX_LIGHTS 96
+
 cbuffer LightBuffer : register(b3)
 {
 	LightData LB_DirectionalLight;

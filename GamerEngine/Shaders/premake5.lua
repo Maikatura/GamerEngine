@@ -1,6 +1,6 @@
 project "Shaders"
 location "."
-kind "Utility"
+kind "WindowedApp"
 language "C++"
 cppdialect "C++20"
 staticruntime "Off"
