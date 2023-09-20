@@ -223,11 +223,11 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 			if(!model->GetMaterial().empty() && static_cast<int>(meshData.myMaterialIndex) < model->GetMaterialSize())
 			{
-				model->GetMaterial()[meshData.myMaterialIndex].SetAsResource(nullptr);
+				model->GetMaterial()[meshData.myMaterialIndex]->SetAsResource(nullptr);
 			}
 			else if(!model->GetMaterial().empty())
 			{
-				model->GetMaterial()[0].SetAsResource(nullptr);
+				model->GetMaterial()[0]->SetAsResource(nullptr);
 			}
 
 			/*DX11::GetContext()->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());

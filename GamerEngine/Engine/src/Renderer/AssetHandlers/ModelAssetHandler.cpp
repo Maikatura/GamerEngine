@@ -349,10 +349,13 @@ bool ModelAssetHandler::InitUnitCube()
 	std::wstring normalTexture = L"Resources\\Textures\\T_Default_N.dds";
 	std::wstring materialTexture = L"Resources\\Textures\\T_Default_M.dds";
 
-	Material mat;
-	mat.SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoTexture));
-	mat.SetNormalTexture(TextureAssetHandler::GetTexture(normalTexture));
-	mat.SetMaterialTexture(TextureAssetHandler::GetTexture(materialTexture));
+
+
+	std::shared_ptr<Material> mat = std::make_shared<Material>();
+	mat->Init(L"Cube");
+	mat->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoTexture));
+	mat->SetNormalTexture(TextureAssetHandler::GetTexture(normalTexture));
+	mat->SetMaterialTexture(TextureAssetHandler::GetTexture(materialTexture));
 	mdl->PushMaterial(mat);
 
 	mdl->Init(modelData, L"Cube");
@@ -912,12 +915,13 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 				material = TextureAssetHandler::GetTexture(L"resources\\Textures\\T_Default_M.dds");
 			}
 
-			Material mat;
-			mat.SetAlbedoTexture(albedo);
-			mat.SetNormalTexture(normal);
-			mat.SetMaterialTexture(material);
+			std::shared_ptr<Material> mat = std::make_shared<Material>();
+			mat->Init(Helpers::string_cast<std::wstring>(mesh.MeshName));
+			mat->SetAlbedoTexture(albedo);
+			mat->SetNormalTexture(normal);
+			mat->SetMaterialTexture(material);
 
-			mdl->PushMaterial(mat);
+			mdl->PushMaterial(std::move(mat));
 
 
 			
@@ -988,8 +992,8 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 	const std::string ansiFileName = Helpers::string_cast<std::string>(someFilePath);
 	std::shared_ptr<ModelInstance> model = GetModelInstance(aModelName);
 
-	/*TGA::FBX::Animation tgaAnimation;
-	if(TGA::FBX::Importer::LoadAnimation(ansiFileName, model->GetSkeleton()->BoneNames, tgaAnimation))
+	TGA::FBX::Animation tgaAnimation;
+	if(TGA::FBX::Importer::LoadAnimation(someFilePath, tgaAnimation))
 	{
 		Animation animOut;
 		animOut.Duration = static_cast<float>(tgaAnimation.Duration);
@@ -998,11 +1002,17 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 		animOut.Name = Helpers::string_cast<std::wstring>(tgaAnimation.Name);
 		for(int i = 0; i < static_cast<int>(tgaAnimation.Length); i++)
 		{
-			animOut.Frames.push_back(Animation::Frame{ *(std::vector<Matrix4x4f>*) & tgaAnimation.Frames[i].LocalTransforms });
+			Animation::Frame frames; //{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
+			for (int y = 0; y < tgaAnimation.Frames[i].LocalTransforms.size(); y++)
+			{
+				frames.LocalTransforms.push_back(*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
+			}
+
+			animOut.Frames.push_back(frames);
 		}
 
 		model->GetSkeleton()->Animations.insert({ someFilePath, animOut });
-	}*/
+	}
 
 
 	return true;

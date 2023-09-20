@@ -212,35 +212,38 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::BeginMap; // ModelComponent
 
 		out << YAML::Key << "Path" << YAML::Value << Helpers::string_cast<std::string>(model.GetModel()->GetModel()->GetName());
+		
+
+		const std::vector<std::shared_ptr<Material>>& material = model.GetModel()->GetMaterial();
+
+		out << YAML::Key << "TextureSize" << YAML::Value << model.GetModel()->GetMaterialSize();
 		out << YAML::Key << "Texture";
 		out << YAML::BeginMap;
-
-		const std::vector<Material>& material = model.GetModel()->GetMaterial();
-
-		for(size_t i = 0; i < material.size(); i++)
+		for(size_t i = 0; i < model.GetModel()->GetMaterialSize(); i++)
 		{
-			if(const auto albedoTex = material[i].GetAlbedoTexture())
+			out << YAML::Key << i;
+			out << YAML::BeginMap;
+
+			if(const auto albedoTex = material[i]->GetAlbedoTexture())
 			{
 				out << YAML::Key << "Albedo" << YAML::Value << Helpers::string_cast<std::string>(albedoTex->GetPath());
 			}
 			
-			if(const auto normalTex = material[i].GetNormalTexture())
+			if(const auto normalTex = material[i]->GetNormalTexture())
 			{
 				out << YAML::Key << "Normal" << YAML::Value << Helpers::string_cast<std::string>(normalTex->GetPath());
 			}
 
 			
-			if(const auto materialTex = material[i].GetMaterialTexture())
+			if(const auto materialTex = material[i]->GetMaterialTexture())
 			{
 				out << YAML::Key << "Material" << YAML::Value << Helpers::string_cast<std::string>(materialTex->GetPath());
 			}
+
+			out << YAML::EndMap;
 		}
-
-
-		
-
-
 		out << YAML::EndMap;
+
 
 		out << YAML::EndMap; // ModelComponent
 	}
@@ -465,32 +468,44 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 		auto& modelComp = deserializedEntity.AddComponent<ModelComponent>(Helpers::string_cast<std::wstring>(path));
 
 
+		int textureSize = 0;
+		if (modelComponent["TextureSize"])
+		{
+			textureSize = modelComponent["TextureSize"].as<int>();
+		}
+
 		auto textures = modelComponent["Texture"];
+
+
 
 		if (!isHeadless)
 		{
-			/*auto& materials = modelComp.GetModel()->GetMaterial();
-
-			Material mat;
+			auto& materials = modelComp.GetModel()->GetMaterial();
 
 
-
-			if(textures["Albedo"])
+			for (size_t i = 0; i < textureSize; i++)
 			{
-				mat.SetAlbedoTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Albedo"].as<std::string>())));
-			}
+				auto texture = textures[std::to_string(i)];
 
-			if(textures["Normal"])
-			{
-				mat.SetNormalTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Normal"].as<std::string>())));
-			}
+				
 
-			if(textures["Material"])
-			{
-				mat.SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(textures["Material"].as<std::string>())));
-			}
+				if (texture["Albedo"])
+				{
+					std::wstring albedoPath = Helpers::string_cast<std::wstring>(texture["Albedo"].as<std::string>());
+					materials[i]->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoPath));
+				}
 
-			materials.push_back( mat);*/
+				if (texture["Normal"])
+				{
+					materials[i]->SetNormalTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(texture["Normal"].as<std::string>())));
+				}
+
+				if (texture["Material"])
+				{
+					materials[i]->SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(texture["Material"].as<std::string>())));
+				}
+			}
+			
 		}
 	}
 

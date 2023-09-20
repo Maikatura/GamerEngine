@@ -216,6 +216,9 @@
     <ProjectReference Include="..\External\OpenVR\OpenVR.vcxproj">
       <Project>{7F884AC8-6B2A-759E-54E5-88F24026FCEE}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\External\DirectXTK\DirectXTK.vcxproj">
+      <Project>{F78B7304-63F6-277B-AC34-D92018DE05D0}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\External\ImGui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>

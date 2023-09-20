@@ -4,7 +4,6 @@
 #include <Renderer/AssetHandlers/TextureAssetHandler.h>
 #include <Renderer/Model/Texture.h>
 #include <Renderer/AssetHandlers/DDSTextureLoader11.h>
-#include <WICTextureLoader/WICTextureLoader11.h>
 #include <Renderer/Framework/DX11.h>
 #include <filesystem>
 #include <fstream>
@@ -12,6 +11,8 @@
 #include "DDSTextureLoader.h"
 #include "Renderer/Render/DepthStencil.h"
 #include "Renderer/Scene/SceneManager.h"
+#include <WICTextureLoader.h>
+
 
 void TextureAssetHandler::Clear()
 {
@@ -31,14 +32,19 @@ std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aNa
 
 	if(model == myRegistry.end())
 	{
-		LoadTexture(L"Resources\\Textures\\T_Default_C.dds");
+		model = myRegistry.find(L"resources\\Textures\\T_Default_C.dds");
+
+		if (model == myRegistry.end())
+		{
+			LoadTexture(L"resources\\Textures\\T_Default_C.dds");
+		}
 
 		if (myRegistry.empty())
 		{
 			return std::make_shared<Texture>();
 		}
 
-		return myRegistry.find(L"Resources\\Textures\\T_Default_C.dds")->second;
+		return myRegistry.find(L"resources\\Textures\\T_Default_C.dds")->second;
 	}
 
 
@@ -47,6 +53,8 @@ std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aNa
 
 bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 {
+
+	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
 	if (SceneManager::IsHeadless())
 	{
@@ -58,20 +66,20 @@ bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 
 		std::filesystem::path filename = aFileName;
 
-		Texture result;
+		std::shared_ptr<Texture> result = std::make_shared<Texture>();
 		HRESULT createResult = S_FALSE;
 		if (filename.extension() == ".dds")
 		{
-			createResult = DirectX::CreateDDSTextureFromFile(DX11::Device.Get(), aFileName.c_str(),
-				result.myTexture.GetAddressOf(),
-				result.mySRV.GetAddressOf()
+			createResult = DirectX::CreateDDSTextureFromFile(DX11::GetDevice(), aFileName.c_str(),
+				result->myTexture.GetAddressOf(),
+				result->mySRV.GetAddressOf()
 			);
 		}
 		else
 		{
-			createResult = DirectX::CreateWICTextureFromFile(DX11::Device.Get(), aFileName.c_str(),
-				result.myTexture.GetAddressOf(),
-				result.mySRV.GetAddressOf()
+			createResult = DirectX::CreateWICTextureFromFile(DX11::GetDevice(), aFileName.c_str(),
+				result->myTexture.GetAddressOf(),
+				result->mySRV.GetAddressOf()
 			);
 		}
 
@@ -79,13 +87,13 @@ bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 
 
 		std::filesystem::path path = aFileName;
-		result.SetName(path.filename());
-		result.SetPath(path.wstring());
+		result->SetName(path.filename());
+		result->SetPath(path.wstring());
 
 		if (SUCCEEDED(createResult))
 		{
 			
-			myRegistry.insert({ aFileName, std::make_shared<Texture>(result) });
+			myRegistry.insert({ path.wstring(), result });
 			return true;
 		}
 

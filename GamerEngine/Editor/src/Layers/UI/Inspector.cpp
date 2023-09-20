@@ -221,98 +221,124 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 					ImGui::InputInt("Size", &size);
 					model.GetModel()->GetModel()->SetMaterialSize(size);
 
-					for(size_t i = 0; i < model.GetModel()->GetMaterial().size(); i++)
+
+					std::map<std::string, std::vector<std::shared_ptr<Material>>> materialGroups;
+					for (auto& material : model.GetModel()->GetMaterial()) 
 					{
+						materialGroups[Helpers::string_cast<std::string>(material->GetName())].push_back(material);
+					}
+
+					std::map<std::string, std::vector<std::shared_ptr<Material>>> sortedMaterials(materialGroups.begin(), materialGroups.end());
+
+					int i = 0;
+
+					for(const auto& [name, group] : sortedMaterials)
+					{
+						ImGui::Text("Name: %s", name.c_str());
+
+						for (auto& material : group)
 						{
-							ImGui::BeginGroup();
-							// Albedo
-
-							auto albedoTex = model.GetModel()->GetMaterial()[i].GetAlbedoTexture();
-							std::string name = (albedoTex != nullptr) ? Helpers::string_cast<std::string>(albedoTex->GetName()) : "No Texture";
-
-							if(albedoTex != nullptr)
 							{
-								ImGui::Image(albedoTex->GetSRV().Get(), { 20, 20 });
-								ImGui::SameLine();
-								ImGui::InputText("##Albedo" + i, &name, flagsReadOnly);
+								ImGui::BeginGroup();
+								// Albedo
+
+								std::string nameId = "##Albedo" + std::to_string(i);
+
+								auto albedoTex = material->GetAlbedoTexture();
+								std::string name = (albedoTex != nullptr) ? Helpers::string_cast<std::string>(albedoTex->GetName()) : "No Texture";
+
+								if (albedoTex != nullptr)
+								{
+									ImGui::Image(albedoTex->GetSRV().Get(), { 20, 20 });
+									ImGui::SameLine();
+									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
+								}
+								else
+								{
+									ImGui::ColorButton("##placeholder", { 1,0,0,1 }, 0, { 20, 20 });
+									ImGui::SameLine();
+									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
+								}
+
+								std::wstring newFile = DropHandler::DropFileEntity(aEntity);
+								std::filesystem::path aNewPath = newFile;
+								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
+								{
+									material->SetAlbedoTexture(TextureAssetHandler::GetTexture(newFile));
+								}
+
+
+
+								ImGui::EndGroup();
 							}
-							else
+
+							// Normal
 							{
-								ImGui::ColorButton("##placeholder", { 1,0,0,1 }, 0, { 20, 20 });
-								ImGui::SameLine();
-								ImGui::InputText("##Albedo" + i, &name, flagsReadOnly);
-							}
+								ImGui::BeginGroup();
 
-							std::wstring newFile = DropHandler::DropFileEntity(aEntity);
-							std::filesystem::path aNewPath = newFile;
-							if(name != aNewPath.filename() && !aNewPath.filename().string().empty())
+								std::string nameId = "##Normal" + std::to_string(i);
+
+
+								auto normalTexture = material->GetNormalTexture();
+								std::string name = (normalTexture != nullptr) ? Helpers::string_cast<std::string>(normalTexture->GetName()) : "No Texture";
+
+								if (normalTexture != nullptr)
+								{
+									ImGui::Image(normalTexture->GetSRV().Get(), { 20, 20 });
+									ImGui::SameLine();
+									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
+								}
+								else
+								{
+									ImGui::ColorButton("##placeholder", { 1,0,0,1 }, 0, { 20, 20 });
+									ImGui::SameLine();
+									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
+								}
+
+								std::wstring newFile = DropHandler::DropFileEntity(aEntity);
+								std::filesystem::path aNewPath = newFile;
+								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
+								{
+									material->SetNormalTexture(TextureAssetHandler::GetTexture(newFile));
+								}
+
+								ImGui::EndGroup();
+							}
+							// Material
 							{
-								model.GetModel()->GetMaterial()[i].SetAlbedoTexture(TextureAssetHandler::GetTexture(newFile));
+								ImGui::BeginGroup();
+
+								std::string nameId = "##Material" + std::to_string(i);
+
+
+								auto materialTex = material->GetMaterialTexture();
+								std::string name = (materialTex != nullptr) ? Helpers::string_cast<std::string>(materialTex->GetName()) : "No Texture";
+
+								if (materialTex != nullptr)
+								{
+									ImGui::Image(materialTex->GetSRV().Get(), { 20, 20 });
+									ImGui::SameLine();
+									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
+								}
+								else
+								{
+									ImGui::ColorButton("##placeholder", { 1,0,0,1 }, 0, { 20, 20 });
+									ImGui::SameLine();
+									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
+								}
+
+								std::wstring newFile = DropHandler::DropFileEntity(aEntity);
+								std::filesystem::path aNewPath = newFile;
+								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
+								{
+									material->SetMaterialTexture(TextureAssetHandler::GetTexture(newFile));
+								}
+
+								ImGui::EndGroup();
 							}
-
-
-
-							ImGui::EndGroup();
 						}
 
-						// Normal
-						{
-							ImGui::BeginGroup();
-
-							auto normalTexture = model.GetModel()->GetMaterial()[i].GetNormalTexture();
-							std::string name = (normalTexture != nullptr) ? Helpers::string_cast<std::string>(normalTexture->GetName()) : "No Texture";
-
-							if(normalTexture != nullptr)
-							{
-								ImGui::Image(normalTexture->GetSRV().Get(), { 20, 20 });
-								ImGui::SameLine();
-								ImGui::InputText("##Normal" + i, &name, flagsReadOnly);
-							}
-							else
-							{
-								ImGui::ColorButton("##placeholder", { 1,0,0,1 }, 0, { 20, 20 });
-								ImGui::SameLine();
-								ImGui::InputText("##Normal" + i, &name, flagsReadOnly);
-							}
-
-							std::wstring newFile = DropHandler::DropFileEntity(aEntity);
-							std::filesystem::path aNewPath = newFile;
-							if(name != aNewPath.filename() && !aNewPath.filename().string().empty())
-							{
-								model.GetModel()->GetMaterial()[i].SetNormalTexture(TextureAssetHandler::GetTexture(newFile));
-							}
-
-							ImGui::EndGroup();
-						}
-						// Material
-						{
-							ImGui::BeginGroup();
-
-							auto materialTex = model.GetModel()->GetMaterial()[i].GetMaterialTexture();
-							std::string name = (materialTex != nullptr) ? Helpers::string_cast<std::string>(materialTex->GetName()) : "No Texture";
-
-							if(materialTex != nullptr)
-							{
-								ImGui::Image(materialTex->GetSRV().Get(), { 20, 20 });
-								ImGui::SameLine();
-								ImGui::InputText("##Material" + i, &name, flagsReadOnly);
-							}
-							else
-							{
-								ImGui::ColorButton("##placeholder", { 1,0,0,1 }, 0, { 20, 20 });
-								ImGui::SameLine();
-								ImGui::InputText("##Material" + i, &name, flagsReadOnly);
-							}
-
-							std::wstring newFile = DropHandler::DropFileEntity(aEntity);
-							std::filesystem::path aNewPath = newFile;
-							if(name != aNewPath.filename() && !aNewPath.filename().string().empty())
-							{
-								model.GetModel()->GetMaterial()[i].SetMaterialTexture(TextureAssetHandler::GetTexture(newFile));
-							}
-
-							ImGui::EndGroup();
-						}
+						
 					}
 				}
 				else

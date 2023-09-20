@@ -81,9 +81,9 @@ public:
 
 	void UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent);
 
-	void PushMaterial(Material aMaterial) const { myModel->PushMaterial(aMaterial); }
+	void PushMaterial(std::shared_ptr<Material> aMaterial) const { myModel->PushMaterial(aMaterial); }
 
-	FORCEINLINE std::vector<Material>& GetMaterial() const { return myModel->GetMaterial(); }
+	FORCEINLINE std::vector<std::shared_ptr<Material>>& GetMaterial() const { return myModel->GetMaterial(); }
 	FORCEINLINE int GetMaterialSize() { return myModel->GetMaterialSize(); }
 	FORCEINLINE std::shared_ptr<AnimationStatus> GetAnimationState() { return myAnimState; }
 	FORCEINLINE Skeleton* GetSkeleton() { return myModel->GetSkeleton(); }

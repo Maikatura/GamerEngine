@@ -155,6 +155,12 @@ void ModelInstance::EditorUpdate()
 void ModelInstance::UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent)
 {
 	int length = static_cast<int>(anAnimState->myCurrentAnimation->Length);
+
+	if (length <= 0)
+	{
+		return;
+	}
+
 	int frame = (anAnimState->myCurrentFrame < length - 1 ? anAnimState->myCurrentFrame + 1 : 0);
 	Matrix4x4f lowFrame = anAnimState->myCurrentAnimation->Frames[anAnimState->myCurrentFrame].LocalTransforms[someBoneInd];
 	Matrix4x4f highFrame = anAnimState->myCurrentAnimation->Frames[frame].LocalTransforms[someBoneInd];

@@ -844,56 +844,153 @@ bool DX11::CreateSelectionView()
 
 void DX11::Resize()
 {
-	//	GetContext()->ClearState();
-	//	ID3D11RenderTargetView* nullViews[] = { nullptr };
-	//	GetContext()->OMSetRenderTargets(ARRAYSIZE(nullViews), nullViews, nullptr);
-	//	BackBuffer->Release();
-	//	DepthBuffer->Release();
-	//	SampleStateDefault->Release();
-	//	//SamplerStateWrap->Release();
-	//	//BackBufferTex[0] = nullptr;
-	//
-	//
-	//	if(BackBufferTex != nullptr)
-	//	{
-	//		BackBufferTex->Release();
-	//	}
-	//
-	//	RenderRTV->Release();
-	//	RenderSRV->Release();
-	//	IDBuffer->Release();
-	//	IDBufferTex->Release();
-	//	StagingTex->Release();
-	//
-	//
-	//	RECT clientRect = { 0,0,0,0 };
-	//	GetClientRect(WindowHandle, &clientRect);
-	//
-	//	GetContext()->Flush();
-	//
-	//
-	//#if _DEBUG
-	//	ReportDX11();
-	//#endif
-	//
-	//	HRESULT result;
-	//	result = SwapChain->ResizeBuffers(1, static_cast<UINT>(clientRect.right - clientRect.left), static_cast<UINT>(clientRect.bottom - clientRect.top), DXGI_FORMAT_UNKNOWN, 0);
-	//	if(result != S_OK)
-	//	{
-	//		std::cout << "SwapChain Could not resize." << "\n";
-	//	}
-	//
-	//	ComPtr<ID3D11Texture2D> spBackBuffer;
-	//	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(spBackBuffer.GetAddressOf()));
-	//	if(result != S_OK)
-	//	{
-	//		std::cout << "SwapChain could not get backbuffer 0." << "\n";
-	//	}
-	//
-	//	CreateTexture2D();
-	//	CreateDepthBuffer();
-	//	ResizeViewport();
-	//	CreateShaderResourceView();
-	//	CreateSampler();
-	//	CreateSelectionView();
+	m_nRenderWidth = 0;
+	m_nRenderHeight = 0;
+
+
+	// TODO : IF VR THEN GET RECOMMENDED SIZE
+
+	RECT clientRect = { 0,0,0,0 };
+	GetClientRect(WindowHandle, &clientRect);
+
+	if (m_nRenderWidth == 0)
+	{
+		m_nRenderWidth = clientRect.right - clientRect.left;
+	}
+
+	if (m_nRenderHeight == 0)
+	{
+		m_nRenderHeight = clientRect.bottom - clientRect.top;
+	}
+
+	// Release the existing resources
+	myImmediateContext->OMSetRenderTargets(0, nullptr, nullptr);
+	SafeRelease(myRenderTargetView);
+	SafeRelease(myDepthStencilView);
+	SafeRelease(myBackBufferTex);
+
+
+
+	// Resize the swap chain
+	HRESULT hr = SwapChain->ResizeBuffers(1, m_nRenderWidth, m_nRenderHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+	if (FAILED(hr))
+	{
+		// Handle the error
+		return;
+	}
+	// Create a new render target view
+	hr = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&myBackBufferTex));
+	if (FAILED(hr))
+	{
+		// Handle the error
+		return;
+	}
+
+	D3D11_TEXTURE2D_DESC BBDesc;
+	ZeroMemory(&BBDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	myBackBufferTex->GetDesc(&BBDesc);
+
+	D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
+	ZeroMemory(&RTVDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+	RTVDesc.Format = BBDesc.Format;
+	RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	RTVDesc.Texture2D.MipSlice = 0;
+
+	hr = Device->CreateRenderTargetView(myBackBufferTex, &RTVDesc, &myRenderTargetView);
+	if (FAILED(hr))
+	{
+		// Handle the error
+		return;
+	}
+
+	// Create a depth-stencil buffer with the same dimensions
+	ID3D11Texture2D* pDepthStencil = NULL;
+	D3D11_TEXTURE2D_DESC depthStencilDesc = {};
+	depthStencilDesc.Width = m_nRenderWidth;
+	depthStencilDesc.Height = m_nRenderHeight;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	hr = Device->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
+	if (FAILED(hr))
+	{
+		// Handle the error
+		return;
+	}
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	ZeroMemory(&descDSV, sizeof(descDSV));
+	descDSV.Format = depthStencilDesc.Format;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0;
+
+	hr = Device->CreateDepthStencilView(pDepthStencil, &descDSV, &myDepthStencilView);
+	if (FAILED(hr))
+	{
+		// Handle the error
+		return;
+	}
+	SafeRelease(pDepthStencil);
+
+
+	// Update the viewport with the new dimensions
+	myViewport.Width = static_cast<float>(m_nRenderWidth);
+	myViewport.Height = static_cast<float>(m_nRenderHeight);
+
+
+	m_RenderTextureLeft->Shutdown();
+	m_RenderTextureRight->Shutdown();
+	myScreenView->Shutdown();
+
+	// Create the render to texture object.
+	m_RenderTextureLeft = std::make_shared<RenderTexture>();
+	if (!m_RenderTextureLeft)
+	{
+		return;
+	}
+
+	// Initialize the render to texture object.
+	hr = m_RenderTextureLeft->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	if (!hr)
+	{
+		return;
+	}
+
+	m_RenderTextureRight = std::make_shared<RenderTexture>();
+	if (!m_RenderTextureRight)
+	{
+		return;
+	}
+
+	// Initialize the render to texture object.
+	hr = m_RenderTextureRight->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	if (!hr)
+	{
+		return;
+	}
+
+	// Create the render to texture object.
+	myScreenView = std::make_shared<RenderTexture>();
+	if (!myScreenView)
+	{
+		return;
+	}
+
+	//m_nRenderHeight = clientRect.bottom - clientRect.top;
+
+
+	// Initialize the render to texture object.
+	hr = myScreenView->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	if (!hr)
+	{
+		return;
+	}
+
+	myViewport.Width = static_cast<float>(m_nRenderWidth);
+	myViewport.Height = static_cast<float>(m_nRenderHeight);
+	myImmediateContext->RSSetViewports(1, &myViewport);
 }

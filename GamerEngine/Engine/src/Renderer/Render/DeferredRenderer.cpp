@@ -429,11 +429,11 @@ void DeferredRenderer::GenerateGBuffer(const std::vector<RenderBuffer>& aModelLi
 
 			if(!model->GetMaterial().empty() && static_cast<int>(meshData.myMaterialIndex) < model->GetMaterialSize())
 			{
-				model->GetMaterial()[meshData.myMaterialIndex].SetAsResource(nullptr);
+				model->GetMaterial()[meshData.myMaterialIndex]->SetAsResource(nullptr);
 			}
 			else if(!model->GetMaterial().empty())
 			{
-				model->GetMaterial()[0].SetAsResource(nullptr);
+				model->GetMaterial()[0]->SetAsResource(nullptr);
 			}
 
 			/*if(isInstanced && !model->HasBeenRendered())

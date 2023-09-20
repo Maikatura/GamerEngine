@@ -36,10 +36,10 @@ void Model::SetMaterialSize(int aSize)
 	myMaterialSize = static_cast<int>(myMaterial.size());
 }
 
-void Model::PushMaterial(const Material aMaterial)
+void Model::PushMaterial(const std::shared_ptr<Material> aMaterial)
 {
 	myMaterialSize++;
-	myMaterial.push_back(aMaterial);
+	myMaterial.push_back(std::move(aMaterial));
 }
 
 void Model::Update()

@@ -19,7 +19,6 @@
 #include "Layers/UI/EditorSettingsPanel.h"
 #include "Renderer/model/Entity.h"
 #include "Renderer/Scene/SceneManager.h"
-#include <DirectXMathMatrix.inl>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

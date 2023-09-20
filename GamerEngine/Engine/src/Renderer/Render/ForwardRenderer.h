@@ -12,7 +12,7 @@
 #include "Renderer/Render/Buffers.h"
 #include <d3d11.h>
 
-constexpr UINT MAX_FORWARD_LIGHTS = 8;
+constexpr UINT MAX_FORWARD_LIGHTS = 98;
 
 
 struct SceneLightBuffer

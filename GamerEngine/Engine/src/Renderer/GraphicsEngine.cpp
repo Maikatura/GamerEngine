@@ -301,25 +301,25 @@ void GraphicsEngine::BeginFrame()
 
 
 
-	/*if(myWantToResizeBuffers)
+	if(myWantToResizeBuffers)
 	{
 		if(DX11::SwapChain)
 		{
 			if (SceneManager::GetStatus() == SceneStatus::Complete)
 			{
-				auto scene = SceneManager::GetScene();
-				myGBuffer->Release();
+				//myGBuffer->Release();
 				DX11::Resize();
+				auto scene = SceneManager::GetScene();
 				scene->Resize({ static_cast<unsigned int>(Get()->GetWindowSize().cx), static_cast<unsigned int>(Get()->GetWindowSize().cy) });
-				myGBuffer->CreateGBuffer();
-				myPostProcessRenderer->ReInitialize();
+				/*myGBuffer->CreateGBuffer();
+				myPostProcessRenderer->ReInitialize();*/
 
 			}
 
 
 		}
 		myWantToResizeBuffers = false;
-	}*/
+	}
 
 	//Vector4f clearColor = Renderer::GetClearColor();
 	//DX11::BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
@@ -567,6 +567,7 @@ void GraphicsEngine::OnFrameRender()
 
 	if (myUseEditor)
 	{
+
 		//DX11::TurnZBufferOff();
 		DX11::myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
 		//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.

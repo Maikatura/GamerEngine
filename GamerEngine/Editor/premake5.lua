@@ -92,6 +92,7 @@ links
 	"YamlCpp",
 	"OpenFBX",
 	"OpenVR",
+	"DirectXTK",
 	
 	"ImGui",
 	

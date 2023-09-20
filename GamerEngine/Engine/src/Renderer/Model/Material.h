@@ -35,9 +35,10 @@ public:
 
 	Material(const Material& other) = default;
 
+	void Init(std::wstring aName);
 	void Init(std::wstring aName, const Vector3f& anAlbedo);
 
-	FORCEINLINE const std::wstring& GetName() const { return myName; }
+	FORCEINLINE const std::wstring GetName() const { return myName; }
 	FORCEINLINE const Vector3f& GetAlbedo() const { return myMaterialData.Albedo; }
 
 	FORCEINLINE const std::shared_ptr<Texture>& GetAlbedoTexture() const { return myTextures[MaterialTextureChannel::Albedo];  }

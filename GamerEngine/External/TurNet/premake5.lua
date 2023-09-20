@@ -50,12 +50,10 @@ defines
 includedirs
 {
     ".",
-	"%{IncludeDirs.CryptoPP}"
 }
 
 links 
 {
-	"CryptoPP",
 	"ws2_32.lib"
 }
 

@@ -7,6 +7,11 @@ Material::Material()
 {
 }
 
+void Material::Init(std::wstring aName)
+{
+	Init(aName, { 1,1,1 });
+}
+
 void Material::Init(std::wstring aName, const Vector3f& anAlbedo)
 {
 	myName = aName;

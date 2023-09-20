@@ -1,4 +1,4 @@
-#define MAX_MODEL_BONES 180
+#define MAX_MODEL_BONES 512
 #define BLENDSHAPE_ARRAY_SIZE 1024
 
 struct VertexInput
