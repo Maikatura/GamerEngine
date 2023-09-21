@@ -101,6 +101,9 @@
     <ClInclude Include="src\Sort\Sort.hpp">
       <Filter>src\Sort</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilites\COMInitializer.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utilites\InputManager.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
@@ -125,18 +128,17 @@
     <ClInclude Include="src\Utilites\VisualProfiler.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utilites\COMInitializer.h">
-      <Filter>src\Utilites</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="src\Utilites\COMInitializer.cpp">
+      <Filter>src\Utilites</Filter>
+    </ClCompile>
     <ClCompile Include="src\Utilites\InputManager.cpp">
       <Filter>src\Utilites</Filter>
     </ClCompile>
     <ClCompile Include="src\Utilites\Timer.cpp">
       <Filter>src\Utilites</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utilites\COMInitializer.cpp" />
   </ItemGroup>
 </Project>

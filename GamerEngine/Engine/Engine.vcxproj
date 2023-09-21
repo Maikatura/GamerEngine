@@ -108,6 +108,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MetaAssetHandler.h" />
     <ClInclude Include="src\EngineSettingDefines.h" />
     <ClInclude Include="src\GraphicsEngine.pch.h" />
     <ClInclude Include="src\Renderer\AssetHandlers\DDSTextureLoader11.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="src\Time.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MetaAssetHandler.cpp" />
     <ClCompile Include="src\GraphicsEngine.pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
