@@ -676,8 +676,6 @@ bool Inspector::ShowTexturePicker(Entity& aEntity, std::shared_ptr<Material>& se
 	bool textureChanged = false;
 	static bool openPopup = false; // Track whether to open the popup
 
-	static bool lastClickWasDoubleClick = false;
-	static double lastClickTime = 0.0;
 
 	ImVec2 groupSize = ImGui::GetItemRectSize();
 	if (ImGui::InvisibleButton("GroupButton", groupSize))

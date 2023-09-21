@@ -26,4 +26,5 @@ public:
 
 	static ID3D11PixelShader* GetPixelShader(const std::string& aPath);
 	static ID3D11VertexShader* GetVertexShader(const std::string& aPath);
+	static std::vector<std::shared_ptr<Texture>> GetTextureList();
 };

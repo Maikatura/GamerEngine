@@ -3,6 +3,16 @@
 #include <Renderer/Framework/DX11.h>
 
 
+TextureType Texture::GetTextureType()
+{
+	return myTextureType;
+}
+
+void Texture::SetTextureType(TextureType aTextureType)
+{
+	myTextureType = aTextureType;
+}
+
 Texture::Texture()
 {
 }

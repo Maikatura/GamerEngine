@@ -755,8 +755,9 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 				for(int uvCh = 0; uvCh < 4; uvCh++)
 				{
-					mdlVertices[v].UVs[uvCh].x = mesh.Vertices[v].UVs[uvCh][0];
-					mdlVertices[v].UVs[uvCh].y = mesh.Vertices[v].UVs[uvCh][1];
+					mdlVertices[v].UVs[uvCh].x = std::clamp(mesh.Vertices[v].UVs[uvCh][0], 0.0f, 1.0f);
+					mdlVertices[v].UVs[uvCh].y = std::clamp(mesh.Vertices[v].UVs[uvCh][1], 0.0f, 1.0f);
+
 				}
 
 

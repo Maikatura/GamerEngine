@@ -18,19 +18,47 @@ void Material::Init(std::wstring aName, const Vector3f& anAlbedo)
 	myMaterialData.Albedo = anAlbedo;
 }
 
+void Material::SetTexture(TextureType aTextureType, std::shared_ptr<Texture> aTexture)
+{
+	switch (aTextureType)
+	{
+	case TextureType::Albedo:
+		SetAlbedoTexture(aTexture);
+		break;
+	case TextureType::Normal:
+		SetNormalTexture(aTexture);
+		break;
+	case TextureType::Material:
+		SetMaterialTexture(aTexture);
+		break;
+	case TextureType::COUNT:
+		break;
+	default: ;
+	}
+}
+
 void Material::SetAlbedoTexture(std::shared_ptr<Texture> aTexture)
 {
-	myTextures[MaterialTextureChannel::Albedo] = aTexture;
+	TextureType type = TextureType::Albedo;
+
+	aTexture->SetTextureType(type);
+	myTextures[static_cast<int>(type)] = aTexture;
 }
 
 void Material::SetNormalTexture(std::shared_ptr<Texture> aNormalTexture)
 {
-	myTextures[MaterialTextureChannel::Normal] = aNormalTexture;
+	TextureType type = TextureType::Normal;
+
+	aNormalTexture->SetTextureType(type);
+	myTextures[static_cast<int>(type)] = aNormalTexture;
 }
 
 void Material::SetMaterialTexture(std::shared_ptr<Texture> aMaterialTexture)
 {
-	myTextures[MaterialTextureChannel::Material] = aMaterialTexture;
+	TextureType type = TextureType::Material;
+
+	aMaterialTexture->SetTextureType(type);
+	myTextures[static_cast<int>(type)] = aMaterialTexture;
 }
 
 void Material::SetAsResource(ComPtr<ID3D11Resource> aMaterialBuffer)
@@ -57,16 +85,16 @@ void Material::SetAsResource(ComPtr<ID3D11Resource> aMaterialBuffer)
 
 	//DX11::GetContext()->Unmap(aMaterialBuffer.Get(), 0);
 
-	if (myTextures[MaterialTextureChannel::Albedo])
+	if (myTextures[static_cast<int>(TextureType::Albedo)])
 	{
-		myTextures[MaterialTextureChannel::Albedo]->SetAsResource(0);
+		myTextures[static_cast<int>(TextureType::Albedo)]->SetAsResource(0);
 	}
-	if (myTextures[MaterialTextureChannel::Normal])
+	if (myTextures[static_cast<int>(TextureType::Normal)])
 	{
-		myTextures[MaterialTextureChannel::Normal]->SetAsResource(1);
+		myTextures[static_cast<int>(TextureType::Normal)]->SetAsResource(1);
 	}
-	if(myTextures[MaterialTextureChannel::Material])
+	if(myTextures[static_cast<int>(TextureType::Material)])
 	{
-		myTextures[MaterialTextureChannel::Material]->SetAsResource(2);
+		myTextures[static_cast<int>(TextureType::Material)]->SetAsResource(2);
 	}
 }

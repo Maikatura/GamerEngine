@@ -4,16 +4,8 @@
 #include <Math/MathTypes.hpp>
 #include <d3d11.h>
 
-namespace MaterialTextureChannel
-{
-	enum
-	{
-		Albedo,
-		Normal,
-		Material,
-		COUNT
-	};
-};
+
+
 
 class Material
 {
@@ -25,7 +17,7 @@ public:
 	};
 
 private:
-	std::array<std::shared_ptr<Texture>, MaterialTextureChannel::COUNT> myTextures;
+	std::array<std::shared_ptr<Texture>, static_cast<int>(TextureType::COUNT)> myTextures;
 	MaterialData myMaterialData;
 	std::wstring myName;
 
@@ -41,9 +33,11 @@ public:
 	FORCEINLINE const std::wstring GetName() const { return myName; }
 	FORCEINLINE const Vector3f& GetAlbedo() const { return myMaterialData.Albedo; }
 
-	FORCEINLINE const std::shared_ptr<Texture>& GetAlbedoTexture() const { return myTextures[MaterialTextureChannel::Albedo];  }
-	FORCEINLINE const std::shared_ptr<Texture>& GetNormalTexture() const { return myTextures[MaterialTextureChannel::Normal]; }
-	FORCEINLINE const std::shared_ptr<Texture>& GetMaterialTexture() const { return myTextures[MaterialTextureChannel::Material]; }
+	FORCEINLINE const std::shared_ptr<Texture>& GetAlbedoTexture() const { return myTextures[static_cast<int>(TextureType::Albedo)];  }
+	FORCEINLINE const std::shared_ptr<Texture>& GetNormalTexture() const { return myTextures[static_cast<int>(TextureType::Normal)]; }
+	FORCEINLINE const std::shared_ptr<Texture>& GetMaterialTexture() const { return myTextures[static_cast<int>(TextureType::Material)]; }
+
+	void SetTexture(TextureType aTextureType, std::shared_ptr<Texture> aTexture);
 
 	void SetAlbedoTexture(std::shared_ptr<Texture> aTexture);
 	void SetNormalTexture(std::shared_ptr<Texture> aNormalTexture);

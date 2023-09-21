@@ -181,3 +181,15 @@ ID3D11VertexShader* TextureAssetHandler::GetVertexShader(const std::string& aPat
 
 	return vertexShader;
 }
+
+std::vector<std::shared_ptr<Texture>> TextureAssetHandler::GetTextureList()
+{
+	std::vector<std::shared_ptr<Texture>> textureList;
+
+	for (auto [name, texture] : myRegistry)
+	{
+		textureList.push_back(texture);
+	}
+
+	return textureList;
+}

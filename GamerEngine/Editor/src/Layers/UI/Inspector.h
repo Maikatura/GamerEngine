@@ -18,6 +18,7 @@ public:
 	void DrawFileObject(Entity& aEntity);
 
 	void AddComponent(Entity& aEntity);
+	bool ShowTexturePicker(Entity& aEntity, std::shared_ptr<Material>& selectedMaterial, TextureType textureType);
 
 private:
 
