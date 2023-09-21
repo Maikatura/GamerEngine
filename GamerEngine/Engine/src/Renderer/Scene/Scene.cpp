@@ -26,7 +26,7 @@
 
 Scene::Scene() : mySceneIsReady(false), mySceneStatus(SceneStatus::None)
 {
-
+	myRegistry = new entt::registry();
 }
 
 Scene::~Scene()
@@ -48,7 +48,6 @@ bool Scene::Initialize()
 
 	myComponentMap[entt::type_id<ModelComponent>().hash()] = "ModelComponent";
 
-	myRegistry = new entt::registry();
 	/*myWorld.set<flecs::Rest>({});
 	myWorld.import<flecs::monitor>();
 
@@ -509,6 +508,11 @@ void Scene::SetSceneStatus(SceneStatus aSceneStatus)
 SceneStatus Scene::GetSceneStatus()
 {
 	return mySceneStatus;
+}
+
+bool Scene::IsReady()
+{
+	return mySceneIsReady;
 }
 
 void Scene::SetCameraHandle(std::function<void(Entity)> aCameraHandle)

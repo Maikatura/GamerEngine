@@ -108,7 +108,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Utilites\COMInitializer.hpp" />
+    <ClInclude Include="src\Utilites\COMInitializer.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="src\Data\HashTable.hpp" />
@@ -150,6 +150,7 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Utilites\COMInitializer.cpp" />
     <ClCompile Include="src\Utilites\InputManager.cpp" />
     <ClCompile Include="src\Utilites\Timer.cpp" />
   </ItemGroup>

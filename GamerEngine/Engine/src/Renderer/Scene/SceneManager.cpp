@@ -10,6 +10,7 @@
 #include "Renderer/model/Entity.h"
 #include "Renderer/Particles/ParticleEmitter.h"
 #include "Renderer/Render/SelectionData.h"
+#include "Utilites/COMInitializer.h"
 
 bool SceneManager::IsHeadless()
 {
@@ -77,12 +78,7 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 			std::scoped_lock<std::mutex> lock(mySceneMutex);
 			mySceneStatus = SceneStatus::Loading;
 
-			HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-			if (FAILED(hr)) {
-				// Handle initialization failure
-				return;
-			}
-
+			COMInitializer comInitializer;
 
 
 			if (!myScene)
@@ -111,8 +107,6 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 				}
 
 			}
-
-			CoUninitialize();
 		});
 	}
 }
@@ -162,7 +156,7 @@ std::shared_ptr<Scene> SceneManager::GetScene()
 		}
 	}
 
-	return nullptr;
+	return std::make_shared<Scene>();
 }
 
 SceneStatus SceneManager::GetStatus()

@@ -125,7 +125,7 @@
     <ClInclude Include="src\Utilites\VisualProfiler.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utilites\COMInitializer.hpp">
+    <ClInclude Include="src\Utilites\COMInitializer.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
   </ItemGroup>
@@ -137,5 +137,6 @@
     <ClCompile Include="src\Utilites\Timer.cpp">
       <Filter>src\Utilites</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utilites\COMInitializer.cpp" />
   </ItemGroup>
 </Project>

@@ -335,51 +335,53 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	Input::Update();
 
 	if (myIsMinimized) return;
-	if (SceneManager::GetStatus() == SceneStatus::Complete)
+	if (SceneManager::GetStatus() != SceneStatus::Complete)
 	{
-		auto scene = SceneManager::GetScene();
-		if (!scene) return;
+		return;
+	}
+
+	auto scene = SceneManager::GetScene();
+	if (!scene) return;
 
 
 
-		if (!aShouldRunLoop && myIsPaused)
+	if (!aShouldRunLoop && myIsPaused)
+	{
+		if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
 		{
-			if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
-			{
-				CommandManager::Undo();
-			}
-
-			if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
-			{
-				CommandManager::Redo();
-			}
+			CommandManager::Undo();
 		}
+
+		if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
+		{
+			CommandManager::Redo();
+		}
+	}
 
 
 #if _DEBUG
-
-		if (Input::IsKeyPressed(VK_F6))
+	if (Input::IsKeyPressed(VK_F6))
+	{
+		unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
+		currentRenderMode++;
+		if (currentRenderMode == static_cast<unsigned char>(RenderMode::COUNT))
 		{
-			unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
-			currentRenderMode++;
-			if (currentRenderMode == static_cast<unsigned char>(RenderMode::COUNT))
-			{
-				currentRenderMode = 0;
-			}
-
-			std::cout << "Render Mode: " << currentRenderMode << "\n";
-
-			GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
+			currentRenderMode = 0;
 		}
-#endif
 
-		scene->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::GetStatus() == SceneStatus::Complete);
+		std::cout << "Render Mode: " << currentRenderMode << "\n";
+
+		GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
 	}
-
-#ifndef _Distribution
-	std::string fps = "FPS: " + std::to_string(Time::GetFPS());
-	std::cout << fps.c_str() << std::endl;
 #endif
+
+	scene->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::GetStatus() == SceneStatus::Complete);
+	
+
+//#ifdef _Distribution
+//	std::string fps = "FPS: " + std::to_string(Time::GetFPS());
+//	std::cout << fps.c_str() << std::endl;
+//#endif
 
 	//}
 }
@@ -392,6 +394,12 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	{
 		return;
 	}
+
+	if (SceneManager::GetStatus() != SceneStatus::Complete)
+	{
+		return;
+	}
+	
 
 	Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(anEye);
 	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(anEye);
@@ -517,13 +525,12 @@ void GraphicsEngine::OnFrameRender()
 
 	auto scene = SceneManager::GetScene();
 
-	if (!scene)
+	if (!scene && scene->IsReady())
 	{
 		return;
 	}
 
 	OnFrameUpdate(GetEngineUpdateRuntime());
-
 	scene->OnRender();
 
 #ifndef VR_DISABLED

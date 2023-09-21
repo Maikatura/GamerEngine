@@ -73,6 +73,7 @@ public:
 
 	void SetSceneStatus(SceneStatus aSceneStatus);
 	SceneStatus GetSceneStatus();
+	bool IsReady();
 
 	static void SetCameraHandle(std::function<void(Entity)> aCameraHandle);
 
