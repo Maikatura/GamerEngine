@@ -38,8 +38,8 @@ Entities:
           Material: resources\Textures\T_Default_M.dds
         5:
           Albedo: Assets\Exclude\textures\blond2.png
-          Normal: Assets\Exclude\textures\lowpoly_DefaultMaterial_RawNormal.png
-          Material: Assets\Exclude\textures\lowpoly_DefaultMaterial_AO.png
+          Normal: resources\Textures\T_Default_N.dds
+          Material: resources\Textures\T_Default_M.dds
         6:
           Albedo: Assets\Exclude\textures\CC Heels by Nauuki_socks_BaseColor.png
           Normal: Assets\Exclude\textures\CC Heels by Nauuki_socks_Normal.png

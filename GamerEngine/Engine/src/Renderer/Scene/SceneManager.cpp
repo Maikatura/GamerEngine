@@ -77,7 +77,12 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 			std::scoped_lock<std::mutex> lock(mySceneMutex);
 			mySceneStatus = SceneStatus::Loading;
 
-			
+			HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+			if (FAILED(hr)) {
+				// Handle initialization failure
+				return;
+			}
+
 
 
 			if (!myScene)
@@ -107,7 +112,7 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 
 			}
 
-
+			CoUninitialize();
 		});
 	}
 }

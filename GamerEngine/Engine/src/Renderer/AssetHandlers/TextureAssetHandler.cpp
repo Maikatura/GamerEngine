@@ -21,6 +21,10 @@ void TextureAssetHandler::Clear()
 
 std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aName)
 {
+
+	
+
+
 	auto model = myRegistry.find(aName);
 
 	if (model == myRegistry.end())
@@ -47,15 +51,13 @@ std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aNa
 		return myRegistry.find(L"resources\\Textures\\T_Default_C.dds")->second;
 	}
 
+	
 
 	return model->second;
 }
 
 bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 {
-
-	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-
 	if (SceneManager::IsHeadless())
 	{
 		return false;
