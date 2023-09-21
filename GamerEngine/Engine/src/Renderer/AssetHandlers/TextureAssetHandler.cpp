@@ -13,6 +13,8 @@
 #include "Renderer/Scene/SceneManager.h"
 #include <WICTextureLoader.h>
 
+#include "StringCast.h"
+
 
 void TextureAssetHandler::Clear()
 {
@@ -21,26 +23,24 @@ void TextureAssetHandler::Clear()
 
 std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aName)
 {
+	std::wstring texName = Helpers::ToLowerCase(aName);
 
-	
-
-
-	auto model = myRegistry.find(aName);
+	auto model = myRegistry.find(texName);
 
 	if (model == myRegistry.end())
 	{
-		LoadTexture(aName);
+		LoadTexture(texName);
 	}
 
-	model = myRegistry.find(aName);
+	model = myRegistry.find(texName);
 
 	if(model == myRegistry.end())
 	{
-		model = myRegistry.find(L"resources\\Textures\\T_Default_C.dds");
+		model = myRegistry.find(L"resources\\textures\\T_Default_C.dds");
 
 		if (model == myRegistry.end())
 		{
-			LoadTexture(L"resources\\Textures\\T_Default_C.dds");
+			LoadTexture(L"resources\\textures\\T_Default_C.dds");
 		}
 
 		if (myRegistry.empty())
@@ -48,7 +48,7 @@ std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aNa
 			return std::make_shared<Texture>();
 		}
 
-		return myRegistry.find(L"resources\\Textures\\T_Default_C.dds")->second;
+		return myRegistry.find(L"resources\\textures\\T_Default_C.dds")->second;
 	}
 
 	

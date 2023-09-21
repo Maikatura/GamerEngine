@@ -25,6 +25,19 @@ namespace Helpers
 		return distr(rndEngine);
 	}
 
+	std::wstring ToLowerCase(const std::wstring& input)
+	{
+		std::wstring result;
+		std::locale loc;
+
+		for (wchar_t c : input)
+		{
+			result += std::tolower(c, loc);
+		}
+
+		return result;
+	}
+
 	template<typename T, typename U>
 	inline static T string_cast(const U& someString)
 	{
