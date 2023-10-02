@@ -159,7 +159,45 @@ namespace TurNet
 	};
 
 
+	inline std::string encrypt(const std::string& message, int key)
+	{
+		std::string encryptedMessage = "";
+		for (char c : message) 
+		{
+			if (isalpha(c)) 
+			{
+				char base = isupper(c) ? 'A' : 'a';
+				encryptedMessage += static_cast<char>((c - base + key) % 26 + base);
+			}
+			else 
+			{
+				encryptedMessage += c;
+			}
+		}
+		return encryptedMessage;
+	}
 
+	inline std::string decrypt(const std::string& encryptedMessage, int key)
+	{
+		return encrypt(encryptedMessage, -key); // Decryption is just encryption with the inverse key
+	}
+
+	inline TurMessage& MessageEncrypt(const std::string& aEncryptKey, TurMessage& aNewMessage, const MessageData& someData)
+	{
+
+		int whereDataBegin = 1 + (sizeof(uint32_t) * 2);
+
+		std::memcpy(&aNewMessage.Header.ID, &someData.Buffer[0], 1);
+		std::memcpy(&aNewMessage.Header.MessageID, someData.Buffer + 1, 4);
+		std::memcpy(&aNewMessage.Header.Size, someData.Buffer + 1 + sizeof(uint32_t), 4);
+
+		size_t size = aNewMessage.Header.Size;
+		aNewMessage.Body.resize(size);
+
+		std::memcpy(aNewMessage.Body.data(), someData.Buffer + whereDataBegin, size);
+
+		return aNewMessage;
+	}
 
 	inline TurMessage& MessageDecoder(TurMessage& aNewMessage, const MessageData& someData)
 	{

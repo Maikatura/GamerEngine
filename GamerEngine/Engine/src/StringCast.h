@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <random>
+#include <locale>
 
 namespace Helpers
 {
@@ -25,7 +26,7 @@ namespace Helpers
 		return distr(rndEngine);
 	}
 
-	std::wstring ToLowerCase(const std::wstring& input)
+	inline std::wstring ToLowerCase(const std::wstring& input)
 	{
 		std::wstring result;
 		std::locale loc;

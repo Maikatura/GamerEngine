@@ -370,8 +370,15 @@ void Scene::OnRender()
 			for(const auto& entity : view)
 			{
 				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
-				if(model.GetModel())
+				if(model.GetModel() )
 				{
+
+
+					if (!model.HasBeenLoaded())
+					{
+						continue;
+					}
+
 					/*const auto& realModel =  model.GetModel()->GetModel();
 					for(int i = 0; i < model.GetModel()->GetNumMeshes(); i++)
 					{

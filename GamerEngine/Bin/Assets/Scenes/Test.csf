@@ -1,6 +1,61 @@
 Scene: SceneTesting
 Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\Test.csf
 Entities:
+  - Entity: 1543328896891357025
+    TagComponent:
+      Tag: Particle Emitter
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ParticleComponent:
+      EmitterSettingsSize: 2
+      EmitterSettings:
+        0:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+        1:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+      ParticleSettingsSize: 2
+      ParticleSettings:
+        0:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 10, 0]
+          Scale: [1, 1, 1]
+          Color: [1, 0, 0, 1]
+        1:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 20, 0]
+          Scale: [0, 0, 0]
+          Color: [1, 0, 1, 1]
+    RandomMoverComponent:
+      MinArea: [0, 0, 0]
+      MaxArea: [0, 0, 0]
   - Entity: 16032452205484422433
     TagComponent:
       Tag: Directional Light
@@ -20,8 +75,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [602.586731, 739.748901, 1232.33374]
-      Rotation: [29.0105686, -152.488937, 0.000104271501]
+      Translation: [521.309143, 690.635681, 1183.61719]
+      Rotation: [24.4236145, -154.006973, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
     ChildComponent:
       ChildrenSize: 0
@@ -44,8 +99,11 @@ Entities:
       Children:
         {}
     ModelComponent:
+      Delay: 0
       Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
       Texture:
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
+        0:
+          Albedo: resources\textures\T_Default_C.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds

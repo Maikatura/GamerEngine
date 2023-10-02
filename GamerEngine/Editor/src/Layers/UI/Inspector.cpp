@@ -147,6 +147,10 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			auto& model = aEntity.GetComponent<ModelComponent>();
 
 
+			float delay = model.GetDelay();
+			ImGui::DragFloat("Delay", &delay);
+			model.SetDelay(delay);
+
 			{
 				ImGui::BeginGroup();
 

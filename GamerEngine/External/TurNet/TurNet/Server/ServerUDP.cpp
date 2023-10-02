@@ -250,6 +250,9 @@ void TurNet::ServerUDP::WorkerThread()
 						std::cout << "Packet from " << ipAddress << ":" << sin->sin_port << "\n";
 						std::cout << "Packet Size: " << messageData.BufferReceiveType << "\n";
 
+
+
+
 						TurNet::TurMessage data;
 						TurNet::MessageDecoder(data, messageData);
 

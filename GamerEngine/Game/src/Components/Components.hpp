@@ -106,9 +106,12 @@ public:
 	ModelComponent(std::shared_ptr<ModelInstance> aModel) : myModel(aModel)
 	{ }
 
-	ModelComponent(const std::wstring& aModelPath)
+	ModelComponent(const std::wstring& aModelPath, float aDelay = 0.0f)
 	{
-		myModel = ModelAssetHandler::Get().GetModelInstance(aModelPath);
+		myPath = aModelPath;
+		myDelay = aDelay;
+
+		myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
 	}
 
 	std::shared_ptr<ModelInstance> GetModel()
@@ -123,9 +126,19 @@ public:
 
 	void OnUpdate() override
 	{
-		if(myModel)
+		if(myModel && myHasLoaded)
 		{
 			myModel->Update();
+		}
+
+		if (!myHasLoaded)
+		{
+			myDelay -= Time::GetDeltaTime();
+
+			if (myDelay <= 0.0f)
+			{
+				myHasLoaded = true;
+			}
 		}
 	}
 
@@ -145,13 +158,31 @@ public:
 		}
 	}
 
+	bool HasBeenLoaded()
+	{
+		return myHasLoaded;
+	}
+
 	void SetModel(const std::wstring& aModelPath)
 	{
 		myModel = ModelAssetHandler::Get().GetModelInstance(aModelPath);
 	}
 
+	float GetDelay()
+	{
+		return myDelay;
+	}
+
+	void SetDelay(float aDelay)
+	{
+		myDelay = aDelay;
+	}
+
 private:
 
+	float myDelay;
+	bool myHasLoaded = false;
+	std::wstring myPath;
 	std::shared_ptr<ModelInstance> myModel = nullptr;
 };
 

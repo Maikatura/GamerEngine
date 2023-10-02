@@ -25,54 +25,59 @@ void RandomMoverComponent::OnCreate()
 
 void RandomMoverComponent::OnUpdate()
 {
-	if (!HasComponent<Network::NetworkComponent>())
-	{
-		return;
-	}
-
-	auto& netComp = GetComponent<Network::NetworkComponent>();
-
-	
-
 	auto& transform = GetComponent<TransformComponent>();
 
-	if(NetworkSettings::IsClient)
+	transform.Translation = Vector3f(transform.Translation.x, transform.Translation.y, transform.Translation.z + 1400.0f * Time::GetDeltaTime());
+
+
+	/*if (!HasComponent<Network::NetworkComponent>())
 	{
 		return;
-	}
+	}*/
 
-	if (mySendTimer <= 0.0f)
-	{
-		std::random_device randomdevice; // obtain a random number from hardware
-		std::mt19937 gene(randomdevice());
+	//auto& netComp = GetComponent<Network::NetworkComponent>();
 
-		std::uniform_int_distribution<> disx(static_cast<int>(myMoverData->myMinArea.x), static_cast<int>(myMoverData->myMaxArea.x));
-		float xPos = static_cast<float>(disx(gene));
+	//
 
-		std::uniform_int_distribution<> disy(static_cast<int>(myMoverData->myMinArea.y), static_cast<int>(myMoverData->myMaxArea.y));
-		float yPos = static_cast<float>(disy(gene));
+	//auto& transform = GetComponent<TransformComponent>();
 
-		std::uniform_int_distribution<> disz(static_cast<int>(myMoverData->myMinArea.z), static_cast<int>(myMoverData->myMaxArea.z));
-		float zPos = static_cast<float>(disz(gene));
+	//if(NetworkSettings::IsClient)
+	//{
+	//	return;
+	//}
 
-		transform.Translation = Vector3f(xPos, yPos, zPos);
-		mySendTimer = 5.0f;
+	//if (mySendTimer <= 0.0f)
+	//{
+	//	std::random_device randomdevice; // obtain a random number from hardware
+	//	std::mt19937 gene(randomdevice());
 
-		TurNet::TurMessage message;
-		NetObjectMoveMessage objMove;
-		objMove.EntityID = netComp.GetID();
-		objMove.Transform = transform;
+	//	std::uniform_int_distribution<> disx(static_cast<int>(myMoverData->myMinArea.x), static_cast<int>(myMoverData->myMaxArea.x));
+	//	float xPos = static_cast<float>(disx(gene));
+
+	//	std::uniform_int_distribution<> disy(static_cast<int>(myMoverData->myMinArea.y), static_cast<int>(myMoverData->myMaxArea.y));
+	//	float yPos = static_cast<float>(disy(gene));
+
+	//	std::uniform_int_distribution<> disz(static_cast<int>(myMoverData->myMinArea.z), static_cast<int>(myMoverData->myMaxArea.z));
+	//	float zPos = static_cast<float>(disz(gene));
+
+	//	transform.Translation = Vector3f(xPos, yPos, zPos);
+	//	mySendTimer = 5.0f;
+
+	//	TurNet::TurMessage message;
+	//	NetObjectMoveMessage objMove;
+	//	objMove.EntityID = netComp.GetID();
+	//	objMove.Transform = transform;
 
 
-		message << objMove;
+	//	message << objMove;
 
 
-		TurNet::ServerMessageQueue::Push(message);
-	}
-	else
-	{
-		mySendTimer -= Time::GetDeltaTime();
-	}
+	//	TurNet::ServerMessageQueue::Push(message);
+	//}
+	//else
+	//{
+	//	mySendTimer -= Time::GetDeltaTime();
+	//}
 
 }
 

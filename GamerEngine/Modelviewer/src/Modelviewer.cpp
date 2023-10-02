@@ -56,7 +56,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         true
     );
 
-    SceneManager::LoadScene("Assets\\Scenes\\Default.csf");
+    SceneManager::LoadScene("Assets\\Scenes\\SceneStreaming.csf");
  
     while(bShouldRun)
     {

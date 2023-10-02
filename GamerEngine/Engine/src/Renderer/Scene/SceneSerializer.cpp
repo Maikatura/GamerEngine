@@ -211,6 +211,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::Key << "ModelComponent";
 		out << YAML::BeginMap; // ModelComponent
 
+		out << YAML::Key << "Delay" << YAML::Value << model.GetDelay();
 		out << YAML::Key << "Path" << YAML::Value << Helpers::string_cast<std::string>(model.GetModel()->GetModel()->GetName());
 		
 
@@ -464,9 +465,17 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 	auto modelComponent = aEntityNode["ModelComponent"];
 	if(modelComponent)
 	{
+
+
+
 		auto path = modelComponent["Path"].as<std::string>();
 		auto& modelComp = deserializedEntity.AddComponent<ModelComponent>(Helpers::string_cast<std::wstring>(path));
 
+
+		if (modelComponent["Delay"])
+		{
+			modelComp.SetDelay(modelComponent["Delay"].as<float>());
+		}
 
 		int textureSize = 0;
 		if (modelComponent["TextureSize"])
@@ -480,29 +489,32 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 
 		if (!isHeadless)
 		{
-			auto& materials = modelComp.GetModel()->GetMaterial();
-
-
-			for (size_t i = 0; i < textureSize; i++)
+			if (textureSize != 0)
 			{
-				auto texture = textures[std::to_string(i)];
+				auto& materials = modelComp.GetModel()->GetMaterial();
 
-				
 
-				if (texture["Albedo"])
+				for (size_t i = 0; i < textureSize; i++)
 				{
-					std::wstring albedoPath = Helpers::string_cast<std::wstring>(texture["Albedo"].as<std::string>());
-					materials[i]->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoPath));
-				}
+					auto texture = textures[std::to_string(i)];
 
-				if (texture["Normal"])
-				{
-					materials[i]->SetNormalTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(texture["Normal"].as<std::string>())));
-				}
 
-				if (texture["Material"])
-				{
-					materials[i]->SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(texture["Material"].as<std::string>())));
+
+					if (texture["Albedo"])
+					{
+						std::wstring albedoPath = Helpers::string_cast<std::wstring>(texture["Albedo"].as<std::string>());
+						materials[i]->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoPath));
+					}
+
+					if (texture["Normal"])
+					{
+						materials[i]->SetNormalTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(texture["Normal"].as<std::string>())));
+					}
+
+					if (texture["Material"])
+					{
+						materials[i]->SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(texture["Material"].as<std::string>())));
+					}
 				}
 			}
 			
