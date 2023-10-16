@@ -1061,13 +1061,5 @@ std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::ws
 
 	modelInstance = model->second;
 
-	for(auto item : myModelRegistry)
-	{
-		std::cout << "Name: " << item.second->GetModel()->Name << "\n";
-	}
-
-	std::cout << "END\n";
-	
-
 	return modelInstance;
 }

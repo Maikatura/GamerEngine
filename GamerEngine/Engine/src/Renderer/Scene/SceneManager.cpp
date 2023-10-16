@@ -35,45 +35,45 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 		Initialize();
 	}
 
-
-	if (!aFilepath.empty())
+	if (IsReady())
 	{
-		//myScene->SceneReady(false);
-		
-		SelectionData::SetEntityObject(Entity{ entt::null, nullptr });
-
-		if(GraphicsEngine::Get())
+		if (!aFilepath.empty())
 		{
-			GraphicsEngine::Get()->SetPauseState(true);
-			GraphicsEngine::Get()->StopUpdateThread();
-		}
+			//myScene->SceneReady(false);
+			
+			SelectionData::SetEntityObject(Entity{ entt::null, nullptr });
 
-		if (IsReady()) 
-		{
-			myLoadDone = false;
+			if(GraphicsEngine::Get())
+			{
+				GraphicsEngine::Get()->SetPauseState(true);
+				GraphicsEngine::Get()->StopUpdateThread();
+			}
 
-			// Move the old scene into a temporary smart pointer
-			std::shared_ptr<Scene> oldScene = myScene;
+			
+				myLoadDone = false;
 
-			ThreadPool::Get().EnqueueTask([&, aFilepath]() 
-				{
-				mySceneStatus = SceneStatus::Loading;
+				// Move the old scene into a temporary smart pointer
+				std::shared_ptr<Scene> oldScene = myScene;
 
-				std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
+				ThreadPool::Get().EnqueueTask([&, aFilepath]() 
+					{
+					mySceneStatus = SceneStatus::Loading;
 
-				SceneSerializer sceneLoad(newScene.get());
-				if (sceneLoad.Deserialize(aFilepath, myIsHeadless)) 
-				{
-					// Swap the scenes only if the new scene is loaded successfully
-					mySwapScene = newScene;
-					mySceneStatus = SceneStatus::NeedSwap;
+					std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
 
-					// At this point, oldScene will automatically be destroyed
-				}
+					SceneSerializer sceneLoad(newScene.get());
+					if (sceneLoad.Deserialize(aFilepath, myIsHeadless)) 
+					{
+						// Swap the scenes only if the new scene is loaded successfully
+						mySwapScene = newScene;
+						mySceneStatus = SceneStatus::NeedSwap;
 
-				myLoadDone = true;
-				});
-		}
+						// At this point, oldScene will automatically be destroyed
+					}
+
+					myLoadDone = true;
+					});
+			}
 		
 	}
 }

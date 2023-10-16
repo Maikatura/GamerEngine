@@ -139,12 +139,16 @@ SceneSerializer::SceneSerializer(Scene* scene)
 
 static void SerializeEntity(YAML::Emitter& out, Entity entity)
 {
+	std::cout << "Saving Entity: Start" << std::endl;
+
 
 	out << YAML::BeginMap; // Entity
 	out << YAML::Key << "Entity" << YAML::Value << (uint64_t)entity.GetUUID();
 
 	if(entity.HasComponent<TagComponent>())
 	{
+		std::cout << "Saving Component: TagComponent" << std::endl;
+
 		out << YAML::Key << "TagComponent";
 		out << YAML::BeginMap; // TagComponent
 
@@ -156,6 +160,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if(entity.HasComponent<TransformComponent>())
 	{
+		std::cout << "Saving Component: TransformComponent" << std::endl;
 		out << YAML::Key << "TransformComponent";
 		out << YAML::BeginMap; // TransformComponent
 
@@ -169,6 +174,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if(entity.HasComponent<ChildComponent>())
 	{
+		std::cout << "Saving Component: ChildComponent" << std::endl;
 		out << YAML::Key << "ChildComponent";
 		out << YAML::BeginMap; // ChildComponent
 
@@ -195,6 +201,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if(entity.HasComponent<CameraComponent>())
 	{
+		std::cout << "Saving Component: CameraComponent" << std::endl;
 		auto& cameraComp = entity.GetComponent<CameraComponent>();
 		out << YAML::Key << "CameraComponent" << YAML::Value;
 		out << YAML::BeginMap; // Camera
@@ -207,6 +214,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if(entity.HasComponent<ModelComponent>())
 	{
+		std::cout << "Saving Component: ModelComponent" << std::endl;
 		auto& model = entity.GetComponent<ModelComponent>();
 
 		out << YAML::Key << "ModelComponent";
@@ -252,6 +260,8 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if(entity.HasComponent<ParticleEmitter>())
 	{
+		std::cout << "Saving Component: ParticleEmitter" << std::endl;
+
 		auto& particle = entity.GetComponent<ParticleEmitter>();
 		const auto& particleData = particle.GetEmitterSettings();
 		const auto settings = particle.GetSettings();
@@ -312,6 +322,8 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if(entity.HasComponent<DirectionalLightComponent>())
 	{
+		std::cout << "Saving Component: DirectionalLightComponent" << std::endl;
+
 		out << YAML::Key << "DirectionalLightComponent";
 		out << YAML::BeginMap; // DirectionalLightComponent
 
@@ -325,6 +337,8 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if(entity.HasComponent<SpotLightComponent>())
 	{
+		std::cout << "Saving Component: SpotLightComponent" << std::endl;
+
 		out << YAML::Key << "SpotLightComponent";
 		out << YAML::BeginMap; // SpotLightComponent
 
@@ -340,6 +354,8 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if(entity.HasComponent<PointLightComponent>())
 	{
+		std::cout << "Saving Component: PointLightComponent" << std::endl;
+
 		out << YAML::Key << "PointLightComponent";
 		out << YAML::BeginMap; // PointLightComponent
 
@@ -353,6 +369,8 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if (entity.HasComponent<Network::NetworkComponent>())
 	{
+		std::cout << "Saving Component: NetworkComponent" << std::endl;
+
 		out << YAML::Key << "NetworkComponent";
 		out << YAML::BeginMap; // PointLightComponent
 
@@ -369,6 +387,8 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if (entity.HasComponent<NativeScriptComponent>())
 	{
+		std::cout << "Saving Component: NativeScriptComponent" << std::endl;
+
 		auto comp = entity.GetComponent<NativeScriptComponent>().Instance;
 		if (auto ranMover = dynamic_cast<RandomMoverComponent*>(comp))
 		{
@@ -388,6 +408,8 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 
 	out << YAML::EndMap; // Entity
+
+	std::cout << "Saving Entity: Done" << std::endl;
 }
 
 
@@ -405,6 +427,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 
 	Entity deserializedEntity = aScene->CreateEntityWithUUID(uuid, name);
 
+	std::cout << "Loading Entity with UUID: " << uuid << std::endl;
 
 	auto transformComponent = aEntityNode["TransformComponent"];
 	if(transformComponent)
