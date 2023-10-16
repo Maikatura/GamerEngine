@@ -223,6 +223,7 @@
     <ClInclude Include="MetaAssetHandler.h">
       <Filter>Renderer\AssetHandlers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Managers\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GraphicsEngine.pch.cpp" />

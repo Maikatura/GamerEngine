@@ -15,10 +15,7 @@ class SceneManager
 	inline static std::shared_ptr<Scene> mySwapScene;
 	inline static std::mutex mySceneMutex;
 
-	inline static std::thread* mySaveThread;
 	inline static std::atomic<bool> mySaveDone;
-
-	inline static std::thread* myLoadThread;
 	inline static std::atomic<bool> myLoadDone;
 
 	inline static SceneStatus mySceneStatus;

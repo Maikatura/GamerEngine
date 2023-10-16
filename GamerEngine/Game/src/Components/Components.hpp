@@ -12,6 +12,7 @@
 #include "Component.h"
 #include "StringCast.h"
 #include "Renderer/AssetHandlers/ModelAssetHandler.h"
+#include "Renderer/Managers/ThreadPool.h"
 
 struct NativeScriptComponent;
 class ScriptableEntity;
@@ -111,7 +112,19 @@ public:
 		myPath = aModelPath;
 		myDelay = aDelay;
 
-		myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
+		ThreadPool::Get().EnqueueTask([&]()
+			{
+
+				if (myDelay <= 0.0f)
+				{
+					myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
+				}
+
+				myDelay -= Time::GetDeltaTime();
+			});
+
+
+		
 	}
 
 	std::shared_ptr<ModelInstance> GetModel()
@@ -131,15 +144,7 @@ public:
 			myModel->Update();
 		}
 
-		if (!myHasLoaded)
-		{
-			myDelay -= Time::GetDeltaTime();
-
-			if (myDelay <= 0.0f)
-			{
-				myHasLoaded = true;
-			}
-		}
+		
 	}
 
 	void OnEditorUpdate()
@@ -165,7 +170,18 @@ public:
 
 	void SetModel(const std::wstring& aModelPath)
 	{
-		myModel = ModelAssetHandler::Get().GetModelInstance(aModelPath);
+		myPath = aModelPath;
+		ThreadPool::Get().EnqueueTask([&]()
+			{
+				if (myDelay <= 0.0f)
+				{
+					myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
+				}
+
+				myDelay -= Time::GetDeltaTime();
+
+			});
+		
 	}
 
 	float GetDelay()

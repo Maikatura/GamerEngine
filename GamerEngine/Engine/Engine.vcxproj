@@ -134,6 +134,7 @@
     <ClInclude Include="src\Renderer\Managers\Commands\ModelCommand.h" />
     <ClInclude Include="src\Renderer\Managers\Commands\PositionCommand.h" />
     <ClInclude Include="src\Renderer\Managers\DropManager.h" />
+    <ClInclude Include="src\Renderer\Managers\ThreadPool.h" />
     <ClInclude Include="src\Renderer\Model\Entity.h" />
     <ClInclude Include="src\Renderer\Model\Material.h" />
     <ClInclude Include="src\Renderer\Model\Model.h" />
