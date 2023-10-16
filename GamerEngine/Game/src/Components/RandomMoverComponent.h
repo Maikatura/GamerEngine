@@ -35,6 +35,8 @@ public:
 	Vector3f GetMinArea();
 	Vector3f GetMaxArea();
 
+	Vector3f myVelocity;
+
 	RandomMoverData* myMoverData;
 
 };

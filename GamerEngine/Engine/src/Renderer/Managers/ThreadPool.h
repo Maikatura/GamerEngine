@@ -11,7 +11,7 @@ class ThreadPool {
 public:
 	static ThreadPool& Get()
 	{
-		static ThreadPool instance(8);
+		static ThreadPool instance(1);
 		return instance;
 	}
 

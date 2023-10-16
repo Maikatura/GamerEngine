@@ -38,7 +38,7 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 
 	if (!aFilepath.empty())
 	{
-		myScene->SceneReady(false);
+		//myScene->SceneReady(false);
 		
 		SelectionData::SetEntityObject(Entity{ entt::null, nullptr });
 
@@ -48,61 +48,80 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 			GraphicsEngine::Get()->StopUpdateThread();
 		}
 
-		ThreadPool::Get().EnqueueTask([&, aFilepath]()
-			{
-				std::scoped_lock<std::mutex> lock(mySceneMutex);
+		if (IsReady()) 
+		{
+			myLoadDone = false;
+
+			// Move the old scene into a temporary smart pointer
+			std::shared_ptr<Scene> oldScene = myScene;
+
+			ThreadPool::Get().EnqueueTask([&, aFilepath]() 
+				{
 				mySceneStatus = SceneStatus::Loading;
 
-				COMInitializer comInitializer;
+				std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
 
-
-				if (!myScene)
+				SceneSerializer sceneLoad(newScene.get());
+				if (sceneLoad.Deserialize(aFilepath, myIsHeadless)) 
 				{
-					std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
-					//newScene->SceneReady(false);
+					// Swap the scenes only if the new scene is loaded successfully
+					mySwapScene = newScene;
+					mySceneStatus = SceneStatus::NeedSwap;
 
-					SceneSerializer sceneLoad(newScene.get());
-					if (sceneLoad.Deserialize(aFilepath, myIsHeadless))
-					{
-						//newScene->Initialize();
-						mySwapScene = newScene;
-						mySceneStatus = SceneStatus::NeedSwap;
-					}
+					// At this point, oldScene will automatically be destroyed
 				}
-				else
-				{
-					std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
-					//newScene->SceneReady(false);
 
-					SceneSerializer sceneLoad(newScene.get());
-					if (sceneLoad.Deserialize(aFilepath, myIsHeadless))
-					{
-						mySwapScene = newScene;
-						mySceneStatus = SceneStatus::NeedSwap;
-					}
-
-				}
-			});
+				myLoadDone = true;
+				});
+		}
+		
 	}
 }
 
 void SceneManager::SaveScene(const std::string& aFilepath)
 {
-	ThreadPool::Get().EnqueueTask([&, aFilepath]()
-		{
-			std::scoped_lock<std::mutex> lock(mySceneMutex);
-			if (!myScene)
+	if (IsReady())
+	{
+		mySaveDone = false;
+
+		ThreadPool::Get().EnqueueTask([&, aFilepath]()
 			{
-				Initialize();
-			}
-			SceneSerializer saveScene(myScene.get());
-			saveScene.Serialize(aFilepath);
-			mySaveDone = true;
-		});
+				if (!myScene)
+				{
+					Initialize();
+				}
+				SceneSerializer saveScene(myScene.get());
+				saveScene.Serialize(aFilepath);
+				mySaveDone = true;
+			});
+	}
+
+	
 }
 
 void SceneManager::Update()
 {
+	if (mySaveDone && myLoadDone && mySceneStatus == SceneStatus::Complete)
+	{
+		if (myScene)
+		{
+			myScene->OnUpdate();
+		}
+
+		
+	}
+	
+}
+
+void SceneManager::Render()
+{
+	if (mySaveDone && myLoadDone && mySceneStatus == SceneStatus::Complete)
+	{
+		if (myScene)
+		{
+			myScene->OnRender();
+		}
+	}
 	
 }
 
@@ -121,7 +140,12 @@ std::shared_ptr<Scene> SceneManager::GetScene()
 		}
 	}
 
-	return std::make_shared<Scene>();
+	return nullptr;
+}
+
+bool SceneManager::IsReady()
+{
+	return (mySceneStatus == SceneStatus::Complete && mySaveDone && myLoadDone);
 }
 
 SceneStatus SceneManager::GetStatus()
@@ -193,25 +217,24 @@ Entity SceneManager::CreateEntityType(int aEntityType, const UUID2& aUUID)
 
 void SceneManager::SwapScene()
 {
-	if (mySceneStatus == SceneStatus::NeedSwap)
+	if (mySceneStatus == SceneStatus::NeedSwap && mySaveDone && myLoadDone) 
 	{
+		
 		myScene = std::move(mySwapScene);
-		mySwapScene = nullptr;
-		mySceneStatus = SceneStatus::Complete;
-		myScene->SetSceneStatus(SceneStatus::Complete);
-		myScene->SceneReady(true);
 
-
-		if(GraphicsEngine::Get())
-		{
-			GraphicsEngine::Get()->StartUpdateThread();
-		}
-
-		if(GraphicsEngine::Get())
+		if (GraphicsEngine::Get()) 
 		{
 			GraphicsEngine::Get()->SetPauseState(false);
 		}
 
+		if (myScene)
+		{
+			myScene->SetSceneStatus(SceneStatus::Complete);
+			myScene->SceneReady(true);
+		}
 
+		mySceneStatus = SceneStatus::Complete;
 	}
+
 }
+

@@ -15,6 +15,7 @@
 #include "Components/NativeScriptComponent.h"
 #include "Components/RandomMoverComponent.h"
 #include "Components/Network/NetworkComponent.h"
+#include "Utilites/COMInitializer.h"
 
 namespace YAML
 {
@@ -389,6 +390,9 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 	out << YAML::EndMap; // Entity
 }
 
+
+
+
 void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, bool isHeadless)
 {
 	uint64_t uuid = aEntityNode["Entity"].as<uint64_t>();
@@ -466,59 +470,62 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 	if(modelComponent)
 	{
 
+		ModelData modelData;
 
 
-		auto path = modelComponent["Path"].as<std::string>();
-		auto& modelComp = deserializedEntity.AddComponent<ModelComponent>(Helpers::string_cast<std::wstring>(path));
+				
 
 
-		if (modelComponent["Delay"])
-		{
-			modelComp.SetDelay(modelComponent["Delay"].as<float>());
-		}
+		modelData.Path = Helpers::string_cast<std::wstring>(modelComponent["Path"].as<std::string>());
+				
+				
 
-		int textureSize = 0;
-		if (modelComponent["TextureSize"])
-		{
-			textureSize = modelComponent["TextureSize"].as<int>();
-		}
-
-		auto textures = modelComponent["Texture"];
-
-
-
-		if (!isHeadless)
-		{
-			if (textureSize != 0)
-			{
-				auto& materials = modelComp.GetModel()->GetMaterial();
-
-
-				for (size_t i = 0; i < textureSize; i++)
+				if (modelComponent["Delay"])
 				{
-					auto texture = textures[std::to_string(i)];
-
-
-
-					if (texture["Albedo"])
-					{
-						std::wstring albedoPath = Helpers::string_cast<std::wstring>(texture["Albedo"].as<std::string>());
-						materials[i]->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoPath));
-					}
-
-					if (texture["Normal"])
-					{
-						materials[i]->SetNormalTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(texture["Normal"].as<std::string>())));
-					}
-
-					if (texture["Material"])
-					{
-						materials[i]->SetMaterialTexture(TextureAssetHandler::GetTexture(Helpers::string_cast<std::wstring>(texture["Material"].as<std::string>())));
-					}
+					modelData.Delay = modelComponent["Delay"].as<float>();
 				}
-			}
-			
-		}
+
+				int textureSize = 0;
+				if (modelComponent["TextureSize"])
+				{
+					textureSize = modelComponent["TextureSize"].as<int>();
+				}
+
+				auto textures = modelComponent["Texture"];
+
+
+				if (!isHeadless)
+				{
+					if (textureSize != 0)
+					{
+						for (size_t i = 0; i < textureSize; i++)
+						{
+							auto texture = textures[std::to_string(i)];
+
+
+
+							if (texture["Albedo"])
+							{
+								modelData.Albedo.push_back(Helpers::string_cast<std::wstring>(texture["Albedo"].as<std::string>()));
+								//materials[i]->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoPath));
+							}
+
+							if (texture["Normal"])
+							{
+								modelData.Normal.push_back(Helpers::string_cast<std::wstring>(texture["Normal"].as<std::string>()));
+							}
+
+							if (texture["Material"])
+							{
+								modelData.Material.push_back(Helpers::string_cast<std::wstring>(texture["Material"].as<std::string>()));
+							}
+						}
+					}
+
+				}
+
+				auto& modelComp = deserializedEntity.AddComponent<ModelComponent>(modelData);
+
 	}
 
 	auto particleComponent = aEntityNode["ParticleComponent"];
@@ -711,6 +718,7 @@ void SceneSerializer::Serialize(const std::string& aFilepath)
 	std::ofstream fout(aFilepath);
 	fout << out.c_str();
 	fout.close();
+
 }
 
 void SceneSerializer::SerializeRuntime(const std::string& aFilepath)

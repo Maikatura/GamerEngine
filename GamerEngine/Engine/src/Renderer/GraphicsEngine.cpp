@@ -117,7 +117,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	Time::Update();
 	Input::Init();
 	AudioManager::Init();
-	SceneManager::Initialize();
+	SceneManager::Get().Initialize();
 
 	START_PROFILE("Start of Program");
 
@@ -305,11 +305,11 @@ void GraphicsEngine::BeginFrame()
 	{
 		if(DX11::SwapChain)
 		{
-			if (SceneManager::GetStatus() == SceneStatus::Complete)
+			if (SceneManager::Get().GetStatus() == SceneStatus::Complete)
 			{
 				//myGBuffer->Release();
 				DX11::Resize();
-				auto scene = SceneManager::GetScene();
+				auto scene = SceneManager::Get().GetScene();
 				scene->Resize({ static_cast<unsigned int>(Get()->GetWindowSize().cx), static_cast<unsigned int>(Get()->GetWindowSize().cy) });
 				/*myGBuffer->CreateGBuffer();
 				myPostProcessRenderer->ReInitialize();*/
@@ -335,14 +335,11 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	Input::Update();
 
 	if (myIsMinimized) return;
-	if (SceneManager::GetStatus() != SceneStatus::Complete)
+	
+	if (!SceneManager::Get().IsReady())
 	{
 		return;
 	}
-
-	auto scene = SceneManager::GetScene();
-	if (!scene) return;
-
 
 
 	if (!aShouldRunLoop && myIsPaused)
@@ -375,7 +372,7 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	}
 #endif
 
-	scene->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::GetStatus() == SceneStatus::Complete);
+	SceneManager::Get().GetScene()->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::Get().GetStatus() == SceneStatus::Complete);
 	
 
 //#ifdef _Distribution
@@ -388,14 +385,19 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 
 void GraphicsEngine::RenderScene(VREye anEye)
 {
-	auto scene = SceneManager::GetScene();
+	if (!SceneManager::Get().IsReady())
+	{
+		return;
+	}
+
+	auto scene = SceneManager::Get().GetScene();
 
 	if (!scene)
 	{
 		return;
 	}
 
-	if (SceneManager::GetStatus() != SceneStatus::Complete)
+	if (SceneManager::Get().GetStatus() != SceneStatus::Complete)
 	{
 		return;
 	}
@@ -507,7 +509,10 @@ void GraphicsEngine::OnFrameRender()
 	if (myIsMinimized) return;
 
 
-
+	if (!SceneManager::Get().IsReady())
+	{
+		return;
+	}
 
 	bool renderSSAO = true;
 	if (Input::IsKeyDown('P'))
@@ -523,9 +528,14 @@ void GraphicsEngine::OnFrameRender()
 	}
 
 
-	auto scene = SceneManager::GetScene();
+	auto scene = SceneManager::Get().GetScene();
 
-	if (!scene && scene->IsReady())
+	if (!scene)
+	{
+		return;
+	}
+
+	if (!scene->IsReady())
 	{
 		return;
 	}
@@ -655,17 +665,9 @@ void GraphicsEngine::EndFrame()
 	/*myGBuffer->Clear();
 	myDropManager->ClearPaths();*/
 
-	if (SceneManager::GetStatus() == SceneStatus::NeedSwap)
+	if (SceneManager::Get().GetStatus() == SceneStatus::NeedSwap)
 	{
-		if (myUpdateThread)
-		{
-			while (!myUpdateThread->joinable())
-			{
-
-			}
-		}
-
-		SceneManager::SwapScene();
+		SceneManager::Get().SwapScene();
 	}
 }
 

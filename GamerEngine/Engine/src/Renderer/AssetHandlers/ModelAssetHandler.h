@@ -25,10 +25,6 @@ class ModelAssetHandler
 	ofbx::IScene* LoadModelScene(const std::string& aPath);
 
 
-
-
-	inline static std::shared_ptr<ModelAssetHandler> myInstance;
-
 public:
 
 

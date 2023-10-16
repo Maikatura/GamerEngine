@@ -56,7 +56,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         true
     );
 
-    SceneManager::LoadScene("Assets\\Scenes\\SceneStreaming.csf");
+    SceneManager::Get().Initialize();
+    SceneManager::Get().LoadScene("Assets\\Scenes\\uppgift.csf");
  
     while(bShouldRun)
     {

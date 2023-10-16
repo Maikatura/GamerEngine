@@ -82,7 +82,7 @@ private:
 	bool mySceneIsReady = false;
 
 	std::string myPath;
-	entt::registry* myRegistry;
+	entt::registry myRegistry;
 
 	std::shared_ptr<DirectionalLight> myDirectionalLight;
 	std::shared_ptr<EnvironmentLight> myEnvironmentLight;

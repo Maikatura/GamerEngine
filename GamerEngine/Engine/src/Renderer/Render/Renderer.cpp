@@ -30,12 +30,12 @@ void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTrans
 
 void Renderer::RenderLight(Light* aLight)
 {
-	if(!SceneManager::GetScene())
+	if(!SceneManager::Get().GetScene())
 	{
 		return;
 	}
 
-	SceneManager::GetScene()->RenderLight(aLight);
+	SceneManager::Get().GetScene()->RenderLight(aLight);
 }
 
 void Renderer::SetRenderGame(bool aToggleToRenderGame)

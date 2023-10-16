@@ -419,13 +419,9 @@ ofbx::IScene* ModelAssetHandler::LoadModelScene(const std::string& aPath)
 
 ModelAssetHandler& ModelAssetHandler::Get()
 {
-	if (!myInstance)
-	{
-		myInstance = std::make_shared<ModelAssetHandler>();
-		myInstance->Initialize();
-	}
+	static ModelAssetHandler instance;
 
-	return *myInstance;
+	return instance;
 }
 
 void ModelAssetHandler::Clear()
@@ -441,12 +437,13 @@ void ModelAssetHandler::Clear()
 		std::cout << "Name: " << item.second->GetModel()->Name << " Cleared Data" << "\n";
 	}
 
-	Initialize();
+	
 }
 
 bool ModelAssetHandler::Initialize()
 {
-	if (SceneManager::IsHeadless())
+
+	if (SceneManager::Get().IsHeadless())
 	{
 		return true;
 	}
@@ -683,7 +680,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 {
-	if(SceneManager::IsHeadless())
+	if(SceneManager::Get().IsHeadless())
 	{
 		return true;
 	}
@@ -698,14 +695,11 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 	HRESULT result = S_FALSE;
 
-	TGA::FBX::Mesh tgaModel;
-
-	
-
-	importer.InitImporter();
-
 	std::vector<std::string> addedBlendShapes;
 
+	
+	TGA::FBX::Mesh tgaModel;
+	importer.InitImporter();
 	if(importer.LoadModel(aFilePath, tgaModel))
 	{
 		std::shared_ptr<Model> mdl = std::make_shared<Model>();

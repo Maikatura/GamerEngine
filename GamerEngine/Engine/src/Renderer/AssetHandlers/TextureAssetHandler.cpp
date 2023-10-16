@@ -14,6 +14,7 @@
 #include <WICTextureLoader.h>
 
 #include "StringCast.h"
+#include "Utilites/COMInitializer.h"
 
 
 void TextureAssetHandler::Clear()
@@ -23,6 +24,7 @@ void TextureAssetHandler::Clear()
 
 std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aName)
 {
+	
 	std::wstring texName = Helpers::ToLowerCase(aName);
 
 	auto model = myRegistry.find(texName);
@@ -58,7 +60,7 @@ std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aNa
 
 bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 {
-	if (SceneManager::IsHeadless())
+	if (SceneManager::Get().IsHeadless())
 	{
 		return false;
 	}

@@ -26,17 +26,13 @@
 
 Scene::Scene() : mySceneIsReady(false), mySceneStatus(SceneStatus::None)
 {
-	myRegistry = new entt::registry();
+
 }
 
 Scene::~Scene()
 {
 	//myWorld.quit();
 
-	if(myStatisticThread.joinable())
-	{
-		myStatisticThread.join();
-	}
 
 	Clear();
 }
@@ -70,9 +66,9 @@ void Scene::Clear()
 	myLightToRender.clear();
 
 
-	/*myRegistry->each([&](auto entityID)
+	/*myRegistry.each([&](auto entityID)
 		{
-			myRegistry->destroy(entityID);
+			myRegistry.destroy(entityID);
 
 			Entity aEntity{ entityID , this };
 
@@ -85,7 +81,7 @@ void Scene::Clear()
 
 void Scene::Resize(Vector2ui aNewWindowSize)
 {
-	auto view = myRegistry->view<CameraComponent>();
+	auto view = myRegistry.view<CameraComponent>();
 	for(auto entity : view)
 	{
 		auto& camera = view.get<CameraComponent>(entity);
@@ -95,7 +91,7 @@ void Scene::Resize(Vector2ui aNewWindowSize)
 
 entt::registry& Scene::GetRegistry()
 {
-	return *myRegistry;
+	return myRegistry;
 }
 
 Entity Scene::CreateEntity(const std::string& aName)
@@ -106,7 +102,7 @@ Entity Scene::CreateEntity(const std::string& aName)
 
 Entity Scene::CreateEntityWithUUID(const UUID2& aUUID, const std::string& aName)
 {
-	Entity entity = { myRegistry->create(), this };
+	Entity entity = { myRegistry.create(), this };
 	auto& idComp = entity.AddComponent<IDComponent>(aUUID);
 	entity.AddComponent<TransformComponent>();
 	entity.AddComponent<ChildComponent>();
@@ -164,18 +160,17 @@ void Scene::DeleteEntity(Entity aEntity)
 		}
 	}
 
-	myRegistry->destroy(aEntity);
+	myRegistry.destroy(aEntity);
 }
 
 void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 {
 	if(!mySceneIsReady) return;
 	if(mySceneStatus != SceneStatus::Complete) return;
-	if (!myRegistry) return;
 
 	
 	{
-		myRegistry->view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+		myRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 		{
 			if(!nsc.Instance)
 			{
@@ -196,7 +191,7 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 	}
 
 	{
-		const auto& view = myRegistry->view<ModelComponent>();
+		const auto& view = myRegistry.view<ModelComponent>();
 
 		if(view != nullptr)
 		{
@@ -211,7 +206,7 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 	if(aShouldRunLoop)
 	{
 		{
-			const auto& view = myRegistry->view<Network::NetworkComponent>();
+			const auto& view = myRegistry.view<Network::NetworkComponent>();
 
 			if(view != nullptr)
 			{
@@ -228,7 +223,7 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 		}
 
 		{
-			const auto& view = myRegistry->view<TransformComponent, ParticleEmitter>();
+			const auto& view = myRegistry.view<TransformComponent, ParticleEmitter>();
 
 			if(view != nullptr)
 			{
@@ -242,7 +237,7 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 		}
 
 		{
-			const auto& view = myRegistry->view<ModelComponent>();
+			const auto& view = myRegistry.view<ModelComponent>();
 
 			if(view != nullptr)
 			{
@@ -260,14 +255,13 @@ void Scene::OnRender()
 {
 	if(mySceneStatus != SceneStatus::Complete) return;
 	if (!mySceneIsReady) return;
-	if (!myRegistry) return;
 
 	{
 		Clear();
 	}
 
 	{
-		const auto& view = myRegistry->view<TransformComponent, CameraComponent>();
+		const auto& view = myRegistry.view<TransformComponent, CameraComponent>();
 		if(view != nullptr)
 		{
 			for(const auto& entity : view)
@@ -286,7 +280,7 @@ void Scene::OnRender()
 
 	{
 	
-		const auto& view = myRegistry->view<TransformComponent, ParticleEmitter>();
+		const auto& view = myRegistry.view<TransformComponent, ParticleEmitter>();
 		if(view != nullptr)
 		{
 			for(const auto& entity : view)
@@ -297,7 +291,7 @@ void Scene::OnRender()
 		}
 	}
 	{
-		const auto& view = myRegistry->view<TransformComponent, DirectionalLightComponent>();
+		const auto& view = myRegistry.view<TransformComponent, DirectionalLightComponent>();
 		if(view != nullptr)
 		{
 			for(const auto& entity : view)
@@ -312,7 +306,7 @@ void Scene::OnRender()
 	}
 
 	{
-		const auto& view = myRegistry->view<TransformComponent, PointLightComponent>();
+		const auto& view = myRegistry.view<TransformComponent, PointLightComponent>();
 		if(view != nullptr)
 		{
 			for(const auto& entity : view)
@@ -329,7 +323,7 @@ void Scene::OnRender()
 	}
 
 	{
-		const auto& view = myRegistry->view<TransformComponent, SpotLightComponent>();
+		const auto& view = myRegistry.view<TransformComponent, SpotLightComponent>();
 		if(view != nullptr)
 		{
 			for(const auto& entity : view)
@@ -346,7 +340,7 @@ void Scene::OnRender()
 
 
 	{
-		const auto& view = myRegistry->view<TransformComponent, ModelComponent>();
+		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
 		if(view != nullptr)
 		{
 			for(const auto& entity : view)
@@ -364,7 +358,7 @@ void Scene::OnRender()
 	}
 
 	{
-		const auto& view = myRegistry->view<TransformComponent, ModelComponent>();
+		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
 		if(view != nullptr)
 		{
 			for(const auto& entity : view)
@@ -484,7 +478,7 @@ Entity Scene::GetNetworkEntity(TurNet::TurMessage* aMessage)
 
 
 	Entity entityReturn;
-	const auto& view = myRegistry->view<Network::NetworkComponent>();
+	const auto& view = myRegistry.view<Network::NetworkComponent>();
 
 
 	for(const auto& entity : view)
