@@ -20,6 +20,7 @@
 #include "Renderer/Scene/SceneManager.h"
 #include "Layers/NetworkingLayer.h"
 #include "Layers/Network/MoveObjectMessage.h"
+#include "Renderer/Render/DeferredRenderer.h"
 
 EditorView::EditorView() : Layer("Scene")
 {

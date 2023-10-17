@@ -219,7 +219,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			DX11::GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
 			DX11::GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
 			DX11::GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-			DX11::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // Use D3D11_PRIMITIVE_TOPOLOGY_... for your specific primitive type
+			DX11::GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology)); // Use D3D11_PRIMITIVE_TOPOLOGY_... for your specific primitive type
 
 			if(!model->GetMaterial().empty() && static_cast<int>(meshData.myMaterialIndex) < model->GetMaterialSize())
 			{

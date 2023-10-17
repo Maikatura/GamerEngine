@@ -30,21 +30,26 @@ public:
 		GBufferTexture_Count
 	};
 
-	void SetAsTarget() const;
-	void ClearTarget() const;
-	void SetAsResource(unsigned int aStartSlot) const;
-	void ClearResource(unsigned int aStartSlot) const;
+	void SetAsTarget();
+	void ClearTarget();
+	void SetAsResource(unsigned int aStartSlot);
+	void ClearResource(unsigned int aStartSlot);
 	void Clear();
 
 	void Release();
 
 	bool CreateGBuffer();
 
+	static RenderTexture& GetRenderer();
+
+
+
 private:
 
 	ID3D11Texture2D* myTexture;
-	std::array<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>, GBufferTexture::GBufferTexture_Count> myRTVs;
-	std::array<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>, GBufferTexture::GBufferTexture_Count> mySRVs;
+	std::array<RenderTexture, GBufferTexture::GBufferTexture_Count> myRenderTextures;
+
+	inline static RenderTexture myRenderer;
 };
 
 class DeferredRenderer : public RendererBase
@@ -67,12 +72,14 @@ private:
 	ComPtr<ID3D11VertexShader> myDeferredVS;
 	ComPtr<ID3D11PixelShader> myRenderTexPS;
 
+
+
 public:
 
 
 	bool Initialize();
-	void GenerateGBuffer(const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime);
-	void Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime);
+	void GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye);
+	void Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime, VREye anEye);
 	void RenderLate();
 	void ClearTarget();
 };

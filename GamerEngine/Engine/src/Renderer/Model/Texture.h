@@ -44,5 +44,6 @@ public:
 
 	void SetName(const std::wstring& aName);
 	void SetAsResource(unsigned int aSlot);
+	void ClearResource(unsigned int aSlot);
 	void SetPath(const std::wstring& aPath);
 };

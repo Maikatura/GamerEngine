@@ -1,38 +1,6 @@
 Scene: SceneTesting
-Path: Assets\Scenes\uppgift.csf
+Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\LightTest.csf
 Entities:
-  - Entity: 12488069851411550894
-    TagComponent:
-      Tag: Point Light
-    TransformComponent:
-      Translation: [-528.906799, -298.935089, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    PointLightComponent:
-      Color: [1, 1, 0.396078438, 1]
-      Intensity: 479
-      Range: 293
-  - Entity: 13206094227154578508
-    TagComponent:
-      Tag: Spot Light
-    TransformComponent:
-      Translation: [0, -59.5184021, 0]
-      Rotation: [169.002045, -0, 0]
-      Scale: [0.999993026, 0.999988019, 0.999988019]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    SpotLightComponent:
-      Color: [1, 1, 0, 1]
-      Intensity: 172
-      Range: 186
-      InnerCone: 136
-      OuterCone: 116
   - Entity: 16032452205484422433
     TagComponent:
       Tag: Directional Light
@@ -52,8 +20,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [-1380.96704, -8.6032486, 178.292694]
-      Rotation: [22.1467266, 101.115593, 0.000104271501]
+      Translation: [-1497.57202, 28.5315323, -27.7512608]
+      Rotation: [20.1336937, 89.9946213, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
     ChildComponent:
       ChildrenSize: 0

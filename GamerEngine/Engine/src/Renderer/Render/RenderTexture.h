@@ -21,11 +21,12 @@ public:
 	RenderTexture(const RenderTexture&);
 	~RenderTexture();
 
-	bool Initialize(ID3D11Device*, int, int);
+	bool Initialize(ID3D11Device*, int, int, DXGI_FORMAT aFormat = DXGI_FORMAT_R8G8B8A8_UNORM);
 	void Shutdown();
 
 	void SetRenderTarget(ID3D11DeviceContext*, ID3D11DepthStencilView*);
 	void ClearRenderTarget(ID3D11DeviceContext*, ID3D11DepthStencilView*, float, float, float, float);
+	ID3D11RenderTargetView* GetRenderTargetView();
 	ID3D11ShaderResourceView* GetShaderResourceView();
 	ID3D11Texture2D* GetTexture();
 

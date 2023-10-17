@@ -135,7 +135,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			continue;
 		}
 		auto& model = RenderBuffer.myModel;
-		bool isInstanced = model->HasRenderedInstance();
+		bool isInstanced = false; //model->HasRenderedInstance();
 
 		for(unsigned int m = 0; m < model->GetNumMeshes(); m++)
 		{
@@ -206,7 +206,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			DX11::GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 			DX11::GetContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)meshData.myPrimitiveTopology);
 
-			if(isInstanced && !model->HasBeenRendered())
+			/*if(isInstanced && !model->HasBeenRendered())
 			{
 				myInstancedTransformBufferData.clear();
 				std::vector<ModelInstance::RenderedInstanceData> myTransformData = model->GetTransformVector();
@@ -237,21 +237,21 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 			}
 			else
-			{
+			{*/
 				DX11::GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
 				DX11::GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
-			}
+			//}
 		}
 
-		if(isInstanced)
+		/*if(isInstanced)
 		{
 			model->SetHasBeenRenderer(true);
-		}
+		}*/
 	}
 
 
 	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
-	DX11::ResizeViewport();
+	DX11::ResetViewport();
 	//DX11::GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
 }
 

@@ -4,6 +4,7 @@
 
 #include <openvr.h>
 
+#include "Renderer/GraphicsEngine.h"
 #include "Renderer/Render/RenderTexture.h"
 
 #define VR_DISABLED
@@ -99,8 +100,6 @@ public:
 
 
 	static void TurnZBufferOn();
-
-
 	static void TurnZBufferOff();
 
 	static void UpdateHMDMatrixPose();
@@ -111,6 +110,11 @@ public:
 	static RECT GetClientSize();
 
 	static void Resize();
+
+	static void ResetViewport();
+
+	static void ResetRenderTarget(bool isUsingEditor = false);
+
 
 	static UINT GetScreenObjectId(UINT x, UINT y);
 	static bool ResizeViewport();

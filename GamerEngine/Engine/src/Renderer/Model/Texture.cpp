@@ -30,8 +30,12 @@ void Texture::SetName(const std::wstring& aName)
 
 void Texture::SetAsResource(unsigned aSlot)
 {
-	DX11::GetContext()->VSSetShaderResources(aSlot, 1, mySRV.GetAddressOf());
 	DX11::GetContext()->PSSetShaderResources(aSlot, 1, mySRV.GetAddressOf());
+}
+
+void Texture::ClearResource(unsigned aSlot)
+{
+	DX11::GetContext()->PSSetShaderResources(aSlot, 1, nullptr);
 }
 
 void Texture::SetPath(const std::wstring& aPath)

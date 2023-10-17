@@ -352,8 +352,8 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 			result.myColor.a = 1.0f;
 			break;
 		case 17://RenderMode::AmbientLightNoAlbedo:
-			result.myColor.rgb = finalColor;
-			//result.myColor.rgb = ambientLighting;
+			//result.myColor.rgb = finalColor;
+			result.myColor.rgb = ambientLighting;
 			result.myColor.a = 1.0f;
 			break;
 		case 18://RenderMode::PointLightNoAlbedo:

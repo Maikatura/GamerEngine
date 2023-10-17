@@ -65,6 +65,18 @@ DX11::DX11()
 DX11::~DX11()
 {}
 
+void DX11::ResetRenderTarget(bool isUsingEditor)
+{
+	if (isUsingEditor)
+	{
+		myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+	}
+	else
+	{
+		DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
+	}
+}
+
 ID3D11Device* DX11::GetDevice()
 {
 	return Device.Get();
@@ -990,6 +1002,13 @@ void DX11::Resize()
 		return;
 	}
 
+	myViewport.Width = static_cast<float>(m_nRenderWidth);
+	myViewport.Height = static_cast<float>(m_nRenderHeight);
+	myImmediateContext->RSSetViewports(1, &myViewport);
+}
+
+void DX11::ResetViewport()
+{
 	myViewport.Width = static_cast<float>(m_nRenderWidth);
 	myViewport.Height = static_cast<float>(m_nRenderHeight);
 	myImmediateContext->RSSetViewports(1, &myViewport);

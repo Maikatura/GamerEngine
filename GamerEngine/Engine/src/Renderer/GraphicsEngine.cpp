@@ -307,12 +307,12 @@ void GraphicsEngine::BeginFrame()
 		{
 			if (SceneManager::Get().GetStatus() == SceneStatus::Complete)
 			{
-				//myGBuffer->Release();
+				myGBuffer->Release();
 				DX11::Resize();
 				auto scene = SceneManager::Get().GetScene();
 				scene->Resize({ static_cast<unsigned int>(Get()->GetWindowSize().cx), static_cast<unsigned int>(Get()->GetWindowSize().cy) });
-				/*myGBuffer->CreateGBuffer();
-				myPostProcessRenderer->ReInitialize();*/
+				myGBuffer->CreateGBuffer();
+				//myPostProcessRenderer->ReInitialize();
 
 			}
 
@@ -418,65 +418,79 @@ void GraphicsEngine::RenderScene(VREye anEye)
 
 	// TODO : CLEAN THIS MESS UP
 
-	//if (GetRenderModeInt() != 9)
-	//{
-	//	{
-	//		PROFILE_SCOPE("Render Shadows");
-	//		myShadowRenderer->ClearResources();
+	bool renderSSAO = true;
+	if (Input::IsKeyDown('P'))
+	{
+		renderSSAO = false;
+	}
 
-	//		/*myShadowRenderer->Render(environmentLight.get(), modelList);
-	//		myShadowRenderer->Render(directionalLight.get(), modelList);*/
+	static bool sssaoOn = true;
 
-	//		for (auto& light : someLightList)
-	//		{
-	//			myShadowRenderer->Render(light, modelList);
-	//		}
-	//		//myShadowRenderer->ClearResources();
-	//	}
-	//}
-	//myShadowRenderer->ClearTarget();
-
-	//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-	//RendererBase::SetBlendState(BlendState::None);
-
-	//myGBuffer->ClearResource(0);
-	//myGBuffer->SetAsTarget();
-
-	//{
-	//	PROFILE_SCOPE("Generate GBuffer");
-	//	myDeferredRenderer->GenerateGBuffer(modelList, deltaTime, 0);
-	//}
-
-	//myGBuffer->ClearTarget();
-	//myGBuffer->SetAsResource(0);
-
-
-	//{
-	//	PROFILE_SCOPE("Render With Deferred Renderer");
-	//	RendererBase::SetBlendState(BlendState::Alpha);
-	//	myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0);
-	//	//myDeferredRenderer->ClearTarget();
-	//}
-	//myGBuffer->ClearTarget();
-
-	//{
-	//	PROFILE_SCOPE("Render SSAO");
-	//	/*if (sssaoOn)
-	//	{
-	//		myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO);
-	//	}
-	//	else
-	//	{
-	//		myPostProcessRenderer->ClearTargets();
-	//	}*/
-	//}
+	if (Input::IsKeyPressed('P'))
+	{
+		sssaoOn = !sssaoOn;
+	}
 
 	if (GetRenderModeInt() != 9)
 	{
 		{
-			//PROFILE_SCOPE("Render With Forward Renderer (Models)");
-			//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-			//RendererBase::SetBlendState(BlendState::None);
+			PROFILE_SCOPE("Render Shadows");
+			myShadowRenderer->ClearResources();
+
+			myShadowRenderer->Render(environmentLight.get(), modelList);
+			myShadowRenderer->Render(directionalLight.get(), modelList);
+
+			for (auto& light : someLightList)
+			{
+				myShadowRenderer->Render(light, modelList);
+			}
+			//myShadowRenderer->ClearResources();
+		}
+	}
+	myShadowRenderer->ClearTarget();
+
+	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+	RendererBase::SetBlendState(BlendState::None);
+
+	myGBuffer->ClearResource(0);
+	myGBuffer->SetAsTarget();
+
+	{
+		PROFILE_SCOPE("Generate GBuffer");
+		myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
+	}
+
+	myGBuffer->ClearTarget();
+	myGBuffer->SetAsResource(0);
+
+	{
+		PROFILE_SCOPE("Render With Deferred Renderer");
+		RendererBase::SetBlendState(BlendState::Alpha);
+		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
+		myDeferredRenderer->ClearTarget();
+	}
+	myGBuffer->ClearTarget();
+
+	
+
+	/*{
+		PROFILE_SCOPE("Render SSAO");
+		if (sssaoOn)
+		{
+			myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO);
+		}
+		else
+		{
+			myPostProcessRenderer->ClearTargets();
+		}
+	}*/
+
+	if (GetRenderModeInt() != 9)
+	{
+		{
+			PROFILE_SCOPE("Render With Forward Renderer (Models)");
+			RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+			RendererBase::SetBlendState(BlendState::None);
 
 			myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 		}
@@ -495,11 +509,15 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		{
 			PROFILE_SCOPE("Render Tonemap");
 			myPostProcessRenderer->Render(PostProcessRenderer::PP_TONEMAP);
-		}
+		}*/
+
+
+
+		DX11::ResetRenderTarget(myUseEditor);
+
 
 		PROFILE_SCOPE("Final Render Call");
 		myDeferredRenderer->RenderLate();
-		RendererBase::SetBlendState(BlendState::Alpha);*/
 	}
 
 }
@@ -614,6 +632,8 @@ void GraphicsEngine::OnFrameRender()
 	RenderScene(VREye::None);
 
 
+
+
 	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	Renderer::Clear();*/
@@ -656,14 +676,16 @@ void GraphicsEngine::EndFrame()
 	if (myIsMinimized) return;
 
 
-	//DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
+	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	DX11::EndFrame();
 
 	UpdateHMDMatrixPose();
 
-	/*myGBuffer->Clear();
-	myDropManager->ClearPaths();*/
+	//myGBuffer->Clear();
+
+	
+	//myDropManager->ClearPaths();
 
 	if (SceneManager::Get().GetStatus() == SceneStatus::NeedSwap)
 	{
@@ -688,8 +710,8 @@ void GraphicsEngine::SetWinProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> 
 
 void GraphicsEngine::ResetStates() const
 {
-	//RendererBase::SetBlendState(BlendState::None);
-	//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+	RendererBase::SetBlendState(BlendState::None);
+	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetSamplerState(0u, SamplerState::Default);
 	RendererBase::SetSamplerState(1u, SamplerState::PointClamp);
 	RendererBase::SetSamplerState(2u, SamplerState::Wrap);

@@ -9,13 +9,6 @@
 #include "Renderer/Render/RendererBase.h"
 
 
-inline Matrix4x4f ComposeFromTRS(const Vector3f& aTranslation, const CommonUtilities::Quaternion<float>& aRotationQuat, const Vector3f& aScale)
-{
-	return Matrix4x4f::CreateScale(aScale)
-		* aRotationQuat.GetRotationMatrix4x4()
-		* Matrix4x4f::CreateTranslation(aTranslation);
-}
-
 DirectionalLight::DirectionalLight()
 {
 	SetDirection({ 0,0,0 });
@@ -45,13 +38,13 @@ void DirectionalLight::Update()
 
 	myLightData.SmoothShadows = myDirLight->SmoothShadows;
 
-	Vector3f rotation = { myTransformComp->Rotation.x, myTransformComp->Rotation.y, myTransformComp->Rotation.z };
-	CommonUtilities::Quat rotation2 = CommonUtilities::Quat::FromEulers(rotation * DEG_TO_RAD);
-	myLocalDirection = rotation;
-	myLightData.Direction = rotation2.Forward();
+	auto quatRot = CommonUtilities::Quaternionf::FromEulers(ToRadians(myTransformComp->Rotation));
+	auto matrix = ComposeFromTRS(Renderer::GetCamera()->GetPosition(), quatRot, { 1, 1, 1 });
+
+	myLocalDirection = myTransformComp->Rotation;
+	myLightData.Direction = matrix.GetForward();
 	myLightData.Position = Renderer::GetCamera()->GetPosition() + (myLightData.Direction * -3000.f);
 
-	auto matrix = ComposeFromTRS(myLightData.Position, rotation2, { 1, 1, 1 });
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(matrix);
 	myLightData.ShadowMapIndex = 19;
 }
@@ -65,7 +58,7 @@ void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLight
 		//DX11::GetContext()->VSSetShaderResources(19, 1, &nullsrv);
 
 		DX11::GetContext()->PSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
-		//DX11::GetContext()->VSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
+		DX11::GetContext()->VSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }
 

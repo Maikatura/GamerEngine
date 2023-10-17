@@ -280,7 +280,7 @@ public:
 
 	DirectionalLightComponent()
 	{
-		myDirectionalLight = LightAssetHandler::CreateDirectionalLight({ 1,1,1 }, 2.0f, { -140,60,178 });
+		myDirectionalLight = LightAssetHandler::CreateDirectionalLight({ 1,1,1 }, 1.0f, { -140,60,178 });
 	}
 
 
