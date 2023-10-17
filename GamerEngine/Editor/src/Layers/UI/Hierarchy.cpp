@@ -41,7 +41,7 @@ void Hierarchy::OnImGuiRender()
 
 	BeginMenu();
 
-	if(SceneManager::GetScene())
+	if(SceneManager::Get().GetScene())
 	{
 
 		auto startCursor = ImGui::GetCursorPos();
@@ -52,19 +52,19 @@ void Hierarchy::OnImGuiRender()
 
 
 
-		SceneManager::GetScene()->GetRegistry().each([&](auto entityID)
+		SceneManager::Get().GetScene()->GetRegistry().each([&](auto entityID)
 		{
 			if(entityID == entt::null)
 			{
 				return;
 			}
 
-			if(!SceneManager::GetScene()->GetRegistry().valid(entityID))
+			if(!SceneManager::Get().GetScene()->GetRegistry().valid(entityID))
 			{
 				return;
 			}
 
-			Entity entity{ entityID, SceneManager::GetScene().get()};
+			Entity entity{ entityID, SceneManager::Get().GetScene().get()};
 
 			if(entity.GetComponent<ChildComponent>().HasParent())
 			{
@@ -216,7 +216,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 
 		for(int i = 0; i < aEntity.GetComponent<ChildComponent>().myChildren.size(); i++)
 		{
-			Entity entity{ aEntity.GetComponent<ChildComponent>().myChildren[i], SceneManager::GetScene().get() };
+			Entity entity{ aEntity.GetComponent<ChildComponent>().myChildren[i], SceneManager::Get().GetScene().get() };
 			DrawEntityNode(entity);
 		}
 		ImGui::TreePop();
@@ -224,7 +224,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 
 	if(entityDeleted)
 	{
-		SceneManager::GetScene()->DeleteEntity(aEntity);
+		SceneManager::Get().GetScene()->DeleteEntity(aEntity);
 	}
 
 
@@ -254,43 +254,43 @@ void Hierarchy::DrawWindowPopupMenu()
 		if(ImGui::MenuItem("Create"))
 		{
 			createIndex = 0;
-			entity = SceneManager::CreateEntityType(createIndex);
+			entity = SceneManager::Get().CreateEntityType(createIndex);
 		}
 
 		if(ImGui::MenuItem("Create Debug Camera"))
 		{
 			createIndex = 1;
-			entity = SceneManager::CreateEntityType(createIndex);
+			entity = SceneManager::Get().CreateEntityType(createIndex);
 		}
 
 		if(ImGui::MenuItem("Create Particle Emitter"))
 		{
 			createIndex = 2;
-			entity = SceneManager::CreateEntityType(createIndex);
+			entity = SceneManager::Get().CreateEntityType(createIndex);
 		}
 
 		if(ImGui::MenuItem("Create Directional Light"))
 		{
 			createIndex = 3;
-			entity = SceneManager::CreateEntityType(createIndex);
+			entity = SceneManager::Get().CreateEntityType(createIndex);
 		}
 
 		if(ImGui::MenuItem("Create Point Light"))
 		{
 			createIndex = 4;
-			entity = SceneManager::CreateEntityType(createIndex);
+			entity = SceneManager::Get().CreateEntityType(createIndex);
 		}
 
 		if(ImGui::MenuItem("Create Spot Light"))
 		{
 			createIndex = 5;
-			entity = SceneManager::CreateEntityType(createIndex);
+			entity = SceneManager::Get().CreateEntityType(createIndex);
 		}
 
 		if(ImGui::MenuItem("Create Network Manager"))
 		{
 			createIndex = 6;
-			entity = SceneManager::CreateEntityType(createIndex);
+			entity = SceneManager::Get().CreateEntityType(createIndex);
 		}
 
 		auto& client = NetworkingLayer::GetClient();

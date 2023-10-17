@@ -27,15 +27,15 @@ void MainMenuBar::OnImGuiRender()
             if(ImGui::MenuItem("Open"))
             {
                 std::string path = FileDialog::OpenFile("Scene File (*.csf)\0*.csf\0");
-                SceneManager::LoadScene(path);
-                ConsoleHelper::Log(LogType::Info, std::string("Open Scene from '" + SceneManager::GetScene()->GetPath() + "'"));
+                SceneManager::Get().LoadScene(path);
+                ConsoleHelper::Log(LogType::Info, std::string("Open Scene from '" + SceneManager::Get().GetScene()->GetPath() + "'"));
             }
 
             if(ImGui::MenuItem("Save"))
             {
                 std::string path = FileDialog::SaveFile("Scene File (*.csf)\0*.csf\0");
-                SceneManager::SaveScene(path + ".csf");
-                ConsoleHelper::Log(LogType::Info, std::string("Saved scene to '" + SceneManager::GetScene()->GetPath() + "'"));
+                SceneManager::Get().SaveScene(path + ".csf");
+                ConsoleHelper::Log(LogType::Info, std::string("Saved scene to '" + SceneManager::Get().GetScene()->GetPath() + "'"));
             }
 
             ImGui::EndMenu();
@@ -138,7 +138,7 @@ void MainMenuBar::OnImGuiRender()
             if(ImGui::Button(playText.c_str()))
             {
                 myLayers.SetShouldEngineRun(true);
-                mySnapshot = SnapshotManager(&SceneManager::GetScene()->GetRegistry());
+                mySnapshot = SnapshotManager(&SceneManager::Get().GetScene()->GetRegistry());
                 mySnapshot.CreateSnapshot();
             }
         }

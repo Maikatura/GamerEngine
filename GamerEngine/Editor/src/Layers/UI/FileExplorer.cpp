@@ -375,7 +375,7 @@ void FileExplorer::HandleFile(std::filesystem::directory_entry aPath, FileType a
 		case FileType::Audio: break;
 		case FileType::Scene:
 		{
-			SceneManager::LoadScene(aPath.path().string());
+			SceneManager::Get().LoadScene(aPath.path().string());
 			break;
 		}
 		case FileType::Animation: break;

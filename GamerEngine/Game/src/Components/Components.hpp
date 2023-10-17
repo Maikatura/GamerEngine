@@ -151,7 +151,7 @@ public:
 
 	ModelComponent(ModelData aModelData)
 	{
-		ThreadPool::Get().EnqueueTask([&, modelData = aModelData]() 
+		ModelAssetHandler::Get().EnqueueLoadTask([&, modelData = aModelData]() 
 			{
 				myPath = modelData.Path;
 				myModel = ModelAssetHandler::Get().GetModelInstance(modelData.Path);

@@ -288,12 +288,12 @@ void EditorSettingsPanel::RenderEditorSettings()
 	ImGui::TextWrapped("Save and load scene");
 	if(ImGui::Button("Save Scene"))
 	{
-		SceneManager::SaveScene("Assets\\Scenes\\scenetesting.csf");
+		SceneManager::Get().SaveScene("Assets\\Scenes\\scenetesting.csf");
 	}
 
 	if(ImGui::Button("Load Scene"))
 	{
-		SceneManager::LoadScene("Assets\\Scenes\\scenetesting.csf");
+		SceneManager::Get().LoadScene("Assets\\Scenes\\scenetesting.csf");
 	}
 
 

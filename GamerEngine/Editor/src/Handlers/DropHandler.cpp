@@ -48,7 +48,7 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 
 			if(fbxExt == extension)
 			{
-				auto& modelComp = SceneManager::GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
+				auto& modelComp = SceneManager::Get().GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
 				ConsoleHelper::Log(LogType::Info, "Loaded a model '" + path.filename().string() + "' into the scene");
 			}
 
@@ -57,7 +57,7 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 
 				GraphicsEngine::Get()->SetEngineUpdateRuntime(false);
 
-				SceneManager::LoadScene(stringPath);
+				SceneManager::Get().LoadScene(stringPath);
 				
 
 				ConsoleHelper::Log(LogType::Info, "Loaded a scene '" + stringPath + "'");

@@ -30,7 +30,7 @@ void EditorView::OnImGuiRender()
 {
 	Entity entity = SelectionData::GetEntityObject();
 
-	if(!SceneManager::GetScene())
+	if(!SceneManager::Get().GetScene())
 	{
 		return;
 	}
@@ -59,7 +59,7 @@ void EditorView::RenderSceneView(Entity aEntity)
 
 	ImVec2 windowSize = ImGui::GetWindowSize();
 
-	auto view = SceneManager::GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
+	auto view = SceneManager::Get().GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
 	for(auto entity : view)
 	{
 		auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
@@ -81,7 +81,7 @@ void EditorView::RenderSceneView(Entity aEntity)
 
 void EditorView::RenderEntityParts(Entity aEntity)
 {
-	if(!SceneManager::GetScene()->GetRegistry().valid(aEntity.GetHandle()))
+	if(!SceneManager::Get().GetScene()->GetRegistry().valid(aEntity.GetHandle()))
 	{
 		return;
 	}

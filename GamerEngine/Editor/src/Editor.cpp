@@ -92,7 +92,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	
 	Scene::SetCameraHandle(cameraFunc);
 
-	SceneManager::LoadScene("Editor\\Scenes\\default.csf");
+	SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
 	
 	while(bShouldRun)
 	{

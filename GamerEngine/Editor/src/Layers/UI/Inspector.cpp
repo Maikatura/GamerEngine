@@ -32,9 +32,9 @@ void Inspector::OnImGuiRender()
 
 	Entity entity = SelectionData::GetEntityObject();
 
-	if(SceneManager::GetScene())
+	if(SceneManager::Get().GetScene())
 	{
-		if(SceneManager::GetScene()->GetRegistry().valid(entity))
+		if(SceneManager::Get().GetScene()->GetRegistry().valid(entity))
 		{
 			DrawSceneObject(entity);
 		}

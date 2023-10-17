@@ -128,7 +128,7 @@ void NetworkingLayer::OnUpdate()
 
 	for(int i = 0; i < myPlayers.size(); i++)
 	{
-		if(!SceneManager::GetScene()->GetRegistry().valid(myPlayers[i].myEntity))
+		if(!SceneManager::Get().GetScene()->GetRegistry().valid(myPlayers[i].myEntity))
 		{
 			continue;
 		}
@@ -217,10 +217,10 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Got Something from server";
 
-				auto view = SceneManager::GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
+				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
 				for(auto entity : view)
 				{
-					if (!SceneManager::GetScene()->GetRegistry().valid(entity))
+					if (!SceneManager::Get().GetScene()->GetRegistry().valid(entity))
 					{
 						return;
 					}
@@ -243,10 +243,10 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Server Moved A Object" << std::endl;
 
-				auto view = SceneManager::GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
+				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
 				for(auto& entity : view)
 				{
-					if(!SceneManager::GetScene()->GetRegistry().valid(entity))
+					if(!SceneManager::Get().GetScene()->GetRegistry().valid(entity))
 					{
 						return;
 					}
@@ -266,7 +266,7 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Got Something from server" << std::endl;
 
-				SceneManager::CreateEntityType(createMsg.EntityType, createMsg.EntityID);
+				SceneManager::Get().CreateEntityType(createMsg.EntityType, createMsg.EntityID);
 
 				break;
 			}
@@ -300,7 +300,7 @@ void NetworkingLayer::StartNetworkingClient()
 				data.Time = std::chrono::high_resolution_clock::now();
 				data.Rotation = { 0.0f,0.0f,0.0f };
 
-				data.myEntity = SceneManager::CreateEntityType(0, id);
+				data.myEntity = SceneManager::Get().CreateEntityType(0, id);
 				data.myEntity.GetComponent<TransformComponent>().Translation = playerConnectMsg.Translation;
 				data.myEntity.GetComponent<TransformComponent>().Scale = { scale, scale ,scale };
 				auto& networkComp = data.myEntity.AddComponent<Network::NetworkComponent>();
@@ -345,7 +345,7 @@ void NetworkingLayer::StartNetworkingClient()
 				{
 					if(myPlayers[i].ClientID == disMsg.ClientID)
 					{
-						SceneManager::GetScene()->DeleteEntity(myPlayers[i].myEntity);
+						SceneManager::Get().GetScene()->DeleteEntity(myPlayers[i].myEntity);
 					}
 				}
 
