@@ -6,6 +6,7 @@
 
 #include "Utilites/UtilityFunctions.h"
 #include "Renderer/Input/Input.h"
+#include "Renderer/Scene/SceneManager.h"
 
 
 CameraController::CameraController() : ScriptableEntity(true)
@@ -25,6 +26,18 @@ void CameraController::OnUpdate()
 	float aDeltaTime = Time::GetDeltaTime();
 
 	Vector3f movement;
+
+
+	if (Input::IsKeyPressed('L'))
+	{
+		SceneManager::Get().LoadScene("Assets\\Scenes\\uppgift.csf");
+	}
+
+	if (Input::IsKeyPressed('S'))
+	{
+		SceneManager::Get().SaveScene("Assets\\Scenes\\uppgift.csf");
+	}
+
 
 	TransformComponent& transform = GetComponent<TransformComponent>();
 	CameraControllerData& cameraData = GetComponent<CameraControllerData>();
@@ -105,4 +118,6 @@ void CameraController::OnUpdate()
 	}
 
 	transform.Translation += movement;
+
+	
 }

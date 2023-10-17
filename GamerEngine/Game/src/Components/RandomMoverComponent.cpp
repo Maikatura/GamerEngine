@@ -66,15 +66,7 @@ void RandomMoverComponent::OnUpdate()
 	transform.Translation += myVelocity * Time::GetDeltaTime();
 
 
-	if (Input::IsKeyPressed('L'))
-	{
-		SceneManager::Get().LoadScene("Assets\\Scenes\\uppgift.csf");
-	}
-
-	if (Input::IsKeyPressed('S'))
-	{
-		SceneManager::Get().SaveScene("Assets\\Scenes\\uppgift.csf");
-	}
+	
 }
 
 float RandomMoverComponent::GetSpeed()
