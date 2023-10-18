@@ -59,13 +59,13 @@ void CameraController::OnUpdate()
 		return;
 	}
 
-	float oldMouseX = transform.Rotation.x;
-	float oldMouseY = transform.Rotation.y;
+	float oldMouseX = transform.GetRotation().x;
+	float oldMouseY = transform.GetRotation().y;
 
 	
 
-	transform.Rotation.y += Input::GetMouseDelta().x * cameraData.myMouseSensitivity;
-	transform.Rotation.x += Input::GetMouseDelta().y * cameraData.myMouseSensitivity;
+	transform.GetRotation().y += Input::GetMouseDelta().x * cameraData.myMouseSensitivity;
+	transform.GetRotation().x += Input::GetMouseDelta().y * cameraData.myMouseSensitivity;
 
 	if (ImGui::GetIO().MouseWheel != 0.0f)
 	{
@@ -112,12 +112,12 @@ void CameraController::OnUpdate()
 		movement += { 0.0f, -1.0f * aDeltaTime * speed, 0.0f };
 	}
 
-	if (movement != Vector3f::Zero() || oldMouseX != transform.Rotation.x || oldMouseY != transform.Rotation.y)
+	if (movement != Vector3f::Zero() || oldMouseX != transform.GetRotation().x || oldMouseY != transform.GetRotation().y)
 	{
 		camera.SetHasMoved(true);
 	}
 
-	transform.Translation += movement;
+	transform.GetPosition() += movement;
 
 	
 }

@@ -33,8 +33,8 @@ void SpotLight::SetOuterCone(float aRadius)
 void SpotLight::Update()
 {
 	Matrix4x4f wTrans = myTransform->GetMatrix();
-	SetDirection(myTransform->Rotation);
-	SetLightPosition(myTransform->Translation);
+	SetDirection(myTransform->GetRotation());
+	SetLightPosition(myTransform->GetPosition());
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(wTrans);
 	myLightData.ShadowMapIndex = 20 + mySpotAndDirLightInt;
 	mySpotAndDirLightInt++;

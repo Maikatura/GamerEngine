@@ -38,11 +38,14 @@ void DirectionalLight::Update()
 
 	myLightData.SmoothShadows = myDirLight->SmoothShadows;
 
-	auto quatRot = CommonUtilities::Quaternionf::FromEulers(ToRadians(myTransformComp->Rotation));
-	auto matrix = ComposeFromTRS(Renderer::GetCamera()->GetPosition(), quatRot, { 1, 1, 1 });
 
-	myLocalDirection = myTransformComp->Rotation;
-	myLightData.Direction = matrix.GetForward();
+
+
+
+	auto quatRot = CommonUtilities::Quaternionf::FromEulers(myTransformComp->GetRotation());
+	auto matrix = ComposeFromTRS(myTransformComp->GetPosition(), quatRot, { 1, 1, 1 });
+
+	myLightData.Direction = quatRot.Forward();
 	myLightData.Position = Renderer::GetCamera()->GetPosition() + (myLightData.Direction * -3000.f);
 
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(matrix);
@@ -58,7 +61,6 @@ void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLight
 		//DX11::GetContext()->VSSetShaderResources(19, 1, &nullsrv);
 
 		DX11::GetContext()->PSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
-		DX11::GetContext()->VSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }
 

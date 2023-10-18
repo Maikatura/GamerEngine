@@ -165,9 +165,9 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::BeginMap; // TransformComponent
 
 		auto& tc = entity.GetComponent<TransformComponent>();
-		out << YAML::Key << "Translation" << YAML::Value << tc.Translation;
-		out << YAML::Key << "Rotation" << YAML::Value << tc.Rotation;
-		out << YAML::Key << "Scale" << YAML::Value << tc.Scale;
+		out << YAML::Key << "Translation" << YAML::Value << tc.GetPosition();
+		out << YAML::Key << "Rotation" << YAML::Value << tc.GetRotation();
+		out << YAML::Key << "Scale" << YAML::Value << tc.GetScale();
 
 		out << YAML::EndMap; // TransformComponent
 	}
@@ -434,9 +434,9 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 	{
 		// Entities always have transforms
 		auto& tc = deserializedEntity.GetComponent<TransformComponent>();
-		tc.Translation = transformComponent["Translation"].as<Vector3f>();
-		tc.Rotation = transformComponent["Rotation"].as<Vector3f>();
-		tc.Scale = transformComponent["Scale"].as<Vector3f>();
+		tc.SetPosition(transformComponent["Translation"].as<Vector3f>());
+		tc.SetRotation(transformComponent["Rotation"].as<Vector3f>());
+		tc.SetScale(transformComponent["Scale"].as<Vector3f>());
 	}
 
 

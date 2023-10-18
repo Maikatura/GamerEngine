@@ -161,9 +161,8 @@ public:
 		{
 			if (myShadowMap->myDSV)
 			{
-				
-
 				DX11::GetContext()->ClearDepthStencilView(myShadowMap->myDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+				DX11::GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
 			}
 		}
 	}
@@ -174,7 +173,7 @@ public:
 		{
 			if(myShadowMap->myDSV)
 			{
-				//DX11::GetContext()->OMSetRenderTargets(0, nullptr, myShadowMap->myDSV.Get());
+				DX11::GetContext()->OMSetRenderTargets(0, nullptr, myShadowMap->myDSV.Get());
 			}
 		}
 	}

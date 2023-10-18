@@ -7,7 +7,7 @@ GBufferOutput main(VertexToPixel input)
 {
 	GBufferOutput result;
 
-	const float4 albedo = albedoTexture.Sample(defaultSampler, input.myUV).rgba;
+    const float4 albedo = albedoTexture.Sample(wrapSampler, input.myUV).rgba;
 	if(albedo.a <= 0.05f)
 	{
 		discard;
@@ -23,9 +23,9 @@ GBufferOutput main(VertexToPixel input)
 	}
 
 	// TGA weirdness R:unused | G:norm.y | B:AO | A:norm.x
-	const float3 normalMap = normalTexture.Sample(defaultSampler, input.myUV).agb;
+    const float3 normalMap = normalTexture.Sample(wrapSampler, input.myUV).agb;
 
-	const float4 materialMap = materialTexture.Sample(defaultSampler, input.myUV).rgba;
+    const float4 materialMap = materialTexture.Sample(wrapSampler, input.myUV).rgba;
 	const float ambientOcclusion = normalMap.b;
 
 
@@ -33,9 +33,9 @@ GBufferOutput main(VertexToPixel input)
 
 	
 	result.Albedo = albedo;
-	result.Normal = float4(pixelNormal, 0.0f);
+    result.Normal = float4(normalize(input.myNormal), 0.0f);
 	result.Material = materialMap;
-	result.VertexNormal = float4(normalize(input.myNormal), 0.0f);
+    result.VertexNormal = float4(pixelNormal, 0.0f);
 	result.WorldPosition = float4(input.myVertexWorldPosition.xyz, 1.0f);
 	result.AmbientOcclusion = ambientOcclusion;
 	result.ViewPosition = float4(input.myViewPosition.xyz, 1.0f);
@@ -46,7 +46,7 @@ GBufferOutput main(VertexToPixel input)
 		default:
 			break;
 		case 6:// RenderMode::NormalMap
-			result.Normal = normalTexture.Sample(pointWrapSampler, input.myUV).agbb;
+            result.Normal = normalTexture.Sample(wrapSampler, input.myUV).agbb;
 			break;
 		case 2://RenderMode::VertexColor:
 			result.Albedo.rgb = input.myVxColor.rgb;

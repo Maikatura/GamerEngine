@@ -1,45 +1,13 @@
 Scene: SceneTesting
 Path: Assets\Scenes\uppgift.csf
 Entities:
-  - Entity: 12488069851411550894
-    TagComponent:
-      Tag: Point Light
-    TransformComponent:
-      Translation: [-528.906799, -298.935089, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    PointLightComponent:
-      Color: [1, 1, 0.396078438, 1]
-      Intensity: 479
-      Range: 293
-  - Entity: 13206094227154578508
-    TagComponent:
-      Tag: Spot Light
-    TransformComponent:
-      Translation: [0, -59.5184021, 0]
-      Rotation: [169.002045, -0, 0]
-      Scale: [0.999993026, 0.999988019, 0.999988019]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    SpotLightComponent:
-      Color: [1, 1, 0, 1]
-      Intensity: 172
-      Range: 186
-      InnerCone: 136
-      OuterCone: 116
   - Entity: 16032452205484422433
     TagComponent:
       Tag: Directional Light
     TransformComponent:
-      Translation: [92.2944183, 203.494476, -380.113586]
-      Rotation: [132.786758, -16.4169998, 0]
-      Scale: [0.995829344, 0.999664962, 0.999686956]
+      Translation: [92.2944183, 203.494476, -5.17140198]
+      Rotation: [120.056923, 5.0149622, -1.847018]
+      Scale: [0.995641708, 0.999697387, 0.999688447]
     ChildComponent:
       ChildrenSize: 0
       Children:
@@ -52,8 +20,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [-1380.96704, -8.6032486, 178.292694]
-      Rotation: [22.1467266, 101.115593, 0.000104271501]
+      Translation: [817.465393, 1278.89917, -1627.39539]
+      Rotation: [54.7513885, -35.7685089, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
     ChildComponent:
       ChildrenSize: 0
@@ -88,7 +56,7 @@ Entities:
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [0, 0, -653.219971]
+      Translation: [0, 0, -947.977966]
       Rotation: [0, -0, 0]
       Scale: [73.7638702, 73.7638702, 73.7638702]
     ChildComponent:

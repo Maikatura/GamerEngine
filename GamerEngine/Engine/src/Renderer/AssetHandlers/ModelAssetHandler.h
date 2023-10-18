@@ -18,7 +18,7 @@ namespace ofbx
 	struct IScene;
 }
 
-const int InputLayoutSize = 19;
+const int InputLayoutSize = 18;
 
 class ModelAssetHandler
 {

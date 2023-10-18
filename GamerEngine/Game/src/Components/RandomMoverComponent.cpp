@@ -36,34 +36,34 @@ void RandomMoverComponent::OnUpdate()
 
 	const float radius = 125.0f;
 
-	if (transform.Translation.x < -radius)
+	if (transform.GetPosition().x < -radius)
 	{
-		transform.Translation.x = radius;
+		transform.GetPosition().x = radius;
 	}
-	else if (transform.Translation.x > radius)
+	else if (transform.GetPosition().x > radius)
 	{
-		transform.Translation.x = -radius;
-	}
-
-	if (transform.Translation.y < -radius)
-	{
-		transform.Translation.y = radius;
-	}
-	else if (transform.Translation.y > radius)
-	{
-		transform.Translation.y = -radius;
+		transform.GetPosition().x = -radius;
 	}
 
-	if (transform.Translation.z < -radius)
+	if (transform.GetPosition().y < -radius)
 	{
-		transform.Translation.z = radius;
+		transform.GetPosition().y = radius;
 	}
-	else if (transform.Translation.z > radius)
+	else if (transform.GetPosition().y > radius)
 	{
-		transform.Translation.z = -radius;
+		transform.GetPosition().y = -radius;
 	}
 
-	transform.Translation += myVelocity * Time::GetDeltaTime();
+	if (transform.GetPosition().z < -radius)
+	{
+		transform.GetPosition().z = radius;
+	}
+	else if (transform.GetPosition().z > radius)
+	{
+		transform.GetPosition().z = -radius;
+	}
+
+	transform.GetPosition() += myVelocity * Time::GetDeltaTime();
 
 
 	

@@ -169,7 +169,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 			if(!model->GetMaterial().empty())
 			{
-				model->GetMaterial()[0]->SetAsResource(nullptr);
+				//model->GetMaterial()[0]->SetAsResource(nullptr);
 
 				//if(model->RenderWithDeferred())
 				//{

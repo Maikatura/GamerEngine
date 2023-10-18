@@ -171,14 +171,85 @@ void MainMenuBar::OnImGuiRender()
 
 
 
-		std::string fps = "FPS: " + std::to_string(Time::GetFPS());
+        std::string topBar = "Render Mode: ";
+        RenderMode currentRenderMode = GraphicsEngine::Get()->GetRenderMode();
+
+        switch (currentRenderMode)
+    	{
+	    case RenderMode::Default:
+            topBar += "Default";
+		    break;
+	    case RenderMode::UV1:
+            topBar += "UV1";
+		    break;
+	    case RenderMode::VertexColor:
+            topBar += "Vertex Color";
+		    break;
+	    case RenderMode::VertexNormal:
+            topBar += "Vertex Normal";
+		    break;
+	    case RenderMode::PixelNormal:
+            topBar += "Pixel Normal";
+		    break;
+	    case RenderMode::AlbedoMap:
+            topBar += "Albedo Map";
+		    break;
+	    case RenderMode::NormalMap:
+            topBar += "Normal Map";
+		    break;
+	    case RenderMode::DirectLight:
+            topBar += "Directonal Light";
+		    break;
+	    case RenderMode::AmbientLight:
+            topBar += "Ambient Light";
+		    break;
+	    case RenderMode::PointLight:
+            topBar += "Point Light";
+		    break;
+	    case RenderMode::SpotLight:
+            topBar += "Spot Light";
+		    break;
+	    case RenderMode::AmbientOcclusion:
+            topBar += "AO";
+		    break;
+	    case RenderMode::SSAO:
+            topBar += "SSAO";
+		    break;
+	    case RenderMode::Metalness:
+            topBar += "Metalness";
+		    break;
+	    case RenderMode::Roughness:
+            topBar += "Roughness";
+		    break;
+	    case RenderMode::Emission:
+            topBar += "Emission";
+		    break;
+	    case RenderMode::DirectLightNoAlbedo:
+            topBar += "Direct Light No Albedo";
+		    break;
+	    case RenderMode::AmbientLightNoAlbedo:
+            topBar += "Ambient Light No Albedo";
+		    break;
+	    case RenderMode::PointLightNoAlbedo:
+            topBar += "Point Light No Albedo";
+		    break;
+	    case RenderMode::SpotLightNoAlbedo:
+            topBar += "Spot Light No Albedo";
+		    break;
+	    case RenderMode::COUNT:
+        default:
+            topBar += "Error";
+            break;
+	    }
+
+    	topBar += "\t FPS: " + std::to_string(Time::GetFPS());
 
        
-    	textWidth = ImGui::CalcTextSize(fps.c_str()).x + 6.0f;
+    	textWidth = ImGui::CalcTextSize(topBar.c_str()).x + 6.0f;
 
         ImGui::SetCursorPosX((windowWidth - textWidth ));
 
-    	ImGui::Text(fps.c_str(), false);
+    	ImGui::Text(topBar.c_str(), false);
 
         ImGui::EndMainMenuBar();
     }

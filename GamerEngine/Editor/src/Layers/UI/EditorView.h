@@ -28,6 +28,7 @@ private:
 	void RenderEntityParts(Entity aEntity);
 
 	int myTabOpen = 0;
+	int myRenderPass = 0;
 
 	bool myIsFirstTimeEditing = true;
 	bool myIsEditingPosition = false;

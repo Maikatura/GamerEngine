@@ -19,8 +19,6 @@ void main(
             const float4 worldToLightView = mul(PLViews[face], float4(input[index].myVertexWorldPosition, 1.f));
             const float4 lightViewToLightProj = mul(SC_Projection, worldToLightView);
             result.Position = lightViewToLightProj;
-            result.Normal = input[index].myNormal;
-            result.UV = input[index].myUV;
             output.Append(result);
         }
         output.RestartStrip();

@@ -382,21 +382,39 @@ namespace CommonUtilities
 		return angles;
 	}
 
+	template <typename T>
+	inline T NormalizeAngle(T angleInDegrees) {
+		// Ensure the angle is in the 0 to 360-degree range
+		if (angleInDegrees < static_cast<T>(0.0f)) {
+			angleInDegrees += static_cast<T>(360.0f);
+		}
+		else if (angleInDegrees >= static_cast<T>(360.0f)) {
+			angleInDegrees -= static_cast<T>(360.0f);
+		}
+		return angleInDegrees;
+	}
+
 	// Explanation: https://math.stackexchange.com/a/2975462
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::FromEulers(const Vector3<T>& aEulers)
 	{
-		Vector3<T> halfAngle = aEulers * static_cast<T>(0.5);
+
+		Vector3<T> eulerFixed = aEulers;
+
+		eulerFixed.x = NormalizeAngle(eulerFixed.x);
+		eulerFixed.y = NormalizeAngle(eulerFixed.y);
+		eulerFixed.z = NormalizeAngle(eulerFixed.z);
+
+
+		Vector3<T> rotationRadians = eulerFixed * static_cast<T>(PI_NUMBER / 180.0);
+		Vector3<T> halfAngle = rotationRadians * static_cast<T>(0.5);
+
 		Quaternion<T> pitch{ std::cos(halfAngle.x), std::sin(halfAngle.x), static_cast<T>(0), static_cast<T>(0) };
 		Quaternion<T> yaw{ std::cos(halfAngle.y), static_cast<T>(0), std::sin(halfAngle.y), static_cast<T>(0) };
 		Quaternion<T> roll{ std::cos(halfAngle.z), static_cast<T>(0), static_cast<T>(0), std::sin(halfAngle.z) };
 
 		Quaternion<T> result = roll * yaw * pitch;
 		result.Normalize();
-
-		result.x = result.x;
-		result.y = result.y;
-		result.z = result.z;
 
 		return result;
 	}

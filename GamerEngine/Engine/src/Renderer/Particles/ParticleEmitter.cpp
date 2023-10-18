@@ -178,7 +178,7 @@ void ParticleEmitter::OnUpdate(TransformComponent& aTransform)
 			int systemPointInt = static_cast<int>(systemPoint);
 
 			p.myLifeTime = CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinLifeTime, myEmitterTimePoints[systemPointInt + 1].myMinLifeTime, systemPoint - systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxLifeTime, myEmitterTimePoints[systemPointInt + 1].myMaxLifeTime, systemPoint - systemPointInt), (rand() % 1000) * .001f);
-			p.myPosition = aTransform.Translation + myOffset + CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myPosition, myEmitterTimePoints[systemPointInt + 1].myPosition, systemPoint - systemPoint);
+			p.myPosition = aTransform.GetPosition() + myOffset + CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myPosition, myEmitterTimePoints[systemPointInt + 1].myPosition, systemPoint - systemPoint);
 			p.myRotation = 0;
 			Vector3f angle;
 			angle.x += CommonUtilities::LerpMinMax(CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMinAngle.x, myEmitterTimePoints[systemPointInt + 1].myMinAngle.x, systemPoint - systemPoint), CommonUtilities::LerpMinMax(myEmitterTimePoints[systemPointInt].myMaxAngle.x, myEmitterTimePoints[systemPointInt + 1].myMaxAngle.x, systemPoint - systemPointInt), (rand() % 1000) * .001f);
@@ -230,7 +230,7 @@ void ParticleEmitter::SetAsResource()
 		particleVertexData[i].myColor = CommonUtilities::LerpMinMax(myParticleTimePoints[(int)particlePoint].myColor, myParticleTimePoints[(int)particlePoint + 1].myColor, particlePoint - (int)particlePoint) * myParticles[i].myAge;
 		auto scale = CommonUtilities::LerpMinMax(myParticleTimePoints[(int)particlePoint].myScale, myParticleTimePoints[(int)particlePoint + 1].myScale, particlePoint - (int)particlePoint) * myParticles[i].myAge;
 
-		particleVertexData[i].myScale = { (scale.x * myTransform->Scale.x) * 0.1f, (scale.y * myTransform->Scale.y) * 0.1f };
+		particleVertexData[i].myScale = { (scale.x * myTransform->GetScale().x) * 0.1f, (scale.y * myTransform->GetScale().y) * 0.1f};
 		particleVertexData[i].myPivot = { .5f, .5f };
 	}
 	for(; i < particleVertexData.size(); i++)

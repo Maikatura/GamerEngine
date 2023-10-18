@@ -4,7 +4,9 @@
 struct Vertex
 {
 	Vector4f Position = { 0,0,0,1 };
-	Vector3f VertexPosition = { 0,0,0 };
+	Vector3f Normal = { 0,0,0 };
+	Vector3f Tangent = { 0,0,0 };
+	Vector3f Binormal = { 0,0,0 };
 	Vector4f VertexColors[4] =
 	{
 		{1,1,1,1},
@@ -24,7 +26,5 @@ struct Vertex
 	Vector4ui myBoneIDs = {0,0,0,0};
 	Vector4f myBoneWeights = { 0,0,0,0 };
 
-	Vector3f Tangent	= { 0,0,0 };
-	Vector3f Binormal	= { 0,0,0 };
-	Vector3f Normal		= { 0,0,0 };
+	
 };

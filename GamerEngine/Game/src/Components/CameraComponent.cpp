@@ -89,6 +89,11 @@ Vector3f CameraComponent::GetPosition()
 	return myPosition;
 }
 
+Vector3f CameraComponent::GetForward()
+{
+	return myRotation.Normalized();
+}
+
 
 inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t& matPose)
 {
@@ -170,13 +175,17 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	////rotation.z = 0.0f;
 
 
-	myPosition = aTransform->Translation;
+	myPosition = aTransform->GetPosition();
+
 #ifndef VR_DISABLED
 	ViewProjection = ComposeFromTRS(aTransform->Translation, rotation, aTransform->Scale);
-	ViewFlatProjection = ComposeFromTRS(aTransform->Translation, CommonUtilities::Quat::FromEulers(ToRadians(aTransform->Rotation)), aTransform->Scale);
+	ViewFlatProjection = ComposeFromTRS(aTransform->Translation, CommonUtilities::Quat::FromEulers(aTransform->Rotation), aTransform->Scale);
 #else
-	ViewFlatProjection = ComposeFromTRS(aTransform->Translation, CommonUtilities::Quat::FromEulers(ToRadians(aTransform->Rotation)), aTransform->Scale);;
+	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(aTransform->GetRotation()), aTransform->GetScale());
 #endif
+
+	myRotation = aTransform->GetRotation();
+
 
 	//ViewProjection = Matrix4x4f(1.0f);
 

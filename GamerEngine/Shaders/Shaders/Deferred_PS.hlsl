@@ -182,78 +182,82 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 
 	if(LB_DirectionalLight.CastShadows)
 	{
-		const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
-		const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
+        const float4 worldToLightView = mul(worldPosition, LB_DirectionalLight.LightView[0]);
+        const float4 lightViewToLightProj = mul(worldToLightView, LB_DirectionalLight.LightProjection);
 
-		float3 projectedTexCoord;
-		projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
-		projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
+        float4 projectedTexCoord = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
-		if(saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
-		{
-			const float shadowBias = 0.00008f;
-			const float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - shadowBias;
-			projectedTexCoord.z = viewDepth;
-			const float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
+        projectedTexCoord.xy = lightViewToLightProj.xy / (2.0f * lightViewToLightProj.w) + float2(0.5f, -0.5f);
 
-			if(lightDepth < viewDepth)
-			{
-				float flaking = 0.8f;
-				float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / 8192);
-				directShadow *= saturate(shadow * (1 - flaking) + flaking);
-				directLighting *= shadow;
-			}
-		}
-	}
+        bool validTexCoord = saturate(projectedTexCoord) == projectedTexCoord;
+        bool inFrontOfLight = worldToLightView.z >= 0.0f;
 
-	[unroll(20)]
-	for(unsigned int l = 0; l < LB_NumLights; l++)
-	{
-		LightData Light = LB_Lights[l];
-		switch(Light.LightType)
-		{
-			case 2:
-			{
-				float3 pointTemp = EvaluatePointLight(diffuseColor,
-					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, toEye, worldPosition.xyz);
+        if (validTexCoord && inFrontOfLight)
+        {
+            const float shadowBias = 0.00008f;
+            float viewDepth = lightViewToLightProj.z / lightViewToLightProj.w - shadowBias;
+            projectedTexCoord.z = viewDepth;
+    
+            float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
+    
+            if (lightDepth < viewDepth)
+            {
+                float flaking = 0.8f;
+                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / 8192.0f);
+                directShadow *= saturate(shadow * (1 - flaking) + flaking);
+                directLighting *= shadow;
+            }
+        }
+    }
 
-				if(Light.CastShadows)
-				{
+	//[unroll(20)]
+	//for(unsigned int l = 0; l < LB_NumLights; l++)
+	//{
+	//	LightData Light = LB_Lights[l];
+	//	switch(Light.LightType)
+	//	{
+	//		case 2:
+	//		{
+	//			float3 pointTemp = EvaluatePointLight(diffuseColor,
+	//				specularColor, normal, roughness, Light.Color, Light.Intensity,
+	//				Light.Range, Light.Position, toEye, worldPosition.xyz);
 
-					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz))
-					{
-						const float shadow = 0.001f;
-						pointTemp *= shadow;
-					}
-				}
-				pointLight += pointTemp;
-				break;
-			}
-			case 3:
-			{
-				float3 spotTemp = EvaluateSpotLight(diffuseColor,
-					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
-					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
+	//			if(Light.CastShadows)
+	//			{
 
-				if(Light.CastShadows)
-				{
-					if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz))
-					{
-						const float shadow = 0.001f;
-						spotTemp *= shadow;
-					}
-				}
-				spotLight += spotTemp;
-				break;
-			}
-		}
-	}
+	//				if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz))
+	//				{
+	//					const float shadow = 0.001f;
+	//					pointTemp *= shadow;
+	//				}
+	//			}
+	//			pointLight += pointTemp;
+	//			break;
+	//		}
+	//		case 3:
+	//		{
+	//			float3 spotTemp = EvaluateSpotLight(diffuseColor,
+	//				specularColor, normal, roughness, Light.Color, Light.Intensity,
+	//				Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+	//				Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
+
+	//			if(Light.CastShadows)
+	//			{
+	//				if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz))
+	//				{
+	//					const float shadow = 0.001f;
+	//					spotTemp *= shadow;
+	//				}
+	//			}
+	//			spotLight += spotTemp;
+	//			break;
+	//		}
+	//	}
+	//}
 
     float emissiveStrength = 0.0f;
 	float3 emissiveColor = emissive * emissiveIntensity * albedo.xyz * emissiveStrength;
-	float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight) * directShadow);
+    float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight)/* * directShadow*/);
 
 
 	switch(FB_RenderMode)

@@ -42,16 +42,26 @@ inline TurNet::TurMessage& operator<<(TurNet::TurMessage& msg, const Vector3f& d
 
 inline TurNet::TurMessage& operator>>(TurNet::TurMessage& msg, TransformComponent& data)
 {
-	msg >> data.Scale;
-	msg >> data.Rotation;
-	msg >> data.Translation;
+	Vector3f pos;
+	Vector3f rot;
+	Vector3f sca;
+
+
+	msg >> pos;
+	msg >> rot;
+	msg >> sca;
+
+	data.SetPosition(pos);
+	data.SetRotation(rot);
+	data.SetScale(sca);
+
 	return msg;
 }
 
 inline TurNet::TurMessage& operator<<(TurNet::TurMessage& msg, const TransformComponent& data)
 {
-	msg << data.Translation;
-	msg << data.Rotation;
-	msg << data.Scale;
+	msg << data.GetPosition();
+	msg << data.GetRotation();
+	msg << data.GetScale();
 	return msg;
 }

@@ -31,11 +31,16 @@ namespace CommonUtilities
 		T& operator()(const size_t anIndex);
 		const T& operator()(const size_t anIndex) const;
 
+
+
 		Vector3<T> operator[](const size_t anIndex);
 		const Vector3<T> operator[](const size_t anIndex) const;
 		Vector3<T> ToEularAngles();
 		CommonUtilities::Quaternion<T> GetQuat();
 
+
+
+		static Matrix4x4<T> CreateLookAt(const Vector3<T>& eye, const Vector3<T>& target, const Vector3<T>& up);
 		static Matrix4x4<T> CreateRotationAroundX(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundY(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundZ(T aAngleInRadians);
@@ -104,12 +109,17 @@ namespace CommonUtilities
 		Matrix4x4<T> projection;
 
 
-		projection(1, 1) = static_cast<T>(2.0) / (aRight - aLeft);
-		projection(2, 2) = static_cast<T>(2.0) / (aTop - aBottom);
-		projection(3, 3) = static_cast<T>(1.0) / (aFar - aNear);
-		projection(4, 1) = static_cast<T>(-((aRight + aLeft) / (aRight - aLeft)));
-		projection(4, 2) = static_cast<T>(-((aTop + aBottom) / (aTop - aBottom)));
-		projection(4, 3) = static_cast<T>(-(aNear / (aNear - aFar)));
+		// Scaling elements
+		projection(1, 1) = static_cast<T>(2) / (aRight - aLeft);
+		projection(2, 2) = static_cast<T>(2) / (aTop - aBottom);
+		projection(3, 3) = -static_cast<T>(2) / (aFar - aNear); // Negative sign for the depth range
+
+		// Translation elements
+		projection(4, 1) = -((aRight + aLeft) / (aRight - aLeft));
+		projection(4, 2) = -((aTop + aBottom) / (aTop - aBottom));
+		projection(4, 3) = -((aFar + aNear) / (aFar - aNear)); // Negative sign
+
+		// Homogeneous coordinate element
 		projection(4, 4) = static_cast<T>(1);
 
 
@@ -251,6 +261,38 @@ namespace CommonUtilities
 		quaternion.z = quaternion.z;
 
 		return quaternion;
+	}
+
+	template <class T>
+	Matrix4x4<T> Matrix4x4<T>::CreateLookAt(const Vector3<T>& eye, const Vector3<T>& target, const Vector3<T>& up)
+	{
+		Vector3 zAxis = eye.Normalized() - target.Normalized();
+		Vector3 xAxis = up.Cross(zAxis).Normalized();
+		Vector3 yAxis = zAxis.Cross(xAxis);
+
+		Matrix4x4 viewMatrix;
+
+		viewMatrix(0) = xAxis.x;
+		viewMatrix(1) = xAxis.y;
+		viewMatrix(2) = xAxis.z;
+		viewMatrix(3) = -xAxis.Dot(eye);
+				  
+		viewMatrix(4) = yAxis.x;
+		viewMatrix(5) = yAxis.y;
+		viewMatrix(6) = yAxis.z;
+		viewMatrix(7) = -yAxis.Dot(eye);
+				  
+		viewMatrix(8) = zAxis.x;
+		viewMatrix(9) = zAxis.y;
+		viewMatrix(10) = zAxis.z;
+		viewMatrix(11) = -zAxis.Dot(eye);
+				  
+		viewMatrix(12) = 0.0f;
+		viewMatrix(13) = 0.0f;
+		viewMatrix(14) = 0.0f;
+		viewMatrix(15) = 1.0f;
+
+		return viewMatrix;
 	}
 
 	template <class T>
@@ -751,13 +793,9 @@ namespace CommonUtilities
 	{
 		Vector3<T> aRotation = {0,0,0};
 
-		
-
-		T radToDeg = 180.0f / 3.14159f;
-		aRotation.x = radToDeg * static_cast<T>(std::atan2f(myMatrix[1][2], myMatrix[2][2]));
-		aRotation.y = radToDeg * static_cast<T>(std::atan2f(-myMatrix[0][2], std::sqrtf(myMatrix[1][2] * myMatrix[1][2] + myMatrix[2][2] * myMatrix[2][2])));
-		aRotation.z = radToDeg * static_cast<T>(std::atan2f(myMatrix[0][1], myMatrix[0][0]));
-
+		aRotation.x = static_cast<T>(std::atan2(myMatrix[6], myMatrix[10]));
+		aRotation.y = static_cast<T>(std::atan2(-myMatrix[2], myMatrix[0]));
+		aRotation.z = static_cast<T>(std::atan2(myMatrix[1], myMatrix[5]));
 		return aRotation;
 	}
 

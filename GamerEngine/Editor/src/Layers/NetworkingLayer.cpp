@@ -135,7 +135,7 @@ void NetworkingLayer::OnUpdate()
 
 		auto& transComp = myPlayers[i].myEntity.GetComponent<TransformComponent>();
 
-		float distance = (myPlayers[i].Translation - transComp.Translation).Length();
+		float distance = (myPlayers[i].Translation - transComp.GetPosition()).Length();
 		
 		//float distanceRot = (myPlayers[i].Rotation - transComp.Rotation).Length();
 
@@ -144,13 +144,13 @@ void NetworkingLayer::OnUpdate()
 		std::chrono::steady_clock::time_point clockNow = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double, std::milli> time = clockNow - myPlayers[i].Time;
 
-		Vector3f oldPosition = transComp.Translation;
+		Vector3f oldPosition = transComp.GetPosition();
 		//Vector3f newPosition = oldPosition + (myPlayers[i].MoveSpeed * Time::GetDeltaTime());
 
 		float lerpTime = static_cast<float>(time.count()) / 1000.0f;
 		float time_to_reach_targetTan = CommonUtilities::Max(0.0f, (distance / myPlayers[i].MoveSpeed) - lerpTime);
-		transComp.Translation = Vector3f::Lerp(transComp.Translation, myPlayers[i].Translation, Time::GetDeltaTime());
-		transComp.Rotation = myPlayers[i].Rotation;
+		transComp.SetPosition(Vector3f::Lerp(transComp.GetPosition(), myPlayers[i].Translation, Time::GetDeltaTime()));
+		transComp.SetPosition(myPlayers[i].Rotation);
 	}
 
 }
@@ -230,7 +230,7 @@ void NetworkingLayer::StartNetworkingClient()
 					if(ID.ID == moveMsg.EntityID)
 					{
 						auto& netComp = view.get<Network::NetworkComponent>(entity);
-						netComp.SetNewPosition(moveMsg.Transform.Translation);
+						netComp.SetNewPosition(moveMsg.Transform.GetPosition());
 						std::cout << moveMsg << std::endl;
 					}
 				}
@@ -254,7 +254,7 @@ void NetworkingLayer::StartNetworkingClient()
 					auto& netComp = view.get< Network::NetworkComponent>(entity);
 					if(netComp.GetID() == moveMsg.EntityID)
 					{
-						netComp.SetNewPosition(moveMsg.Transform.Translation);
+						netComp.SetNewPosition(moveMsg.Transform.GetPosition());
 					}
 				}
 				break;
@@ -301,8 +301,8 @@ void NetworkingLayer::StartNetworkingClient()
 				data.Rotation = { 0.0f,0.0f,0.0f };
 
 				data.myEntity = SceneManager::Get().CreateEntityType(0, id);
-				data.myEntity.GetComponent<TransformComponent>().Translation = playerConnectMsg.Translation;
-				data.myEntity.GetComponent<TransformComponent>().Scale = { scale, scale ,scale };
+				data.myEntity.GetComponent<TransformComponent>().SetPosition(playerConnectMsg.Translation);
+				data.myEntity.GetComponent<TransformComponent>().SetScale({ scale, scale ,scale });
 				auto& networkComp = data.myEntity.AddComponent<Network::NetworkComponent>();
 				networkComp.SetID(id);
 				networkComp.SetServer(playerConnectMsg.IsServer);

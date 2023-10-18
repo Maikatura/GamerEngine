@@ -80,9 +80,9 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 	if(aEntity.HasComponent<TransformComponent>())
 	{
 		auto& transform = aEntity.GetComponent<TransformComponent>();
-		auto translate = transform.Translation;
-		auto rotation = transform.Rotation;
-		auto scale = transform.Scale;
+		auto translate = transform.GetPosition();
+		auto rotation = transform.GetRotation();
+		auto scale = transform.GetScale();
 
 		if(ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_DefaultOpen, "%s Transform", ICON_FK_ARROWS))
 		{
@@ -116,9 +116,9 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			ImGui::TreePop();
 		}
 
-		transform.Translation = translate;
-		transform.Rotation = rotation;
-		transform.Scale = scale;
+		transform.SetPosition(translate);
+		transform.SetRotation(rotation);
+		transform.SetScale(scale);
 	}
 
 	ImGui::SeparateWithSpacing();

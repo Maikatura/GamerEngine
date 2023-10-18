@@ -22,9 +22,9 @@ std::shared_ptr<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vect
 
 
 	constexpr float nearPlane = 30.0f;
-	constexpr float farPlane = 50000.0f;
+	constexpr float farPlane = 250000.0f;
 	const Vector2f resolution = Vector2f(8192.0f, 8192.0f);
-	constexpr float DIVIDE = 0.4f;
+	constexpr float DIVIDE = 0.5f;
 
 	myDirectionalLight->myNearPlane = nearPlane;
 	myDirectionalLight->myFarPlane = farPlane;

@@ -20,6 +20,7 @@
 #include "Renderer/Scene/SceneManager.h"
 #include "Layers/NetworkingLayer.h"
 #include "Layers/Network/MoveObjectMessage.h"
+#include "Renderer/Input/Input.h"
 #include "Renderer/Render/DeferredRenderer.h"
 
 EditorView::EditorView() : Layer("Scene")
@@ -67,8 +68,23 @@ void EditorView::RenderSceneView(Entity aEntity)
 		camera.Resize({ static_cast<unsigned int>(windowSize.x), static_cast<unsigned int>(windowSize.y) });
 	}
 
+
+	
+	
+
+	if (GraphicsEngine::Get()->GetRenderPass() == 0)
+	{
+		ImGui::Image(DX11::myScreenView->GetShaderResourceView(), { windowSize.x, windowSize.y }); // Use this
+	}
+	else
+	{
+		ImGui::Image(GBuffer::GetPasses()[GraphicsEngine::Get()->GetRenderPass() - 1].GetShaderResourceView(), {windowSize.x, windowSize.y});
+	}
+
+
 	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowSize.x, windowSize.y);
-	ImGui::Image(DX11::myScreenView->GetShaderResourceView(), { windowSize.x, windowSize.y });
+	//ImGui::Image(GBuffer::GetPasses()[6].GetShaderResourceView(), {windowSize.x, windowSize.y});
+	
 	//ImGui::Image(GraphicsEngine::Get()->GetScene()->GetDirLight()->GetShadowMapView(), {windowSize.x, windowSize.y});
 
 	RenderEntityParts(aEntity);
@@ -104,9 +120,9 @@ void EditorView::RenderEntityParts(Entity aEntity)
 	memcpy_s(&projMat, sizeof(Matrix4x4f), &projectionView, sizeof(Matrix4x4f));
 
 	TransformComponent& transform = aEntity.GetComponent<TransformComponent>();
-	float translate[3] = { transform.Translation.x, transform.Translation.y, transform.Translation.z };
-	float rotation[3] = { transform.Rotation.x, transform.Rotation.y, transform.Rotation.z };
-	float scale[3] = { transform.Scale.x, transform.Scale.y, transform.Scale.z };
+	float translate[3] = { transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z };
+	float rotation[3] = { transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z };
+	float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
 
 	ImGuizmo::RecomposeMatrixFromComponents(translate, rotation, scale, *localMat.m);
 
@@ -151,9 +167,9 @@ void EditorView::RenderEntityParts(Entity aEntity)
 
 	ImGuizmo::DecomposeMatrixToComponents(*localMat.m, translate, rotation, scale);
 
-	memcpy_s(&transform.Translation, sizeof(Vector3f), &translate[0], sizeof(Vector3f));
-	memcpy_s(&transform.Rotation, sizeof(Vector3f), &rotation[0], sizeof(Vector3f));
-	memcpy_s(&transform.Scale, sizeof(Vector3f), &scale[0], sizeof(Vector3f));
+	memcpy_s(&transform.GetPosition(), sizeof(Vector3f), &translate[0], sizeof(Vector3f));
+	memcpy_s(&transform.GetRotation(), sizeof(Vector3f), &rotation[0], sizeof(Vector3f));
+	memcpy_s(&transform.GetScale(), sizeof(Vector3f), &scale[0], sizeof(Vector3f));
 
 	if(myIsEditingPosition != myOldIsEditingPosition)
 	{

@@ -370,6 +370,16 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 
 		GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
 	}
+
+	if (Input::IsKeyPressed(VK_F7))
+	{
+		myRenderPass++;
+
+		if (GBuffer::GBufferTexture::GBufferTexture_Count + 1 == myRenderPass)
+		{
+			myRenderPass = 0;
+		}
+	}
 #endif
 
 	SceneManager::Get().GetScene()->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::Get().GetStatus() == SceneStatus::Complete);
@@ -436,10 +446,10 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		{
 			PROFILE_SCOPE("Render Shadows");
 			myShadowRenderer->ClearResources();
-
+	
 			myShadowRenderer->Render(environmentLight.get(), modelList);
 			myShadowRenderer->Render(directionalLight.get(), modelList);
-
+	
 			for (auto& light : someLightList)
 			{
 				myShadowRenderer->Render(light, modelList);
@@ -759,5 +769,10 @@ bool GraphicsEngine::GetEngineRunning()
 void GraphicsEngine::SetEngineRunning(bool aCondition)
 {
 	myIsRunning = aCondition;
+}
+
+int GraphicsEngine::GetRenderPass()
+{
+	return myRenderPass;
 }
 

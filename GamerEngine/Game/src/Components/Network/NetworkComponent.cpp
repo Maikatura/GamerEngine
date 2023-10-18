@@ -42,17 +42,17 @@ void Network::NetworkComponent::OnUpdate()
 		if (myFirstStart)
 		{
 			myFirstStart = false;
-			myNewTranslation = transform.Translation;
+			myNewTranslation = transform.GetPosition();
 		}
 
 
 		if (myShouldSmooth)
 		{
-			transform.Translation = Vector3f::Lerp(transform.Translation, myNewTranslation, Time::GetDeltaTime());
+			transform.SetPosition(Vector3f::Lerp(transform.GetPosition(), myNewTranslation, Time::GetDeltaTime()));
 		}
 		else
 		{
-			transform.Translation = myNewTranslation;
+			transform.SetPosition(myNewTranslation);
 		}
 	}
 	

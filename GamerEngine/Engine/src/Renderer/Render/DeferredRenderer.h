@@ -42,12 +42,13 @@ public:
 
 	static RenderTexture& GetRenderer();
 
+	static std::array<RenderTexture, GBufferTexture::GBufferTexture_Count>& GetPasses();
 
 
 private:
 
 	ID3D11Texture2D* myTexture;
-	std::array<RenderTexture, GBufferTexture::GBufferTexture_Count> myRenderTextures;
+	inline static std::array<RenderTexture, GBufferTexture::GBufferTexture_Count> myRenderTextures;
 
 	inline static RenderTexture myRenderer;
 };

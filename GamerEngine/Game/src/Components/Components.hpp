@@ -47,16 +47,64 @@ public:
 
 class TransformComponent : public Component
 {
-public:
 	Vector3f Translation = { 0.0f, 0.0f, 0.0f };
 	Vector3f Rotation = { 0.0f, 0.0f, 0.0f };
 	Vector3f Scale = { 1.0f, 1.0f, 1.0f };
+
+public:
+	
 
 	TransformComponent() = default;
 	TransformComponent(const TransformComponent&) = default;
 	TransformComponent(const Vector3f& translation)
 		: Translation(translation)
 	{}
+
+	Vector3f GetPosition() const
+	{
+		return Translation;
+	}
+
+	Vector3f& GetPosition()
+	{
+		return Translation;
+	}
+
+	void SetPosition(Vector3f aPosition)
+	{
+		Translation = aPosition;
+	}
+
+	Vector3f GetRotation() const
+	{
+		return Rotation;
+	}
+
+	Vector3f& GetRotation()
+	{
+		return Rotation;
+	}
+
+	void SetRotation(Vector3f aRotation)
+	{
+		Rotation = aRotation;
+	}
+
+	Vector3f GetScale() const
+	{
+		return Scale;
+	}
+
+	Vector3f& GetScale()
+	{
+		return Scale;
+	}
+
+	void SetScale(Vector3f aScale)
+	{
+		Scale = aScale;
+	}
+
 
 	void LookAt(const Vector3f aPosition)
 	{
@@ -94,9 +142,16 @@ public:
 		Rotation = { pitch * (180.0f / 3.14f), yaw * (180.0f / 3.14f), 0.0f };
 	}
 
+	Vector3f Forward()
+	{
+		const float forwardDistance = 5.0f;
+		Vector3f forwardVector = CommonUtilities::Quat(Rotation).Forward();
+		return Translation + forwardVector * forwardDistance;
+	}
+
 	Matrix4x4f GetMatrix()
 	{
-		return ComposeFromTRS(Translation, CommonUtilities::Quat::FromEulers(ToRadians(Rotation)), Scale);
+		return ComposeFromTRS(Translation, CommonUtilities::Quat::FromEulers(Rotation), Scale);
 	}
 };
 

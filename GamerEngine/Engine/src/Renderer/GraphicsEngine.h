@@ -87,7 +87,8 @@ public:
 
 	bool GetEngineRunning();
 	void SetEngineRunning(bool aCondition);
-	
+	int GetRenderPass();
+
 	std::shared_ptr<ForwardRenderer> myForwardRenderer;
 	std::shared_ptr<DeferredRenderer> myDeferredRenderer;
 	std::shared_ptr<ShadowRenderer> myShadowRenderer;
@@ -101,6 +102,7 @@ public:
 
 private:
 
+	int myRenderPass = 0;
 	int m_iTrackedControllerCount;
 	int m_iTrackedControllerCount_Last;
 	int m_iValidPoseCount;

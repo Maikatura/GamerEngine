@@ -11,11 +11,11 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 	{
 		return;
 	}
-
+	
 	//Transform transform = Transform();
 
 
-	auto test = ComposeFromTRS(aTransfrom.Translation, CommonUtilities::Quaternionf::FromEulers(ToRadians(aTransfrom.Rotation)), aTransfrom.Scale);
+	auto test = ComposeFromTRS(aTransfrom.GetPosition(), CommonUtilities::Quaternionf::FromEulers(aTransfrom.GetRotation()), aTransfrom.GetScale());
 	//auto test2 = ComposeFromTRS(aTransfrom.Translation, test.GetQuat(), aTransfrom.Scale);
 	//transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
 	aModel.GetModel()->SetTransform(test);
@@ -25,7 +25,7 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
 {
-	mySpritesToRender.push_back({ Matrix4x4f::BuildTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale), aSprite });
+	mySpritesToRender.push_back({ Matrix4x4f::BuildTransform(aTransfrom.GetPosition(), aTransfrom.GetRotation(), aTransfrom.GetScale()), aSprite });
 }
 
 void Renderer::RenderLight(Light* aLight)

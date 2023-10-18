@@ -9,8 +9,13 @@ class TransformComponent;
 class CameraComponent : public Component
 {
 
+	Vector3f myRotation;
+	Vector2ui myRes;
+	Vector3f myPosition;
+
 public:
 
+	
 
 	Matrix4x4f ProjectionLeft;
 	Matrix4x4f ViewPosLeft;
@@ -44,6 +49,7 @@ public:
 	float GetCameraSpeed();
 
 	Vector3f GetPosition();
+	Vector3f GetForward();
 
 	Matrix4x4f GetCurrentViewProjectionMatrix(VREye anEye);
 	Matrix4x4f GetHMDMatrixPoseEye(VREye anEye);
@@ -61,8 +67,7 @@ private:
 	float myCameraSpeed;
 	float myHorizontalFoV;
 	float myVerticalFoV;
-	Vector2ui myRes;
-	Vector3f myPosition;
+	
 
 	Matrix4x4f viewProjectionMatrixVR;
 

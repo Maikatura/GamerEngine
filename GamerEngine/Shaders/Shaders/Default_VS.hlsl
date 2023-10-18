@@ -4,52 +4,45 @@ VertexToPixel main(VertexInput input)
 {
 	VertexToPixel result;
 
-	float4x4 skinningMatrix = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+	float4x4 skinningMatrix = {
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	};
+
 	if(OB_HasBones)
 	{
 		skinningMatrix = 0;
-		skinningMatrix += OB_BoneData[input.myBoneIDs.x] * input.myBoneWeights.x;
-		skinningMatrix += OB_BoneData[input.myBoneIDs.y] * input.myBoneWeights.y;
-		skinningMatrix += OB_BoneData[input.myBoneIDs.z] * input.myBoneWeights.z;
-		skinningMatrix += OB_BoneData[input.myBoneIDs.w] * input.myBoneWeights.w;
+        skinningMatrix += mul(input.myBoneWeights.x, OB_BoneData[input.myBoneIDs.x]);
+		skinningMatrix += mul(input.myBoneWeights.y, OB_BoneData[input.myBoneIDs.y]);
+		skinningMatrix += mul(input.myBoneWeights.z, OB_BoneData[input.myBoneIDs.z]);
+		skinningMatrix += mul(input.myBoneWeights.w, OB_BoneData[input.myBoneIDs.w]);
 	}
 
-	float4 vertexWorldPosition = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    float4 vertexWorldPosition = mul(OB_ToWorld, mul(input.myPosition, skinningMatrix));
 	if (OB_IsInstanced)
 	{
 		vertexWorldPosition = mul(input.Offset, mul(input.myPosition, skinningMatrix));
 	}
-	else
-	{
-		vertexWorldPosition = mul(OB_ToWorld, mul(input.myPosition, skinningMatrix));
-	}
 
+    float4 viewPosition = mul(FB_ToView, vertexWorldPosition);
+    result.myVertexWorldPosition = vertexWorldPosition.xyz;
+    result.myViewPosition = viewPosition.xyz;
+    result.myPosition = mul(FB_ToProjection, viewPosition);
+
+
+    float3x3 worldNormalRotation = (float3x3)OB_ToWorld;
+    if (OB_IsInstanced)
+    {
+        //worldNormalRotation = (float3x3) instanceBuffer[instanceArgs[OB_StartInstanceOffset + 3] + input.InstanceID].Transform;
+    }
 	
+    float3x3 skinNormalRotation = (float3x3)skinningMatrix;
 
-	//const float4 vertexViewPosition = mul(FB_ToView, vertexWorldPosition);
-	//const float4 vertexProjectionPosition = mul(FB_ToProjection, vertexViewPosition);
-
-	const float3x3 worldNormalRotation = (float3x3)OB_ToWorld;
-	const float3x3 skinNormalRotation = (float3x3)skinningMatrix;
-
-
-	float4 viewPosition = mul(FB_ToView, vertexWorldPosition);
-	float4 position = mul(FB_ToProjection, viewPosition);
-
-	/*float3 newPosition = position.xyz;
-	for(int i = 0; i < blendShapeCount; i++) 
-	{
-		newPosition += (blendShapeVertices[i] - position) * blendShapeWeights[i];
-	}*/
-
-	result.myVertexWorldPosition = vertexWorldPosition.xyz;
-	result.myViewPosition = viewPosition.xyz;
-
-	result.myPosition = position;
-
+    result.myNormal = mul(worldNormalRotation, mul(input.myNormal, skinNormalRotation));
 	result.myTangent	=	mul(worldNormalRotation, mul(input.myTangent,	skinNormalRotation));
 	result.myBinormal	=	mul(worldNormalRotation, mul(input.myBinormal,	skinNormalRotation));
-	result.myNormal		=	mul(worldNormalRotation, mul(input.myNormal,	skinNormalRotation));
 
 	result.myVxColor = input.myVxColor;
 	result.myVxColor2 = input.myVxColor2;
