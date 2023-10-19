@@ -495,59 +495,53 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 
 		ModelData modelData;
 
-
-				
-
-
 		modelData.Path = Helpers::string_cast<std::wstring>(modelComponent["Path"].as<std::string>());
-				
-				
 
-				if (modelComponent["Delay"])
+		if (modelComponent["Delay"])
+		{
+			modelData.Delay = modelComponent["Delay"].as<float>();
+		}
+
+		int textureSize = 0;
+		if (modelComponent["TextureSize"])
+		{
+			textureSize = modelComponent["TextureSize"].as<int>();
+		}
+
+		auto textures = modelComponent["Texture"];
+
+
+		if (!isHeadless)
+		{
+			if (textureSize != 0)
+			{
+				for (size_t i = 0; i < textureSize; i++)
 				{
-					modelData.Delay = modelComponent["Delay"].as<float>();
-				}
-
-				int textureSize = 0;
-				if (modelComponent["TextureSize"])
-				{
-					textureSize = modelComponent["TextureSize"].as<int>();
-				}
-
-				auto textures = modelComponent["Texture"];
+					auto texture = textures[std::to_string(i)];
 
 
-				if (!isHeadless)
-				{
-					if (textureSize != 0)
+
+					if (texture["Albedo"])
 					{
-						for (size_t i = 0; i < textureSize; i++)
-						{
-							auto texture = textures[std::to_string(i)];
-
-
-
-							if (texture["Albedo"])
-							{
-								modelData.Albedo.push_back(Helpers::string_cast<std::wstring>(texture["Albedo"].as<std::string>()));
-								//materials[i]->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoPath));
-							}
-
-							if (texture["Normal"])
-							{
-								modelData.Normal.push_back(Helpers::string_cast<std::wstring>(texture["Normal"].as<std::string>()));
-							}
-
-							if (texture["Material"])
-							{
-								modelData.Material.push_back(Helpers::string_cast<std::wstring>(texture["Material"].as<std::string>()));
-							}
-						}
+						modelData.Albedo.push_back(Helpers::string_cast<std::wstring>(texture["Albedo"].as<std::string>()));
+						//materials[i]->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoPath));
 					}
 
-				}
+					if (texture["Normal"])
+					{
+						modelData.Normal.push_back(Helpers::string_cast<std::wstring>(texture["Normal"].as<std::string>()));
+					}
 
-				auto& modelComp = deserializedEntity.AddComponent<ModelComponent>(modelData);
+					if (texture["Material"])
+					{
+						modelData.Material.push_back(Helpers::string_cast<std::wstring>(texture["Material"].as<std::string>()));
+					}
+				}
+			}
+
+		}
+
+		deserializedEntity.AddComponent<ModelComponent>(modelData);
 
 	}
 

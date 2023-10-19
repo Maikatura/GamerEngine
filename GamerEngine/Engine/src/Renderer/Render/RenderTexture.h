@@ -30,6 +30,8 @@ public:
 	ID3D11ShaderResourceView* GetShaderResourceView();
 	ID3D11Texture2D* GetTexture();
 
+	void SetAsResource(ID3D11DeviceContext* deviceContext, int aSlot);
+
 private:
 	ID3D11Texture2D* m_renderTargetTexture;
 	ID3D11RenderTargetView* m_renderTargetView;

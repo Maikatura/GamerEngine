@@ -13,6 +13,7 @@
 #include "Renderer/Scene/SceneManager.h"
 #include "Renderer/Scene/SceneSerializer.h"
 #include "Snapshots/SnapshotManager.h"
+#include "SettingKeybinds.h"
 
 
 MainMenuBar::MainMenuBar(EditorLayers& aLayer) : Layer("MainMenuBar", true, false), myLayers(aLayer)
@@ -20,18 +21,24 @@ MainMenuBar::MainMenuBar(EditorLayers& aLayer) : Layer("MainMenuBar", true, fals
 
 void MainMenuBar::OnImGuiRender()
 {
-    if(ImGui::BeginMainMenuBar())
+    RenderMainBar();
+    RenderFooter();
+}
+
+void MainMenuBar::RenderMainBar()
+{
+    if (ImGui::BeginMainMenuBar())
     {
-        if(ImGui::BeginMenu(ICON_FK_FILE" File"))
+        if (ImGui::BeginMenu(ICON_FK_FILE" File"))
         {
-            if(ImGui::MenuItem("Open"))
+            if (ImGui::MenuItem("Open"))
             {
                 std::string path = FileDialog::OpenFile("Scene File (*.csf)\0*.csf\0");
                 SceneManager::Get().LoadScene(path);
                 ConsoleHelper::Log(LogType::Info, std::string("Open Scene from '" + SceneManager::Get().GetScene()->GetPath() + "'"));
             }
 
-            if(ImGui::MenuItem("Save"))
+            if (ImGui::MenuItem("Save"))
             {
                 std::string path = FileDialog::SaveFile("Scene File (*.csf)\0*.csf\0");
                 SceneManager::Get().SaveScene(path + ".csf");
@@ -41,15 +48,15 @@ void MainMenuBar::OnImGuiRender()
             ImGui::EndMenu();
         }
 
-        if(ImGui::BeginMenu("View"))
+        if (ImGui::BeginMenu("View"))
         {
             ImGui::EndMenu();
         }
 
-        if(ImGui::BeginMenu("Tools"))
+        if (ImGui::BeginMenu("Tools"))
         {
             // EditorNames::SettingsName.c_str()
-            if(ImGui::MenuItem("Tools 1 & 2"))
+            if (ImGui::MenuItem("Tools 1 & 2"))
             {
                 myLayers.AddLayer(std::make_shared<EditorSettingsPanel>());
             }
@@ -57,10 +64,10 @@ void MainMenuBar::OnImGuiRender()
             ImGui::EndMenu();
         }
 
-        if(ImGui::BeginMenu("Windows"))
+        if (ImGui::BeginMenu("Windows"))
         {
 
-            for(int i = 0; i < myLayers.myLayers.size(); i++)
+            for (int i = 0; i < myLayers.myLayers.size(); i++)
             {
                 if (myLayers.myLayers[i]->ShouldBeSaved())
                 {
@@ -84,21 +91,21 @@ void MainMenuBar::OnImGuiRender()
                     //    }
                     //    else
                     //    {
-                            if(ImGui::MenuItemEx(myLayers.myLayers[i]->GetLayerName().c_str(), myLayers.myLayers[i]->IsOpen() ? ICON_FK_CHECK : ""))
-                            {
-                                if(myLayers.myLayers[i]->IsOpen())
-                                {
-                                    myLayers.myLayers[i]->SetOpen(false);
-                                }
-                                else
-                                {
-                                    myLayers.myLayers[i]->SetOpen(true);
-                                }
-                            }
-                        //}
+                    if (ImGui::MenuItemEx(myLayers.myLayers[i]->GetLayerName().c_str(), myLayers.myLayers[i]->IsOpen() ? ICON_FK_CHECK : ""))
+                    {
+                        if (myLayers.myLayers[i]->IsOpen())
+                        {
+                            myLayers.myLayers[i]->SetOpen(false);
+                        }
+                        else
+                        {
+                            myLayers.myLayers[i]->SetOpen(true);
+                        }
+                    }
                     //}
+                //}
 
-                    
+
                 }
 
 
@@ -108,9 +115,9 @@ void MainMenuBar::OnImGuiRender()
         }
 
 
-        if(ImGui::BeginMenu("Help"))
+        if (ImGui::BeginMenu("Help"))
         {
-            if(ImGui::MenuItem("Help Panel"))
+            if (ImGui::MenuItem("Help Panel"))
             {
                 myLayers.AddLayer(std::make_shared<HelpPanel>());
             }
@@ -133,9 +140,9 @@ void MainMenuBar::OnImGuiRender()
             std::string playText = ICON_FK_PLAY;
             playText += " Play";
 
-        	textWidth = ImGui::CalcTextSize(playText.c_str()).x;
+            textWidth = ImGui::CalcTextSize(playText.c_str()).x;
             ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
-            if(ImGui::Button(playText.c_str()))
+            if (ImGui::Button(playText.c_str()))
             {
                 myLayers.SetShouldEngineRun(true);
                 mySnapshot = SnapshotManager(&SceneManager::Get().GetScene()->GetRegistry());
@@ -149,21 +156,21 @@ void MainMenuBar::OnImGuiRender()
 
             textWidth = ImGui::CalcTextSize(stopText.c_str()).x;
             ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
-            if(ImGui::Button(stopText.c_str()))
+            if (ImGui::Button(stopText.c_str()))
             {
                 myLayers.SetShouldEngineRun(false);
                 ConsoleHelper::Log(LogType::Info, "Stopped game");
                 mySnapshot.RestoreSnapShot();
             }
         }
-       
+
 
         std::string resumeOrPause = (GraphicsEngine::Get()->GetPauseState() == true) ? "Resume" : "Pause";
 
         textWidth = ImGui::CalcTextSize(resumeOrPause.c_str()).x;
         ImGui::SetCursorPosX((windowWidth * 0.5f) + (size + padding));
 
-        if(ImGui::Button(resumeOrPause.c_str()))
+        if (ImGui::Button(resumeOrPause.c_str()))
         {
             GraphicsEngine::Get()->SetPauseState(!GraphicsEngine::Get()->GetPauseState());
             ConsoleHelper::Log(LogType::Info, "Paused/Resumed game");
@@ -175,82 +182,137 @@ void MainMenuBar::OnImGuiRender()
         RenderMode currentRenderMode = GraphicsEngine::Get()->GetRenderMode();
 
         switch (currentRenderMode)
-    	{
-	    case RenderMode::Default:
+        {
+        case RenderMode::Default:
             topBar += "Default";
-		    break;
-	    case RenderMode::UV1:
+            break;
+        case RenderMode::UV1:
             topBar += "UV1";
-		    break;
-	    case RenderMode::VertexColor:
+            break;
+        case RenderMode::VertexColor:
             topBar += "Vertex Color";
-		    break;
-	    case RenderMode::VertexNormal:
+            break;
+        case RenderMode::VertexNormal:
             topBar += "Vertex Normal";
-		    break;
-	    case RenderMode::PixelNormal:
+            break;
+        case RenderMode::PixelNormal:
             topBar += "Pixel Normal";
-		    break;
-	    case RenderMode::AlbedoMap:
+            break;
+        case RenderMode::AlbedoMap:
             topBar += "Albedo Map";
-		    break;
-	    case RenderMode::NormalMap:
+            break;
+        case RenderMode::NormalMap:
             topBar += "Normal Map";
-		    break;
-	    case RenderMode::DirectLight:
+            break;
+        case RenderMode::DirectLight:
             topBar += "Directonal Light";
-		    break;
-	    case RenderMode::AmbientLight:
+            break;
+        case RenderMode::AmbientLight:
             topBar += "Ambient Light";
-		    break;
-	    case RenderMode::PointLight:
+            break;
+        case RenderMode::PointLight:
             topBar += "Point Light";
-		    break;
-	    case RenderMode::SpotLight:
+            break;
+        case RenderMode::SpotLight:
             topBar += "Spot Light";
-		    break;
-	    case RenderMode::AmbientOcclusion:
+            break;
+        case RenderMode::AmbientOcclusion:
             topBar += "AO";
-		    break;
-	    case RenderMode::SSAO:
+            break;
+        case RenderMode::SSAO:
             topBar += "SSAO";
-		    break;
-	    case RenderMode::Metalness:
+            break;
+        case RenderMode::Metalness:
             topBar += "Metalness";
-		    break;
-	    case RenderMode::Roughness:
+            break;
+        case RenderMode::Roughness:
             topBar += "Roughness";
-		    break;
-	    case RenderMode::Emission:
+            break;
+        case RenderMode::Emission:
             topBar += "Emission";
-		    break;
-	    case RenderMode::DirectLightNoAlbedo:
+            break;
+        case RenderMode::DirectLightNoAlbedo:
             topBar += "Direct Light No Albedo";
-		    break;
-	    case RenderMode::AmbientLightNoAlbedo:
+            break;
+        case RenderMode::AmbientLightNoAlbedo:
             topBar += "Ambient Light No Albedo";
-		    break;
-	    case RenderMode::PointLightNoAlbedo:
+            break;
+        case RenderMode::PointLightNoAlbedo:
             topBar += "Point Light No Albedo";
-		    break;
-	    case RenderMode::SpotLightNoAlbedo:
+            break;
+        case RenderMode::SpotLightNoAlbedo:
             topBar += "Spot Light No Albedo";
-		    break;
-	    case RenderMode::COUNT:
+            break;
+        case RenderMode::COUNT:
         default:
             topBar += "Error";
             break;
-	    }
+        }
 
-    	topBar += "\t FPS: " + std::to_string(Time::GetFPS());
+        topBar += "\t FPS: " + std::to_string(Time::GetFPS());
 
-       
-    	textWidth = ImGui::CalcTextSize(topBar.c_str()).x + 6.0f;
 
-        ImGui::SetCursorPosX((windowWidth - textWidth ));
+        textWidth = ImGui::CalcTextSize(topBar.c_str()).x + 6.0f;
 
-    	ImGui::Text(topBar.c_str(), false);
+        ImGui::SetCursorPosX((windowWidth - textWidth));
+
+        ImGui::Text(topBar.c_str(), false);
+
+
+        ImGuiViewportP* viewport = (ImGuiViewportP*)(void*)ImGui::GetMainViewport();
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
+        float height = ImGui::GetFrameHeight();
+
+        if (ImGui::BeginViewportSideBar("##SecondaryMenuBar", viewport, ImGuiDir_Up, height, window_flags)) {
+            if (ImGui::BeginMenuBar()) {
+                if(ImGui::Button(SettingKeybinds::GetEditModeName().c_str()))
+                {
+	                if (SettingKeybinds::GetEditMode() == ImGuizmo::MODE::LOCAL)
+	                {
+                        SettingKeybinds::SetEditModeType(ImGuizmo::MODE::WORLD);
+	                }
+                    else
+                    {
+                        SettingKeybinds::SetEditModeType(ImGuizmo::MODE::LOCAL);
+                    }
+                }
+                ImGui::EndMenuBar();
+            }
+            ImGui::End();
+        }
+
+
 
         ImGui::EndMainMenuBar();
     }
+}
+
+void MainMenuBar::RenderFooter()
+{
+    //const ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+    //// Set position to the bottom of the viewport
+    //ImGui::SetNextWindowPos(
+    //    ImVec2(viewport->Pos.x,
+    //        viewport->Pos.y + viewport->Size.y - ImGui::GetFrameHeight()));
+
+    //// Extend width to viewport width
+    //ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, ImGui::GetFrameHeight()));
+
+    //// Add menu bar flag and disable everything else
+    //ImGuiWindowFlags flags =
+    //    ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs |
+    //    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse |
+    //    ImGuiWindowFlags_NoSavedSettings |
+    //    ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoBackground |
+    //    ImGuiWindowFlags_MenuBar;
+
+
+    //if (ImGui::Begin("StatusBar", nullptr, flags)) {
+    //    if (ImGui::BeginMenuBar()) {
+    //        ImGui::Text("%s", "Haiiii :3");
+    //        ImGui::EndMenuBar();
+    //    }
+    //    ImGui::End();
+    //}
 }

@@ -111,7 +111,7 @@ public:
 	FORCEINLINE void SetDirection(Vector3f aDirection)
 	{
 		myLocalDirection = aDirection;
-		myLightData.Direction = CommonUtilities::Quat::FromEulers(aDirection * DEG_TO_RAD).Forward();
+		myLightData.Direction = CommonUtilities::Quat::FromEulers(ToRadians(aDirection)).Forward();
 	}
 	FORCEINLINE Vector3f GetDirection()
 	{

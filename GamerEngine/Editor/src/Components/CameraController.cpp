@@ -28,16 +28,6 @@ void CameraController::OnUpdate()
 	Vector3f movement;
 
 
-	if (Input::IsKeyPressed('L'))
-	{
-		SceneManager::Get().LoadScene("Assets\\Scenes\\uppgift.csf");
-	}
-
-	if (Input::IsKeyPressed('S'))
-	{
-		SceneManager::Get().SaveScene("Assets\\Scenes\\uppgift.csf");
-	}
-
 
 	TransformComponent& transform = GetComponent<TransformComponent>();
 	CameraControllerData& cameraData = GetComponent<CameraControllerData>();

@@ -113,7 +113,7 @@ public:
 
 	static void ResetViewport();
 
-	static void ResetRenderTarget(bool isUsingEditor = false);
+	static void ResetRenderTarget(bool isUsingEditor = false, bool useDepth = true);
 
 
 	static UINT GetScreenObjectId(UINT x, UINT y);

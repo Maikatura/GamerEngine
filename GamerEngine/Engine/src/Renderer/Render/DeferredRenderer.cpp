@@ -21,7 +21,7 @@ void GBuffer::SetAsTarget()
 
 void GBuffer::ClearTarget()
 {
-	Vector4f color = { 0,0,1.0f,0 };
+	Vector4f color = { 0,0,0,0 };
 	ID3D11RenderTargetView* rtvList[GBufferTexture::GBufferTexture_Count];
 	for(int i = 0; i < GBufferTexture::GBufferTexture_Count; i++)
 	{
@@ -31,8 +31,8 @@ void GBuffer::ClearTarget()
 		//DX11::GetContext()->ClearRenderTargetView(myRTVs[i].Get(), &color.x);
 	}
 
-	myRenderer.ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), color.x, color.y, color.z, color.w);
-	myRenderer.SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+	//myRenderer.ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), color.x, color.y, color.z, color.w);
+	DX11::ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
 }
 
 
@@ -57,11 +57,11 @@ void GBuffer::ClearResource(unsigned aStartSlot)
 	{
 		srvList[i] = nullptr;
 
-		myRenderTextures[i].ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0, 0, 0, 1.0f);
+		myRenderTextures[i].ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0, 0, 0, 0);
 	}
 
 
-	DX11::GetContext()->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
+	//DX11::GetContext()->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
 	DX11::GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
 }
 

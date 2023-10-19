@@ -13,11 +13,11 @@ float3 UnpackNormal(float3 aNormal)
 float3x3 ComposeTBN(float3 aTangent, float3 aBinormal, float3 aNormal)
 {
     return float3x3
-        (
-            normalize(aTangent),
-            normalize(aBinormal),
-            normalize(aNormal)
-            );
+	(
+        normalize(aTangent),
+        normalize(aBinormal),
+        normalize(aNormal)
+    );
 }
 
 float3 CalculatePixelNormal(float3 aPackedNormal, float3 aTangent, float3 aBinormal, float3 aVertexNormal)

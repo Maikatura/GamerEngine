@@ -15,7 +15,7 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 	//Transform transform = Transform();
 
 
-	auto test = ComposeFromTRS(aTransfrom.GetPosition(), CommonUtilities::Quaternionf::FromEulers(aTransfrom.GetRotation()), aTransfrom.GetScale());
+	auto test = ComposeFromTRS(aTransfrom.GetPosition(), CommonUtilities::Quaternionf::FromEulers(ToRadians(aTransfrom.GetRotation())), aTransfrom.GetScale());
 	//auto test2 = ComposeFromTRS(aTransfrom.Translation, test.GetQuat(), aTransfrom.Scale);
 	//transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
 	aModel.GetModel()->SetTransform(test);

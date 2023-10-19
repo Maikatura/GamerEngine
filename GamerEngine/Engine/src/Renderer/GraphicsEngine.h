@@ -84,6 +84,7 @@ public:
 
 	bool GetPauseState();
 	void SetPauseState(bool aCondition);
+	bool GetEditorMode();
 
 	bool GetEngineRunning();
 	void SetEngineRunning(bool aCondition);

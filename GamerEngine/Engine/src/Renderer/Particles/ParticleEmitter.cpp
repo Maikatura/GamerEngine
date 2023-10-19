@@ -106,8 +106,8 @@ bool ParticleEmitter::Init()
 
 	DX11::Device->CreateBuffer(&vertBufferDesc, &vertSubData, myVertexBuffer.GetAddressOf());
 
-	if(!TextureAssetHandler::LoadTexture(L"Assets\\Textures\\ParticleStar.dds"))
-		myTexture = TextureAssetHandler::GetTexture(L"Assets\\Textures\\ParticleStar.dds");
+	if(!TextureAssetHandler::LoadTexture(L"resources\\textures\\ParticleStar.dds"))
+		myTexture = TextureAssetHandler::GetTexture(L"resources\\textures\\ParticleStar.dds");
 
 	return true;
 }

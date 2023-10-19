@@ -13,7 +13,13 @@ public:
 
 	void OnImGuiRender() override;
 
+
+
 private:
+
+	void RenderMainBar();
+	void RenderFooter();
+
 	EditorLayers& myLayers;
 	SnapshotManager mySnapshot;
 };

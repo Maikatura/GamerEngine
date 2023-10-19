@@ -151,7 +151,7 @@ public:
 
 	Matrix4x4f GetMatrix()
 	{
-		return ComposeFromTRS(Translation, CommonUtilities::Quat::FromEulers(Rotation), Scale);
+		return ComposeFromTRS(Translation, CommonUtilities::Quat::FromEulers(ToRadians(Rotation)), Scale);
 	}
 };
 
@@ -182,7 +182,7 @@ public:
 
 		if (aShouldThread)
 		{
-			ThreadPool::Get().EnqueueTask([&]()
+			ModelAssetHandler::Get().EnqueueLoadTask([&]()
 				{
 
 					if (myDelay <= 0.0f)
@@ -291,7 +291,7 @@ public:
 	void SetModelAsync(const std::wstring& aModelPath)
 	{
 		myPath = aModelPath;
-		ThreadPool::Get().EnqueueTask([&]()
+		ModelAssetHandler::Get().EnqueueLoadTask([&]()
 			{
 				if (myDelay <= 0.0f)
 				{

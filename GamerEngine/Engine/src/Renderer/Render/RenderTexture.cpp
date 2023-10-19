@@ -156,3 +156,8 @@ ID3D11Texture2D* RenderTexture::GetTexture()
 {
 	return m_renderTargetTexture;
 }
+
+void RenderTexture::SetAsResource(ID3D11DeviceContext* deviceContext, int aSlot)
+{
+	deviceContext->PSSetShaderResources(aSlot, 1, &m_shaderResourceView);
+}

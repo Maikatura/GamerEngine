@@ -13,6 +13,7 @@
 #include <Renderer/Model/Entity.h>
 #include <Components/CameraController.h>
 
+#include "SettingKeybinds.h"
 #include "Renderer/Debugger/ConsoleHelper.h"
 #include "Handlers/DropHandler.h"
 #include "Renderer/Managers/CommandManager.h"
@@ -70,15 +71,19 @@ void EditorView::RenderSceneView(Entity aEntity)
 
 
 	
-	
+	int pass = GraphicsEngine::Get()->GetRenderPass();
 
-	if (GraphicsEngine::Get()->GetRenderPass() == 0)
+	if (pass == 0)
 	{
 		ImGui::Image(DX11::myScreenView->GetShaderResourceView(), { windowSize.x, windowSize.y }); // Use this
 	}
+	else if (pass == 1)
+	{
+		ImGui::Image(GBuffer::GetRenderer().GetShaderResourceView(), { windowSize.x, windowSize.y });
+	}
 	else
 	{
-		ImGui::Image(GBuffer::GetPasses()[GraphicsEngine::Get()->GetRenderPass() - 1].GetShaderResourceView(), {windowSize.x, windowSize.y});
+		ImGui::Image(GBuffer::GetPasses()[pass - 2].GetShaderResourceView(), {windowSize.x, windowSize.y});
 	}
 
 
@@ -148,7 +153,7 @@ void EditorView::RenderEntityParts(Entity aEntity)
 	ImGuizmo::Manipulate(*viewMat.m,
 		*projMat.m,
 		myOperation,
-		ImGuizmo::WORLD,
+		SettingKeybinds::GetEditMode(),
 		*localMat.m,
 		NULL,
 		NULL

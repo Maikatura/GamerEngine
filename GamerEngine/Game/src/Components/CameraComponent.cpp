@@ -181,7 +181,7 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	ViewProjection = ComposeFromTRS(aTransform->Translation, rotation, aTransform->Scale);
 	ViewFlatProjection = ComposeFromTRS(aTransform->Translation, CommonUtilities::Quat::FromEulers(aTransform->Rotation), aTransform->Scale);
 #else
-	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(aTransform->GetRotation()), aTransform->GetScale());
+	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
 #endif
 
 	myRotation = aTransform->GetRotation();

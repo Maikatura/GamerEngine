@@ -57,7 +57,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     );
 
     SceneManager::Get().Initialize();
-    SceneManager::Get().LoadScene("Assets\\Scenes\\uppgift.csf");
+    SceneManager::Get().LoadScene("Assets\\Scenes\\Test.csf");
  
     while(bShouldRun)
     {

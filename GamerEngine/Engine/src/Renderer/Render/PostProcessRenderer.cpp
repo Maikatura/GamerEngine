@@ -52,7 +52,27 @@ void PostProcessRenderer::ReInitialize()
 {
 	myHasInited = false;
 
-	myRenderTextures.clear();
+	RECT clientRect = DX11::GetClientSize();
+	float width = static_cast<float>(clientRect.right - clientRect.left);
+	float height = static_cast<float>(clientRect.bottom - clientRect.top);
+
+
+	mySSAOTexture = std::make_shared<RenderTexture>();
+	mySSAOTexture->Initialize(DX11::GetDevice(), static_cast<int>(width), static_cast<int>(height), DXGI_FORMAT_R32_FLOAT);
+
+	myFullSize = std::make_shared<RenderTexture>();
+	myFullSize->Initialize(DX11::GetDevice(), static_cast<int>(width), static_cast<int>(height));
+
+
+	myHalfSize = std::make_shared<RenderTexture>();
+	myHalfSize->Initialize(DX11::GetDevice(), static_cast<int>(width * .5f), static_cast<int>(height * .5f));
+
+	myQuarterSize = std::make_shared<RenderTexture>();
+	myQuarterSize->Initialize(DX11::GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
+
+	myBlur = std::make_shared<RenderTexture>();
+	myBlur->Initialize(DX11::GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
+
 	myNoiseTexture->SetAsResource(8);
 }
 
@@ -92,7 +112,7 @@ std::shared_ptr<RenderTexture> PostProcessRenderer::CreateRenderTexture(const st
 	return nullptr;
 }
 
-void PostProcessRenderer::Render(PostProcessPass aPass)
+void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection)
 {
 	if(!Renderer::GetCamera())
 	{
@@ -102,23 +122,15 @@ void PostProcessRenderer::Render(PostProcessPass aPass)
 
 	if(myHasInited == false)
 	{
-		RECT clientRect = DX11::GetClientSize();
-		float width = static_cast<float>(clientRect.right - clientRect.left);
-		float height = static_cast<float>(clientRect.bottom - clientRect.top);
+		
 
-
-		/*mySSAOTexture = CreateRenderTexture("PP_SSAO", width, height, DXGI_FORMAT_R32_FLOAT);
-		myFullSize = CreateRenderTexture("PP_FullSize", width, height);
-		myHalfSize = CreateRenderTexture("PP_HalfSize", width * .5f, height * .5f);
-		myQuarterSize = CreateRenderTexture("PP_QuarterSize", width * .25f, height * .25f);
-		myBlur = CreateRenderTexture("PP_Blur", width * .25f, height * .25f);
-		myHasInited = true;*/
+		myHasInited = true;
 	}
 
-	ID3D11RenderTargetView* buffers[1]
+	/*ID3D11RenderTargetView* buffers[1]
 	{
 		DX11::RenderRTV.Get()
-	};
+	};*/
 
 	switch(aPass)
 	{
@@ -128,36 +140,25 @@ void PostProcessRenderer::Render(PostProcessPass aPass)
 		case PP_BLOOM:
 		{
 			
-			/*SetDepthStencilState(DepthStencilState::Disabled);
+			SetDepthStencilState(DepthStencilState::Disabled);
 			SetBlendState(BlendState::Additive);
-			myFullSize->Clear();
-			myFullSize->SetAsTarget();
+
+			RenderTextureOnSlot(0, 0, PostProcessPass::PP_LUMINANCE, myFullSize);
+
+			RenderTextureOnSlot(0, 0, PostProcessPass::PP_LUMINANCE, myHalfSize);
+
+			RenderTextureOnSlot(0, 0, PostProcessPass::PP_COPY, myQuarterSize);
+
+			RenderTextureOnSlot(0, 1, PostProcessPass::PP_GAUSSIAN, myBlur);
+
+			RenderTextureOnSlot(0, 0, PostProcessPass::PP_COPY, myHalfSize);
+
+			RenderTextureOnSlot(0, 0, PostProcessPass::PP_COPY, myFullSize);
 			
 
-			DX11::GetContext()->PSSetShaderResources(0, 1, DX11::RenderSRV.GetAddressOf());
-			RenderPass(PostProcessPass::PP_LUMINANCE);
+			RenderTextureOnSlot(0,0, PostProcessPass::PP_BLOOM, myFullSize);
 
-			myHalfSize->Clear();
-			myHalfSize->SetAsTarget();
-			myFullSize->SetAsResource(0);
-			RenderPass(PostProcessPass::PP_COPY);
-
-			myQuarterSize->Clear();
-			myQuarterSize->SetAsTarget();
-			myHalfSize->SetAsResource(0);
-			RenderPass(PostProcessPass::PP_COPY);
-
-			myBlur->Clear();
-			myBlur->SetAsTarget();
-			myQuarterSize->SetAsResource(0);
-			RenderPass(PostProcessPass::PP_GAUSSIAN);
-
-			myHalfSize->Clear();
-			myHalfSize->SetAsTarget();
-			myBlur->SetAsResource(0);
-			RenderPass(PostProcessPass::PP_COPY);
-
-			myFullSize->Clear();
+			/*myFullSize->Clear();
 			myFullSize->SetAsTarget();
 			DX11::GetContext()->OMSetRenderTargets(1, &buffers[0], DX11::DepthBuffer.Get());
 			myBlur->SetAsResource(0);
@@ -174,90 +175,74 @@ void PostProcessRenderer::Render(PostProcessPass aPass)
 
 		case PP_SSAO:
 		{
-			//myNoiseTexture->SetAsResource(9);
+			myNoiseTexture->SetAsResource(9);
 
-			//HRESULT result = S_FALSE;
-			//D3D11_MAPPED_SUBRESOURCE bufferData;
-			//RECT clientRect = DX11::GetClientSize();
-			//const Vector2ui Resolution = {
-			//	static_cast<unsigned int>(clientRect.right - clientRect.left),
-			//	static_cast<unsigned int>(clientRect.bottom - clientRect.top)
-			//};
+			HRESULT result = S_FALSE;
+			D3D11_MAPPED_SUBRESOURCE bufferData;
+			RECT clientRect = DX11::GetClientSize();
+			const Vector2ui Resolution = {
+				static_cast<unsigned int>(clientRect.right - clientRect.left),
+				static_cast<unsigned int>(clientRect.bottom - clientRect.top)
+			};
 
-			//myFrameBufferData.View = Matrix4x4f::GetFastInverse(Renderer::GetViewMatrix());
-			//myFrameBufferData.CamTranslation = Renderer::GetViewMatrix().GetPosition();
-			//myFrameBufferData.Projection = Renderer::GetProjectionMatrix();
-			//myFrameBufferData.RenderMode = 0;
+			myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
+			myFrameBufferData.CamTranslation = aView.GetPosition();
+			myFrameBufferData.Projection = aProjection;
+			myFrameBufferData.RenderMode = 0;
 
-			//myFrameBufferData.Resolution = Resolution;
-			//myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
-			//myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
+			myFrameBufferData.Resolution = Resolution;
+			myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
+			myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
 
-			//myFrameBufferData.DeltaTime = 0;
-			//myFrameBufferData.TotalTime = 0;
-			//const float aspectRatio = (float)myFrameBufferData.Resolution.x / (float)myFrameBufferData.Resolution.y;
-			//float farPlane = Renderer::GetCamera()->myFarPlane;
-			//float halfHeight = farPlane * tanf(0.5f * Renderer::GetCamera()->GetVerticalFoV());
-			//float halfWidth = aspectRatio * halfHeight;
-
-
-			//myFrameBufferData.FrustrumCorners[0] = Vector4f(-halfWidth, -halfHeight, farPlane, 0);
-			//myFrameBufferData.FrustrumCorners[1] = Vector4f(-halfWidth, halfHeight, farPlane, 0);
-			//myFrameBufferData.FrustrumCorners[2] = Vector4f(halfWidth, halfHeight, farPlane, 0);
-			//myFrameBufferData.FrustrumCorners[3] = Vector4f(halfWidth, -halfHeight, farPlane, 0);
+			myFrameBufferData.DeltaTime = 0;
+			myFrameBufferData.TotalTime = 0;
+			const float aspectRatio = (float)myFrameBufferData.Resolution.x / (float)myFrameBufferData.Resolution.y;
+			float farPlane = Renderer::GetCamera()->myFarPlane;
+			float halfHeight = farPlane * tanf(0.5f * Renderer::GetCamera()->GetVerticalFoV());
+			float halfWidth = aspectRatio * halfHeight;
 
 
-			//ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-			//result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-			//if(FAILED(result))
-			//{
-			//	// BOOM?
-			//	return;
-			//}
+			myFrameBufferData.FrustrumCorners[0] = Vector4f(-halfWidth, -halfHeight, farPlane, 0);
+			myFrameBufferData.FrustrumCorners[1] = Vector4f(-halfWidth, halfHeight, farPlane, 0);
+			myFrameBufferData.FrustrumCorners[2] = Vector4f(halfWidth, halfHeight, farPlane, 0);
+			myFrameBufferData.FrustrumCorners[3] = Vector4f(halfWidth, -halfHeight, farPlane, 0);
 
-			//memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-			//DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
+			ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
+			result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+			if(FAILED(result))
+			{
+				// BOOM?
+				return;
+			}
 
-			//DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-			//DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+			memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
+			DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
 
-			//ID3D11ShaderResourceView* nullsrv = nullptr;
+			DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+			DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
-			//SetDepthStencilState(DepthStencilState::ReadWrite);
-			//SetBlendState(BlendState::Additive);
-			//mySSAOTexture->Clear();
-			//DX11::GetContext()->PSSetShaderResources(8, 1, &nullsrv);
-			//DX11::GetContext()->VSSetShaderResources(8, 1, &nullsrv);
+			ID3D11ShaderResourceView* nullsrv = nullptr;
 
-			//mySSAOTexture->SetAsTarget();
-			//RenderPass(PostProcessPass::PP_SSAO);
+			SetDepthStencilState(DepthStencilState::ReadWrite);
+			SetBlendState(BlendState::Additive);
 
-			//DX11::GetContext()->OMSetRenderTargets(1, &buffers[0], DX11::DepthBuffer.Get());
-			//mySSAOTexture->SetAsResource(8);
 
+			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture);
 			break;
 		}
 
 		case PP_TONEMAP:
 		{
-			/*ID3D11ShaderResourceView* nullsrv = nullptr;
+			ID3D11ShaderResourceView* nullsrv = nullptr;
 
 			SetDepthStencilState(DepthStencilState::Disabled);
 			SetBlendState(BlendState::Additive);
-			DX11::GetContext()->PSSetShaderResources(0, 1, &nullsrv);
-			DX11::GetContext()->VSSetShaderResources(0, 1, &nullsrv);
-			myFullSize->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 0.0f, 1.0f);
-			myFullSize->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-			DX11::GetContext()->PSSetShaderResources(0, 1, DX11::RenderSRV.GetAddressOf());
-			DX11::GetContext()->VSSetShaderResources(0, 1, DX11::RenderSRV.GetAddressOf());
-			RenderPass(PostProcessPass::PP_TONEMAP);
 
-			DX11::GetContext()->PSSetShaderResources(0, 1, &nullsrv);
-			DX11::GetContext()->VSSetShaderResources(0, 1, &nullsrv);
 			
-			DX11::GetContext()->OMSetRenderTargets(1, &buffers[0], DX11::DepthBuffer.Get());
-			myFullSize->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-			RenderPass(PostProcessPass::PP_COPY);*/
+			RenderTextureOnSlot(0,0, PostProcessPass::PP_TONEMAP, myFullSize);
+			RenderTextureOnSlot(0,0, PostProcessPass::PP_COPY, myFullSize);
+
+			DX11::ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
 			break;
 		}
 		case PP_COUNT: break;
@@ -266,6 +251,20 @@ void PostProcessRenderer::Render(PostProcessPass aPass)
 
 
 
+}
+
+void PostProcessRenderer::RenderTextureOnSlot(int aSlot,int aResourceSlot, PostProcessPass aPass, std::shared_ptr<RenderTexture> aRenderTexture)
+{
+	ID3D11ShaderResourceView* nullsrv = nullptr;
+
+	aRenderTexture->ClearRenderTarget(DX11::GetContext(), nullptr, 0.0f, 0.0f, 0.0f, 0.0f);
+	DX11::GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
+
+	aRenderTexture->SetRenderTarget(DX11::GetContext(), nullptr);
+	RenderPass(aPass);
+
+	DX11::ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
+	aRenderTexture->SetAsResource(DX11::GetContext(), aSlot);
 }
 
 void PostProcessRenderer::RenderPass(PostProcessPass aPass)
@@ -289,5 +288,5 @@ void PostProcessRenderer::Release()
 
 void PostProcessRenderer::ClearTargets()
 {
-	mySSAOTexture->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 0.0f, 1.0f);
+	mySSAOTexture->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 0.0f, 0.0f);
 }

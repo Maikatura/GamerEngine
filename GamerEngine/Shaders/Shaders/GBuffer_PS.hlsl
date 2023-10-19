@@ -33,18 +33,21 @@ GBufferOutput main(VertexToPixel input)
 
 	
 	result.Albedo = albedo;
-    result.Normal = float4(normalize(input.myNormal), 0.0f);
+    result.Normal = float4(pixelNormal, 1.0f);
 	result.Material = materialMap;
-    result.VertexNormal = float4(pixelNormal, 0.0f);
+    result.VertexNormal = float4(normalize(input.myNormal), 0.0f);
 	result.WorldPosition = float4(input.myVertexWorldPosition.xyz, 1.0f);
 	result.AmbientOcclusion = ambientOcclusion;
 	result.ViewPosition = float4(input.myViewPosition.xyz, 1.0f);
-	result.ViewNormal = float4(normalize(mul(FB_ToView, float4(result.Normal.xyz, 0.0f)).xyz), 0.0f);
+    result.ViewNormal = float4(normalize(mul(FB_ToView, float4(result.Normal.xyz, 0.0f)).xyz), 0.0f);
 
 	switch(FB_RenderMode)
 	{
 		default:
 			break;
+        case 1: // RenderMode::TexCoords0
+            result.Albedo.rg = input.myUV;
+            break;
 		case 6:// RenderMode::NormalMap
             result.Normal = normalTexture.Sample(wrapSampler, input.myUV).agbb;
 			break;

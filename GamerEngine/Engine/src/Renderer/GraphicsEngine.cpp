@@ -312,7 +312,7 @@ void GraphicsEngine::BeginFrame()
 				auto scene = SceneManager::Get().GetScene();
 				scene->Resize({ static_cast<unsigned int>(Get()->GetWindowSize().cx), static_cast<unsigned int>(Get()->GetWindowSize().cy) });
 				myGBuffer->CreateGBuffer();
-				//myPostProcessRenderer->ReInitialize();
+				myPostProcessRenderer->ReInitialize();
 
 			}
 
@@ -375,7 +375,7 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	{
 		myRenderPass++;
 
-		if (GBuffer::GBufferTexture::GBufferTexture_Count + 1 == myRenderPass)
+		if (GBuffer::GBufferTexture::GBufferTexture_Count + 2 == myRenderPass)
 		{
 			myRenderPass = 0;
 		}
@@ -434,13 +434,6 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		renderSSAO = false;
 	}
 
-	static bool sssaoOn = true;
-
-	if (Input::IsKeyPressed('P'))
-	{
-		sssaoOn = !sssaoOn;
-	}
-
 	if (GetRenderModeInt() != 9)
 	{
 		{
@@ -454,7 +447,6 @@ void GraphicsEngine::RenderScene(VREye anEye)
 			{
 				myShadowRenderer->Render(light, modelList);
 			}
-			//myShadowRenderer->ClearResources();
 		}
 	}
 	myShadowRenderer->ClearTarget();
@@ -462,74 +454,58 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetBlendState(BlendState::None);
 
-	myGBuffer->ClearResource(0);
-	myGBuffer->SetAsTarget();
+	
 
+	
 	{
 		PROFILE_SCOPE("Generate GBuffer");
+		myGBuffer->ClearResource(0);
+		myGBuffer->SetAsTarget();
 		myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
+		myGBuffer->ClearTarget();
+		myGBuffer->SetAsResource(0);
 	}
 
-	myGBuffer->ClearTarget();
-	myGBuffer->SetAsResource(0);
+	
 
 	{
 		PROFILE_SCOPE("Render With Deferred Renderer");
 		RendererBase::SetBlendState(BlendState::Alpha);
 		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
 		myDeferredRenderer->ClearTarget();
+		myGBuffer->ClearTarget();
 	}
-	myGBuffer->ClearTarget();
 
-	
-
-	/*{
-		PROFILE_SCOPE("Render SSAO");
-		if (sssaoOn)
-		{
-			myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO);
-		}
-		else
-		{
-			myPostProcessRenderer->ClearTargets();
-		}
-	}*/
-
-	if (GetRenderModeInt() != 9)
 	{
-		{
-			PROFILE_SCOPE("Render With Forward Renderer (Models)");
-			RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-			RendererBase::SetBlendState(BlendState::None);
-
-			myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
-		}
-
-		/*{
-			PROFILE_SCOPE("Render With Forward Renderer (Sprites)");
-			RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
-			myForwardRenderer->RenderSprites(spriteList, directionalLight, environmentLight);
-		}
-
-		{
-			PROFILE_SCOPE("Render Bloom");
-			myPostProcessRenderer->Render(PostProcessRenderer::PP_BLOOM);
-		}
-
-		{
-			PROFILE_SCOPE("Render Tonemap");
-			myPostProcessRenderer->Render(PostProcessRenderer::PP_TONEMAP);
-		}*/
-
-
-
-		DX11::ResetRenderTarget(myUseEditor);
-
-
-		PROFILE_SCOPE("Final Render Call");
-		myDeferredRenderer->RenderLate();
+		PROFILE_SCOPE("Render SSAO");
+		(renderSSAO == true) ? myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection) : myPostProcessRenderer->ClearTargets();
 	}
 
+	if (GetRenderModeInt() != 9) return;
+	
+	{
+		PROFILE_SCOPE("Render With Forward Renderer (Models)");
+		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+		RendererBase::SetBlendState(BlendState::None);
+		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
+	}
+
+	{
+		//PROFILE_SCOPE("Render With Forward Renderer (Sprites)");
+		//RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
+		//DX11::ResetRenderTarget(myUseEditor);
+		//myForwardRenderer->RenderSprites(view, projection, spriteList, directionalLight, environmentLight);
+	}
+
+	{
+		PROFILE_SCOPE("Render Bloom");
+		myPostProcessRenderer->Render(PostProcessRenderer::PP_BLOOM, view, projection);
+	}
+
+	{
+		PROFILE_SCOPE("Render Tonemap");
+		myPostProcessRenderer->Render(PostProcessRenderer::PP_TONEMAP, view, projection);
+	}
 }
 
 void GraphicsEngine::OnFrameRender()
@@ -541,20 +517,6 @@ void GraphicsEngine::OnFrameRender()
 	{
 		return;
 	}
-
-	bool renderSSAO = true;
-	if (Input::IsKeyDown('P'))
-	{
-		renderSSAO = false;
-	}
-
-	static bool sssaoOn = true;
-
-	if (Input::IsKeyPressed('P'))
-	{
-		sssaoOn = !sssaoOn;
-	}
-
 
 	auto scene = SceneManager::Get().GetScene();
 
@@ -612,12 +574,8 @@ void GraphicsEngine::OnFrameRender()
 
 	if (myUseEditor)
 	{
-
 		//DX11::TurnZBufferOff();
 		DX11::myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-		//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
-
-		// Clear the render to texture.
 		DX11::myScreenView->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 	}
 	else
@@ -629,8 +587,8 @@ void GraphicsEngine::OnFrameRender()
 		clearColor.w = 1.0f;
 
 		DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
-		float clearDepth = 1.0f;  // The value to which you want to clear the depth buffer
-		UINT8 clearStencil = 0;  // The value to which you want to clear the stencil buffer (if you have one)
+		float clearDepth = 1.0f;
+		UINT8 clearStencil = 0;
 
 		DX11::GetContext()->ClearDepthStencilView(DX11::GetDepthStencilView(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
 		DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
@@ -640,7 +598,6 @@ void GraphicsEngine::OnFrameRender()
 
 
 	RenderScene(VREye::None);
-
 
 
 
@@ -666,19 +623,6 @@ void GraphicsEngine::StartUpdateThread()
 
 void GraphicsEngine::StopUpdateThread()
 {
-	if (myUpdateThread)
-	{
-		myIsRunning = false;
-
-		while (!myUpdateThread->joinable())
-		{
-
-		}
-
-		if (myUpdateThread && myUpdateThread->joinable()) {
-			myUpdateThread->join();
-		}
-	}
 }
 
 void GraphicsEngine::EndFrame()
@@ -687,6 +631,13 @@ void GraphicsEngine::EndFrame()
 
 
 	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
+
+
+	{
+		PROFILE_SCOPE("Final Render Call");
+		DX11::ResetRenderTarget(myUseEditor);
+		myDeferredRenderer->RenderLate();
+	}
 
 	DX11::EndFrame();
 
@@ -759,6 +710,11 @@ bool GraphicsEngine::GetPauseState()
 void GraphicsEngine::SetPauseState(bool aCondition)
 {
 	myIsPaused = aCondition;
+}
+
+bool GraphicsEngine::GetEditorMode()
+{
+	return myUseEditor;
 }
 
 bool GraphicsEngine::GetEngineRunning()

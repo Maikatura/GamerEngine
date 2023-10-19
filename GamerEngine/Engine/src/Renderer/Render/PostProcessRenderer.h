@@ -26,7 +26,6 @@ public:
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> myFullscreenVS;
 	std::array<Microsoft::WRL::ComPtr<ID3D11PixelShader>, PostProcessPass::PP_COUNT> myPassShaders;
-	std::unordered_map<std::string, std::shared_ptr<RenderTexture>> myRenderTextures;
 
 	std::shared_ptr<RenderTexture> mySSAOTexture;
 	std::shared_ptr<RenderTexture> myFullSize;
@@ -44,7 +43,10 @@ public:
 
 	std::shared_ptr<RenderTexture> CreateRenderTexture(const std::string& aName, float aWidth, float aHeight, DXGI_FORMAT aFormat = DXGI_FORMAT_R8G8B8A8_UNORM);
 
-	void Render(PostProcessPass aPass);
+	void Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection);
+
+
+	void RenderTextureOnSlot(int aSlot, int aResourceSlot, PostProcessPass aPass, std::shared_ptr<RenderTexture> aRenderTexture);
 	void RenderPass(PostProcessPass aPass);
 
 	void Release();

@@ -422,7 +422,7 @@ ofbx::IScene* ModelAssetHandler::LoadModelScene(const std::string& aPath)
 
 ModelAssetHandler& ModelAssetHandler::Get()
 {
-	static ModelAssetHandler instance(1);
+	static ModelAssetHandler instance(4);
 
 	return instance;
 }

@@ -65,15 +65,15 @@ DX11::DX11()
 DX11::~DX11()
 {}
 
-void DX11::ResetRenderTarget(bool isUsingEditor)
+void DX11::ResetRenderTarget(bool isUsingEditor, bool useDepth)
 {
 	if (isUsingEditor)
 	{
-		myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+		myScreenView->SetRenderTarget(DX11::GetContext(), (useDepth == true) ? DX11::GetDepthStencilView() : nullptr);
 	}
 	else
 	{
-		DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
+		DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, (useDepth == true) ? DX11::GetDepthStencilView() : nullptr);
 	}
 }
 
@@ -205,7 +205,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	swapDesc.BufferCount = 1;
 	swapDesc.BufferDesc.Width = clientRect.right - clientRect.left;
 	swapDesc.BufferDesc.Height = clientRect.bottom - clientRect.top;
-	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // unsigned normal
+	swapDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // unsigned normal
 	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
 	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;

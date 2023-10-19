@@ -117,10 +117,10 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			return;
 		}
 
-		/*if(model->RenderWithDeferred())
+		if(model->RenderWithDeferred())
 		{
 			continue;
-		}*/
+		}
 
 		
 
@@ -280,15 +280,15 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 }
 
-void ForwardRenderer::RenderSprites(std::vector<RenderBuffer2D>& aSpriteList,
+void ForwardRenderer::RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, std::vector<RenderBuffer2D>& aSpriteList,
 	const std::shared_ptr<DirectionalLight>& aDirectionalLight,
 	const std::shared_ptr<EnvironmentLight>& anEnvironmentLight)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
-	myFrameBufferData.View = Matrix4x4f::GetFastInverse(Renderer::GetViewMatrix());
-	myFrameBufferData.Projection = Renderer::GetProjectionMatrix();
+	myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
+	myFrameBufferData.Projection = aProjection;
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);

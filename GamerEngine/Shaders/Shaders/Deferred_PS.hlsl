@@ -210,54 +210,54 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
         }
     }
 
-	//[unroll(20)]
-	//for(unsigned int l = 0; l < LB_NumLights; l++)
-	//{
-	//	LightData Light = LB_Lights[l];
-	//	switch(Light.LightType)
-	//	{
-	//		case 2:
-	//		{
-	//			float3 pointTemp = EvaluatePointLight(diffuseColor,
-	//				specularColor, normal, roughness, Light.Color, Light.Intensity,
-	//				Light.Range, Light.Position, toEye, worldPosition.xyz);
+	[unroll(20)]
+	for(unsigned int l = 0; l < LB_NumLights; l++)
+	{
+		LightData Light = LB_Lights[l];
+		switch(Light.LightType)
+		{
+			case 2:
+			{
+				float3 pointTemp = EvaluatePointLight(diffuseColor,
+					specularColor, normal, roughness, Light.Color, Light.Intensity,
+					Light.Range, Light.Position, toEye, worldPosition.xyz);
 
-	//			if(Light.CastShadows)
-	//			{
+				if(Light.CastShadows)
+				{
 
-	//				if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz))
-	//				{
-	//					const float shadow = 0.001f;
-	//					pointTemp *= shadow;
-	//				}
-	//			}
-	//			pointLight += pointTemp;
-	//			break;
-	//		}
-	//		case 3:
-	//		{
-	//			float3 spotTemp = EvaluateSpotLight(diffuseColor,
-	//				specularColor, normal, roughness, Light.Color, Light.Intensity,
-	//				Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
-	//				Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
+					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz))
+					{
+						const float shadow = 0.001f;
+						pointTemp *= shadow;
+					}
+				}
+				pointLight += pointTemp;
+				break;
+			}
+			case 3:
+			{
+				float3 spotTemp = EvaluateSpotLight(diffuseColor,
+					specularColor, normal, roughness, Light.Color, Light.Intensity,
+					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
-	//			if(Light.CastShadows)
-	//			{
-	//				if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz))
-	//				{
-	//					const float shadow = 0.001f;
-	//					spotTemp *= shadow;
-	//				}
-	//			}
-	//			spotLight += spotTemp;
-	//			break;
-	//		}
-	//	}
-	//}
+				if(Light.CastShadows)
+				{
+					if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz))
+					{
+						const float shadow = 0.001f;
+						spotTemp *= shadow;
+					}
+				}
+				spotLight += spotTemp;
+				break;
+			}
+		}
+	}
 
-    float emissiveStrength = 0.0f;
+    float emissiveStrength = 10.0f;
 	float3 emissiveColor = emissive * emissiveIntensity * albedo.xyz * emissiveStrength;
-    float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight)/* * directShadow*/);
+    float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight)* directShadow);
 
 
 	switch(FB_RenderMode)
@@ -268,7 +268,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 			result.myColor.a = 1.0f;
 			break;
 		case 1://RenderMode::TexCoord1:
-			result.myColor.rgb = float3(input.myUV.xy, 0.0f);
+			result.myColor.rgb = float3(albedo.rg, 0.0f);
 			result.myColor.a = 1.0f;
 			break;
 		case 2://RenderMode::VertexColor:

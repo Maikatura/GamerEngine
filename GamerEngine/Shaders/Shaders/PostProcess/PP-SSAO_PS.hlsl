@@ -3,13 +3,16 @@
 #include "../Data/Textures.hlsli"
 #include "../Data/PBRFunctions.hlsli"
 
+#define SSAO_NOISE_SIZE 4
+#define SSAO_NOISE_COUNT (SSAO_NOISE_SIZE * SSAO_NOISE_SIZE)
+
 float SSAO(float2 aScreenTexCoord, float2 aTexCoord, float3 aViewPosition, float3 aViewNormal, float aScale, float aBias, float aIntensity)
 {
-	const float3 diff = viewPositionTexture.Sample(pointClampSampler, aScreenTexCoord + aTexCoord).rgb - aViewPosition;
-	const float3 v = normalize(diff);
-	const float d = length(diff) * aScale;
-	const float occlusion = max(0.0f, dot(aViewNormal, v) - aBias) * 1.0f / (1.0f + d) * aIntensity;
-	return occlusion;
+    const float3 diff = viewPositionTexture.Sample(pointClampSampler, aScreenTexCoord + aTexCoord).rgb - aViewPosition;
+    const float3 v = normalize(diff);
+    const float d = length(diff) * aScale;
+    const float occlusion = max(0.0f, dot(aViewNormal, v) - aBias) * 1.0f / (1.0f + d) * aIntensity;
+    return occlusion;
 }
 
 DeferredPixelOutput main(DeferredVertexToPixel aInput)
@@ -19,11 +22,11 @@ DeferredPixelOutput main(DeferredVertexToPixel aInput)
 	// SSAO SETTINGS
 	float intensity = 1.0f;
 	float scale = 0.5f;
-	float bias = 0.15f;
+	float bias = 0.2f;
 	float radius = 0.310f;
-	float offset = 0.6f;
+	float offset = 0.3f;
 
-	float2 randomTexCoordScale = aInput.myUV;
+	float2 randomTexCoordScale = aInput.myUV * FB_Resolution;
 	const float random = (int)fmod(randomTexCoordScale.x, 4) + (int)(fmod(randomTexCoordScale.y, 4) * 4);
 
 	//point clamp sampler since the textures have already been linearly interpolated when downsized

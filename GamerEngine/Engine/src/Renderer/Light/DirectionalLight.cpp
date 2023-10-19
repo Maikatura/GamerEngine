@@ -42,7 +42,7 @@ void DirectionalLight::Update()
 
 
 
-	auto quatRot = CommonUtilities::Quaternionf::FromEulers(myTransformComp->GetRotation());
+	auto quatRot = CommonUtilities::Quaternionf::FromEulers(ToRadians(myTransformComp->GetRotation()));
 	auto matrix = ComposeFromTRS(myTransformComp->GetPosition(), quatRot, { 1, 1, 1 });
 
 	myLightData.Direction = quatRot.Forward();

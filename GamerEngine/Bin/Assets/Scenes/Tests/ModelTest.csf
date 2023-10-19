@@ -1,0 +1,78 @@
+Scene: SceneTesting
+Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\Tests\ModelTest.csf
+Entities:
+  - Entity: 2280414801650547856
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, -496.583862, 0]
+      Rotation: [0, 86.35923, 0]
+      Scale: [85.5972061, 85.5972977, 85.5972061]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -2.47000007e-05
+      Path: Assets\taurenskeleton\taurenskeleton_blood101.fbx
+      TextureSize: 2
+      Texture:
+        0:
+          Albedo: assets\taurenskeleton\taurenskeleton_blood.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        1:
+          Albedo: assets\taurenskeleton\taurenskeleton_horns_blood.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [92.2944183, 203.494476, -159.69783]
+      Rotation: [132.786758, -16.4169998, 0]
+      Scale: [0.995829344, 0.999664962, 0.999686956]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [-44, 100, 85]
+      Intensity: 1
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [118.886024, -141.965118, 676.63208]
+      Rotation: [14.1934977, -167.60321, 0.000104271501]
+      Scale: [0.999961138, 0.999956548, 0.999987185]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 25000
+      Primary: true
+  - Entity: 1828353707181980437
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, -508.054779, 0.917554855]
+      Rotation: [0, -0, 0]
+      Scale: [1000, 10, 1000]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -431602080
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\T_Default_C.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
