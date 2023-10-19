@@ -1031,6 +1031,12 @@ std::shared_ptr<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath
 
 std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFilePath)
 {
+
+	if (!std::filesystem::exists(aFilePath))
+	{
+		return nullptr;
+	}
+
 	std::shared_ptr<ModelInstance> modelInstance = nullptr;
 	auto model = myModelRegistry.find(aFilePath);
 	if(model == myModelRegistry.end())

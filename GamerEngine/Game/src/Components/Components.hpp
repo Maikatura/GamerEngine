@@ -185,6 +185,7 @@ public:
 			ModelAssetHandler::Get().EnqueueLoadTask([&]()
 				{
 
+
 					if (myDelay <= 0.0f)
 					{
 						myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
@@ -211,6 +212,10 @@ public:
 				myPath = modelData.Path;
 				myModel = ModelAssetHandler::Get().GetModelInstance(modelData.Path);
 
+				if (!myModel)
+				{
+					return;
+				}
 
 				auto& materials = myModel->GetMaterial();
 

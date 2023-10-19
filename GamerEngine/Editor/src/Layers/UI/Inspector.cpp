@@ -201,8 +201,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 					if(!newFile.empty())
 					{
-						auto modelStuff = ModelAssetHandler::Get().GetModelInstance(newFile);
-						model.SetModel(newFile);
+						model.SetModelAsync(newFile);
 
 					}
 				}

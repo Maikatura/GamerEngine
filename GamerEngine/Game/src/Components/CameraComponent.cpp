@@ -178,8 +178,8 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	myPosition = aTransform->GetPosition();
 
 #ifndef VR_DISABLED
-	ViewProjection = ComposeFromTRS(aTransform->Translation, rotation, aTransform->Scale);
-	ViewFlatProjection = ComposeFromTRS(aTransform->Translation, CommonUtilities::Quat::FromEulers(aTransform->Rotation), aTransform->Scale);
+	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
+	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
 #else
 	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
 #endif
