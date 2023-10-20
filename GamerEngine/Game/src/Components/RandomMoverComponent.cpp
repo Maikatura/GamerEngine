@@ -5,8 +5,8 @@
 #include "Network/NetworkSettings.h"
 #include "TurNet/Server/ServerMessageQueue.h"
 #include "../../Editor/src/Layers/Network/MoveObjectMessage.h"
-#include "Renderer/Input/Input.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Input/Input.h"
+#include "Scene/SceneManager.h"
 
 RandomMoverComponent::RandomMoverComponent()
 {

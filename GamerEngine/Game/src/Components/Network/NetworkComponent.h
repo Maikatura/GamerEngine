@@ -1,7 +1,7 @@
 #pragma once
 #include "Components/Component.h"
 #include "Math/MathTypes.hpp"
-#include "Renderer/Scene/UUID.h"
+#include "Scene/UUID.h"
 
 
 namespace Network

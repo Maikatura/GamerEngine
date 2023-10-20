@@ -3,9 +3,9 @@
 
 #include "Components/Components.hpp"
 #include "Components/Network/NetworkComponent.h"
-#include "Renderer/Model/Entity.h"
+#include "Model/Entity.h"
 #include "Network/CreateObjectMessage.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Scene/SceneManager.h"
 #include "TurNet/Shared/Utility/TurCompare.h"
 
 #include "Network/NetOverloads.h"
@@ -15,8 +15,8 @@
 #include "Network/PlayerDisconnectMessage.h"
 #include "Network/PlayerMoveMessage.h"
 #include "Network/SkinChangerMessage.h"
-#include "Renderer/AssetHandlers/ModelAssetHandler.h"
-#include "Renderer/Render/Renderer.h"
+#include "AssetHandlers/ModelAssetHandler.h"
+#include "Render/Renderer.h"
 
 using namespace std::chrono_literals;
 

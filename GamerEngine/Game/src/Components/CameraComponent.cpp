@@ -1,6 +1,6 @@
 #include "GraphicsEngine.pch.h"
 #include "Components/CameraComponent.h"
-
+#include "Components/TransfromComponent.h"
 #include "Components.hpp"
 #include "openvr_capi.h"
 //#include <DirectXMath.h>

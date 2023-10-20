@@ -27,7 +27,7 @@
     <ClInclude Include="src\Components\CameraComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\ChildComponent.h">
+    <ClInclude Include="src\Components\TransfromComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\Component.h">
@@ -56,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="src\framework.h" />
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Components\AllComponents.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ModelComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Components\CameraComponent.cpp">
@@ -74,5 +80,7 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\Components\TagComponent.h" />
+    <ClCompile Include="src\Components\IDComponent.h" />
   </ItemGroup>
 </Project>

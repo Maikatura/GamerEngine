@@ -4,362 +4,356 @@
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer">
-      <UniqueIdentifier>{73D1DFBF-5F34-6F64-08BA-A71AF4FB3AE7}</UniqueIdentifier>
+    <Filter Include="src\AssetHandlers">
+      <UniqueIdentifier>{2DEB13F7-9901-128D-E278-9DAE4ECEE214}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\AssetHandlers">
-      <UniqueIdentifier>{F3937D37-DFA3-2908-485D-8E26348C18A1}</UniqueIdentifier>
+    <Filter Include="src\Audio">
+      <UniqueIdentifier>{EE2696B2-5A91-4A29-A3CF-FBCE0F79287E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Audio">
-      <UniqueIdentifier>{B4699E3D-A04D-5F93-09AE-59E6F5B04915}</UniqueIdentifier>
+    <Filter Include="src\Debugger">
+      <UniqueIdentifier>{21D07CB9-0D33-0C5E-B6B8-4414A2FAD7E0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Debugger">
-      <UniqueIdentifier>{276522EC-93D1-DDE6-5CC5-7544C8F0FF4E}</UniqueIdentifier>
+    <Filter Include="src\EngineSettings">
+      <UniqueIdentifier>{03891AA3-EF6C-DBF8-58CD-D54B44D0C57A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\EngineSettings">
-      <UniqueIdentifier>{894AB9F0-F557-E7D6-7E3E-E3C1EA4AB38D}</UniqueIdentifier>
+    <Filter Include="src\Framework">
+      <UniqueIdentifier>{EAC3A871-5684-24A8-1FBF-6D258B3E6984}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Framework">
-      <UniqueIdentifier>{B0F900F9-9CF3-294B-8560-C05B71F98FB7}</UniqueIdentifier>
+    <Filter Include="src\Input">
+      <UniqueIdentifier>{EC4823B3-58B3-D729-A1F1-88CF0D9BB57E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Input">
-      <UniqueIdentifier>{B28B2B3E-9E6F-EC93-07D0-E6E6F3D2D615}</UniqueIdentifier>
+    <Filter Include="src\Light">
+      <UniqueIdentifier>{94AC56B3-0017-0B2A-4955-BCCFB5FEE87E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Light">
-      <UniqueIdentifier>{5AEF5E3E-46D3-1F94-AF33-1AE79B360A16}</UniqueIdentifier>
+    <Filter Include="src\Managers">
+      <UniqueIdentifier>{AA4F78EE-96B2-0793-3F38-40492B7AD315}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Managers">
-      <UniqueIdentifier>{B0E41D21-1C51-D91B-E544-71795170FB83}</UniqueIdentifier>
+    <Filter Include="src\Managers\Commands">
+      <UniqueIdentifier>{2B2A0746-9796-C240-608A-5A9ECCB5E4A8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Managers\Commands">
-      <UniqueIdentifier>{F1C50381-DDEB-CDE7-C631-53B3B2F6F2B3}</UniqueIdentifier>
+    <Filter Include="src\Model">
+      <UniqueIdentifier>{2D026CB3-996C-202A-E2AA-D1CF4E54FE7E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Model">
-      <UniqueIdentifier>{F344743E-DF28-3594-4889-2FE7348C1F16}</UniqueIdentifier>
+    <Filter Include="src\Particles">
+      <UniqueIdentifier>{438C557B-AF4C-D1B1-7887-1A2FE406168E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Particles">
-      <UniqueIdentifier>{09C2AD02-F5BB-D654-DE28-6D65CAC13CC1}</UniqueIdentifier>
+    <Filter Include="src\Render">
+      <UniqueIdentifier>{FC94E62B-E84C-2879-5154-01D53D2BC369}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Render">
-      <UniqueIdentifier>{8230F717-EE91-D425-77FF-1AD8E35F0BE5}</UniqueIdentifier>
+    <Filter Include="src\Scene">
+      <UniqueIdentifier>{0A06D2B3-7670-862A-BFAE-37D02B58647F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Scene">
-      <UniqueIdentifier>{D048DA3E-BC2C-9B94-258D-95E711908516}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Renderer\Types">
-      <UniqueIdentifier>{579FF83E-4383-B994-ACE3-B3E798E6A316}</UniqueIdentifier>
+    <Filter Include="src\Types">
+      <UniqueIdentifier>{915CF0B3-FDC6-A42A-4605-56D0B2AE827F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MetaAssetHandler.h" />
+    <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h">
+      <Filter>src\AssetHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetHandlers\LightAssetHandler.h">
+      <Filter>src\AssetHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetHandlers\ModelAssetHandler.h">
+      <Filter>src\AssetHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetHandlers\ParticleAssetHandler.h">
+      <Filter>src\AssetHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetHandlers\TextureAssetHandler.h">
+      <Filter>src\AssetHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Audio\Audio.h">
+      <Filter>src\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Audio\AudioManager.h">
+      <Filter>src\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Debugger\ConsoleHelper.h">
+      <Filter>src\Debugger</Filter>
+    </ClInclude>
     <ClInclude Include="src\EngineSettingDefines.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EngineSettings\Settings.h">
+      <Filter>src\EngineSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\DX11.h">
+      <Filter>src\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\GraphicsEngine.pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\AssetHandlers\DDSTextureLoader11.h">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClInclude Include="src\Input\Input.h">
+      <Filter>src\Input</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\AssetHandlers\LightAssetHandler.h">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClInclude Include="src\Light\DirectionalLight.h">
+      <Filter>src\Light</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\AssetHandlers\ModelAssetHandler.h">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClInclude Include="src\Light\EnvironmentLight.h">
+      <Filter>src\Light</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\AssetHandlers\ParticleAssetHandler.h">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClInclude Include="src\Light\Light.h">
+      <Filter>src\Light</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\AssetHandlers\TextureAssetHandler.h">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClInclude Include="src\Light\PointLight.h">
+      <Filter>src\Light</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Audio\Audio.h">
-      <Filter>src\Renderer\Audio</Filter>
+    <ClInclude Include="src\Light\SpotLight.h">
+      <Filter>src\Light</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Audio\AudioManager.h">
-      <Filter>src\Renderer\Audio</Filter>
+    <ClInclude Include="src\Managers\CommandManager.h">
+      <Filter>src\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Debugger\ConsoleHelper.h">
-      <Filter>src\Renderer\Debugger</Filter>
+    <ClInclude Include="src\Managers\Commands\AbstractCommand.h">
+      <Filter>src\Managers\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\EngineSettings\Settings.h">
-      <Filter>src\Renderer\EngineSettings</Filter>
+    <ClInclude Include="src\Managers\Commands\InspectorCommnad.h">
+      <Filter>src\Managers\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Framework\DX11.h">
-      <Filter>src\Renderer\Framework</Filter>
+    <ClInclude Include="src\Managers\Commands\ModelCommand.h">
+      <Filter>src\Managers\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\GraphicsEngine.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Managers\Commands\PositionCommand.h">
+      <Filter>src\Managers\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Input\Input.h">
-      <Filter>src\Renderer\Input</Filter>
+    <ClInclude Include="src\Managers\DropManager.h">
+      <Filter>src\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Light\DirectionalLight.h">
-      <Filter>src\Renderer\Light</Filter>
+    <ClInclude Include="src\Managers\ThreadPool.h">
+      <Filter>src\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Light\EnvironmentLight.h">
-      <Filter>src\Renderer\Light</Filter>
+    <ClInclude Include="src\Managers\ThreadPool.hpp">
+      <Filter>src\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Light\Light.h">
-      <Filter>src\Renderer\Light</Filter>
+    <ClInclude Include="src\Model\Entity.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Light\PointLight.h">
-      <Filter>src\Renderer\Light</Filter>
+    <ClInclude Include="src\Model\Material.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Light\SpotLight.h">
-      <Filter>src\Renderer\Light</Filter>
+    <ClInclude Include="src\Model\Model.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Managers\CommandManager.h">
-      <Filter>src\Renderer\Managers</Filter>
+    <ClInclude Include="src\Model\ModelData.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Managers\Commands\AbstractCommand.h">
-      <Filter>src\Renderer\Managers\Commands</Filter>
+    <ClInclude Include="src\Model\ModelInstance.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Managers\Commands\InspectorCommnad.h">
-      <Filter>src\Renderer\Managers\Commands</Filter>
+    <ClInclude Include="src\Model\Render2D.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Managers\Commands\ModelCommand.h">
-      <Filter>src\Renderer\Managers\Commands</Filter>
+    <ClInclude Include="src\Model\SceneObject.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Managers\Commands\PositionCommand.h">
-      <Filter>src\Renderer\Managers\Commands</Filter>
+    <ClInclude Include="src\Model\SelectedObject.hpp">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Managers\DropManager.h">
-      <Filter>src\Renderer\Managers</Filter>
+    <ClInclude Include="src\Model\Texture.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Managers\ThreadPool.h">
-      <Filter>src\Renderer\Managers</Filter>
+    <ClInclude Include="src\Model\Transform.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Managers\ThreadPool.hpp">
-      <Filter>src\Renderer\Managers</Filter>
+    <ClInclude Include="src\Model\Vertex.h">
+      <Filter>src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\Entity.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Particles\ParticleEmitter.h">
+      <Filter>src\Particles</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\Material.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Particles\ParticleEmitterTemplate.h">
+      <Filter>src\Particles</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\Model.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Particles\ParticleSystem.h">
+      <Filter>src\Particles</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\ModelData.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Render\Buffers.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\ModelInstance.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Render\DeferredRenderer.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\Render2D.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Render\DepthStencil.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\SceneObject.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Render\ForwardRenderer.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\SelectedObject.hpp">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Render\LineRenderer.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\Texture.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Render\PostProcessRenderer.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\Transform.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Render\Render2D.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Model\Vertex.h">
-      <Filter>src\Renderer\Model</Filter>
+    <ClInclude Include="src\Render\RenderBuffer.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Particles\ParticleEmitter.h">
-      <Filter>src\Renderer\Particles</Filter>
+    <ClInclude Include="src\Render\RenderTexture.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Particles\ParticleEmitterTemplate.h">
-      <Filter>src\Renderer\Particles</Filter>
+    <ClInclude Include="src\Render\Renderer.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Particles\ParticleSystem.h">
-      <Filter>src\Renderer\Particles</Filter>
+    <ClInclude Include="src\Render\RendererBase.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Render\Buffers.h">
-      <Filter>src\Renderer\Render</Filter>
+    <ClInclude Include="src\Render\SelectionData.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Render\DeferredRenderer.h">
-      <Filter>src\Renderer\Render</Filter>
+    <ClInclude Include="src\Render\ShadowRenderer.h">
+      <Filter>src\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Render\DepthStencil.h">
-      <Filter>src\Renderer\Render</Filter>
+    <ClInclude Include="src\Scene\Scene.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Render\ForwardRenderer.h">
-      <Filter>src\Renderer\Render</Filter>
+    <ClInclude Include="src\Scene\SceneManager.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Render\LineRenderer.h">
-      <Filter>src\Renderer\Render</Filter>
+    <ClInclude Include="src\Scene\SceneSerializer.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Render\PostProcessRenderer.h">
-      <Filter>src\Renderer\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Render\Render2D.h">
-      <Filter>src\Renderer\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Render\RenderBuffer.h">
-      <Filter>src\Renderer\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Render\RenderTexture.h">
-      <Filter>src\Renderer\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Render\Renderer.h">
-      <Filter>src\Renderer\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Render\RendererBase.h">
-      <Filter>src\Renderer\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Render\SelectionData.h">
-      <Filter>src\Renderer\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Render\ShadowRenderer.h">
-      <Filter>src\Renderer\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Scene\Scene.h">
-      <Filter>src\Renderer\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Scene\SceneManager.h">
-      <Filter>src\Renderer\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Scene\SceneSerializer.h">
-      <Filter>src\Renderer\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Scene\UUID.h">
-      <Filter>src\Renderer\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Types\EnumTypes.h">
-      <Filter>src\Renderer\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Types\FileExtensions.h">
-      <Filter>src\Renderer\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="src\StringCast.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Scene\UUID.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Time.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Types\EnumTypes.h">
+      <Filter>src\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Types\FileExtensions.h">
+      <Filter>src\Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MetaAssetHandler.cpp" />
+    <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp">
+      <Filter>src\AssetHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetHandlers\LightAssetHandler.cpp">
+      <Filter>src\AssetHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetHandlers\ModelAssetHandler.cpp">
+      <Filter>src\AssetHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetHandlers\ParticleAssetHandler.cpp">
+      <Filter>src\AssetHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetHandlers\TextureAssetHandler.cpp">
+      <Filter>src\AssetHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Audio\AudioManager.cpp">
+      <Filter>src\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Debugger\ConsoleHelper.cpp">
+      <Filter>src\Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framework\DX11.cpp">
+      <Filter>src\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphicsEngine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\GraphicsEngine.pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\AssetHandlers\DDSTextureLoader11.cpp">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClCompile Include="src\Input\Input.cpp">
+      <Filter>src\Input</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\AssetHandlers\LightAssetHandler.cpp">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClCompile Include="src\Light\DirectionalLight.cpp">
+      <Filter>src\Light</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\AssetHandlers\ModelAssetHandler.cpp">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClCompile Include="src\Light\EnvironmentLight.cpp">
+      <Filter>src\Light</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\AssetHandlers\ParticleAssetHandler.cpp">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClCompile Include="src\Light\PointLight.cpp">
+      <Filter>src\Light</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\AssetHandlers\TextureAssetHandler.cpp">
-      <Filter>src\Renderer\AssetHandlers</Filter>
+    <ClCompile Include="src\Light\SpotLight.cpp">
+      <Filter>src\Light</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Audio\AudioManager.cpp">
-      <Filter>src\Renderer\Audio</Filter>
+    <ClCompile Include="src\Managers\CommandManager.cpp">
+      <Filter>src\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Debugger\ConsoleHelper.cpp">
-      <Filter>src\Renderer\Debugger</Filter>
+    <ClCompile Include="src\Model\Entity.cpp">
+      <Filter>src\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Framework\DX11.cpp">
-      <Filter>src\Renderer\Framework</Filter>
+    <ClCompile Include="src\Model\Material.cpp">
+      <Filter>src\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\GraphicsEngine.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Model\Model.cpp">
+      <Filter>src\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Input\Input.cpp">
-      <Filter>src\Renderer\Input</Filter>
+    <ClCompile Include="src\Model\ModelInstance.cpp">
+      <Filter>src\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Light\DirectionalLight.cpp">
-      <Filter>src\Renderer\Light</Filter>
+    <ClCompile Include="src\Model\SceneObject.cpp">
+      <Filter>src\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Light\EnvironmentLight.cpp">
-      <Filter>src\Renderer\Light</Filter>
+    <ClCompile Include="src\Model\Texture.cpp">
+      <Filter>src\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Light\PointLight.cpp">
-      <Filter>src\Renderer\Light</Filter>
+    <ClCompile Include="src\Model\Transform.cpp">
+      <Filter>src\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Light\SpotLight.cpp">
-      <Filter>src\Renderer\Light</Filter>
+    <ClCompile Include="src\Particles\ParticleEmitter.cpp">
+      <Filter>src\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Managers\CommandManager.cpp">
-      <Filter>src\Renderer\Managers</Filter>
+    <ClCompile Include="src\Particles\ParticleEmitterTemplate.cpp">
+      <Filter>src\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Model\Entity.cpp">
-      <Filter>src\Renderer\Model</Filter>
+    <ClCompile Include="src\Particles\ParticleSystem.cpp">
+      <Filter>src\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Model\Material.cpp">
-      <Filter>src\Renderer\Model</Filter>
+    <ClCompile Include="src\Render\DeferredRenderer.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Model\Model.cpp">
-      <Filter>src\Renderer\Model</Filter>
+    <ClCompile Include="src\Render\ForwardRenderer.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Model\ModelInstance.cpp">
-      <Filter>src\Renderer\Model</Filter>
+    <ClCompile Include="src\Render\LineRenderer.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Model\SceneObject.cpp">
-      <Filter>src\Renderer\Model</Filter>
+    <ClCompile Include="src\Render\PostProcessRenderer.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Model\Texture.cpp">
-      <Filter>src\Renderer\Model</Filter>
+    <ClCompile Include="src\Render\Render2D.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Model\Transform.cpp">
-      <Filter>src\Renderer\Model</Filter>
+    <ClCompile Include="src\Render\RenderBuffer.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Particles\ParticleEmitter.cpp">
-      <Filter>src\Renderer\Particles</Filter>
+    <ClCompile Include="src\Render\RenderTexture.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Particles\ParticleEmitterTemplate.cpp">
-      <Filter>src\Renderer\Particles</Filter>
+    <ClCompile Include="src\Render\Renderer.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Particles\ParticleSystem.cpp">
-      <Filter>src\Renderer\Particles</Filter>
+    <ClCompile Include="src\Render\RendererBase.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Render\DeferredRenderer.cpp">
-      <Filter>src\Renderer\Render</Filter>
+    <ClCompile Include="src\Render\ShadowRenderer.cpp">
+      <Filter>src\Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Render\ForwardRenderer.cpp">
-      <Filter>src\Renderer\Render</Filter>
+    <ClCompile Include="src\Scene\Scene.cpp">
+      <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Render\LineRenderer.cpp">
-      <Filter>src\Renderer\Render</Filter>
+    <ClCompile Include="src\Scene\SceneManager.cpp">
+      <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Render\PostProcessRenderer.cpp">
-      <Filter>src\Renderer\Render</Filter>
+    <ClCompile Include="src\Scene\SceneSerializer.cpp">
+      <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Render\Render2D.cpp">
-      <Filter>src\Renderer\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Render\RenderBuffer.cpp">
-      <Filter>src\Renderer\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Render\RenderTexture.cpp">
-      <Filter>src\Renderer\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Render\Renderer.cpp">
-      <Filter>src\Renderer\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Render\RendererBase.cpp">
-      <Filter>src\Renderer\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Render\ShadowRenderer.cpp">
-      <Filter>src\Renderer\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Scene\Scene.cpp">
-      <Filter>src\Renderer\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Scene\SceneManager.cpp">
-      <Filter>src\Renderer\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Scene\SceneSerializer.cpp">
-      <Filter>src\Renderer\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Scene\UUID.cpp">
-      <Filter>src\Renderer\Scene</Filter>
+    <ClCompile Include="src\Scene\UUID.cpp">
+      <Filter>src\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

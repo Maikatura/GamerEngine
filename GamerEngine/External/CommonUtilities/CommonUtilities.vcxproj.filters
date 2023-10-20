@@ -119,6 +119,9 @@
     <ClInclude Include="src\Utilites\Stack.hpp">
       <Filter>src\Utilites</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilites\StringCast.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utilites\Timer.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
@@ -126,6 +129,9 @@
       <Filter>src\Utilites</Filter>
     </ClInclude>
     <ClInclude Include="src\Utilites\VisualProfiler.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\Pointers.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
   </ItemGroup>

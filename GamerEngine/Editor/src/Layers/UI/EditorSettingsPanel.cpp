@@ -7,17 +7,17 @@
 #include <rapidjson/writer.h>
 #include "Windows.h"
 
-#include <Renderer/GraphicsEngine.h>
+#include <GraphicsEngine.h>
 
 #include "Time.hpp"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Renderer/Render/Renderer.h"
-#include "Renderer/Scene/Scene.h"
-#include "Renderer/Scene/SceneSerializer.h"
+#include "Render/Renderer.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneSerializer.h"
 #include <imgui_markdown/imgui_markdown.h>
 
 #include "Layers/EditorColorScheme.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Scene/SceneManager.h"
 
 ImFont* H1 = NULL;
 ImFont* H2 = NULL;

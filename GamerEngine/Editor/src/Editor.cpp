@@ -6,10 +6,10 @@
 #include "Windows.h"
 
 
-#include <Renderer/Framework/DX11.h>
-#include <Renderer/GraphicsEngine.h>
-#include <Renderer/Framework/DX11.h>
-#include <Renderer/Render/LineRenderer.h> 
+#include <Framework/DX11.h>
+#include <GraphicsEngine.h>
+#include <Framework/DX11.h>
+#include <Render/LineRenderer.h> 
 
 #include "Physics.h"
 #include "Time.hpp"
@@ -17,8 +17,8 @@
 #include "Components/NativeScriptComponent.h"
 #include "Layers/EditorLayers.h"
 #include "Layers/UI/EditorSettingsPanel.h"
-#include "Renderer/model/Entity.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "model/Entity.h"
+#include "Scene/SceneManager.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

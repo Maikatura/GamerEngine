@@ -17,7 +17,7 @@
 // Only include in editor
 #ifndef EDITOR
 #define EDITOR
-#include <Renderer/EngineSettings/Settings.h>
+#include <EngineSettings/Settings.h>
 
 
 #endif
@@ -29,7 +29,7 @@
 #include <iostream>
 #include <string>
 #include <EngineSettingDefines.h>
-#include "Renderer/Managers/ThreadPool.h"
+#include "Managers/ThreadPool.h"
 
 
 

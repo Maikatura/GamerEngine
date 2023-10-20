@@ -1,21 +1,21 @@
 #include "Editor.pch.h"
 #include "FileExplorer.h"
 #include "ImGui/imgui.h"
-#include <Renderer/AssetHandlers/TextureAssetHandler.h>
-#include <Renderer/Model/Texture.h>
-#include "Renderer/GraphicsEngine.h"
+#include <AssetHandlers/TextureAssetHandler.h>
+#include <Model/Texture.h>
+#include "GraphicsEngine.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Renderer/Scene/Scene.h"
+#include "Scene/Scene.h"
 #include <ImGui/imgui_stdlib.h>
-#include <Renderer/Types/FileExtensions.h>
-#include "Renderer/Render/SelectionData.h"
-#include "StringCast.h"
+#include <Types/FileExtensions.h>
+#include "Render/SelectionData.h"
+#include "Utilites/StringCast.h"
 #include <fstream>
 
 #include "Components/CameraController.h"
-#include "Renderer/Debugger/ConsoleHelper.h"
-#include "Renderer/Scene/SceneManager.h"
-#include "Renderer/Scene/SceneSerializer.h"
+#include "Debugger/ConsoleHelper.h"
+#include "Scene/SceneManager.h"
+#include "Scene/SceneSerializer.h"
 
 extern const std::filesystem::path AssetPath = "Assets";
 

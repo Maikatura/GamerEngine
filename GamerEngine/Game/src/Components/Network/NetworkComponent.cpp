@@ -1,6 +1,8 @@
 #include "NetworkComponent.h"
 
-#include "Renderer/Model/Entity.h"
+#include "Time.hpp"
+#include "Components/TransfromComponent.h"
+#include "Model/Entity.h"
 
 Network::NetworkComponent::NetworkComponent()
 {

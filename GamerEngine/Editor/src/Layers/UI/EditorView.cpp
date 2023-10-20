@@ -1,28 +1,28 @@
 #include "Editor.pch.h"
 #include "EditorView.h"
 #include <DirectXMath.h>
-#include <Renderer/GraphicsEngine.h>
-#include <Renderer/Framework/DX11.h>
-#include <Renderer/Scene/Scene.h>
+#include <GraphicsEngine.h>
+#include <Framework/DX11.h>
+#include <Scene/Scene.h>
 
 #include "Components/Components.hpp"
 #include "imgui/imgui_internal.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Renderer/Render/Renderer.h"
-#include "Renderer/Render/SelectionData.h"
-#include <Renderer/Model/Entity.h>
+#include "Render/Renderer.h"
+#include "Render/SelectionData.h"
+#include <Model/Entity.h>
 #include <Components/CameraController.h>
 
 #include "SettingKeybinds.h"
-#include "Renderer/Debugger/ConsoleHelper.h"
+#include "Debugger/ConsoleHelper.h"
 #include "Handlers/DropHandler.h"
-#include "Renderer/Managers/CommandManager.h"
-#include "Renderer/Managers/Commands/PositionCommand.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Managers/CommandManager.h"
+#include "Managers/Commands/PositionCommand.h"
+#include "Scene/SceneManager.h"
 #include "Layers/NetworkingLayer.h"
 #include "Layers/Network/MoveObjectMessage.h"
-#include "Renderer/Input/Input.h"
-#include "Renderer/Render/DeferredRenderer.h"
+#include "Input/Input.h"
+#include "Render/DeferredRenderer.h"
 
 EditorView::EditorView() : Layer("Scene")
 {

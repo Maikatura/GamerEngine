@@ -33,6 +33,7 @@ public:
 	float myFoV = 90.0f;
 
 	bool Primary = true;
+	bool EditorCam = false;
 
 	CameraComponent();
 	CameraComponent(const CameraComponent&) = default;

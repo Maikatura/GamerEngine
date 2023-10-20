@@ -1,26 +1,26 @@
 #include "Editor.pch.h"
 #include "Inspector.h"
-#include <Renderer/GraphicsEngine.h>
-#include <Renderer/Model/Entity.h>
-#include <Renderer/Render/SelectionData.h>
-#include <Renderer/Scene/Scene.h>
-#include "StringCast.h"
-#include "Renderer/AssetHandlers/ModelAssetHandler.h"
-#include "Renderer/Audio/Audio.h"
+#include <GraphicsEngine.h>
+#include <Model/Entity.h>
+#include <Render/SelectionData.h>
+#include <Scene/Scene.h>
+#include "Utilites/StringCast.h"
+#include "AssetHandlers/ModelAssetHandler.h"
+#include "Audio/Audio.h"
 #include "Components/CameraController.h"
 #include "Components/Components.hpp"
 #include "Components/NativeScriptComponent.h"
 #include "Components/Network/NetworkComponent.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Renderer/Model/ModelInstance.h"
-#include "Renderer/Particles/ParticleEmitter.h"
-#include "Renderer/Light/EnvironmentLight.h"
-#include "Renderer/Light/SpotLight.h"
-#include "Renderer/Light/PointLight.h"
+#include "Model/ModelInstance.h"
+#include "Particles/ParticleEmitter.h"
+#include "Light/EnvironmentLight.h"
+#include "Light/SpotLight.h"
+#include "Light/PointLight.h"
 #include "Handlers/DropHandler.h"
 #include "Layers/NetworkingLayer.h"
 #include "Layers/Network/MoveObjectMessage.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Scene/SceneManager.h"
 
 
 Inspector::Inspector() : Layer("Inspector")

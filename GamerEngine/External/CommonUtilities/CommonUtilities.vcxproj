@@ -110,6 +110,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="src\Utilites\Pointers.h" />
     <ClInclude Include="src\Data\HashTable.hpp" />
     <ClInclude Include="src\Data\Pointer.h" />
     <ClInclude Include="src\Data\SharedRef.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="src\Utilites\ProfilerMacro.h" />
     <ClInclude Include="src\Utilites\Queue.hpp" />
     <ClInclude Include="src\Utilites\Stack.hpp" />
+    <ClInclude Include="src\Utilites\StringCast.h" />
     <ClInclude Include="src\Utilites\Timer.h" />
     <ClInclude Include="src\Utilites\UtilityFunctions.h" />
     <ClInclude Include="src\Utilites\VisualProfiler.h" />

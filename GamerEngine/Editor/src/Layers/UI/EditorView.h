@@ -2,7 +2,7 @@
 #include <Layers/Layer.h>
 #include "ImGuizmo/ImGuizmo.h"
 
-#include "Components/Components.hpp"
+#include "Components/TransfromComponent.h"
 #include "Math/MathTypes.hpp"
 
 class Entity;

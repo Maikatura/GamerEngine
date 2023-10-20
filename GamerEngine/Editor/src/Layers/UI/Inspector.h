@@ -1,8 +1,8 @@
 #pragma once
 #include <Layers/Layer.h>
 
-#include <Renderer/Types/EnumTypes.h>
-#include <Renderer/Model/Entity.h>
+#include <Types/EnumTypes.h>
+#include <Model/Entity.h>
 
 #include "Components/RandomMoverComponent.h"
 

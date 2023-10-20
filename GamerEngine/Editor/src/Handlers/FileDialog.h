@@ -2,7 +2,7 @@
 #include <commdlg.h>
 #include <string>
 
-#include "Renderer/GraphicsEngine.h"
+#include "GraphicsEngine.h"
 
 class FileDialog
 {

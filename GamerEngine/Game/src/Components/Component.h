@@ -4,6 +4,7 @@ class Entity;
 class Component
 {
 public:
+	virtual ~Component() = default;
 
 	Component(bool aRunInEditor = false);
 

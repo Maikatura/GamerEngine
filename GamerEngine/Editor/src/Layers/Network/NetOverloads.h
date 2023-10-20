@@ -1,6 +1,6 @@
 #pragma once
-#include "Components/Components.hpp"
 #include "TurNet/Shared/DataHandling/TurMessage.h"
+#include "Components/TransfromComponent.h"
 
 enum class NetworkMessages : char
 {

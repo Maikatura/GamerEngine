@@ -4,14 +4,14 @@
 #include <string>
 #include <Layers/LayerHeader.h>
 
-#include "Renderer/GraphicsEngine.h"
+#include "GraphicsEngine.h"
 #include "Time.hpp"
-#include "Renderer/Debugger/ConsoleHelper.h"
+#include "Debugger/ConsoleHelper.h"
 #include "Fonts/IconsForkAwesome.h"
 #include "Handlers/FileDialog.h"
-#include "Renderer/Scene/Scene.h"
-#include "Renderer/Scene/SceneManager.h"
-#include "Renderer/Scene/SceneSerializer.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
+#include "Scene/SceneSerializer.h"
 #include "Snapshots/SnapshotManager.h"
 #include "SettingKeybinds.h"
 

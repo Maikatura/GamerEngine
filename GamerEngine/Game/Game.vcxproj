@@ -108,11 +108,13 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\AllComponents.h" />
+    <ClInclude Include="src\Components\ModelComponent.h" />
     <ClInclude Include="src\Components\Animator.h" />
     <ClInclude Include="src\Components\Audio\AudioSource.h" />
     <ClInclude Include="src\Components\Camera.h" />
     <ClInclude Include="src\Components\CameraComponent.h" />
-    <ClInclude Include="src\Components\ChildComponent.h" />
+    <ClInclude Include="src\Components\TransfromComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\Components.hpp" />
     <ClInclude Include="src\Components\NativeScriptComponent.h" />
@@ -127,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="src\Components\CameraComponent.cpp" />
     <ClCompile Include="src\Components\Component.cpp" />
+    <ClCompile Include="src\Components\IDComponent.h" />
     <ClCompile Include="src\Components\Network\NetworkComponent.cpp" />
     <ClCompile Include="src\Components\RandomMoverComponent.cpp" />
     <ClCompile Include="src\Components\ScriptableEntity.cpp" />
+    <ClCompile Include="src\Components\TagComponent.h" />
     <ClCompile Include="src\pch.cpp" />
   </ItemGroup>
   <ItemGroup>

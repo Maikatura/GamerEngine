@@ -5,8 +5,9 @@
 #include <Input/InputInternal.h>
 
 #include "Utilites/UtilityFunctions.h"
-#include "Renderer/Input/Input.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Input/Input.h"
+#include "Scene/SceneManager.h"
+#include "Components/TransfromComponent.h"
 
 
 CameraController::CameraController() : ScriptableEntity(true)

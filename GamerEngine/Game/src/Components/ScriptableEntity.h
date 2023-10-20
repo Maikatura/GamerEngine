@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/model/Entity.h"
+#include "Model/Entity.h"
 
 #include "Components.hpp"
 

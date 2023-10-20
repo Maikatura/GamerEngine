@@ -1,6 +1,6 @@
 #pragma once
 #include "Components/ScriptableEntity.h"
-#include "Renderer/Render/Renderer.h"
+#include "Render/Renderer.h"
 #include "Math/Frustum.h"
 #define PI 3.14f
 

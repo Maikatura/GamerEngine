@@ -3,13 +3,13 @@
 #include <fstream>
 #include <Layers/EditorLayers.h>
 #include <iostream>
-#include <Renderer/GraphicsEngine.h>
-#include <Renderer/Framework/DX11.h>
+#include <GraphicsEngine.h>
+#include <Framework/DX11.h>
 #include "ImGuizmo/ImGuizmo.h"
 #include <Layers/LayerHeader.h>
-#include "Renderer/Scene/Scene.h"
+#include "Scene/Scene.h"
 #include <Fonts/IconsForkAwesome.h>
-#include "Renderer/Debugger/ConsoleHelper.h"
+#include "Debugger/ConsoleHelper.h"
 
 EditorLayers::EditorLayers()
 {}

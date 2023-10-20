@@ -15,7 +15,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Application"
 include "Editor"
-include "Modelviewer"
+include "Runtime"
 
 group "External"
 include "External/CommonUtilities"

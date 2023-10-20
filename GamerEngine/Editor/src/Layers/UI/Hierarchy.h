@@ -3,7 +3,8 @@
 #include <memory>
 #include <vector>
 
-#include "Renderer/Model/Model.h"
+#include "Model/Model.h"
+#include "Utilites/Pointers.h"
 
 class Entity;
 class ModelInstance;
@@ -26,7 +27,7 @@ public:
 	void DrawArmature(Entity& aEntity, std::shared_ptr<ModelInstance> aModel);
 	void LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned int aBoneID = 0);
 
-	bool LoopThoughChildren(Entity& aEntity);
+	bool LoopThoughChildren(SrdPtr<Entity> aEntity);
 	void CheckIfUserWantToSetParent(Entity& entity);
 	void IsItemHovered(Entity& aEntity);
 

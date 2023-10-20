@@ -1,13 +1,13 @@
 #include "Editor.pch.h"
 #include "KeybindShortcutsLayer.h"
 #include <filesystem>
-#include "Renderer/GraphicsEngine.h"
-#include "Renderer/Debugger/ConsoleHelper.h"
+#include "GraphicsEngine.h"
+#include "Debugger/ConsoleHelper.h"
 #include "Handlers/FileDialog.h"
-#include "Renderer/Input/Input.h"
-#include "Renderer/Scene/Scene.h"
-#include "Renderer/Scene/SceneManager.h"
-#include "Renderer/Scene/SceneSerializer.h"
+#include "Input/Input.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
+#include "Scene/SceneSerializer.h"
 
 
 KeybindShortcutsLayer::KeybindShortcutsLayer() : Layer("Keybinds", true, false)

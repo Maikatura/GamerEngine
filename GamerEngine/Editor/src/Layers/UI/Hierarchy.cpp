@@ -5,27 +5,27 @@
 #include <ImGui/imgui.h>
 
 // Helpers
-#include <StringCast.h>
+#include <Utilites/StringCast.h>
 #include <Handlers/DropHandler.h>
-#include <Renderer/Render/SelectionData.h>
+#include <Render/SelectionData.h>
 
 // Scene
-#include <Renderer/Scene/Scene.h>
-#include <Renderer/Model/Entity.h>
+#include <Scene/Scene.h>
+#include <Model/Entity.h>
 
 //Components
 #include <Components/Components.hpp>
 #include <Components/CameraController.h>
-#include <Renderer/Particles/ParticleEmitter.h>
-#include <Renderer/Model/ModelInstance.h>
+#include <Particles/ParticleEmitter.h>
+#include <Model/ModelInstance.h>
 
-#include "Components/ChildComponent.h"
-#include "Renderer/Debugger/ConsoleHelper.h"
+#include "..\..\..\..\Game\src\Components\TransfromComponent.h"
+#include "Debugger/ConsoleHelper.h"
 
 #include <Fonts/IconsForkAwesome.h>
 
 #include "imgui_internal.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Scene/SceneManager.h"
 #include "Layers/NetworkingLayer.h"
 #include "Layers/Network/CreateObjectMessage.h"
 #include <Data/HashTable.hpp>
@@ -66,7 +66,7 @@ void Hierarchy::OnImGuiRender()
 
 			Entity entity{ entityID, SceneManager::Get().GetScene().get()};
 
-			if(entity.GetComponent<ChildComponent>().HasParent())
+			if(entity.GetComponent<TransformComponent>().HasParent())
 			{
 				return;
 			}
@@ -100,12 +100,12 @@ void Hierarchy::OnImGuiRender()
 
 				for(size_t i = 0; i < entityDataVector.size(); i++)
 				{
-					Entity draggedEntity = entityDataVector[i];
-					if(draggedEntity.GetComponent<ChildComponent>().HasParent())
+					SrdPtr<Entity> draggedEntity = MakeSrdPtr<Entity>(entityDataVector[i]);
+					if(draggedEntity->GetComponent<TransformComponent>().HasParent())
 					{
-						auto parent = draggedEntity.GetComponent<ChildComponent>().GetParent();
-						parent.GetComponent<ChildComponent>().RemoveChild(draggedEntity);
-						draggedEntity.GetComponent<ChildComponent>().ClearParent();
+						auto parent = draggedEntity->GetComponent<TransformComponent>().GetParent();
+						parent->GetComponent<TransformComponent>().RemoveChild(draggedEntity);
+						draggedEntity->GetComponent<TransformComponent>().ClearParent();
 					}
 				}
 			}
@@ -141,7 +141,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 	if(aEntity.HasComponent<ModelComponent>())
 	{
 
-		bool check1 = (aEntity.GetComponent<ChildComponent>().myChildren.size() == 0);
+		bool check1 = (aEntity.GetComponent<TransformComponent>().myChildren.size() == 0);
 		bool check2 = false;
 
 
@@ -159,10 +159,10 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 	}
 	else
 	{
-		flags |= ((aEntity.GetComponent<ChildComponent>().myChildren.size() == 0)) ? ImGuiTreeNodeFlags_Leaf : 0;
+		flags |= ((aEntity.GetComponent<TransformComponent>().myChildren.size() == 0)) ? ImGuiTreeNodeFlags_Leaf : 0;
 	}
 
-	flags |= ((aEntity.GetComponent<ChildComponent>().myChildren.size() == 0) && !aEntity.HasComponent<ModelComponent>()) ? ImGuiTreeNodeFlags_Leaf : 0;
+	flags |= ((aEntity.GetComponent<TransformComponent>().myChildren.size() == 0) && !aEntity.HasComponent<ModelComponent>()) ? ImGuiTreeNodeFlags_Leaf : 0;
 	flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
 
@@ -214,9 +214,9 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 			}
 		}
 
-		for(int i = 0; i < aEntity.GetComponent<ChildComponent>().myChildren.size(); i++)
+		for(int i = 0; i < aEntity.GetComponent<TransformComponent>().myChildren.size(); i++)
 		{
-			Entity entity{ aEntity.GetComponent<ChildComponent>().myChildren[i], SceneManager::Get().GetScene().get() };
+			Entity entity{ aEntity.GetComponent<TransformComponent>().myChildren[i]->GetHandle(), SceneManager::Get().GetScene().get() };
 			DrawEntityNode(entity);
 		}
 		ImGui::TreePop();
@@ -384,15 +384,15 @@ void Hierarchy::LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned
 	}
 }
 
-bool Hierarchy::LoopThoughChildren(Entity& aEntity)
+bool Hierarchy::LoopThoughChildren(SrdPtr<Entity> aEntity)
 {
-	for(Entity ent : aEntity.GetComponent<ChildComponent>().myChildren)
+	for(SrdPtr<Entity> ent : aEntity->GetComponent<TransformComponent>().myChildren)
 	{
-		if(ent.GetID() == aEntity.GetID())
+		if(ent->GetID() == aEntity->GetID())
 		{
 			return true;
 		}
-		else if(ent.GetComponent<ChildComponent>().myChildren.size() > 0)
+		else if(ent->GetComponent<TransformComponent>().myChildren.size() > 0)
 		{
 			return LoopThoughChildren(ent);
 		}
@@ -403,6 +403,8 @@ bool Hierarchy::LoopThoughChildren(Entity& aEntity)
 
 void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 {
+
+	SrdPtr<Entity> entity = MakeSrdPtr<Entity>(aEntity);
 
 	if(ImGui::BeginDragDropSource())
 	{
@@ -434,33 +436,33 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 
 			for(int i = 0; i < aChildEntityList.size(); i++)
 			{
-				Entity aChildEntity = aChildEntityList[i];
+				SrdPtr<Entity> aChildEntity = MakeSrdPtr<Entity>(aChildEntityList[i]);
 
 				bool shouldExit = false;
-				if(!aEntity.GetComponent<ChildComponent>().HasParent() && !aChildEntity.GetComponent<ChildComponent>().HasParent())
+				if(!entity->GetComponent<TransformComponent>().HasParent() && !aChildEntity->GetComponent<TransformComponent>().HasParent())
 				{
 
-					aEntity.GetComponent<ChildComponent>().SetChild(aChildEntity);
-					aChildEntity.GetComponent<ChildComponent>().SetParent(aEntity);
+					entity->GetComponent<TransformComponent>().SetChild(aChildEntity);
+					aChildEntity->GetComponent<TransformComponent>().SetParent(entity);
 					hasMoved = true;
 				}
-				else if(aEntity.GetComponent<ChildComponent>().HasParent() && !aChildEntity.GetComponent<ChildComponent>().HasParent())
+				else if(entity->GetComponent<TransformComponent>().HasParent() && !aChildEntity->GetComponent<TransformComponent>().HasParent())
 				{
 
-					Entity entityParent = aEntity;
+					SrdPtr<Entity> entityParent = entity;
 					bool done = false;
 					while(!done)
 					{
-						if(entityParent.GetID() == aChildEntity.GetID())
+						if(entityParent->GetID() == aChildEntity->GetID())
 						{
 							done = true;
 							shouldExit = true;
-							std::cout << entityParent.GetComponent<TagComponent>().Tag << std::endl;
+							std::cout << entityParent->GetComponent<TagComponent>().Tag << std::endl;
 						}
 
-						if(entityParent.GetComponent<ChildComponent>().HasParent())
+						if(entityParent->GetComponent<TransformComponent>().HasParent())
 						{
-							entityParent = entityParent.GetComponent<ChildComponent>().GetParent();
+							entityParent = entityParent->GetComponent<TransformComponent>().GetParent();
 						}
 						else
 						{
@@ -471,43 +473,43 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 
 					if(!shouldExit)
 					{
-						shouldExit = LoopThoughChildren(aEntity);
+						shouldExit = LoopThoughChildren(entity);
 					}
 
 					if(shouldExit) return;
 
-					aEntity.GetComponent<ChildComponent>().SetChild(aChildEntity);
-					aChildEntity.GetComponent<ChildComponent>().SetParent(aEntity);
+					entity->GetComponent<TransformComponent>().SetChild(aChildEntity);
+					aChildEntity->GetComponent<TransformComponent>().SetParent(entity);
 					hasMoved = true;
 				}
-				else if(!aEntity.GetComponent<ChildComponent>().HasParent() && aChildEntity.GetComponent<ChildComponent>().HasParent())
+				else if(!entity->GetComponent<TransformComponent>().HasParent() && aChildEntity->GetComponent<TransformComponent>().HasParent())
 				{
-					auto parent = aChildEntity.GetComponent<ChildComponent>().GetParent();
-					parent.GetComponent<ChildComponent>().RemoveChild(aChildEntity);
+					auto parent = aChildEntity->GetComponent<TransformComponent>().GetParent();
+					parent->GetComponent<TransformComponent>().RemoveChild(aChildEntity);
 
-					aEntity.GetComponent<ChildComponent>().SetChild(aChildEntity);
-					aChildEntity.GetComponent<ChildComponent>().SetParent(aEntity);
+					entity->GetComponent<TransformComponent>().SetChild(aChildEntity);
+					aChildEntity->GetComponent<TransformComponent>().SetParent(entity);
 					hasMoved = true;
 				}
-				else if(aEntity.GetComponent<ChildComponent>().HasParent() && aChildEntity.GetComponent<ChildComponent>().HasParent())
+				else if(entity->GetComponent<TransformComponent>().HasParent() && aChildEntity->GetComponent<TransformComponent>().HasParent())
 				{
 
-					Entity entityParent = aEntity;
+					SrdPtr<Entity> entityParent = entity;
 
 
 					bool done = false;
 					while(!done)
 					{
-						if(entityParent.GetID() == aChildEntity.GetID())
+						if(entityParent->GetID() == aChildEntity->GetID())
 						{
 							done = true;
 							shouldExit = true;
-							std::cout << entityParent.GetComponent<TagComponent>().Tag << std::endl;
+							std::cout << entityParent->GetComponent<TagComponent>().Tag << std::endl;
 						}
 
-						if(entityParent.GetComponent<ChildComponent>().HasParent())
+						if(entityParent->GetComponent<TransformComponent>().HasParent())
 						{
-							entityParent = entityParent.GetComponent<ChildComponent>().GetParent();
+							entityParent = entityParent->GetComponent<TransformComponent>().GetParent();
 						}
 						else
 						{
@@ -518,7 +520,7 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 
 					if(!shouldExit)
 					{
-						shouldExit = LoopThoughChildren(aEntity);
+						shouldExit = LoopThoughChildren(entity);
 					}
 
 					if(shouldExit)
@@ -526,11 +528,11 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 						return;
 					}
 
-					auto parent = aChildEntity.GetComponent<ChildComponent>().GetParent();
-					parent.GetComponent<ChildComponent>().RemoveChild(aChildEntity);
+					auto parent = aChildEntity->GetComponent<TransformComponent>().GetParent();
+					parent->GetComponent<TransformComponent>().RemoveChild(aChildEntity);
 
-					aEntity.GetComponent<ChildComponent>().SetChild(aChildEntity);
-					aChildEntity.GetComponent<ChildComponent>().SetParent(aEntity);
+					entity->GetComponent<TransformComponent>().SetChild(aChildEntity);
+					aChildEntity->GetComponent<TransformComponent>().SetParent(entity);
 					hasMoved = true;
 				}
 			}
