@@ -11,8 +11,8 @@ class TransformComponent : public Component
 
 public:
 
-	SrdPtr<Entity> myParent;
-	std::vector<SrdPtr<Entity>> myChildren{};
+	Ref<Entity> myParent;
+	std::vector<Ref<Entity>> myChildren{};
 
 
 	uint64_t TempParent;
@@ -119,12 +119,12 @@ public:
 		return ComposeFromTRS(Translation, CommonUtilities::Quat::FromEulers(ToRadians(Rotation)), Scale);
 	}
 
-	void SetChild(SrdPtr<Entity> aChild)
+	void SetChild(Ref<Entity> aChild)
 	{
 		myChildren.push_back(aChild);
 	}
 
-	void RemoveChild(SrdPtr<Entity> aChild)
+	void RemoveChild(Ref<Entity> aChild)
 	{
 		for (size_t i = 0; i < myChildren.size(); i++)
 		{
@@ -136,22 +136,22 @@ public:
 		}
 	}
 
-	void SetParent(SrdPtr<Entity> aParent)
+	void SetParent(Ref<Entity> aParent)
 	{
 		myParent = aParent;
 	}
 
 	void ClearParent()
 	{
-		myParent = MakeSrdPtr<Entity>();
+		myParent = MakeRef<Entity>();
 	}
 
-	SrdPtr<Entity> GetParent() const
+	Ref<Entity> GetParent() const
 	{
 		return myParent;
 	}
 
-	std::vector<SrdPtr<Entity>> GetChildren() const
+	std::vector<Ref<Entity>> GetChildren() const
 	{
 		return myChildren;
 	}

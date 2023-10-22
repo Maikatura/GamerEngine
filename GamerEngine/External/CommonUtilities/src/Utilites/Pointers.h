@@ -2,20 +2,20 @@
 #include <memory>
 
 template<typename T>
-using SrdPtr = std::shared_ptr<T>;
+using Ref = std::shared_ptr<T>;
 
 
 template<typename T>
-using UnqPtr = std::unique_ptr<T>;
+using UnqRef = std::unique_ptr<T>;
 
 template<typename T, typename... Args>
-inline SrdPtr<T> MakeSrdPtr(Args&&... args)
+inline Ref<T> MakeRef(Args&&... args)
 {
 	return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
 template<typename T, typename... Args>
-inline UnqPtr<T> MakeUnqPtr(Args&&... args)
+inline UnqRef<T> MakeUnqRef(Args&&... args)
 {
 	return std::make_unique<T>(std::forward<Args>(args)...);
 }

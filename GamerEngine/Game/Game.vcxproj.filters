@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\AllComponents.h">
+      <Filter>Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Components\Animator.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -27,13 +30,16 @@
     <ClInclude Include="src\Components\CameraComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\TransfromComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\Components\Component.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\Components.hpp">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\IDComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ModelComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\NativeScriptComponent.h">
@@ -51,17 +57,17 @@
     <ClInclude Include="src\Components\ScriptableEntity.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\Components\TagComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\TransfromComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Network\NetworkSettings.h">
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="src\framework.h" />
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Components\AllComponents.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\ModelComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Components\CameraComponent.cpp">
@@ -80,7 +86,5 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
-    <ClCompile Include="src\Components\TagComponent.h" />
-    <ClCompile Include="src\Components\IDComponent.h" />
   </ItemGroup>
 </Project>

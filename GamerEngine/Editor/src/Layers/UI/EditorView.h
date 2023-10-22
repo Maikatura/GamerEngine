@@ -16,7 +16,7 @@ public:
 
 	void OnImGuiRender() override;
 
-	void RenderSceneView(Entity aEntity);
+	void RenderSceneView(Ref<Entity> aEntity);
 	void RenderGameView();
 
 	void OnUpdate() override;
@@ -25,7 +25,7 @@ private:
 
 	Vector2f MouseToViewport(Vector2f aWindowSize, float windowScale);
 
-	void RenderEntityParts(Entity aEntity);
+	void RenderEntityParts(Ref<Entity> aEntity);
 
 	int myTabOpen = 0;
 	int myRenderPass = 0;

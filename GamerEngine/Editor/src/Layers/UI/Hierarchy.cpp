@@ -100,7 +100,7 @@ void Hierarchy::OnImGuiRender()
 
 				for(size_t i = 0; i < entityDataVector.size(); i++)
 				{
-					SrdPtr<Entity> draggedEntity = MakeSrdPtr<Entity>(entityDataVector[i]);
+					Ref<Entity> draggedEntity = MakeRef<Entity>(entityDataVector[i]);
 					if(draggedEntity->GetComponent<TransformComponent>().HasParent())
 					{
 						auto parent = draggedEntity->GetComponent<TransformComponent>().GetParent();
@@ -384,9 +384,9 @@ void Hierarchy::LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned
 	}
 }
 
-bool Hierarchy::LoopThoughChildren(SrdPtr<Entity> aEntity)
+bool Hierarchy::LoopThoughChildren(Ref<Entity> aEntity)
 {
-	for(SrdPtr<Entity> ent : aEntity->GetComponent<TransformComponent>().myChildren)
+	for(Ref<Entity> ent : aEntity->GetComponent<TransformComponent>().myChildren)
 	{
 		if(ent->GetID() == aEntity->GetID())
 		{
@@ -404,7 +404,7 @@ bool Hierarchy::LoopThoughChildren(SrdPtr<Entity> aEntity)
 void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 {
 
-	SrdPtr<Entity> entity = MakeSrdPtr<Entity>(aEntity);
+	Ref<Entity> entity = MakeRef<Entity>(aEntity);
 
 	if(ImGui::BeginDragDropSource())
 	{
@@ -436,7 +436,7 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 
 			for(int i = 0; i < aChildEntityList.size(); i++)
 			{
-				SrdPtr<Entity> aChildEntity = MakeSrdPtr<Entity>(aChildEntityList[i]);
+				Ref<Entity> aChildEntity = MakeRef<Entity>(aChildEntityList[i]);
 
 				bool shouldExit = false;
 				if(!entity->GetComponent<TransformComponent>().HasParent() && !aChildEntity->GetComponent<TransformComponent>().HasParent())
@@ -449,7 +449,7 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 				else if(entity->GetComponent<TransformComponent>().HasParent() && !aChildEntity->GetComponent<TransformComponent>().HasParent())
 				{
 
-					SrdPtr<Entity> entityParent = entity;
+					Ref<Entity> entityParent = entity;
 					bool done = false;
 					while(!done)
 					{
@@ -494,7 +494,7 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 				else if(entity->GetComponent<TransformComponent>().HasParent() && aChildEntity->GetComponent<TransformComponent>().HasParent())
 				{
 
-					SrdPtr<Entity> entityParent = entity;
+					Ref<Entity> entityParent = entity;
 
 
 					bool done = false;

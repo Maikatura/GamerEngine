@@ -109,19 +109,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AllComponents.h" />
-    <ClInclude Include="src\Components\ModelComponent.h" />
     <ClInclude Include="src\Components\Animator.h" />
     <ClInclude Include="src\Components\Audio\AudioSource.h" />
     <ClInclude Include="src\Components\Camera.h" />
     <ClInclude Include="src\Components\CameraComponent.h" />
-    <ClInclude Include="src\Components\TransfromComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\Components.hpp" />
+    <ClInclude Include="src\Components\IDComponent.h" />
+    <ClInclude Include="src\Components\ModelComponent.h" />
     <ClInclude Include="src\Components\NativeScriptComponent.h" />
     <ClInclude Include="src\Components\Network\NetworkComponent.h" />
     <ClInclude Include="src\Components\RandomMoverComponent.h" />
     <ClInclude Include="src\Components\Rotater.h" />
     <ClInclude Include="src\Components\ScriptableEntity.h" />
+    <ClInclude Include="src\Components\TagComponent.h" />
+    <ClInclude Include="src\Components\TransfromComponent.h" />
     <ClInclude Include="src\Network\NetworkSettings.h" />
     <ClInclude Include="src\framework.h" />
     <ClInclude Include="src\pch.h" />
@@ -129,11 +131,9 @@
   <ItemGroup>
     <ClCompile Include="src\Components\CameraComponent.cpp" />
     <ClCompile Include="src\Components\Component.cpp" />
-    <ClCompile Include="src\Components\IDComponent.h" />
     <ClCompile Include="src\Components\Network\NetworkComponent.cpp" />
     <ClCompile Include="src\Components\RandomMoverComponent.cpp" />
     <ClCompile Include="src\Components\ScriptableEntity.cpp" />
-    <ClCompile Include="src\Components\TagComponent.h" />
     <ClCompile Include="src\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
