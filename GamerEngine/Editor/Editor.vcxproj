@@ -149,6 +149,8 @@
     <ClInclude Include="src\Layers\UI\Hierarchy.h" />
     <ClInclude Include="src\Layers\UI\Inspector.h" />
     <ClInclude Include="src\Layers\UI\MainMenuBar.h" />
+    <ClInclude Include="src\Project\ProjectConfig.h" />
+    <ClInclude Include="src\Project\ProjectSerializer.h" />
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\SettingKeybinds.h" />
     <ClInclude Include="src\Snapshots\SnapshotManager.h" />
@@ -177,6 +179,8 @@
     <ClCompile Include="src\Layers\UI\Hierarchy.cpp" />
     <ClCompile Include="src\Layers\UI\Inspector.cpp" />
     <ClCompile Include="src\Layers\UI\MainMenuBar.cpp" />
+    <ClCompile Include="src\Project\ProjectConfig.cpp" />
+    <ClCompile Include="src\Project\ProjectSerializer.cpp" />
     <ClCompile Include="src\Snapshots\SnapshotManager.cpp" />
   </ItemGroup>
   <ItemGroup>

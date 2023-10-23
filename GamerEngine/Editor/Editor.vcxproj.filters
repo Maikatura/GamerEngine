@@ -25,6 +25,9 @@
     <Filter Include="Layers\UI">
       <UniqueIdentifier>{224B2E62-8EB5-E2D8-D7F3-937E439DC02D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project">
+      <UniqueIdentifier>{5C2CF323-C80B-72BF-D123-FD953D82D820}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Snapshots">
       <UniqueIdentifier>{28632D73-94CD-E1E9-DD0B-938F49B5BF3E}</UniqueIdentifier>
     </Filter>
@@ -125,6 +128,12 @@
     <ClInclude Include="src\Layers\UI\MainMenuBar.h">
       <Filter>Layers\UI</Filter>
     </ClInclude>
+    <ClInclude Include="src\Project\ProjectConfig.h">
+      <Filter>Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Project\ProjectSerializer.h">
+      <Filter>Project</Filter>
+    </ClInclude>
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\SettingKeybinds.h" />
     <ClInclude Include="src\Snapshots\SnapshotManager.h">
@@ -188,6 +197,12 @@
     </ClCompile>
     <ClCompile Include="src\Layers\UI\MainMenuBar.cpp">
       <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Project\ProjectConfig.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Project\ProjectSerializer.cpp">
+      <Filter>Project</Filter>
     </ClCompile>
     <ClCompile Include="src\Snapshots\SnapshotManager.cpp">
       <Filter>Snapshots</Filter>

@@ -27,7 +27,7 @@ public:
 	void DrawArmature(Entity& aEntity, std::shared_ptr<ModelInstance> aModel);
 	void LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned int aBoneID = 0);
 
-	bool LoopThoughChildren(SrdPtr<Entity> aEntity);
+	bool LoopThoughChildren(Ref<Entity> aEntity);
 	void CheckIfUserWantToSetParent(Entity& entity);
 	void IsItemHovered(Entity& aEntity);
 

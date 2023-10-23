@@ -783,8 +783,8 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 	{
 		for(auto& entity2 : view)
 		{
-			SrdPtr<Entity> entityOne = MakeSrdPtr<Entity>(Entity{ entity1, myScene });
-			SrdPtr<Entity> entityTwo = MakeSrdPtr<Entity>(Entity{ entity2, myScene });
+			Ref<Entity> entityOne = MakeRef<Entity>(Entity{ entity1, myScene });
+			Ref<Entity> entityTwo = MakeRef<Entity>(Entity{ entity2, myScene });
 
 			if (!entityOne || !entityTwo)
 			{

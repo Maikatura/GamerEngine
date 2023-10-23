@@ -110,6 +110,9 @@
     <ClInclude Include="src\Utilites\PerformaceTimer.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilites\Pointers.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utilites\ProfilerMacro.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
@@ -129,9 +132,6 @@
       <Filter>src\Utilites</Filter>
     </ClInclude>
     <ClInclude Include="src\Utilites\VisualProfiler.h">
-      <Filter>src\Utilites</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utilites\Pointers.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
   </ItemGroup>

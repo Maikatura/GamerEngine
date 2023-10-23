@@ -41,10 +41,13 @@ void EditorView::OnImGuiRender()
 	// TODO : Separate to SceneView.h and GameView.h
 
 	//RenderGameView();
-	RenderSceneView(entity);
+
+	Ref<Entity> thisEntity = MakeRef<Entity>(entity);
+
+	RenderSceneView(thisEntity);
 }
 
-void EditorView::RenderSceneView(Entity aEntity)
+void EditorView::RenderSceneView(Ref<Entity> aEntity)
 {
 	static ImGuiWindowFlags gizmoWindowFlags = 0;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
@@ -101,14 +104,14 @@ void EditorView::RenderSceneView(Entity aEntity)
 	ImGui::PopStyleVar();
 }
 
-void EditorView::RenderEntityParts(Entity aEntity)
+void EditorView::RenderEntityParts(Ref<Entity> aEntity)
 {
-	if(!SceneManager::Get().GetScene()->GetRegistry().valid(aEntity.GetHandle()))
+	if(!SceneManager::Get().GetScene()->GetRegistry().valid(aEntity->GetHandle()))
 	{
 		return;
 	}
 
-	if(!aEntity.HasComponent<TransformComponent>())
+	if(!aEntity->HasComponent<TransformComponent>())
 	{
 		return;
 	}
@@ -124,7 +127,7 @@ void EditorView::RenderEntityParts(Entity aEntity)
 	memcpy_s(&viewMat, sizeof(Matrix4x4f), &viewInverse, sizeof(Matrix4x4f));
 	memcpy_s(&projMat, sizeof(Matrix4x4f), &projectionView, sizeof(Matrix4x4f));
 
-	TransformComponent& transform = aEntity.GetComponent<TransformComponent>();
+	TransformComponent& transform = aEntity->GetComponent<TransformComponent>();
 	float translate[3] = { transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z };
 	float rotation[3] = { transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z };
 	float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
@@ -192,7 +195,7 @@ void EditorView::RenderEntityParts(Entity aEntity)
 
 			TurNet::TurMessage outMsg;
 			ObjectMoveMessage moveMsg;
-			moveMsg.EntityID = aEntity.GetComponent<IDComponent>().ID;
+			moveMsg.EntityID = aEntity->GetComponent<IDComponent>().ID;
 			moveMsg.Transform = transform;
 		
 			outMsg << moveMsg;
