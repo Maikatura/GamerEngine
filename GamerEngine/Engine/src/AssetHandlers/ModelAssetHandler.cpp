@@ -1038,28 +1038,33 @@ std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::ws
 	}
 
 	std::shared_ptr<ModelInstance> modelInstance = nullptr;
-	auto model = myModelRegistry.find(aFilePath);
-	if(model == myModelRegistry.end())
 	{
-		if (LoadModelData(aFilePath))
+		std::scoped_lock<std::mutex> lock(myListMutex);
+
+		auto model = myModelRegistry.find(aFilePath);
+		if (model == myModelRegistry.end())
 		{
-			auto endCheck = myModelRegistry.find(aFilePath);
-			if(endCheck == myModelRegistry.end())
+			if (LoadModelData(aFilePath))
 			{
-				return nullptr;
+				auto endCheck = myModelRegistry.find(aFilePath);
+				if (endCheck == myModelRegistry.end())
+				{
+					return nullptr;
+				}
+				else
+				{
+					modelInstance = endCheck->second;
+				}
 			}
 			else
 			{
-				return endCheck->second;
+				return nullptr;
 			}
-		}
-		else
-		{
-			return nullptr;
-		}
 
-		
+
+		}
 	}
+	
 
 	if (myModelRegistry.empty())
 	{
@@ -1067,8 +1072,6 @@ std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::ws
 		returnValue->Init(std::make_shared<Model>());
 		return returnValue;
 	}
-
-	modelInstance = model->second;
 
 	return modelInstance;
 }

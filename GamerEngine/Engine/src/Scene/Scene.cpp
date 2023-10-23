@@ -269,6 +269,7 @@ void Scene::OnRender()
 
 				if(camera.Primary)
 				{
+					transform.SetPosition(transform.GetPosition() + (Vector3f{ 0, 0,-500000.0f } * Time::GetDeltaTime()));
 					camera.BuildTransform(&transform);
 					Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
 					break;

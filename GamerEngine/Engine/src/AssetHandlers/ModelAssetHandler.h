@@ -27,6 +27,7 @@ class ModelAssetHandler
 	std::vector<std::thread> myThreads;
 	std::queue<std::function<void()>> myTaskQueue;
 	std::mutex myQueueMutex;
+	std::mutex myListMutex;
 	std::condition_variable myTaskAvailable;
 	bool myStop = false;
 

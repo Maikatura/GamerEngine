@@ -37,15 +37,19 @@ public:
 		{
 			ModelAssetHandler::Get().EnqueueLoadTask([&]()
 				{
+					CommonUtilities::Timer timer;
 
 
-					if (myDelay <= 0.0f)
+					while (!(myDelay < 0.0f))
 					{
-						myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
-						myHasLoaded = true;
+						timer.Update();
+						myDelay -= timer.GetDeltaTime();
 					}
 
-					myDelay -= Time::GetDeltaTime();
+
+
+					myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
+					myHasLoaded = true;
 				});
 		}
 		else
@@ -63,6 +67,19 @@ public:
 		ModelAssetHandler::Get().EnqueueLoadTask([&, modelData = aModelData]()
 			{
 				myPath = modelData.Path;
+
+
+				myDelay = modelData.Delay;
+
+				CommonUtilities::Timer timer;
+
+
+				while (!(myDelay < 0.0f))
+				{
+					timer.Update();
+					myDelay -= timer.GetDeltaTime();
+				}
+
 				myModel = ModelAssetHandler::Get().GetModelInstance(modelData.Path);
 
 				if (!myModel)
@@ -88,6 +105,7 @@ public:
 				{
 					materials[i]->SetMaterialTexture(TextureAssetHandler::GetTexture(modelData.Material[i]));
 				}
+				myHasLoaded = true;
 			});
 	}
 
@@ -151,13 +169,21 @@ public:
 		myPath = aModelPath;
 		ModelAssetHandler::Get().EnqueueLoadTask([&]()
 			{
-				if (myDelay <= 0.0f)
+				CommonUtilities::Timer timer;
+
+
+				while (!(myDelay < 0.0f))
+				{
+					timer.Update();
+					myDelay -= timer.GetDeltaTime();
+				}
+
+
 				{
 					myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
 					myHasLoaded = true;
 				}
 
-				myDelay -= Time::GetDeltaTime();
 
 			});
 
