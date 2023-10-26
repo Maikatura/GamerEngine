@@ -24,16 +24,17 @@ DeferredPixelOutput main(DeferredVertexToPixel aInput)
 	float scale = 0.5f;
 	float bias = 0.2f;
 	float radius = 0.310f;
-	float offset = 0.3f;
+	float offset = 0.6f;
 
 	float2 randomTexCoordScale = aInput.myUV * FB_Resolution;
 	const float random = (int)fmod(randomTexCoordScale.x, 4) + (int)(fmod(randomTexCoordScale.y, 4) * 4);
 
 	//point clamp sampler since the textures have already been linearly interpolated when downsized
-	const float3 viewPosition = viewPositionTexture.Sample(pointClampSampler, aInput.myUV).xyz;
-	const float3 viewNormal = viewNormalTexture.Sample(pointClampSampler, aInput.myUV).xyz;
+	const float3 viewPosition = viewPositionTexture.Sample(pointWrapSampler, aInput.myUV).xyz;
+    const float3 viewNormal = viewNormalTexture.Sample(pointWrapSampler, aInput.myUV).xyz;
 
 	float occlusion = 0.0f;
+
 
 	for(uint i = 0; i < 4; i++)
 	{

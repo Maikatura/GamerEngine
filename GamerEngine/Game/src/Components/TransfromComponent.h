@@ -1,5 +1,4 @@
 #pragma once
-#include "GraphicsEngine.h"
 #include "Model/Entity.h"
 #include "Utilites/Pointers.h"
 

@@ -43,4 +43,3 @@ include "Engine"
 
 group "Server"
 include "Server"
-include "GameServer"

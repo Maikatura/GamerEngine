@@ -9,7 +9,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 	DeferredPixelOutput result;
 
 	const float4 color = albedoTexture.Sample(defaultSampler, input.myUV).rgba;
-	const uint mode = 0;
+	const uint mode = 2;
 
 	switch (mode)
 	{

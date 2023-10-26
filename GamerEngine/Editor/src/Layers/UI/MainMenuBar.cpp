@@ -14,6 +14,7 @@
 #include "Scene/SceneSerializer.h"
 #include "Snapshots/SnapshotManager.h"
 #include "SettingKeybinds.h"
+#include "Render/DeferredRenderer.h"
 
 
 MainMenuBar::MainMenuBar(EditorLayers& aLayer) : Layer("MainMenuBar", true, false), myLayers(aLayer)
@@ -177,8 +178,25 @@ void MainMenuBar::RenderMainBar()
         }
 
 
+        std::string topBar = "";
 
-        std::string topBar = "Render Mode: ";
+        {
+            topBar += "Render Pass: ";
+
+            int pass = GraphicsEngine::Get()->GetRenderPass();
+            if (pass == 0)
+            {
+                topBar += "Default";
+            }
+            else
+            {
+                topBar += GBuffer::GetPasses()[pass - 1].GetName();
+            }
+        }
+       
+        topBar += "\t";
+
+        topBar += "Render Mode: ";
         RenderMode currentRenderMode = GraphicsEngine::Get()->GetRenderMode();
 
         switch (currentRenderMode)
@@ -249,7 +267,8 @@ void MainMenuBar::RenderMainBar()
             break;
         }
 
-        topBar += "\t FPS: " + std::to_string(Time::GetFPS());
+        topBar += "\t";
+        topBar += "FPS: " + std::to_string(Time::GetFPS());
 
 
         textWidth = ImGui::CalcTextSize(topBar.c_str()).x + 6.0f;

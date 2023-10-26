@@ -109,10 +109,6 @@ namespace CommonUtilities
 	template <class T>
 	void Vector3<T>::Normalize()
 	{
-		assert(x != 0 && "X is 0 and cant be normilized");
-		assert(y != 0 && "Y is 0 and cant be normilized");
-		assert(z != 0 && "Z is 0 and cant be normilized");
-
 		Vector3<T> normalized = Normalized();
 
 		x = normalized.x;

@@ -28,16 +28,20 @@ struct LineCBufferData
 class LineRenderer
 {
 public:
-	static bool Init();
-
-	static void DrawPoint(Vector3f aPosition, Vector4f aColor = {1,1,1,1});
-	static void DrawLine(Vector3f aStartPoint, Vector3f aEndPoint, Vector4f aColor = { 1,1,1,1 });
-	static void DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation = { 0,0,0 }, Vector4f aColor = { 1,1,1,1 });
-	static void DrawCircle(Vector3f aPosition, float aRadius, int aTesselation = 24);
 
 
-	static void Render();
-	static void Clear();
+	static LineRenderer& Get();
+
+	bool Init();
+
+	void DrawPoint(Vector3f aPosition, Vector4f aColor = {1,1,1,1});
+	void DrawLine(Vector3f aStartPoint, Vector3f aEndPoint, Vector4f aColor = { 1,1,1,1 });
+	void DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation = { 0,0,0 }, Vector4f aColor = { 1,1,1,1 });
+	void DrawCircle(Vector3f aPosition, float aRadius, int aTesselation = 24);
+
+
+	void Render(Matrix4x4f aView, Matrix4x4f aProjection);
+	void Clear();
 
 private:
 

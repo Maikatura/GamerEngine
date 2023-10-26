@@ -269,7 +269,6 @@ void Scene::OnRender()
 
 				if(camera.Primary)
 				{
-					transform.SetPosition(transform.GetPosition() + (Vector3f{ 0, 0,-500000.0f } * Time::GetDeltaTime()));
 					camera.BuildTransform(&transform);
 					Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
 					break;
@@ -364,6 +363,19 @@ void Scene::OnRender()
 			for(const auto& entity : view)
 			{
 				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
+
+				if (!model.IsLoaded())
+				{
+					model.GetDelay() -= Time::GetDeltaTime();
+
+					if (model.GetDelay() <= 0.0f)
+					{
+						model.SetLoaded(true);
+					}
+
+					continue;
+				}
+
 				if(model.GetModel())
 				{
 

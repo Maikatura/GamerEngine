@@ -10,12 +10,13 @@
 #include <Managers/CommandManager.h>
 
 #include <Render/ForwardRenderer.h>
+
+#include "Profiler/Profiler.h"
 #include "Render/DeferredRenderer.h"
+#include "Render/LineRenderer.h"
 #include "Render/ShadowRenderer.h"
 #include "Render/PostProcessRenderer.h"
 #include "Scene/SceneManager.h"
-#include "Utilites/ProfilerMacro.h"
-#include "Utilites/VisualProfiler.h"
 
 
 GraphicsEngine* GraphicsEngine::Get()
@@ -27,7 +28,6 @@ GraphicsEngine::~GraphicsEngine()
 {
 	StopUpdateThread();
 
-	STOP_PROFILE();
 	TextureAssetHandler::Clear();
 	RevokeDragDrop(myWindowHandle);
 	OleUninitialize();
@@ -119,7 +119,11 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	AudioManager::Init();
 	SceneManager::Get().Initialize();
 
-	START_PROFILE("Start of Program");
+	if (!myUseEditor)
+	{
+		gCPUProfiler.Initialize(1, 512);
+	}
+
 
 	return true;
 }
@@ -299,7 +303,10 @@ void GraphicsEngine::BeginFrame()
 {
 	if (myIsMinimized) return;
 
-
+	if (!myUseEditor)
+	{
+		PROFILE_FRAME();
+	}
 
 	if(myWantToResizeBuffers)
 	{
@@ -375,14 +382,18 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	{
 		myRenderPass++;
 
-		if (GBuffer::GBufferTexture::GBufferTexture_Count + 2 == myRenderPass)
+		if (GBuffer::GBufferTexture::GBufferTexture_Count + 1 == myRenderPass)
 		{
 			myRenderPass = 0;
 		}
 	}
 #endif
 
-	SceneManager::Get().GetScene()->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::Get().GetStatus() == SceneStatus::Complete);
+	{
+		PROFILE_CPU_SCOPE("Update Loop");
+		SceneManager::Get().GetScene()->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::Get().GetStatus() == SceneStatus::Complete);
+
+	}
 	
 
 //#ifdef _Distribution
@@ -441,7 +452,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	if (GetRenderModeInt() != 9)
 	{
 		{
-			PROFILE_SCOPE("Render Shadows");
+			PROFILE_CPU_SCOPE("Render Shadows");
 			myShadowRenderer->ClearResources();
 	
 			myShadowRenderer->Render(environmentLight.get(), modelList);
@@ -451,9 +462,10 @@ void GraphicsEngine::RenderScene(VREye anEye)
 			{
 				myShadowRenderer->Render(light, modelList);
 			}
+			myShadowRenderer->ClearTarget();
+
 		}
 	}
-	myShadowRenderer->ClearTarget();
 
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetBlendState(BlendState::None);
@@ -462,7 +474,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 
 	
 	{
-		PROFILE_SCOPE("Generate GBuffer");
+		PROFILE_CPU_SCOPE("Generate GBuffer");
 		myGBuffer->ClearResource(0);
 		myGBuffer->SetAsTarget();
 		myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
@@ -473,25 +485,30 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	
 
 	{
-		PROFILE_SCOPE("Render With Deferred Renderer");
+		PROFILE_CPU_SCOPE("Render With Deferred Renderer");
 		RendererBase::SetBlendState(BlendState::Alpha);
 		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
 		myDeferredRenderer->ClearTarget();
-		myGBuffer->ClearTarget();
 	}
 
-	{
-		PROFILE_SCOPE("Render SSAO");
-		(renderSSAO == true) ? myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection) : myPostProcessRenderer->ClearTargets();
-	}
 
-	if (GetRenderModeInt() != 9) return;
+	
+
+	myGBuffer->ClearTarget();
+
+	if (GetRenderModeInt() == 9) return;
 	
 	{
-		PROFILE_SCOPE("Render With Forward Renderer (Models)");
+		PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
 		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 		RendererBase::SetBlendState(BlendState::None);
 		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
+	}
+
+	{
+		PROFILE_CPU_SCOPE("Render SSAO");
+		(renderSSAO == true) ? myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection) : myPostProcessRenderer->ClearTargets();
+		DX11::TurnZBufferOn();
 	}
 
 	{
@@ -501,15 +518,17 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		//myForwardRenderer->RenderSprites(view, projection, spriteList, directionalLight, environmentLight);
 	}
 
-	{
-		PROFILE_SCOPE("Render Bloom");
+	/*{
+		PROFILE_CPU_SCOPE("Render Bloom");
 		myPostProcessRenderer->Render(PostProcessRenderer::PP_BLOOM, view, projection);
 	}
 
 	{
-		PROFILE_SCOPE("Render Tonemap");
+		PROFILE_CPU_SCOPE("Render Tonemap");
 		myPostProcessRenderer->Render(PostProcessRenderer::PP_TONEMAP, view, projection);
-	}
+	}*/
+
+	
 }
 
 void GraphicsEngine::OnFrameRender()
@@ -534,8 +553,11 @@ void GraphicsEngine::OnFrameRender()
 		return;
 	}
 
-	OnFrameUpdate(GetEngineUpdateRuntime());
-	scene->OnRender();
+	{
+		PROFILE_CPU_SCOPE("Scene Render Setup");
+		scene->OnRender();
+	}
+
 
 #ifndef VR_DISABLED
 
@@ -546,27 +568,31 @@ void GraphicsEngine::OnFrameRender()
 
 
 		DX11::GetContext()->RSSetState(DX11::myFrontCulling);
+		{
+			PROFILE_CPU_SCOPE("Render Left Eye (VR)");
+			DX11::m_RenderTextureLeft->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+			//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
-		DX11::m_RenderTextureLeft->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-		//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
+				// Clear the render to texture.
+			DX11::m_RenderTextureLeft->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
-			// Clear the render to texture.
-		DX11::m_RenderTextureLeft->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+			// Render the scene now and it will draw to the render to texture instead of the back buffer.
+			RenderScene(VREye::Left);
+		}
 
-		// Render the scene now and it will draw to the render to texture instead of the back buffer.
-		RenderScene(VREye::Left);
+		{
+			PROFILE_CPU_SCOPE("Render Right Eye (VR)");
+			
+			// Set the render target to be the render to texture.
+			DX11::m_RenderTextureRight->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+			//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
+				// Clear the render to texture.
+			DX11::m_RenderTextureRight->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
-
-		// Set the render target to be the render to texture.
-		DX11::m_RenderTextureRight->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-		//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
-
-			// Clear the render to texture.
-		DX11::m_RenderTextureRight->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
-
-		// Render the scene now and it will draw to the render to texture instead of the back buffer.
-		RenderScene(VREye::Right);
+			// Render the scene now and it will draw to the render to texture instead of the back buffer.
+			RenderScene(VREye::Right);
+		}
 	}
 
 #endif
@@ -574,44 +600,50 @@ void GraphicsEngine::OnFrameRender()
 
 
 
-
-
-	if (myUseEditor)
 	{
-		//DX11::TurnZBufferOff();
-		DX11::myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-		DX11::myScreenView->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+		PROFILE_CPU_SCOPE("View Render Setup");
+		if (myUseEditor)
+		{
+			//DX11::TurnZBufferOff();
+			DX11::myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+			DX11::myScreenView->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+		}
+		else
+		{
+			//DX11::TurnZBufferOff();
+			//DX11::GetContext()->RSSetState(DX11::myBackCulling);
+			Vector4f clearColor = Renderer::GetClearColor();
+			clearColor.z = 1.0f;
+			clearColor.w = 1.0f;
+
+			DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
+			float clearDepth = 1.0f;
+			UINT8 clearStencil = 0;
+
+			DX11::GetContext()->ClearDepthStencilView(DX11::GetDepthStencilView(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
+			DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
+
+		}
+
+
 	}
-	else
+
 	{
-		//DX11::TurnZBufferOff();
-		//DX11::GetContext()->RSSetState(DX11::myBackCulling);
-		Vector4f clearColor = Renderer::GetClearColor();
-		clearColor.z = 1.0f;
-		clearColor.w = 1.0f;
-
-		DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
-		float clearDepth = 1.0f;
-		UINT8 clearStencil = 0;
-
-		DX11::GetContext()->ClearDepthStencilView(DX11::GetDepthStencilView(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
-		DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
-
+		PROFILE_CPU_SCOPE("Render Screen");
+		RenderScene(VREye::None);
 	}
 
-
-
-	RenderScene(VREye::None);
-
-
-
+	
 	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	Renderer::Clear();*/
 
 
+	{
+		PROFILE_CPU_SCOPE("Clean Scene");
+		scene->Clean();
 
-	scene->Clean();
+	}
 }
 
 void GraphicsEngine::StartUpdateThread()
@@ -634,19 +666,20 @@ void GraphicsEngine::EndFrame()
 	if (myIsMinimized) return;
 
 
-	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
-
-
 	{
-		PROFILE_SCOPE("Final Render Call");
+		PROFILE_CPU_SCOPE("Final Render Call");
 		DX11::ResetRenderTarget(myUseEditor);
 		myDeferredRenderer->RenderLate();
 	}
 
-	DX11::EndFrame();
+	{
+		PROFILE_CPU_SCOPE("End Of Frame");
+		DX11::EndFrame();
+	}
 
+#ifndef VR_DISABLED
 	UpdateHMDMatrixPose();
-
+#endif
 	//myGBuffer->Clear();
 
 	
@@ -675,6 +708,7 @@ void GraphicsEngine::SetWinProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> 
 
 void GraphicsEngine::ResetStates() const
 {
+	PROFILE_CPU_SCOPE("Reset States");
 	RendererBase::SetBlendState(BlendState::None);
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetSamplerState(0u, SamplerState::Default);

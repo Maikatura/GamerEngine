@@ -9,10 +9,10 @@
 #endif
 // ImGui Start
 #include <ImGui/ImGui.h>
-#include <ImGui/imgui_impl_dx11.h>
-#include <ImGui/imgui_impl_win32.h>
+#include <ImGui/backend/imgui_impl_dx11.h>
+#include <ImGui/backend/imgui_impl_win32.h>
 #include <ImGui/imgui_stdlib.h>
-#include "Fonts/IconsForkAwesome.h"
+#include "Fonts/IconsFontAwesome.h"
 #include <imguizmo/imguizmo.h>
 // ImGui End
 

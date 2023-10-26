@@ -31,7 +31,8 @@ disablewarnings
 
 defines
 {
-    "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS"
+    "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS",
+	"NOMINMAX"
 }
 
 includedirs{

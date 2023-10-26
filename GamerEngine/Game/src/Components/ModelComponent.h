@@ -37,26 +37,14 @@ public:
 		{
 			ModelAssetHandler::Get().EnqueueLoadTask([&]()
 				{
-					CommonUtilities::Timer timer;
-
-
-					while (!(myDelay < 0.0f))
-					{
-						timer.Update();
-						myDelay -= timer.GetDeltaTime();
-					}
-
-
-
 					myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
-					myHasLoaded = true;
+
 				});
 		}
 		else
 		{
 			myPath = aModelPath;
 			myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
-			myHasLoaded = true;
 		}
 
 
@@ -67,18 +55,7 @@ public:
 		ModelAssetHandler::Get().EnqueueLoadTask([&, modelData = aModelData]()
 			{
 				myPath = modelData.Path;
-
-
 				myDelay = modelData.Delay;
-
-				CommonUtilities::Timer timer;
-
-
-				while (!(myDelay < 0.0f))
-				{
-					timer.Update();
-					myDelay -= timer.GetDeltaTime();
-				}
 
 				myModel = ModelAssetHandler::Get().GetModelInstance(modelData.Path);
 
@@ -105,13 +82,13 @@ public:
 				{
 					materials[i]->SetMaterialTexture(TextureAssetHandler::GetTexture(modelData.Material[i]));
 				}
-				myHasLoaded = true;
+				//myIsLoaded = true;
 			});
 	}
 
 	void Clear()
 	{
-		myHasLoaded = false;
+		myIsLoaded = false;
 		myModel = nullptr;
 		myPath = L"";
 	}
@@ -128,7 +105,7 @@ public:
 
 	void OnUpdate() override
 	{
-		if (myModel && myHasLoaded)
+		if (myModel && myIsLoaded)
 		{
 			myModel->Update();
 		}
@@ -154,14 +131,14 @@ public:
 
 	bool HasBeenLoaded()
 	{
-		return myHasLoaded;
+		return myIsLoaded;
 	}
 
 	void SetModel(const std::wstring& aModelPath)
 	{
 		myPath = aModelPath;
 		myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
-		myHasLoaded = true;
+		
 	}
 
 	void SetModelAsync(const std::wstring& aModelPath)
@@ -169,27 +146,19 @@ public:
 		myPath = aModelPath;
 		ModelAssetHandler::Get().EnqueueLoadTask([&]()
 			{
-				CommonUtilities::Timer timer;
+				
 
-
-				while (!(myDelay < 0.0f))
-				{
-					timer.Update();
-					myDelay -= timer.GetDeltaTime();
-				}
-
-
-				{
-					myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
-					myHasLoaded = true;
-				}
+				
+				myModel = ModelAssetHandler::Get().GetModelInstance(myPath);
+				//myIsLoaded = true;
+				
 
 
 			});
 
 	}
 
-	float GetDelay()
+	float& GetDelay()
 	{
 		return myDelay;
 	}
@@ -199,11 +168,21 @@ public:
 		myDelay = aDelay;
 	}
 
+	bool IsLoaded()
+	{
+		return myIsLoaded;
+	}
+
+	void SetLoaded(bool isLoaded)
+	{
+		myIsLoaded = isLoaded;
+	}
+
 private:
 
 
 	float myDelay = 0.0f;
-	bool myHasLoaded = false;
+	bool myIsLoaded = false;
 	std::wstring myPath;
 	std::shared_ptr<ModelInstance> myModel = nullptr;
 };

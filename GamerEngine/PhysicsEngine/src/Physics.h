@@ -17,6 +17,7 @@ public:
 
 	void Update();
 
+
 private:
 
 	btDefaultCollisionConfiguration* myCollisionConfiguration;

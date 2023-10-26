@@ -21,8 +21,15 @@ RenderTexture::~RenderTexture()
 }
 
 
-bool RenderTexture::Initialize(ID3D11Device* device, int textureWidth, int textureHeight, DXGI_FORMAT aFormat)
+bool RenderTexture::Initialize(ID3D11Device* device, int textureWidth, int textureHeight, DXGI_FORMAT aFormat, const std::string& aRenderTextureName)
 {
+	if (!aRenderTextureName.empty())
+	{
+		myRenderTextureName = aRenderTextureName;
+	}
+	
+
+
 	D3D11_TEXTURE2D_DESC textureDesc;
 	HRESULT result;
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -76,6 +83,7 @@ bool RenderTexture::Initialize(ID3D11Device* device, int textureWidth, int textu
 		return false;
 	}
 
+
 	return true;
 }
 
@@ -101,6 +109,16 @@ void RenderTexture::Shutdown()
 	}
 
 	return;
+}
+
+void RenderTexture::SetName(const std::string& aRenderTextureName)
+{
+	myRenderTextureName = aRenderTextureName;
+}
+
+const std::string& RenderTexture::GetName()
+{
+	return myRenderTextureName;
 }
 
 

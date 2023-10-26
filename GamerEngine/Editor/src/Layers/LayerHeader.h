@@ -11,3 +11,5 @@
 #include <Layers/NetworkingLayer.h>
 #include <Layers/Debug/ConsoleWindow.h>
 #include <Layers/Debug/KeybindShortcutsLayer.h>
+
+#include <Layers/UI/ProfilerLayer.h>

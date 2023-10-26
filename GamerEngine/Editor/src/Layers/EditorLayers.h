@@ -45,4 +45,6 @@ private:
 
 	void AddDefaultLayers();
 
+	bool myShouldProfile = false;
+
 };

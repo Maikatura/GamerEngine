@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
-#include "openvr.h"
 #include "Math/Frustum.h"
+#include "Math/MathTypes.hpp"
 
 enum class VREye;
 class TransformComponent;
@@ -61,7 +61,7 @@ public:
 	void BuildTransform(TransformComponent* aTransform);
 
 	void SetupCameras();
-	Matrix4x4f GetCurrentViewMatrix(vr::Hmd_Eye evr_eye);
+	Matrix4x4f GetCurrentViewMatrix(VREye evr_eye);
 
 private:
 	bool myHasMoved;

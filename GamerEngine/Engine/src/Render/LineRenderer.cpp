@@ -18,6 +18,12 @@ LineCBufferData LineRenderer::myLineCBufferData;
 std::vector<std::array<LineVertex, 2>> LineRenderer::myLinesToRender;
 
 
+LineRenderer& LineRenderer::Get()
+{
+	static LineRenderer instance;
+	return instance;
+}
+
 bool LineRenderer::Init()
 {
 #if _DEBUG
@@ -236,20 +242,18 @@ void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselatio
 #endif
 }
 
-
-
-void LineRenderer::Render()
+void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
 {
 #if _DEBUG
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
-	myLineCBufferData.View = Matrix4x4f::GetFastInverse(Renderer::GetViewMatrix());
-	myLineCBufferData.Projection = Renderer::GetProjectionMatrix();
+	myLineCBufferData.View = Matrix4x4f::GetFastInverse(aView);
+	myLineCBufferData.Projection = aProjection;
 	myLineCBufferData.World = Matrix4x4f();
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	HRESULT result = DX11::GetContext()->Map(myLineCBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-	if(FAILED(result))
+	if (FAILED(result))
 	{
 		// BOOM?
 		return;
@@ -263,7 +267,7 @@ void LineRenderer::Render()
 
 	// TODO : Skip the lines that is outside the camera (NOTE do it for models and will will have it for this too) (Also if they are out side the Far Plane distance on the camera skip them too)
 
-	for(int i = 0; i < myLinesToRender.size(); i++)
+	for (int i = 0; i < myLinesToRender.size(); i++)
 	{
 		DX11::GetContext()->VSSetConstantBuffers(3, 1, myLineCBuffer.GetAddressOf());
 
@@ -274,9 +278,9 @@ void LineRenderer::Render()
 		DX11::GetContext()->PSSetShader(myLinePixelShader.Get(), NULL, 0);
 
 		D3D11_MAPPED_SUBRESOURCE lineData;
-		HRESULT hResult = DX11::GetContext()->Map(myBuffer.Get(), 0,D3D11_MAP_WRITE_DISCARD, 0, &lineData);
+		HRESULT hResult = DX11::GetContext()->Map(myBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &lineData);
 
-		if(FAILED(hResult))
+		if (FAILED(hResult))
 		{
 			return;
 		}

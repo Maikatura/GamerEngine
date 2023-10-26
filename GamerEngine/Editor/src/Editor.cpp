@@ -6,13 +6,13 @@
 #include "Windows.h"
 
 
+
+
+#include <Profiler/Profiler.h>
 #include <Framework/DX11.h>
 #include <GraphicsEngine.h>
-#include <Framework/DX11.h>
 #include <Render/LineRenderer.h> 
-
 #include "Physics.h"
-#include "Time.hpp"
 #include "Components/CameraController.h"
 #include "Components/NativeScriptComponent.h"
 #include "Layers/EditorLayers.h"
@@ -80,7 +80,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	myLayers.Init();
 	EditorSettingsPanel::LoadConfig();
-	LineRenderer::Init();
+	LineRenderer::Get().Init();
 	Physics::Get().Init();
 
 
@@ -113,22 +113,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			break;
 		}
 
+		
+
 		myLayers.BeginFrame();
 		graphicsEngine.BeginFrame();
 
 		//Physics::Get().Update();
 
-		//graphicsEngine.SetEngineUpdateRuntime(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameRender();
 
-		/*LineRenderer::Render();
-		LineRenderer::Clear();*/
 
-		myLayers.OnUpdate();
-		myLayers.OnImGuiRender();
+		//LineRenderer::Get().Render(view, projection);
+		{
+			myLayers.OnUpdate();
+			myLayers.OnImGuiRender();
+			myLayers.EndFrame();
+		}
 
-		myLayers.EndFrame();
 		graphicsEngine.EndFrame();
 	}
 

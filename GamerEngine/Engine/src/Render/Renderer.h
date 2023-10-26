@@ -18,8 +18,6 @@ public:
 		myCamera = aCamera;
 		myViewProjection = aViewProjection;
 		myProjection = aProjection;
-
-
 	}
 
 	static void Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom);

@@ -4,22 +4,36 @@
 class Time
 {
 public:
+
+	
+
 	static float GetDeltaTime()
 	{
-		return myTimer.GetDeltaTime();
+		return DeltaTime;
 	}
 
 	static int GetFPS()
 	{
-		return myTimer.GetFPS();
+		return FPS;
 	}
+
+private:
 
 	static void Update()
 	{
 		myTimer.Update();
+		DeltaTime = myTimer.GetDeltaTime();
+		FPS = myTimer.GetFPS();
+		FrameTime = myTimer.GetFrameTime();
 	}
 
-private:
+	friend class GraphicsEngine;
+
+
+	inline static int FPS;
+	inline static float DeltaTime;
+	inline static float FrameTime;
+
 
 	inline static CommonUtilities::Timer myTimer;
 };

@@ -58,7 +58,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;src\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -83,7 +83,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;src\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -106,11 +106,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Fonts\IconsFontAwesome.h" />
     <ClInclude Include="src\Fonts\IconsForkAwesome.h" />
+    <ClInclude Include="src\ImGui\backend\imgui_impl_dx11.h" />
+    <ClInclude Include="src\ImGui\backend\imgui_impl_win32.h" />
     <ClInclude Include="src\ImGui\imconfig.h" />
     <ClInclude Include="src\ImGui\imgui.h" />
-    <ClInclude Include="src\ImGui\imgui_impl_dx11.h" />
-    <ClInclude Include="src\ImGui\imgui_impl_win32.h" />
     <ClInclude Include="src\ImGui\imgui_internal.h" />
     <ClInclude Include="src\ImGui\imgui_stdlib.h" />
     <ClInclude Include="src\ImGui\imstb_rectpack.h" />
@@ -122,14 +123,15 @@
     <ClInclude Include="src\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="src\ImGuizmo\ImSequencer.h" />
     <ClInclude Include="src\ImGuizmo\ImZoomSlider.h" />
+    <ClInclude Include="src\Profiler\Profiler.h" />
     <ClInclude Include="src\imgui_markdown\imgui_markdown.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ImGui\backend\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\ImGui\backend\imgui_impl_win32.cpp" />
     <ClCompile Include="src\ImGui\imgui.cpp" />
     <ClCompile Include="src\ImGui\imgui_demo.cpp" />
     <ClCompile Include="src\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="src\ImGui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="src\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="src\ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="src\ImGui\imgui_tables.cpp" />
     <ClCompile Include="src\ImGui\imgui_widgets.cpp" />
@@ -138,6 +140,8 @@
     <ClCompile Include="src\ImGuizmo\ImGradient.cpp" />
     <ClCompile Include="src\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="src\ImGuizmo\ImSequencer.cpp" />
+    <ClCompile Include="src\Profiler\Profiler.cpp" />
+    <ClCompile Include="src\Profiler\ProfilerWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

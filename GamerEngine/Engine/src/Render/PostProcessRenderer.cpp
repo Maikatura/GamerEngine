@@ -196,16 +196,12 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 
 			myFrameBufferData.DeltaTime = 0;
 			myFrameBufferData.TotalTime = 0;
-			const float aspectRatio = (float)myFrameBufferData.Resolution.x / (float)myFrameBufferData.Resolution.y;
-			float farPlane = Renderer::GetCamera()->myFarPlane;
-			float halfHeight = farPlane * tanf(0.5f * Renderer::GetCamera()->GetVerticalFoV());
-			float halfWidth = aspectRatio * halfHeight;
 
-
-			myFrameBufferData.FrustrumCorners[0] = Vector4f(-halfWidth, -halfHeight, farPlane, 0);
-			myFrameBufferData.FrustrumCorners[1] = Vector4f(-halfWidth, halfHeight, farPlane, 0);
-			myFrameBufferData.FrustrumCorners[2] = Vector4f(halfWidth, halfHeight, farPlane, 0);
-			myFrameBufferData.FrustrumCorners[3] = Vector4f(halfWidth, -halfHeight, farPlane, 0);
+			myFrustum = CreateFrustumFromCamera(aView, Renderer::GetCamera()->GetVerticalFoV(), Renderer::GetCamera()->GetHorizontalFoV(), Renderer::GetCamera()->myNearPlane, Renderer::GetCamera()->myFarPlane);
+			myFrameBufferData.FrustrumCorners[0] = myFrustum.NearTopLeft;
+			myFrameBufferData.FrustrumCorners[1] = myFrustum.NearTopRight;
+			myFrameBufferData.FrustrumCorners[2] = myFrustum.NearBottomLeft;
+			myFrameBufferData.FrustrumCorners[3] = myFrustum.NearBottomRight;
 
 			ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 			result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
@@ -218,16 +214,15 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
 			DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
 
-			DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+			//DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 			DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
-			ID3D11ShaderResourceView* nullsrv = nullptr;
-
+			
 			SetDepthStencilState(DepthStencilState::ReadWrite);
 			SetBlendState(BlendState::Additive);
 
-
-			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture);
+			
+			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture, DX11::GetDepthStencilView());
 			break;
 		}
 
@@ -253,18 +248,24 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 
 }
 
-void PostProcessRenderer::RenderTextureOnSlot(int aSlot,int aResourceSlot, PostProcessPass aPass, std::shared_ptr<RenderTexture> aRenderTexture)
+void PostProcessRenderer::RenderTextureOnSlot(int aSlot,int aResourceSlot, PostProcessPass aPass, std::shared_ptr<RenderTexture> aRenderTexture, ID3D11DepthStencilView* depthStencilView)
 {
 	ID3D11ShaderResourceView* nullsrv = nullptr;
 
-	aRenderTexture->ClearRenderTarget(DX11::GetContext(), nullptr, 0.0f, 0.0f, 0.0f, 0.0f);
+	aRenderTexture->ClearRenderTarget(DX11::GetContext(), depthStencilView, 0.0f, 0.0f, 0.0f, 0.0f);
 	DX11::GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
 
-	aRenderTexture->SetRenderTarget(DX11::GetContext(), nullptr);
+
+	
+
+	aRenderTexture->SetRenderTarget(DX11::GetContext(), depthStencilView);
+
+	
+
 	RenderPass(aPass);
 
 	DX11::ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
-	aRenderTexture->SetAsResource(DX11::GetContext(), aSlot);
+	aRenderTexture->SetAsResource(DX11::GetContext(), aResourceSlot);
 }
 
 void PostProcessRenderer::RenderPass(PostProcessPass aPass)
@@ -288,5 +289,5 @@ void PostProcessRenderer::Release()
 
 void PostProcessRenderer::ClearTargets()
 {
-	mySSAOTexture->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 0.0f, 0.0f);
+	mySSAOTexture->ClearRenderTarget(DX11::GetContext(), nullptr, 0.0f, 0.0f, 0.0f, 0.0f);
 }

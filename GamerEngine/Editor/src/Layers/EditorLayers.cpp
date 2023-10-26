@@ -10,6 +10,8 @@
 #include "Scene/Scene.h"
 #include <Fonts/IconsForkAwesome.h>
 #include "Debugger/ConsoleHelper.h"
+#include "Profiler/Profiler.h"
+
 
 EditorLayers::EditorLayers()
 {}
@@ -124,12 +126,22 @@ void EditorLayers::BeginFrame()
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 
-	
-
 	ImGui::NewFrame();
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_None);
 	ImGuizmo::SetOrthographic(false);
 	ImGuizmo::BeginFrame();
+
+	
+	PROFILE_FRAME();
+	
+
+	for (int i = 0; i < myLayers.size(); i++)
+	{
+		if (!myLayers[i]->HasBeenAdded())
+		{
+			myLayers[i]->OnBeginFrame();
+		}
+	}
 
 	OnAttach();
 }
@@ -177,6 +189,7 @@ void EditorLayers::AddDefaultLayers()
 	AddLayer(std::make_shared<KeybindShortcutsLayer>());
 	AddLayer(std::make_shared<NetworkingLayer>());
 	AddLayer(std::make_shared<HelpPanel>());
+	AddLayer(std::make_shared<ProfilerLayer>(myShouldProfile));
 }
 
 void EditorLayers::OnUpdate()
@@ -207,12 +220,10 @@ void EditorLayers::OnImGuiRender()
 
 	for(int i = 0; i < myLayers.size(); i++)
 	{
-		if (myLayers[i]->HasBeenAdded())
+		if (myLayers[i]->HasBeenAdded() && myLayers[i]->IsOpen())
 		{
-			if (myLayers[i]->IsOpen())
-			{
-				myLayers[i]->OnImGuiRender();
-			}
+			myLayers[i]->OnImGuiRender();
+			
 
 			/*if(!myLayers[i]->OnImGuiRender())
 			{

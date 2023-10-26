@@ -93,21 +93,21 @@ bool GBuffer::CreateGBuffer()
 
 	
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Albedo].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R8G8B8A8_UNORM);
+	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Albedo].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R8G8B8A8_UNORM, "Albedo GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Normal].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM);
+	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Normal].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Normal GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Material].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM);
+	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Material].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Material GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_VertexNormal].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM);
+	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_VertexNormal].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Vertex Normal GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Position].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Position].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R32G32B32A32_FLOAT, "Position GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_AmbientOcclusion].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R8_UNORM);
+	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_AmbientOcclusion].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R8_UNORM, "AO GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_ViewPosition].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_ViewPosition].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R32G32B32A32_FLOAT, "View Position GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_ViewNormal].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM);
+	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_ViewNormal].Initialize(DX11::GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "View Normal GBuffer");
 
 	myRenderer.Initialize(DX11::GetDevice(), width, height);
 

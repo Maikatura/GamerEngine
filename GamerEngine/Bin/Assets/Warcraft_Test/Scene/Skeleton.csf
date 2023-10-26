@@ -1,61 +1,6 @@
 Scene: SceneTesting
 Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Warcraft_Test\Scene\Skeleton.csf
 Entities:
-  - Entity: 5429648877439772753
-    TagComponent:
-      Tag: Tauren Skeleton
-    TransformComponent:
-      Translation: [0, 0.122204721, 0]
-      Rotation: [0, -0, 0]
-      Scale: [10, 10, 10]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Delay: -2.56999992e-05
-      Path: Assets\Warcraft_Test\Models\taurenskeleton\taurenskeleton_blood101.fbx
-      TextureSize: 2
-      Texture:
-        0:
-          Albedo: assets\warcraft_test\models\taurenskeleton\taurenskeleton_blood.png
-          Normal: resources\textures\t_default_n.dds
-          Material: resources\textures\t_default_m.dds
-        1:
-          Albedo: assets\warcraft_test\models\taurenskeleton\taurenskeleton_horns_blood.png
-          Normal: resources\textures\t_default_n.dds
-          Material: resources\textures\t_default_m.dds
-  - Entity: 16032452205484422433
-    TagComponent:
-      Tag: Directional Light
-    TransformComponent:
-      Translation: [92.2944183, 203.494476, -159.69783]
-      Rotation: [132.786758, -16.4169998, 0]
-      Scale: [0.995829344, 0.999664962, 0.999686956]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    DirectionalLightComponent:
-      Color: [1, 1, 1]
-      Direction: [-44, 100, 85]
-      Intensity: 1
-  - Entity: 4488255876943964703
-    TagComponent:
-      Tag: EditorCamera
-    TransformComponent:
-      Translation: [-42.6490288, 21.8623199, 3.75952148]
-      Rotation: [9.14446259, -262.740967, 0.000104271501]
-      Scale: [0.999961138, 0.999956548, 0.999987185]
-    ChildComponent:
-      ChildrenSize: 0
-      Children:
-        {}
-    CameraComponent:
-      FOV: 90
-      NearPlane: 0.100000001
-      FarPlane: 25000
-      Primary: true
   - Entity: 1828353707181980437
     TagComponent:
       Tag: Cube
@@ -63,7 +8,6 @@ Entities:
       Translation: [0, -0.49396944, 0]
       Rotation: [0, -0, 0]
       Scale: [50, 0.100000001, 50]
-    ChildComponent:
       ChildrenSize: 0
       Children:
         {}
@@ -73,6 +17,58 @@ Entities:
       TextureSize: 1
       Texture:
         0:
-          Albedo: resources\textures\T_Default_C.dds
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [-17.3193913, 25.2823715, -5.63846302]
+      Rotation: [6.24046326, -294.486328, 0.000104271501]
+      Scale: [0.999961138, 0.999956548, 0.999987185]
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 25000
+      Primary: true
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [92.2944183, 203.494476, -159.69783]
+      Rotation: [132.786758, -16.4169998, 0]
+      Scale: [0.995829344, 0.999664962, 0.999686956]
+      ChildrenSize: 0
+      Children:
+        {}
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [-44, 100, 85]
+      Intensity: 1
+  - Entity: 5429648877439772753
+    TagComponent:
+      Tag: Tauren Skeleton
+    TransformComponent:
+      Translation: [0, 0.122204721, 0]
+      Rotation: [0, -0, 0]
+      Scale: [10, 10, 10]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.000795800006
+      Path: Assets\Warcraft_Test\Models\taurenskeleton\taurenskeleton_blood101.fbx
+      TextureSize: 2
+      Texture:
+        0:
+          Albedo: assets\warcraft_test\models\taurenskeleton\taurenskeleton_blood.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        1:
+          Albedo: assets\warcraft_test\models\taurenskeleton\taurenskeleton_horns_blood.png
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds

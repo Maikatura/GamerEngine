@@ -89,8 +89,8 @@ public:
 		colors[ImGuiCol_TabActive] = Active(colors[ImGuiCol_Tab]);
 		colors[ImGuiCol_TabUnfocused] = colors[ImGuiCol_Tab];
 		colors[ImGuiCol_TabUnfocusedActive] = colors[ImGuiCol_TabActive];
-		colors[ImGuiCol_DockingPreview] = Darken(colors[ImGuiCol_HeaderActive], 0.2f);
-		colors[ImGuiCol_DockingEmptyBg] = Darken(colors[ImGuiCol_HeaderActive], 0.6f);
+		/*colors[ImGuiCol_DockingPreview] = Darken(colors[ImGuiCol_HeaderActive], 0.2f);
+		colors[ImGuiCol_DockingEmptyBg] = Darken(colors[ImGuiCol_HeaderActive], 0.6f);*/
 		colors[ImGuiCol_PlotLines] = GetColor(HighlightColor);
 		colors[ImGuiCol_PlotLinesHovered] = Hovered(colors[ImGuiCol_PlotLines]);
 		colors[ImGuiCol_PlotHistogram] = GetColor(HighlightColor);

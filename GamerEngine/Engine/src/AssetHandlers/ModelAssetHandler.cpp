@@ -385,7 +385,7 @@ ofbx::IScene* ModelAssetHandler::LoadModelScene(const std::string& aPath)
 	FILE* fp;
 	fopen_s(&fp, aPath.c_str(), "rb");
 
-	if(!fp)
+	if (!fp)
 	{
 		return nullptr;
 	}
@@ -429,7 +429,7 @@ ModelAssetHandler& ModelAssetHandler::Get()
 
 void ModelAssetHandler::Clear()
 {
-	for(auto item : myModelRegistry)
+	for (auto item : myModelRegistry)
 	{
 		if (item.second == nullptr)
 		{
@@ -440,7 +440,7 @@ void ModelAssetHandler::Clear()
 		std::cout << "Name: " << item.second->GetModel()->Name << " Cleared Data" << "\n";
 	}
 
-	
+
 }
 
 bool ModelAssetHandler::Initialize()
@@ -451,12 +451,12 @@ bool ModelAssetHandler::Initialize()
 		return true;
 	}
 
-	if(!InitUnitCube())
+	if (!InitUnitCube())
 	{
 		return false;
 	}
 
-	if(!InitUnitSphere())
+	if (!InitUnitSphere())
 	{
 		return false;
 	}
@@ -474,7 +474,7 @@ void ModelAssetHandler::UnloadModel(const std::wstring& aFilePath)
 
 void ModelAssetHandler::ResetRenderedModels()
 {
-	for(auto item : myModelRegistry)
+	for (auto item : myModelRegistry)
 	{
 		if (item.second)
 		{
@@ -490,11 +490,11 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 
 	const ofbx::Mesh* mesh = nullptr;
-	for(int i = 0; i < scene->getAllObjectCount(); ++i)
+	for (int i = 0; i < scene->getAllObjectCount(); ++i)
 	{
 		std::shared_ptr<Model> mdl = std::make_shared<Model>();
 		const ofbx::Object* object = scene->getAllObjects()[i];
-		if(object->getType() == ofbx::Object::Type::MESH)
+		if (object->getType() == ofbx::Object::Type::MESH)
 		{
 			mesh = static_cast<const ofbx::Mesh*>(object);
 
@@ -511,7 +511,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			const int indexCount = geometry->getIndexCount();
 
 			std::vector<Vertex> mdlVertices(vertexCount);
-			for(int x = 0; x < vertexCount; ++x)
+			for (int x = 0; x < vertexCount; ++x)
 			{
 				mdlVertices[x].Position = Vector4f{
 					static_cast<float>(vertexPositions[x].x),
@@ -522,7 +522,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 
 
-				for(int vCol = 0; vCol < 4; vCol++)
+				for (int vCol = 0; vCol < 4; vCol++)
 				{
 					if (mesh->getGeometry()->getColors())
 					{
@@ -535,7 +535,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 					}
 				}
 
-				for(int uvCh = 0; uvCh < 4; uvCh++)
+				for (int uvCh = 0; uvCh < 4; uvCh++)
 				{
 					if (mesh->getGeometry()->getUVs(uvCh))
 					{
@@ -569,11 +569,11 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 						static_cast<float>(mesh->getGeometry()->getNormals()[x].z)
 					};
 				}
-				
+
 			}
 
 			std::vector<unsigned int> mdlIndices(indexCount);
-			for(int i = 0; i < indexCount; ++i)
+			for (int i = 0; i < indexCount; ++i)
 			{
 				mdlIndices[i] = indices[i];
 			}
@@ -590,7 +590,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 			ID3D11Buffer* vertexBuffer;
 			result = DX11::Device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -607,7 +607,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 			ID3D11Buffer* indexBuffer;
 			result = DX11::Device->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -620,7 +620,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 			ID3D11VertexShader* vertexShader;
 			result = DX11::Device->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -631,7 +631,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
 			ID3D11PixelShader* pixelShader;
 			result = DX11::Device->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -639,7 +639,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 			ID3D11InputLayout* inputLayout;
 			result = DX11::Device->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -673,7 +673,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 	}
 
 
-	
+
 
 
 	return false;
@@ -683,7 +683,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 {
-	if(SceneManager::Get().IsHeadless())
+	if (SceneManager::Get().IsHeadless())
 	{
 		return true;
 	}
@@ -700,14 +700,14 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 	std::vector<std::string> addedBlendShapes;
 
-	
+
 	TGA::FBX::Mesh tgaModel;
 	importer.InitImporter();
-	if(importer.LoadModel(aFilePath, tgaModel))
+	if (importer.LoadModel(aFilePath, tgaModel))
 	{
 		std::shared_ptr<Model> mdl = std::make_shared<Model>();
 
-		for(size_t i = 0; i < tgaModel.Elements.size(); i++)
+		for (size_t i = 0; i < tgaModel.Elements.size(); i++)
 		{
 			std::vector<Vertex> mdlVertices;
 
@@ -716,7 +716,8 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			mdlVertices.resize(mesh.Vertices.size());
 
 
-			for(size_t v = 0; v < mesh.Vertices.size(); v++)
+
+			for (size_t v = 0; v < mesh.Vertices.size(); v++)
 			{
 
 				mdlVertices[v].Position = {
@@ -726,7 +727,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 					1.0f
 				};
 
-				for(int vCol = 0; vCol < 4; vCol++)
+				for (int vCol = 0; vCol < 4; vCol++)
 				{
 					mdlVertices[v].VertexColors[vCol] = {
 						mesh.Vertices[v].VertexColors[vCol][0],
@@ -750,7 +751,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 					mesh.Vertices[v].BoneWeights[3]
 				};
 
-				for(int uvCh = 0; uvCh < 4; uvCh++)
+				for (int uvCh = 0; uvCh < 4; uvCh++)
 				{
 					mdlVertices[v].UVs[uvCh].x = std::clamp(mesh.Vertices[v].UVs[uvCh][0], 0.0f, 1.0f);
 					mdlVertices[v].UVs[uvCh].y = std::clamp(mesh.Vertices[v].UVs[uvCh][1], 0.0f, 1.0f);
@@ -780,24 +781,31 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			}
 
 
-			for(size_t i = 0; i < 3; i++)
+			for (size_t i = 0; i < 3; i++)
 			{
 				mdl->BoxBounds.BoxExtents.push_back(tgaModel.BoxSphereBounds.BoxExtents[i]);
 				mdl->BoxBounds.Center.push_back(tgaModel.BoxSphereBounds.Center[i]);
 			}
 			mdl->BoxBounds.Radius = tgaModel.BoxSphereBounds.Radius;
 
-			for (int i = 0; i < mesh.Indices.size(); i++)
+			int size = static_cast<int>(mesh.Indices.size());
+			mdlIndices.resize(size);
+			memcpy_s(&mdlIndices[0], sizeof(unsigned) * size, &mesh.Indices[0], sizeof(unsigned) * size);
+
+
+			/*for (int i = 0; i < mesh.Indices.size(); i++)
 			{
+
+
 				mdlIndices.push_back(mesh.Indices[i]);
-			}
+			}*/
 
 
 			Skeleton mdlSkeleton;
 			const bool hasSkeleton = tgaModel.Skeleton.GetRoot();
-			if(hasSkeleton)
+			if (hasSkeleton)
 			{
-				for(size_t i = 0; i < tgaModel.Skeleton.Bones.size(); i++)
+				for (size_t i = 0; i < tgaModel.Skeleton.Bones.size(); i++)
 				{
 					mdlSkeleton.Bones.push_back(Bone());
 					mdlSkeleton.Bones[i].BindPoseInverse = *((Matrix4x4f*)&tgaModel.Skeleton.Bones[i].BindPoseInverse);
@@ -825,7 +833,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			ID3D11Buffer* vertexBuffer;
 			result = DX11::Device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -842,7 +850,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			ID3D11Buffer* indexBuffer;
 			result = DX11::Device->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -855,7 +863,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 			ID3D11VertexShader* vertexShader;
 			result = DX11::Device->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -866,7 +874,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
 			ID3D11PixelShader* pixelShader;
 			result = DX11::Device->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -874,7 +882,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			ID3D11InputLayout* inputLayout;
 			result = DX11::Device->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
-			if(FAILED(result))
+			if (FAILED(result))
 			{
 				return false;
 			}
@@ -908,7 +916,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 				normal = TextureAssetHandler::GetTexture(L"resources\\Textures\\T_Default_N.dds");
 			}
 
-			if(material->GetName() == albedo->GetName())
+			if (material->GetName() == albedo->GetName())
 			{
 				material = TextureAssetHandler::GetTexture(L"resources\\Textures\\T_Default_M.dds");
 			}
@@ -922,7 +930,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			mdl->PushMaterial(std::move(mat));
 
 
-			
+
 			/*for(size_t i = 0; i < mesh.Blendshapes.size(); i++)
 			{
 				Model::BlendShapeData data;
@@ -958,7 +966,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			//modelData.myBlendShapeBuffer = blendBuffer;
 
-			if(hasSkeleton)
+			if (hasSkeleton)
 			{
 				mdl->Init(modelData, aFilePath, mdlSkeleton);
 			}
@@ -967,7 +975,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 				mdl->Init(modelData, aFilePath);
 			}
 
-			
+
 		}
 
 		mdl->Name = ansiFileName;
@@ -991,27 +999,28 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 	std::shared_ptr<ModelInstance> model = GetModelInstance(aModelName);
 
 	TGA::FBX::Animation tgaAnimation;
-	if(TGA::FBX::Importer::LoadAnimation(someFilePath, tgaAnimation))
+	if (!TGA::FBX::Importer::LoadAnimation(someFilePath, tgaAnimation))
 	{
-		Animation animOut;
-		animOut.Duration = static_cast<float>(tgaAnimation.Duration);
-		animOut.FramesPerSecond = tgaAnimation.FramesPerSecond;
-		animOut.Length = tgaAnimation.Length;
-		animOut.Name = Helpers::string_cast<std::wstring>(tgaAnimation.Name);
-		for(int i = 0; i < static_cast<int>(tgaAnimation.Length); i++)
-		{
-			Animation::Frame frames; //{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
-			for (int y = 0; y < tgaAnimation.Frames[i].LocalTransforms.size(); y++)
-			{
-				frames.LocalTransforms.push_back(*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
-			}
-
-			animOut.Frames.push_back(frames);
-		}
-
-		model->GetSkeleton()->Animations.insert({ someFilePath, animOut });
+		return false;
 	}
 
+	Animation animOut;
+	animOut.Duration = static_cast<float>(tgaAnimation.Duration);
+	animOut.FramesPerSecond = tgaAnimation.FramesPerSecond;
+	animOut.Length = tgaAnimation.Length;
+	animOut.Name = Helpers::string_cast<std::wstring>(tgaAnimation.Name);
+	for (int i = 0; i < static_cast<int>(tgaAnimation.Length); i++)
+	{
+		Animation::Frame frames; //{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
+		for (int y = 0; y < tgaAnimation.Frames[i].LocalTransforms.size(); y++)
+		{
+			frames.LocalTransforms.push_back(*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
+		}
+
+		animOut.Frames.push_back(frames);
+	}
+
+	model->GetSkeleton()->Animations.insert({ someFilePath, animOut });
 
 	return true;
 }
@@ -1020,7 +1029,7 @@ std::shared_ptr<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath
 {
 	auto model = myModelRegistry.find(aFilePath);
 
-	if(model->second == nullptr)
+	if (model->second == nullptr)
 	{
 		LoadModelData(aFilePath);
 		model = myModelRegistry.find(aFilePath);
@@ -1037,34 +1046,28 @@ std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::ws
 		return nullptr;
 	}
 
-	std::shared_ptr<ModelInstance> modelInstance = nullptr;
+
 	{
 		std::scoped_lock<std::mutex> lock(myListMutex);
 
 		auto model = myModelRegistry.find(aFilePath);
-		if (model == myModelRegistry.end())
+		if (model != myModelRegistry.end())
 		{
-			if (LoadModelData(aFilePath))
-			{
-				auto endCheck = myModelRegistry.find(aFilePath);
-				if (endCheck == myModelRegistry.end())
-				{
-					return nullptr;
-				}
-				else
-				{
-					modelInstance = endCheck->second;
-				}
-			}
-			else
-			{
-				return nullptr;
-			}
-
-
+			return model->second;
 		}
 	}
-	
+
+	if (LoadModelData(aFilePath))
+	{
+		std::scoped_lock<std::mutex> lock(myListMutex);
+
+		auto model = myModelRegistry.find(aFilePath);
+		if (model != myModelRegistry.end())
+		{
+			return model->second;
+		}
+
+	}
 
 	if (myModelRegistry.empty())
 	{
@@ -1073,5 +1076,5 @@ std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::ws
 		return returnValue;
 	}
 
-	return modelInstance;
+	return nullptr;
 }

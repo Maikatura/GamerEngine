@@ -128,6 +128,9 @@
     <ClInclude Include="src\Layers\UI\MainMenuBar.h">
       <Filter>Layers\UI</Filter>
     </ClInclude>
+    <ClInclude Include="src\Layers\UI\ProfilerLayer.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
     <ClInclude Include="src\Project\ProjectConfig.h">
       <Filter>Project</Filter>
     </ClInclude>
@@ -196,6 +199,9 @@
       <Filter>Layers\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Layers\UI\MainMenuBar.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\ProfilerLayer.cpp">
       <Filter>Layers\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Project\ProjectConfig.cpp">

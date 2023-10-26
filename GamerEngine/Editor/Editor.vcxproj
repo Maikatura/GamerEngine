@@ -61,7 +61,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;2220;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\PyBullet\src;..\External\flecs\include;..\External\directxtk\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -72,7 +72,7 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\PyBullet\src;..\External\flecs\include;..\External\directxtk\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;2220;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\PyBullet\src;..\External\flecs\include;..\External\directxtk\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -103,7 +103,7 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\rapidjson;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\PyBullet\src;..\External\flecs\include;..\External\directxtk\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
@@ -149,6 +149,7 @@
     <ClInclude Include="src\Layers\UI\Hierarchy.h" />
     <ClInclude Include="src\Layers\UI\Inspector.h" />
     <ClInclude Include="src\Layers\UI\MainMenuBar.h" />
+    <ClInclude Include="src\Layers\UI\ProfilerLayer.h" />
     <ClInclude Include="src\Project\ProjectConfig.h" />
     <ClInclude Include="src\Project\ProjectSerializer.h" />
     <ClInclude Include="src\Resource.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\Layers\UI\Hierarchy.cpp" />
     <ClCompile Include="src\Layers\UI\Inspector.cpp" />
     <ClCompile Include="src\Layers\UI\MainMenuBar.cpp" />
+    <ClCompile Include="src\Layers\UI\ProfilerLayer.cpp" />
     <ClCompile Include="src\Project\ProjectConfig.cpp" />
     <ClCompile Include="src\Project\ProjectSerializer.cpp" />
     <ClCompile Include="src\Snapshots\SnapshotManager.cpp" />

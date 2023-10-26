@@ -5,13 +5,14 @@
 #define _WINSOCKAPI_ 
 #include "Windows.h"
 
+
+
 #include "Modelviewer.h"
 #include "GraphicsEngine.h"
 #include "Render/LineRenderer.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
 #include "Scene/SceneSerializer.h"
-
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -57,7 +58,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     );
 
     SceneManager::Get().Initialize();
-    SceneManager::Get().LoadScene("Assets\\Scenes\\ResourceLoading.csf");
+    SceneManager::Get().LoadScene("Assets\\Warcraft_Test\\Scene\\Skeleton.csf");
  
     while(bShouldRun)
     {
@@ -77,6 +78,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             break;
         }
 
+        
+
         graphicsEngine.BeginFrame();
         graphicsEngine.OnFrameUpdate(true);
         graphicsEngine.OnFrameRender();
@@ -85,7 +88,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 		#ifndef _Distribution
-        LineRenderer::Clear();
+        //LineRenderer::Get().Clear();
 		#endif
     }
 

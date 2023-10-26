@@ -80,13 +80,9 @@ void EditorView::RenderSceneView(Ref<Entity> aEntity)
 	{
 		ImGui::Image(DX11::myScreenView->GetShaderResourceView(), { windowSize.x, windowSize.y }); // Use this
 	}
-	else if (pass == 1)
-	{
-		ImGui::Image(GBuffer::GetRenderer().GetShaderResourceView(), { windowSize.x, windowSize.y });
-	}
 	else
 	{
-		ImGui::Image(GBuffer::GetPasses()[pass - 2].GetShaderResourceView(), {windowSize.x, windowSize.y});
+		ImGui::Image(GBuffer::GetPasses()[pass - 1].GetShaderResourceView(), {windowSize.x, windowSize.y});
 	}
 
 

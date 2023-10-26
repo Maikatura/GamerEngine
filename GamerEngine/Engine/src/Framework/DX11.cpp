@@ -437,11 +437,13 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	}
 
 	// Initialize the render to texture object.
+	m_RenderTextureLeft->SetName("VR Left Eye");
 	result = m_RenderTextureLeft->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
 	if (!result)
 	{
 		return false;
 	}
+
 
 	m_RenderTextureRight = std::make_shared<RenderTexture>();
 	if (!m_RenderTextureRight)
@@ -450,6 +452,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	}
 
 	// Initialize the render to texture object.
+	m_RenderTextureRight->SetName("VR Right Eye");
+
 	result = m_RenderTextureRight->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
 	if (!result)
 	{
@@ -467,6 +471,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	
 
 	// Initialize the render to texture object.
+	myScreenView->SetName("Window View");
 	result = myScreenView->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
 	if (!result)
 	{
@@ -558,7 +563,7 @@ void DX11::BeginFrame(std::array<float, 4> aClearColor)
 
 void DX11::EndFrame()
 {
-	TurnZBufferOn();
+	//TurnZBufferOn();
 
 	SwapChain->Present(0, 0);
 

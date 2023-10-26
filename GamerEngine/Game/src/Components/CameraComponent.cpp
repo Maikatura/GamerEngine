@@ -1,8 +1,8 @@
-#include "GraphicsEngine.pch.h"
 #include "Components/CameraComponent.h"
 #include "Components/TransfromComponent.h"
 #include "Components.hpp"
-#include "openvr_capi.h"
+#include "Math/MathTypes.hpp"
+#include "openvr.h"
 //#include <DirectXMath.h>
 
 CameraComponent::CameraComponent()
@@ -204,7 +204,7 @@ void CameraComponent::SetupCameras()
 	ViewPosRight = GetHMDMatrixPoseEye(VREye::Right);
 }
 
-Matrix4x4f CameraComponent::GetCurrentViewMatrix(vr::Hmd_Eye evr_eye)
+Matrix4x4f CameraComponent::GetCurrentViewMatrix(VREye evr_eye)
 {
 	return ViewProjection;
 }

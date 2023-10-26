@@ -11,6 +11,7 @@
 #include "Components/Components.hpp"
 #include "Components/NativeScriptComponent.h"
 #include "Components/Network/NetworkComponent.h"
+#include "Fonts/IconsForkAwesome.h"
 #include "ImGuiAdded/ImGuiExtra.h"
 #include "Model/ModelInstance.h"
 #include "Particles/ParticleEmitter.h"
@@ -367,7 +368,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 				{
 					ImGui::BeginGroup();
 
-					if(ImGui::ListBoxHeader("Animations"))
+					/*if(ImGui::ListBoxHeader("Animations"))
 					{
 						for(auto item : model.GetModel()->GetSkeleton()->Animations)
 						{
@@ -379,7 +380,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 						}
 						ImGui::ListBoxFooter();
 						DropHandler::DropFileEntity(aEntity);
-					}
+					}*/
 
 					ImGui::EndGroup();
 				}
@@ -761,7 +762,7 @@ void Inspector::DrawFileObject(Entity& aEntity)
 
 		case FileType::Texture:
 		{
-			float size = ImGui::GetWindowContentRegionWidth();
+			float size = ImGui::GetWindowWidth();
 			Texture* texture = ((Texture*)selectedObjectData->FileData);
 			ImGui::Image(texture->GetSRV().Get(), { size ,size });
 			ImGui::Text("Okay and why?");

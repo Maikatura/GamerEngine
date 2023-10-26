@@ -5,6 +5,7 @@
 #include "RendererBase.h"
 #include "RenderTexture.h"
 #include "Framework/DX11.h"
+#include "Math/Frustum.h"
 #include "Model/Texture.h"
 
 class PostProcessRenderer : public RendererBase
@@ -36,6 +37,8 @@ private:
 	std::shared_ptr<Texture> myNoiseTexture;
 	bool myHasInited = false;
 
+	CommonUtilities::Frustum myFrustum;
+	
 public:
 
 	bool Initialize();
@@ -46,7 +49,7 @@ public:
 	void Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection);
 
 
-	void RenderTextureOnSlot(int aSlot, int aResourceSlot, PostProcessPass aPass, std::shared_ptr<RenderTexture> aRenderTexture);
+	void RenderTextureOnSlot(int aSlot, int aResourceSlot, PostProcessPass aPass, std::shared_ptr<RenderTexture> aRenderTexture, ID3D11DepthStencilView* depthStencilView = nullptr);
 	void RenderPass(PostProcessPass aPass);
 
 	void Release();

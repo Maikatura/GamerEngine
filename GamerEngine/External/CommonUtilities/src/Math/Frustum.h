@@ -34,7 +34,7 @@ namespace CommonUtilities
 	using Frustum = TFrustum<float>;
 
 	template <typename T>
-	inline TFrustum<T> CreateFrustumFromCamera(Matrix4x4<T>& aCameraTransform, T aVFovDeg, T aHFovDeg, T aNearPlane, T aFarPlane)
+	inline TFrustum<T> CreateFrustumFromCamera(Matrix4x4<T> aCameraTransform, T aVFovDeg, T aHFovDeg, T aNearPlane, T aFarPlane)
 	{
 		TFrustum<T> frustum;
 

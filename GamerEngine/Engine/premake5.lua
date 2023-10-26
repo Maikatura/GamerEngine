@@ -53,8 +53,10 @@ includedirs{
 	"%{IncludeDirs.OpenVR}",
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.Game}",
+	"%{IncludeDirs.ImGui}",
 	"%{IncludeDirs.YamlCpp}",
 	"%{IncludeDirs.WICTextureLoader}",
+	"%{IncludeDirs.PyBullet}",
 	"%{IncludeDirs.DirectXTK}",
 	"%{IncludeDirs.Flecs}../include2"
 	
@@ -75,7 +77,8 @@ links
 	"Game",
 	"Shaders",
 	"Flecs",
-	"DirectXTK"
+	"DirectXTK",
+	"ImGui"
 }
 
 files 

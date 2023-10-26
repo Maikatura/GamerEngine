@@ -3,10 +3,6 @@
 #include <cassert>
 #include <cmath>
 #include <math.h>
-
-#include "MathTypes.hpp"
-#include "MathTypes.hpp"
-#include "MathTypes.hpp"
 #include "Quaternion.hpp"
 #include "Vector.h"
 
