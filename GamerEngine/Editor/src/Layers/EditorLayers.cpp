@@ -34,7 +34,7 @@ void EditorLayers::Init()
 	//ImGui::StyleColorsDark();
 
 	ImGui_ImplWin32_Init(GraphicsEngine::Get()->GetWindowHandle());
-	ImGui_ImplDX11_Init(DX11::GetDevice(), DX11::GetContext());
+	ImGui_ImplDX11_Init(DX11::Get().Get().GetDevice(), DX11::Get().GetContext());
 
 	ImGui::LoadIniSettingsFromDisk((myImGuiSettingsFile + "EditorLayout.data").c_str());
 
@@ -216,7 +216,8 @@ void EditorLayers::OnAttach()
 
 void EditorLayers::OnImGuiRender()
 {
-	DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, NULL);
+	auto renderView = DX11::Get().GetRenderTargetView();
+	DX11::Get().GetContext()->OMSetRenderTargets(1, &renderView, NULL);
 
 	for(int i = 0; i < myLayers.size(); i++)
 	{

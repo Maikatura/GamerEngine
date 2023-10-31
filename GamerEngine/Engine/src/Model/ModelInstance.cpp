@@ -26,7 +26,7 @@ bool ModelInstance::UpdateInstanceBuffer()
 	D3D11_SUBRESOURCE_DATA vertexSubResourceData{};
 	vertexSubResourceData.pSysMem = myRenderedInstances.data();
 
-	result = DX11::Device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, myInstanceBuffer.GetAddressOf());
+	result = DX11::Get().Get().GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, myInstanceBuffer.GetAddressOf());
 	if (FAILED(result))
 	{
 		return false;

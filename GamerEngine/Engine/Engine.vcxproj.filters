@@ -46,6 +46,9 @@
     <Filter Include="src\Types">
       <UniqueIdentifier>{915CF0B3-FDC6-A42A-4605-56D0B2AE827F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\VR">
+      <UniqueIdentifier>{12df5d5c-48de-4154-a422-23412f8db73c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MetaAssetHandler.h" />
@@ -232,6 +235,10 @@
     <ClInclude Include="src\Types\FileExtensions.h">
       <Filter>src\Types</Filter>
     </ClInclude>
+    <ClInclude Include="src\VR\VRSystem.h">
+      <Filter>src\VR</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VR\VRMath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MetaAssetHandler.cpp" />
@@ -354,6 +361,9 @@
     </ClCompile>
     <ClCompile Include="src\Scene\UUID.cpp">
       <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VR\VRSystem.cpp">
+      <Filter>src\VR</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

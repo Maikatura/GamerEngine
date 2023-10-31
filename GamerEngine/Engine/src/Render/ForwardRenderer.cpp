@@ -21,28 +21,28 @@ bool ForwardRenderer::Initialize()
 	bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	bufferDescription.ByteWidth = sizeof(FrameBufferData);
-	result = DX11::Device->CreateBuffer(&bufferDescription, nullptr, myFrameBuffer.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myFrameBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
 	}
 
 	bufferDescription.ByteWidth = sizeof(ObjectBufferData);
-	result = DX11::Device->CreateBuffer(&bufferDescription, nullptr, myObjectBuffer.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myObjectBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
 	}
 
 	/*bufferDescription.ByteWidth = sizeof(Vector4f);
-	result = DX11::Device->CreateBuffer(&bufferDescription, nullptr, myMaterialBuffer.GetAddressOf());
+	result = DX11::Get().Device->CreateBuffer(&bufferDescription, nullptr, myMaterialBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
 	}*/
 
 	bufferDescription.ByteWidth = sizeof(SceneLightBuffer);
-	result = DX11::Device->CreateBuffer(&bufferDescription, nullptr, myLightBuffer.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myLightBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -83,9 +83,9 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 	myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
 
 
-	RECT clientRect = DX11::GetClientSize();
-	uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::m_nRenderWidth;
-	uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::m_nRenderHeight;
+	RECT clientRect = DX11::Get().GetClientSize();
+	uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
+	uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
 
 	const Vector2ui Resolution = {
 		width,
@@ -94,7 +94,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 	myFrameBufferData.Resolution = Resolution;
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if (FAILED(result))
 	{
 		// BOOM?
@@ -102,10 +102,10 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 	}
 
 	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-	DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
+	DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
 
-	DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
 	for(const RenderBuffer& modelBuffer : aModelList)
 	{
@@ -157,7 +157,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 		}
 
 
-		result = DX11::GetContext()->Map(
+		result = DX11::Get().GetContext()->Map(
 			myLightBuffer.Get(),
 			0,
 			D3D11_MAP_WRITE_DISCARD,
@@ -171,8 +171,8 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 		memcpy(bufferData.pData, &mySceneLightBufferData, sizeof(SceneLightBuffer));
 
-		DX11::GetContext()->Unmap(myLightBuffer.Get(), 0);
-		DX11::GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
+		DX11::Get().GetContext()->Unmap(myLightBuffer.Get(), 0);
+		DX11::Get().GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
 
 		ModelAssetHandler::Get().ResetRenderedModels();
 
@@ -199,27 +199,27 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			);
 		}
 
-		result = DX11::GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		result = DX11::Get().GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		if(FAILED(result))
 		{
 			// WTF
 		}
 
 		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-		DX11::GetContext()->Unmap(myObjectBuffer.Get(), 0);
+		DX11::Get().GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
-		DX11::GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-		DX11::GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
 		for(int index = 0; index < modelInstance->GetNumMeshes(); index++)
 		{
 			const Model::MeshData& meshData = modelInstance->GetMeshData(index);
 
-			DX11::GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
-			DX11::GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
-			DX11::GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
-			DX11::GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-			DX11::GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology)); // Use D3D11_PRIMITIVE_TOPOLOGY_... for your specific primitive type
+			DX11::Get().GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
+			DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
+			DX11::Get().GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
+			DX11::Get().GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+			DX11::Get().GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology)); // Use D3D11_PRIMITIVE_TOPOLOGY_... for your specific primitive type
 
 			if(!model->GetMaterial().empty() && static_cast<int>(meshData.myMaterialIndex) < model->GetMaterialSize())
 			{
@@ -230,8 +230,8 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 				model->GetMaterial()[0]->SetAsResource(nullptr);
 			}
 
-			/*DX11::GetContext()->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
-			DX11::GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+			/*DX11::Get().GetContext()->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 */
 
 //SetSamplerState(SamplerState::SS_Wrap);
@@ -247,9 +247,9 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 				}
 
 				ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-				result = DX11::GetContext()->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+				result = DX11::Get().GetContext()->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 				memcpy(bufferData.pData, &myInstancedTransformBufferData[0], sizeof(Matrix4x4f) * model->GetNumberOfInstances());
-				DX11::GetContext()->Unmap(myInstanceBuffer.Get(), 0);
+				DX11::Get().GetContext()->Unmap(myInstanceBuffer.Get(), 0);
 
 				ID3D11Buffer* buffers[2] = { meshData.myVertexBuffer.Get(), myInstanceBuffer.Get() };
 
@@ -257,8 +257,8 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 				UINT offset[2] = { meshData.myOffset, 0 };
 
-				DX11::GetContext()->IASetVertexBuffers(0, 2, buffers, stride, offset);
-				DX11::GetContext()->DrawIndexedInstanced(
+				DX11::Get().GetContext()->IASetVertexBuffers(0, 2, buffers, stride, offset);
+				DX11::Get().GetContext()->DrawIndexedInstanced(
 					meshData.myNumberOfIndices,
 					model->GetNumberOfInstances(),
 					0, 0, 0
@@ -266,8 +266,8 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			}
 			else
 			{*/
-				DX11::GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
-				DX11::GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
+				DX11::Get().GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
+				DX11::Get().GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
 			//}
 		}
 
@@ -291,35 +291,35 @@ void ForwardRenderer::RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, st
 	myFrameBufferData.Projection = aProjection;
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if(FAILED(result))
 	{
 		// it ded
 	}
 	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
 
-	DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
+	DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
 	//SetDepthStencilState(DepthStencilState::DSS_ReadOnly);
 
 
-	DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-	DX11::GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+	DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 	CommonUtilities::MergeSort(aSpriteList);
 
 
 	for(RenderBuffer2D rc : aSpriteList)
 	{
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		result = DX11::GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		result = DX11::Get().GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		if(FAILED(result))
 		{
 			// it ded
 		}
 		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-		DX11::GetContext()->Unmap(myObjectBuffer.Get(), 0);
+		DX11::Get().GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
 		//SetDepthStencilState(DepthStencilState::DSS_ReadOnly);
 

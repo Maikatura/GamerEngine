@@ -59,7 +59,7 @@ void Model::Update()
 			//if(blendShape.WeightPercentOld != blendShape.WeightPercent)
 			//{
 			//	D3D11_MAPPED_SUBRESOURCE mappedResource;
-			//	HRESULT hr = DX11::GetContext()->Map(meshData.myVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			//	HRESULT hr = DX11::Get().GetContext()->Map(meshData.myVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 			//	if(SUCCEEDED(hr))
 			//	{
 			//		// Get a pointer to the data
@@ -85,7 +85,7 @@ void Model::Update()
 
 			//		memcpy(pData, &Copy[0], sizeof(Vertex) * Copy.size());
 
-			//		DX11::GetContext()->Unmap(meshData.myVertexBuffer.Get(), 0);
+			//		DX11::Get().GetContext()->Unmap(meshData.myVertexBuffer.Get(), 0);
 			//	}
 			//}
 			//blendShape.WeightPercentOld = blendShape.WeightPercent;

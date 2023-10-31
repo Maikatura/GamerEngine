@@ -69,22 +69,22 @@ bool ParticleEmitter::Init()
 	std::ifstream vsFile;
 	vsFile.open("Shaders\\Sprite_VS.cso", std::ios::binary);
 	std::string vsData = { std::istreambuf_iterator(vsFile), std::istreambuf_iterator<char>() };
-	DX11::Device->CreateVertexShader(vsData.data(), vsData.size(), nullptr, myVertexShader.GetAddressOf());
+	DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, myVertexShader.GetAddressOf());
 	vsFile.close();
 
 	std::ifstream gsFile;
 	gsFile.open("Shaders\\Sprite_GS.cso", std::ios::binary);
 	std::string gsData = { std::istreambuf_iterator(gsFile), std::istreambuf_iterator<char>() };
-	DX11::Device->CreateGeometryShader(gsData.data(), gsData.size(), nullptr, myGeometryShader.GetAddressOf());
+	DX11::Get().GetDevice()->CreateGeometryShader(gsData.data(), gsData.size(), nullptr, myGeometryShader.GetAddressOf());
 	gsFile.close();
 
 	std::ifstream psFile;
 	psFile.open("Shaders\\Sprite_PS.cso", std::ios::binary);
 	std::string psData = { std::istreambuf_iterator(psFile), std::istreambuf_iterator<char>() };
-	DX11::Device->CreatePixelShader(psData.data(), psData.size(), nullptr, myPixelShader.GetAddressOf());
+	DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, myPixelShader.GetAddressOf());
 	psFile.close();
 
-	HRESULT res = DX11::Device->CreateInputLayout(layout, sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), myInputLayout.GetAddressOf());
+	HRESULT res = DX11::Get().GetDevice()->CreateInputLayout(layout, sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), myInputLayout.GetAddressOf());
 	if (FAILED(res))
 	{
 		return false;
@@ -105,7 +105,7 @@ bool ParticleEmitter::Init()
 	D3D11_SUBRESOURCE_DATA vertSubData{};
 	vertSubData.pSysMem = &particleVertexData[0];
 
-	DX11::Device->CreateBuffer(&vertBufferDesc, &vertSubData, myVertexBuffer.GetAddressOf());
+	DX11::Get().GetDevice()->CreateBuffer(&vertBufferDesc, &vertSubData, myVertexBuffer.GetAddressOf());
 
 	if(!TextureAssetHandler::LoadTexture(L"resources\\textures\\ParticleStar.dds"))
 		myTexture = TextureAssetHandler::GetTexture(L"resources\\textures\\ParticleStar.dds");
@@ -242,21 +242,21 @@ void ParticleEmitter::SetAsResource()
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-	const HRESULT result = DX11::GetContext()->Map(myVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	const HRESULT result = DX11::Get().GetContext()->Map(myVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if (FAILED(result))
 	{
 		// BOOM KABOOM THIS IS BAD
 		return;
 	}
 	memcpy(bufferData.pData, &particleVertexData[0], sizeof(SpriteVertex) * myAbsoluteMaxSimultaniousParticles);
-	DX11::GetContext()->Unmap(myVertexBuffer.Get(), 0);
+	DX11::Get().GetContext()->Unmap(myVertexBuffer.Get(), 0);
 
-	DX11::GetContext()->IASetVertexBuffers(0, 1, myVertexBuffer.GetAddressOf(), &myVertexStride, &myVertexOffset);
-	DX11::GetContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)myPrimitiveTopology);
-	DX11::GetContext()->IASetInputLayout(myInputLayout.Get());
-	DX11::GetContext()->VSSetShader(myVertexShader.Get(), nullptr, 0);
-	DX11::GetContext()->GSSetShader(myGeometryShader.Get(), nullptr, 0);
-	DX11::GetContext()->PSSetShader(myPixelShader.Get(), nullptr, 0);
+	DX11::Get().GetContext()->IASetVertexBuffers(0, 1, myVertexBuffer.GetAddressOf(), &myVertexStride, &myVertexOffset);
+	DX11::Get().GetContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)myPrimitiveTopology);
+	DX11::Get().GetContext()->IASetInputLayout(myInputLayout.Get());
+	DX11::Get().GetContext()->VSSetShader(myVertexShader.Get(), nullptr, 0);
+	DX11::Get().GetContext()->GSSetShader(myGeometryShader.Get(), nullptr, 0);
+	DX11::Get().GetContext()->PSSetShader(myPixelShader.Get(), nullptr, 0);
 
 	if(myTexture)
 	{
@@ -268,5 +268,5 @@ void ParticleEmitter::Draw() const
 {
 	if(myParticles.empty()) return;
 
-	DX11::GetContext()->Draw((UINT)particleVertexData.size(), 0);
+	DX11::Get().GetContext()->Draw((UINT)particleVertexData.size(), 0);
 }

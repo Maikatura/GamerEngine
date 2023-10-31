@@ -28,22 +28,22 @@ void Render2D::InitializeShaders(int someSpriteAmmount)
 	std::ifstream vsFile;
 	vsFile.open("Shaders\\Sprite_VS.cso", std::ios::binary);
 	std::string vsData = { std::istreambuf_iterator(vsFile), std::istreambuf_iterator<char>() };
-	DX11::Device->CreateVertexShader(vsData.data(), vsData.size(), nullptr, myVertexShader.GetAddressOf());
+	DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, myVertexShader.GetAddressOf());
 	vsFile.close();
 
 	std::ifstream gsFile;
 	gsFile.open("Shaders\\Sprite_GS.cso", std::ios::binary);
 	std::string gsData = { std::istreambuf_iterator(gsFile), std::istreambuf_iterator<char>() };
-	DX11::Device->CreateGeometryShader(gsData.data(), gsData.size(), nullptr, myGeometryShader.GetAddressOf());
+	DX11::Get().GetDevice()->CreateGeometryShader(gsData.data(), gsData.size(), nullptr, myGeometryShader.GetAddressOf());
 	gsFile.close();
 
 	std::ifstream psFile;
 	psFile.open("Shaders\\Sprite_PS.cso", std::ios::binary);
 	std::string psData = { std::istreambuf_iterator(psFile), std::istreambuf_iterator<char>() };
-	DX11::Device->CreatePixelShader(psData.data(), psData.size(), nullptr, myPixelShader.GetAddressOf());
+	DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, myPixelShader.GetAddressOf());
 	psFile.close();
 
-	HRESULT res = DX11::Device->CreateInputLayout(layout, sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), myInputLayout.GetAddressOf());
+	HRESULT res = DX11::Get().GetDevice()->CreateInputLayout(layout, sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), myInputLayout.GetAddressOf());
 
 	myVertexStride = sizeof(SpriteVertex);
 	myVertexOffset = 0;
@@ -60,5 +60,5 @@ void Render2D::InitializeShaders(int someSpriteAmmount)
 	D3D11_SUBRESOURCE_DATA vertSubData{};
 	vertSubData.pSysMem = &myVertices[0];
 
-	DX11::Device->CreateBuffer(&vertBufferDesc, &vertSubData, myVertexBuffer.GetAddressOf());
+	DX11::Get().GetDevice()->CreateBuffer(&vertBufferDesc, &vertSubData, myVertexBuffer.GetAddressOf());
 }

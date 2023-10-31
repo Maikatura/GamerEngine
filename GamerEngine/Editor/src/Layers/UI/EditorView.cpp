@@ -78,7 +78,7 @@ void EditorView::RenderSceneView(Ref<Entity> aEntity)
 
 	if (pass == 0)
 	{
-		ImGui::Image(DX11::myScreenView->GetShaderResourceView(), { windowSize.x, windowSize.y }); // Use this
+		ImGui::Image(DX11::Get().Get().GetScreenView()->GetShaderResourceView(), {windowSize.x, windowSize.y}); // Use this
 	}
 	else
 	{

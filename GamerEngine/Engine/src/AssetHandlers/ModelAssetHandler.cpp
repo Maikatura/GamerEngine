@@ -262,7 +262,7 @@ bool ModelAssetHandler::InitUnitCube()
 	//vertexSubResourceData.pSysMem = &mdlVertices[0];
 
 	//ID3D11Buffer* vertexBuffer;
-	//result = DX11::Device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
+	//result = DX11::Get().Device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
 	//if(FAILED(result))
 	//{
 	//	return false;
@@ -303,7 +303,7 @@ bool ModelAssetHandler::InitUnitCube()
 	//indexSubresourceData.pSysMem = &mdlIndices[0];
 
 	//ID3D11Buffer* indexBuffer;
-	//result = DX11::GetDevice()->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
+	//result = DX11::Get().GetDevice()->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
 	//if(FAILED(result))
 	//{
 	//	return false;
@@ -315,7 +315,7 @@ bool ModelAssetHandler::InitUnitCube()
 	//vsFile.open("Shaders\\Default_VS.cso", std::ios::binary);
 	//std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 	//ID3D11VertexShader* vertexShader;
-	//result = DX11::GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
+	//result = DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
 	//if(FAILED(result))
 	//{
 	//	return false;
@@ -325,7 +325,7 @@ bool ModelAssetHandler::InitUnitCube()
 	//ComPtr<ID3D11PixelShader> pixelShader = TextureAssetHandler::GetPixelShader("Shaders\\Default_PS.cso");
 
 	//ID3D11InputLayout* inputLayout;
-	//result = DX11::GetDevice()->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
+	//result = DX11::Get().GetDevice()->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
 	//if(FAILED(result))
 	//{
 	//	return false;
@@ -589,7 +589,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			vertexSubResourceData.SysMemSlicePitch = 0;
 
 			ID3D11Buffer* vertexBuffer;
-			result = DX11::Device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
+			result = DX11::Get().GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
 			if (FAILED(result))
 			{
 				return false;
@@ -606,7 +606,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			indexSubresourceData.SysMemSlicePitch = 0;
 
 			ID3D11Buffer* indexBuffer;
-			result = DX11::Device->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
+			result = DX11::Get().GetDevice()->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
 			if (FAILED(result))
 			{
 				return false;
@@ -619,7 +619,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			vsFile.open("Shaders/Default_VS.cso", std::ios::binary);
 			std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 			ID3D11VertexShader* vertexShader;
-			result = DX11::Device->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
+			result = DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
 			if (FAILED(result))
 			{
 				return false;
@@ -630,7 +630,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			psFile.open("Shaders/Default_PS.cso", std::ios::binary);
 			std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
 			ID3D11PixelShader* pixelShader;
-			result = DX11::Device->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
+			result = DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
 			if (FAILED(result))
 			{
 				return false;
@@ -638,7 +638,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			psFile.close();
 
 			ID3D11InputLayout* inputLayout;
-			result = DX11::Device->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
+			result = DX11::Get().GetDevice()->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
 			if (FAILED(result))
 			{
 				return false;
@@ -832,7 +832,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			vertexSubResourceData.SysMemSlicePitch = 0;
 
 			ID3D11Buffer* vertexBuffer;
-			result = DX11::Device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
+			result = DX11::Get().GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
 			if (FAILED(result))
 			{
 				return false;
@@ -849,7 +849,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			indexSubresourceData.SysMemSlicePitch = 0;
 
 			ID3D11Buffer* indexBuffer;
-			result = DX11::Device->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
+			result = DX11::Get().GetDevice()->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
 			if (FAILED(result))
 			{
 				return false;
@@ -862,7 +862,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			vsFile.open("Shaders/Default_VS.cso", std::ios::binary);
 			std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 			ID3D11VertexShader* vertexShader;
-			result = DX11::Device->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
+			result = DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
 			if (FAILED(result))
 			{
 				return false;
@@ -873,7 +873,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			psFile.open("Shaders/Default_PS.cso", std::ios::binary);
 			std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
 			ID3D11PixelShader* pixelShader;
-			result = DX11::Device->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
+			result = DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
 			if (FAILED(result))
 			{
 				return false;
@@ -881,7 +881,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			psFile.close();
 
 			ID3D11InputLayout* inputLayout;
-			result = DX11::Device->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
+			result = DX11::Get().GetDevice()->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
 			if (FAILED(result))
 			{
 				return false;
@@ -958,7 +958,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			//blendShapeSubResourceData.SysMemSlicePitch = 0;
 
 			//ID3D11Buffer* blendBuffer;
-			//result = DX11::Device->CreateBuffer(&blendShapeBufferDesc, &blendShapeSubResourceData, &blendBuffer);
+			//result = DX11::Get().Device->CreateBuffer(&blendShapeBufferDesc, &blendShapeSubResourceData, &blendBuffer);
 			//if(FAILED(result))
 			//{
 			//	return false;

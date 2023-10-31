@@ -170,6 +170,8 @@
     <ClInclude Include="src\Time.hpp" />
     <ClInclude Include="src\Types\EnumTypes.h" />
     <ClInclude Include="src\Types\FileExtensions.h" />
+    <ClInclude Include="src\VR\VRMath.h" />
+    <ClInclude Include="src\VR\VRSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MetaAssetHandler.cpp" />
@@ -215,6 +217,7 @@
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\Scene\UUID.cpp" />
+    <ClCompile Include="src\VR\VRSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\External\CommonUtilities\CommonUtilities.vcxproj">

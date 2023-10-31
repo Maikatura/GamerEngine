@@ -30,7 +30,7 @@ void KeybindShortcutsLayer::OnImGuiRender()
 void KeybindShortcutsLayer::OnUpdate()
 {
 	{
-		if(Input::IsKeyPressed(VK_F6))
+		/*if(Input::IsKeyPressed(VK_F6))
 		{
 			unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
 			currentRenderMode++;
@@ -42,6 +42,6 @@ void KeybindShortcutsLayer::OnUpdate()
 			std::cout<< "Render Mode: " << currentRenderMode << "\n";
 
 			GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
-		}
+		}*/
 	}
 }

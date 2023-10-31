@@ -17,7 +17,7 @@ bool RendererBase::Init()
 	vxSubresource.pSysMem = &myInstancedTransformBufferData[0];
 	bufferDescription.ByteWidth = sizeof(Matrix4x4f) * 2000;
 	bufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	result = DX11::Device->CreateBuffer(&bufferDescription, &vxSubresource, myInstanceBuffer.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, &vxSubresource, myInstanceBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -40,7 +40,7 @@ bool RendererBase::Init()
 		samplerStateDesc.MinLOD = -D3D11_FLOAT32_MAX;
 		samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-		HRESULT result = DX11::Device->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::Default].GetAddressOf());
+		HRESULT result = DX11::Get().GetDevice()->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::Default].GetAddressOf());
 
 		if(FAILED(result))
 		{
@@ -64,7 +64,7 @@ bool RendererBase::Init()
 		samplerStateDesc.MinLOD = -D3D11_FLOAT32_MAX;
 		samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-		HRESULT result = DX11::Device->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::Wrap].GetAddressOf());
+		HRESULT result = DX11::Get().GetDevice()->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::Wrap].GetAddressOf());
 
 		if(FAILED(result))
 		{
@@ -84,7 +84,7 @@ bool RendererBase::Init()
 		samplerStateDesc.MinLOD = -D3D11_FLOAT32_MAX;
 		samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-		HRESULT result = DX11::Device->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::PointClamp].GetAddressOf());
+		HRESULT result = DX11::Get().GetDevice()->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::PointClamp].GetAddressOf());
 		if(FAILED(result))
 		{
 			return false;
@@ -103,7 +103,7 @@ bool RendererBase::Init()
 		samplerStateDesc.MinLOD = -D3D11_FLOAT32_MAX;
 		samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-		HRESULT result = DX11::Device->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::PointWrap].GetAddressOf());
+		HRESULT result = DX11::Get().GetDevice()->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::PointWrap].GetAddressOf());
 		if(FAILED(result))
 		{
 			return false;
@@ -126,7 +126,7 @@ bool RendererBase::Init()
 		samplerStateDesc.MinLOD = -D3D11_FLOAT32_MAX;
 		samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-		HRESULT result = DX11::Device->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::LinearClamp].GetAddressOf());
+		HRESULT result = DX11::Get().GetDevice()->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::LinearClamp].GetAddressOf());
 
 		if(FAILED(result))
 		{
@@ -150,7 +150,7 @@ bool RendererBase::Init()
 		samplerStateDesc.MinLOD = -D3D11_FLOAT32_MAX;
 		samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-		HRESULT result = DX11::Device->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::LinearWrap].GetAddressOf());
+		HRESULT result = DX11::Get().GetDevice()->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::LinearWrap].GetAddressOf());
 
 		if(FAILED(result))
 		{
@@ -175,7 +175,7 @@ bool RendererBase::Init()
 		samplerStateDesc.MinLOD = -D3D11_FLOAT32_MAX;
 		samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-		HRESULT result = DX11::Device->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::ComparisonLinearClamp].GetAddressOf());
+		HRESULT result = DX11::Get().GetDevice()->CreateSamplerState(&samplerStateDesc, mySamplerStates[(int)SamplerState::ComparisonLinearClamp].GetAddressOf());
 
 		if(FAILED(result))
 		{
@@ -197,7 +197,7 @@ bool RendererBase::Init()
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MAX;
 		blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-		result = DX11::Device->CreateBlendState(&blendDesc, &myBlendStates[(int)BlendState::Alpha]);
+		result = DX11::Get().GetDevice()->CreateBlendState(&blendDesc, &myBlendStates[(int)BlendState::Alpha]);
 		if(FAILED(result))
 		{
 			return false;
@@ -215,7 +215,7 @@ bool RendererBase::Init()
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MAX;
 		blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-		result = DX11::Device->CreateBlendState(&blendDesc, &myBlendStates[(int)BlendState::Additive]);
+		result = DX11::Get().GetDevice()->CreateBlendState(&blendDesc, &myBlendStates[(int)BlendState::Additive]);
 		if(FAILED(result))
 		{
 			return false;
@@ -229,7 +229,7 @@ bool RendererBase::Init()
 		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-		HRESULT result = DX11::Device->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadWrite]);;
+		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadWrite]);;
 
 		if(FAILED(result))
 		{
@@ -244,7 +244,7 @@ bool RendererBase::Init()
 		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 		depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-		HRESULT result = DX11::Device->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadOnly]);;
+		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadOnly]);;
 
 		if(FAILED(result))
 		{
@@ -259,7 +259,7 @@ bool RendererBase::Init()
 		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 		depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
-		HRESULT result = DX11::Device->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadOnlyLEqual]);;
+		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadOnlyLEqual]);;
 
 		if(FAILED(result))
 		{
@@ -288,7 +288,7 @@ bool RendererBase::Init()
 		depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 		depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-		HRESULT result = DX11::Device->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::StencilKeep]);;
+		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::StencilKeep]);;
 
 		if(FAILED(result))
 		{
@@ -317,7 +317,7 @@ bool RendererBase::Init()
 		depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_ZERO;
 		depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-		HRESULT result = DX11::Device->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::StencilZero]);;
+		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::StencilZero]);;
 
 		if(FAILED(result))
 		{
@@ -329,7 +329,7 @@ bool RendererBase::Init()
 		D3D11_DEPTH_STENCIL_DESC depthStencilDesc{};
 		depthStencilDesc.DepthEnable = FALSE;
 
-		HRESULT result = DX11::Device->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::Disabled]);;
+		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::Disabled]);;
 
 		if(FAILED(result))
 		{
@@ -342,22 +342,22 @@ bool RendererBase::Init()
 
 void RendererBase::SetDepthStencilState(DepthStencilState aDepthStencilState)
 {
-	//DX11::GetContext()->OMSetDepthStencilState(DX11::pDSState, 1);
-	//DX11::GetContext()->OMSetDepthStencilState(myDepthStencilStates[(int)aDepthStencilState].Get(), 0xffffffff);
+	//DX11::Get().GetContext()->OMSetDepthStencilState(DX11::Get().pDSState, 1);
+	//DX11::Get().GetContext()->OMSetDepthStencilState(myDepthStencilStates[(int)aDepthStencilState].Get(), 0xffffffff);
 }
 
 void RendererBase::SetBlendState(BlendState aBlendState)
 {
-	//DX11::GetContext()->OMSetBlendState(myBlendStates[(int)aBlendState].Get(), nullptr, 0xffffffff);
+	//DX11::Get().GetContext()->OMSetBlendState(myBlendStates[(int)aBlendState].Get(), nullptr, 0xffffffff);
 }
 
 void RendererBase::SetSamplerState(int aSlot, SamplerState aSamplerState) 
 {
-	DX11::GetContext()->PSSetSamplers(aSlot, 1, mySamplerStates[(int)aSamplerState].GetAddressOf());
+	DX11::Get().GetContext()->PSSetSamplers(aSlot, 1, mySamplerStates[(int)aSamplerState].GetAddressOf());
 }
 
 void RendererBase::RemoveResource(int aSlot)
 {
 	//ID3D11ShaderResourceView* nullsrv = nullptr;
-	//DX11::GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
+	//DX11::Get().GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
 }

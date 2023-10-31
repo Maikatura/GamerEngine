@@ -7,74 +7,38 @@
 
 #include "openvr.h"
 
-ComPtr<ID3D11Device> DX11::Device;
-ComPtr<ID3D11DeviceContext> DX11::Context;
-ComPtr<IDXGISwapChain> DX11::SwapChain;
-
-ComPtr<ID3D11SamplerState> DX11::SampleStateDefault;
-ComPtr<ID3D11SamplerState> DX11::SamplerStateWrap;
-
-ComPtr<ID3D11RenderTargetView> DX11::BackBuffer;
-ComPtr<ID3D11ShaderResourceView> DX11::BackBufferSRV;
-ID3D11Texture2D* DX11::BackBufferTex;
-ComPtr<ID3D11DepthStencilView> DX11::DepthBuffer;
-
-ComPtr<ID3D11RenderTargetView> DX11::RenderRTV;
-ComPtr<ID3D11ShaderResourceView> DX11::RenderSRV;
-
-ComPtr<ID3D11RenderTargetView> DX11::IDBuffer;
-ComPtr<ID3D11Texture2D> DX11::IDBufferTex;
-ComPtr<ID3D11Texture2D> DX11::StagingTex;
-D3D11_TEXTURE2D_DESC DX11::IDBufferDesc;
-D3D11_TEXTURE2D_DESC DX11::StagingTexDesc;
-
-
-vr::IVRSystem* DX11::m_pHMD;
-vr::IVRRenderModels* DX11::m_pRenderModels;
-vr::TrackedDevicePose_t DX11::m_rTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
-Matrix4x4f DX11::m_rmat4DevicePose[vr::k_unMaxTrackedDeviceCount];
-Matrix4x4f DX11::m_mat4HMDPose;
-
-D3D_FEATURE_LEVEL		DX11::featureLevel;
-D3D_DRIVER_TYPE			DX11::driverType;
-
-ID3D11Texture2D* DX11::myBackBufferTex;
-
-uint32_t DX11::m_nRenderWidth;
-uint32_t DX11::m_nRenderHeight;
-
-ID3D11RenderTargetView* DX11::myRenderTargetView = nullptr;
-ID3D11DepthStencilView* DX11::myDepthStencilView = nullptr;
-
-D3D11_VIEWPORT DX11::myViewport;
-ID3D11DepthStencilState* DX11::pDSState;
-ID3D11DepthStencilState* DX11::myDepthDisabledStencilState;
-ID3D11DeviceContext* DX11::myImmediateContext = nullptr;
-
-std::shared_ptr<RenderTexture> DX11::m_RenderTextureLeft;
-std::shared_ptr<RenderTexture> DX11::m_RenderTextureRight;
-std::shared_ptr<RenderTexture> DX11::myScreenView;
-
-ID3D11RasterizerState* DX11::myFrontCulling;
-ID3D11RasterizerState* DX11::myBackCulling;
-
-
 DX11::DX11()
 {}
 
 DX11::~DX11()
 {}
 
+ComPtr<IDXGISwapChain> DX11::GetSwapChain()
+{
+	return SwapChain;
+}
+
+DX11& DX11::Get()
+{
+	static DX11 instance;
+	return instance;
+}
+
 void DX11::ResetRenderTarget(bool isUsingEditor, bool useDepth)
 {
 	if (isUsingEditor)
 	{
-		myScreenView->SetRenderTarget(DX11::GetContext(), (useDepth == true) ? DX11::GetDepthStencilView() : nullptr);
+		myScreenView->SetRenderTarget(GetContext(), (useDepth == true) ? GetDepthStencilView() : nullptr);
 	}
 	else
 	{
-		DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, (useDepth == true) ? DX11::GetDepthStencilView() : nullptr);
+		GetContext()->OMSetRenderTargets(1, &myRenderTargetView, (useDepth == true) ? GetDepthStencilView() : nullptr);
 	}
+}
+
+Vector2ui DX11::GetScreenSize()
+{
+	return Vector2ui{ myRenderWidth,myRenderHeight };
 }
 
 ID3D11Device* DX11::GetDevice()
@@ -92,6 +56,11 @@ ID3D11DepthStencilView* DX11::GetDepthStencilView()
 	return myDepthStencilView;
 }
 
+VRSystem& DX11::GetVRSystem()
+{
+	return myVRSystem;
+}
+
 void DX11::TurnZBufferOn()
 {
 	myImmediateContext->OMSetDepthStencilState(pDSState, 1);
@@ -103,6 +72,31 @@ void DX11::TurnZBufferOff()
 
 	myImmediateContext->OMSetDepthStencilState(myDepthDisabledStencilState, 1);
 	return;
+}
+
+std::shared_ptr<RenderTexture>& DX11::GetLeftEyeView()
+{
+	return m_RenderTextureLeft;
+}
+
+std::shared_ptr<RenderTexture>& DX11::GetRightEyeView()
+{
+	return m_RenderTextureRight;
+}
+
+std::shared_ptr<RenderTexture>& DX11::GetScreenView()
+{
+	return myScreenView;
+}
+
+ID3D11RenderTargetView* DX11::GetRenderTargetView()
+{
+	return myRenderTargetView;
+}
+
+bool DX11::IsVrNull()
+{
+	return myVRSystem.IsVrNull();
 }
 
 
@@ -119,65 +113,23 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 #ifndef VR_DISABLED
 
-	// Loading the SteamVR Runtime
-	vr::EVRInitError eError = vr::VRInitError_None;
-
-	m_pHMD = vr::VR_Init(&eError, vr::VRApplication_Scene);
-
-	if (eError != vr::VRInitError_None)
-	{
-		m_pHMD = NULL;
-		char buf[1024];
-		sprintf_s(buf, ARRAYSIZE(buf), "Unable to init VR runtime: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
-		std::string temp(buf);
-		std::wstring wtemp(temp.begin(), temp.end());
-		MessageBox(WindowHandle, wtemp.c_str(), L"VR_Init Failed", 0);
-		return false;
-	}
-
-	m_pHMD->GetRecommendedRenderTargetSize(&m_nRenderWidth, &m_nRenderHeight);
-
-	printf("width = %d, height = %d", m_nRenderWidth, m_nRenderHeight);
-
-	//m_nRenderWidth /= 2;
-	//m_nRenderHeight /= 4;
-
-	//clientWidth = m_nRenderWidth;
-	//clientHeight = m_nRenderHeight;
-
-	m_pRenderModels = (vr::IVRRenderModels*)vr::VR_GetGenericInterface(vr::IVRRenderModels_Version, &eError);
-	if (!m_pRenderModels)
-	{
-		m_pHMD = NULL;
-		vr::VR_Shutdown();
-
-		char buf[1024];
-		sprintf_s(buf, ARRAYSIZE(buf), "Unable to get render model interface: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
-		std::string temp(buf);
-		std::wstring wtemp(temp.begin(), temp.end());
-		MessageBox(WindowHandle, wtemp.c_str(), L"VR_Init Failed", NULL);
-		return false;
-	}
-
-	if (!vr::VRCompositor())
-	{
-		printf("Compositor initialization failed. See log file for details\n");
-		return false;
-	}
+	
 
 #endif
 
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
-	if (m_nRenderWidth == 0)
+	if (myVRSystem.GetWidth() == 0)
 	{
-		m_nRenderWidth = clientRect.right - clientRect.left;
+		//myVRSystem.SetWidth(clientRect.right - clientRect.left);
+		myRenderWidth = clientRect.right - clientRect.left;
 	}
 
-	if (m_nRenderHeight == 0)
+	if (myVRSystem.GetHeight() == 0)
 	{
-		m_nRenderHeight = clientRect.bottom - clientRect.top;
+		//myVRSystem.SetHeight(clientRect.bottom - clientRect.top);
+		myRenderHeight = clientRect.bottom - clientRect.top;
 	}
 
 	// CREATE DEVICE AND SWAP CHAIN
@@ -269,8 +221,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	ID3D11Texture2D* pDepthStencil = NULL;
 	D3D11_TEXTURE2D_DESC descDepth;
 	ZeroMemory(&descDepth, sizeof(descDepth));
-	descDepth.Width = m_nRenderWidth;// swapDesc.BufferDesc.Width;
-	descDepth.Height = m_nRenderHeight;// swapDesc.BufferDesc.Height;
+	descDepth.Width = myRenderWidth;// swapDesc.BufferDesc.Width;
+	descDepth.Height = myRenderHeight;// swapDesc.BufferDesc.Height;
 	descDepth.MipLevels = 1;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;// DXGI_FORMAT_D32_FLOAT;//DXGI_FORMAT_D24_UNORM_S8_UINT;;//pDeviceSettings->d3d11.AutoDepthStencilFormat;
 	// DXGI_FORMAT_D32_FLOAT_S8X24_UINT
@@ -419,8 +371,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 
 	//VIEWPORT CREATION
-	myViewport.Width = static_cast<float>(m_nRenderWidth);
-	myViewport.Height = static_cast<float>(m_nRenderHeight);
+	myViewport.Width = static_cast<float>(myRenderWidth);
+	myViewport.Height = static_cast<float>(myRenderHeight);
 	myViewport.TopLeftX = 0;
 	myViewport.TopLeftY = 0;
 	myViewport.MinDepth = 0.0f;
@@ -438,7 +390,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// Initialize the render to texture object.
 	m_RenderTextureLeft->SetName("VR Left Eye");
-	result = m_RenderTextureLeft->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	result = m_RenderTextureLeft->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
 	if (!result)
 	{
 		return false;
@@ -454,7 +406,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	// Initialize the render to texture object.
 	m_RenderTextureRight->SetName("VR Right Eye");
 
-	result = m_RenderTextureRight->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	result = m_RenderTextureRight->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
 	if (!result)
 	{
 		return false;
@@ -472,7 +424,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// Initialize the render to texture object.
 	myScreenView->SetName("Window View");
-	result = myScreenView->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	result = myScreenView->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
 	if (!result)
 	{
 		return false;
@@ -566,6 +518,7 @@ void DX11::EndFrame()
 	//TurnZBufferOn();
 
 	SwapChain->Present(0, 0);
+	myVRSystem.Update();
 
 #ifndef VR_DISABLED
 
@@ -861,8 +814,8 @@ bool DX11::CreateSelectionView()
 
 void DX11::Resize()
 {
-	m_nRenderWidth = 0;
-	m_nRenderHeight = 0;
+	myRenderWidth = 0;
+	myRenderHeight = 0;
 
 
 	// TODO : IF VR THEN GET RECOMMENDED SIZE
@@ -870,14 +823,16 @@ void DX11::Resize()
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
-	if (m_nRenderWidth == 0)
+	if (myVRSystem.GetWidth() == 0)
 	{
-		m_nRenderWidth = clientRect.right - clientRect.left;
+		//myVRSystem.SetWidth(clientRect.right - clientRect.left);
+		myRenderWidth = clientRect.right - clientRect.left;
 	}
 
-	if (m_nRenderHeight == 0)
+	if (myVRSystem.GetHeight() == 0)
 	{
-		m_nRenderHeight = clientRect.bottom - clientRect.top;
+		//myVRSystem.SetHeight(clientRect.bottom - clientRect.top);
+		myRenderHeight = clientRect.bottom - clientRect.top;
 	}
 
 	// Release the existing resources
@@ -889,7 +844,7 @@ void DX11::Resize()
 
 
 	// Resize the swap chain
-	HRESULT hr = SwapChain->ResizeBuffers(1, m_nRenderWidth, m_nRenderHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+	HRESULT hr = SwapChain->ResizeBuffers(1, myRenderWidth, myRenderHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 	if (FAILED(hr))
 	{
 		// Handle the error
@@ -923,8 +878,8 @@ void DX11::Resize()
 	// Create a depth-stencil buffer with the same dimensions
 	ID3D11Texture2D* pDepthStencil = NULL;
 	D3D11_TEXTURE2D_DESC depthStencilDesc = {};
-	depthStencilDesc.Width = m_nRenderWidth;
-	depthStencilDesc.Height = m_nRenderHeight;
+	depthStencilDesc.Width = myRenderWidth;
+	depthStencilDesc.Height = myRenderHeight;
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
 	depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
@@ -955,8 +910,8 @@ void DX11::Resize()
 
 
 	// Update the viewport with the new dimensions
-	myViewport.Width = static_cast<float>(m_nRenderWidth);
-	myViewport.Height = static_cast<float>(m_nRenderHeight);
+	myViewport.Width = static_cast<float>(myRenderWidth);
+	myViewport.Height = static_cast<float>(myRenderHeight);
 
 
 	m_RenderTextureLeft->Shutdown();
@@ -971,7 +926,7 @@ void DX11::Resize()
 	}
 
 	// Initialize the render to texture object.
-	hr = m_RenderTextureLeft->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	hr = m_RenderTextureLeft->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
 	if (!hr)
 	{
 		return;
@@ -984,7 +939,7 @@ void DX11::Resize()
 	}
 
 	// Initialize the render to texture object.
-	hr = m_RenderTextureRight->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	hr = m_RenderTextureRight->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
 	if (!hr)
 	{
 		return;
@@ -1001,20 +956,20 @@ void DX11::Resize()
 
 
 	// Initialize the render to texture object.
-	hr = myScreenView->Initialize(Device.Get(), m_nRenderWidth, m_nRenderHeight);
+	hr = myScreenView->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
 	if (!hr)
 	{
 		return;
 	}
 
-	myViewport.Width = static_cast<float>(m_nRenderWidth);
-	myViewport.Height = static_cast<float>(m_nRenderHeight);
+	myViewport.Width = static_cast<float>(myRenderWidth);
+	myViewport.Height = static_cast<float>(myRenderHeight);
 	myImmediateContext->RSSetViewports(1, &myViewport);
 }
 
 void DX11::ResetViewport()
 {
-	myViewport.Width = static_cast<float>(m_nRenderWidth);
-	myViewport.Height = static_cast<float>(m_nRenderHeight);
+	myViewport.Width = static_cast<float>(myRenderWidth);
+	myViewport.Height = static_cast<float>(myRenderHeight);
 	myImmediateContext->RSSetViewports(1, &myViewport);
 }

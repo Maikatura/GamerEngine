@@ -43,7 +43,7 @@ bool LineRenderer::Init()
 	std::ifstream vsFile;
 	vsFile.open("Shaders\\Lineshader_VS.cso", std::ios::binary);
 	std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
-	result = DX11::Device->CreateVertexShader(vsData.data(), vsData.size(), nullptr, myLineVertexShader.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, myLineVertexShader.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -53,14 +53,14 @@ bool LineRenderer::Init()
 	std::ifstream psFile;
 	psFile.open("Shaders\\Lineshader_PS.cso", std::ios::binary);
 	std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
-	result = DX11::Device->CreatePixelShader(psData.data(), psData.size(), nullptr, myLinePixelShader.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, myLinePixelShader.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
 	}
 	psFile.close();
 
-	result = DX11::Device->CreateInputLayout(layout, sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), myInputLayout.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateInputLayout(layout, sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), myInputLayout.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -72,7 +72,7 @@ bool LineRenderer::Init()
 	bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	bufferDescription.ByteWidth = sizeof(LineCBufferData);
-	result = DX11::Device->CreateBuffer(&bufferDescription, nullptr, myLineCBuffer.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myLineCBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -81,7 +81,7 @@ bool LineRenderer::Init()
 	bufferDescription.ByteWidth = sizeof(LineVertex) * 2;
 	bufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	result = DX11::Device->CreateBuffer(&bufferDescription, nullptr, myBuffer.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -252,7 +252,7 @@ void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
 	myLineCBufferData.World = Matrix4x4f();
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	HRESULT result = DX11::GetContext()->Map(myLineCBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	HRESULT result = DX11::Get().GetContext()->Map(myLineCBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if (FAILED(result))
 	{
 		// BOOM?
@@ -260,7 +260,7 @@ void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
 	}
 
 	memcpy(bufferData.pData, &myLineCBufferData, sizeof(LineCBufferData));
-	DX11::GetContext()->Unmap(myLineCBuffer.Get(), 0);
+	DX11::Get().GetContext()->Unmap(myLineCBuffer.Get(), 0);
 
 	UINT stride = sizeof(LineVertex);
 	UINT offset = 0;
@@ -269,16 +269,16 @@ void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
 
 	for (int i = 0; i < myLinesToRender.size(); i++)
 	{
-		DX11::GetContext()->VSSetConstantBuffers(3, 1, myLineCBuffer.GetAddressOf());
+		DX11::Get().GetContext()->VSSetConstantBuffers(3, 1, myLineCBuffer.GetAddressOf());
 
-		DX11::GetContext()->IASetInputLayout(myInputLayout.Get());
-		DX11::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		DX11::Get().GetContext()->IASetInputLayout(myInputLayout.Get());
+		DX11::Get().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-		DX11::GetContext()->VSSetShader(myLineVertexShader.Get(), NULL, 0);
-		DX11::GetContext()->PSSetShader(myLinePixelShader.Get(), NULL, 0);
+		DX11::Get().GetContext()->VSSetShader(myLineVertexShader.Get(), NULL, 0);
+		DX11::Get().GetContext()->PSSetShader(myLinePixelShader.Get(), NULL, 0);
 
 		D3D11_MAPPED_SUBRESOURCE lineData;
-		HRESULT hResult = DX11::GetContext()->Map(myBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &lineData);
+		HRESULT hResult = DX11::Get().GetContext()->Map(myBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &lineData);
 
 		if (FAILED(hResult))
 		{
@@ -286,10 +286,10 @@ void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
 		}
 
 		memcpy(lineData.pData, myLinesToRender[i].data(), sizeof(LineVertex) * 2);
-		DX11::GetContext()->Unmap(myBuffer.Get(), 0);
+		DX11::Get().GetContext()->Unmap(myBuffer.Get(), 0);
 
-		DX11::GetContext()->IASetVertexBuffers(0, 1, myBuffer.GetAddressOf(), &stride, &offset);
-		DX11::GetContext()->Draw(2, 0);
+		DX11::Get().GetContext()->IASetVertexBuffers(0, 1, myBuffer.GetAddressOf(), &stride, &offset);
+		DX11::Get().GetContext()->Draw(2, 0);
 	}
 #endif
 }

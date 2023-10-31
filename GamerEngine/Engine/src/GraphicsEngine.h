@@ -31,7 +31,6 @@ class GraphicsEngine
 
 	std::function<bool(HWND, UINT, WPARAM, LPARAM)> myWinProcFunction;
 
-	std::shared_ptr<CommonUtilities::InputManager> myInputManager;
 	std::shared_ptr<DropManager> myDropManager;
 
 	inline static GraphicsEngine* myInstance;
@@ -76,7 +75,7 @@ public:
 
 	void ResetStates() const;
 	
-	std::shared_ptr<CommonUtilities::InputManager> GetInput();
+
 	std::vector<std::string> GetDropPath();
 
 	bool GetEngineUpdateRuntime();
@@ -104,14 +103,7 @@ public:
 private:
 
 	int myRenderPass = 0;
-	int m_iTrackedControllerCount;
-	int m_iTrackedControllerCount_Last;
-	int m_iValidPoseCount;
-	int m_iValidPoseCount_Last;
-	bool m_bShowCubes;
-
-	std::string m_strPoseClasses;                            // what classes we saw poses for this frame
-	char m_rDevClassChar[vr::k_unMaxTrackedDeviceCount];   // for each device, a character representing its class
+	
 	
 };
 

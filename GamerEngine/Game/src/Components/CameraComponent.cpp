@@ -3,11 +3,12 @@
 #include "Components.hpp"
 #include "Math/MathTypes.hpp"
 #include "openvr.h"
+#include "VR/VRMath.h"
 //#include <DirectXMath.h>
 
 CameraComponent::CameraComponent()
 {
-	Initialize(90, 0.1f, 25000.0f, { DX11::m_nRenderWidth, DX11::m_nRenderHeight });
+	Initialize(90, 0.1f, 25000.0f, { DX11::Get().GetScreenSize().x, DX11::Get().GetScreenSize().y });
 }
 
 void CameraComponent::Initialize(float aHorizontalFoV, float aNearPlane, float aFarPlane, Vector2ui aResolution)
@@ -40,6 +41,7 @@ void CameraComponent::Resize(Vector2ui aResolution)
 	const float hFoVRad = myFoV * (0.01745f);
 	const float vFoVRad = 2 * std::atan(std::tan(hFoVRad / 2) * (static_cast<float>(aResolution.y) / static_cast<float>(aResolution.x)));
 
+	myHorizontalFoV = hFoVRad;
 	myVerticalFoV = vFoVRad;
 
 	const float myXScale = 1 / std::tanf(hFoVRad * 0.5f);
@@ -61,7 +63,7 @@ float CameraComponent::GetResScale()
 
 float CameraComponent::GetHorizontalFoV()
 {
-	return myFoV;
+	return myHorizontalFoV;
 }
 
 float CameraComponent::GetVerticalFoV()
@@ -94,32 +96,6 @@ Vector3f CameraComponent::GetForward()
 	return myRotation.Normalized();
 }
 
-
-inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t& matPose)
-{
-	Matrix4x4f matrixObj;
-	for (int row = 0; row < 4; ++row) {
-		for (int col = 0; col < 4; ++col) {
-			matrixObj(row + 1, col + 1) = matPose.m[col][row]; // Transpose the matrix during conversion
-		} 
-	}
-
-	return matrixObj;
-}
-
-inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix44_t& matPose)
-{
-	Matrix4x4f matrixObj;
-
-	for (int row = 0; row < 4; ++row) {
-		for (int col = 0; col < 4; ++col) {
-			matrixObj(row + 1, col + 1) = matPose.m[col][row]; // Transpose the matrix during conversion
-		}
-	}
-
-	return matrixObj;
-}
-
 Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(VREye anEye)
 {
 	if (anEye == VREye::None)
@@ -132,10 +108,10 @@ Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(VREye anEye)
 
 Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VREye anEye)
 {
-	if (!DX11::m_pHMD)
+	if (DX11::Get().IsVrNull())
 		return Matrix4x4f();
 
-	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetEyeToHeadTransform(VREye::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right));
+	Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetEyeToHeadTransform(anEye);
 
 
 	return Matrix4x4f::GetFastInverse(matrixObj);
@@ -144,10 +120,10 @@ Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VREye anEye)
 
 Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VREye anEye)
 {
-	if (!DX11::m_pHMD || anEye == VREye::None)
+	if (!DX11::Get().IsVrNull() || anEye == VREye::None)
 		return Projection;
 
-	Matrix4x4f matrixObj = ConvertSteamVRMatrixToMatrix4(DX11::m_pHMD->GetProjectionMatrix(VREye::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right, myNearPlane, myFarPlane));
+	Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetProjectionMatrix( anEye, myNearPlane, myFarPlane);
 
 	return matrixObj;
 }
@@ -162,13 +138,10 @@ void CameraComponent::SetHasMoved(bool aMoveValue)
 	myHasMoved = aMoveValue;
 }
 
-
-
 void CameraComponent::BuildTransform(TransformComponent* aTransform)
 {
 
 
-	CommonUtilities::Quaternionf rotation = DX11::m_mat4HMDPose.GetQuat();
 
 	//rotation.x = -rotation.x;
 	//rotation.y = -rotation.y;
@@ -178,6 +151,7 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	myPosition = aTransform->GetPosition();
 
 #ifndef VR_DISABLED
+	CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
 	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
 	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
 #else

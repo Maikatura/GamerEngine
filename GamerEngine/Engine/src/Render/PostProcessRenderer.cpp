@@ -15,7 +15,7 @@ bool PostProcessRenderer::Initialize()
 	bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	bufferDescription.ByteWidth = sizeof(FrameBufferData);
-	result = DX11::Device->CreateBuffer(&bufferDescription, nullptr, myFrameBuffer.GetAddressOf());
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myFrameBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -38,8 +38,6 @@ bool PostProcessRenderer::Initialize()
 	}
 
 
-
-
 	myNoiseTexture = TextureAssetHandler::GetTexture(L"Editor\\Textures\\BlueNoise.dds");
 
 	ReInitialize();
@@ -52,26 +50,26 @@ void PostProcessRenderer::ReInitialize()
 {
 	myHasInited = false;
 
-	RECT clientRect = DX11::GetClientSize();
+	RECT clientRect = DX11::Get().GetClientSize();
 	float width = static_cast<float>(clientRect.right - clientRect.left);
 	float height = static_cast<float>(clientRect.bottom - clientRect.top);
 
 
 	mySSAOTexture = std::make_shared<RenderTexture>();
-	mySSAOTexture->Initialize(DX11::GetDevice(), static_cast<int>(width), static_cast<int>(height), DXGI_FORMAT_R32_FLOAT);
+	mySSAOTexture->Initialize(DX11::Get().GetDevice(), static_cast<int>(width), static_cast<int>(height), DXGI_FORMAT_R32_FLOAT);
 
 	myFullSize = std::make_shared<RenderTexture>();
-	myFullSize->Initialize(DX11::GetDevice(), static_cast<int>(width), static_cast<int>(height));
+	myFullSize->Initialize(DX11::Get().GetDevice(), static_cast<int>(width), static_cast<int>(height));
 
 
 	myHalfSize = std::make_shared<RenderTexture>();
-	myHalfSize->Initialize(DX11::GetDevice(), static_cast<int>(width * .5f), static_cast<int>(height * .5f));
+	myHalfSize->Initialize(DX11::Get().GetDevice(), static_cast<int>(width * .5f), static_cast<int>(height * .5f));
 
 	myQuarterSize = std::make_shared<RenderTexture>();
-	myQuarterSize->Initialize(DX11::GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
+	myQuarterSize->Initialize(DX11::Get().GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
 
 	myBlur = std::make_shared<RenderTexture>();
-	myBlur->Initialize(DX11::GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
+	myBlur->Initialize(DX11::Get().GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
 
 	myNoiseTexture->SetAsResource(8);
 }
@@ -94,12 +92,12 @@ std::shared_ptr<RenderTexture> PostProcessRenderer::CreateRenderTexture(const st
 	//	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 	//	
 
-	//	renderTex->Initialize(DX11::GetDevice(), aWidth, aHeight);
+	//	renderTex->Initialize(DX11::Get().GetDevice(), aWidth, aHeight);
 
 
 
-	//	//DX11::Device->CreateRenderTargetView(renderTex->GetTexture(), nullptr, renderTex-);
-	//	//DX11::Device->CreateShaderResourceView(renderTex->GetTexture(), nullptr, renderTex->GetShaderResourceView());
+	//	//DX11::Get().Device->CreateRenderTargetView(renderTex->GetTexture(), nullptr, renderTex-);
+	//	//DX11::Get().Device->CreateShaderResourceView(renderTex->GetTexture(), nullptr, renderTex->GetShaderResourceView());
 	//	//SafeRelease(renderTex.myTexture2D);
 
 	//	myRenderTextures[aName] = renderTex;
@@ -129,7 +127,7 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 
 	/*ID3D11RenderTargetView* buffers[1]
 	{
-		DX11::RenderRTV.Get()
+		DX11::Get().RenderRTV.Get()
 	};*/
 
 	switch(aPass)
@@ -160,11 +158,11 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 
 			/*myFullSize->Clear();
 			myFullSize->SetAsTarget();
-			DX11::GetContext()->OMSetRenderTargets(1, &buffers[0], DX11::DepthBuffer.Get());
+			DX11::Get().GetContext()->OMSetRenderTargets(1, &buffers[0], DX11::Get().DepthBuffer.Get());
 			myBlur->SetAsResource(0);
 			RenderPass(PostProcessPass::PP_COPY);
 
-			DX11::GetContext()->OMSetRenderTargets(1, &buffers[0], DX11::DepthBuffer.Get());
+			DX11::Get().GetContext()->OMSetRenderTargets(1, &buffers[0], DX11::Get().DepthBuffer.Get());
 			myFullSize->SetAsResource(0);
 			myBlur->SetAsResource(1);
 			RenderPass(PostProcessPass::PP_BLOOM);*/
@@ -179,10 +177,10 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 
 			HRESULT result = S_FALSE;
 			D3D11_MAPPED_SUBRESOURCE bufferData;
-			RECT clientRect = DX11::GetClientSize();
+			 
 			const Vector2ui Resolution = {
-				static_cast<unsigned int>(clientRect.right - clientRect.left),
-				static_cast<unsigned int>(clientRect.bottom - clientRect.top)
+				static_cast<unsigned int>(DX11::Get().GetScreenSize().x),
+				static_cast<unsigned int>(DX11::Get().GetScreenSize().y)
 			};
 
 			myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
@@ -204,7 +202,7 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			myFrameBufferData.FrustrumCorners[3] = myFrustum.NearBottomRight;
 
 			ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-			result = DX11::GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+			result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 			if(FAILED(result))
 			{
 				// BOOM?
@@ -212,17 +210,17 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			}
 
 			memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-			DX11::GetContext()->Unmap(myFrameBuffer.Get(), 0);
+			DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
 
-			//DX11::GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-			DX11::GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+			DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+			DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
 			
 			SetDepthStencilState(DepthStencilState::ReadWrite);
 			SetBlendState(BlendState::Additive);
 
 			
-			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture, DX11::GetDepthStencilView());
+			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture, DX11::Get().GetDepthStencilView());
 			break;
 		}
 
@@ -237,7 +235,7 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			RenderTextureOnSlot(0,0, PostProcessPass::PP_TONEMAP, myFullSize);
 			RenderTextureOnSlot(0,0, PostProcessPass::PP_COPY, myFullSize);
 
-			DX11::ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
+			DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
 			break;
 		}
 		case PP_COUNT: break;
@@ -252,34 +250,34 @@ void PostProcessRenderer::RenderTextureOnSlot(int aSlot,int aResourceSlot, PostP
 {
 	ID3D11ShaderResourceView* nullsrv = nullptr;
 
-	aRenderTexture->ClearRenderTarget(DX11::GetContext(), depthStencilView, 0.0f, 0.0f, 0.0f, 0.0f);
-	DX11::GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
+	aRenderTexture->ClearRenderTarget(DX11::Get().GetContext(), depthStencilView, 0.0f, 0.0f, 0.0f, 0.0f);
+	DX11::Get().GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
 
 
 	
 
-	aRenderTexture->SetRenderTarget(DX11::GetContext(), depthStencilView);
+	aRenderTexture->SetRenderTarget(DX11::Get().GetContext(), depthStencilView);
 
 	
 
 	RenderPass(aPass);
 
-	DX11::ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
-	aRenderTexture->SetAsResource(DX11::GetContext(), aResourceSlot);
+	DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
+	aRenderTexture->SetAsResource(DX11::Get().GetContext(), aResourceSlot);
 }
 
 void PostProcessRenderer::RenderPass(PostProcessPass aPass)
 {
 	HRESULT result = S_FALSE;
 
-	DX11::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	DX11::GetContext()->IASetInputLayout(nullptr);
-	DX11::GetContext()->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
-	DX11::GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
-	DX11::GetContext()->VSSetShader(myFullscreenVS.Get(), nullptr, 0);
-	DX11::GetContext()->PSSetShader(myPassShaders[aPass].Get(), nullptr, 0);
-	DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
-	DX11::GetContext()->Draw(3, 0);
+	DX11::Get().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	DX11::Get().GetContext()->IASetInputLayout(nullptr);
+	DX11::Get().GetContext()->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
+	DX11::Get().GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+	DX11::Get().GetContext()->VSSetShader(myFullscreenVS.Get(), nullptr, 0);
+	DX11::Get().GetContext()->PSSetShader(myPassShaders[aPass].Get(), nullptr, 0);
+	DX11::Get().GetContext()->GSSetShader(nullptr, nullptr, 0);
+	DX11::Get().GetContext()->Draw(3, 0);
 }
 
 void PostProcessRenderer::Release()
@@ -289,5 +287,5 @@ void PostProcessRenderer::Release()
 
 void PostProcessRenderer::ClearTargets()
 {
-	mySSAOTexture->ClearRenderTarget(DX11::GetContext(), nullptr, 0.0f, 0.0f, 0.0f, 0.0f);
+	mySSAOTexture->ClearRenderTarget(DX11::Get().GetContext(), nullptr, 0.0f, 0.0f, 0.0f, 0.0f);
 }

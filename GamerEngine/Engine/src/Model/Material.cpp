@@ -83,7 +83,7 @@ void Material::SetAsResource(ComPtr<ID3D11Resource> aMaterialBuffer)
 
 	//memcpy(bufferData.pData, &myMaterialData, sizeof(MaterialData));
 
-	//DX11::GetContext()->Unmap(aMaterialBuffer.Get(), 0);
+	//DX11::Get().GetContext()->Unmap(aMaterialBuffer.Get(), 0);
 
 	if (myTextures[static_cast<int>(TextureType::Albedo)])
 	{

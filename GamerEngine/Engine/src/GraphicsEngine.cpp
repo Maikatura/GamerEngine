@@ -73,7 +73,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	RegisterDragDrop(myWindowHandle, myDropManager.get());
 
 
-	if (!DX11::Init(myWindowHandle, enableDeviceDebug, isVRMode))
+	if (!DX11::Get().Init(myWindowHandle, enableDeviceDebug, isVRMode))
 	{
 		return false;
 	}
@@ -153,51 +153,18 @@ inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix44_t& matPose
 	return matrixObj;
 }
 
-void GraphicsEngine::UpdateHMDMatrixPose()
-{
-	if (!DX11::m_pHMD)
-		return;
 
-	vr::VRCompositor()->WaitGetPoses(DX11::m_rTrackedDevicePose, vr::k_unMaxTrackedDeviceCount, NULL, 0);
-
-	m_iValidPoseCount = 0;
-	m_strPoseClasses = "";
-	for (int nDevice = 0; nDevice < vr::k_unMaxTrackedDeviceCount; ++nDevice)
-	{
-		if (DX11::m_rTrackedDevicePose[nDevice].bPoseIsValid)
-		{
-			m_iValidPoseCount++;
-			DX11::m_rmat4DevicePose[nDevice] = ConvertSteamVRMatrixToMatrix4(DX11::m_rTrackedDevicePose[nDevice].mDeviceToAbsoluteTracking);
-			if (m_rDevClassChar[nDevice] == 0)
-			{
-				switch (DX11::m_pHMD->GetTrackedDeviceClass(nDevice))
-				{
-				case vr::TrackedDeviceClass_Controller:        m_rDevClassChar[nDevice] = 'C'; break;
-				case vr::TrackedDeviceClass_HMD:               m_rDevClassChar[nDevice] = 'H'; break;
-				case vr::TrackedDeviceClass_Invalid:           m_rDevClassChar[nDevice] = 'I'; break;
-				case vr::TrackedDeviceClass_GenericTracker:    m_rDevClassChar[nDevice] = 'O'; break;
-				case vr::TrackedDeviceClass_TrackingReference: m_rDevClassChar[nDevice] = 'T'; break;
-				default:                                       m_rDevClassChar[nDevice] = '?'; break;
-				}
-			}
-			m_strPoseClasses += m_rDevClassChar[nDevice];
-		}
-	}
-
-	if (DX11::m_rTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid)
-	{
-		DX11::m_mat4HMDPose = Matrix4x4f::GetFastInverse(DX11::m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd]);
-	}
-	else
-	{
-		printf("pose not valid");
-	}
-}
 
 LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
+
+	Input::UpdateEvents(uMsg, wParam, lParam);
+
 	// We want to be able to access the Graphics Engine instance from inside this function.
 	static GraphicsEngine* graphicsEnginePtr = nullptr;
+
+
+
 
 	if (graphicsEnginePtr)
 	{
@@ -210,7 +177,7 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 		}
 	}
 
-	Input::UpdateEvents(uMsg, wParam, lParam);
+	
 
 	switch (uMsg)
 	{
@@ -222,7 +189,7 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
 	case WM_SIZE:
 	{
-		if (DX11::Device != NULL)
+		if (DX11::Get().GetDevice() != NULL)
 		{
 			Get()->SetWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 
@@ -252,7 +219,7 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
 	case WM_EXITSIZEMOVE:
 	{
-		if (DX11::Device != NULL)
+		if (DX11::Get().GetDevice() != NULL)
 		{
 			graphicsEnginePtr->SetUpdateBuffers(true);
 		}
@@ -310,12 +277,12 @@ void GraphicsEngine::BeginFrame()
 
 	if(myWantToResizeBuffers)
 	{
-		if(DX11::SwapChain)
+		if(DX11::Get().GetSwapChain())
 		{
 			if (SceneManager::Get().GetStatus() == SceneStatus::Complete)
 			{
 				myGBuffer->Release();
-				DX11::Resize();
+				DX11::Get().Resize();
 				auto scene = SceneManager::Get().GetScene();
 				scene->Resize({ static_cast<unsigned int>(Get()->GetWindowSize().cx), static_cast<unsigned int>(Get()->GetWindowSize().cy) });
 				myGBuffer->CreateGBuffer();
@@ -329,7 +296,7 @@ void GraphicsEngine::BeginFrame()
 	}
 
 	//Vector4f clearColor = Renderer::GetClearColor();
-	//DX11::BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
+	//DX11::Get().BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
 	//
 	ResetStates();
 }
@@ -508,13 +475,13 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	{
 		PROFILE_CPU_SCOPE("Render SSAO");
 		(renderSSAO == true) ? myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection) : myPostProcessRenderer->ClearTargets();
-		DX11::TurnZBufferOn();
+		DX11::Get().TurnZBufferOn();
 	}
 
 	{
 		//PROFILE_SCOPE("Render With Forward Renderer (Sprites)");
 		//RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
-		//DX11::ResetRenderTarget(myUseEditor);
+		//DX11::Get().ResetRenderTarget(myUseEditor);
 		//myForwardRenderer->RenderSprites(view, projection, spriteList, directionalLight, environmentLight);
 	}
 
@@ -567,14 +534,14 @@ void GraphicsEngine::OnFrameRender()
 
 
 
-		DX11::GetContext()->RSSetState(DX11::myFrontCulling);
+		DX11::Get().GetContext()->RSSetState(DX11::Get().myFrontCulling);
 		{
 			PROFILE_CPU_SCOPE("Render Left Eye (VR)");
-			DX11::m_RenderTextureLeft->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+			DX11::Get().m_RenderTextureLeft->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
 			//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
 				// Clear the render to texture.
-			DX11::m_RenderTextureLeft->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+			DX11::Get().m_RenderTextureLeft->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 			// Render the scene now and it will draw to the render to texture instead of the back buffer.
 			RenderScene(VREye::Left);
@@ -584,11 +551,11 @@ void GraphicsEngine::OnFrameRender()
 			PROFILE_CPU_SCOPE("Render Right Eye (VR)");
 			
 			// Set the render target to be the render to texture.
-			DX11::m_RenderTextureRight->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
+			DX11::Get().m_RenderTextureRight->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
 			//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
 				// Clear the render to texture.
-			DX11::m_RenderTextureRight->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+			DX11::Get().m_RenderTextureRight->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 			// Render the scene now and it will draw to the render to texture instead of the back buffer.
 			RenderScene(VREye::Right);
@@ -604,24 +571,25 @@ void GraphicsEngine::OnFrameRender()
 		PROFILE_CPU_SCOPE("View Render Setup");
 		if (myUseEditor)
 		{
-			//DX11::TurnZBufferOff();
-			DX11::myScreenView->SetRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView());
-			DX11::myScreenView->ClearRenderTarget(DX11::GetContext(), DX11::GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+			//DX11::Get().TurnZBufferOff();
+			DX11::Get().GetScreenView()->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
+			DX11::Get().GetScreenView()->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0.5f, 0.5f, 0.5f, 1.0f);
 		}
 		else
 		{
-			//DX11::TurnZBufferOff();
-			//DX11::GetContext()->RSSetState(DX11::myBackCulling);
+			//DX11::Get().TurnZBufferOff();
+			//DX11::Get().GetContext()->RSSetState(DX11::Get().myBackCulling);
 			Vector4f clearColor = Renderer::GetClearColor();
 			clearColor.z = 1.0f;
 			clearColor.w = 1.0f;
 
-			DX11::GetContext()->OMSetRenderTargets(1, &DX11::myRenderTargetView, DX11::GetDepthStencilView());
+			auto renderTarget = DX11::Get().GetRenderTargetView();
+			DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView());
 			float clearDepth = 1.0f;
 			UINT8 clearStencil = 0;
 
-			DX11::GetContext()->ClearDepthStencilView(DX11::GetDepthStencilView(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
-			DX11::GetContext()->ClearRenderTargetView(DX11::myRenderTargetView, &clearColor.x);
+			DX11::Get().GetContext()->ClearDepthStencilView(DX11::Get().GetDepthStencilView(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
+			DX11::Get().GetContext()->ClearRenderTargetView(renderTarget, &clearColor.x);
 
 		}
 
@@ -634,7 +602,7 @@ void GraphicsEngine::OnFrameRender()
 	}
 
 	
-	/*DX11::GetContext()->GSSetShader(nullptr, nullptr, 0);
+	/*DX11::Get().GetContext()->GSSetShader(nullptr, nullptr, 0);
 
 	Renderer::Clear();*/
 
@@ -668,13 +636,13 @@ void GraphicsEngine::EndFrame()
 
 	{
 		PROFILE_CPU_SCOPE("Final Render Call");
-		DX11::ResetRenderTarget(myUseEditor);
+		DX11::Get().ResetRenderTarget(myUseEditor);
 		myDeferredRenderer->RenderLate();
 	}
 
 	{
 		PROFILE_CPU_SCOPE("End Of Frame");
-		DX11::EndFrame();
+		DX11::Get().EndFrame();
 	}
 
 #ifndef VR_DISABLED
@@ -718,11 +686,6 @@ void GraphicsEngine::ResetStates() const
 	RendererBase::SetSamplerState(4u, SamplerState::LinearClamp);
 	RendererBase::SetSamplerState(5u, SamplerState::LinearWrap);
 	RendererBase::SetSamplerState(6u, SamplerState::ComparisonLinearClamp);
-}
-
-std::shared_ptr<CommonUtilities::InputManager> GraphicsEngine::GetInput()
-{
-	return myInputManager;
 }
 
 std::vector<std::string> GraphicsEngine::GetDropPath()

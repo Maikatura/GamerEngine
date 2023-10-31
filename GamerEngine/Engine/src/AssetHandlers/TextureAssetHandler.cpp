@@ -74,14 +74,14 @@ bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 		HRESULT createResult = S_FALSE;
 		if (filename.extension() == ".dds")
 		{
-			createResult = DirectX::CreateDDSTextureFromFile(DX11::GetDevice(), aFileName.c_str(),
+			createResult = DirectX::CreateDDSTextureFromFile(DX11::Get().Get().GetDevice(), aFileName.c_str(),
 				result->myTexture.GetAddressOf(),
 				result->mySRV.GetAddressOf()
 			);
 		}
 		else
 		{
-			createResult = DirectX::CreateWICTextureFromFile(DX11::GetDevice(), aFileName.c_str(),
+			createResult = DirectX::CreateWICTextureFromFile(DX11::Get().Get().GetDevice(), aFileName.c_str(),
 				result->myTexture.GetAddressOf(),
 				result->mySRV.GetAddressOf()
 			);
@@ -131,7 +131,7 @@ std::shared_ptr<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
 	desc.CPUAccessFlags = 0;
 	desc.MiscFlags = 0;
-	result = DX11::Device->CreateTexture2D(&desc, nullptr, reinterpret_cast<ID3D11Texture2D**>(output->myTexture.GetAddressOf()));
+	result = DX11::Get().GetDevice()->CreateTexture2D(&desc, nullptr, reinterpret_cast<ID3D11Texture2D**>(output->myTexture.GetAddressOf()));
 	assert(SUCCEEDED(result));
 
 
@@ -140,14 +140,14 @@ std::shared_ptr<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 	resourceDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT;
 	resourceDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
 	resourceDesc.Texture2D.MipLevels = desc.MipLevels;
-	result = DX11::Device->CreateShaderResourceView(output->myTexture.Get(), &resourceDesc, output->mySRV.ReleaseAndGetAddressOf());
+	result = DX11::Get().GetDevice()->CreateShaderResourceView(output->myTexture.Get(), &resourceDesc, output->mySRV.ReleaseAndGetAddressOf());
 	assert(SUCCEEDED(result));
 
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthDesc = {};
 	depthDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
 	depthDesc.ViewDimension = D3D11_DSV_DIMENSION::D3D11_DSV_DIMENSION_TEXTURE2D;
-	result = DX11::Device->CreateDepthStencilView(output->myTexture.Get(), &depthDesc, output->myDSV.ReleaseAndGetAddressOf());
+	result = DX11::Get().GetDevice()->CreateDepthStencilView(output->myTexture.Get(), &depthDesc, output->myDSV.ReleaseAndGetAddressOf());
 	assert(SUCCEEDED(result));
 
 	output->myViewport = D3D11_VIEWPORT({ 0.0f, 0.0f, static_cast<float>(aWidth), static_cast<float>(aHeight), 0.0f, 1.0f });
@@ -161,7 +161,7 @@ ID3D11PixelShader* TextureAssetHandler::GetPixelShader(const std::string& aPath)
 	psFile.open(aPath.c_str(), std::ios::binary);
 	std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
 	ID3D11PixelShader* pixelShader;
-	DX11::Device->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
+	DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
 	
 	psFile.close();
 
@@ -174,7 +174,7 @@ ID3D11VertexShader* TextureAssetHandler::GetVertexShader(const std::string& aPat
 	vsFile.open(aPath, std::ios::binary);
 	std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 	ID3D11VertexShader* vertexShader;
-	HRESULT result = DX11::Device->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
+	HRESULT result = DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
 	if(FAILED(result))
 	{
 		// WTF

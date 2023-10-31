@@ -1,0 +1,74 @@
+Scene: SceneTesting
+Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\Testing Textures.csf
+Entities:
+  - Entity: 1113458039765909235
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [5.27999973, 5.27999973, 5.27999973]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00145630003
+      Path: Assets\Models\Gremlin.fbx
+      TextureSize: 2
+      Texture:
+        0:
+          Albedo: assets\models\t_gremlin_c.dds
+          Normal: assets\models\t_gremlin_n.dds
+          Material: assets\models\t_gremlin_m.dds
+        1:
+          Albedo: resources\textures\T_Default_C.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [92.2944183, 203.494476, -159.69783]
+      Rotation: [132.786758, -16.4169998, 0]
+      Scale: [0.995829344, 0.999664962, 0.999686956]
+      ChildrenSize: 0
+      Children:
+        {}
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [-44, 100, 85]
+      Intensity: 1
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [262.69455, 418.954132, 686.865967]
+      Rotation: [17.7905884, -154.931122, 0.000104271501]
+      Scale: [0.999961138, 0.999956548, 0.999987185]
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 25000
+      Primary: true
+  - Entity: 1828353707181980437
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, -508.054779, 0.917554855]
+      Rotation: [0, -0, 0]
+      Scale: [1000, 10, 1000]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -107374176
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\T_Default_C.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds

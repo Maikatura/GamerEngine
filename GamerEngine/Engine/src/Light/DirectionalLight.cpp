@@ -64,10 +64,10 @@ void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLight
 	if(myLightData.CastShadows)
 	{
 	/*	ID3D11ShaderResourceView* nullsrv = nullptr;
-		DX11::GetContext()->PSSetShaderResources(19, 1, &nullsrv);*/
-		//DX11::GetContext()->VSSetShaderResources(19, 1, &nullsrv);
+		DX11::Get().GetContext()->PSSetShaderResources(19, 1, &nullsrv);*/
+		//DX11::Get().GetContext()->VSSetShaderResources(19, 1, &nullsrv);
 
-		DX11::GetContext()->PSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
+		DX11::Get().GetContext()->PSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }
 

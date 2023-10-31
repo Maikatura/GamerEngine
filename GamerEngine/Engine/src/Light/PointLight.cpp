@@ -19,7 +19,7 @@ void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer
 {
 	if(myLightData.CastShadows)
 	{
-		DX11::GetContext()->PSSetShaderResources(myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
+		DX11::Get().GetContext()->PSSetShaderResources(myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }
 
@@ -63,7 +63,7 @@ void PointLight::CreatePointLightMap(Vector2f aResolution)
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
 	desc.CPUAccessFlags = 0;
 	desc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
-	DX11::Device->CreateTexture2D(&desc, nullptr, reinterpret_cast<ID3D11Texture2D**>(myShadowMap->myTexture.GetAddressOf()));
+	DX11::Get().GetDevice()->CreateTexture2D(&desc, nullptr, reinterpret_cast<ID3D11Texture2D**>(myShadowMap->myTexture.GetAddressOf()));
 	//assert(SUCCEEDED(result));
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC resourceDesc = {};
@@ -71,7 +71,7 @@ void PointLight::CreatePointLightMap(Vector2f aResolution)
 	resourceDesc.Format = DXGI_FORMAT_R32_FLOAT;
 	resourceDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
 	resourceDesc.Texture2D.MipLevels = desc.MipLevels;
-	DX11::Device->CreateShaderResourceView(myShadowMap->myTexture.Get(), &resourceDesc, myShadowMap->mySRV.GetAddressOf());
+	DX11::Get().GetDevice()->CreateShaderResourceView(myShadowMap->myTexture.Get(), &resourceDesc, myShadowMap->mySRV.GetAddressOf());
 	//assert(SUCCEEDED(result));
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthDesc = {};
@@ -80,6 +80,6 @@ void PointLight::CreatePointLightMap(Vector2f aResolution)
 	depthDesc.Texture2DArray.MipSlice = 0;
 	depthDesc.Texture2DArray.ArraySize = desc.ArraySize;
 	depthDesc.Texture2DArray.FirstArraySlice = 0;
-	DX11::Device->CreateDepthStencilView(myShadowMap->myTexture.Get(), &depthDesc, myShadowMap->myDSV.GetAddressOf());
+	DX11::Get().GetDevice()->CreateDepthStencilView(myShadowMap->myTexture.Get(), &depthDesc, myShadowMap->myDSV.GetAddressOf());
 	//assert(SUCCEEDED(result));
 }
