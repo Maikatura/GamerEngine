@@ -50,7 +50,7 @@ includedirs{
 externalincludedirs {
 	"%{IncludeDirs.GraphicsEngine}",
 	"%{IncludeDirs.CommonUtilities}",
-	"%{IncludeDirs.PyBullet}",
+	"%{IncludeDirs.PhysX}",
 	"%{IncludeDirs.Game}"
 }
 
@@ -59,7 +59,7 @@ externalwarnings "Off"
 links
 {
 	"CommonUtilities",
-	"PyBullet"
+	"PhysX"
 }
 
 files 

@@ -46,7 +46,7 @@
     <IntDir>..\Temp\Intermediate\Server\Debug\</IntDir>
     <TargetName>Server_Debug</TargetName>
     <TargetExt>.exe</TargetExt>
-    <ExternalIncludePath>..\External\TurNet;..\Game\src;..\External\rapidjson;..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\External\TurNet;..\Game\src;.;..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,7 +54,7 @@
     <IntDir>..\Temp\Intermediate\Server\Release\</IntDir>
     <TargetName>Server_Release</TargetName>
     <TargetExt>.exe</TargetExt>
-    <ExternalIncludePath>..\External\TurNet;..\Game\src;..\External\rapidjson;..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\External\TurNet;..\Game\src;.;..\Engine\src;..\External\CommonUtilities\src;..\External\entt;..\External\FBXImporter;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -75,7 +75,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;d3d11.lib;dxguid.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\debug\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RapidJson.lib;ws2_32.lib;d3d11.lib;dxguid.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\debug\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -102,7 +102,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ws2_32.lib;d3d11.lib;dxguid.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RapidJson.lib;ws2_32.lib;d3d11.lib;dxguid.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -113,9 +113,6 @@
   <ItemGroup>
     <ProjectReference Include="..\External\FBXImporter\FBXImporter.vcxproj">
       <Project>{5711F0AA-C3C6-68A0-4CBB-6277B86F5FA4}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\External\rapidjson\Rapidjson.vcxproj">
-      <Project>{2F4FA070-9BB9-54E7-E4F7-058D50A1323C}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\yaml-cpp\YamlCpp.vcxproj">
       <Project>{3BF5F3B0-A7D4-724C-B0EC-FD221C4BD9AD}</Project>

@@ -55,9 +55,12 @@ includedirs{
 	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.ImGui}",
 	"%{IncludeDirs.YamlCpp}",
+	"%{IncludeDirs.Json}",
 	"%{IncludeDirs.WICTextureLoader}",
-	"%{IncludeDirs.PyBullet}",
+	"%{IncludeDirs.PhysX}",
 	"%{IncludeDirs.DirectXTK}",
+	"%{IncludeDirs.msdfgen}",
+	"%{IncludeDirs.msdf_atlas_gen}",
 	"%{IncludeDirs.Flecs}../include2"
 	
 }
@@ -78,7 +81,9 @@ links
 	"Shaders",
 	"Flecs",
 	"DirectXTK",
-	"ImGui"
+	"ImGui",
+	"Json",
+	"msdf"
 }
 
 files 

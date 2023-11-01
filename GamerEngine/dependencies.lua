@@ -12,7 +12,7 @@ IncludeDirs["PhysicsEngine"] = "%{wks.location}/PhysicsEngine/src/"
 -- Eternal Includes
 
 IncludeDirs["Flecs"] = "%{wks.location}/External/flecs/include/"
-IncludeDirs["PyBullet"] = "%{wks.location}/External/PyBullet/src"
+IncludeDirs["PyBullet"] = "%{wks.location}/External/PhysX/src"
 IncludeDirs["TurNet"] = "%{wks.location}/External/TurNet/"
 IncludeDirs["CryptoPP"] = "%{wks.location}/External/CryptoPP/"
 IncludeDirs["CommonUtilities"] = "%{wks.location}/External/CommonUtilities/src/"
@@ -22,11 +22,13 @@ IncludeDirs["ImGuiOnly"] = "%{wks.location}/External/ImGui/src/ImGui/"
 IncludeDirs["Entt"] = "%{wks.location}/External/entt/"
 IncludeDirs["YamlCpp"] = "%{wks.location}/External/yaml-cpp/"
 IncludeDirs["WICTextureLoader"] = "%{wks.location}/External/WICTextureLoader/"
-IncludeDirs["RapidJson"] = "%{wks.location}/External/rapidjson/"
+IncludeDirs["Json"] = "%{wks.location}/External/json/"
 IncludeDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/include/"
 IncludeDirs["OpenFBX"] = "%{wks.location}/External/OpenFBX/src/"
 IncludeDirs["OpenVR"] = "%{wks.location}/External/openvr/headers/"
 IncludeDirs["DirectXTK"] = "%{wks.location}/External/directxtk/inc/"
+IncludeDirs["msdf_atlas_gen"] = "%{wks.location}/External/Text/src/msdf-atlas-gen/"
+IncludeDirs["msdfgen"] = "%{wks.location}/External/Text/src/msdfgen/"
 
 --Libaries
 LibDirs = {}

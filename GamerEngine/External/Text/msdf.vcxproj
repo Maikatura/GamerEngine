@@ -1,0 +1,530 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4FCB9A7C-3B02-9C0D-E4EE-8110D004180F}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>msdf</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\msdf\Debug\</IntDir>
+    <TargetName>msdf_Debug</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\msdf\Release\</IntDir>
+    <TargetName>msdf_Release</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;MSDFGEN_USE_CPP11;FT2_BUILD_LIBRARY;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;src\msdf-atlas-gen;src\msdfgen;src\msdfgen\core;src\msdfgen\ext;src\msdfgen\include;src\msdfgen\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;MSDFGEN_USE_CPP11;FT2_BUILD_LIBRARY;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;src\msdf-atlas-gen;src\msdfgen;src\msdfgen\core;src\msdfgen\ext;src\msdfgen\include;src\msdfgen\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\msdf-atlas-gen\AtlasGenerator.h" />
+    <ClInclude Include="src\msdf-atlas-gen\AtlasStorage.h" />
+    <ClInclude Include="src\msdf-atlas-gen\BitmapAtlasStorage.h" />
+    <ClInclude Include="src\msdf-atlas-gen\BitmapAtlasStorage.hpp" />
+    <ClInclude Include="src\msdf-atlas-gen\Charset.h" />
+    <ClInclude Include="src\msdf-atlas-gen\DynamicAtlas.h" />
+    <ClInclude Include="src\msdf-atlas-gen\DynamicAtlas.hpp" />
+    <ClInclude Include="src\msdf-atlas-gen\FontGeometry.h" />
+    <ClInclude Include="src\msdf-atlas-gen\GlyphBox.h" />
+    <ClInclude Include="src\msdf-atlas-gen\GlyphGeometry.h" />
+    <ClInclude Include="src\msdf-atlas-gen\ImmediateAtlasGenerator.h" />
+    <ClInclude Include="src\msdf-atlas-gen\ImmediateAtlasGenerator.hpp" />
+    <ClInclude Include="src\msdf-atlas-gen\Rectangle.h" />
+    <ClInclude Include="src\msdf-atlas-gen\RectanglePacker.h" />
+    <ClInclude Include="src\msdf-atlas-gen\Remap.h" />
+    <ClInclude Include="src\msdf-atlas-gen\TightAtlasPacker.h" />
+    <ClInclude Include="src\msdf-atlas-gen\Workload.h" />
+    <ClInclude Include="src\msdf-atlas-gen\bitmap-blit.h" />
+    <ClInclude Include="src\msdf-atlas-gen\csv-export.h" />
+    <ClInclude Include="src\msdf-atlas-gen\glyph-generators.h" />
+    <ClInclude Include="src\msdf-atlas-gen\image-encode.h" />
+    <ClInclude Include="src\msdf-atlas-gen\image-save.h" />
+    <ClInclude Include="src\msdf-atlas-gen\image-save.hpp" />
+    <ClInclude Include="src\msdf-atlas-gen\json-export.h" />
+    <ClInclude Include="src\msdf-atlas-gen\msdf-atlas-gen.h" />
+    <ClInclude Include="src\msdf-atlas-gen\rectangle-packing.h" />
+    <ClInclude Include="src\msdf-atlas-gen\rectangle-packing.hpp" />
+    <ClInclude Include="src\msdf-atlas-gen\shadron-preview-generator.h" />
+    <ClInclude Include="src\msdf-atlas-gen\size-selectors.h" />
+    <ClInclude Include="src\msdf-atlas-gen\types.h" />
+    <ClInclude Include="src\msdf-atlas-gen\utf8.h" />
+    <ClInclude Include="src\msdfgen\core\Bitmap.h" />
+    <ClInclude Include="src\msdfgen\core\Bitmap.hpp" />
+    <ClInclude Include="src\msdfgen\core\BitmapRef.hpp" />
+    <ClInclude Include="src\msdfgen\core\Contour.h" />
+    <ClInclude Include="src\msdfgen\core\EdgeColor.h" />
+    <ClInclude Include="src\msdfgen\core\EdgeHolder.h" />
+    <ClInclude Include="src\msdfgen\core\MSDFErrorCorrection.h" />
+    <ClInclude Include="src\msdfgen\core\Projection.h" />
+    <ClInclude Include="src\msdfgen\core\Scanline.h" />
+    <ClInclude Include="src\msdfgen\core\Shape.h" />
+    <ClInclude Include="src\msdfgen\core\ShapeDistanceFinder.h" />
+    <ClInclude Include="src\msdfgen\core\ShapeDistanceFinder.hpp" />
+    <ClInclude Include="src\msdfgen\core\SignedDistance.h" />
+    <ClInclude Include="src\msdfgen\core\Vector2.h" />
+    <ClInclude Include="src\msdfgen\core\arithmetics.hpp" />
+    <ClInclude Include="src\msdfgen\core\bitmap-interpolation.hpp" />
+    <ClInclude Include="src\msdfgen\core\contour-combiners.h" />
+    <ClInclude Include="src\msdfgen\core\edge-coloring.h" />
+    <ClInclude Include="src\msdfgen\core\edge-segments.h" />
+    <ClInclude Include="src\msdfgen\core\edge-selectors.h" />
+    <ClInclude Include="src\msdfgen\core\equation-solver.h" />
+    <ClInclude Include="src\msdfgen\core\generator-config.h" />
+    <ClInclude Include="src\msdfgen\core\msdf-error-correction.h" />
+    <ClInclude Include="src\msdfgen\core\pixel-conversion.hpp" />
+    <ClInclude Include="src\msdfgen\core\rasterization.h" />
+    <ClInclude Include="src\msdfgen\core\render-sdf.h" />
+    <ClInclude Include="src\msdfgen\core\save-bmp.h" />
+    <ClInclude Include="src\msdfgen\core\save-tiff.h" />
+    <ClInclude Include="src\msdfgen\core\sdf-error-estimation.h" />
+    <ClInclude Include="src\msdfgen\core\shape-description.h" />
+    <ClInclude Include="src\msdfgen\ext\import-font.h" />
+    <ClInclude Include="src\msdfgen\ext\import-svg.h" />
+    <ClInclude Include="src\msdfgen\ext\resolve-shape-geometry.h" />
+    <ClInclude Include="src\msdfgen\ext\save-png.h" />
+    <ClInclude Include="src\msdfgen\freetype\builds\amiga\include\config\ftconfig.h" />
+    <ClInclude Include="src\msdfgen\freetype\builds\amiga\include\config\ftmodule.h" />
+    <ClInclude Include="src\msdfgen\freetype\builds\atari\ATARI.H" />
+    <ClInclude Include="src\msdfgen\freetype\builds\vms\ftconfig.h" />
+    <ClInclude Include="src\msdfgen\freetype\devel\ft2build.h" />
+    <ClInclude Include="src\msdfgen\freetype\devel\ftoption.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\config\ftconfig.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\config\ftheader.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\config\ftmodule.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\config\ftoption.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\config\ftstdlib.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\config\integer-types.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\config\mac-support.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\config\public-macros.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\freetype.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftadvanc.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftbbox.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftbdf.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftbitmap.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftbzip2.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftcache.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftchapters.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftcid.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftcolor.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftdriver.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\fterrdef.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\fterrors.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftfntfmt.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftgasp.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftglyph.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftgxval.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftgzip.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftimage.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftincrem.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftlcdfil.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftlist.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftlogging.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftlzw.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftmac.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftmm.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftmodapi.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftmoderr.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftotval.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftoutln.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftparams.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftpfr.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftrender.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftsizes.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftsnames.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftstroke.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftsynth.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftsystem.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\fttrigon.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\fttypes.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ftwinfnt.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\autohint.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\cffotypes.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\cfftypes.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\compiler-macros.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftcalc.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftdebug.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftdrv.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftgloadr.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\fthash.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftmemory.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftobjs.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftpsprop.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftrfork.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftserv.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftstream.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\fttrace.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\ftvalid.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\psaux.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\pshints.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svbdf.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svcfftl.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svcid.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svfntfmt.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svgldict.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svgxval.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svkern.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svmetric.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svmm.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svotval.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svpfr.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svpostnm.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svprop.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svpscmap.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svpsinfo.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svsfnt.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svttcmap.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svtteng.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svttglyf.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\services\svwinfnt.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\sfnt.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\t1types.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\tttypes.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\internal\wofftypes.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\t1tables.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\ttnameid.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\tttables.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\freetype\tttags.h" />
+    <ClInclude Include="src\msdfgen\freetype\include\ft2build.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afblue.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afcjk.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afcover.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afdummy.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\aferrors.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afglobal.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afhints.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afindic.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\aflatin.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afloader.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afmodule.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afranges.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afscript.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afshaper.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afstyles.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\aftypes.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afws-decl.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\autofit\afws-iter.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\base\ftbase.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\base\md5.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\bdf\bdf.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\bdf\bdfdrivr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\bdf\bdferror.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cache\ftccache.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cache\ftccback.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cache\ftcerror.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cache\ftcglyph.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cache\ftcimage.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cache\ftcmanag.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cache\ftcmru.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cache\ftcsbits.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cff\cffcmap.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cff\cffdrivr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cff\cfferrs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cff\cffgload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cff\cffload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cff\cffobjs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cff\cffparse.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cff\cfftoken.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cid\ciderrs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cid\cidgload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cid\cidload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cid\cidobjs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cid\cidparse.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cid\cidriver.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\cid\cidtoken.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gxvalid\gxvalid.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gxvalid\gxvcommn.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gxvalid\gxverror.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gxvalid\gxvfeat.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gxvalid\gxvmod.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gxvalid\gxvmort.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gxvalid\gxvmorx.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gzip\ftzconf.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gzip\infblock.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gzip\infcodes.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gzip\inffixed.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gzip\inftrees.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gzip\infutil.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gzip\zlib.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\gzip\zutil.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\lzw\ftzopen.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\otvalid\otvalid.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\otvalid\otvcommn.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\otvalid\otverror.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\otvalid\otvgpos.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\otvalid\otvmod.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pcf\pcf.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pcf\pcfdrivr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pcf\pcferror.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pcf\pcfread.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pcf\pcfutil.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pfr\pfrcmap.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pfr\pfrdrivr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pfr\pfrerror.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pfr\pfrgload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pfr\pfrload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pfr\pfrobjs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pfr\pfrsbit.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pfr\pfrtypes.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\afmparse.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\cffdecode.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psarrst.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psauxerr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psauxmod.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psblues.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psconv.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\pserror.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psfixed.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psfont.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psft.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psglue.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\pshints.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psintrp.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psobjs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psread.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\psstack.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\pstypes.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\t1cmap.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psaux\t1decode.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pshinter\pshalgo.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pshinter\pshglob.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pshinter\pshmod.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pshinter\pshnterr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\pshinter\pshrec.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psnames\psmodule.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psnames\psnamerr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\psnames\pstables.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\raster\ftmisc.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\raster\ftraster.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\raster\ftrend1.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\raster\rasterrs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sdf\ftsdf.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sdf\ftsdfcommon.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sdf\ftsdferrs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sdf\ftsdfrend.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\pngshim.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\sfdriver.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\sferrors.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\sfobjs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\sfwoff.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\sfwoff2.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttbdf.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttcmap.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttcmapc.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttcolr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttcpal.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttkern.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttmtx.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttpost.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\ttsbit.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\sfnt\woff2tags.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\smooth\ftgrays.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\smooth\ftsmerrs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\smooth\ftsmooth.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\truetype\ttdriver.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\truetype\tterrors.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\truetype\ttgload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\truetype\ttgxvar.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\truetype\ttinterp.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\truetype\ttobjs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\truetype\ttpload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\truetype\ttsubpix.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type1\t1afm.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type1\t1driver.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type1\t1errors.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type1\t1gload.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type1\t1load.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type1\t1objs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type1\t1parse.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type1\t1tokens.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type42\t42drivr.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type42\t42error.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type42\t42objs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type42\t42parse.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\type42\t42types.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\winfonts\fnterrs.h" />
+    <ClInclude Include="src\msdfgen\freetype\src\winfonts\winfnt.h" />
+    <ClInclude Include="src\msdfgen\include\lodepng.h" />
+    <ClInclude Include="src\msdfgen\include\tinyxml2.h" />
+    <ClInclude Include="src\msdfgen\msdfgen-ext.h" />
+    <ClInclude Include="src\msdfgen\msdfgen.h" />
+    <ClInclude Include="src\msdfgen\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\msdf-atlas-gen\Charset.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\FontGeometry.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\GlyphGeometry.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\RectanglePacker.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\TightAtlasPacker.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\Workload.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\bitmap-blit.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\charset-parser.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\csv-export.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\glyph-generators.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\image-encode.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\json-export.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\main.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\shadron-preview-generator.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\size-selectors.cpp" />
+    <ClCompile Include="src\msdf-atlas-gen\utf8.cpp" />
+    <ClCompile Include="src\msdfgen\core\Contour.cpp" />
+    <ClCompile Include="src\msdfgen\core\EdgeHolder.cpp" />
+    <ClCompile Include="src\msdfgen\core\MSDFErrorCorrection.cpp" />
+    <ClCompile Include="src\msdfgen\core\Projection.cpp" />
+    <ClCompile Include="src\msdfgen\core\Scanline.cpp" />
+    <ClCompile Include="src\msdfgen\core\Shape.cpp" />
+    <ClCompile Include="src\msdfgen\core\SignedDistance.cpp" />
+    <ClCompile Include="src\msdfgen\core\Vector2.cpp" />
+    <ClCompile Include="src\msdfgen\core\contour-combiners.cpp" />
+    <ClCompile Include="src\msdfgen\core\edge-coloring.cpp" />
+    <ClCompile Include="src\msdfgen\core\edge-segments.cpp" />
+    <ClCompile Include="src\msdfgen\core\edge-selectors.cpp" />
+    <ClCompile Include="src\msdfgen\core\equation-solver.cpp" />
+    <ClCompile Include="src\msdfgen\core\msdf-error-correction.cpp" />
+    <ClCompile Include="src\msdfgen\core\msdfgen.cpp" />
+    <ClCompile Include="src\msdfgen\core\rasterization.cpp" />
+    <ClCompile Include="src\msdfgen\core\render-sdf.cpp" />
+    <ClCompile Include="src\msdfgen\core\save-bmp.cpp" />
+    <ClCompile Include="src\msdfgen\core\save-tiff.cpp" />
+    <ClCompile Include="src\msdfgen\core\sdf-error-estimation.cpp" />
+    <ClCompile Include="src\msdfgen\core\shape-description.cpp" />
+    <ClCompile Include="src\msdfgen\ext\import-font.cpp" />
+    <ClCompile Include="src\msdfgen\ext\import-svg.cpp" />
+    <ClCompile Include="src\msdfgen\ext\resolve-shape-geometry.cpp" />
+    <ClCompile Include="src\msdfgen\ext\save-png.cpp" />
+    <ClCompile Include="src\msdfgen\freetype\src\autofit\autofit.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftbase.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftbbox.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftbdf.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftbitmap.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftcid.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftdebug.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftfstype.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftgasp.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftglyph.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftgxval.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftinit.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftmm.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftotval.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftpatent.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftpfr.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftstroke.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftsynth.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftsystem.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\fttype1.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\base\ftwinfnt.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\bdf\bdf.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\bzip2\ftbzip2.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\cache\ftcache.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\cff\cff.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\cid\type1cid.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\gzip\ftgzip.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\lzw\ftlzw.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\pcf\pcf.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\pfr\pfr.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\psaux\psaux.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\pshinter\pshinter.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\psnames\psnames.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\raster\raster.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\sdf\sdf.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\sfnt\sfnt.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\smooth\smooth.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\truetype\truetype.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\type1\type1.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\type42\type42.c" />
+    <ClCompile Include="src\msdfgen\freetype\src\winfonts\winfnt.c" />
+    <ClCompile Include="src\msdfgen\lib\lodepng.cpp" />
+    <ClCompile Include="src\msdfgen\lib\tinyxml2.cpp" />
+    <ClCompile Include="src\msdfgen\main.cpp">
+      <ObjectFileName>$(IntDir)\main1.obj</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

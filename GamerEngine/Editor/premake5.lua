@@ -62,7 +62,7 @@ includedirs{
 	"%{IncludeDirs.ImGuiOnly}",
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.Game}",
-	"%{IncludeDirs.RapidJson}",
+	"%{IncludeDirs.Json}",
 	"%{IncludeDirs.TurNet}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
@@ -70,7 +70,7 @@ includedirs{
 	"%{IncludeDirs.OpenVR}",
     	"%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.PhysicsEngine}",
-	"%{IncludeDirs.PyBullet}",
+	--"%{IncludeDirs.PhysX}",
 	"%{IncludeDirs.Flecs}",
 	"%{IncludeDirs.DirectXTK}"
 }
@@ -88,14 +88,17 @@ links
 	"Game",
 	"PhysicsEngine",
 	"Flecs",
+	"freetype",
+	--"PhysX",
 	
-	"RapidJson",
+	"Json",
 	"YamlCpp",
 	"OpenFBX",
 	"OpenVR",
 	"DirectXTK",
 	
 	"ImGui",
+	"msdf",
 	
 	--"cryptlib",
 	"TurNet",

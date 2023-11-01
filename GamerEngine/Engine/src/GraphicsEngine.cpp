@@ -18,6 +18,7 @@
 #include "Render/PostProcessRenderer.h"
 #include "Scene/SceneManager.h"
 
+#include "Font/Font.h"
 
 GraphicsEngine* GraphicsEngine::Get()
 {
@@ -78,6 +79,8 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		return false;
 	}
 
+	Engine::Font font("resources\\fonts\\arial.ttf");
+
 	myForwardRenderer = std::make_shared<ForwardRenderer>();
 	myDeferredRenderer = std::make_shared<DeferredRenderer>();
 	myShadowRenderer = std::make_shared<ShadowRenderer>();
@@ -126,31 +129,6 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 
 	return true;
-}
-
-inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t& matPose)
-{
-	Matrix4x4f matrixObj;
-	for (int row = 0; row < 4; ++row) {
-		for (int col = 0; col < 4; ++col) {
-			matrixObj(row + 1, col + 1) = matPose.m[col][row]; // Transpose the matrix during conversion
-		}
-	}
-
-	return matrixObj;
-}
-
-inline Matrix4x4f ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix44_t& matPose)
-{
-	Matrix4x4f matrixObj;
-
-	for (int row = 0; row < 4; ++row) {
-		for (int col = 0; col < 4; ++col) {
-			matrixObj(row + 1, col + 1) = matPose.m[col][row]; // Transpose the matrix during conversion
-		}
-	}
-
-	return matrixObj;
 }
 
 

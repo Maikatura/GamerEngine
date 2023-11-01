@@ -60,7 +60,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\PyBullet\src;..\External\directxtk\inc;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\json;..\External\WICTextureLoader;.;..\External\directxtk\inc;..\External\Text\src\msdfgen;..\External\Text\src\msdf-atlas-gen;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -86,7 +86,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\WICTextureLoader;..\External\PyBullet\src;..\External\directxtk\inc;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\json;..\External\WICTextureLoader;.;..\External\directxtk\inc;..\External\Text\src\msdfgen;..\External\Text\src\msdf-atlas-gen;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -108,9 +108,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="MetaAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\AssetHandlers\LightAssetHandler.h" />
+    <ClInclude Include="src\AssetHandlers\MetaFileHandler.h" />
     <ClInclude Include="src\AssetHandlers\ModelAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\ParticleAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\TextureAssetHandler.h" />
@@ -119,6 +119,7 @@
     <ClInclude Include="src\Debugger\ConsoleHelper.h" />
     <ClInclude Include="src\EngineSettingDefines.h" />
     <ClInclude Include="src\EngineSettings\Settings.h" />
+    <ClInclude Include="src\Font\Font.h" />
     <ClInclude Include="src\Framework\DX11.h" />
     <ClInclude Include="src\GraphicsEngine.h" />
     <ClInclude Include="src\GraphicsEngine.pch.h" />
@@ -174,14 +175,15 @@
     <ClInclude Include="src\VR\VRSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MetaAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp" />
     <ClCompile Include="src\AssetHandlers\LightAssetHandler.cpp" />
+    <ClCompile Include="src\AssetHandlers\MetaFileHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\ModelAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\ParticleAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\TextureAssetHandler.cpp" />
     <ClCompile Include="src\Audio\AudioManager.cpp" />
     <ClCompile Include="src\Debugger\ConsoleHelper.cpp" />
+    <ClCompile Include="src\Font\Font.cpp" />
     <ClCompile Include="src\Framework\DX11.cpp" />
     <ClCompile Include="src\GraphicsEngine.cpp" />
     <ClCompile Include="src\GraphicsEngine.pch.cpp">
@@ -246,6 +248,12 @@
     </ProjectReference>
     <ProjectReference Include="..\External\ImGui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\Json\Json.vcxproj">
+      <Project>{7F9B877C-6BD2-880D-14BF-6E1000D5040F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\Text\msdf.vcxproj">
+      <Project>{4FCB9A7C-3B02-9C0D-E4EE-8110D004180F}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

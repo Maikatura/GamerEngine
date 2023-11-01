@@ -40,7 +40,6 @@ libdirs
 
 includedirs{
     "./src",
-	"%{IncludeDirs.RapidJson}",
 	"%{IncludeDirs.ImGui}",
 	"%{IncludeDirs.GraphicsEngine}",
 	"%{IncludeDirs.CommonUtilities}",
@@ -48,7 +47,7 @@ includedirs{
 	"%{IncludeDirs.ImGuiOnly}",
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.Game}",
-	"%{IncludeDirs.RapidJson}",
+	"%{IncludeDirs.Json}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
 	"%{IncludeDirs.OpenVR}",
@@ -70,7 +69,7 @@ links
 	"FBXImporter",
 	"Engine",
 	"Game",
-	"RapidJson",
+	"Json",
 	"YamlCpp",
 	"Flecs",
 	"OpenVR",
