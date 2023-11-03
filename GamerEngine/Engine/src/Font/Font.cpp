@@ -34,34 +34,28 @@ namespace Engine
 
 		msdfgen::BitmapConstRef<T, N> bitmap = (msdfgen::BitmapConstRef<T, N>)generator.atlasStorage();
 
+		std::vector<CommonUtilities::Vector4<T>> newBuffer;
 
-		std::vector<T> convertedData;
-		convertedData.reserve(aWidth * aHeight);
-
-
-		for (uint32_t y = 0; y < aHeight; y++) 
+		int y = 0;
+		for (int i = 0; i < static_cast<size_t>(aWidth) * static_cast<size_t>(aHeight); i++)
 		{
-			for (uint32_t x = 0; x < aWidth; x++) 
-			{
-				T color = static_cast<T>(*bitmap(x, y));  // Red channel
-				convertedData.push_back(color);
+			CommonUtilities::Vector4<T> vectorStuff;
 
-				if (color != 0)
-				{
-					//std::cout <<  sizeof(color) << std::endl;;
-				}
-				
+			auto data = bitmap(i % aWidth, y);
+			vectorStuff.x = data[0];
+			vectorStuff.y = data[1];
+			vectorStuff.z = data[2];
+			vectorStuff.w = 255;
+
+			if (i % aWidth == 0)
+			{
+				y++;
 			}
+
+			newBuffer.push_back(vectorStuff);
 		}
 
-		
-
-		int size = 3;
-
-		std::cout <<  size << std::endl;
-
-
-		Ref<Texture> texture = TextureAssetHandler::CreateTexture(Helpers::string_cast<std::wstring>(aFontName), (void*)bitmap.pixels, bitmap.width, bitmap.height, size);
+		Ref<Texture> texture = TextureAssetHandler::CreateTexture(Helpers::string_cast<std::wstring>(aFontName), (void*)newBuffer.data(), bitmap.width, bitmap.height, sizeof(CommonUtilities::Vector4<T>));
 		return texture;
 	};
 
@@ -150,6 +144,9 @@ namespace Engine
 				glyph.edgeColoring(msdfgen::edgeColoringInkTrap, DEFAULT_ANGLE_THRESHOLD, glyphSeed);
 			}
 		}
+
+
+
 
 		Ref<Texture> texture = CreateAndCacheAtlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>("Ariel", (float)emSize, myData->Glyphs, myData->FontGeometry, width, height);
 

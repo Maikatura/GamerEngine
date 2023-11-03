@@ -27,47 +27,34 @@ Ref<Texture> TextureAssetHandler::CreateTexture(const std::wstring& aName, void*
 	Ref<Texture> returnTexture = MakeRef<Texture>();
 
 
-	// Define the texture description
-	D3D11_TEXTURE2D_DESC textureDesc;
-	ZeroMemory(&textureDesc, sizeof(textureDesc));
-	textureDesc.Width = aWidth;          // Width of the texture
-	textureDesc.Height = aHeight;        // Height of the texture
-	textureDesc.MipLevels = 1;          // Number of mip levels (1 for a simple texture)
-	textureDesc.ArraySize = 1;          // Number of textures in the array
-	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Texture format (adjust as needed)
-	textureDesc.SampleDesc.Count = 1;   // Number of multisamples per pixel
-	textureDesc.SampleDesc.Quality = 0; // Quality level of multisampling
-	textureDesc.Usage = D3D11_USAGE_DEFAULT;  // Usage (change if needed)
-	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE; // Bind flags (e.g., shader resource)
-	textureDesc.CPUAccessFlags = 0; // CPU access flags
-	textureDesc.MiscFlags = 0;     // Miscellaneous flags
-	
+	// Assuming 'device' is your D3D11 device
+	ID3D11Texture2D* dxTexture;
 
-	// Create the texture
-	ID3D11Texture2D* texture = nullptr;
-	D3D11_SUBRESOURCE_DATA initData;
-	ZeroMemory(&initData, sizeof(initData));
-	initData.pSysMem = aPixels; // Pointer to your raw data
-	initData.SysMemPitch = aWidth * aColorCount; // Assuming 4 bytes per pixel (adjust for your data format)
+	// Create a texture with the same dimensions as the bitmap
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	texDesc.Width = aWidth;
+	texDesc.Height = aHeight;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;// Assuming R8G8B8A8 format
+	texDesc.SampleDesc.Count = 1;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = 0;
 
-	HRESULT result = DX11::Get().GetDevice()->CreateTexture2D(&textureDesc, &initData, &texture);
-	if (FAILED(result))
-	{
-		// Handle the error
-	}
+	DX11::Get().GetDevice()->CreateTexture2D(&texDesc, nullptr, &dxTexture);
 
-	// Create a shader resource view for the texture
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	ZeroMemory(&srvDesc, sizeof(srvDesc));
-	srvDesc.Format = textureDesc.Format;
+	// Copy the pixel data from the 'bitmap' to 'dxTexture'
+	DX11::Get().GetContext()->UpdateSubresource(dxTexture, 0, nullptr, aPixels, aWidth * aColorCount, 0);
+
+	// Create a shader resource view (SRV) from 'dxTexture'
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = texDesc.Format;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 
-	result = DX11::Get().GetDevice()->CreateShaderResourceView(texture, &srvDesc, &returnTexture->mySRV);
-	if (FAILED(result))
-	{
-		// Handle the error
-	}
+	DX11::Get().GetDevice()->CreateShaderResourceView(dxTexture, &srvDesc, &returnTexture->mySRV);
+
 
 	returnTexture->SetName(aName);
 	myRegistry.insert({ aName, returnTexture });

@@ -79,7 +79,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		return false;
 	}
 
-	Engine::Font font("resources\\fonts\\arial.ttf");
+	Engine::Font font("resources\\fonts\\OpenSans.ttf");
 
 	myForwardRenderer = MakeRef<ForwardRenderer>();
 	myDeferredRenderer = MakeRef<DeferredRenderer>();

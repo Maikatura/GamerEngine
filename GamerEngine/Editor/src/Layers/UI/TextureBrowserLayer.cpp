@@ -15,7 +15,7 @@ void TextureBrowserLayer::OnImGuiRender()
 	auto textures = TextureAssetHandler::GetTextureList();
 	for (auto texture : textures)
 	{
-		ImGui::Image(texture->GetSRV().Get(), { 512, 512 }, { 0,1 }, { 1, 0 });
+		ImGui::Image(texture->GetSRV().Get(), { 512, 512 });
 	}
 
 	EndMenu();
