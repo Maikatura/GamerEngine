@@ -9,6 +9,7 @@
 #include <Particles/particleemitter.h>
 
 #include "AssetHandlers/ModelAssetHandler.h"
+#include "Font/MSDFData.h"
 
 bool ForwardRenderer::Initialize()
 {
@@ -332,6 +333,62 @@ void ForwardRenderer::RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, st
 		}
 
 	}
+}
+
+void ForwardRenderer::RenderString(const std::string& aString, Ref<Engine::Font> aFont, Matrix4x4f aTransform,
+	Vector4f aColor)
+{
+	const auto& fontGeometry = aFont->GetMSDFData()->FontGeometry;
+	const auto& metrics = fontGeometry.getMetrics();
+	auto fontAtlas = aFont->GetAtlasTexture();
+
+	double x = 0.0;
+	double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
+	double y = 0.0;
+
+	char character = 'C';
+	auto glyph = fontGeometry.getGlyph(character);
+
+	if (!glyph)
+	{
+		glyph = fontGeometry.getGlyph('?');
+	}
+
+	if (!glyph)
+	{
+		return;
+	}
+
+	double al, ab, ar, at;
+	glyph->getQuadAtlasBounds(al, ab, ar, at);
+
+	Vector2f texCoordMin((float)al, (float)ab);
+	Vector2f texCoordMax((float)ar, (float)at);
+
+
+	double pl, pb, pr, pt;
+	glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+	Vector2f quadMin((float)al, (float)ab);
+	Vector2f quadMax((float)ar, (float)at);
+
+	quadMin *= (float)fsScale, quadMin *= (float)fsScale;
+	quadMin += Vector2f{ (float)x,(float)y };
+	quadMax += Vector2f{ (float)x,(float)y };
+
+	float texelWidth = 1.0f / (float)fontAtlas->GetWidth();
+	float texelHeight = 1.0f / (float)fontAtlas->GetHeight();
+	texCoordMin += Vector2f(texelWidth, texelHeight);
+	texCoordMax += Vector2f(texelWidth, texelHeight);
+
+	// Render
+
+	double advance = glyph->getAdvance();
+	char nextCharacter = 'C';
+	fontGeometry.getAdvance(advance, character, nextCharacter);
+
+	float kerningOffset = 0.0f;
+	x += fsScale * advance + kerningOffset;
+
 }
 
 void ForwardRenderer::BuildDepth()

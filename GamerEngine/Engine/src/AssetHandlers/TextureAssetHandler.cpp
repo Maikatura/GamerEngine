@@ -26,6 +26,8 @@ Ref<Texture> TextureAssetHandler::CreateTexture(const std::wstring& aName, void*
 {
 	Ref<Texture> returnTexture = MakeRef<Texture>();
 
+	returnTexture->SetWidth(aWidth);
+	returnTexture->SetHeight(aHeight);
 
 	// Assuming 'device' is your D3D11 device
 	ID3D11Texture2D* dxTexture;

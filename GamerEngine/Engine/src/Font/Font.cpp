@@ -6,16 +6,10 @@
 #include "FontGeometry.h"
 #include "Model/Texture.h"
 #include "Utilites/StringCast.h"
-
+#include <Font/MSDFData.h>
 
 namespace Engine
 {
-
-	struct MSDFData
-	{
-		std::vector<msdf_atlas::GlyphGeometry> Glyphs;
-		msdf_atlas::FontGeometry FontGeometry;
-	};
 
 	template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S,N> GenFunc>
 	static Ref<Texture> CreateAndCacheAtlas(const std::string& aFontName,

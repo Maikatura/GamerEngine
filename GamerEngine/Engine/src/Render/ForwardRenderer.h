@@ -12,6 +12,8 @@
 #include "Render/Buffers.h"
 #include <d3d11.h>
 
+#include "Font/Font.h"
+
 constexpr UINT MAX_FORWARD_LIGHTS = 98;
 
 
@@ -42,6 +44,9 @@ public:
 
 	void RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, std::vector<RenderBuffer2D>& aSpriteList, const Ref<DirectionalLight>& aDirectionalLight, const std::
 		shared_ptr<EnvironmentLight>& anEnvironmentLight);
+
+
+	void RenderString(const std::string& aString, Ref<Engine::Font> aFont, Matrix4x4f aTransform, Vector4f aColor);
 
 	void BuildDepth();
 

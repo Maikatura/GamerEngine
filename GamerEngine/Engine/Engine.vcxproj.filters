@@ -244,6 +244,9 @@
     <ClInclude Include="src\VR\VRSystem.h">
       <Filter>VR</Filter>
     </ClInclude>
+    <ClInclude Include="src\Font\MSDFData.h">
+      <Filter>Font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp">

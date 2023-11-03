@@ -21,6 +21,10 @@ class Texture
 	friend class PostProcessRenderer;
 
 protected:
+
+	int myWidth;
+	int myHeight;
+
 	std::wstring myName;
 	std::wstring myPath;
 
@@ -40,9 +44,15 @@ public:
 	void SetTextureType(TextureType aTextureType);
 
 
+	int GetWidth() { return myWidth; }
+	int GetHeight() { return myHeight; }
+
 	Texture();
 	virtual ~Texture();
 
+
+	void SetWidth(int aWidth) { myWidth = aWidth; }
+	void SetHeight(int aHeight) { myHeight = aHeight; }
 	void SetName(const std::wstring& aName);
 	void SetAsResource(unsigned int aSlot);
 	void ClearResource(unsigned int aSlot);
