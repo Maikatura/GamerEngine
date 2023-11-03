@@ -39,6 +39,7 @@ public:
 	TextureType GetTextureType();
 	void SetTextureType(TextureType aTextureType);
 
+
 	Texture();
 	virtual ~Texture();
 

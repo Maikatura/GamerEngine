@@ -13,3 +13,4 @@
 #include <Layers/Debug/KeybindShortcutsLayer.h>
 
 #include <Layers/UI/ProfilerLayer.h>
+#include <Layers/UI/TextureBrowserLayer.h>

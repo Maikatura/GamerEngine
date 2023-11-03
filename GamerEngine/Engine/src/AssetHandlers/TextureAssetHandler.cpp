@@ -22,6 +22,60 @@ void TextureAssetHandler::Clear()
 	myRegistry.clear();
 }
 
+Ref<Texture> TextureAssetHandler::CreateTexture(const std::wstring& aName, void* aPixels, int aWidth, int aHeight, int aColorCount)
+{
+	Ref<Texture> returnTexture = MakeRef<Texture>();
+
+
+	// Define the texture description
+	D3D11_TEXTURE2D_DESC textureDesc;
+	ZeroMemory(&textureDesc, sizeof(textureDesc));
+	textureDesc.Width = aWidth;          // Width of the texture
+	textureDesc.Height = aHeight;        // Height of the texture
+	textureDesc.MipLevels = 1;          // Number of mip levels (1 for a simple texture)
+	textureDesc.ArraySize = 1;          // Number of textures in the array
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Texture format (adjust as needed)
+	textureDesc.SampleDesc.Count = 1;   // Number of multisamples per pixel
+	textureDesc.SampleDesc.Quality = 0; // Quality level of multisampling
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;  // Usage (change if needed)
+	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE; // Bind flags (e.g., shader resource)
+	textureDesc.CPUAccessFlags = 0; // CPU access flags
+	textureDesc.MiscFlags = 0;     // Miscellaneous flags
+	
+
+	// Create the texture
+	ID3D11Texture2D* texture = nullptr;
+	D3D11_SUBRESOURCE_DATA initData;
+	ZeroMemory(&initData, sizeof(initData));
+	initData.pSysMem = aPixels; // Pointer to your raw data
+	initData.SysMemPitch = aWidth * aColorCount; // Assuming 4 bytes per pixel (adjust for your data format)
+
+	HRESULT result = DX11::Get().GetDevice()->CreateTexture2D(&textureDesc, &initData, &texture);
+	if (FAILED(result))
+	{
+		// Handle the error
+	}
+
+	// Create a shader resource view for the texture
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	ZeroMemory(&srvDesc, sizeof(srvDesc));
+	srvDesc.Format = textureDesc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = 1;
+
+	result = DX11::Get().GetDevice()->CreateShaderResourceView(texture, &srvDesc, &returnTexture->mySRV);
+	if (FAILED(result))
+	{
+		// Handle the error
+	}
+
+	returnTexture->SetName(aName);
+	myRegistry.insert({ aName, returnTexture });
+
+	return returnTexture;
+}
+
+
 Ref<Texture> TextureAssetHandler::GetTexture(const std::wstring& aName)
 {
 	

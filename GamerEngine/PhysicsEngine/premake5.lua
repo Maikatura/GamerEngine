@@ -59,7 +59,7 @@ externalwarnings "Off"
 links
 {
 	"CommonUtilities",
-	"PhysX"
+	--"PhysX"
 }
 
 files 

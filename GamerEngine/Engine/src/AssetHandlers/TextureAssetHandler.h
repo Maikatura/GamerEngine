@@ -19,6 +19,7 @@ public:
 
 	static void Clear();
 
+	static Ref<Texture> CreateTexture(const std::wstring& aName, void* aPixels, int aWidth, int aHeight, int aColorCount = 4);
 	static Ref<Texture> GetTexture(const std::wstring& aName);
 
 	static bool LoadTexture(const std::wstring& aFileName);
@@ -30,3 +31,4 @@ public:
 	static ID3D11VertexShader* GetVertexShader(const std::string& aPath);
 	static std::vector<Ref<Texture>> GetTextureList();
 };
+

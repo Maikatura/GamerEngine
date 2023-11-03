@@ -13,6 +13,7 @@ void Texture::SetTextureType(TextureType aTextureType)
 	myTextureType = aTextureType;
 }
 
+
 Texture::Texture()
 {
 }

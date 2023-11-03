@@ -74,7 +74,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>PhysX.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -102,7 +101,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>PhysX.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Lib>

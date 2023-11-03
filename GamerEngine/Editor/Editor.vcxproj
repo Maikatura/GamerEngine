@@ -150,6 +150,7 @@
     <ClInclude Include="src\Layers\UI\Inspector.h" />
     <ClInclude Include="src\Layers\UI\MainMenuBar.h" />
     <ClInclude Include="src\Layers\UI\ProfilerLayer.h" />
+    <ClInclude Include="src\Layers\UI\TextureBrowserLayer.h" />
     <ClInclude Include="src\Project\ProjectConfig.h" />
     <ClInclude Include="src\Project\ProjectSerializer.h" />
     <ClInclude Include="src\Resource.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="src\Layers\UI\Inspector.cpp" />
     <ClCompile Include="src\Layers\UI\MainMenuBar.cpp" />
     <ClCompile Include="src\Layers\UI\ProfilerLayer.cpp" />
+    <ClCompile Include="src\Layers\UI\TextureBrowserLayer.cpp" />
     <ClCompile Include="src\Project\ProjectConfig.cpp" />
     <ClCompile Include="src\Project\ProjectSerializer.cpp" />
     <ClCompile Include="src\Snapshots\SnapshotManager.cpp" />

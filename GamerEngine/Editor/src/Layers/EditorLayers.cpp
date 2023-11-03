@@ -190,6 +190,7 @@ void EditorLayers::AddDefaultLayers()
 	AddLayer(MakeRef<NetworkingLayer>());
 	AddLayer(MakeRef<HelpPanel>());
 	AddLayer(MakeRef<ProfilerLayer>(myShouldProfile));
+	AddLayer(MakeRef<TextureBrowserLayer>());
 }
 
 void EditorLayers::OnUpdate()

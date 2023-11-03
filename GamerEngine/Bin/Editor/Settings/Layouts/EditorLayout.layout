@@ -17,3 +17,5 @@ Windows:
     IsOpen: false
   - Name: Profiler
     IsOpen: false
+  - Name: Texture Browser
+    IsOpen: true
