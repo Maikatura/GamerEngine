@@ -61,7 +61,6 @@ public:
 	~GraphicsEngine();
 
 	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug, std::wstring aName = L"GamerEngine", bool aBoolToUseEditor = false, bool isVRMode = false);
-	void UpdateHMDMatrixPose();
 
 	void BeginFrame();
 	void EndFrame();

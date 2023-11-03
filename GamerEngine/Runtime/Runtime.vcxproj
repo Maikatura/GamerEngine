@@ -204,6 +204,9 @@
     <ProjectReference Include="..\External\DirectXTK\DirectXTK.vcxproj">
       <Project>{F78B7304-63F6-277B-AC34-D92018DE05D0}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\External\Text\src\msdfgen\freetype\freetype.vcxproj">
+      <Project>{89895BD8-7556-B6E3-9E6F-A48B8A9BEB71}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\External\TurNet\TurNet.vcxproj">
       <Project>{076955D4-F30A-80AA-DCC5-93FEC80607FB}</Project>
     </ProjectReference>

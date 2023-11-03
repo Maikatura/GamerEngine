@@ -108,7 +108,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Assert.h" />
     <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\AssetHandlers\LightAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\MetaFileHandler.h" />
@@ -117,6 +116,7 @@
     <ClInclude Include="src\AssetHandlers\TextureAssetHandler.h" />
     <ClInclude Include="src\Audio\Audio.h" />
     <ClInclude Include="src\Audio\AudioManager.h" />
+    <ClInclude Include="src\Core\Assert.h" />
     <ClInclude Include="src\Debugger\ConsoleHelper.h" />
     <ClInclude Include="src\EngineSettingDefines.h" />
     <ClInclude Include="src\EngineSettings\Settings.h" />

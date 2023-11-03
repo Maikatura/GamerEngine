@@ -5,6 +5,7 @@
 
 bool VRSystem::Init(HWND aWindowHandle)
 {
+#if ENABLE_VR
 	// Loading the SteamVR Runtime
 	vr::EVRInitError eError = vr::VRInitError_None;
 
@@ -51,12 +52,13 @@ bool VRSystem::Init(HWND aWindowHandle)
 		return false;
 	}
 
+#endif
+
 	return true;
 }
 
 void VRSystem::Update()
 {
-
 	if (!m_pHMD)
 		return;
 

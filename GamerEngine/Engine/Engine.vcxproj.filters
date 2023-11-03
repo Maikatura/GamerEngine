@@ -7,6 +7,9 @@
     <Filter Include="Audio">
       <UniqueIdentifier>{9718D90C-032D-01BE-CCAE-A41D3882FDEE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Debugger">
       <UniqueIdentifier>{2ACD0289-169A-5D94-3FB3-4B3C2BDF9222}</UniqueIdentifier>
     </Filter>
@@ -74,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="src\Audio\AudioManager.h">
       <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Assert.h">
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Debugger\ConsoleHelper.h">
       <Filter>Debugger</Filter>
@@ -238,7 +244,6 @@
     <ClInclude Include="src\VR\VRSystem.h">
       <Filter>VR</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Assert.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp">

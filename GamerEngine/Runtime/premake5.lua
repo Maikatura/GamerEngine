@@ -74,7 +74,7 @@ links
 	"Flecs",
 	"OpenVR",
 	"DirectXTk",
-	
+	"freetype",
 	"d3d11.lib",
 	"dxguid.lib",
 	

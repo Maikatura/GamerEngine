@@ -504,7 +504,7 @@ void GraphicsEngine::OnFrameRender()
 	}
 
 
-#ifndef VR_DISABLED
+#if ENABLE_VR
 
 	if (!myIsPaused)
 	{
@@ -512,14 +512,14 @@ void GraphicsEngine::OnFrameRender()
 
 
 
-		DX11::Get().GetContext()->RSSetState(DX11::Get().myFrontCulling);
+		DX11::Get().GetContext()->RSSetState(DX11::Get().GetFrontCulling());
 		{
 			PROFILE_CPU_SCOPE("Render Left Eye (VR)");
-			DX11::Get().m_RenderTextureLeft->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
+			DX11::Get().GetRightEyeView()->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
 			//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
 				// Clear the render to texture.
-			DX11::Get().m_RenderTextureLeft->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+			DX11::Get().GetRightEyeView()->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 			// Render the scene now and it will draw to the render to texture instead of the back buffer.
 			RenderScene(VREye::Left);
@@ -529,11 +529,11 @@ void GraphicsEngine::OnFrameRender()
 			PROFILE_CPU_SCOPE("Render Right Eye (VR)");
 			
 			// Set the render target to be the render to texture.
-			DX11::Get().m_RenderTextureRight->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
+			DX11::Get().GetRightEyeView()->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
 			//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
 				// Clear the render to texture.
-			DX11::Get().m_RenderTextureRight->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
+			DX11::Get().GetRightEyeView()->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 			// Render the scene now and it will draw to the render to texture instead of the back buffer.
 			RenderScene(VREye::Right);
@@ -623,9 +623,7 @@ void GraphicsEngine::EndFrame()
 		DX11::Get().EndFrame();
 	}
 
-#ifndef VR_DISABLED
-	UpdateHMDMatrixPose();
-#endif
+
 	//myGBuffer->Clear();
 
 	

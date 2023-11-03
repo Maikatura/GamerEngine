@@ -5,7 +5,8 @@
 #include "Components/CameraComponent.h"
 #include "Math/MathTypes.hpp"
 
-#define VR_DISABLED
+
+#define ENABLE_VR 0
 
 enum class VREye
 {

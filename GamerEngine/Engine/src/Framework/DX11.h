@@ -87,6 +87,7 @@ public:
 	DX11();
 	~DX11();
 	ComPtr<IDXGISwapChain> GetSwapChain();
+	ID3D11RasterizerState* GetFrontCulling();
 
 	static DX11& Get();
 

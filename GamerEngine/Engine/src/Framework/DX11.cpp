@@ -18,6 +18,11 @@ ComPtr<IDXGISwapChain> DX11::GetSwapChain()
 	return SwapChain;
 }
 
+ID3D11RasterizerState* DX11::GetFrontCulling()
+{
+	return myFrontCulling;
+}
+
 DX11& DX11::Get()
 {
 	static DX11 instance;
@@ -111,11 +116,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-#ifndef VR_DISABLED
-
-	
-
-#endif
+	myVRSystem.Init(aWindowHandle);
 
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
@@ -381,6 +382,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	// BIND VIEWPORT
 	myImmediateContext->RSSetViewports(1, &myViewport);
 
+
+#ifndef VR_DISABLED
 	// Create the render to texture object.
 	m_RenderTextureLeft = MakeRef<RenderTexture>();
 	if (!m_RenderTextureLeft)
@@ -397,6 +400,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	}
 
 
+
 	m_RenderTextureRight = MakeRef<RenderTexture>();
 	if (!m_RenderTextureRight)
 	{
@@ -411,6 +415,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	{
 		return false;
 	}
+#endif
 
 	// Create the render to texture object.
 	myScreenView = MakeRef<RenderTexture>();
@@ -494,7 +499,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	//	}
 	//}
 
-#ifndef VR_DISABLED
+#if ENABLE_VR
 	if (!vr::VRCompositor())
 	{
 		printf("Compositor initialization failed. See log file for details\n");
@@ -520,7 +525,7 @@ void DX11::EndFrame()
 	SwapChain->Present(0, 0);
 	myVRSystem.Update();
 
-#ifndef VR_DISABLED
+#if ENABLE_VR
 
 	vr::Texture_t leftEyeTexture = { m_RenderTextureLeft->GetTexture(), vr::TextureType_DirectX, vr::ColorSpace_Auto };
 	vr::EVRCompositorError error1 = vr::VRCompositor()->Submit(vr::Eye_Left, &leftEyeTexture);
