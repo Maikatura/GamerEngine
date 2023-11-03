@@ -8,10 +8,10 @@ LightAssetHandler::~LightAssetHandler()
 	myLights.clear();
 }
 
-std::shared_ptr<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor, float anIntensity,
+Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor, float anIntensity,
 	Vector3f aRotation)
 {
-	myDirectionalLight = std::make_shared<DirectionalLight>();
+	myDirectionalLight = MakeRef<DirectionalLight>();
 	myDirectionalLight->Init(aColor, anIntensity);
 
 	myDirectionalLight->SetLightPosition({0, 0, 0});
@@ -52,18 +52,18 @@ std::shared_ptr<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vect
 	return myDirectionalLight;
 }
 
-std::shared_ptr<EnvironmentLight> LightAssetHandler::CreateEnvironmentLight(const std::wstring& aTextureName)
+Ref<EnvironmentLight> LightAssetHandler::CreateEnvironmentLight(const std::wstring& aTextureName)
 {
-	myEnvironmentLight = std::make_shared<EnvironmentLight>();
+	myEnvironmentLight = MakeRef<EnvironmentLight>();
 	myEnvironmentLight->myTexture = TextureAssetHandler::GetTexture(aTextureName);
 	return myEnvironmentLight;
 }
 
-std::shared_ptr<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor, float anIntensity, float aRange,
+Ref<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor, float anIntensity, float aRange,
 	Vector3f aPosition)
 {
-	myLights.push_back(std::make_shared<PointLight>());
-	std::shared_ptr<PointLight> result = std::dynamic_pointer_cast<PointLight>(myLights.back());
+	myLights.push_back(MakeRef<PointLight>());
+	Ref<PointLight> result = std::dynamic_pointer_cast<PointLight>(myLights.back());
 
 	result->Init(aColor, anIntensity);
 	result->SetRange(aRange);
@@ -88,11 +88,11 @@ std::shared_ptr<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor,
 	return result;
 }
 
-std::shared_ptr<SpotLight> LightAssetHandler::CreateSpotLight(Vector3f aColor, float anIntensity, float aRange,
+Ref<SpotLight> LightAssetHandler::CreateSpotLight(Vector3f aColor, float anIntensity, float aRange,
 	Vector3f aPosition, float aInnerCone, float aOuterCone)
 {
-	myLights.push_back(std::make_shared<SpotLight>());
-	std::shared_ptr<SpotLight> result = std::dynamic_pointer_cast<SpotLight>(myLights.back());
+	myLights.push_back(MakeRef<SpotLight>());
+	Ref<SpotLight> result = std::dynamic_pointer_cast<SpotLight>(myLights.back());
 
 	result->Init(aColor, anIntensity);
 	result->SetRange(aRange);

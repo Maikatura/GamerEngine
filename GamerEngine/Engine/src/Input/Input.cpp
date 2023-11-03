@@ -2,9 +2,11 @@
 #include <Input/Input.h>
 #include <Utilites/InputManager.h>
 
+#include "Utilites/Pointers.h"
+
 void Input::Init()
 {
-	myInput = std::make_shared<CommonUtilities::InputManager>();
+	myInput = MakeRef<CommonUtilities::InputManager>();
 }
 
 void Input::Update()

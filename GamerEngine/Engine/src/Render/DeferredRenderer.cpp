@@ -234,7 +234,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 
 	for(const RenderBuffer& modelBuffer : aModelList)
 	{
-		std::shared_ptr<ModelInstance> model = modelBuffer.myModel;
+		Ref<ModelInstance> model = modelBuffer.myModel;
 		if(model == nullptr)
 		{
 			return;
@@ -344,8 +344,8 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 	}
 }
 
-void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::shared_ptr<DirectionalLight>& aDirectionalLight,
-	const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime, VREye anEye)
+void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Ref<DirectionalLight>& aDirectionalLight,
+	const Ref<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime, VREye anEye)
 {
 	if(!Renderer::GetCamera())
 	{

@@ -54,7 +54,7 @@ bool ForwardRenderer::Initialize()
 	return true;
 }
 
-void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, const std::shared_ptr<DirectionalLight>& aDirectionalLight, const std::shared_ptr<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, VREye anEye)
+void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, VREye anEye)
 {
 	if(!Renderer::GetCamera())
 	{
@@ -109,7 +109,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 	for(const RenderBuffer& modelBuffer : aModelList)
 	{
-		std::shared_ptr<ModelInstance> model = modelBuffer.myModel;
+		Ref<ModelInstance> model = modelBuffer.myModel;
 
 
 		if(model == nullptr)
@@ -178,7 +178,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 
 
-		std::shared_ptr<ModelInstance> modelInstance = model;
+		Ref<ModelInstance> modelInstance = model;
 
 		//bool isInstanced = modelInstance->HasRenderedInstance();
 		bool isInstanced = false;
@@ -281,8 +281,8 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 }
 
 void ForwardRenderer::RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, std::vector<RenderBuffer2D>& aSpriteList,
-	const std::shared_ptr<DirectionalLight>& aDirectionalLight,
-	const std::shared_ptr<EnvironmentLight>& anEnvironmentLight)
+	const Ref<DirectionalLight>& aDirectionalLight,
+	const Ref<EnvironmentLight>& anEnvironmentLight)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE bufferData;

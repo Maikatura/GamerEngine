@@ -7,7 +7,7 @@ class EnvironmentLight : public Light
 {
 	friend class LightAssetHandler;
 
-	std::shared_ptr<Texture> myTexture;
+	Ref<Texture> myTexture;
 
 
 public:

@@ -1,5 +1,6 @@
 #pragma once
 #include "Model/Transform.h"
+#include "Utilites/Pointers.h"
 
 class TransformComponent;
 
@@ -7,7 +8,7 @@ class TransformComponent;
 class SceneObject
 {
 protected:
-	std::shared_ptr<Transform> myTransform;
+	Ref<Transform> myTransform;
 
 
 
@@ -17,7 +18,7 @@ public:
 	std::string Name;
 	SceneObject()
 	{
-		myTransform = std::make_shared<Transform>(this);
+		myTransform = MakeRef<Transform>(this);
 		myTransform->SetGameObject(this);
 	}
 	virtual ~SceneObject() = default;

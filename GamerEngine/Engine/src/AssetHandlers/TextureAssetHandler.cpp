@@ -22,7 +22,7 @@ void TextureAssetHandler::Clear()
 	myRegistry.clear();
 }
 
-std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aName)
+Ref<Texture> TextureAssetHandler::GetTexture(const std::wstring& aName)
 {
 	
 	std::wstring texName = Helpers::ToLowerCase(aName);
@@ -47,7 +47,7 @@ std::shared_ptr<Texture> TextureAssetHandler::GetTexture(const std::wstring& aNa
 
 		if (myRegistry.empty())
 		{
-			return std::make_shared<Texture>();
+			return MakeRef<Texture>();
 		}
 
 		return myRegistry.find(L"resources\\textures\\T_Default_C.dds")->second;
@@ -70,7 +70,7 @@ bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 
 		std::filesystem::path filename = aFileName;
 
-		std::shared_ptr<Texture> result = std::make_shared<Texture>();
+		Ref<Texture> result = MakeRef<Texture>();
 		HRESULT createResult = S_FALSE;
 		if (filename.extension() == ".dds")
 		{
@@ -111,7 +111,7 @@ void TextureAssetHandler::UnloadUnusedTextures()
 	
 }
 
-std::shared_ptr<DepthStencil> TextureAssetHandler::CreateDepthStencil(
+Ref<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 	const std::wstring& aName, size_t aWidth, size_t aHeight)
 {
 	HRESULT result = S_FALSE;
@@ -184,9 +184,9 @@ ID3D11VertexShader* TextureAssetHandler::GetVertexShader(const std::string& aPat
 	return vertexShader;
 }
 
-std::vector<std::shared_ptr<Texture>> TextureAssetHandler::GetTextureList()
+std::vector<Ref<Texture>> TextureAssetHandler::GetTextureList()
 {
-	std::vector<std::shared_ptr<Texture>> textureList;
+	std::vector<Ref<Texture>> textureList;
 
 	for (auto [name, texture] : myRegistry)
 	{

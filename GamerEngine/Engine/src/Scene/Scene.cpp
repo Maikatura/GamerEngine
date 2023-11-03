@@ -420,12 +420,12 @@ const std::string& Scene::GetPath()
 	return myPath;
 }
 
-std::shared_ptr<DirectionalLight> Scene::GetDirLight()
+Ref<DirectionalLight> Scene::GetDirLight()
 {
 	return myDirectionalLight;
 }
 
-std::shared_ptr<EnvironmentLight> Scene::GetEnvLight()
+Ref<EnvironmentLight> Scene::GetEnvLight()
 {
 	return myEnvironmentLight;
 }

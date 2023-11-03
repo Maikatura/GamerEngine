@@ -57,8 +57,8 @@ public:
 	void SetPath(const std::string& aPath);
 	const std::string& GetPath();
 
-	std::shared_ptr<DirectionalLight> GetDirLight();
-	std::shared_ptr<EnvironmentLight> GetEnvLight();
+	Ref<DirectionalLight> GetDirLight();
+	Ref<EnvironmentLight> GetEnvLight();
 
 	void SceneReady(bool isSceneReady);
 
@@ -84,8 +84,8 @@ private:
 	std::string myPath;
 	entt::registry myRegistry;
 
-	std::shared_ptr<DirectionalLight> myDirectionalLight;
-	std::shared_ptr<EnvironmentLight> myEnvironmentLight;
+	Ref<DirectionalLight> myDirectionalLight;
+	Ref<EnvironmentLight> myEnvironmentLight;
 	std::mutex myLock;
 
 	//flecs::world myWorld;

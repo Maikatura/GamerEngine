@@ -91,7 +91,7 @@ void FileExplorer::OnImGuiRender()
 
 	auto pathBacktrack = myCurrentDirectory;
 
-	std::vector< std::filesystem::path> paths;
+	std::vector<std::filesystem::path> paths;
 	while(pathBacktrack != std::filesystem::path(AssetPath).parent_path())
 	{
 		paths.push_back(pathBacktrack);
@@ -350,7 +350,7 @@ void FileExplorer::SetInspectorValue(std::filesystem::directory_entry aDirectory
 
 }
 
-std::shared_ptr<Texture> FileExplorer::SelectIcon(std::filesystem::directory_entry aDirectory, FileType aFileType)
+Ref<Texture> FileExplorer::SelectIcon(std::filesystem::directory_entry aDirectory, FileType aFileType)
 {
 
 	if(aFileType == FileType::Texture)
@@ -405,7 +405,7 @@ FileType FileExplorer::GetFileType(std::filesystem::directory_entry aDirectory)
 	return out->second;
 }
 
-void FileExplorer::ExplorerDragDropSourceSetter(std::shared_ptr<Texture> aIcon)
+void FileExplorer::ExplorerDragDropSourceSetter(Ref<Texture> aIcon)
 {
 	if(ImGui::BeginDragDropSource())
 	{

@@ -24,7 +24,7 @@ class ModelComponent : public Component
 public:
 	ModelComponent() = default;
 	ModelComponent(const ModelComponent&) = default;
-	ModelComponent(std::shared_ptr<ModelInstance> aModel) : myModel(aModel)
+	ModelComponent(Ref<ModelInstance> aModel) : myModel(aModel)
 	{ }
 
 	ModelComponent(const std::wstring& aModelPath, float aDelay = 0.0f, bool aShouldThread = true)
@@ -93,7 +93,7 @@ public:
 		myPath = L"";
 	}
 
-	std::shared_ptr<ModelInstance> GetModel()
+	Ref<ModelInstance> GetModel()
 	{
 		if (!myModel)
 		{
@@ -121,7 +121,7 @@ public:
 		}
 	}
 
-	void SetModel(std::shared_ptr<ModelInstance> aModel)
+	void SetModel(Ref<ModelInstance> aModel)
 	{
 		/*if(myModel)
 		{
@@ -184,5 +184,5 @@ private:
 	float myDelay = 0.0f;
 	bool myIsLoaded = false;
 	std::wstring myPath;
-	std::shared_ptr<ModelInstance> myModel = nullptr;
+	Ref<ModelInstance> myModel = nullptr;
 };

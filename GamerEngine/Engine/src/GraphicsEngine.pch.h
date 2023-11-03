@@ -30,7 +30,7 @@
 #include <string>
 #include <EngineSettingDefines.h>
 #include "Managers/ThreadPool.h"
-
+#include <Core/Assert.h>
 
 
 #if _DEBUG

@@ -76,9 +76,9 @@ private:
 	uint32_t myRenderWidth;
 	uint32_t myRenderHeight;
 
-	std::shared_ptr<RenderTexture> m_RenderTextureLeft;
-	std::shared_ptr<RenderTexture> m_RenderTextureRight;
-	std::shared_ptr<RenderTexture> myScreenView;
+	Ref<RenderTexture> m_RenderTextureLeft;
+	Ref<RenderTexture> m_RenderTextureRight;
+	Ref<RenderTexture> myScreenView;
 
 	ID3D11RasterizerState* myFrontCulling;
 	ID3D11RasterizerState* myBackCulling;
@@ -101,9 +101,9 @@ public:
 	void TurnZBufferOn();
 	void TurnZBufferOff();
 
-	std::shared_ptr<RenderTexture>& GetLeftEyeView();
-	std::shared_ptr<RenderTexture>& GetRightEyeView();
-	std::shared_ptr<RenderTexture>& GetScreenView();
+	Ref<RenderTexture>& GetLeftEyeView();
+	Ref<RenderTexture>& GetRightEyeView();
+	Ref<RenderTexture>& GetScreenView();
 	ID3D11RenderTargetView* GetRenderTargetView();
 	
 

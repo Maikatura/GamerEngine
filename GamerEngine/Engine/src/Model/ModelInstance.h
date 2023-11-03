@@ -20,9 +20,9 @@ private:
 
 	ComPtr<ID3D11Buffer> myInstanceBuffer;
 
-	std::shared_ptr<Model> myModel;
+	Ref<Model> myModel;
 	std::array<CommonUtilities::Matrix4x4<float>, MAX_MODEL_BONES> myBoneTransform{};
-	std::shared_ptr<AnimationStatus> myAnimState;
+	Ref<AnimationStatus> myAnimState;
 	std::vector<RenderedInstanceData> myRenderedInstances;
 
 	int myModelMeshes;
@@ -71,8 +71,8 @@ public:
 
 	ModelInstance() = default;
 
-	void Init(std::shared_ptr<Model> aModel);
-	std::shared_ptr<Model> GetModel();
+	void Init(Ref<Model> aModel);
+	Ref<Model> GetModel();
 
 
 	void PlayAnimation(std::wstring aAnimationPath);
@@ -81,11 +81,11 @@ public:
 
 	void UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent);
 
-	void PushMaterial(std::shared_ptr<Material> aMaterial) const { myModel->PushMaterial(aMaterial); }
+	void PushMaterial(Ref<Material> aMaterial) const { myModel->PushMaterial(aMaterial); }
 
-	FORCEINLINE std::vector<std::shared_ptr<Material>>& GetMaterial() const { return myModel->GetMaterial(); }
+	FORCEINLINE std::vector<Ref<Material>>& GetMaterial() const { return myModel->GetMaterial(); }
 	FORCEINLINE int GetMaterialSize() { return myModel->GetMaterialSize(); }
-	FORCEINLINE std::shared_ptr<AnimationStatus> GetAnimationState() { return myAnimState; }
+	FORCEINLINE Ref<AnimationStatus> GetAnimationState() { return myAnimState; }
 	FORCEINLINE Skeleton* GetSkeleton() { return myModel->GetSkeleton(); }
 	FORCEINLINE const Skeleton* GetSkeleton() const { return myModel->GetSkeleton(); }
 	FORCEINLINE Model::MeshData const& GetMeshData(unsigned int anIndex) const { return myModel->GetMeshData(anIndex); }

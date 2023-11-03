@@ -213,7 +213,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::Key << "Path" << YAML::Value << Helpers::string_cast<std::string>(model.GetModel()->GetModel()->GetName());
 		
 
-		const std::vector<std::shared_ptr<Material>>& material = model.GetModel()->GetMaterial();
+		const std::vector<Ref<Material>>& material = model.GetModel()->GetMaterial();
 
 		out << YAML::Key << "TextureSize" << YAML::Value << model.GetModel()->GetMaterialSize();
 		out << YAML::Key << "Texture";

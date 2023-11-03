@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "Particles/ParticleEmitterTemplate.h"
+#include "Utilites/Pointers.h"
 
 class ParticleSystem;
 
@@ -17,5 +18,5 @@ public:
 
 	static bool LoadSystemTemplate(const std::wstring& someFilePath);
 	static bool LoadEmitterTemplate(const std::wstring& someFilePath);
-	static std::shared_ptr<ParticleSystem> GetParticleSystem(const std::wstring& aSystemName);
+	static Ref<ParticleSystem> GetParticleSystem(const std::wstring& aSystemName);
 };

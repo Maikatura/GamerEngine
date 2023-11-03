@@ -38,7 +38,7 @@ public:
 
 
 
-	std::shared_ptr<DirectionalLight> myDirectionalLight;
+	Ref<DirectionalLight> myDirectionalLight;
 };
 
 struct PointLightComponent : public Component
@@ -61,7 +61,7 @@ struct PointLightComponent : public Component
 	float Intensity;
 	float Range;
 
-	std::shared_ptr<PointLight> myPointLight;
+	Ref<PointLight> myPointLight;
 };
 
 struct SpotLightComponent : public Component
@@ -74,7 +74,7 @@ struct SpotLightComponent : public Component
 	void OnUpdate() override
 	{}
 
-	std::shared_ptr<SpotLight> mySpotLight;
+	Ref<SpotLight> mySpotLight;
 };
 
 template<typename... Component>

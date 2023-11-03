@@ -59,7 +59,7 @@ void MainMenuBar::RenderMainBar()
             // EditorNames::SettingsName.c_str()
             if (ImGui::MenuItem("Tools 1 & 2"))
             {
-                myLayers.AddLayer(std::make_shared<EditorSettingsPanel>());
+                myLayers.AddLayer(MakeRef<EditorSettingsPanel>());
             }
 
             ImGui::EndMenu();
@@ -120,7 +120,7 @@ void MainMenuBar::RenderMainBar()
         {
             if (ImGui::MenuItem("Help Panel"))
             {
-                myLayers.AddLayer(std::make_shared<HelpPanel>());
+                myLayers.AddLayer(MakeRef<HelpPanel>());
             }
 
             ImGui::EndMenu();

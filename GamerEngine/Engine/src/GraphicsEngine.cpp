@@ -70,7 +70,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	myWindowSize.cx = someWidth;
 	myWindowSize.cy = someHeight;
 
-	myDropManager = std::make_shared<DropManager>();
+	myDropManager = MakeRef<DropManager>();
 	RegisterDragDrop(myWindowHandle, myDropManager.get());
 
 
@@ -81,11 +81,11 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 	Engine::Font font("resources\\fonts\\arial.ttf");
 
-	myForwardRenderer = std::make_shared<ForwardRenderer>();
-	myDeferredRenderer = std::make_shared<DeferredRenderer>();
-	myShadowRenderer = std::make_shared<ShadowRenderer>();
-	myPostProcessRenderer = std::make_shared<PostProcessRenderer>();
-	myGBuffer = std::make_shared<GBuffer>();
+	myForwardRenderer = MakeRef<ForwardRenderer>();
+	myDeferredRenderer = MakeRef<DeferredRenderer>();
+	myShadowRenderer = MakeRef<ShadowRenderer>();
+	myPostProcessRenderer = MakeRef<PostProcessRenderer>();
+	myGBuffer = MakeRef<GBuffer>();
 
 	if (!myForwardRenderer->Initialize())
 	{
@@ -379,8 +379,8 @@ void GraphicsEngine::RenderScene(VREye anEye)
 
 	std::vector<Light*>& someLightList = scene->GetLights();
 
-	const std::shared_ptr<DirectionalLight>& directionalLight = scene->GetDirLight();
-	const std::shared_ptr<EnvironmentLight>& environmentLight = scene->GetEnvLight();
+	const Ref<DirectionalLight>& directionalLight = scene->GetDirLight();
+	const Ref<EnvironmentLight>& environmentLight = scene->GetEnvLight();
 	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
 	std::vector<RenderBuffer2D>& spriteList = Renderer::GetSprites();
 
@@ -595,7 +595,7 @@ void GraphicsEngine::OnFrameRender()
 void GraphicsEngine::StartUpdateThread()
 {
 
-	/*myUpdateThread = std::make_shared<std::thread>([&]()
+	/*myUpdateThread = MakeRef<std::thread>([&]()
 		{
 		});*/
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "Utilites/Pointers.h"
 
 
 namespace CommonUtilities
@@ -24,5 +25,5 @@ public:
 	static  CommonUtilities::Vector2<float> GetMousePos();
 
 private:
-	inline static std::shared_ptr<CommonUtilities::InputManager> myInput;
+	inline static Ref<CommonUtilities::InputManager> myInput;
 };

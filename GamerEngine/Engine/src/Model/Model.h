@@ -119,7 +119,7 @@ private:
 
 	int myMaterialSize = 0;
 	std::wstring myPath;
-	std::vector<std::shared_ptr<Material>> myMaterial;
+	std::vector<Ref<Material>> myMaterial;
 	std::vector<MeshData> myMeshData = {};
 	
 	Skeleton mySkeleton;
@@ -138,9 +138,9 @@ public:
 
 	int GetMaterialSize();
 	void SetMaterialSize(int aSize);
-	void PushMaterial(const std::shared_ptr<Material> aMaterial);
+	void PushMaterial(const Ref<Material> aMaterial);
 
-	FORCEINLINE std::vector<std::shared_ptr<Material>>& GetMaterial()		{ return myMaterial; }
+	FORCEINLINE std::vector<Ref<Material>>& GetMaterial()		{ return myMaterial; }
 	FORCEINLINE Skeleton* GetSkeleton()										{ return &mySkeleton; }
 	FORCEINLINE const Skeleton* GetSkeleton() const							{ return &mySkeleton; }
 	FORCEINLINE bool HasSkeleton() const									{ return mySkeleton.GetRoot(); }

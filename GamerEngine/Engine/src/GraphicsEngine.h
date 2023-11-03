@@ -9,6 +9,7 @@
 #include <functional>
 
 #include "openvr.h"
+#include "Utilites/Pointers.h"
 
 enum class VREye;
 class DX11;
@@ -31,13 +32,20 @@ class GraphicsEngine
 
 	std::function<bool(HWND, UINT, WPARAM, LPARAM)> myWinProcFunction;
 
-	std::shared_ptr<DropManager> myDropManager;
 
 	inline static GraphicsEngine* myInstance;
 
 	RenderMode myRenderMode = RenderMode::Default;
 
-	std::shared_ptr<std::thread> myUpdateThread = nullptr;
+
+	Ref<ForwardRenderer> myForwardRenderer;
+	Ref<DeferredRenderer> myDeferredRenderer;
+	Ref<ShadowRenderer> myShadowRenderer;
+	Ref<PostProcessRenderer> myPostProcessRenderer;
+	Ref<GBuffer> myGBuffer;
+
+	Ref<DropManager> myDropManager;
+	Ref<std::thread> myUpdateThread = nullptr;
 
 	bool myUpdateCondition = false;
 	bool myUseEditor = true;
@@ -89,11 +97,7 @@ public:
 	void SetEngineRunning(bool aCondition);
 	int GetRenderPass();
 
-	std::shared_ptr<ForwardRenderer> myForwardRenderer;
-	std::shared_ptr<DeferredRenderer> myDeferredRenderer;
-	std::shared_ptr<ShadowRenderer> myShadowRenderer;
-	std::shared_ptr<PostProcessRenderer> myPostProcessRenderer;
-	std::shared_ptr<GBuffer> myGBuffer;
+	
 
 	[[nodiscard]] HWND FORCEINLINE GetWindowHandle() const { return myWindowHandle; }
 	[[nodiscard]] SIZE FORCEINLINE GetWindowSize() const { return myWindowSize; }

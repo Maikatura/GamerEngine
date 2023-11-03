@@ -17,6 +17,6 @@ public:
 
 private:
 
-	//inline static std::unordered_map<std::string, std::shared_ptr<SoLoud::Wav>> mySoundRegistry;
+	//inline static std::unordered_map<std::string, Ref<SoLoud::Wav>> mySoundRegistry;
 	//inline static SoLoud::Soloud mySoLoudInstance;
 };

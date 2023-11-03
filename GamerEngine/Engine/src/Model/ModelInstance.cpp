@@ -61,9 +61,9 @@ void ModelInstance::SetHasBeenRenderer(bool aValue)
 	myHasBeenRendered = aValue;
 }
 
-void ModelInstance::Init(std::shared_ptr<Model> aModel)
+void ModelInstance::Init(Ref<Model> aModel)
 {
-	myTransform = std::make_shared<Transform>();
+	myTransform = MakeRef<Transform>();
 	if (!aModel->HasSkeleton())
 	{
 		if (myFirstTimeInit)
@@ -75,14 +75,14 @@ void ModelInstance::Init(std::shared_ptr<Model> aModel)
 	else
 	{
 		myModel = aModel;
-		myAnimState = std::make_shared<AnimationStatus>();
+		myAnimState = MakeRef<AnimationStatus>();
 
 	}
 
 
 }
 
-std::shared_ptr<Model> ModelInstance::GetModel()
+Ref<Model> ModelInstance::GetModel()
 {
 	if (!myModel)
 	{

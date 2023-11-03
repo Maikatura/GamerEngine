@@ -18,7 +18,7 @@ void Material::Init(std::wstring aName, const Vector3f& anAlbedo)
 	myMaterialData.Albedo = anAlbedo;
 }
 
-void Material::SetTexture(TextureType aTextureType, std::shared_ptr<Texture> aTexture)
+void Material::SetTexture(TextureType aTextureType, Ref<Texture> aTexture)
 {
 	switch (aTextureType)
 	{
@@ -37,7 +37,7 @@ void Material::SetTexture(TextureType aTextureType, std::shared_ptr<Texture> aTe
 	}
 }
 
-void Material::SetAlbedoTexture(std::shared_ptr<Texture> aTexture)
+void Material::SetAlbedoTexture(Ref<Texture> aTexture)
 {
 	TextureType type = TextureType::Albedo;
 
@@ -45,7 +45,7 @@ void Material::SetAlbedoTexture(std::shared_ptr<Texture> aTexture)
 	myTextures[static_cast<int>(type)] = aTexture;
 }
 
-void Material::SetNormalTexture(std::shared_ptr<Texture> aNormalTexture)
+void Material::SetNormalTexture(Ref<Texture> aNormalTexture)
 {
 	TextureType type = TextureType::Normal;
 
@@ -53,7 +53,7 @@ void Material::SetNormalTexture(std::shared_ptr<Texture> aNormalTexture)
 	myTextures[static_cast<int>(type)] = aNormalTexture;
 }
 
-void Material::SetMaterialTexture(std::shared_ptr<Texture> aMaterialTexture)
+void Material::SetMaterialTexture(Ref<Texture> aMaterialTexture)
 {
 	TextureType type = TextureType::Material;
 

@@ -16,7 +16,7 @@ protected:
 	Render2D();
 	void Render();
 	void InitializeShaders(int someSpriteAmmount = 1);
-	std::shared_ptr<Texture> myTexture;
+	Ref<Texture> myTexture;
 	std::vector<SpriteVertex> myVertices;
 	ComPtr<ID3D11Buffer> myVertexBuffer;
 	UINT myVertexStride;

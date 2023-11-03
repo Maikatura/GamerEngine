@@ -71,7 +71,7 @@ void EditorLayers::Init()
 	}
 }
 
-void EditorLayers::AddLayer(std::shared_ptr<Layer> aLayer)
+void EditorLayers::AddLayer(Ref<Layer> aLayer)
 {
 
 	bool windowExist = false;
@@ -159,7 +159,7 @@ void EditorLayers::EndFrame()
 	}
 }
 
-void EditorLayers::LoadLayout(YAML::Node window, std::vector<std::shared_ptr<Layer>>::const_reference aLayer)
+void EditorLayers::LoadLayout(YAML::Node window, std::vector<Ref<Layer>>::const_reference aLayer)
 {
 	if(window["Name"].as<std::string>() == aLayer->GetLayerName())
 	{
@@ -179,17 +179,17 @@ void EditorLayers::SetShouldEngineRun(bool aCond)
 
 void EditorLayers::AddDefaultLayers()
 {
-	AddLayer(std::make_shared<MainMenuBar>(*this));
-	AddLayer(std::make_shared<ConsoleWindow>());
-	AddLayer(std::make_shared<FileExplorer>());
-	AddLayer(std::make_shared<Hierarchy>());
-	AddLayer(std::make_shared<Inspector>());
-	AddLayer(std::make_shared<AnimatorLayer>());
-	AddLayer(std::make_shared<EditorView>());
-	AddLayer(std::make_shared<KeybindShortcutsLayer>());
-	AddLayer(std::make_shared<NetworkingLayer>());
-	AddLayer(std::make_shared<HelpPanel>());
-	AddLayer(std::make_shared<ProfilerLayer>(myShouldProfile));
+	AddLayer(MakeRef<MainMenuBar>(*this));
+	AddLayer(MakeRef<ConsoleWindow>());
+	AddLayer(MakeRef<FileExplorer>());
+	AddLayer(MakeRef<Hierarchy>());
+	AddLayer(MakeRef<Inspector>());
+	AddLayer(MakeRef<AnimatorLayer>());
+	AddLayer(MakeRef<EditorView>());
+	AddLayer(MakeRef<KeybindShortcutsLayer>());
+	AddLayer(MakeRef<NetworkingLayer>());
+	AddLayer(MakeRef<HelpPanel>());
+	AddLayer(MakeRef<ProfilerLayer>(myShouldProfile));
 }
 
 void EditorLayers::OnUpdate()

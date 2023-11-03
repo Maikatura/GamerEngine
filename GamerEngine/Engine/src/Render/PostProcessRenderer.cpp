@@ -55,30 +55,30 @@ void PostProcessRenderer::ReInitialize()
 	float height = static_cast<float>(clientRect.bottom - clientRect.top);
 
 
-	mySSAOTexture = std::make_shared<RenderTexture>();
+	mySSAOTexture = MakeRef<RenderTexture>();
 	mySSAOTexture->Initialize(DX11::Get().GetDevice(), static_cast<int>(width), static_cast<int>(height), DXGI_FORMAT_R32_FLOAT);
 
-	myFullSize = std::make_shared<RenderTexture>();
+	myFullSize = MakeRef<RenderTexture>();
 	myFullSize->Initialize(DX11::Get().GetDevice(), static_cast<int>(width), static_cast<int>(height));
 
 
-	myHalfSize = std::make_shared<RenderTexture>();
+	myHalfSize = MakeRef<RenderTexture>();
 	myHalfSize->Initialize(DX11::Get().GetDevice(), static_cast<int>(width * .5f), static_cast<int>(height * .5f));
 
-	myQuarterSize = std::make_shared<RenderTexture>();
+	myQuarterSize = MakeRef<RenderTexture>();
 	myQuarterSize->Initialize(DX11::Get().GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
 
-	myBlur = std::make_shared<RenderTexture>();
+	myBlur = MakeRef<RenderTexture>();
 	myBlur->Initialize(DX11::Get().GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
 
 	myNoiseTexture->SetAsResource(8);
 }
 
-std::shared_ptr<RenderTexture> PostProcessRenderer::CreateRenderTexture(const std::string& aName, float aWidth, float aHeight, DXGI_FORMAT aFormat)
+Ref<RenderTexture> PostProcessRenderer::CreateRenderTexture(const std::string& aName, float aWidth, float aHeight, DXGI_FORMAT aFormat)
 {
 	//if(auto i = myRenderTextures.find(aName); i == myRenderTextures.end())
 	//{
-	//	std::shared_ptr<RenderTexture> renderTex = std::make_shared<RenderTexture>();
+	//	Ref<RenderTexture> renderTex = MakeRef<RenderTexture>();
 	//	//HRESULT result;
 
 	//	//renderTex->mySize = { static_cast<float>(aWidth), static_cast<float>(aHeight) };
@@ -246,7 +246,7 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 
 }
 
-void PostProcessRenderer::RenderTextureOnSlot(int aSlot,int aResourceSlot, PostProcessPass aPass, std::shared_ptr<RenderTexture> aRenderTexture, ID3D11DepthStencilView* depthStencilView)
+void PostProcessRenderer::RenderTextureOnSlot(int aSlot,int aResourceSlot, PostProcessPass aPass, Ref<RenderTexture> aRenderTexture, ID3D11DepthStencilView* depthStencilView)
 {
 	ID3D11ShaderResourceView* nullsrv = nullptr;
 

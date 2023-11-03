@@ -24,7 +24,7 @@ void SceneManager::SetHeadless(bool isHeadless)
 
 void SceneManager::Initialize()
 {
-	myScene = std::make_shared<Scene>();
+	myScene = MakeRef<Scene>();
 	mySceneStatus = SceneStatus::Complete;
 }
 
@@ -53,13 +53,13 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 				myLoadDone = false;
 
 				// Move the old scene into a temporary smart pointer
-				std::shared_ptr<Scene> oldScene = myScene;
+				Ref<Scene> oldScene = myScene;
 
 				ThreadPool::Get().EnqueueTask([&, aFilepath]() 
 					{
 					mySceneStatus = SceneStatus::Loading;
 
-					std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
+					Ref<Scene> newScene = MakeRef<Scene>();
 
 					SceneSerializer sceneLoad(newScene.get());
 					if (sceneLoad.Deserialize(aFilepath, myIsHeadless)) 
@@ -125,7 +125,7 @@ void SceneManager::Render()
 	
 }
 
-std::shared_ptr<Scene> SceneManager::GetScene()
+Ref<Scene> SceneManager::GetScene()
 {
 	if(!myScene)
 	{

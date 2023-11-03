@@ -6,7 +6,7 @@
 
 void SceneObject::SetTransform(Transform aTransform)
 {
-	myTransform = std::make_shared<Transform>(aTransform);
+	myTransform = MakeRef<Transform>(aTransform);
 }
 
 void SceneObject::SetRotation(float aPitch, float aYaw, float aRoll)

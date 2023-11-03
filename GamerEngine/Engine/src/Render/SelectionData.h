@@ -15,11 +15,11 @@ public:
 		mySelectedObject->Size = sizeof(T);
 	}
 
-	static std::shared_ptr<SelectedObejct> GetSelectedObject()
+	static Ref<SelectedObejct> GetSelectedObject()
 	{
 		if(mySelectedObject == nullptr)
 		{
-			mySelectedObject = std::make_shared<SelectedObejct>(FileType::Error, nullptr);
+			mySelectedObject = MakeRef<SelectedObejct>(FileType::Error, nullptr);
 		}
 
 		return mySelectedObject;
@@ -44,5 +44,5 @@ public:
 private:
 
 	inline static Entity myEntity;
-	inline static std::shared_ptr<SelectedObejct> mySelectedObject = nullptr;
+	inline static Ref<SelectedObejct> mySelectedObject = nullptr;
 };

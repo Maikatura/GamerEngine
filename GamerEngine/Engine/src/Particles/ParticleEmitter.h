@@ -6,6 +6,8 @@
 
 #include <Model/Render2D.h>
 
+#include "Utilites/Pointers.h"
+
 class TransformComponent;
 class ScriptableEntity;
 class Render2D;
@@ -40,7 +42,7 @@ class ParticleEmitter
 	UINT myPrimitiveTopology;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> myInputLayout;
 
-	std::shared_ptr<Texture> myTexture;
+	Ref<Texture> myTexture;
 
 	EmitterSettingsData myEmittorSettings;
 

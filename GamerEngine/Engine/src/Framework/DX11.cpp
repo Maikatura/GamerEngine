@@ -74,17 +74,17 @@ void DX11::TurnZBufferOff()
 	return;
 }
 
-std::shared_ptr<RenderTexture>& DX11::GetLeftEyeView()
+Ref<RenderTexture>& DX11::GetLeftEyeView()
 {
 	return m_RenderTextureLeft;
 }
 
-std::shared_ptr<RenderTexture>& DX11::GetRightEyeView()
+Ref<RenderTexture>& DX11::GetRightEyeView()
 {
 	return m_RenderTextureRight;
 }
 
-std::shared_ptr<RenderTexture>& DX11::GetScreenView()
+Ref<RenderTexture>& DX11::GetScreenView()
 {
 	return myScreenView;
 }
@@ -382,7 +382,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	myImmediateContext->RSSetViewports(1, &myViewport);
 
 	// Create the render to texture object.
-	m_RenderTextureLeft = std::make_shared<RenderTexture>();
+	m_RenderTextureLeft = MakeRef<RenderTexture>();
 	if (!m_RenderTextureLeft)
 	{
 		return false;
@@ -397,7 +397,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	}
 
 
-	m_RenderTextureRight = std::make_shared<RenderTexture>();
+	m_RenderTextureRight = MakeRef<RenderTexture>();
 	if (!m_RenderTextureRight)
 	{
 		return false;
@@ -413,7 +413,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	}
 
 	// Create the render to texture object.
-	myScreenView = std::make_shared<RenderTexture>();
+	myScreenView = MakeRef<RenderTexture>();
 	if (!myScreenView)
 	{
 		return false;
@@ -919,7 +919,7 @@ void DX11::Resize()
 	myScreenView->Shutdown();
 
 	// Create the render to texture object.
-	m_RenderTextureLeft = std::make_shared<RenderTexture>();
+	m_RenderTextureLeft = MakeRef<RenderTexture>();
 	if (!m_RenderTextureLeft)
 	{
 		return;
@@ -932,7 +932,7 @@ void DX11::Resize()
 		return;
 	}
 
-	m_RenderTextureRight = std::make_shared<RenderTexture>();
+	m_RenderTextureRight = MakeRef<RenderTexture>();
 	if (!m_RenderTextureRight)
 	{
 		return;
@@ -946,7 +946,7 @@ void DX11::Resize()
 	}
 
 	// Create the render to texture object.
-	myScreenView = std::make_shared<RenderTexture>();
+	myScreenView = MakeRef<RenderTexture>();
 	if (!myScreenView)
 	{
 		return;

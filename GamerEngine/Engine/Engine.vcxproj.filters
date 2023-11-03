@@ -238,6 +238,7 @@
     <ClInclude Include="src\VR\VRSystem.h">
       <Filter>VR</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Assert.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp">

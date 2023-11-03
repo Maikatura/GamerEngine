@@ -12,7 +12,7 @@ class RenderBuffer
 public:
 	uint32_t myId;
 	Matrix4x4f myTransform;
-	std::shared_ptr<ModelInstance> myModel;
+	Ref<ModelInstance> myModel;
 };
 
 class RenderBuffer2D

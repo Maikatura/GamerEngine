@@ -17,7 +17,7 @@ public:
 	};
 
 private:
-	std::array<std::shared_ptr<Texture>, static_cast<int>(TextureType::COUNT)> myTextures;
+	std::array<Ref<Texture>, static_cast<int>(TextureType::COUNT)> myTextures;
 	MaterialData myMaterialData;
 	std::wstring myName;
 
@@ -33,15 +33,15 @@ public:
 	FORCEINLINE const std::wstring GetName() const { return myName; }
 	FORCEINLINE const Vector3f& GetAlbedo() const { return myMaterialData.Albedo; }
 
-	FORCEINLINE const std::shared_ptr<Texture>& GetAlbedoTexture() const { return myTextures[static_cast<int>(TextureType::Albedo)];  }
-	FORCEINLINE const std::shared_ptr<Texture>& GetNormalTexture() const { return myTextures[static_cast<int>(TextureType::Normal)]; }
-	FORCEINLINE const std::shared_ptr<Texture>& GetMaterialTexture() const { return myTextures[static_cast<int>(TextureType::Material)]; }
+	FORCEINLINE const Ref<Texture>& GetAlbedoTexture() const { return myTextures[static_cast<int>(TextureType::Albedo)];  }
+	FORCEINLINE const Ref<Texture>& GetNormalTexture() const { return myTextures[static_cast<int>(TextureType::Normal)]; }
+	FORCEINLINE const Ref<Texture>& GetMaterialTexture() const { return myTextures[static_cast<int>(TextureType::Material)]; }
 
-	void SetTexture(TextureType aTextureType, std::shared_ptr<Texture> aTexture);
+	void SetTexture(TextureType aTextureType, Ref<Texture> aTexture);
 
-	void SetAlbedoTexture(std::shared_ptr<Texture> aTexture);
-	void SetNormalTexture(std::shared_ptr<Texture> aNormalTexture);
-	void SetMaterialTexture(std::shared_ptr<Texture> aMaterialTexture);
+	void SetAlbedoTexture(Ref<Texture> aTexture);
+	void SetNormalTexture(Ref<Texture> aNormalTexture);
+	void SetMaterialTexture(Ref<Texture> aMaterialTexture);
 
 	void SetAsResource(ComPtr<ID3D11Resource> aMaterialBuffer);
 

@@ -28,13 +28,13 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> myFullscreenVS;
 	std::array<Microsoft::WRL::ComPtr<ID3D11PixelShader>, PostProcessPass::PP_COUNT> myPassShaders;
 
-	std::shared_ptr<RenderTexture> mySSAOTexture;
-	std::shared_ptr<RenderTexture> myFullSize;
-	std::shared_ptr<RenderTexture> myHalfSize;
-	std::shared_ptr<RenderTexture> myQuarterSize;
-	std::shared_ptr<RenderTexture> myBlur;
+	Ref<RenderTexture> mySSAOTexture;
+	Ref<RenderTexture> myFullSize;
+	Ref<RenderTexture> myHalfSize;
+	Ref<RenderTexture> myQuarterSize;
+	Ref<RenderTexture> myBlur;
 
-	std::shared_ptr<Texture> myNoiseTexture;
+	Ref<Texture> myNoiseTexture;
 	bool myHasInited = false;
 
 	CommonUtilities::Frustum myFrustum;
@@ -44,12 +44,12 @@ public:
 	bool Initialize();
 	void ReInitialize();
 
-	std::shared_ptr<RenderTexture> CreateRenderTexture(const std::string& aName, float aWidth, float aHeight, DXGI_FORMAT aFormat = DXGI_FORMAT_R8G8B8A8_UNORM);
+	Ref<RenderTexture> CreateRenderTexture(const std::string& aName, float aWidth, float aHeight, DXGI_FORMAT aFormat = DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	void Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection);
 
 
-	void RenderTextureOnSlot(int aSlot, int aResourceSlot, PostProcessPass aPass, std::shared_ptr<RenderTexture> aRenderTexture, ID3D11DepthStencilView* depthStencilView = nullptr);
+	void RenderTextureOnSlot(int aSlot, int aResourceSlot, PostProcessPass aPass, Ref<RenderTexture> aRenderTexture, ID3D11DepthStencilView* depthStencilView = nullptr);
 	void RenderPass(PostProcessPass aPass);
 
 	void Release();

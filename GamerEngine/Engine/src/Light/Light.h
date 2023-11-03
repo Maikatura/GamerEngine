@@ -55,10 +55,10 @@ protected:
 	float myNearPlane = 0.0f;
 	float myFarPlane = 0.0f;
 
-	std::shared_ptr<DepthStencil> myShadowMap;
-	std::shared_ptr<RenderTexture> myWorldPositionMap;
-	std::shared_ptr<RenderTexture> myWorldNormalMap;
-	std::shared_ptr<RenderTexture> myFluxMap;
+	Ref<DepthStencil> myShadowMap;
+	Ref<RenderTexture> myWorldPositionMap;
+	Ref<RenderTexture> myWorldNormalMap;
+	Ref<RenderTexture> myFluxMap;
 
 	Vector3f myLocalDirection;
 

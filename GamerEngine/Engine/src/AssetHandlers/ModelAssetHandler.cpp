@@ -346,7 +346,7 @@ bool ModelAssetHandler::InitUnitCube()
 	//modelData.myPixelShader = pixelShader;
 	//modelData.myGeometryShader = nullptr;
 
-	//std::shared_ptr<Model> mdl = std::make_shared<Model>();
+	//Ref<Model> mdl = MakeRef<Model>();
 
 	//std::wstring albedoTexture = L"Resources\\Textures\\T_Default_C.dds";
 	//std::wstring normalTexture = L"Resources\\Textures\\T_Default_N.dds";
@@ -354,7 +354,7 @@ bool ModelAssetHandler::InitUnitCube()
 
 
 
-	//std::shared_ptr<Material> mat = std::make_shared<Material>();
+	//Ref<Material> mat = MakeRef<Material>();
 	//mat->Init(L"Cube");
 	//mat->SetAlbedoTexture(TextureAssetHandler::GetTexture(albedoTexture));
 	//mat->SetNormalTexture(TextureAssetHandler::GetTexture(normalTexture));
@@ -363,7 +363,7 @@ bool ModelAssetHandler::InitUnitCube()
 
 	//mdl->Init(modelData, L"Cube");
 
-	//std::shared_ptr<ModelInstance> mdlInstance = std::make_shared<ModelInstance>();
+	//Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
 	//mdlInstance->Init(mdl);
 
 	//myModelRegistry.insert({ L"Cube", mdlInstance });
@@ -492,7 +492,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 	const ofbx::Mesh* mesh = nullptr;
 	for (int i = 0; i < scene->getAllObjectCount(); ++i)
 	{
-		std::shared_ptr<Model> mdl = std::make_shared<Model>();
+		Ref<Model> mdl = MakeRef<Model>();
 		const ofbx::Object* object = scene->getAllObjects()[i];
 		if (object->getType() == ofbx::Object::Type::MESH)
 		{
@@ -663,7 +663,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 		}
 
 		mdl->Name = Helpers::string_cast<std::string>(aFilePath);
-		std::shared_ptr<ModelInstance> mdlInstance = std::make_shared<ModelInstance>();
+		Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
 
 		mdlInstance->Init(mdl);
 
@@ -705,7 +705,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 	importer.InitImporter();
 	if (importer.LoadModel(aFilePath, tgaModel))
 	{
-		std::shared_ptr<Model> mdl = std::make_shared<Model>();
+		Ref<Model> mdl = MakeRef<Model>();
 
 		for (size_t i = 0; i < tgaModel.Elements.size(); i++)
 		{
@@ -921,7 +921,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 				material = TextureAssetHandler::GetTexture(L"resources\\Textures\\T_Default_M.dds");
 			}
 
-			std::shared_ptr<Material> mat = std::make_shared<Material>();
+			Ref<Material> mat = MakeRef<Material>();
 			mat->Init(Helpers::string_cast<std::wstring>(mesh.MeshName));
 			mat->SetAlbedoTexture(albedo);
 			mat->SetNormalTexture(normal);
@@ -979,7 +979,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 		}
 
 		mdl->Name = ansiFileName;
-		std::shared_ptr<ModelInstance> mdlInstance = std::make_shared<ModelInstance>();
+		Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
 
 		mdlInstance->Init(mdl);
 
@@ -996,7 +996,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const std::wstring& someFilePath)
 {
 	const std::string ansiFileName = Helpers::string_cast<std::string>(someFilePath);
-	std::shared_ptr<ModelInstance> model = GetModelInstance(aModelName);
+	Ref<ModelInstance> model = GetModelInstance(aModelName);
 
 	TGA::FBX::Animation tgaAnimation;
 	if (!TGA::FBX::Importer::LoadAnimation(someFilePath, tgaAnimation))
@@ -1025,7 +1025,7 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 	return true;
 }
 
-std::shared_ptr<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath)
+Ref<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath)
 {
 	auto model = myModelRegistry.find(aFilePath);
 
@@ -1038,7 +1038,7 @@ std::shared_ptr<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath
 	return model->second->GetModel();
 }
 
-std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFilePath)
+Ref<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFilePath)
 {
 
 	if (!std::filesystem::exists(aFilePath))
@@ -1071,8 +1071,8 @@ std::shared_ptr<ModelInstance> ModelAssetHandler::GetModelInstance(const std::ws
 
 	if (myModelRegistry.empty())
 	{
-		auto returnValue = std::make_shared<ModelInstance>();
-		returnValue->Init(std::make_shared<Model>());
+		auto returnValue = MakeRef<ModelInstance>();
+		returnValue->Init(MakeRef<Model>());
 		return returnValue;
 	}
 

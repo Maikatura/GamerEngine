@@ -226,13 +226,13 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 					model.GetModel()->GetModel()->SetMaterialSize(size);
 
 
-					std::map<std::string, std::vector<std::shared_ptr<Material>>> materialGroups;
+					std::map<std::string, std::vector<Ref<Material>>> materialGroups;
 					for (auto& material : model.GetModel()->GetMaterial()) 
 					{
 						materialGroups[Helpers::string_cast<std::string>(material->GetName())].push_back(material);
 					}
 
-					std::map<std::string, std::vector<std::shared_ptr<Material>>> sortedMaterials(materialGroups.begin(), materialGroups.end());
+					std::map<std::string, std::vector<Ref<Material>>> sortedMaterials(materialGroups.begin(), materialGroups.end());
 
 					int i = 0;
 
@@ -675,7 +675,7 @@ void Inspector::AddComponent(Entity& aEntity)
 }
 
 
-bool Inspector::ShowTexturePicker(Entity& aEntity, std::shared_ptr<Material>& selectedMaterial, TextureType textureType)
+bool Inspector::ShowTexturePicker(Entity& aEntity, Ref<Material>& selectedMaterial, TextureType textureType)
 {
 	bool textureChanged = false;
 	static bool openPopup = false; // Track whether to open the popup
@@ -738,7 +738,7 @@ bool Inspector::ShowTexturePicker(Entity& aEntity, std::shared_ptr<Material>& se
 void Inspector::DrawFileObject(Entity& aEntity)
 {
 	aEntity;
-	std::shared_ptr<SelectedObejct> selectedObjectData = SelectionData::GetSelectedObject();
+	Ref<SelectedObejct> selectedObjectData = SelectionData::GetSelectedObject();
 
 	switch(selectedObjectData->FileType)
 	{

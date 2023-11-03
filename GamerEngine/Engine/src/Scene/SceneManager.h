@@ -13,9 +13,8 @@ class SceneManager
 {
 
 	
-
-	std::shared_ptr<Scene> myScene;
-	std::shared_ptr<Scene> mySwapScene;
+	Ref<Scene> myScene;
+	Ref<Scene> mySwapScene;
 	std::mutex mySceneMutex;
 
 	std::atomic<bool> mySaveDone = true;
@@ -42,7 +41,7 @@ public:
 	
 	void Update();
 	void Render();
-	std::shared_ptr<Scene> GetScene();
+	Ref<Scene> GetScene();
 	
 	bool IsReady();
 	

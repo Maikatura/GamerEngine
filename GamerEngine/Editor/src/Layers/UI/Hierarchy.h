@@ -21,10 +21,10 @@ public:
 
 	void DropAFile();
 
-	void DrawEntityPopupMenu(std::shared_ptr<ModelInstance> aModel);
+	void DrawEntityPopupMenu(Ref<ModelInstance> aModel);
 	void DrawWindowPopupMenu();
 
-	void DrawArmature(Entity& aEntity, std::shared_ptr<ModelInstance> aModel);
+	void DrawArmature(Entity& aEntity, Ref<ModelInstance> aModel);
 	void LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned int aBoneID = 0);
 
 	bool LoopThoughChildren(Ref<Entity> aEntity);

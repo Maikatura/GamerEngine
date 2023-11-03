@@ -230,7 +230,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 
 }
 
-void Hierarchy::DrawEntityPopupMenu(std::shared_ptr<ModelInstance> aModel)
+void Hierarchy::DrawEntityPopupMenu(Ref<ModelInstance> aModel)
 {
 	if(ImGui::BeginPopupContextItem())
 	{
@@ -310,7 +310,7 @@ void Hierarchy::DrawWindowPopupMenu()
 	}
 }
 
-void Hierarchy::DrawArmature(Entity& aEntity, std::shared_ptr<ModelInstance> aModel)
+void Hierarchy::DrawArmature(Entity& aEntity, Ref<ModelInstance> aModel)
 {
 	if(aModel->GetSkeleton())
 	{
