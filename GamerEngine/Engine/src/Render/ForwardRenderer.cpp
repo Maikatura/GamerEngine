@@ -49,6 +49,13 @@ bool ForwardRenderer::Initialize()
 		return false;
 	}
 
+	bufferDescription.ByteWidth = sizeof(TextVertexBuffer);
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myTextBuffer.GetAddressOf());
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 
 	BuildDepth();
 

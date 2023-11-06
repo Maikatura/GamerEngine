@@ -3,7 +3,7 @@
 PixelOutput main(LineToPixel input) : SV_TARGET
 {
 	PixelOutput result;
-	result.myColor = input.myColor;
+	result.Color = input.Color;
 
 	return result;
 }

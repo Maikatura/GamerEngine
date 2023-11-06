@@ -218,6 +218,18 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
     </FxCompile>
+    <FxCompile Include="Shaders\Text_PS.hlsl">
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Shaders\Text_VS.hlsl">
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Data\BufferData.hlsli" />
@@ -235,6 +247,7 @@
     <None Include="Shaders\Data\Textures.hlsli" />
     <None Include="Shaders\Data\Tonemaps.hlsli" />
     <None Include="Shaders\PostProcess\PostProcessStructs.hlsli" />
+    <None Include="Shaders\Data\Shadows.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

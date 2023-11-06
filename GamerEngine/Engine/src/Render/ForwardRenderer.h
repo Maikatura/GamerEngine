@@ -31,6 +31,7 @@ class ForwardRenderer : public RendererBase
 	
 	SceneLightBuffer mySceneLightBufferData {};
 	ComPtr<ID3D11Buffer> myLightBuffer;
+	ComPtr<ID3D11Buffer> myTextBuffer;
 	
 
 

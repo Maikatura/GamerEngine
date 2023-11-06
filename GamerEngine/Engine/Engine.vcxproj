@@ -108,7 +108,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Font\MSDFData.h" />
     <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\AssetHandlers\LightAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\MetaFileHandler.h" />
@@ -122,6 +121,7 @@
     <ClInclude Include="src\EngineSettingDefines.h" />
     <ClInclude Include="src\EngineSettings\Settings.h" />
     <ClInclude Include="src\Font\Font.h" />
+    <ClInclude Include="src\Font\MSDFData.h" />
     <ClInclude Include="src\Framework\DX11.h" />
     <ClInclude Include="src\GraphicsEngine.h" />
     <ClInclude Include="src\GraphicsEngine.pch.h" />

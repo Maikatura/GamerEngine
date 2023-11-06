@@ -7,7 +7,7 @@ GBufferOutput main(VertexToPixel input)
 {
 	GBufferOutput result;
 
-    const float4 albedo = albedoTexture.Sample(wrapSampler, input.myUV).rgba;
+    const float4 albedo = albedoTexture.Sample(wrapSampler, input.UV).rgba;
 	if(albedo.a <= 0.05f)
 	{
 		discard;
@@ -23,22 +23,22 @@ GBufferOutput main(VertexToPixel input)
 	}
 
 	// TGA weirdness R:unused | G:norm.y | B:AO | A:norm.x
-    const float3 normalMap = normalTexture.Sample(wrapSampler, input.myUV).agb;
+    const float3 normalMap = normalTexture.Sample(wrapSampler, input.UV).agb;
 
-    const float4 materialMap = materialTexture.Sample(wrapSampler, input.myUV).rgba;
+    const float4 materialMap = materialTexture.Sample(wrapSampler, input.UV).rgba;
 	const float ambientOcclusion = normalMap.b;
 
 
-	float3 pixelNormal = CalculatePixelNormal(normalMap, input.myTangent, input.myBinormal, input.myNormal);
+	float3 pixelNormal = CalculatePixelNormal(normalMap, input.Tangent, input.Binormal, input.Normal);
 
 	
 	result.Albedo = albedo;
     result.Normal = float4(pixelNormal, 1.0f);
     result.Material = float4(materialMap.xyz, 1.0f);;
-    result.VertexNormal = float4(normalize(input.myNormal), 1.0f);
-	result.WorldPosition = float4(input.myVertexWorldPosition.xyz, 1.0f);
+    result.VertexNormal = float4(normalize(input.Normal), 1.0f);
+	result.WorldPosition = float4(input.VertexWorldPosition.xyz, 1.0f);
 	result.AmbientOcclusion = ambientOcclusion;
-	result.ViewPosition = float4(input.myViewPosition.xyz, 1.0f);
+	result.ViewPosition = float4(input.ViewPosition.xyz, 1.0f);
     result.ViewNormal = float4(normalize(mul(FB_ToView, float4(result.Normal.xyz, 0.0f)).xyz), 1.0f);
 
 	switch(FB_RenderMode)
@@ -46,13 +46,13 @@ GBufferOutput main(VertexToPixel input)
 		default:
 			break;
         case 1: // RenderMode::TexCoords0
-            result.Albedo.rg = input.myUV;
+            result.Albedo.rg = input.UV;
             break;
 		case 6:// RenderMode::NormalMap
-            result.Normal = normalTexture.Sample(wrapSampler, input.myUV).agbb;
+            result.Normal = normalTexture.Sample(wrapSampler, input.UV).agbb;
 			break;
 		case 2://RenderMode::VertexColor:
-			result.Albedo.rgb = input.myVxColor.rgb;
+			result.Albedo.rgb = input.VxColor.rgb;
 			result.Albedo.a = 1.0f;
 			break;
 	}

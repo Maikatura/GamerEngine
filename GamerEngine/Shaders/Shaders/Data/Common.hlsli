@@ -1,5 +1,5 @@
-#ifndef COMMON_HLSI
-#define COMMON_HLSI
+#ifndef COMMON_HLSLI
+#define COMMON_HLSLI
 
 //Frostbyte accurate linear to srgb 
 float3 LinearToSRGB(float3 aColor)

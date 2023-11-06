@@ -59,3 +59,14 @@ struct ObjectBufferData
 	alignas(4) bool IsInstanced;
 	Matrix4x4f BoneData[MAX_MODEL_BONES]{};
 };
+
+struct TextVertexBuffer
+{
+	unsigned int Index;
+	Vector3f Padding_1;
+	Vector4f TexLayout;
+	Vector4f Color;
+	Vector2f Size;
+	unsigned int ImageIndex;
+	unsigned int SamplingData;
+};

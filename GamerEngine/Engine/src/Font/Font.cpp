@@ -33,6 +33,11 @@ namespace Engine
 		int y = 0;
 		for (int i = 0; i < static_cast<size_t>(aWidth) * static_cast<size_t>(aHeight); i++)
 		{
+			if (static_cast<uint32_t>(y) >= aHeight || i % aWidth >= aWidth)
+			{
+				continue;
+			}
+
 			CommonUtilities::Vector4<T> vectorStuff;
 
 			auto data = bitmap(i % aWidth, y);

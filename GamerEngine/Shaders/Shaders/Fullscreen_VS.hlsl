@@ -17,7 +17,7 @@ DeferredVertexToPixel main(DeferredVertexInput input)
 	};
 
 	DeferredVertexToPixel resultValue;
-	resultValue.myPosition = pos[input.myIndex];
-	resultValue.myUV = uv[input.myIndex];
+	resultValue.Position = pos[input.Index];
+	resultValue.UV = uv[input.Index];
 	return resultValue;
 }

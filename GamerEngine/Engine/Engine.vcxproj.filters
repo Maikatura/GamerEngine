@@ -91,6 +91,9 @@
     <ClInclude Include="src\Font\Font.h">
       <Filter>Font</Filter>
     </ClInclude>
+    <ClInclude Include="src\Font\MSDFData.h">
+      <Filter>Font</Filter>
+    </ClInclude>
     <ClInclude Include="src\Framework\DX11.h">
       <Filter>Framework</Filter>
     </ClInclude>
@@ -243,9 +246,6 @@
     </ClInclude>
     <ClInclude Include="src\VR\VRSystem.h">
       <Filter>VR</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Font\MSDFData.h">
-      <Filter>Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

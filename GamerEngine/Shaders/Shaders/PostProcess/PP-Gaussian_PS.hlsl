@@ -6,7 +6,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 {
 	DeferredPixelOutput output;
 
-	float4 color = albedoTexture.Sample(defaultSampler, input.myUV);
+	float4 color = albedoTexture.Sample(defaultSampler, input.UV);
 	//float tau = 6.28318530718f;
 	//float directions = 7.f;
 	//float quality = 4.f;
@@ -23,7 +23,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 
 	//color /= quality * directions - (directions - 1);
 
-	output.myColor = color;
+	output.Color = color;
 
 	return output;
 }

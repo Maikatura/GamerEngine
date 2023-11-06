@@ -8,11 +8,11 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 
 
 
-	float4 color = albedoTexture.Sample(defaultSampler, input.myUV);
+	float4 color = albedoTexture.Sample(defaultSampler, input.UV);
 	//float luminance = dot(color.rgb, float3(.2f, .75f, .6f));
 	//float cutOff = .82f;
 	//luminance = saturate(luminance - cutOff);
-    output.myColor = color;// * luminance * (1.0f / cutOff);
+    output.Color = color;// * luminance * (1.0f / cutOff);
 
 	return output;
 }

@@ -1,3 +1,5 @@
+#ifndef LIGHTBUFFER_HLSLI
+#define LIGHTBUFFER_HLSLI
 
 struct LightData
 {
@@ -41,3 +43,5 @@ cbuffer LightBuffer : register(b3)
 	uint LB_NumLights;
 	float3 LB_padding;
 }
+
+#endif

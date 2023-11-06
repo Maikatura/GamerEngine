@@ -15,8 +15,8 @@ void main(
         
         for(unsigned int index = 0; index < 3; ++index)
         {
-            result.FragPos = float4(input[index].myVertexWorldPosition, 1.f);
-            const float4 worldToLightView = mul(PLViews[face], float4(input[index].myVertexWorldPosition, 1.f));
+            result.FragPos = float4(input[index].VertexWorldPosition, 1.f);
+            const float4 worldToLightView = mul(PLViews[face], float4(input[index].VertexWorldPosition, 1.f));
             const float4 lightViewToLightProj = mul(SC_Projection, worldToLightView);
             result.Position = lightViewToLightProj;
             output.Append(result);

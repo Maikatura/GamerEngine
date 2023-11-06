@@ -6,9 +6,9 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 {
 	DeferredPixelOutput output;
 
-	float4 color = albedoTexture.Sample(pointClampSampler, input.myUV);
-	output.myColor.rgb = color.rgb;
-	output.myColor.a = 1.0f;
+	float4 color = albedoTexture.Sample(pointClampSampler, input.UV);
+	output.Color.rgb = color.rgb;
+	output.Color.a = 1.0f;
 
 	return output;
 }

@@ -42,7 +42,7 @@ bool ModelInstance::RenderWithDeferred()
 		return true;
 	}
 
-	return true;
+	return false;
 }
 
 bool ModelInstance::HasBeenRendered()

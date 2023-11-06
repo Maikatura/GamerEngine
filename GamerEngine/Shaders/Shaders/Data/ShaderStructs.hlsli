@@ -1,26 +1,29 @@
+#ifndef SHADERSTRUCTS_HLSLI
+#define SHADERSTRUCTS_HLSLI
+
 #define MAX_MODEL_BONES 512
 #define BLENDSHAPE_ARRAY_SIZE 1024
 
 struct VertexInput
 {
-	float4 myPosition		:	POSITION;
+	float4 Position		:	POSITION;
 
-    float3 myNormal : NORMAL;
-	float3 myTangent : TANGENT;
-    float3 myBinormal : BINORMAL;
+    float3 Normal : NORMAL;
+	float3 Tangent : TANGENT;
+    float3 Binormal : BINORMAL;
 
-	float4 myVxColor		:	COLOR0;
-	float4 myVxColor2		:	COLOR1;
-	float4 myVxColor3		:	COLOR2;
-	float4 myVxColor4		:	COLOR3;
+	float4 VxColor		:	COLOR0;
+	float4 VxColor2		:	COLOR1;
+	float4 VxColor3		:	COLOR2;
+	float4 VxColor4		:	COLOR3;
 
-	float2 myUV				:	TEXCOORD0;
-	float2 myUV2			:	TEXCOORD1;
-	float2 myUV3			:	TEXCOORD2;
-	float2 myUV4			:	TEXCOORD3;
+	float2 UV				:	TEXCOORD0;
+	float2 UV2			:	TEXCOORD1;
+	float2 UV3			:	TEXCOORD2;
+	float2 UV4			:	TEXCOORD3;
 
-	uint4  myBoneIDs		:	BONEIDS;
-	float4 myBoneWeights	:	BONEWEIGHTS;
+	uint4  BoneIDs		:	BONEIDS;
+	float4 BoneWeights	:	BONEWEIGHTS;
 	
 
 	// Instancing Properties
@@ -30,39 +33,39 @@ struct VertexInput
 
 struct VertexToPixel
 {
-	float4 myPosition		:	SV_POSITION;
-	float3 myVertexWorldPosition	:	POSITION0;
-	float3 myViewPosition	:	POSITION1;
-    float3 myNormal : NORMAL;
-    float3 myTangent : TANGENT;
-    float3 myBinormal : BINORMAL;
-	float4 myVxColor		:	COLOR0;
-	float4 myVxColor2		:	COLOR1;
-	float4 myVxColor3		:	COLOR2;
-	float4 myVxColor4		:	COLOR3;
-	float2 myUV				:	TEXCOORD0;
-	float2 myUV2			:	TEXCOORD1;
-	float2 myUV3			:	TEXCOORD2;
-	float2 myUV4			:	TEXCOORD3;
+	float4 Position		:	SV_POSITION;
+	float3 VertexWorldPosition	:	POSITION0;
+	float3 ViewPosition	:	POSITION1;
+    float3 Normal : NORMAL;
+    float3 Tangent : TANGENT;
+    float3 Binormal : BINORMAL;
+	float4 VxColor		:	COLOR0;
+	float4 VxColor2		:	COLOR1;
+	float4 VxColor3		:	COLOR2;
+	float4 VxColor4		:	COLOR3;
+	float2 UV				:	TEXCOORD0;
+	float2 UV2			:	TEXCOORD1;
+	float2 UV3			:	TEXCOORD2;
+	float2 UV4			:	TEXCOORD3;
     
 };
 
 struct PixelOutput
 {
-	float4 myColor			:	SV_TARGET;
+	float4 Color			:	SV_TARGET;
 };
 
 struct LineInput
 {
-	float4 myPosition		:	POSITION;
-	float4 myColor			:	COLOR;
-	float4 myWidth			:	WIDTH;
+	float4 Position		:	POSITION;
+	float4 Color			:	COLOR;
+	float4 Width			:	WIDTH;
 };
 
 struct LineToPixel
 {
-	float4 myPosition		:	SV_POSITION;
-	float4 myColor			:	COLOR;
+	float4 Position		:	SV_POSITION;
+	float4 Color			:	COLOR;
 };
 
 struct GBufferOutput
@@ -79,19 +82,40 @@ struct GBufferOutput
 
 struct DeferredVertexInput
 {
-	unsigned int myIndex : SV_VERTEXID;
+	unsigned int Index : SV_VERTEXID;
 };
 
 struct DeferredVertexToPixel
 {
-	float4 myPosition		:	SV_POSITION;
-	float2 myUV				:	TEXCOORD;
+	float4 Position		:	SV_POSITION;
+	float2 UV				:	TEXCOORD;
 };
 
 struct DeferredPixelOutput
 {
-	float4 myColor			:	SV_TARGET;
+	float4 Color			:	SV_TARGET;
 };
+
+struct RectVertexInput
+{
+    unsigned int Index : SV_VERTEXID;
+    float4 TexLayout : TEXLAYOUT;
+    float4 Color : COLOR;
+    float2 Position : POSITION;
+    float2 Size : SIZE;
+    uint ImageIndex : IMAGEINDEX;
+    uint SamplingData : MSDFDATA;
+};
+
+struct RectVertexOutput
+{
+    float4 Position : SV_POSITION;
+    float4 Color : COLOR;
+    float2 TextureCoordinates : TEXCOORD0;
+    uint ImageIndex : IMAGEINDEX;
+    uint SamplingData : MSDFDATA;
+};
+
 
 cbuffer FrameBuffer	: register(b0)
 {
@@ -121,7 +145,8 @@ cbuffer Objectbuffer : register(b1)
 
 cbuffer LineCBuffer : register(b2)
 {
-	float4x4 LCB_ToWorld;
-	float4x4 LCB_ToView;
-	float4x4 LCB_ToProjection;
+    float4x4 LCB_ToWorld;
+    float4x4 LCB_ToView;
+    float4x4 LCB_ToProjection;
 };
+#endif

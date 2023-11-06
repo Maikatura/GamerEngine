@@ -14,22 +14,22 @@ VertexToPixel main(VertexInput input)
 	if(OB_HasBones)
 	{
 		skinningMatrix = 0;
-        skinningMatrix += mul(input.myBoneWeights.x, OB_BoneData[input.myBoneIDs.x]);
-		skinningMatrix += mul(input.myBoneWeights.y, OB_BoneData[input.myBoneIDs.y]);
-		skinningMatrix += mul(input.myBoneWeights.z, OB_BoneData[input.myBoneIDs.z]);
-		skinningMatrix += mul(input.myBoneWeights.w, OB_BoneData[input.myBoneIDs.w]);
+        skinningMatrix += mul(input.BoneWeights.x, OB_BoneData[input.BoneIDs.x]);
+		skinningMatrix += mul(input.BoneWeights.y, OB_BoneData[input.BoneIDs.y]);
+		skinningMatrix += mul(input.BoneWeights.z, OB_BoneData[input.BoneIDs.z]);
+		skinningMatrix += mul(input.BoneWeights.w, OB_BoneData[input.BoneIDs.w]);
 	}
 
-    float4 vertexWorldPosition = mul(OB_ToWorld, mul(input.myPosition, skinningMatrix));
+    float4 vertexWorldPosition = mul(OB_ToWorld, mul(input.Position, skinningMatrix));
 	if (OB_IsInstanced)
 	{
-		vertexWorldPosition = mul(input.Offset, mul(input.myPosition, skinningMatrix));
+		vertexWorldPosition = mul(input.Offset, mul(input.Position, skinningMatrix));
 	}
 
     float4 viewPosition = mul(FB_ToView, vertexWorldPosition);
-    result.myVertexWorldPosition = vertexWorldPosition.xyz;
-    result.myViewPosition = viewPosition.xyz;
-    result.myPosition = mul(FB_ToProjection, viewPosition);
+    result.VertexWorldPosition = vertexWorldPosition.xyz;
+    result.ViewPosition = viewPosition.xyz;
+    result.Position = mul(FB_ToProjection, viewPosition);
 
 
     float3x3 worldNormalRotation = (float3x3)OB_ToWorld;
@@ -40,18 +40,18 @@ VertexToPixel main(VertexInput input)
 	
     float3x3 skinNormalRotation = (float3x3)skinningMatrix;
 
-    result.myNormal = mul(worldNormalRotation, mul(input.myNormal, skinNormalRotation));
-	result.myTangent	=	mul(worldNormalRotation, mul(input.myTangent,	skinNormalRotation));
-	result.myBinormal	=	mul(worldNormalRotation, mul(input.myBinormal,	skinNormalRotation));
+    result.Normal = mul(worldNormalRotation, mul(input.Normal, skinNormalRotation));
+	result.Tangent	=	mul(worldNormalRotation, mul(input.Tangent,	skinNormalRotation));
+	result.Binormal	=	mul(worldNormalRotation, mul(input.Binormal,	skinNormalRotation));
 
-	result.myVxColor = input.myVxColor;
-	result.myVxColor2 = input.myVxColor2;
-	result.myVxColor3 = input.myVxColor3;
-	result.myVxColor4 = input.myVxColor4;
-	result.myUV = input.myUV;
-	result.myUV2 = input.myUV2;
-	result.myUV3 = input.myUV3;
-	result.myUV4 = input.myUV4;
+	result.VxColor = input.VxColor;
+	result.VxColor2 = input.VxColor2;
+	result.VxColor3 = input.VxColor3;
+	result.VxColor4 = input.VxColor4;
+	result.UV = input.UV;
+	result.UV2 = input.UV2;
+	result.UV3 = input.UV3;
+	result.UV4 = input.UV4;
 
 	return result;
 }

@@ -40,6 +40,8 @@
     <FxCompile Include="Shaders\Sprite_GS.hlsl" />
     <FxCompile Include="Shaders\Sprite_PS.hlsl" />
     <FxCompile Include="Shaders\Sprite_VS.hlsl" />
+    <FxCompile Include="Shaders\Text_PS.hlsl" />
+    <FxCompile Include="Shaders\Text_VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Data\BufferData.hlsli">
@@ -86,6 +88,9 @@
     </None>
     <None Include="Shaders\PostProcess\PostProcessStructs.hlsli">
       <Filter>PostProcess</Filter>
+    </None>
+    <None Include="Shaders\Data\Shadows.hlsli">
+      <Filter>Data</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -26,12 +26,12 @@ DeferredPixelOutput main(DeferredVertexToPixel aInput)
 	float radius = 0.310f;
 	float offset = 0.6f;
 
-	float2 randomTexCoordScale = aInput.myUV * FB_Resolution;
+	float2 randomTexCoordScale = aInput.UV * FB_Resolution;
 	const float random = (int)fmod(randomTexCoordScale.x, 4) + (int)(fmod(randomTexCoordScale.y, 4) * 4);
 
 	//point clamp sampler since the textures have already been linearly interpolated when downsized
-	const float3 viewPosition = viewPositionTexture.Sample(pointWrapSampler, aInput.myUV).xyz;
-    const float3 viewNormal = viewNormalTexture.Sample(pointWrapSampler, aInput.myUV).xyz;
+	const float3 viewPosition = viewPositionTexture.Sample(pointWrapSampler, aInput.UV).xyz;
+    const float3 viewNormal = viewNormalTexture.Sample(pointWrapSampler, aInput.UV).xyz;
 
 	float occlusion = 0.0f;
 
@@ -41,13 +41,13 @@ DeferredPixelOutput main(DeferredVertexToPixel aInput)
 		const float2 coord1 = reflect(normalize(FB_FrustrumCorners[i % 4]).xy, random).xy * radius;
 		const float2 coord2 = float2(coord1.x * offset - coord1.y * offset, coord1.x * offset + coord1.y * offset);
 
-		occlusion += SSAO(aInput.myUV, coord1 * 0.25f, viewPosition, viewNormal, scale, bias, intensity);
-		occlusion += SSAO(aInput.myUV, coord2 * 0.50f, viewPosition, viewNormal, scale, bias, intensity);
-		occlusion += SSAO(aInput.myUV, coord1 * 0.75f, viewPosition, viewNormal, scale, bias, intensity);
-		occlusion += SSAO(aInput.myUV, coord2 * 1.0f, viewPosition, viewNormal, scale, bias, intensity);
+		occlusion += SSAO(aInput.UV, coord1 * 0.25f, viewPosition, viewNormal, scale, bias, intensity);
+		occlusion += SSAO(aInput.UV, coord2 * 0.50f, viewPosition, viewNormal, scale, bias, intensity);
+		occlusion += SSAO(aInput.UV, coord1 * 0.75f, viewPosition, viewNormal, scale, bias, intensity);
+		occlusion += SSAO(aInput.UV, coord2 * 1.0f, viewPosition, viewNormal, scale, bias, intensity);
 	}
 
-	output.myColor.rgb = 1.0f - saturate(occlusion);
-	output.myColor.a = 1.0f;
+	output.Color.rgb = 1.0f - saturate(occlusion);
+	output.Color.a = 1.0f;
 	return output;
 }
