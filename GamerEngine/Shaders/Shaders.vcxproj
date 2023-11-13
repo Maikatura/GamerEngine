@@ -243,11 +243,11 @@
     <None Include="Shaders\Data\ShaderStructs.hlsli" />
     <None Include="Shaders\Data\ShadowFunctions.hlsli" />
     <None Include="Shaders\Data\ShadowShaderStructs.hlsli" />
+    <None Include="Shaders\Data\Shadows.hlsli" />
     <None Include="Shaders\Data\SpriteShaderStructs.hlsli" />
     <None Include="Shaders\Data\Textures.hlsli" />
     <None Include="Shaders\Data\Tonemaps.hlsli" />
     <None Include="Shaders\PostProcess\PostProcessStructs.hlsli" />
-    <None Include="Shaders\Data\Shadows.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

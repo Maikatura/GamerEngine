@@ -78,6 +78,10 @@ links
 	"d3d11.lib",
 	"dxguid.lib",
 	
+	"msdfgen",
+	"msdf-atlas-gen",
+	"freetype",	
+
 	"TurNet",
 	"ws2_32.lib",
 	"%{Libs.OpenVR}"

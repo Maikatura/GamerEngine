@@ -204,7 +204,13 @@
     <ProjectReference Include="..\External\DirectXTK\DirectXTK.vcxproj">
       <Project>{F78B7304-63F6-277B-AC34-D92018DE05D0}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\External\Text\src\msdfgen\freetype\freetype.vcxproj">
+    <ProjectReference Include="..\External\msdf\msdfgen\msdfgen.vcxproj">
+      <Project>{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\msdf\msdf-atlas-gen.vcxproj">
+      <Project>{38BD587B-248B-4C81-0D1F-BDA7F98B28E6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\msdf\msdfgen\freetype\freetype.vcxproj">
       <Project>{89895BD8-7556-B6E3-9E6F-A48B8A9BEB71}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\TurNet\TurNet.vcxproj">

@@ -27,8 +27,8 @@ IncludeDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/
 IncludeDirs["OpenFBX"] = "%{wks.location}/External/OpenFBX/src/"
 IncludeDirs["OpenVR"] = "%{wks.location}/External/openvr/headers/"
 IncludeDirs["DirectXTK"] = "%{wks.location}/External/directxtk/inc/"
-IncludeDirs["msdf_atlas_gen"] = "%{wks.location}/External/Text/src/msdf-atlas-gen/"
-IncludeDirs["msdfgen"] = "%{wks.location}/External/Text/src/msdfgen/"
+IncludeDirs["msdf_atlas_gen"] = "%{wks.location}/External/msdf/msdf-atlas-gen/"
+IncludeDirs["msdfgen"] = "%{wks.location}/External/msdf/msdfgen/"
 
 --Libaries
 LibDirs = {}

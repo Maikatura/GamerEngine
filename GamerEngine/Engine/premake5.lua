@@ -83,7 +83,7 @@ links
 	"DirectXTK",
 	"ImGui",
 	"Json",
-	"msdf"
+	"msdfgen"
 }
 
 files 

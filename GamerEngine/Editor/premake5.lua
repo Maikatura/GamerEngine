@@ -88,7 +88,7 @@ links
 	"Game",
 	"PhysicsEngine",
 	"Flecs",
-	"freetype",
+	
 	--"PhysX",
 	
 	"Json",
@@ -98,7 +98,9 @@ links
 	"DirectXTK",
 	
 	"ImGui",
-	"msdf",
+	"msdfgen",
+	"msdf-atlas-gen",
+	"freetype",
 	
 	--"cryptlib",
 	"TurNet",

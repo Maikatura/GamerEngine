@@ -77,6 +77,9 @@
     <None Include="Shaders\Data\ShadowShaderStructs.hlsli">
       <Filter>Data</Filter>
     </None>
+    <None Include="Shaders\Data\Shadows.hlsli">
+      <Filter>Data</Filter>
+    </None>
     <None Include="Shaders\Data\SpriteShaderStructs.hlsli">
       <Filter>Data</Filter>
     </None>
@@ -88,9 +91,6 @@
     </None>
     <None Include="Shaders\PostProcess\PostProcessStructs.hlsli">
       <Filter>PostProcess</Filter>
-    </None>
-    <None Include="Shaders\Data\Shadows.hlsli">
-      <Filter>Data</Filter>
     </None>
   </ItemGroup>
 </Project>

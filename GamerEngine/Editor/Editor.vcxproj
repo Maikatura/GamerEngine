@@ -212,9 +212,6 @@
     <ProjectReference Include="..\External\flecs\Flecs.vcxproj">
       <Project>{32A72E0D-9EBB-56BE-673D-FA1DD31053EF}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\External\Text\src\msdfgen\freetype\freetype.vcxproj">
-      <Project>{89895BD8-7556-B6E3-9E6F-A48B8A9BEB71}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\External\Json\Json.vcxproj">
       <Project>{7F9B877C-6BD2-880D-14BF-6E1000D5040F}</Project>
     </ProjectReference>
@@ -233,8 +230,14 @@
     <ProjectReference Include="..\External\ImGui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\External\Text\msdf.vcxproj">
-      <Project>{4FCB9A7C-3B02-9C0D-E4EE-8110D004180F}</Project>
+    <ProjectReference Include="..\External\msdf\msdfgen\msdfgen.vcxproj">
+      <Project>{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\msdf\msdf-atlas-gen.vcxproj">
+      <Project>{38BD587B-248B-4C81-0D1F-BDA7F98B28E6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\msdf\msdfgen\freetype\freetype.vcxproj">
+      <Project>{89895BD8-7556-B6E3-9E6F-A48B8A9BEB71}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\TurNet\TurNet.vcxproj">
       <Project>{076955D4-F30A-80AA-DCC5-93FEC80607FB}</Project>
