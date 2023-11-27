@@ -51,6 +51,7 @@ includedirs{
 	"%{IncludeDirs.FBXImporter}",
 	"%{IncludeDirs.OpenFBX}",
 	"%{IncludeDirs.OpenVR}",
+	"%{IncludeDirs.OpenXR}",
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.ImGui}",
@@ -83,7 +84,8 @@ links
 	"DirectXTK",
 	"ImGui",
 	"Json",
-	"msdfgen"
+	"msdfgen",
+	--"openxr"
 }
 
 files 

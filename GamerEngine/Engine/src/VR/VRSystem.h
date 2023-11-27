@@ -8,13 +8,6 @@
 
 #define ENABLE_VR 0
 
-enum class VREye
-{
-	None,
-	Right,
-	Left
-};
-
 class VRSystem
 {
 private:

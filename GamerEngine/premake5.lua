@@ -33,6 +33,7 @@ include "External/OpenVR"
 include "External/DirectXTK"
 include "External/msdf"
 include "External/msdf/msdfgen"
+--include "External/openxr"
 	
 group "Backend"
 include "Shaders"

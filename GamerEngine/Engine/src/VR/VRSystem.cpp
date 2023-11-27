@@ -2,6 +2,7 @@
 #include "VRSystem.h"
 
 #include "VRMath.h"
+#include "Types\EnumTypes.h"
 
 bool VRSystem::Init(HWND aWindowHandle)
 {

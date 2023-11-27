@@ -111,10 +111,12 @@ Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VREye anEye)
 	if (DX11::Get().IsVrNull())
 		return Matrix4x4f();
 
-	Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetEyeToHeadTransform(anEye);
+	return Matrix4x4f();
+
+	//Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetEyeToHeadTransform(anEye);
 
 
-	return Matrix4x4f::GetFastInverse(matrixObj);
+	//return Matrix4x4f::GetFastInverse(matrixObj);
 }
 
 
@@ -123,9 +125,11 @@ Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VREye anEye)
 	if (!DX11::Get().IsVrNull() || anEye == VREye::None)
 		return Projection;
 
-	Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetProjectionMatrix( anEye, myNearPlane, myFarPlane);
+	return Projection;
 
-	return matrixObj;
+	//Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetProjectionMatrix( anEye, myNearPlane, myFarPlane);
+	//
+	//return matrixObj;
 }
 
 bool CameraComponent::HasMoved()
@@ -140,26 +144,17 @@ void CameraComponent::SetHasMoved(bool aMoveValue)
 
 void CameraComponent::BuildTransform(TransformComponent* aTransform)
 {
-
-
-
-	//rotation.x = -rotation.x;
-	//rotation.y = -rotation.y;
-	////rotation.z = 0.0f;
-
-
 	myPosition = aTransform->GetPosition();
+	myRotation = aTransform->GetRotation();
 
 #ifndef VR_DISABLED
-	CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
-	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
+	//CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
+	//ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
 	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
 #else
 	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
 #endif
-
-	myRotation = aTransform->GetRotation();
-
+	
 
 	//ViewProjection = Matrix4x4f(1.0f);
 

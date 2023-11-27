@@ -5,7 +5,7 @@
 #define _WINSOCKAPI_ 
 #include "Windows.h"
 
-
+// Don't worry this runtime doesn't have a fee and never will c:
 
 #include "Modelviewer.h"
 #include "GraphicsEngine.h"

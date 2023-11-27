@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C1884AC8-AD2A-759E-96E5-88F28226FCEE}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>OpenXR</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\OpenXR\Debug\</IntDir>
+    <TargetName>OpenXR_Debug</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\Temp\lib\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\OpenXR\Release\</IntDir>
+    <TargetName>OpenXR_Release</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;2220;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;VR_API_PUBLIC;OPENVR_BUILD_STATIC;WIN32;VRCORE_NO_PLATFORM;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX20_CODECVT_FACETS_DEPRECATION_WARNING;XR_OS_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;src\external\jsoncpp\include;src\external\jsoncpp\src;src\external\jnipp;src\loader;src\common;src\external\android-jni-wrappers\wrap;C:\Program Files\Java\jdk-21\include;C:\Program Files\Java\jdk-21\include\win32;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>Kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>26812;26451;2220;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;VR_API_PUBLIC;OPENVR_BUILD_STATIC;WIN32;VRCORE_NO_PLATFORM;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX20_CODECVT_FACETS_DEPRECATION_WARNING;XR_OS_WINDOWS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;src\external\jsoncpp\include;src\external\jsoncpp\src;src\external\jnipp;src\loader;src\common;src\external\android-jni-wrappers\wrap;C:\Program Files\Java\jdk-21\include;C:\Program Files\Java\jdk-21\include\win32;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>Kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\openxr\openxr.h" />
+    <ClInclude Include="include\openxr\openxr_platform.h" />
+    <ClInclude Include="include\openxr\openxr_platform_defines.h" />
+    <ClInclude Include="include\openxr\openxr_reflection.h" />
+    <ClInclude Include="include\openxr\openxr_reflection_parent_structs.h" />
+    <ClInclude Include="include\openxr\openxr_reflection_structs.h" />
+    <ClInclude Include="src\common\extra_algorithms.h" />
+    <ClInclude Include="src\common\filesystem_utils.hpp" />
+    <ClInclude Include="src\common\hex_and_handles.h" />
+    <ClInclude Include="src\common\loader_interfaces.h" />
+    <ClInclude Include="src\common\object_info.h" />
+    <ClInclude Include="src\common\platform_utils.hpp" />
+    <ClInclude Include="src\common\stdfs_conditions.h" />
+    <ClInclude Include="src\common\unique_asset.h" />
+    <ClInclude Include="src\common\vulkan_debug_object_namer.hpp" />
+    <ClInclude Include="src\common\xr_dependencies.h" />
+    <ClInclude Include="src\common\xr_linear.h" />
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\ObjectWrapperBase.h" />
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.content.h" />
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.content.impl.h" />
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.database.h" />
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.database.impl.h" />
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.net.h" />
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.net.impl.h" />
+    <ClInclude Include="src\external\jnipp\jnipp.h" />
+    <ClInclude Include="src\external\jnipp\tests\testing.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\allocator.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\assertions.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\config.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\forwards.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\json.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\json_features.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\reader.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\value.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\version.h" />
+    <ClInclude Include="src\external\jsoncpp\include\json\writer.h" />
+    <ClInclude Include="src\external\jsoncpp\src\lib_json\json_tool.h" />
+    <ClInclude Include="src\external\jsoncpp\src\test_lib_json\fuzz.h" />
+    <ClInclude Include="src\external\jsoncpp\src\test_lib_json\jsontest.h" />
+    <ClInclude Include="src\loader\android_utilities.h" />
+    <ClInclude Include="src\loader\api_layer_interface.hpp" />
+    <ClInclude Include="src\loader\exception_handling.hpp" />
+    <ClInclude Include="src\loader\loader_instance.hpp" />
+    <ClInclude Include="src\loader\loader_logger.hpp" />
+    <ClInclude Include="src\loader\loader_logger_recorders.hpp" />
+    <ClInclude Include="src\loader\loader_platform.hpp" />
+    <ClInclude Include="src\loader\manifest_file.hpp" />
+    <ClInclude Include="src\loader\runtime_interface.hpp" />
+    <ClInclude Include="src\loader\xr_generated_loader.hpp" />
+    <ClInclude Include="src\xr_generated_dispatch_table.h" />
+    <ClInclude Include="src\xr_generated_dispatch_table_core.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\common\filesystem_utils.cpp" />
+    <ClCompile Include="src\common\object_info.cpp" />
+    <ClCompile Include="src\external\android-jni-wrappers\wrap\android.content.cpp" />
+    <ClCompile Include="src\external\android-jni-wrappers\wrap\android.database.cpp" />
+    <ClCompile Include="src\external\android-jni-wrappers\wrap\android.net.cpp" />
+    <ClCompile Include="src\external\jnipp\jnipp.cpp" />
+    <ClCompile Include="src\external\jnipp\tests\external_create.cpp" />
+    <ClCompile Include="src\external\jnipp\tests\external_detach.cpp" />
+    <ClCompile Include="src\external\jnipp\tests\main.cpp" />
+    <ClCompile Include="src\external\jsoncpp\example\readFromStream\readFromStream.cpp" />
+    <ClCompile Include="src\external\jsoncpp\example\readFromString\readFromString.cpp" />
+    <ClCompile Include="src\external\jsoncpp\example\streamWrite\streamWrite.cpp" />
+    <ClCompile Include="src\external\jsoncpp\example\stringWrite\stringWrite.cpp" />
+    <ClCompile Include="src\external\jsoncpp\src\jsontestrunner\main.cpp">
+      <ObjectFileName>$(IntDir)\main1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\src\lib_json\json_reader.cpp" />
+    <ClCompile Include="src\external\jsoncpp\src\lib_json\json_value.cpp" />
+    <ClCompile Include="src\external\jsoncpp\src\lib_json\json_writer.cpp" />
+    <ClCompile Include="src\external\jsoncpp\src\test_lib_json\fuzz.cpp" />
+    <ClCompile Include="src\external\jsoncpp\src\test_lib_json\jsontest.cpp" />
+    <ClCompile Include="src\external\jsoncpp\src\test_lib_json\main.cpp">
+      <ObjectFileName>$(IntDir)\main2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\loader\android_utilities.cpp" />
+    <ClCompile Include="src\loader\api_layer_interface.cpp" />
+    <ClCompile Include="src\loader\loader_core.cpp" />
+    <ClCompile Include="src\loader\loader_instance.cpp" />
+    <ClCompile Include="src\loader\loader_logger.cpp" />
+    <ClCompile Include="src\loader\loader_logger_recorders.cpp" />
+    <ClCompile Include="src\loader\manifest_file.cpp" />
+    <ClCompile Include="src\loader\runtime_interface.cpp" />
+    <ClCompile Include="src\loader\xr_generated_loader.cpp" />
+    <ClCompile Include="src\xr_generated_dispatch_table.c" />
+    <ClCompile Include="src\xr_generated_dispatch_table_core.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

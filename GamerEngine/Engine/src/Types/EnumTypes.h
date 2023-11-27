@@ -45,3 +45,11 @@ enum class RenderMode
 	SpotLightNoAlbedo,
 	COUNT
 };
+
+
+enum class VREye 
+{
+	None,
+	Left,
+	Right
+};
