@@ -237,6 +237,21 @@ void EditorLayers::OnImGuiRender()
 			}*/
 		}
 	}
+
+
+	ImGui::Begin("WoW Item Tooltip");
+
+	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 112, 221, 255)); // Rare
+	ImGui::Text("Valor-Bound Greaves");
+	ImGui::PopStyleColor();
+
+
+	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 210, 0, 255)); // Item Level
+	ImGui::Text("Item Level 25");
+	ImGui::PopStyleColor();
+
+
+	ImGui::End();
 }
 
 void EditorLayers::OnDetach()

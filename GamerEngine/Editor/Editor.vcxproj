@@ -61,7 +61,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;2220;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\flecs\include;..\External\directxtk\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -72,7 +72,7 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\flecs\include;..\External\directxtk\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;2220;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\flecs\include;..\External\directxtk\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -103,7 +103,7 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\flecs\include;..\External\directxtk\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>

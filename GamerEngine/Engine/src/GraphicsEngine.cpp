@@ -377,7 +377,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(anEye);
 
 
-	std::vector<Light*>& someLightList = scene->GetLights();
+	std::vector<Light*> someLightList = scene->GetSomeLights();
 
 	const Ref<DirectionalLight>& directionalLight = scene->GetDirLight();
 	const Ref<EnvironmentLight>& environmentLight = scene->GetEnvLight();

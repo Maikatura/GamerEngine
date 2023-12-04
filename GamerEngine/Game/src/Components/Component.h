@@ -11,6 +11,7 @@ public:
 	bool RunInEditor();
 
 	void SetEntity(Entity* aEntity);
+	Entity* GetEntity() { return myEntity; }
 
 protected:
 	virtual void OnCreate() {}

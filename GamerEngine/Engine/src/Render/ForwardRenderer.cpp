@@ -143,23 +143,36 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			aDirectionalLight->SetAsResource(nullptr);
 		}
 
-		if(anEnvironmentLight)
+		if (anEnvironmentLight)
 		{
 			anEnvironmentLight->SetAsResource(nullptr);
 		}
 
-		mySceneLightBufferData.NumLights = 0;
-		ZeroMemory(mySceneLightBufferData.Lights, sizeof(Light::LightBufferData) * MAX_FORWARD_LIGHTS);
-		for(size_t l = 0; l < aLightList.size() && l < MAX_FORWARD_LIGHTS; l++)
+		mySceneLightBufferData.NumLightsPoint = 0;
+		mySceneLightBufferData.NumLightsSpot = 0;
+		ZeroMemory(mySceneLightBufferData.LightsPoint, sizeof(Light::LightBufferData) * MAX_FORWARD_LIGHTS);
+		ZeroMemory(mySceneLightBufferData.LightsSpot, sizeof(Light::LightBufferData) * MAX_FORWARD_LIGHTS);
+
+		for (size_t l = 0; l < aLightList.size(); l++)
 		{
-			if(aLightList[l]->GetLightBufferData().LightType == 1)
+			if (aLightList[l]->GetLightBufferData().LightType == 1)
 			{
 				continue;
 			}
 			else
 			{
-				mySceneLightBufferData.Lights[l] = aLightList[l]->GetLightBufferData();
-				mySceneLightBufferData.NumLights++;
+				if (aLightList[l]->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_FORWARD_LIGHTS)
+				{
+					mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = aLightList[l]->GetLightBufferData();
+					mySceneLightBufferData.NumLightsPoint++;
+				}
+
+				if (aLightList[l]->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_FORWARD_LIGHTS)
+				{
+					mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = aLightList[l]->GetLightBufferData();
+					mySceneLightBufferData.NumLightsSpot++;
+				}
+
 				aLightList[l]->SetAsResource(nullptr);
 			}
 		}

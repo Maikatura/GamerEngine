@@ -64,7 +64,8 @@ protected:
 
 	TransformComponent* myTransformComp;
 
-	inline static int mySpotAndDirLightInt = 0;
+	inline static int SpotLightNum = 0;
+	inline static int PointLightNum = 0;
 
 public:
 
@@ -73,7 +74,8 @@ public:
 
 	static void Reset()
 	{
-		mySpotAndDirLightInt = 0;
+		SpotLightNum = 0;
+		PointLightNum = 0;
 	}
 
 	bool operator<(const Light& aLight) const

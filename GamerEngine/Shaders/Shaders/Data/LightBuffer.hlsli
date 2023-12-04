@@ -34,14 +34,17 @@ struct LightData
 
 };
 
-#define MAX_LIGHTS 96
+#define MAX_LIGHTS 20
 
 cbuffer LightBuffer : register(b3)
 {
 	LightData LB_DirectionalLight;
-	LightData LB_Lights[MAX_LIGHTS];
-	uint LB_NumLights;
-	float3 LB_padding;
+	LightData LB_LightsSpot[MAX_LIGHTS];
+	LightData LB_LightsPoint[MAX_LIGHTS];
+	uint LB_NumLightsSpot;
+	uint LB_NumLightsPoint;
+	float LB_padding1;
+	float LB_padding2;
 }
 
 #endif

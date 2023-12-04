@@ -14,16 +14,20 @@
 
 #include "Font/Font.h"
 
-constexpr UINT MAX_FORWARD_LIGHTS = 98;
+constexpr UINT MAX_FORWARD_LIGHTS = 20;
 
 
 struct SceneLightBuffer
 {
 	Light::LightBufferData DirectionalLight;
-	Light::LightBufferData Lights[MAX_FORWARD_LIGHTS];
+	Light::LightBufferData LightsSpot[MAX_FORWARD_LIGHTS];
+	Light::LightBufferData LightsPoint[MAX_FORWARD_LIGHTS];
 
-	unsigned int NumLights;
-	Vector3f Padding;
+	unsigned int NumLightsSpot;
+	unsigned int NumLightsPoint;
+
+	float Padding1;
+	float Padding2;
 };
 
 class ForwardRenderer : public RendererBase

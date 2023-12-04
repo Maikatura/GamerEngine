@@ -11,7 +11,7 @@ void SpotLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer)
 {
 	if(myLightData.CastShadows)
 	{
-		DX11::Get().GetContext()->PSSetShaderResources(myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
+		DX11::Get().GetContext()->PSSetShaderResources(20 + myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }
 
@@ -37,8 +37,8 @@ void SpotLight::Update()
 	SetDirection(myTransform->GetRotation());
 	SetLightPosition(myTransform->GetPosition());
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(wTrans);
-	myLightData.ShadowMapIndex = 20 + mySpotAndDirLightInt;
-	mySpotAndDirLightInt++;
+	myLightData.ShadowMapIndex = SpotLightNum;
+	SpotLightNum++;
 }
 
 void SpotLight::SetData(TransformComponent* aTransform)

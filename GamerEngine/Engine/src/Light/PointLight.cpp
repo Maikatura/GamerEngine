@@ -19,7 +19,7 @@ void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer
 {
 	if(myLightData.CastShadows)
 	{
-		DX11::Get().GetContext()->PSSetShaderResources(myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
+		DX11::Get().GetContext()->PSSetShaderResources(40 + myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }
 
@@ -35,8 +35,8 @@ void PointLight::Update()
 	myLightData.LightView[3] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{  90, 0, 0 })), { 1, 1, 1 }));
 	myLightData.LightView[4] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 0, 0 })), { 1, 1, 1 }));
 	myLightData.LightView[5] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0,  180, 0 })), { 1, 1, 1 }));
-	myLightData.ShadowMapIndex = 40 + mySpotAndDirLightInt;
-	mySpotAndDirLightInt++;
+	myLightData.ShadowMapIndex = PointLightNum;
+	PointLightNum++;
 }
 
 void PointLight::SetRange(float aRange)

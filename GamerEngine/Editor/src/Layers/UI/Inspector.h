@@ -17,6 +17,10 @@ public:
 	void DrawSceneObject(Entity& aEntity);
 	void DrawFileObject(Entity& aEntity);
 
+
+	template <typename T>
+	static void DrawComponent(const std::string& aName, Entity aEntity, std::function<void(T&)> aFunction);
+
 	void AddComponent(Entity& aEntity);
 	bool ShowTexturePicker(Entity& aEntity, Ref<Material>& selectedMaterial, TextureType textureType);
 

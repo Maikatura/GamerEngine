@@ -400,10 +400,12 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 		aDirectionalLight->SetAsResource(nullptr);
 	}
 
-	mySceneLightBufferData.NumLights = 0;
-	ZeroMemory(mySceneLightBufferData.Lights, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
+	mySceneLightBufferData.NumLightsPoint = 0;
+	mySceneLightBufferData.NumLightsSpot = 0;
+	ZeroMemory(mySceneLightBufferData.LightsPoint, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
+	ZeroMemory(mySceneLightBufferData.LightsSpot, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
 
-	for(size_t l = 0; l < aLightList.size() && l < MAX_DEFERRED_LIGHTS; l++)
+	for(size_t l = 0; l < aLightList.size(); l++)
 	{
 		if(aLightList[l]->GetLightBufferData().LightType == 1)
 		{
@@ -411,8 +413,18 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 		}
 		else
 		{
-			mySceneLightBufferData.Lights[l] = aLightList[l]->GetLightBufferData();
-			mySceneLightBufferData.NumLights++;
+			if (aLightList[l]->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_DEFERRED_LIGHTS)
+			{
+				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = aLightList[l]->GetLightBufferData();
+				mySceneLightBufferData.NumLightsPoint++;
+			}
+			
+			if (aLightList[l]->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_DEFERRED_LIGHTS)
+			{
+				mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = aLightList[l]->GetLightBufferData();
+				mySceneLightBufferData.NumLightsSpot++;
+			}
+
 			aLightList[l]->SetAsResource(nullptr);
 		}
 	}

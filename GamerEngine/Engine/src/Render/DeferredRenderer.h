@@ -10,7 +10,7 @@
 #include "Light/SpotLight.h"
 #include "Light/PointLight.h"
 
-constexpr UINT MAX_DEFERRED_LIGHTS = 96;
+constexpr UINT MAX_DEFERRED_LIGHTS = 20;
 
 class GBuffer
 {
@@ -60,10 +60,14 @@ private:
 	struct SceneLightBuffer
 	{
 		Light::LightBufferData DirectionalLight;
-		Light::LightBufferData Lights[MAX_DEFERRED_LIGHTS];
+		Light::LightBufferData LightsSpot[MAX_DEFERRED_LIGHTS];
+		Light::LightBufferData LightsPoint[MAX_DEFERRED_LIGHTS];
 
-		unsigned int NumLights;
-		Vector3f Padding;
+		unsigned int NumLightsSpot;
+		unsigned int NumLightsPoint;
+		
+		float Padding1;
+		float Padding2;
 	} mySceneLightBufferData;
 
 	ComPtr<ID3D11Buffer> myLightBuffer;

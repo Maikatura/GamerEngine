@@ -38,29 +38,29 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
     float3 pointLight = 0;
     float3 spotLight = 0;
 
-    for (unsigned int i = 0; i < LB_NumLights; i++)
-    {
-        const LightData Light = LB_Lights[i];
-        switch (Light.LightType)
-        {
-            default:
-                break;
-
-            case 0: // This could be directional light
-                break;
-
-            case 1:
-			
-                pointLight += EvaluatePointLight(diffuseColor, specularColor, normal, material.g, Light.Color, Light.Intensity, Light.Range, Light.Position, toEye, worldPosition.xyz);
-                break;
-
-            case 2: //Spot Light
-                break;
-
-            case 3: //Area Lights, etc
-                break;
-        }
-    }
+   // for (unsigned int i = 0; i < LB_NumLights; i++)
+   // {
+   //     const LightData Light = LB_Lights[i];
+   //     switch (Light.LightType)
+   //     {
+   //         default:
+   //             break;
+   //
+   //         case 0: // This could be directional light
+   //             break;
+   //
+   //         case 1:
+	//		
+   //             pointLight += EvaluatePointLight(diffuseColor, specularColor, normal, material.g, Light.Color, Light.Intensity, Light.Range, Light.Position, toEye, worldPosition.xyz);
+   //             break;
+   //
+   //         case 2: //Spot Light
+   //             break;
+   //
+   //         case 3: //Area Lights, etc
+   //             break;
+   //     }
+   // }
 
     const float3 ambientLightning = EvaluateAmbience(
 		environmentTexture,

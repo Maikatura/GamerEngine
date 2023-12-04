@@ -2,11 +2,19 @@
 #ifndef EDITOR_PCH
 #define EDITOR_PCH
 
-#define WIN32_LEAN_AND_MEAN
-#ifdef WIN32_LEAN_AND_MEAN            // Exclude rarely-used stuff from Windows headers
-#include <windows.h>
-#include <Utilites/StringCast.h>
+
+#ifdef GE_PLATFORM_WINDOWS
+	#ifndef NOMINMAX
+		// See github.com/skypjack/entt/wiki/Frequently-Asked-Questions#warning-c4003-the-min-the-max-and-the-macro
+		#define NOMINMAX
+	#endif
 #endif
+
+
+#ifdef GE_PLATFORM_WINDOWS
+#include <Windows.h>
+#endif
+
 // ImGui Start
 #include <ImGui/ImGui.h>
 #include <ImGui/backend/imgui_impl_dx11.h>

@@ -108,9 +108,9 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
     }
 
 	[unroll(20)]
-	for(unsigned int l = 0; l < LB_NumLights; l++)
+	for(unsigned int l = 0; l < LB_NumLightsPoint; l++)
 	{
-		LightData Light = LB_Lights[l];
+		LightData Light = LB_LightsPoint[l];
 		switch(Light.LightType)
 		{
 			case 2:
@@ -121,40 +121,52 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 
 				if(Light.CastShadows)
 				{
+				
 
-					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz))
+					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, .0005f, Light.CastShadows))
 					{
-						const float shadow = 0.001f;
+						const float shadow = 0.05f;
 						pointTemp *= shadow;
 					}
 				}
 				pointLight += pointTemp;
 				break;
 			}
+			
+		}
+	}
+
+	[unroll(20)]
+	for(unsigned int l = 0; l < LB_NumLightsSpot; l++)
+	{
+		LightData Light = LB_LightsSpot[l];
+		switch(Light.LightType)
+		{
 			case 3:
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.Range, Light.Position, Light.Direction * -1, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
 				if(Light.CastShadows)
 				{
-					if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz))
+					if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, .0001f, Light.CastShadows))
 					{
-						const float shadow = 0.001f;
+						const float shadow = 0.05f;
 						spotTemp *= shadow;
 					}
 				}
 				spotLight += spotTemp;
 				break;
 			}
+		
 		}
 	}
 
     float emissiveStrength = 10.0f;
 	float3 emissiveColor = emissive * emissiveIntensity * albedo.xyz * emissiveStrength;
-    float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight)* directShadow);
+    float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight) * directShadow);
 
 
 	switch(FB_RenderMode)

@@ -125,53 +125,61 @@ PixelOutput main(VertexToPixel input)
     }
 
 	[unroll(20)]
-    for (unsigned int l = 0; l < LB_NumLights; l++)
-    {
-        LightData Light = LB_Lights[l];
-        switch (Light.LightType)
-        {
-            case 2:
+	for(unsigned int l = 0; l < LB_NumLightsPoint; l++)
+	{
+		LightData Light = LB_LightsPoint[l];
+		switch(Light.LightType)
+		{
+			case 2:
 			{
-                    float3 pointTemp = EvaluatePointLight(diffuseColor,
-				specularColor, normal, roughness, Light.Color, Light.Intensity,
-				Light.Range, Light.Position, toEye, worldPosition.xyz);
+				float3 pointTemp = EvaluatePointLight(diffuseColor,
+					specularColor, normal, roughness, Light.Color, Light.Intensity,
+					Light.Range, Light.Position, toEye, worldPosition.xyz);
 
-                    if (Light.CastShadows)
-                    {
+				if(Light.CastShadows)
+				{
+					
+					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz , .0005f, Light.CastShadows))
+					{
+						const float shadow = 0.001f;
+						pointTemp *= shadow;
+					}
+				}
+				pointLight += pointTemp;
+				break;
+			}
+			
+		}
+	}
 
-                        if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz))
-                        {
-                            const float shadow = 0.001f;
-                            pointTemp *= shadow;
-                        }
-                    }
-                    pointLight += pointTemp;
-                    break;
-                }
-            case 3:
+	[unroll(20)]
+	for(unsigned int l = 0; l < LB_NumLightsSpot; l++)
+	{
+		LightData Light = LB_LightsSpot[l];
+		switch(Light.LightType)
+		{
+			case 3:
 			{
-                    float3 spotTemp = EvaluateSpotLight(diffuseColor,
-				specularColor, normal, roughness, Light.Color, Light.Intensity,
-				Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
-				Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
+				float3 spotTemp = EvaluateSpotLight(diffuseColor,
+					specularColor, normal, roughness, Light.Color, Light.Intensity,
+					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
-                    if (Light.CastShadows)
-                    {
-                        if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz))
-                        {
-                            const float shadow = 0.001f;
-                            spotTemp *= shadow;
-                        }
-                    }
-                    spotLight += spotTemp;
-                    break;
-                }
-            default:
-			{
-                    break;
-                }
-        }
-    }
+				if(Light.CastShadows)
+				{
+				
+					if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, .0001f, Light.CastShadows))
+					{
+						const float shadow = 0.001f;
+						spotTemp *= shadow;
+					}
+				}
+				spotLight += spotTemp;
+				break;
+			}
+		
+		}
+	}
 
 	float emissiveStrength = 0.0f;
 	float3 emissiveColor = emissive * emissiveStr * albedo.xyz * emissiveStrength;

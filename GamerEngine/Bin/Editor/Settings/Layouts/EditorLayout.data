@@ -1,6 +1,6 @@
 [Window][DockSpaceViewport_11111111]
 Pos=0,38
-Size=1920,971
+Size=1904,1003
 Collapsed=0
 
 [Window][Debug##Default]
@@ -16,7 +16,7 @@ DockId=0x00000007,0
 
 [Window][Hierarchy]
 Pos=0,38
-Size=489,971
+Size=489,1003
 Collapsed=0
 DockId=0x00000005,0
 
@@ -28,7 +28,7 @@ DockId=0x00000009,0
 
 [Window][Scene]
 Pos=491,38
-Size=1153,579
+Size=1137,611
 Collapsed=0
 DockId=0x00000007,0
 
@@ -112,14 +112,14 @@ Collapsed=0
 DockId=0x0000000B,0
 
 [Window][File Explorer]
-Pos=491,619
-Size=1153,390
+Pos=491,651
+Size=1137,390
 Collapsed=0
 DockId=0x00000008,0
 
 [Window][Inspector]
-Pos=1646,38
-Size=274,971
+Pos=1630,38
+Size=274,1003
 Collapsed=0
 DockId=0x0000000A,0
 
@@ -147,8 +147,13 @@ Size=694,1003
 Collapsed=0
 DockId=0x00000005,1
 
+[Window][WoW Item Tooltip]
+Pos=241,226
+Size=180,152
+Collapsed=0
+
 [Docking][Data]
-DockSpace           ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,61 Size=1920,971 Split=X
+DockSpace           ID=0x8B93E3BD Window=0xA787BDB4 Pos=8,69 Size=1904,1003 Split=X
   DockNode          ID=0x0000000B Parent=0x8B93E3BD SizeRef=263,998 Selected=0x354383ED
   DockNode          ID=0x0000000C Parent=0x8B93E3BD SizeRef=1655,998 Split=X
     DockNode        ID=0x00000001 Parent=0x0000000C SizeRef=385,1022 Selected=0x64685346
