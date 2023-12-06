@@ -398,13 +398,22 @@ namespace CommonUtilities
 	constexpr Quaternion<T> Quaternion<T>::FromEulers(const Vector3<T>& aEulers)
 	{
 
-		Vector3<T> halfAngle = aEulers * static_cast<T>(0.5);
+		Vector3<T> halfAngle = aEulers * static_cast<T>(0.5f);
 
-		Quaternion<T> pitch{ std::cos(halfAngle.x), std::sin(halfAngle.x), static_cast<T>(0), static_cast<T>(0) };
-		Quaternion<T> yaw{ std::cos(halfAngle.y), static_cast<T>(0), std::sin(halfAngle.y), static_cast<T>(0) };
-		Quaternion<T> roll{ std::cos(halfAngle.z), static_cast<T>(0), static_cast<T>(0), std::sin(halfAngle.z) };
+		float cy = std::cos(halfAngle.z);
+		float sy = std::sin(halfAngle.z);
+		float cp = std::cos(halfAngle.y);
+		float sp = std::sin(halfAngle.y);
+		float cr = std::cos(halfAngle.x);
+		float sr = std::sin(halfAngle.x);
 
-		Quaternion<T> result = roll * yaw * pitch;
+		Quaternion result(
+			cr * cp * cy + sr * sp * sy,
+			sr * cp * cy - cr * sp * sy,
+			cr * sp * cy + sr * cp * sy,
+			cr * cp * sy - sr * sp * cy
+		);
+
 		result.Normalize();
 
 		return result;

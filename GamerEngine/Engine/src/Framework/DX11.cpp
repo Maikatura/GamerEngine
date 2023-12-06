@@ -179,6 +179,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 			featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &SwapChain, &Device,
 			&featureLevel, &myImmediateContext);
 
+		GE_ASSERT(SUCCEEDED(result), "Failed to create SwapChain and Device");
 		if (SUCCEEDED(errorCode))
 		{
 			driverType = driverTypes[i];
@@ -195,6 +196,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// CREATE RENDER TARGET VIEW
 	result = SwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&myBackBufferTex));
+	GE_ASSERT(SUCCEEDED(result), "Failed to get swapchain buffer");
 	if (FAILED(result))
 	{
 		return false;
@@ -212,11 +214,12 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	RTVDesc.Texture2D.MipSlice = 0;
 
 	result = Device->CreateRenderTargetView(myBackBufferTex, &RTVDesc, &myRenderTargetView);
+	SafeRelease(myBackBufferTex);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target view from back buffer");
 	if (FAILED(result))
 	{
-		//MyDebug(_T("ERROR"));
+		return false;
 	}
-	SafeRelease(myBackBufferTex);
 
 	// CREATE DEPTH STENCIL
 	ID3D11Texture2D* pDepthStencil = NULL;
@@ -237,9 +240,11 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 
 	result = Device->CreateTexture2D(&descDepth, NULL, &pDepthStencil);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D");
 	if (FAILED(result))
+	{
 		return false;
-
+	}
 
 	D3D11_DEPTH_STENCIL_DESC dsDesc;
 	ZeroMemory(&dsDesc, sizeof(dsDesc));
@@ -267,6 +272,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// Create depth stencil state
 	result = Device->CreateDepthStencilState(&dsDesc, &pDSState);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D");
 	if (FAILED(result))
 	{
 		return false;
@@ -285,10 +291,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	descDSV.Texture2D.MipSlice = 0;
 
 	// Create the depth stencil view
-	result = Device->CreateDepthStencilView(pDepthStencil, // Depth stencil texture
-		&descDSV, // Depth stencil desc
-		&myDepthStencilView);  // [out] Depth stencil view
-
+	result = Device->CreateDepthStencilView(pDepthStencil, &descDSV, &myDepthStencilView);  // [out] Depth stencil view
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil View");
 	if (FAILED(result))
 	{
 		WCHAR buf[100];
@@ -328,6 +332,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// Create the state using the device.
 	result = Device->CreateDepthStencilState(&depthDisabledStencilDesc, &myDepthDisabledStencilState);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil State");
 	if (FAILED(result))
 	{
 		return false;
@@ -352,7 +357,12 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
 
 	
-	Device->CreateRasterizerState(&rasterizerDesc, &myFrontCulling);
+	result = Device->CreateRasterizerState(&rasterizerDesc, &myFrontCulling);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Rasterizer State");
+	if (FAILED(result))
+	{
+		return false;
+	}
 
 	// Set the rasterizer state
 	//myImmediateContext->RSSetState(myFrontCulling);
@@ -364,8 +374,12 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
 
 	
-	Device->CreateRasterizerState(&rasterizerDesc, &myBackCulling);
-
+	result = Device->CreateRasterizerState(&rasterizerDesc, &myBackCulling);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Rasterizer State");
+	if (FAILED(result))
+	{
+		return false;
+	}
 	// Set the rasterizer state
 	//myImmediateContext->RSSetState(rasterizerState);
 
@@ -394,7 +408,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	// Initialize the render to texture object.
 	m_RenderTextureLeft->SetName("VR Left Eye");
 	result = m_RenderTextureLeft->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
-	if (!result)
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Left Render Target (VR)");
+	if (FAILED(result))
 	{
 		return false;
 	}
@@ -411,7 +426,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	m_RenderTextureRight->SetName("VR Right Eye");
 
 	result = m_RenderTextureRight->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
-	if (!result)
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Right Render Target (VR)");
+	if (FAILED(result))
 	{
 		return false;
 	}
@@ -430,7 +446,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	// Initialize the render to texture object.
 	myScreenView->SetName("Window View");
 	result = myScreenView->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
-	if (!result)
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target (Flatscreen)");
+	if (FAILED(result))
 	{
 		return false;
 	}

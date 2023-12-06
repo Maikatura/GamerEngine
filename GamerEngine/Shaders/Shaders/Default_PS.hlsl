@@ -51,7 +51,6 @@ PixelOutput main(VertexToPixel input)
 
 	const float3 normal = normalTexture.Sample(defaultSampler, input.UV).rgb;
 	const float4 material = materialTexture.Sample(defaultSampler, input.UV).rgba;
-	const float3 vertexNormal = vertexNormalTexture.Sample(defaultSampler, input.UV).rgb;
 	const float4 worldPosition = worldPositionTexture.Sample(defaultSampler, input.UV).rgba;
 	const float ambientOcclusion = normal.r;
 	const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
@@ -65,17 +64,29 @@ PixelOutput main(VertexToPixel input)
 	float3 specularColor = lerp(float3(0.04f, 0.04f, 0.04f), albedo.rgb, metalness);
 	float3 diffuseColor = lerp(float3(0.0f, 0.0f, 0.0f), albedo.rgb, 1 - metalness);
 
-	float3 pointLight = 0;
-	float3 spotLight = 0;
-	float3 directLighting = 0;
+	input.Tangent = normalize(input.Tangent);
+	input.Binormal = normalize(input.Binormal);
+	input.Normal = normalize(input.Normal);
 
-	float directShadow = 1.0f;
-	float pointLightShadow = 1.0f;
+	const float3x3 TBN = float3x3(
+		normalize(input.Tangent),
+		normalize(input.Binormal),
+		normalize(input.Normal)
+		);
+
+	float3 pixelNormal = normal;
+	pixelNormal.z = 0;
+	pixelNormal = pixelNormal * 2 - 1;
+	pixelNormal.z = sqrt(1 - saturate(pixelNormal.x * pixelNormal.x + pixelNormal.y * pixelNormal.y));
+	pixelNormal.y *= -1;
+	pixelNormal = normalize(pixelNormal);
+	pixelNormal = normalize(mul(pixelNormal, TBN));
+	
 
 	float3 ambientLighting = EvaluateAmbience(
 		environmentTexture,
-		normal,
-		vertexNormal,
+		pixelNormal,
+		normalize(input.Normal),
 		toEye,
 		roughness,
 		ambientOcclusion,
@@ -85,10 +96,15 @@ PixelOutput main(VertexToPixel input)
 
 	ambientLighting *= ssao;
 
-	directLighting = EvaluateDirectionalLight(
+	float3 pointLight = 0;
+	float3 spotLight = 0;
+
+	//float interleavedGradientNoise = InterleavedGradientNoise(input.UV * float2(512, 512));
+
+	float3 directLighting = EvaluateDirectionalLight(
 		diffuseColor,
 		specularColor,
-		normal,
+		pixelNormal,
 		roughness,
 		LB_DirectionalLight.Color.rgb,
 		LB_DirectionalLight.Intensity,
@@ -96,7 +112,7 @@ PixelOutput main(VertexToPixel input)
 		toEye
 	);
 
-	float interleavedGradientNoise = InterleavedGradientNoise(input.UV * float2(512, 512));
+	float directShadow = 1.0f;
 
 
     if (LB_DirectionalLight.CastShadows)
@@ -133,7 +149,7 @@ PixelOutput main(VertexToPixel input)
 			case 2:
 			{
 				float3 pointTemp = EvaluatePointLight(diffuseColor,
-					specularColor, normal, roughness, Light.Color, Light.Intensity,
+					specularColor, pixelNormal, roughness, Light.Color, Light.Intensity,
 					Light.Range, Light.Position, toEye, worldPosition.xyz);
 
 				if(Light.CastShadows)
@@ -141,7 +157,7 @@ PixelOutput main(VertexToPixel input)
 					
 					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz , .0005f, Light.CastShadows))
 					{
-						const float shadow = 0.001f;
+						const float shadow = 0.05f;
 						pointTemp *= shadow;
 					}
 				}
@@ -161,7 +177,7 @@ PixelOutput main(VertexToPixel input)
 			case 3:
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
-					specularColor, normal, roughness, Light.Color, Light.Intensity,
+					specularColor, pixelNormal, roughness, Light.Color, Light.Intensity,
 					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
@@ -203,7 +219,7 @@ PixelOutput main(VertexToPixel input)
 			break;
 		case 3://RenderMode::VertexNormal:
 		{
-			float3 debugNormal = vertexNormal;
+			float3 debugNormal = pixelNormal;
 			float signedLength = (debugNormal.r + debugNormal.g + debugNormal.b) / 3;
 
 			if(signedLength < 0)

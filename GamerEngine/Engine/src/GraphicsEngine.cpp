@@ -408,7 +408,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 				myShadowRenderer->Render(light, modelList);
 			}
 			myShadowRenderer->ClearTarget();
-
+	
 		}
 	}
 
@@ -439,21 +439,22 @@ void GraphicsEngine::RenderScene(VREye anEye)
 
 	
 
-	myGBuffer->ClearTarget();
+	//myGBuffer->ClearTarget();
 
 	if (GetRenderModeInt() == 9) return;
 	
 	{
-		PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
-		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-		RendererBase::SetBlendState(BlendState::None);
-		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
+		//PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
+		//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+		//RendererBase::SetBlendState(BlendState::None);
+		//myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
 
 	{
-		PROFILE_CPU_SCOPE("Render SSAO");
+		//PROFILE_CPU_SCOPE("Render SSAO");
 		(renderSSAO == true) ? myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection) : myPostProcessRenderer->ClearTargets();
-		DX11::Get().TurnZBufferOn();
+		//DX11::Get().TurnZBufferOn();
+		myPostProcessRenderer->ClearTargets();
 	}
 
 	{

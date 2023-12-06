@@ -314,6 +314,7 @@ void Scene::OnRender()
 				if(pointLight.myPointLight)
 				{
 					pointLight.myPointLight->SetData(&transform);
+					pointLight.OnUpdate();
 					RenderLight(pointLight.myPointLight.get());
 					
 				}
@@ -331,6 +332,7 @@ void Scene::OnRender()
 				if(spotLight.mySpotLight)
 				{
 					spotLight.mySpotLight->SetData(&transform);
+					spotLight.OnUpdate();
 					RenderLight(spotLight.mySpotLight.get());
 				}
 			}

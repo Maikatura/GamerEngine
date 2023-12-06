@@ -7,7 +7,7 @@
 #include "Data/ShadowFunctions.hlsli"
 #include "Data/LightBuffer.hlsli"
 
-DeferredPixelOutput main(DeferredVertexToPixel input)
+DeferredPixelOutput main(FullscreenVertexToPixel input)
 {
     DeferredPixelOutput result;
 

@@ -59,7 +59,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\openxr\include;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\json;..\External\WICTextureLoader;.;..\External\directxtk\inc;..\External\msdf\msdfgen;..\External\msdf\msdf-atlas-gen;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -85,7 +85,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\openxr\include;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\json;..\External\WICTextureLoader;.;..\External\directxtk\inc;..\External\msdf\msdfgen;..\External\msdf\msdf-atlas-gen;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>

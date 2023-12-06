@@ -21,22 +21,11 @@ void GBuffer::SetAsTarget()
 
 void GBuffer::ClearTarget()
 {
-	Vector4f color = { 0,0,0,0 };
-	ID3D11RenderTargetView* rtvList[GBufferTexture::GBufferTexture_Count];
-	for(int i = 0; i < GBufferTexture::GBufferTexture_Count; i++)
-	{
-		rtvList[i] = nullptr;
-
-		//myRenderTextures[i].ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), color.x, color.y, color.z, color.w);
-		//DX11::Get().GetContext()->ClearRenderTargetView(myRTVs[i].Get(), &color.x);
-	}
-
-	//myRenderer.ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), color.x, color.y, color.z, color.w);
 	DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
 }
 
 
-void GBuffer::SetAsResource(unsigned aStartSlot)
+void GBuffer::SetAsResource(unsigned int aStartSlot)
 {
 	ID3D11ShaderResourceView* mySRVList[GBufferTexture::GBufferTexture_Count];
 	for(int t = 0; t < GBufferTexture::GBufferTexture_Count; t++)
@@ -49,7 +38,7 @@ void GBuffer::SetAsResource(unsigned aStartSlot)
 	
 }
 
-void GBuffer::ClearResource(unsigned aStartSlot)
+void GBuffer::ClearResource(unsigned int aStartSlot)
 {
 
 	ID3D11ShaderResourceView* srvList[GBufferTexture::GBufferTexture_Count];
@@ -416,16 +405,19 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 			if (aLightList[l]->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_DEFERRED_LIGHTS)
 			{
 				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = aLightList[l]->GetLightBufferData();
+				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint].CastShadows = true;
 				mySceneLightBufferData.NumLightsPoint++;
+				aLightList[l]->SetAsResource(nullptr);
 			}
 			
 			if (aLightList[l]->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_DEFERRED_LIGHTS)
 			{
 				mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = aLightList[l]->GetLightBufferData();
 				mySceneLightBufferData.NumLightsSpot++;
+				aLightList[l]->SetAsResource(nullptr);
 			}
 
-			aLightList[l]->SetAsResource(nullptr);
+			
 		}
 	}
 

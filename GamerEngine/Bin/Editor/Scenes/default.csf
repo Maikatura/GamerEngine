@@ -1,6 +1,25 @@
 Scene: SceneTesting
-Path: C:\Users\simon.igelstrom\Documents\School\Assignments\9-TGP\Engine\Source\Bin\Assets\Scenes\1FastTest.csf
+Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
 Entities:
+  - Entity: 5923227853819891854
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [13.6577244, -423.337097, 311.152679]
+      Rotation: [0, -17.2238941, 0]
+      Scale: [31.1136951, 31.1136589, 31.1136951]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00187189993
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
   - Entity: 1828353707181980437
     TagComponent:
       Tag: Default Entity Name
@@ -8,33 +27,25 @@ Entities:
       Translation: [0, -508.054779, 0.917554855]
       Rotation: [0, -0, 0]
       Scale: [1000, 10, 1000]
-    ChildComponent:
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
+      Delay: -107374176
       Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
       Texture:
-        Albedo: resources/textures/T_Default_C.dds
-        Normal: resources/textures/T_Default_N.dds
-        Material: resources/textures/T_Default_M.dds
-        Albedo: resources/textures/T_Default_C.dds
-        Normal: resources/textures/T_Default_N.dds
-        Material: resources/textures/T_Default_M.dds
-        Albedo: resources/textures/T_Default_C.dds
-        Normal: resources/textures/T_Default_N.dds
-        Material: resources/textures/T_Default_M.dds
-        Albedo: Resources\Textures\T_Default_C.dds
-        Normal: resources\Textures\T_Default_N.dds
-        Material: resources\Textures\T_Default_M.dds
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
   - Entity: 4488255876943964703
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [521.309143, 690.635681, 1183.61719]
-      Rotation: [24.4236145, -154.006973, 0.000104271501]
+      Translation: [367.090088, -211.340012, 309.091827]
+      Rotation: [36.2378845, -95.2337723, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
-    ChildComponent:
       ChildrenSize: 0
       Children:
         {}
@@ -50,7 +61,6 @@ Entities:
       Translation: [92.2944183, 203.494476, -159.69783]
       Rotation: [132.786758, -16.4169998, 0]
       Scale: [0.995829344, 0.999664962, 0.999686956]
-    ChildComponent:
       ChildrenSize: 0
       Children:
         {}
@@ -58,3 +68,17 @@ Entities:
       Color: [1, 1, 1]
       Direction: [-44, 100, 85]
       Intensity: 1
+  - Entity: 15553723860272066188
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [14.2591629, -352.718353, 304.586487]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [1, 1, 0, 1]
+      Intensity: 4041
+      Range: 279

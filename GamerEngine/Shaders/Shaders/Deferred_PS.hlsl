@@ -8,7 +8,7 @@
 
 
 
-DeferredPixelOutput main(DeferredVertexToPixel input)
+DeferredPixelOutput main(FullscreenVertexToPixel input)
 {
 	DeferredPixelOutput result;
 
@@ -57,7 +57,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 	);
 
 	ambientLighting *= ssao;
-    ambientLighting *= 0.2f;
+    
 
 	float3 pointLight = 0;
 	float3 spotLight = 0;
@@ -146,7 +146,7 @@ DeferredPixelOutput main(DeferredVertexToPixel input)
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, Light.Direction * -1, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
 				if(Light.CastShadows)

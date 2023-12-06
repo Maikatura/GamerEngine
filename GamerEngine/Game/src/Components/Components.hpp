@@ -57,11 +57,13 @@ struct PointLightComponent : public Component
 		myPointLight->SetColor(Color);
 		myPointLight->SetRange(Range);
 		myPointLight->SetIntensity(Intensity);
+		myPointLight->SetCastShadows(CastShadow);
 	}
 
 	Vector3f Color;
 	float Intensity;
 	float Range;
+	bool CastShadow;
 
 	Ref<PointLight> myPointLight;
 };
@@ -82,10 +84,11 @@ struct SpotLightComponent : public Component
 	void OnUpdate() override
 	{
 		mySpotLight->SetColor(Color);
-		mySpotLight->SetIntensity(Intensity);
 		mySpotLight->SetRange(Range);
+		mySpotLight->SetIntensity(Intensity);
 		mySpotLight->SetInnerCone(InnerCone);
 		mySpotLight->SetOuterCone(OuterCone);
+		mySpotLight->SetCastShadows(CastShadow);
 	}
 
 	Vector3f Color;
@@ -93,6 +96,7 @@ struct SpotLightComponent : public Component
 	float Range;
 	float InnerCone;
 	float OuterCone;
+	bool CastShadow;
 
 	Ref<SpotLight> mySpotLight;
 };

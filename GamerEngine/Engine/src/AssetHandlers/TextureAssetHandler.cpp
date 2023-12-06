@@ -159,6 +159,8 @@ Ref<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 {
 	HRESULT result = S_FALSE;
 
+	std::string name = Helpers::string_cast<std::string>(aName);
+
 	std::unique_ptr<DepthStencil> output = std::make_unique<DepthStencil>();
 	output->myName = aName;
 
@@ -175,7 +177,9 @@ Ref<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 	desc.CPUAccessFlags = 0;
 	desc.MiscFlags = 0;
 	result = DX11::Get().GetDevice()->CreateTexture2D(&desc, nullptr, reinterpret_cast<ID3D11Texture2D**>(output->myTexture.GetAddressOf()));
-	assert(SUCCEEDED(result));
+
+	
+	GE_ASSERT(SUCCEEDED(result), std::string("Failed to create Texture2D: " + name).c_str());
 
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC resourceDesc = {};
@@ -184,14 +188,14 @@ Ref<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 	resourceDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
 	resourceDesc.Texture2D.MipLevels = desc.MipLevels;
 	result = DX11::Get().GetDevice()->CreateShaderResourceView(output->myTexture.Get(), &resourceDesc, output->mySRV.ReleaseAndGetAddressOf());
-	assert(SUCCEEDED(result));
+	GE_ASSERT(SUCCEEDED(result), std::string("Failed to create Shader Resource View: " + name).c_str());
 
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthDesc = {};
 	depthDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
 	depthDesc.ViewDimension = D3D11_DSV_DIMENSION::D3D11_DSV_DIMENSION_TEXTURE2D;
 	result = DX11::Get().GetDevice()->CreateDepthStencilView(output->myTexture.Get(), &depthDesc, output->myDSV.ReleaseAndGetAddressOf());
-	assert(SUCCEEDED(result));
+	GE_ASSERT(SUCCEEDED(result), std::string("Failed to create Shader Resource View: " + name).c_str());
 
 	output->myViewport = D3D11_VIEWPORT({ 0.0f, 0.0f, static_cast<float>(aWidth), static_cast<float>(aHeight), 0.0f, 1.0f });
 

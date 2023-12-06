@@ -115,22 +115,15 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 	ImGui::SeparateWithSpacing();
 
-	if (aEntity.HasComponent<CameraComponent>())
+	DrawComponent<CameraComponent>("Camera Component", aEntity, [](auto& component) 
 	{
-		if (ImGui::TreeNodeEx("CameraComponent", ImGuiTreeNodeFlags_DefaultOpen, "%s Camera Component", ICON_FK_CAMERA))
-		{
-			auto& camera = aEntity.GetComponent<CameraComponent>();
+			ImGui::DragFloat("Field of View", &component.myFoV);
+			ImGui::DragFloat("Near Plane", &component.myNearPlane);
+			ImGui::DragFloat("Far Plane", &component.myFarPlane);
+			ImGui::Checkbox("Primary", &component.Primary);
 
-			ImGui::DragFloat("Field of View", &camera.myFoV);
-			ImGui::DragFloat("Near Plane", &camera.myNearPlane);
-			ImGui::DragFloat("Far Plane", &camera.myFarPlane);
-			ImGui::Checkbox("Primary", &camera.Primary);
-
-			camera.Initialize(camera.myFoV, camera.myNearPlane, camera.myFarPlane);
-
-			ImGui::TreePop();
-		}
-	}
+			component.Initialize(component.myFoV, component.myNearPlane, component.myFarPlane);
+	});
 
 	DrawComponent<ModelComponent>("Model Component", aEntity, [](auto& component)
 		{
@@ -467,6 +460,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			ImGui::ColorEdit3("Color", &component.Color.x);
 			ImGui::DragFloat("Intensity", &component.Intensity);
 			ImGui::DragFloat("Range", &component.Range);
+			ImGui::Checkbox("Cast Shadows", &component.CastShadow);
 
 			int tempIndex = component.myPointLight->GetLightBufferData().ShadowMapIndex;
 			ImGui::DragInt("Index", &tempIndex);
@@ -509,63 +503,32 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 					ImGui::TreePop();
 				}
 			}
-
-			/*auto& controller = aEntity.GetComponent<NativeScriptComponent>().Get<CameraController>();
-
-			if(ImGui::TreeNodeEx("CameraController", ImGuiTreeNodeFlags_DefaultOpen, "%s Camera Controller", ICON_FK_CODE))
-			{
-				float speed = controller.GetSpeed();
-				float speedMul = controller.GetSpeedMul();
-				float maxSpeed = controller.GetMaxSpeed();
-
-				ImGui::DragFloat("Speed", &speed);
-				ImGui::DragFloat("Speed Shift", &speedMul);
-				ImGui::DragFloat("Max Speed", &maxSpeed);
-
-				controller.SetSpeed(speed);
-				controller.SetSpeedMul(speedMul);
-				controller.SetMaxSpeed(maxSpeed);
-
-				ImGui::TreePop();
-			}
-
-			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
-			ImGui::TextWrapped("You can't listen you should not touch this object\nI know you shouldn't see this object but I haven't fixed that yet!");
-			ImGui::PopStyleColor();*/
 		}
 	}
 
 
 
-	if (aEntity.HasComponent<Network::NetworkComponent>())
+	DrawComponent<Network::NetworkComponent>("Network Component", aEntity, [](auto& component) 
 	{
-		auto& networkComp = aEntity.GetComponent<Network::NetworkComponent>();
-
-		if (ImGui::TreeNodeEx("NetworkComponent", ImGuiTreeNodeFlags_DefaultOpen, "Network Component"))
-		{
-			uint64_t serverID = networkComp.GetID().Get();
+			uint64_t serverID = component.GetID().Get();
 			ImGui::Text("Server ID");
 			ImGui::SameLine();
 			ImGui::DragScalarN("##LOL", ImGuiDataType_U64, &serverID, 1);
-			networkComp.SetID(serverID);
+			component.SetID(serverID);
 
-			bool isServer = networkComp.IsServer();
+			bool isServer = component.IsServer();
 			ImGui::Text("Is Server");
 			ImGui::SameLine();
 			ImGui::Checkbox("##IsServer", &isServer);
-			networkComp.SetServer(isServer);
+			component.SetServer(isServer);
 
-
-			bool shouldSmooth = networkComp.ShouldSmooth();
+			bool shouldSmooth = component.ShouldSmooth();
 			ImGui::Text("Smooth");
 			ImGui::SameLine();
 			ImGui::Checkbox("##SmoothSync", &shouldSmooth);
-			networkComp.SetShouldSmooth(shouldSmooth);
-
-			ImGui::TreePop();
-		}
-
-	}
+			component.SetShouldSmooth(shouldSmooth);
+	});
+	
 
 
 	myIsEditValues = myIsEditValuesOld;

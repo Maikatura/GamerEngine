@@ -1,5 +1,3 @@
-#ifndef SHADOWS_HLSLI
-#define SHADOWS_HLSLI
 
 #include "LightBuffer.hlsli"
 #include "Samplers.hlsli"
@@ -29,7 +27,10 @@ bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightPr
 
 bool GetShadowPixel(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLightProjection, float aRange, float3 aLightPosition, float3 aWorldPosition, float aBias, bool aCastShadows)
 {
-	if (!aCastShadows) return false;
+	if (!aCastShadows) 
+    {
+        return false;
+    }
 
 	for (int face = 0; face < 6; face++)
 	{
@@ -104,4 +105,3 @@ float2 GetRandom(float2 uv, float2 uvScale)
     const float3 random = 2.0f * blueNoiseTexture.Sample(pointWrapSampler, uv * uvScale).rgb - 1.0f;
     return random.xy;
 }
-#endif

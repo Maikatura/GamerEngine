@@ -1,6 +1,6 @@
 #include "Data/ShaderStructs.hlsli"
 
-DeferredVertexToPixel main(DeferredVertexInput input)
+FullscreenVertexToPixel main(FullscreenVertexInput input)
 {
 	const float4 pos[3] =
 	{
@@ -16,8 +16,8 @@ DeferredVertexToPixel main(DeferredVertexInput input)
 		float2(2.0f, 1.0f)
 	};
 
-	DeferredVertexToPixel resultValue;
-	resultValue.Position = pos[input.Index];
-	resultValue.UV = uv[input.Index];
-	return resultValue;
+	FullscreenVertexToPixel result;
+	result.Position = pos[input.Index];
+	result.UV = uv[input.Index];
+	return result;
 }

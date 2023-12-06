@@ -2,7 +2,7 @@
 #include "../Data/ShaderStructs.hlsli"
 #include "../Data/Samplers.hlsli"
 
-DeferredPixelOutput main(DeferredVertexToPixel input)
+DeferredPixelOutput main(FullscreenVertexToPixel input)
 {
 	DeferredPixelOutput output;
 

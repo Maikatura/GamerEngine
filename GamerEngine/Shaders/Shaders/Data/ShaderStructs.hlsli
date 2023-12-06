@@ -80,12 +80,12 @@ struct GBufferOutput
 	float4 ViewNormal		:	SV_TARGET7;
 };
 
-struct DeferredVertexInput
+struct FullscreenVertexInput
 {
 	unsigned int Index : SV_VERTEXID;
 };
 
-struct DeferredVertexToPixel
+struct FullscreenVertexToPixel
 {
 	float4 Position		:	SV_POSITION;
 	float2 UV				:	TEXCOORD;

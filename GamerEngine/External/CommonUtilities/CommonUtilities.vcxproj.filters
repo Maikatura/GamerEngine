@@ -101,6 +101,9 @@
     <ClInclude Include="src\Sort\Sort.hpp">
       <Filter>src\Sort</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilites\Asserts.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utilites\COMInitializer.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>

@@ -10,16 +10,23 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
 
-// add headers that you want to pre-compile here
+#ifdef GE_PLATFORM_WINDOWS
+#ifndef NOMINMAX
+	// See github.com/skypjack/entt/wiki/Frequently-Asked-Questions#warning-c4003-the-min-the-max-and-the-macro
+#define NOMINMAX
+#endif
+#endif
+
+
+#ifdef GE_PLATFORM_WINDOWS
 #include <Windows.h>
+#endif
 #include <d3d11.h>
 
 // Only include in editor
 #ifndef EDITOR
 #define EDITOR
 #include <EngineSettings/Settings.h>
-
-
 #endif
 
 // Common Utilities
@@ -31,11 +38,10 @@
 #include <EngineSettingDefines.h>
 #include "Managers/ThreadPool.h"
 #include <Core/Assert.h>
-
+#include "Utilites/Asserts.h"
 
 #if _DEBUG
 #include <dxgidebug.h>
-
 inline void ReportDX11()
 {
 	auto handle = GetModuleHandle(L"dxgidebug.dll");
@@ -53,8 +59,8 @@ inline void ReportDX11()
 		}
 	}
 }
-
 #endif
+
 
 
 template<typename T>

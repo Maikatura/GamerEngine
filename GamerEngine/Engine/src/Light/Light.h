@@ -54,6 +54,7 @@ protected:
 
 	float myNearPlane = 0.0f;
 	float myFarPlane = 0.0f;
+	bool myCastShadows = true;
 
 	Ref<DepthStencil> myShadowMap;
 	Ref<RenderTexture> myWorldPositionMap;
@@ -145,6 +146,11 @@ public:
 	void SetActive(bool aActive)
 	{
 		myIsActive = aActive;
+	}
+
+	void SetCastShadows(bool aCastShadows)
+	{
+		myCastShadows = aCastShadows;
 	}
 
 	bool HasShadowMap()

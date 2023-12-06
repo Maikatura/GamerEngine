@@ -8,13 +8,6 @@
 
 #define DEG_TO_RAD 0.0174532925f
 
-inline Matrix4x4f ComposeFromTRS(const Vector3f& aTranslation, const CommonUtilities::Quaternion<float>& aRotationQuat, const Vector3f& aScale)
-{
-	return Matrix4x4f::CreateScale(aScale)
-		* aRotationQuat.GetRotationMatrix4x4()
-		* Matrix4x4f::CreateTranslation(aTranslation);
-}
-
 void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer)
 {
 	if(myLightData.CastShadows)
@@ -25,9 +18,9 @@ void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer
 
 void PointLight::Update()
 {
-	SetDirection(myTransformComp->GetRotation());
+	//SetDirection(myTransformComp->GetRotation());
 	SetLightPosition(myTransformComp->GetPosition());
-	SetIntensity(myLightData.Intensity);
+	//SetIntensity(myLightData.Intensity);
 
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 90, 0 })), { 1, 1, 1 }));
 	myLightData.LightView[1] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, -90, 0 })), { 1, 1, 1 }));
@@ -63,16 +56,16 @@ void PointLight::CreatePointLightMap(Vector2f aResolution)
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
 	desc.CPUAccessFlags = 0;
 	desc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
-	DX11::Get().GetDevice()->CreateTexture2D(&desc, nullptr, reinterpret_cast<ID3D11Texture2D**>(myShadowMap->myTexture.GetAddressOf()));
-	//assert(SUCCEEDED(result));
+	HRESULT result = DX11::Get().GetDevice()->CreateTexture2D(&desc, nullptr, reinterpret_cast<ID3D11Texture2D**>(myShadowMap->myTexture.GetAddressOf()));
+	GE_ASSERT(SUCCEEDED(result), "Failed to create point light texture");
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC resourceDesc = {};
 	ZeroMemory(&resourceDesc, sizeof(resourceDesc));
 	resourceDesc.Format = DXGI_FORMAT_R32_FLOAT;
 	resourceDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
 	resourceDesc.Texture2D.MipLevels = desc.MipLevels;
-	DX11::Get().GetDevice()->CreateShaderResourceView(myShadowMap->myTexture.Get(), &resourceDesc, myShadowMap->mySRV.GetAddressOf());
-	//assert(SUCCEEDED(result));
+	result = DX11::Get().GetDevice()->CreateShaderResourceView(myShadowMap->myTexture.Get(), &resourceDesc, myShadowMap->mySRV.GetAddressOf());
+	GE_ASSERT(SUCCEEDED(result), "Failed to create point light Shader Resource View");
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthDesc = {};
 	depthDesc.Format = DXGI_FORMAT_D32_FLOAT;
@@ -80,6 +73,6 @@ void PointLight::CreatePointLightMap(Vector2f aResolution)
 	depthDesc.Texture2DArray.MipSlice = 0;
 	depthDesc.Texture2DArray.ArraySize = desc.ArraySize;
 	depthDesc.Texture2DArray.FirstArraySlice = 0;
-	DX11::Get().GetDevice()->CreateDepthStencilView(myShadowMap->myTexture.Get(), &depthDesc, myShadowMap->myDSV.GetAddressOf());
-	//assert(SUCCEEDED(result));
+	result = DX11::Get().GetDevice()->CreateDepthStencilView(myShadowMap->myTexture.Get(), &depthDesc, myShadowMap->myDSV.GetAddressOf());
+	GE_ASSERT(SUCCEEDED(result), "Failed to create point light Depth Stencil View");
 }

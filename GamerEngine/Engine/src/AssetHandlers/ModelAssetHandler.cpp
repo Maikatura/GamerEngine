@@ -48,6 +48,12 @@ std::array<D3D11_INPUT_ELEMENT_DESC, InputLayoutSize> ModelAssetHandler::CreateL
 	return layout;
 }
 
+ModelAssetHandler& ModelAssetHandler::Get()
+{
+	static ModelAssetHandler instance(1);
+	return instance;
+}
+
 bool ModelAssetHandler::InitUnitCube()
 {
 	HRESULT result = S_FALSE;
@@ -420,12 +426,7 @@ ofbx::IScene* ModelAssetHandler::LoadModelScene(const std::string& aPath)
 	return myScene;
 }
 
-ModelAssetHandler& ModelAssetHandler::Get()
-{
-	static ModelAssetHandler instance(4);
 
-	return instance;
-}
 
 void ModelAssetHandler::Clear()
 {
@@ -460,8 +461,6 @@ bool ModelAssetHandler::Initialize()
 	{
 		return false;
 	}
-
-	importer.InitImporter();
 
 	return true;
 }

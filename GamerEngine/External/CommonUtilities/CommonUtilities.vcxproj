@@ -136,6 +136,7 @@
     <ClInclude Include="src\Math\Vector3.hpp" />
     <ClInclude Include="src\Math\Vector4.hpp" />
     <ClInclude Include="src\Sort\Sort.hpp" />
+    <ClInclude Include="src\Utilites\Asserts.h" />
     <ClInclude Include="src\Utilites\COMInitializer.h" />
     <ClInclude Include="src\Utilites\InputManager.h" />
     <ClInclude Include="src\Utilites\PerformaceTimer.h" />

@@ -15,7 +15,7 @@ float SSAO(float2 aScreenTexCoord, float2 aTexCoord, float3 aViewPosition, float
     return occlusion;
 }
 
-DeferredPixelOutput main(DeferredVertexToPixel aInput)
+DeferredPixelOutput main(FullscreenVertexToPixel aInput)
 {
 	DeferredPixelOutput output;
 

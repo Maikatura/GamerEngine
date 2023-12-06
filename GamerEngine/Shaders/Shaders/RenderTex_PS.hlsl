@@ -2,7 +2,7 @@
 #include "Data/Textures.hlsli"
 #include "Data/Samplers.hlsli"
 
-DeferredPixelOutput main(DeferredVertexToPixel input)
+DeferredPixelOutput main(FullscreenVertexToPixel input)
 {
 	DeferredPixelOutput result;
 
