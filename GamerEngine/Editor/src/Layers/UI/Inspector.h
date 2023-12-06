@@ -19,7 +19,7 @@ public:
 
 
 	template <typename T>
-	static void DrawComponent(const std::string& aName, Entity aEntity, std::function<void(T&)> aFunction);
+	static void DrawComponent(const std::string& aName, Entity aEntity, std::function<void(T&, Entity)> aFunction);
 
 	void AddComponent(Entity& aEntity);
 	bool ShowTexturePicker(Entity& aEntity, Ref<Material>& selectedMaterial, TextureType textureType);

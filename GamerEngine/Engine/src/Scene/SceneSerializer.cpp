@@ -651,13 +651,11 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 			float innerCone = spotLightComponent["InnerCone"].as<float>();
 			float outerCone = spotLightComponent["OuterCone"].as<float>();
 
-			auto light = spotLightComp.mySpotLight;
-
-			light->SetColor({ color.x,  color.y,  color.z });
-			light->SetIntensity(intensity);
-			light->SetRange(range);
-			light->SetInnerCone(innerCone);
-			light->SetOuterCone(outerCone);
+			spotLightComp.Color = Vector3f{ color.x,  color.y,  color.z };
+			spotLightComp.Intensity = intensity;
+			spotLightComp.Range = range;
+			spotLightComp.InnerCone = innerCone;
+			spotLightComp.OuterCone = outerCone;
 		}
 	}
 
@@ -672,9 +670,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 			float intensity = (pointLightComponent["Intensity"]) ? pointLightComponent["Intensity"].as<float>() : 1.0f;
 			float range = (pointLightComponent["Range"]) ? pointLightComponent["Range"].as<float>() : 1.0f;
 
-			auto light = pointLightComp.myPointLight;
-
-			light->SetColor({ color.x,  color.y,  color.z });
+			pointLightComp.Color = Vector3f{ color.x,  color.y,  color.z };
 			pointLightComp.Intensity = intensity;
 			pointLightComp.Range = range;
 		}

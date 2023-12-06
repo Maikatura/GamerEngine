@@ -1,18 +1,98 @@
 Scene: SceneTesting
 Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
 Entities:
+  - Entity: 17697230832881840710
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [-930.477844, -0.00169339229, -11.8397608]
+      Rotation: [0.000104242135, 89.9779739, -179.999893]
+      Scale: [999.995361, 499.998962, 0.999983132]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00325320009
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 7440434943858370797
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, 0, -771.360779]
+      Rotation: [0, -0, 0]
+      Scale: [1000, 500, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00276760012
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 2108338710293810877
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [-565.934998, -333.057129, 281.225342]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [0, 0.819607854, 1, 1]
+      Intensity: 100000
+      Range: 1000
+  - Entity: 11770492277339510883
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [430.818726, -242.848526, 207.688873]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [0, 1, 0, 1]
+      Intensity: 100000
+      Range: 1000
+  - Entity: 8532554453439454148
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [-12.9125671, -302.407776, 174.294037]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [1, 1, 0, 1]
+      Intensity: 50000
+      Range: 1000
   - Entity: 5923227853819891854
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [13.6577244, -423.337097, 311.152679]
+      Translation: [2.60566139, -423.337097, 346.803772]
       Rotation: [0, -17.2238941, 0]
       Scale: [31.1136951, 31.1136589, 31.1136951]
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Delay: -0.00187189993
+      Delay: -0.00237979996
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
@@ -26,7 +106,7 @@ Entities:
     TransformComponent:
       Translation: [0, -508.054779, 0.917554855]
       Rotation: [0, -0, 0]
-      Scale: [1000, 10, 1000]
+      Scale: [1000, 2, 1000]
       ChildrenSize: 0
       Children:
         {}
@@ -43,8 +123,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [367.090088, -211.340012, 309.091827]
-      Rotation: [36.2378845, -95.2337723, 0.000104271501]
+      Translation: [511.375275, -146.532059, 762.418762]
+      Rotation: [15.4147377, -143.545609, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
       ChildrenSize: 0
       Children:
@@ -58,9 +138,9 @@ Entities:
     TagComponent:
       Tag: Directional Light
     TransformComponent:
-      Translation: [92.2944183, 203.494476, -159.69783]
-      Rotation: [132.786758, -16.4169998, 0]
-      Scale: [0.995829344, 0.999664962, 0.999686956]
+      Translation: [344.794495, -192.594482, 461.394836]
+      Rotation: [-150.195053, 66.1382446, 76.0441971]
+      Scale: [0.995766163, 0.999676526, 0.999675989]
       ChildrenSize: 0
       Children:
         {}
@@ -72,13 +152,74 @@ Entities:
     TagComponent:
       Tag: Point Light
     TransformComponent:
-      Translation: [14.2591629, -352.718353, 304.586487]
+      Translation: [381.80777, -174.381638, -347.639496]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
       ChildrenSize: 0
       Children:
         {}
     PointLightComponent:
-      Color: [1, 1, 0, 1]
-      Intensity: 4041
-      Range: 279
+      Color: [1, 0, 1, 1]
+      Intensity: 100000
+      Range: 1000
+  - Entity: 4333660610956395841
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [-81.6692352, -314.294617, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00174780004
+      Path: Assets\Models\Buddah_Test_Bakes_low.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 17804868780395308565
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [208.703613, -447.781891, -264.415192]
+      Rotation: [0, -0, 0]
+      Scale: [2.92320013, 2.92320013, 2.92320013]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00164969999
+      Path: Assets\Models\Gremlin.fbx
+      TextureSize: 2
+      Texture:
+        0:
+          Albedo: assets\models\t_gremlin_c.dds
+          Normal: assets\models\t_gremlin_n.dds
+          Material: assets\models\t_gremlin_m.dds
+        1:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 6560000753651608803
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [467.140228, -496.856232, 143.92778]
+      Rotation: [-0.000535882718, 71.3081512, -0.000543309725]
+      Scale: [45.7344589, 45.7343979, 45.7344589]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00387619995
+      Path: Assets\Models\pedal.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds

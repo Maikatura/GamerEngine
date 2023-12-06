@@ -84,7 +84,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 	}
 
 
-	DrawComponent<TransformComponent>("Transform", aEntity, [](auto& component)
+	DrawComponent<TransformComponent>("Transform", aEntity, [](auto& component, auto aEntity)
 		{
 
 			auto& translate = component.GetPosition();
@@ -115,7 +115,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 	ImGui::SeparateWithSpacing();
 
-	DrawComponent<CameraComponent>("Camera Component", aEntity, [](auto& component) 
+	DrawComponent<CameraComponent>("Camera Component", aEntity, [](auto& component, auto aEntity)
 	{
 			ImGui::DragFloat("Field of View", &component.myFoV);
 			ImGui::DragFloat("Near Plane", &component.myNearPlane);
@@ -125,7 +125,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			component.Initialize(component.myFoV, component.myNearPlane, component.myFarPlane);
 	});
 
-	DrawComponent<ModelComponent>("Model Component", aEntity, [](auto& component)
+	DrawComponent<ModelComponent>("Model Component", aEntity, [](auto& component, auto aEntity)
 		{
 
 			float delay = component.GetDelay();
@@ -178,7 +178,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 					std::string modelPath = Helpers::string_cast<std::string>(modelName);
 					ImGui::InputText("Model", &modelPath, flagsReadOnly);
 
-					auto newFile = DropHandler::DropFileEntity(*component.GetEntity());
+					auto newFile = DropHandler::DropFileEntity(aEntity);
 
 					if (!newFile.empty())
 					{
@@ -249,7 +249,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
 								}
 
-								std::wstring newFile = DropHandler::DropFileEntity(*component.GetEntity());
+								std::wstring newFile = DropHandler::DropFileEntity(aEntity);
 								std::filesystem::path aNewPath = newFile;
 								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
 								{
@@ -286,7 +286,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
 								}
 
-								std::wstring newFile = DropHandler::DropFileEntity(*component.GetEntity());
+								std::wstring newFile = DropHandler::DropFileEntity(aEntity);
 								std::filesystem::path aNewPath = newFile;
 								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
 								{
@@ -318,7 +318,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 									ImGui::InputText(nameId.c_str(), &name, flagsReadOnly);
 								}
 
-								std::wstring newFile = DropHandler::DropFileEntity(*component.GetEntity());
+								std::wstring newFile = DropHandler::DropFileEntity(aEntity);
 								std::filesystem::path aNewPath = newFile;
 								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
 								{
@@ -367,7 +367,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			}
 		});
 
-	DrawComponent<ParticleEmitter>("Particle Emitter", aEntity, [](auto& component)
+	DrawComponent<ParticleEmitter>("Particle Emitter", aEntity, [](auto& component, auto aEntity)
 		{
 			auto& particle = component;
 
@@ -430,7 +430,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			}
 		});
 
-	DrawComponent<DirectionalLightComponent>("Directional Light", aEntity, [](auto& component) 
+	DrawComponent<DirectionalLightComponent>("Directional Light", aEntity, [](auto& component, auto aEntity)
 	{
 		ImGui::Checkbox("Active", &component.Active);
 		ImGui::Checkbox("Smooth Shadows", &component.SmoothShadows);
@@ -439,7 +439,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 		ImGui::DragFloat("Intensity", &component.Intensity, 0.1f, 0.0f, 10.0f);
 	});
 
-	DrawComponent<SpotLightComponent>("Spot Light", aEntity, [](auto& component) 
+	DrawComponent<SpotLightComponent>("Spot Light", aEntity, [](auto& component, auto aEntity)
 	{
 		
 		ImGui::ColorEdit3("Color", &component.Color.x);
@@ -453,7 +453,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 	});
 
-	DrawComponent<PointLightComponent>("Point Light", aEntity, [](auto& component)
+	DrawComponent<PointLightComponent>("Point Light", aEntity, [](auto& component, auto aEntity)
 	{
 			
 
@@ -508,7 +508,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 
 
-	DrawComponent<Network::NetworkComponent>("Network Component", aEntity, [](auto& component) 
+	DrawComponent<Network::NetworkComponent>("Network Component", aEntity, [](auto& component, auto aEntity)
 	{
 			uint64_t serverID = component.GetID().Get();
 			ImGui::Text("Server ID");
@@ -579,7 +579,7 @@ void Inspector::AddComponent(Entity& aEntity)
 
 
 template<typename T>
-void Inspector::DrawComponent(const std::string& aName, Entity aEntity, std::function<void(T&)> aFunction)
+void Inspector::DrawComponent(const std::string& aName, Entity aEntity, std::function<void(T&, Entity)> aFunction)
 {
 
 	const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
@@ -610,7 +610,7 @@ void Inspector::DrawComponent(const std::string& aName, Entity aEntity, std::fun
 
 		if (open)
 		{
-			aFunction(component);
+			aFunction(component, aEntity);
 			ImGui::TreePop();
 		}
 

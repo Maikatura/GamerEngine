@@ -426,8 +426,6 @@ ofbx::IScene* ModelAssetHandler::LoadModelScene(const std::string& aPath)
 	return myScene;
 }
 
-
-
 void ModelAssetHandler::Clear()
 {
 	for (auto item : myModelRegistry)
@@ -468,7 +466,6 @@ bool ModelAssetHandler::Initialize()
 void ModelAssetHandler::UnloadModel(const std::wstring& aFilePath)
 {
 	myModelRegistry.erase(aFilePath);
-
 }
 
 void ModelAssetHandler::ResetRenderedModels()
@@ -677,8 +674,6 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 
 	return false;
 }
-
-
 
 bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 {
