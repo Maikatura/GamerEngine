@@ -12,8 +12,7 @@ class Material
 public:
 	struct MaterialData
 	{
-		Vector3f Albedo = { 1.0f,1.0f,1.0f };
-		float padding_1;
+		Vector4f Albedo = { 1.0f,1.0f,1.0f, 1.0f };
 	};
 
 private:
@@ -30,12 +29,14 @@ public:
 	void Init(std::wstring aName);
 	void Init(std::wstring aName, const Vector3f& anAlbedo);
 
+	Vector4f& GetAlbedo() { return myMaterialData.Albedo; }
+	
 	FORCEINLINE const std::wstring GetName() const { return myName; }
-	FORCEINLINE const Vector3f& GetAlbedo() const { return myMaterialData.Albedo; }
+	FORCEINLINE const Vector4f& GetAlbedo() const { return myMaterialData.Albedo; }
 
-	FORCEINLINE const Ref<Texture>& GetAlbedoTexture() const { return myTextures[static_cast<int>(TextureType::Albedo)];  }
-	FORCEINLINE const Ref<Texture>& GetNormalTexture() const { return myTextures[static_cast<int>(TextureType::Normal)]; }
-	FORCEINLINE const Ref<Texture>& GetMaterialTexture() const { return myTextures[static_cast<int>(TextureType::Material)]; }
+	FORCEINLINE const Ref<Texture> GetAlbedoTexture() const { return myTextures[static_cast<int>(TextureType::Albedo)];  }
+	FORCEINLINE const Ref<Texture> GetNormalTexture() const { return myTextures[static_cast<int>(TextureType::Normal)]; }
+	FORCEINLINE const Ref<Texture> GetMaterialTexture() const { return myTextures[static_cast<int>(TextureType::Material)]; }
 
 	void SetTexture(TextureType aTextureType, Ref<Texture> aTexture);
 

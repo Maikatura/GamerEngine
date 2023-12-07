@@ -76,6 +76,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 	if (!DX11::Get().Init(myWindowHandle, enableDeviceDebug, isVRMode))
 	{
+		GE_LOG_ERROR("Failed to init DirectX");
 		return false;
 	}
 
@@ -89,6 +90,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 	if (!myForwardRenderer->Initialize())
 	{
+		GE_LOG_ERROR("Failed to init Forward Renderer");
 		return false;
 	}
 
@@ -394,7 +396,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		renderSSAO = false;
 	}
 
-	if (GetRenderModeInt() != 9)
+	/*if (GetRenderModeInt() != 9)
 	{
 		{
 			PROFILE_CPU_SCOPE("Render Shadows");
@@ -410,7 +412,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 			myShadowRenderer->ClearTarget();
 	
 		}
-	}
+	}*/
 
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetBlendState(BlendState::None);
@@ -444,16 +446,16 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	if (GetRenderModeInt() == 9) return;
 	
 	{
-		//PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
-		//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-		//RendererBase::SetBlendState(BlendState::None);
-		//myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
+		PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
+		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+		RendererBase::SetBlendState(BlendState::None);
+		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
 
 	{
-		//PROFILE_CPU_SCOPE("Render SSAO");
+		PROFILE_CPU_SCOPE("Render SSAO");
 		(renderSSAO == true) ? myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection) : myPostProcessRenderer->ClearTargets();
-		//DX11::Get().TurnZBufferOn();
+		DX11::Get().TurnZBufferOn();
 		myPostProcessRenderer->ClearTargets();
 	}
 

@@ -136,12 +136,12 @@ bool DeferredRenderer::Initialize()
 		return false;
 	}
 
-	/*bufferDescription.ByteWidth = sizeof(Vector4f);
-	result = DX11::Get().Device->CreateBuffer(&bufferDescription, nullptr, myMaterialBuffer.GetAddressOf());
+	bufferDescription.ByteWidth = sizeof(Vector4f);
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myMaterialBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
-	}*/
+	}
 
 	bufferDescription.ByteWidth = sizeof(SceneLightBuffer);
 	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myLightBuffer.GetAddressOf());
@@ -174,7 +174,8 @@ bool DeferredRenderer::Initialize()
 
 void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye)
 {
-	if(!Renderer::GetCamera())
+	auto* camera = Renderer::GetCamera();
+	if(!camera)
 	{
 		return;
 	}
@@ -192,8 +193,8 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 	myFrameBufferData.CamTranslation = aView.GetPosition();
 	myFrameBufferData.Projection = aProjection;
 	myFrameBufferData.RenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
-	myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
-	myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
+	myFrameBufferData.FarPlane = camera->myFarPlane;
+	myFrameBufferData.NearPlane = camera->myNearPlane;
 
 
 	RECT clientRect = DX11::Get().GetClientSize();
@@ -273,23 +274,21 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 
 		for(int index = 0; index < model->GetNumMeshes(); index++)
 		{
-			const Model::MeshData& meshData = model->GetMeshData(index);
+			ModelInstance::MeshData& meshData = model->GetMeshData(index);
+			meshData.MaterialData.SetAsResource(myMaterialBuffer);
+			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+			DX11::Get().GetContext()->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 
-
+			
 			DX11::Get().GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
 			DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
 			DX11::Get().GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 			DX11::Get().GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology));
 
-			if(!model->GetMaterial().empty() && static_cast<int>(meshData.myMaterialIndex) < model->GetMaterialSize())
-			{
-				model->GetMaterial()[meshData.myMaterialIndex]->SetAsResource(nullptr);
-			}
-			else if(!model->GetMaterial().empty())
-			{
-				model->GetMaterial()[0]->SetAsResource(nullptr);
-			}
-
+			
+			
+			
+			
 			/*if(isInstanced && !model->HasBeenRendered())
 			{
 				myInstancedTransformBufferData.clear();
@@ -336,25 +335,22 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Ref<DirectionalLight>& aDirectionalLight,
 	const Ref<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime, VREye anEye)
 {
-	if(!Renderer::GetCamera())
+	auto* camera = Renderer::GetCamera();
+	if(!camera)
 	{
 		return;
 	}
 
 	HRESULT result = S_FALSE;
 	D3D11_MAPPED_SUBRESOURCE bufferData;
-
-
-
-
+	
 	myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
 	myFrameBufferData.CamTranslation = aView.GetPosition();
 	myFrameBufferData.Projection = aProjection;
 	myFrameBufferData.RenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
-	myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
-	myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
-
-
+	myFrameBufferData.FarPlane = camera->myFarPlane;
+	myFrameBufferData.NearPlane = camera->myNearPlane;
+	
 	RECT clientRect = DX11::Get().GetClientSize();
 	uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
 	uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
@@ -367,14 +363,16 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-	if(FAILED(result))
+	if (SUCCEEDED(result))
 	{
-		// BOOM?
+		memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
+		DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
 	}
-
-	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
-	DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
-
+	else
+	{
+		GE_LOG_ERROR("Failed to move over to the Frame Buffer (Deferred Renderer)")
+	}
+	
 	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 	DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
@@ -394,31 +392,28 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 	ZeroMemory(mySceneLightBufferData.LightsPoint, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
 	ZeroMemory(mySceneLightBufferData.LightsSpot, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
 
-	for(size_t l = 0; l < aLightList.size(); l++)
+	for (const auto& light : aLightList)
 	{
-		if(aLightList[l]->GetLightBufferData().LightType == 1)
+		const auto& lightData = light->GetLightBufferData();
+		if (lightData.LightType == 1)
 		{
 			continue;
 		}
-		else
-		{
-			if (aLightList[l]->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_DEFERRED_LIGHTS)
-			{
-				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = aLightList[l]->GetLightBufferData();
-				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint].CastShadows = true;
-				mySceneLightBufferData.NumLightsPoint++;
-				aLightList[l]->SetAsResource(nullptr);
-			}
-			
-			if (aLightList[l]->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_DEFERRED_LIGHTS)
-			{
-				mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = aLightList[l]->GetLightBufferData();
-				mySceneLightBufferData.NumLightsSpot++;
-				aLightList[l]->SetAsResource(nullptr);
-			}
 
-			
+		if (lightData.LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_DEFERRED_LIGHTS)
+		{
+			mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = lightData;
+			mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint].CastShadows = true;
+			mySceneLightBufferData.NumLightsPoint++;
 		}
+
+		if (lightData.LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_DEFERRED_LIGHTS)
+		{
+			mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = lightData;
+			mySceneLightBufferData.NumLightsSpot++;
+		}
+
+		light->SetAsResource(nullptr);
 	}
 
 	result = DX11::Get().GetContext()->Map(
@@ -428,14 +423,34 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 		0,
 		&bufferData);
 
-	if(FAILED(result))
+	if (SUCCEEDED(result))
 	{
-		// NOOOOOOOOOOOOOO :(
+		memcpy(bufferData.pData, &mySceneLightBufferData, sizeof(SceneLightBuffer));
+		DX11::Get().GetContext()->Unmap(myLightBuffer.Get(), 0);
+	}
+	else
+	{
+		GE_LOG_ERROR("Failed to move over to the Scene Light Buffer (Deferred Renderer)")
 	}
 
-	memcpy(bufferData.pData, &mySceneLightBufferData, sizeof(SceneLightBuffer));
+	
+	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	result = DX11::Get().GetContext()->Map(
+		myMaterialBuffer.Get(),
+		0,
+		D3D11_MAP_WRITE_DISCARD,
+		0,
+		&bufferData
+	);
+	if (FAILED(result))
+	{
+		// ?? what happen?????????
+	}
 
-	DX11::Get().GetContext()->Unmap(myLightBuffer.Get(), 0);
+	Vector4f MaterialColor = { 1,1,1,1 };
+	memcpy(bufferData.pData, &MaterialColor, sizeof(Vector4f));
+	DX11::Get().GetContext()->Unmap(myMaterialBuffer.Get(), 0);
+
 
 	DX11::Get().GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
 

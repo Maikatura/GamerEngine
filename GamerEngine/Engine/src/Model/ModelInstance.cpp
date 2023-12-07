@@ -4,6 +4,30 @@
 #include "Framework/DX11.h"
 #include "Components/Components.hpp"
 
+void ModelInstance::Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
+{
+	mySkeleton = aSkeleton;
+	Init(aMeshData, aPath);
+}
+
+void ModelInstance::Init(const MeshData& aMeshData, const std::wstring& aPath)
+{
+	myMeshData.push_back(aMeshData);
+	myPath = aPath;
+	
+	if (!HasSkeleton())
+	{
+		if (myFirstTimeInit)
+		{
+			myFirstTimeInit = false;
+		}
+	}
+	else
+	{
+		myAnimState = MakeRef<AnimationStatus>();
+	}
+}
+
 void ModelInstance::AddRenderedInstance(TransformComponent* aTransform)
 {
 	RenderedInstanceData data = {aTransform};
@@ -37,7 +61,7 @@ bool ModelInstance::UpdateInstanceBuffer()
 
 bool ModelInstance::RenderWithDeferred()
 {
-	if (myModel->HasSkeleton())
+	if (HasSkeleton())
 	{
 		return true;
 	}
@@ -61,41 +85,10 @@ void ModelInstance::SetHasBeenRenderer(bool aValue)
 	myHasBeenRendered = aValue;
 }
 
-void ModelInstance::Init(Ref<Model> aModel)
-{
-	myTransform = MakeRef<Transform>();
-	if (!aModel->HasSkeleton())
-	{
-		if (myFirstTimeInit)
-		{
-			myModel = aModel;
-			myFirstTimeInit = false;
-		}
-	}
-	else
-	{
-		myModel = aModel;
-		myAnimState = MakeRef<AnimationStatus>();
-
-	}
-
-
-}
-
-Ref<Model> ModelInstance::GetModel()
-{
-	if (!myModel)
-	{
-		return nullptr;
-	}
-
-	return myModel;
-}
-
 void ModelInstance::PlayAnimation(std::wstring aAnimationPath)
 {
-	myAnimState->myCurrentAnimation = &myModel->GetSkeleton()->Animations[aAnimationPath];
-	myAnimState->myCurrentAnimation->Frames = myModel->GetSkeleton()->Animations[aAnimationPath].Frames;
+	myAnimState->myCurrentAnimation = &GetSkeleton()->Animations[aAnimationPath];
+	myAnimState->myCurrentAnimation->Frames = GetSkeleton()->Animations[aAnimationPath].Frames;
 }
 
 void ModelInstance::Update()
@@ -146,10 +139,7 @@ void ModelInstance::Update()
 
 void ModelInstance::EditorUpdate()
 {
-	if(myModel)
-	{
-		myModel->Update();
-	}
+	
 }
 
 void ModelInstance::UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent)

@@ -210,31 +210,33 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::BeginMap; // ModelComponent
 
 		out << YAML::Key << "Delay" << YAML::Value << model.GetDelay();
-		out << YAML::Key << "Path" << YAML::Value << Helpers::string_cast<std::string>(model.GetModel()->GetModel()->GetName());
+		out << YAML::Key << "Path" << YAML::Value << Helpers::string_cast<std::string>(model.GetModel()->GetName());
 		
 
-		const std::vector<Ref<Material>>& material = model.GetModel()->GetMaterial();
+		
 
-		out << YAML::Key << "TextureSize" << YAML::Value << model.GetModel()->GetMaterialSize();
+		out << YAML::Key << "TextureSize" << YAML::Value << model.GetModel()->GetNumMeshes();
 		out << YAML::Key << "Texture";
 		out << YAML::BeginMap;
-		for(size_t i = 0; i < model.GetModel()->GetMaterialSize(); i++)
+		for(int i = 0; i < model.GetModel()->GetNumMeshes(); i++)
 		{
+
+			const Material& material = model.GetModel()->GetMeshData(i).MaterialData;
+
 			out << YAML::Key << i;
 			out << YAML::BeginMap;
 
-			if(const auto albedoTex = material[i]->GetAlbedoTexture())
+			if(const auto albedoTex = material.GetAlbedoTexture())
 			{
 				out << YAML::Key << "Albedo" << YAML::Value << Helpers::string_cast<std::string>(albedoTex->GetPath());
 			}
 			
-			if(const auto normalTex = material[i]->GetNormalTexture())
+			if(const auto normalTex = material.GetNormalTexture())
 			{
 				out << YAML::Key << "Normal" << YAML::Value << Helpers::string_cast<std::string>(normalTex->GetPath());
 			}
 
-			
-			if(const auto materialTex = material[i]->GetMaterialTexture())
+			if(const auto materialTex = material.GetMaterialTexture())
 			{
 				out << YAML::Key << "Material" << YAML::Value << Helpers::string_cast<std::string>(materialTex->GetPath());
 			}

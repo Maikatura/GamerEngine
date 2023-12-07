@@ -308,9 +308,9 @@ void NetworkingLayer::StartNetworkingClient()
 				networkComp.SetServer(playerConnectMsg.IsServer);
 
 				auto model = data.myEntity.AddComponent<ModelComponent>(ModelAssetHandler::Get().GetModelInstance(L"Editor\\Models\\network\\NetworkCube.fbx"));
-				model.GetModel()->GetMaterial()[0]->SetAlbedoTexture(TextureAssetHandler::GetTexture(L"Editor\\Models\\network\\NetworkCube.dds"));
-				model.GetModel()->GetMaterial()[0]->SetNormalTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_N.dds"));
-				model.GetModel()->GetMaterial()[0]->SetMaterialTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_M.dds"));
+				model.GetModel()->GetMeshData(0).MaterialData.SetAlbedoTexture(TextureAssetHandler::GetTexture(L"Editor\\Models\\network\\NetworkCube.dds"));
+				model.GetModel()->GetMeshData(0).MaterialData.SetNormalTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_N.dds"));
+				model.GetModel()->GetMeshData(0).MaterialData.SetMaterialTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_M.dds"));
 				myPlayers.push_back(data);
 
 				break;

@@ -64,24 +64,15 @@ public:
 					return;
 				}
 
-				auto& materials = myModel->GetMaterial();
-
-				COMInitializer comInitializer;
-
-				for (int i = 0; i < modelData.Albedo.size(); i++)
+				for (int i = 0; i < myModel->GetNumMeshes(); i++)
 				{
-					materials[i]->SetAlbedoTexture(TextureAssetHandler::GetTexture(modelData.Albedo[i]));
+					COMInitializer comInitializer;
+					auto& model = myModel->GetMeshData(i);
+					model.MaterialData.SetAlbedoTexture(TextureAssetHandler::GetTexture(modelData.Albedo[i]));
+					model.MaterialData.SetNormalTexture(TextureAssetHandler::GetTexture(modelData.Normal[i]));
+					model.MaterialData.SetMaterialTexture(TextureAssetHandler::GetTexture(modelData.Material[i]));
 				}
 
-				for (int i = 0; i < modelData.Normal.size(); i++)
-				{
-					materials[i]->SetNormalTexture(TextureAssetHandler::GetTexture(modelData.Normal[i]));
-				}
-
-				for (int i = 0; i < modelData.Material.size(); i++)
-				{
-					materials[i]->SetMaterialTexture(TextureAssetHandler::GetTexture(modelData.Material[i]));
-				}
 				//myIsLoaded = true;
 			});
 	}

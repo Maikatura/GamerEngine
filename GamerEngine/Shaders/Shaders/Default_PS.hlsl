@@ -52,7 +52,7 @@ PixelOutput main(VertexToPixel input)
 	const float3 normal = normalTexture.Sample(defaultSampler, input.UV).rgb;
 	const float4 material = materialTexture.Sample(defaultSampler, input.UV).rgba;
 	const float4 worldPosition = worldPositionTexture.Sample(defaultSampler, input.UV).rgba;
-	const float ambientOcclusion = normal.r;
+	const float ambientOcclusion = normal.b;
 	const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
 
 	const float metalness = material.r;
@@ -108,7 +108,7 @@ PixelOutput main(VertexToPixel input)
 		roughness,
 		LB_DirectionalLight.Color.rgb,
 		LB_DirectionalLight.Intensity,
-		-LB_DirectionalLight.Direction,
+		LB_DirectionalLight.Direction,
 		toEye
 	);
 
@@ -117,23 +117,28 @@ PixelOutput main(VertexToPixel input)
 
     if (LB_DirectionalLight.CastShadows)
     {
-        const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
-        const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
+        const float4 worldToLightView = mul(worldPosition, LB_DirectionalLight.LightView[0]);
+        const float4 lightViewToLightProj = mul(worldToLightView, LB_DirectionalLight.LightProjection);
 
-        float3 projectedTexCoord;
-        projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
-        projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
+        float4 projectedTexCoord = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
-        if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
+        projectedTexCoord.xy = lightViewToLightProj.xy / (2.0f * lightViewToLightProj.w) + float2(0.5f, -0.5f);
+
+        bool validTexCoord = saturate(projectedTexCoord) == projectedTexCoord;
+        bool inFrontOfLight = worldToLightView.z >= 0.0f;
+
+        if (validTexCoord && inFrontOfLight)
         {
-            float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - SHADOW_BIAS;
+            const float shadowBias = 0.00008f;
+            float viewDepth = lightViewToLightProj.z / lightViewToLightProj.w - shadowBias;
             projectedTexCoord.z = viewDepth;
+    
             float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
-
+    
             if (lightDepth < viewDepth)
             {
                 float flaking = 0.8f;
-                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / SHADOW_MAP_TEXCOORD_SCALE);
+                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord.xyz, 1.0f / 8192.0f);
                 directShadow *= saturate(shadow * (1 - flaking) + flaking);
                 directLighting *= shadow;
             }

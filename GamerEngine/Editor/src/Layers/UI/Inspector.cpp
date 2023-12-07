@@ -133,7 +133,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			component.SetDelay(delay);
 
 			{
-				ImGui::BeginGroup();
+				/*ImGui::BeginGroup();
 
 				std::vector<std::string> allMeshNames;
 
@@ -165,7 +165,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 					ImGui::TreePop();
 				}
-				ImGui::EndGroup();
+				ImGui::EndGroup();*/
 			}
 
 			{
@@ -174,7 +174,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 				if (component.GetModel())
 				{
-					const std::wstring& modelName = component.GetModel()->GetModel()->GetName();
+					const std::wstring& modelName = component.GetModel()->GetName();
 					std::string modelPath = Helpers::string_cast<std::string>(modelName);
 					ImGui::InputText("Model", &modelPath, flagsReadOnly);
 
@@ -201,36 +201,42 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 
 
-					int size = component.GetModel()->GetModel()->GetMaterialSize();
-					ImGui::InputInt("Size", &size);
-					component.GetModel()->GetModel()->SetMaterialSize(size);
+					int size = static_cast<int>(component.GetModel()->GetNumMeshes());
+					/*ImGui::InputInt("Size", &size);
+					component.GetModel()->GetModel()->SetMaterialSize(size);*/
 
 
-					std::map<std::string, std::vector<Ref<Material>>> materialGroups;
-					for (auto& material : component.GetModel()->GetMaterial())
+					/*std::map<std::string, std::vector<Model::MeshData&>> materialGroups;
+					for (int i = 0; i < size; i++)
 					{
-						materialGroups[Helpers::string_cast<std::string>(material->GetName())].push_back(material);
-					}
+						auto& meshData = component.GetModel()->GetMeshData(i);
+						materialGroups[Helpers::string_cast<std::string>(meshData.MaterialData.GetName())].push_back(meshData);
+					}*/
 
-					std::map<std::string, std::vector<Ref<Material>>> sortedMaterials(materialGroups.begin(), materialGroups.end());
+					//std::map<std::string, std::vector<Model::MeshData&>> sortedMaterials(materialGroups.begin(), materialGroups.end());
 
 					int i = 0;
 
-					for (auto& [name, group] : sortedMaterials)
-					{
-						ImGui::Text("Name: %s", name.c_str());
+					//for (auto& [name, group] : materialGroups)
+					//{
+						//ImGui::Text("Name: %s", name.c_str());
 
-						for (auto& material : group)
+						for (int i = 0; i < size; i++)
 						{
+							auto& meshData = component.GetModel()->GetMeshData(i);
+							auto& material = meshData.MaterialData;
+
 							{
-
-
 								ImGui::BeginGroup();
 
+								
+								//ImGui::ColorEdit4("Color", &material->GetAlbedo().x);
+								
+								auto albedoTex = material.GetAlbedoTexture();
 
-								auto albedoTex = material->GetAlbedoTexture();
+								
 
-
+								ImGui::ColorEdit4(std::string("Model Color ##" + std::to_string(i)).c_str(), &material.GetAlbedo().x);
 
 								std::string nameId = "##Albedo" + std::to_string(i);
 
@@ -253,7 +259,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 								std::filesystem::path aNewPath = newFile;
 								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
 								{
-									material->SetAlbedoTexture(TextureAssetHandler::GetTexture(newFile));
+									material.SetAlbedoTexture(TextureAssetHandler::GetTexture(newFile));
 								}
 
 								//ShowTexturePicker(*component.GetEntity(), material, albedoTex->GetTextureType());
@@ -270,7 +276,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 								std::string nameId = "##Normal" + std::to_string(i);
 
 
-								auto normalTexture = material->GetNormalTexture();
+								auto normalTexture = material.GetNormalTexture();
 								std::string name = (normalTexture != nullptr) ? Helpers::string_cast<std::string>(normalTexture->GetName()) : "No Texture";
 
 								if (normalTexture != nullptr)
@@ -290,7 +296,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 								std::filesystem::path aNewPath = newFile;
 								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
 								{
-									material->SetNormalTexture(TextureAssetHandler::GetTexture(newFile));
+									material.SetNormalTexture(TextureAssetHandler::GetTexture(newFile));
 								}
 
 								ImGui::EndGroup();
@@ -302,7 +308,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 								std::string nameId = "##Material" + std::to_string(i);
 
 
-								auto materialTex = material->GetMaterialTexture();
+								auto materialTex = material.GetMaterialTexture();
 								std::string name = (materialTex != nullptr) ? Helpers::string_cast<std::string>(materialTex->GetName()) : "No Texture";
 
 								if (materialTex != nullptr)
@@ -322,7 +328,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 								std::filesystem::path aNewPath = newFile;
 								if (name != aNewPath.filename() && !aNewPath.filename().string().empty())
 								{
-									material->SetMaterialTexture(TextureAssetHandler::GetTexture(newFile));
+									material.SetMaterialTexture(TextureAssetHandler::GetTexture(newFile));
 								}
 
 								ImGui::EndGroup();
@@ -330,7 +336,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 						}
 
 
-					}
+					//}
 				}
 				else
 				{
@@ -505,9 +511,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			}
 		}
 	}
-
-
-
+	
 	DrawComponent<Network::NetworkComponent>("Network Component", aEntity, [](auto& component, auto aEntity)
 	{
 			uint64_t serverID = component.GetID().Get();

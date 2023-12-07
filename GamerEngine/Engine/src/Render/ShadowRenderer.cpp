@@ -33,12 +33,12 @@ bool ShadowRenderer::Initialize()
 		return false;
 	}
 
-	/*bufferDescription.ByteWidth = sizeof(Vector4f);
-	result = DX11::Get().Device->CreateBuffer(&bufferDescription, nullptr, myMaterialBuffer.GetAddressOf());
+	bufferDescription.ByteWidth = sizeof(Vector4f);
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myMaterialBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
-	}*/
+	}
 
 	bufferDescription.ByteWidth = sizeof(PointLightView);
 	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myPointLightBuffer.GetAddressOf());
@@ -139,7 +139,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 		for(unsigned int m = 0; m < model->GetNumMeshes(); m++)
 		{
-			const Model::MeshData& meshData = model->GetMeshData(m);
+			const ModelInstance::MeshData& meshData = model->GetMeshData(m);
 
 			myObjectBufferData.IsInstanced = isInstanced;
 			myObjectBufferData.World = RenderBuffer.myTransform;
@@ -165,24 +165,26 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 			memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
 			DX11::Get().GetContext()->Unmap(myObjectBuffer.Get(), 0);
+			
+			DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+			DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
-
-			if(!model->GetMaterial().empty())
-			{
-				//model->GetMaterial()[0]->SetAsResource(nullptr);
+			//if(!model->GetMaterial().empty())
+			//{
+				//model->GetMaterial()[0]->SetAsResource(myMaterialBuffer.Get());
 
 				//if(model->RenderWithDeferred())
 				//{
-				//	//DX11::Get().GetContext()->VSSetShader(myDeferredVS.Get(), nullptr, 0);
-				//	//DX11::Get().GetContext()->PSSetShader(myDeferredPS.Get(), nullptr, 0);
+				//	DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
+				//	DX11::Get().GetContext()->PSSetShader(myDeferredPS.Get(), nullptr, 0);
 				//}
 				//else
 				//{
 					DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
 					DX11::Get().GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
 				//}
-
-			}
+				//DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+			//}
 
 			DX11::Get().GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
 
@@ -199,8 +201,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			DX11::Get().GetContext()->PSSetShader(nullptr, nullptr, 0);
 
 
-			DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-			DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		
 			
 
 			DX11::Get().GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);

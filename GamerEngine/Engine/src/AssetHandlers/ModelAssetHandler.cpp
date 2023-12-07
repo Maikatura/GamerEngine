@@ -430,13 +430,19 @@ void ModelAssetHandler::Clear()
 {
 	for (auto item : myModelRegistry)
 	{
-		if (item.second == nullptr)
+		if (item == nullptr)
+		{
+			continue;
+		}
+		item->ClearInstanceData();
+
+		/*if (item.second == nullptr)
 		{
 			continue;
 		}
 
 		item.second->ClearInstanceData();
-		std::cout << "Name: " << item.second->GetModel()->Name << " Cleared Data" << "\n";
+		std::cout << "Name: " << item.second->Name << " Cleared Data" << "\n";*/
 	}
 
 
@@ -465,17 +471,24 @@ bool ModelAssetHandler::Initialize()
 
 void ModelAssetHandler::UnloadModel(const std::wstring& aFilePath)
 {
-	myModelRegistry.erase(aFilePath);
+	aFilePath;
+	//myModelRegistry.erase(aFilePath);
 }
 
 void ModelAssetHandler::ResetRenderedModels()
 {
 	for (auto item : myModelRegistry)
 	{
-		if (item.second)
+
+		if (item)
+		{
+			item->SetHasBeenRenderer(false);
+		}
+
+		/*if (item.second)
 		{
 			item.second->SetHasBeenRenderer(false);
-		}
+		}*/
 	}
 }
 
@@ -640,7 +653,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 				return false;
 			}
 
-			Model::MeshData modelData = {};
+			ModelInstance::MeshData modelData = {};
 			modelData.myNumberOfVertices = static_cast<UINT>(mdlVertices.size());
 			modelData.myNumberOfIndices = static_cast<UINT>(mdlIndices.size());
 			modelData.myStride = sizeof(Vertex);
@@ -655,15 +668,15 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 			modelData.myMaterialIndex = 0;
 
 
-			mdl->Init(modelData, aFilePath);
+			//mdl->Init(modelData, aFilePath);
 		}
 
 		mdl->Name = Helpers::string_cast<std::string>(aFilePath);
 		Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
 
-		mdlInstance->Init(mdl);
+		//mdlInstance->Init(mdl);
 
-		myModelRegistry.insert({ aFilePath, mdlInstance });
+		myModelRegistry.push_back(mdlInstance);
 
 		return true;
 	}
@@ -699,7 +712,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 	importer.InitImporter();
 	if (importer.LoadModel(aFilePath, tgaModel))
 	{
-		Ref<Model> mdl = MakeRef<Model>();
+		Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
 
 		for (size_t i = 0; i < tgaModel.Elements.size(); i++)
 		{
@@ -775,12 +788,12 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			}
 
 
-			for (size_t i = 0; i < 3; i++)
+			/*for (size_t i = 0; i < 3; i++)
 			{
-				mdl->BoxBounds.BoxExtents.push_back(tgaModel.BoxSphereBounds.BoxExtents[i]);
-				mdl->BoxBounds.Center.push_back(tgaModel.BoxSphereBounds.Center[i]);
+				mdlInstance->BoxBounds.BoxExtents.push_back(tgaModel.BoxSphereBounds.BoxExtents[i]);
+				mdlInstance->BoxBounds.Center.push_back(tgaModel.BoxSphereBounds.Center[i]);
 			}
-			mdl->BoxBounds.Radius = tgaModel.BoxSphereBounds.Radius;
+			mdl->BoxBounds.Radius = tgaModel.BoxSphereBounds.Radius;*/
 
 			int size = static_cast<int>(mesh.Indices.size());
 			mdlIndices.resize(size);
@@ -881,7 +894,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 				return false;
 			}
 
-			Model::MeshData modelData = {};
+			ModelInstance::MeshData modelData = {};
 			modelData.myNumberOfVertices = static_cast<UINT>(mdlVertices.size());
 			modelData.myNumberOfIndices = static_cast<UINT>(mdlIndices.size());
 			modelData.myStride = sizeof(Vertex);
@@ -915,13 +928,10 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 				material = TextureAssetHandler::GetTexture(L"resources\\Textures\\T_Default_M.dds");
 			}
 
-			Ref<Material> mat = MakeRef<Material>();
-			mat->Init(Helpers::string_cast<std::wstring>(mesh.MeshName));
-			mat->SetAlbedoTexture(albedo);
-			mat->SetNormalTexture(normal);
-			mat->SetMaterialTexture(material);
-
-			mdl->PushMaterial(std::move(mat));
+			modelData.MaterialData.Init(Helpers::string_cast<std::wstring>(mesh.MeshName));
+			modelData.MaterialData.SetAlbedoTexture(albedo);
+			modelData.MaterialData.SetNormalTexture(normal);
+			modelData.MaterialData.SetMaterialTexture(material);
 
 
 
@@ -962,23 +972,21 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			if (hasSkeleton)
 			{
-				mdl->Init(modelData, aFilePath, mdlSkeleton);
+				mdlInstance->Init(modelData, aFilePath, mdlSkeleton);
 			}
 			else
 			{
-				mdl->Init(modelData, aFilePath);
+				mdlInstance->Init(modelData, aFilePath);
 			}
 
 
 		}
 
-		mdl->Name = ansiFileName;
-		Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
-
-		mdlInstance->Init(mdl);
+		mdlInstance->Name = ansiFileName;
 
 
-		myModelRegistry.insert({ aFilePath, mdlInstance });
+
+		myModelRegistry.push_back(mdlInstance);
 
 		return true;
 	}
@@ -1019,18 +1027,18 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 	return true;
 }
 
-Ref<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath)
-{
-	auto model = myModelRegistry.find(aFilePath);
-
-	if (model->second == nullptr)
-	{
-		LoadModelData(aFilePath);
-		model = myModelRegistry.find(aFilePath);
-	}
-
-	return model->second->GetModel();
-}
+//Ref<Model> ModelAssetHandler::GetModel(const std::wstring& aFilePath)
+//{
+//	auto model = myModelRegistry.find(aFilePath);
+//
+//	if (model->second == nullptr)
+//	{
+//		LoadModelData(aFilePath);
+//		model = myModelRegistry.find(aFilePath);
+//	}
+//
+//	return model->second->GetModel();
+//}
 
 Ref<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFilePath)
 {
@@ -1040,8 +1048,16 @@ Ref<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFile
 		return nullptr;
 	}
 
-
 	{
+		std::scoped_lock<std::mutex> lock(myListMutex);
+		if (LoadModelData(aFilePath))
+		{
+			return myModelRegistry.back();
+		}
+	}
+	
+
+	/*{
 		std::scoped_lock<std::mutex> lock(myListMutex);
 
 		auto model = myModelRegistry.find(aFilePath);
@@ -1061,12 +1077,11 @@ Ref<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFile
 			return model->second;
 		}
 
-	}
+	}*/
 
 	if (myModelRegistry.empty())
 	{
 		auto returnValue = MakeRef<ModelInstance>();
-		returnValue->Init(MakeRef<Model>());
 		return returnValue;
 	}
 

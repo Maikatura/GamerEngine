@@ -23,7 +23,7 @@ const int InputLayoutSize = 18;
 
 class ModelAssetHandler
 {
-	std::unordered_map<std::wstring, Ref<ModelInstance>> myModelRegistry;
+	std::vector<Ref<ModelInstance>> myModelRegistry;
 
 	std::vector<std::thread> myThreads;
 	std::queue<std::function<void()>> myTaskQueue;
@@ -56,7 +56,7 @@ public:
 	bool LoadModelData(const std::wstring& aFilePath);
 	bool LoadAnimationData(const std::wstring& aModelName, const std::wstring& someFilePath);
 
-	Ref<Model> GetModel(const std::wstring& aFilePath);
+	//Ref<Model> GetModel(const std::wstring& aFilePath);
 	Ref<ModelInstance> GetModelInstance(const std::wstring& aModelName);
 
 

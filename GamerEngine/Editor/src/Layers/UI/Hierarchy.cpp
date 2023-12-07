@@ -333,7 +333,7 @@ void Hierarchy::DrawArmature(Entity& aEntity, Ref<ModelInstance> aModel)
 
 		}
 
-		for(int i = 0; i < aModel->GetModel()->GetNumMeshes(); i++)
+		for(int i = 0; i < aModel->GetNumMeshes(); i++)
 		{
 			uint32_t name = CommonUtilities::HashString(aModel->GetMeshData(i).myMeshName);
 			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)name, ImGuiTreeNodeFlags_Leaf, aModel->GetMeshData(i).myMeshName.c_str());

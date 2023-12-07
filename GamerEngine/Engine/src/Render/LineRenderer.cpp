@@ -269,7 +269,7 @@ void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
 
 	for (int i = 0; i < myLinesToRender.size(); i++)
 	{
-		DX11::Get().GetContext()->VSSetConstantBuffers(3, 1, myLineCBuffer.GetAddressOf());
+		DX11::Get().GetContext()->VSSetConstantBuffers(6, 1, myLineCBuffer.GetAddressOf());
 
 		DX11::Get().GetContext()->IASetInputLayout(myInputLayout.Get());
 		DX11::Get().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);

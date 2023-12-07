@@ -143,7 +143,12 @@ cbuffer Objectbuffer : register(b1)
 	float4x4 OB_BoneData[MAX_MODEL_BONES];
 }
 
-cbuffer LineCBuffer : register(b2)
+cbuffer Materialbuffer : register(b2)
+{
+	float4 MB_Color;
+}
+
+cbuffer LineCBuffer : register(b6)
 {
     float4x4 LCB_ToWorld;
     float4x4 LCB_ToView;
