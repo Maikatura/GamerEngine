@@ -34,6 +34,9 @@ void DirectionalLight::Update()
 	SetIntensity(myDirLight->Intensity);
 	SetColor(myDirLight->Color);
 
+	myLightData.CastShadows = myCastShadows;
+
+
 	myLightData.NearPlane = myNearPlane;
 	myLightData.FarPlane = myFarPlane;
 
@@ -46,7 +49,7 @@ void DirectionalLight::Update()
 
 
 
-	auto quatRot = CommonUtilities::Quaternionf::FromEulers(ToRadians(myTransformComp->GetRotation()));
+	auto quatRot = CommonUtilities::Quaternionf::FromEulers(ToRadians(Vector3f{ myTransformComp->GetRotation().x, 0.0f,  myTransformComp->GetRotation().z }));
 	auto matrix = ComposeFromTRS(myTransformComp->GetPosition(), quatRot, { 1, 1, 1 });
 
 
@@ -67,6 +70,7 @@ void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLight
 		DX11::Get().GetContext()->PSSetShaderResources(19, 1, &nullsrv);*/
 		//DX11::Get().GetContext()->VSSetShaderResources(19, 1, &nullsrv);
 
+		//DX11::Get().GetContext()->VSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
 		DX11::Get().GetContext()->PSSetShaderResources(19, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }

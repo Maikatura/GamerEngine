@@ -44,6 +44,9 @@ void SpotLight::Update()
 	// Set the direction using the rotation quaternion
 	SetDirection(rotationQuaternion * Vector3f(0.0f, 0.0f, 1.0f));
 
+	myLightData.CastShadows = myCastShadows;
+
+
 	// Set the LightView using the inverse of the transformation matrix
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(wTrans);
 

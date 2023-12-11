@@ -342,13 +342,13 @@ bool RendererBase::Init()
 
 void RendererBase::SetDepthStencilState(DepthStencilState aDepthStencilState)
 {
-	//DX11::Get().GetContext()->OMSetDepthStencilState(DX11::Get().pDSState, 1);
-	//DX11::Get().GetContext()->OMSetDepthStencilState(myDepthStencilStates[(int)aDepthStencilState].Get(), 0xffffffff);
+	//DX11::Get().GetContext()->OMSetDepthStencilState(DX11::Get(, 1);
+	DX11::Get().GetContext()->OMSetDepthStencilState(myDepthStencilStates[(int)aDepthStencilState].Get(), 0xffffffff);
 }
 
 void RendererBase::SetBlendState(BlendState aBlendState)
 {
-	//DX11::Get().GetContext()->OMSetBlendState(myBlendStates[(int)aBlendState].Get(), nullptr, 0xffffffff);
+	DX11::Get().GetContext()->OMSetBlendState(myBlendStates[(int)aBlendState].Get(), nullptr, 0xffffffff);
 }
 
 void RendererBase::SetSamplerState(int aSlot, SamplerState aSamplerState) 

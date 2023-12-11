@@ -396,6 +396,10 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		renderSSAO = false;
 	}
 
+
+	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+	RendererBase::SetBlendState(BlendState::None);
+
 	if (GetRenderModeInt() != 9)
 	{
 		{
@@ -409,7 +413,6 @@ void GraphicsEngine::RenderScene(VREye anEye)
 			{
 				myShadowRenderer->Render(light, modelList);
 			}
-			myShadowRenderer->ClearTarget();
 	
 		}
 	}

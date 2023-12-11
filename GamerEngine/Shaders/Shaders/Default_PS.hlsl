@@ -39,48 +39,39 @@ PixelOutput main(VertexToPixel input)
 {
 	PixelOutput result = { 0,0,0,0 };
 
-	const float4 albedo = albedoTexture.Sample(defaultSampler, input.UV);
+	const float4 albedoSample = albedoTexture.Sample(defaultSampler, input.UV);
 
-	if(albedo.a <= 0.05f)
+	if(albedoSample.a == 0)
 	{
 		discard;
 		result.Color = float4(0.0f, 0.0f, 0.0f, 0.0f);
 		return result;
 	}
 
-
-    const float3 normalMap = normalTexture.Sample(defaultSampler, input.UV).rgb;
+    const float3 albedo = albedoSample.rgb * MB_Color;
+    const float3 normalMap = normalTexture.Sample(defaultSampler, input.UV).agb;
     const float4 material = materialTexture.Sample(defaultSampler, input.UV).rgba;
 
-    const float3 worldPosition = input.WorldPosition;
-    const float ambientOcclusion = normalMap.b;
+   
     const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
 
+    const float ambientOcclusion = normalMap.b;
     const float metalness = material.r;
     const float roughness = material.g;
     const float emissive = material.b;
     const float emissiveStr = material.a;
 
-    const float3 toEye = normalize(FB_CamTranslation.xyz - worldPosition);
+    float4 worldPosition = float4(input.WorldPosition.xyz, 1.0f);
+    float3 normal = CalculatePixelNormal(normalMap, input.Tangent, input.Binormal, input.Normal);
 
+    const float3 toEye = normalize(FB_CamTranslation.xyz - input.WorldPosition.xyz);
 	float3 specularColor = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metalness);
 	float3 diffuseColor = lerp(float3(0.0f, 0.0f, 0.0f), albedo, 1 - metalness);
 
-    float3 normal = normalize(input.Normal);
-    float3 tangent = normalize(input.Tangent);
-    float3 binormal = normalize(input.Binormal);
-
-    // Calculate the TBN matrix (Tangent, Binormal, Normal)
-    float3x3 TBN = float3x3(tangent, binormal, normal);
-
-    float3 sampledNormal = normalize(normalMap.xyz);
-    float3 worldNormal = mul(sampledNormal, TBN);
-
-    float3 pixelNormal = normalize(input.WorldNormal);
-
+   
 	float3 ambientLighting = EvaluateAmbience(
 		environmentTexture,
-		pixelNormal,
+		normal,
 		input.WorldPosition,
 		toEye,
 		roughness,
@@ -89,7 +80,7 @@ PixelOutput main(VertexToPixel input)
 		specularColor
 	);
 
-	//ambientLighting *= ssao;
+	ambientLighting *= ssao;
 
 	float3 pointLight = 0;
 	float3 spotLight = 0;
@@ -99,7 +90,7 @@ PixelOutput main(VertexToPixel input)
 	float3 directLighting = EvaluateDirectionalLight(
 		diffuseColor,
 		specularColor,
-		pixelNormal,
+		normal,
 		roughness,
 		LB_DirectionalLight.Color.rgb,
 		LB_DirectionalLight.Intensity,
@@ -112,28 +103,24 @@ PixelOutput main(VertexToPixel input)
 
     if (LB_DirectionalLight.CastShadows)
     {
-        const float4 worldToLightView = mul(worldPosition, LB_DirectionalLight.LightView[0]);
-        const float4 lightViewToLightProj = mul(worldToLightView, LB_DirectionalLight.LightProjection);
+        const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
+        const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
 
-        float4 projectedTexCoord = float4(0.0f, 0.0f, 0.0f, 0.0f);
+        float3 projectedTexCoord;
+        projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
+        projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
 
-        projectedTexCoord.xy = lightViewToLightProj.xy / (2.0f * lightViewToLightProj.w) + float2(0.5f, -0.5f);
-
-        bool validTexCoord = saturate(projectedTexCoord) == projectedTexCoord;
-        bool inFrontOfLight = worldToLightView.z >= 0.0f;
-
-        if (validTexCoord && inFrontOfLight)
+        if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
         {
-            const float shadowBias = 0.008f;
-            float viewDepth = lightViewToLightProj.z / lightViewToLightProj.w - shadowBias;
+            const float shadowBias = 0.0005f;
+            const float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - shadowBias;
             projectedTexCoord.z = viewDepth;
-    
-            float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
-    
+            const float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
+
             if (lightDepth < viewDepth)
             {
                 float flaking = 0.8f;
-                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord.xyz, 1.0f / 8192.0f);
+                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / 8192.0f);
                 directShadow *= saturate(shadow * (1 - flaking) + flaking);
                 directLighting *= shadow;
             }
@@ -149,15 +136,15 @@ PixelOutput main(VertexToPixel input)
 			case 2:
 			{
 				float3 pointTemp = EvaluatePointLight(diffuseColor,
-					specularColor, pixelNormal, roughness, Light.Color, Light.Intensity,
+					specularColor, normal, roughness, Light.Color, Light.Intensity,
 					Light.Range, Light.Position, toEye, worldPosition.xyz);
 
 				if(Light.CastShadows)
 				{
 					
-					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz , .05f, Light.CastShadows))
+                    if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, .0001f, Light.CastShadows))
 					{
-						const float shadow = 0.05f;
+						const float shadow = 0.005f;
 						pointTemp *= shadow;
 					}
 				}
@@ -177,7 +164,7 @@ PixelOutput main(VertexToPixel input)
 			case 3:
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
-					specularColor, pixelNormal, roughness, Light.Color, Light.Intensity,
+					specularColor, normal, roughness, Light.Color, Light.Intensity,
 					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
@@ -219,7 +206,7 @@ PixelOutput main(VertexToPixel input)
 			break;
 		case 3://RenderMode::VertexNormal:
 		{
-			float3 debugNormal = pixelNormal;
+			float3 debugNormal = normal;
 			float signedLength = (debugNormal.r + debugNormal.g + debugNormal.b) / 3;
 
 			if(signedLength < 0)

@@ -22,6 +22,9 @@ void PointLight::Update()
 	SetLightPosition(myTransformComp->GetPosition());
 	//SetIntensity(myLightData.Intensity);
 
+
+	myLightData.CastShadows = myCastShadows;
+
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 90, 0 })), { 1, 1, 1 }));
 	myLightData.LightView[1] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, -90, 0 })), { 1, 1, 1 }));
 	myLightData.LightView[2] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ -90, 0, 0 })), { 1, 1, 1 }));

@@ -70,8 +70,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 		return;
 	}
 
-	//SetDepthStencilState(DepthStencilState::ReadWrite);
-	//SetBlendState(BlendState::None);
+	
 
 	HRESULT result = S_FALSE;
 	D3D11_MAPPED_SUBRESOURCE bufferData;
@@ -181,7 +180,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 				//else
 				//{
 					DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
-					DX11::Get().GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
+					//DX11::Get().GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
 				//}
 				//DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 			//}
@@ -198,7 +197,6 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			{
 				DX11::Get().GetContext()->GSSetShader(nullptr, nullptr, 0);
 			}
-			DX11::Get().GetContext()->PSSetShader(nullptr, nullptr, 0);
 
 
 		

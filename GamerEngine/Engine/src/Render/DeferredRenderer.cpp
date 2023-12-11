@@ -45,7 +45,6 @@ void GBuffer::ClearResource(unsigned int aStartSlot)
 	for(int i = 0; i < GBufferTexture::GBufferTexture_Count; i++)
 	{
 		srvList[i] = nullptr;
-
 		myRenderTextures[i].ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0, 0, 0, 0);
 	}
 
