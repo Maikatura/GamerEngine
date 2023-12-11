@@ -12,7 +12,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.00395040028
+      Delay: -0.00487400033
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
@@ -123,8 +123,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [416.365692, -76.7421646, 725.290955]
-      Rotation: [19.7378063, -148.264755, 0.000104271501]
+      Translation: [725.894104, 7.85451221, 703.152222]
+      Rotation: [23.0377922, -131.764343, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
       ChildrenSize: 0
       Children:
@@ -139,8 +139,8 @@ Entities:
       Tag: Directional Light
     TransformComponent:
       Translation: [344.794495, -192.594482, 461.394836]
-      Rotation: [117.00798, -0, -41.3745728]
-      Scale: [0.995540977, 0.999587059, 0.999603152]
+      Rotation: [-131.737396, 16.7012787, 108.487785]
+      Scale: [0.995415568, 0.999515355, 0.999616861]
       ChildrenSize: 0
       Children:
         {}
@@ -208,14 +208,14 @@ Entities:
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [467.140228, -496.856232, 143.92778]
+      Translation: [517.780334, -374.075806, -5.75302601]
       Rotation: [-0.000535882718, 71.3081512, -0.000543309725]
       Scale: [45.7344589, 45.7343979, 45.7344589]
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Delay: -0.00502339983
+      Delay: -0.00599659979
       Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:

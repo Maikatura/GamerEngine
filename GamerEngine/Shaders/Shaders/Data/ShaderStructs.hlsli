@@ -34,8 +34,8 @@ struct VertexInput
 struct VertexToPixel
 {
 	float4 Position		:	SV_POSITION;
-	float3 VertexWorldPosition	:	POSITION0;
-	float3 ViewPosition	:	POSITION1;
+	float3 WorldPosition	:	POSITION0;
+	float3 WorldNormal	:	POSITION1;
     float3 Normal : NORMAL;
     float3 Tangent : TANGENT;
     float3 Binormal : BINORMAL;

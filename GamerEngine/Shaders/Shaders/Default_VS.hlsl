@@ -20,16 +20,21 @@ VertexToPixel main(VertexInput input)
 		skinningMatrix += mul(input.BoneWeights.w, OB_BoneData[input.BoneIDs.w]);
 	}
 
-    float4 vertexWorldPosition = mul(OB_ToWorld, mul(input.Position, skinningMatrix));
-	if (OB_IsInstanced)
-	{
-		vertexWorldPosition = mul(input.Offset, mul(input.Position, skinningMatrix));
-	}
+    float4 vertexWorldPosition;
+    if (OB_IsInstanced)
+    {
+        vertexWorldPosition = mul(input.Offset, mul(input.Position, skinningMatrix));
+    }
+    else
+    {
+        vertexWorldPosition = mul(OB_ToWorld, mul(input.Position, skinningMatrix));
+    }
 
     float4 viewPosition = mul(FB_ToView, vertexWorldPosition);
-    result.VertexWorldPosition = vertexWorldPosition.xyz;
-    result.ViewPosition = viewPosition.xyz;
+
     result.Position = mul(FB_ToProjection, viewPosition);
+    result.WorldNormal = mul((float3x3) OB_ToWorld, input.Normal); // Assuming Normal is in object space
+    result.WorldPosition = vertexWorldPosition.xyz;
 
 
     float3x3 worldNormalRotation = (float3x3)OB_ToWorld;

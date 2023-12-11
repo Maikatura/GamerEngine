@@ -111,12 +111,8 @@ Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VREye anEye)
 	if (DX11::Get().IsVrNull())
 		return Matrix4x4f();
 
-	return Matrix4x4f();
-
-	//Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetEyeToHeadTransform(anEye);
-
-
-	//return Matrix4x4f::GetFastInverse(matrixObj);
+	Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetEyeToHeadTransform(anEye);
+	return Matrix4x4f::GetFastInverse(matrixObj);
 }
 
 
@@ -125,11 +121,8 @@ Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VREye anEye)
 	if (!DX11::Get().IsVrNull() || anEye == VREye::None)
 		return Projection;
 
-	return Projection;
-
-	//Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetProjectionMatrix( anEye, myNearPlane, myFarPlane);
-	//
-	//return matrixObj;
+	Matrix4x4f matrixObj = DX11::Get().GetVRSystem().GetProjectionMatrix( anEye, myNearPlane, myFarPlane);
+	return matrixObj;
 }
 
 bool CameraComponent::HasMoved()
@@ -147,9 +140,9 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	myPosition = aTransform->GetPosition();
 	myRotation = aTransform->GetRotation();
 
-#ifndef VR_DISABLED
-	//CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
-	//ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
+#if ENABLE_VR
+	CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
+	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
 	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
 #else
 	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());

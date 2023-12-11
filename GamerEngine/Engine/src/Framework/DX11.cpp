@@ -116,8 +116,9 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	myVRSystem.Init(aWindowHandle);
-
+#if ENABLE_VR
+	myVRSystem.Init(WindowHandle);
+#endif
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
@@ -126,11 +127,19 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 		//myVRSystem.SetWidth(clientRect.right - clientRect.left);
 		myRenderWidth = clientRect.right - clientRect.left;
 	}
+	else
+	{
+		myRenderWidth = myVRSystem.GetWidth();
+	}
 
 	if (myVRSystem.GetHeight() == 0)
 	{
 		//myVRSystem.SetHeight(clientRect.bottom - clientRect.top);
 		myRenderHeight = clientRect.bottom - clientRect.top;
+	}
+	else
+	{
+		myRenderHeight = myVRSystem.GetHeight();
 	}
 
 	// CREATE DEVICE AND SWAP CHAIN
@@ -179,7 +188,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 			featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &SwapChain, &Device,
 			&featureLevel, &myImmediateContext);
 
-		GE_ASSERT(SUCCEEDED(result), "Failed to create SwapChain and Device");
+		GE_ASSERT(SUCCEEDED(result), "Failed to create SwapChain and Device")
 		if (SUCCEEDED(errorCode))
 		{
 			driverType = driverTypes[i];
@@ -196,7 +205,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// CREATE RENDER TARGET VIEW
 	result = SwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&myBackBufferTex));
-	GE_ASSERT(SUCCEEDED(result), "Failed to get swapchain buffer");
+	GE_ASSERT(SUCCEEDED(result), "Failed to get swapchain buffer")
 	if (FAILED(result))
 	{
 		return false;
@@ -215,7 +224,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	result = Device->CreateRenderTargetView(myBackBufferTex, &RTVDesc, &myRenderTargetView);
 	SafeRelease(myBackBufferTex);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target view from back buffer");
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target view from back buffer")
 	if (FAILED(result))
 	{
 		return false;
@@ -238,9 +247,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	descDepth.MiscFlags = 0;
 	descDepth.ArraySize = 1;
 
-
 	result = Device->CreateTexture2D(&descDepth, NULL, &pDepthStencil);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D");
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D")
 	if (FAILED(result))
 	{
 		return false;
@@ -397,7 +405,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	myImmediateContext->RSSetViewports(1, &myViewport);
 
 
-#ifndef VR_DISABLED
+#if ENABLE_VR
 	// Create the render to texture object.
 	m_RenderTextureLeft = MakeRef<RenderTexture>();
 	if (!m_RenderTextureLeft)
@@ -891,6 +899,7 @@ void DX11::Resize()
 	RTVDesc.Texture2D.MipSlice = 0;
 
 	hr = Device->CreateRenderTargetView(myBackBufferTex, &RTVDesc, &myRenderTargetView);
+	SafeRelease(myBackBufferTex);
 	if (FAILED(hr))
 	{
 		// Handle the error
@@ -935,10 +944,18 @@ void DX11::Resize()
 	myViewport.Width = static_cast<float>(myRenderWidth);
 	myViewport.Height = static_cast<float>(myRenderHeight);
 
-
-	m_RenderTextureLeft->Shutdown();
-	m_RenderTextureRight->Shutdown();
-	myScreenView->Shutdown();
+	if (m_RenderTextureLeft)
+	{
+		m_RenderTextureLeft->Shutdown();
+	}
+	if (m_RenderTextureRight)
+	{
+		m_RenderTextureRight->Shutdown();
+	}
+	if (myScreenView)
+	{
+		myScreenView->Shutdown();
+	}
 
 	// Create the render to texture object.
 	m_RenderTextureLeft = MakeRef<RenderTexture>();

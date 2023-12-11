@@ -140,6 +140,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 		if(aDirectionalLight)
 		{
 			mySceneLightBufferData.DirectionalLight = aDirectionalLight->GetLightBufferData();
+			mySceneLightBufferData.DirectionalLight.CastShadows = true;
 			aDirectionalLight->SetAsResource(nullptr);
 		}
 

@@ -49,44 +49,39 @@ PixelOutput main(VertexToPixel input)
 	}
 
 
-	const float3 normal = normalTexture.Sample(defaultSampler, input.UV).rgb;
-	const float4 material = materialTexture.Sample(defaultSampler, input.UV).rgba;
-	const float4 worldPosition = worldPositionTexture.Sample(defaultSampler, input.UV).rgba;
-	const float ambientOcclusion = normal.b;
-	const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
+    const float3 normalMap = normalTexture.Sample(defaultSampler, input.UV).rgb;
+    const float4 material = materialTexture.Sample(defaultSampler, input.UV).rgba;
 
-	const float metalness = material.r;
-	const float roughness = material.g;
-	const float emissive = material.b;
-	const float emissiveStr = material.a;
+    const float3 worldPosition = input.WorldPosition;
+    const float ambientOcclusion = normalMap.b;
+    const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
 
-	const float3 toEye = normalize(FB_CamTranslation.xyz - worldPosition.xyz);
-	float3 specularColor = lerp(float3(0.04f, 0.04f, 0.04f), albedo.rgb, metalness);
-	float3 diffuseColor = lerp(float3(0.0f, 0.0f, 0.0f), albedo.rgb, 1 - metalness);
+    const float metalness = material.r;
+    const float roughness = material.g;
+    const float emissive = material.b;
+    const float emissiveStr = material.a;
 
-	input.Tangent = normalize(input.Tangent);
-	input.Binormal = normalize(input.Binormal);
-	input.Normal = normalize(input.Normal);
+    const float3 toEye = normalize(FB_CamTranslation.xyz - worldPosition);
 
-	const float3x3 TBN = float3x3(
-		normalize(input.Tangent),
-		normalize(input.Binormal),
-		normalize(input.Normal)
-		);
+	float3 specularColor = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metalness);
+	float3 diffuseColor = lerp(float3(0.0f, 0.0f, 0.0f), albedo, 1 - metalness);
 
-	float3 pixelNormal = normal;
-	pixelNormal.z = 0;
-	pixelNormal = pixelNormal * 2 - 1;
-	pixelNormal.z = sqrt(1 - saturate(pixelNormal.x * pixelNormal.x + pixelNormal.y * pixelNormal.y));
-	pixelNormal.y *= -1;
-	pixelNormal = normalize(pixelNormal);
-	pixelNormal = normalize(mul(pixelNormal, TBN));
-	
+    float3 normal = normalize(input.Normal);
+    float3 tangent = normalize(input.Tangent);
+    float3 binormal = normalize(input.Binormal);
+
+    // Calculate the TBN matrix (Tangent, Binormal, Normal)
+    float3x3 TBN = float3x3(tangent, binormal, normal);
+
+    float3 sampledNormal = normalize(normalMap.xyz);
+    float3 worldNormal = mul(sampledNormal, TBN);
+
+    float3 pixelNormal = normalize(input.WorldNormal);
 
 	float3 ambientLighting = EvaluateAmbience(
 		environmentTexture,
 		pixelNormal,
-		normalize(input.Normal),
+		input.WorldPosition,
 		toEye,
 		roughness,
 		ambientOcclusion,
@@ -94,7 +89,7 @@ PixelOutput main(VertexToPixel input)
 		specularColor
 	);
 
-	ambientLighting *= ssao;
+	//ambientLighting *= ssao;
 
 	float3 pointLight = 0;
 	float3 spotLight = 0;
@@ -108,7 +103,7 @@ PixelOutput main(VertexToPixel input)
 		roughness,
 		LB_DirectionalLight.Color.rgb,
 		LB_DirectionalLight.Intensity,
-		LB_DirectionalLight.Direction,
+		-LB_DirectionalLight.Direction,
 		toEye
 	);
 
@@ -129,7 +124,7 @@ PixelOutput main(VertexToPixel input)
 
         if (validTexCoord && inFrontOfLight)
         {
-            const float shadowBias = 0.00008f;
+            const float shadowBias = 0.008f;
             float viewDepth = lightViewToLightProj.z / lightViewToLightProj.w - shadowBias;
             projectedTexCoord.z = viewDepth;
     
@@ -160,7 +155,7 @@ PixelOutput main(VertexToPixel input)
 				if(Light.CastShadows)
 				{
 					
-					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz , .0005f, Light.CastShadows))
+					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz , .05f, Light.CastShadows))
 					{
 						const float shadow = 0.05f;
 						pointTemp *= shadow;
@@ -237,7 +232,7 @@ PixelOutput main(VertexToPixel input)
 		}
 		case 4://RenderMode::PixelNormal:
 		{
-			float3 debugNormal = normal;
+			float3 debugNormal = normalMap;
 			float signedLength = (debugNormal.r + debugNormal.g + debugNormal.b) / 3;
 
 			if(signedLength < 0)
@@ -257,7 +252,7 @@ PixelOutput main(VertexToPixel input)
 		}
 		case 6://RenderMode::NormalMap:
 		{
-			result.Color = float4(normal.r, normal.g, 1.0f, 1.0f); //normal is set to NormalMap in GBuffer when RenderMode::NormalMap
+			result.Color = float4(normalMap.r, normalMap.g, 1.0f, 1.0f); //normal is set to NormalMap in GBuffer when RenderMode::NormalMap
 			result.Color.a = 1.0f;
 			break;
 		}

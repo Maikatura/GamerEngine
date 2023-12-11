@@ -63,10 +63,10 @@ bool ModelInstance::RenderWithDeferred()
 {
 	if (HasSkeleton())
 	{
-		return true;
+		return false;
 	}
 
-	return true;
+	return false;
 }
 
 bool ModelInstance::HasBeenRendered()

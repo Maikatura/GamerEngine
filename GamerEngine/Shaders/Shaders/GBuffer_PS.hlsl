@@ -36,9 +36,9 @@ GBufferOutput main(VertexToPixel input)
     result.Normal = float4(pixelNormal, 0.0f);
     result.Material = materialMap;
     result.VertexNormal = float4(normalize(input.Normal), 0.0f);
-	result.WorldPosition = float4(input.VertexWorldPosition.xyz, 1.0f);
+	result.WorldPosition = float4(input.WorldPosition.xyz, 1.0f);
 	result.AmbientOcclusion = ambientOcclusion;
-	result.ViewPosition = float4(input.ViewPosition.xyz, 1.0f);
+	result.ViewPosition = float4(input.Position.xyz, 1.0f);
     result.ViewNormal = float4(normalize(mul(FB_ToView, float4(result.Normal.xyz, 0.0f)).xyz), 0.0f);
 
 	switch(FB_RenderMode)

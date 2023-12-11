@@ -396,7 +396,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		renderSSAO = false;
 	}
 
-	/*if (GetRenderModeInt() != 9)
+	if (GetRenderModeInt() != 9)
 	{
 		{
 			PROFILE_CPU_SCOPE("Render Shadows");
@@ -412,7 +412,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 			myShadowRenderer->ClearTarget();
 	
 		}
-	}*/
+	}
 
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetBlendState(BlendState::None);
@@ -481,6 +481,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 
 void GraphicsEngine::OnFrameRender()
 {
+	if (myWantToResizeBuffers) return;
 	if (myIsMinimized) return;
 
 
@@ -570,7 +571,7 @@ void GraphicsEngine::OnFrameRender()
 			UINT8 clearStencil = 0;
 
 			DX11::Get().GetContext()->ClearDepthStencilView(DX11::Get().GetDepthStencilView(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
-			DX11::Get().GetContext()->ClearRenderTargetView(renderTarget, &clearColor.x);
+			DX11::Get().GetContext()->ClearRenderTargetView(DX11::Get().GetRenderTargetView(), &clearColor.x);
 
 		}
 
