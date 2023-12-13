@@ -442,20 +442,6 @@ void Scene::Clean()
 	Light::Reset();
 }
 
-std::vector<Light*> Scene::GetSomeLights()
-{
-	std::vector<Light*> myList;
-
-	for(size_t i = 0; i < GetLights().size(); i++)
-	{
-		if(GetLights()[i]->GetLightBufferData().LightType != 1)
-		{
-			myList.push_back(GetLights()[i]);
-		}
-	}
-	return myList;
-}
-
 std::vector<Light*>& Scene::GetLights()
 {
 	CommonUtilities::MergeSortPtr(myLightToRender);

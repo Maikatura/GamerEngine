@@ -5,6 +5,7 @@
 
 
 #include "GraphicsEngine.h"
+#include "Render/DepthStencil.h"
 #include "Render/RenderTexture.h"
 #include "VR/VRSystem.h"
 
@@ -64,7 +65,8 @@ private:
 	ID3D11Texture2D* myBackBufferTex;
 
 	ID3D11RenderTargetView* myRenderTargetView;
-	ID3D11DepthStencilView* myDepthStencilView;
+	Ref<DepthStencil> myDepthStencilView;
+	ID3D11ShaderResourceView* myDepthStencilSRV;
 
 	D3D11_VIEWPORT myViewport;
 	ID3D11DepthStencilState* pDSState;
@@ -95,7 +97,8 @@ public:
 
 	ID3D11DeviceContext* GetContext();
 
-	ID3D11DepthStencilView* GetDepthStencilView();
+	Ref<DepthStencil> GetDepthStencilView();
+	ID3D11ShaderResourceView* GetDepthSRV();
 
 	VRSystem& GetVRSystem();
 

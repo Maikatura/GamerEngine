@@ -4,9 +4,9 @@
 #include "../Data/Common.hlsli"
 #include "../Data/Samplers.hlsli"
 
-DeferredPixelOutput main(FullscreenVertexToPixel input)
+PixelOutput main(FullscreenVertexToPixel input)
 {
-	DeferredPixelOutput result;
+    PixelOutput result;
 
 	const float4 color = albedoTexture.Sample(defaultSampler, input.UV).rgba;
 	const uint mode = 2;

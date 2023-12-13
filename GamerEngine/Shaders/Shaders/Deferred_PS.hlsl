@@ -279,6 +279,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 			break;
 	}
 
+	result.Depth = fullscreenDepth.SampleLevel(pointClampSampler, input.UV, 0.0f).r;
 
 	return result;
 }

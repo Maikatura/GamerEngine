@@ -7,11 +7,11 @@
 #include "Render/Renderer.h"
 #include "Components/TransfromComponent.h"
 
-void SpotLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer)
+void SpotLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex)
 {
 	if(myLightData.CastShadows)
 	{
-		DX11::Get().GetContext()->PSSetShaderResources(20 + myLightData.ShadowMapIndex, 1, myShadowMap->mySRV.GetAddressOf());
+		DX11::Get().GetContext()->PSSetShaderResources(20 + aShaderIndex, 1, myShadowMap->mySRV.GetAddressOf());
 	}
 }
 
@@ -42,13 +42,13 @@ void SpotLight::Update()
 	CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z)));
 
 	// Set the direction using the rotation quaternion
-	SetDirection(rotationQuaternion * Vector3f(0.0f, 0.0f, 1.0f));
+	SetDirection(rotationQuaternion.Forward());
 
 	myLightData.CastShadows = myCastShadows;
 
 
 	// Set the LightView using the inverse of the transformation matrix
-	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(wTrans);
+	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, rotationQuaternion, { 1, 1, 1 }));
 
 	//Matrix4x4f wTrans = myTransform->GetMatrix();
 	//SetDirection(myTransform->GetRotation());

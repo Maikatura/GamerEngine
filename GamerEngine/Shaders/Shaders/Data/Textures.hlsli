@@ -20,5 +20,7 @@ Texture2D dirLightShadowTexture		:	register(t19);
 Texture2D shadowMap[20]				:	register(t20);
 TextureCube shadowCubeTexture[20]	:	register(t40);
 
+Texture2D fullscreenDepth : register(t120);
+
 
 #endif

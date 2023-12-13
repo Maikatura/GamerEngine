@@ -16,7 +16,7 @@ void GBuffer::SetAsTarget()
 		
 	}
 
-	DX11::Get().GetContext()->OMSetRenderTargets(GBufferTexture::GBufferTexture_Count, &rtvList[0], DX11::Get().GetDepthStencilView());
+	DX11::Get().GetContext()->OMSetRenderTargets(GBufferTexture::GBufferTexture_Count, &rtvList[0], DX11::Get().GetDepthStencilView()->myDSV.Get());
 }
 
 void GBuffer::ClearTarget()
@@ -45,7 +45,7 @@ void GBuffer::ClearResource(unsigned int aStartSlot)
 	for(int i = 0; i < GBufferTexture::GBufferTexture_Count; i++)
 	{
 		srvList[i] = nullptr;
-		myRenderTextures[i].ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0, 0, 0, 0);
+		myRenderTextures[i].ClearRenderTarget(DX11::Get().GetContext(),nullptr, 0, 0, 0, 0);
 	}
 
 
@@ -377,13 +377,13 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 
 	if(anEnvironmentLight)
 	{
-		anEnvironmentLight->SetAsResource(nullptr);
+		anEnvironmentLight->SetAsResource(nullptr, 0);
 	}
 
 	if(aDirectionalLight)
 	{
 		mySceneLightBufferData.DirectionalLight = aDirectionalLight->GetLightBufferData();
-		aDirectionalLight->SetAsResource(nullptr);
+		aDirectionalLight->SetAsResource(nullptr, 0);
 	}
 
 	mySceneLightBufferData.NumLightsPoint = 0;
@@ -391,28 +391,29 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 	ZeroMemory(mySceneLightBufferData.LightsPoint, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
 	ZeroMemory(mySceneLightBufferData.LightsSpot, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
 
-	for (const auto& light : aLightList)
+	for (size_t l = 0; l < aLightList.size(); l++)
 	{
-		const auto& lightData = light->GetLightBufferData();
-		if (lightData.LightType == 1)
+		if (aLightList[l]->GetLightBufferData().LightType == 1)
 		{
 			continue;
 		}
-
-		if (lightData.LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_DEFERRED_LIGHTS)
+		else
 		{
-			mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = lightData;
-			mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint].CastShadows = true;
-			mySceneLightBufferData.NumLightsPoint++;
-		}
+			if (aLightList[l]->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_FORWARD_LIGHTS)
+			{
+				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = aLightList[l]->GetLightBufferData();
+				aLightList[l]->SetAsResource(nullptr, mySceneLightBufferData.NumLightsPoint);
+				mySceneLightBufferData.NumLightsPoint++;
 
-		if (lightData.LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_DEFERRED_LIGHTS)
-		{
-			mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = lightData;
-			mySceneLightBufferData.NumLightsSpot++;
-		}
+			}
 
-		light->SetAsResource(nullptr);
+			if (aLightList[l]->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_FORWARD_LIGHTS)
+			{
+				mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = aLightList[l]->GetLightBufferData();
+				aLightList[l]->SetAsResource(nullptr, mySceneLightBufferData.NumLightsSpot);
+				mySceneLightBufferData.NumLightsSpot++;
+			}
+		}
 	}
 
 	result = DX11::Get().GetContext()->Map(
@@ -466,6 +467,8 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 
 void DeferredRenderer::RenderLate()
 {
+
+
 
 	auto srv = GBuffer::GetRenderer().GetShaderResourceView();
 	DX11::Get().GetContext()->PSSetShaderResources(0, 1, &srv);

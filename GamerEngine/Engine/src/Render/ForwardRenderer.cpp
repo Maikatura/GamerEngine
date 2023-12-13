@@ -115,6 +115,70 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 	DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
+
+	if (aDirectionalLight)
+	{
+		mySceneLightBufferData.DirectionalLight = aDirectionalLight->GetLightBufferData();
+		aDirectionalLight->SetAsResource(nullptr, 0);
+	}
+
+	if (anEnvironmentLight)
+	{
+		anEnvironmentLight->SetAsResource(nullptr, 0);
+	}
+
+	mySceneLightBufferData.NumLightsPoint = 0;
+	mySceneLightBufferData.NumLightsSpot = 0;
+	ZeroMemory(mySceneLightBufferData.LightsPoint, sizeof(Light::LightBufferData) * MAX_FORWARD_LIGHTS);
+	ZeroMemory(mySceneLightBufferData.LightsSpot, sizeof(Light::LightBufferData) * MAX_FORWARD_LIGHTS);
+
+	for (size_t l = 0; l < aLightList.size(); l++)
+	{
+		if (aLightList[l]->GetLightBufferData().LightType == 1)
+		{
+			continue;
+		}
+		else
+		{
+			if (aLightList[l]->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_FORWARD_LIGHTS)
+			{
+				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = aLightList[l]->GetLightBufferData();
+				aLightList[l]->SetAsResource(nullptr, mySceneLightBufferData.NumLightsPoint);
+				mySceneLightBufferData.NumLightsPoint++;
+
+			}
+
+			if (aLightList[l]->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_FORWARD_LIGHTS)
+			{
+				mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = aLightList[l]->GetLightBufferData();
+				aLightList[l]->SetAsResource(nullptr, mySceneLightBufferData.NumLightsSpot);
+				mySceneLightBufferData.NumLightsSpot++;
+
+			}
+
+
+		}
+	}
+
+
+	result = DX11::Get().GetContext()->Map(
+		myLightBuffer.Get(),
+		0,
+		D3D11_MAP_WRITE_DISCARD,
+		0,
+		&bufferData);
+
+	if (FAILED(result))
+	{
+		// NOOOOOOOOOOOOOO :(
+	}
+
+	memcpy(bufferData.pData, &mySceneLightBufferData, sizeof(SceneLightBuffer));
+
+	DX11::Get().GetContext()->Unmap(myLightBuffer.Get(), 0);
+	DX11::Get().GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
+
+
 	for(const RenderBuffer& modelBuffer : aModelList)
 	{
 		Ref<ModelInstance> model = modelBuffer.myModel;
@@ -135,68 +199,8 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 		/*SetBlendState(BlendState::Alpha);
 		SetDepthStencilState(DepthStencilState::DSS_ReadWrite);*/
 
-		ModelAssetHandler::Get().ResetRenderedModels();
-
-		if(aDirectionalLight)
-		{
-			mySceneLightBufferData.DirectionalLight = aDirectionalLight->GetLightBufferData();
-			mySceneLightBufferData.DirectionalLight.CastShadows = true;
-			aDirectionalLight->SetAsResource(nullptr);
-		}
-
-		if (anEnvironmentLight)
-		{
-			anEnvironmentLight->SetAsResource(nullptr);
-		}
-
-		mySceneLightBufferData.NumLightsPoint = 0;
-		mySceneLightBufferData.NumLightsSpot = 0;
-		ZeroMemory(mySceneLightBufferData.LightsPoint, sizeof(Light::LightBufferData) * MAX_FORWARD_LIGHTS);
-		ZeroMemory(mySceneLightBufferData.LightsSpot, sizeof(Light::LightBufferData) * MAX_FORWARD_LIGHTS);
-
-		for (size_t l = 0; l < aLightList.size(); l++)
-		{
-			if (aLightList[l]->GetLightBufferData().LightType == 1)
-			{
-				continue;
-			}
-			else
-			{
-				if (aLightList[l]->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_FORWARD_LIGHTS)
-				{
-					mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = aLightList[l]->GetLightBufferData();
-					mySceneLightBufferData.NumLightsPoint++;
-				}
-
-				if (aLightList[l]->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_FORWARD_LIGHTS)
-				{
-					mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = aLightList[l]->GetLightBufferData();
-					mySceneLightBufferData.NumLightsSpot++;
-				}
-
-				aLightList[l]->SetAsResource(nullptr);
-			}
-		}
-
-
-		result = DX11::Get().GetContext()->Map(
-			myLightBuffer.Get(),
-			0,
-			D3D11_MAP_WRITE_DISCARD,
-			0,
-			&bufferData);
-
-		if(FAILED(result))
-		{
-			// NOOOOOOOOOOOOOO :(
-		}
-
-		memcpy(bufferData.pData, &mySceneLightBufferData, sizeof(SceneLightBuffer));
-
-		DX11::Get().GetContext()->Unmap(myLightBuffer.Get(), 0);
-		DX11::Get().GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
-
-		ModelAssetHandler::Get().ResetRenderedModels();
+		
+		//ModelAssetHandler::Get().ResetRenderedModels();
 
 
 

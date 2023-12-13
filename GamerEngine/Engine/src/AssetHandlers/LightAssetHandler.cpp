@@ -5,7 +5,7 @@
 
 LightAssetHandler::~LightAssetHandler()
 {
-	myLights.clear();
+	
 }
 
 Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor, float anIntensity,
@@ -24,7 +24,7 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 	constexpr float nearPlane = 30.0f;
 	constexpr float farPlane = 250000.0f;
 	const Vector2f resolution = Vector2f(8192.0f, 8192.0f);
-	constexpr float DIVIDE = 0.5f;
+	constexpr float DIVIDE = 0.4f;
 
 	myDirectionalLight->myNearPlane = nearPlane;
 	myDirectionalLight->myFarPlane = farPlane;
@@ -47,7 +47,6 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 
 
 
-	Renderer::RenderLight(myDirectionalLight.get());
 
 	return myDirectionalLight;
 }
@@ -62,9 +61,8 @@ Ref<EnvironmentLight> LightAssetHandler::CreateEnvironmentLight(const std::wstri
 Ref<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor, float anIntensity, float aRange,
 	Vector3f aPosition)
 {
-	myLights.push_back(MakeRef<PointLight>());
-	Ref<PointLight> result = std::dynamic_pointer_cast<PointLight>(myLights.back());
-
+	Ref<PointLight> result = MakeRef<PointLight>();
+	
 	result->Init(aColor, anIntensity);
 	result->SetRange(aRange);
 	result->SetLightPosition(aPosition);
@@ -74,16 +72,11 @@ Ref<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor, float anInt
 	constexpr float nearPlane = 0.1f;
 	constexpr float farPlane = 25000.0f;
 	const Vector2f resolution = { 2048, 2048 };
-	result->myShadowMap = std::make_unique<DepthStencil>();
-	result->CreatePointLightMap({ resolution.x, resolution.y });
-
-	result->myShadowMap->myViewport = D3D11_VIEWPORT({ 0.0f, 0.0f, static_cast<float>(resolution.x), static_cast<float>(resolution.y), 0.0f, 1.0f });
-
+	result->myShadowMap = TextureAssetHandler::CreatePointLightMap(L"Point Light", static_cast<size_t>(resolution.x), static_cast<size_t>(resolution.y));
 
 	result->myLightData.NearPlane = nearPlane;
 	result->myLightData.FarPlane = aRange;
 	result->myLightData.LightProjection = Matrix4x4f::CreateOrthographicProjection(-resolution.x, resolution.x, -resolution.y, resolution.y, nearPlane, farPlane);
-	Renderer::RenderLight(result.get());
 
 	return result;
 }
@@ -91,8 +84,7 @@ Ref<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor, float anInt
 Ref<SpotLight> LightAssetHandler::CreateSpotLight(Vector3f aColor, float anIntensity, float aRange,
 	Vector3f aPosition, float aInnerCone, float aOuterCone)
 {
-	myLights.push_back(MakeRef<SpotLight>());
-	Ref<SpotLight> result = std::dynamic_pointer_cast<SpotLight>(myLights.back());
+	Ref<SpotLight> result = MakeRef<SpotLight>();
 
 	result->Init(aColor, anIntensity);
 	result->SetRange(aRange);
@@ -103,7 +95,7 @@ Ref<SpotLight> LightAssetHandler::CreateSpotLight(Vector3f aColor, float anInten
 	result->myLightData.CastShadows = true;
 
 	constexpr float nearPlane = 0.1f;
-	constexpr float farPlane = 25000.0f;
+	constexpr float farPlane = 250000.0f;
 	const Vector2f resolution = { 2048, 2048 };
 
 	result->myLightData.LightProjection(1, 1) = 2.0f / resolution.x;
@@ -113,8 +105,6 @@ Ref<SpotLight> LightAssetHandler::CreateSpotLight(Vector3f aColor, float anInten
 	result->myLightData.LightProjection(4, 4) = 1.0f;
 
 	result->myShadowMap = TextureAssetHandler::CreateDepthStencil(L"SpotLight", static_cast<size_t>(resolution.x), static_cast<size_t>(resolution.y));
-
-	Renderer::RenderLight(result.get());
 
 	return result;
 }

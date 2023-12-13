@@ -17,7 +17,7 @@ struct VertexInput
 	float4 VxColor3		:	COLOR2;
 	float4 VxColor4		:	COLOR3;
 
-	float2 UV				:	TEXCOORD0;
+	float2 UV			:	TEXCOORD0;
 	float2 UV2			:	TEXCOORD1;
 	float2 UV3			:	TEXCOORD2;
 	float2 UV4			:	TEXCOORD3;
@@ -33,20 +33,21 @@ struct VertexInput
 
 struct VertexToPixel
 {
-	float4 Position		:	SV_POSITION;
+	float4 Position			:	SV_POSITION;
 	float3 WorldPosition	:	POSITION0;
-	float3 WorldNormal	:	POSITION1;
-    float3 Normal : NORMAL;
-    float3 Tangent : TANGENT;
-    float3 Binormal : BINORMAL;
-	float4 VxColor		:	COLOR0;
-	float4 VxColor2		:	COLOR1;
-	float4 VxColor3		:	COLOR2;
-	float4 VxColor4		:	COLOR3;
+	float3 WorldNormal		:	POSITION1;
+    float3 ViewPosition		:	POSITION2;
+    float3 Normal			:	NORMAL;
+    float3 Tangent			:	TANGENT;
+    float3 Binormal			:	BINORMAL;
+	float4 VxColor			:	COLOR0;
+	float4 VxColor2			:	COLOR1;
+	float4 VxColor3			:	COLOR2;
+	float4 VxColor4			:	COLOR3;
 	float2 UV				:	TEXCOORD0;
-	float2 UV2			:	TEXCOORD1;
-	float2 UV3			:	TEXCOORD2;
-	float2 UV4			:	TEXCOORD3;
+	float2 UV2				:	TEXCOORD1;
+	float2 UV3				:	TEXCOORD2;
+	float2 UV4				:	TEXCOORD3;
     
 };
 
@@ -88,12 +89,19 @@ struct FullscreenVertexInput
 struct FullscreenVertexToPixel
 {
 	float4 Position		:	SV_POSITION;
-	float2 UV				:	TEXCOORD;
+	float2 UV			:	TEXCOORD0;
 };
 
 struct DeferredPixelOutput
 {
 	float4 Color			:	SV_TARGET;
+    float Depth				:	SV_DEPTH;
+};
+
+struct FullscreenPixelOutput
+{
+    float4 Color : SV_TARGET;
+    float Depth : SV_DEPTH;
 };
 
 struct RectVertexInput

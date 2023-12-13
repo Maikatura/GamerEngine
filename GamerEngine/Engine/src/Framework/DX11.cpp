@@ -33,11 +33,11 @@ void DX11::ResetRenderTarget(bool isUsingEditor, bool useDepth)
 {
 	if (isUsingEditor)
 	{
-		myScreenView->SetRenderTarget(GetContext(), (useDepth == true) ? GetDepthStencilView() : nullptr);
+		myScreenView->SetRenderTarget(GetContext(), (useDepth == true) ? GetDepthStencilView()->myDSV.Get() : nullptr);
 	}
 	else
 	{
-		GetContext()->OMSetRenderTargets(1, &myRenderTargetView, (useDepth == true) ? GetDepthStencilView() : nullptr);
+		GetContext()->OMSetRenderTargets(1, &myRenderTargetView, (useDepth == true) ? GetDepthStencilView()->myDSV.Get() : nullptr);
 	}
 }
 
@@ -56,9 +56,14 @@ ID3D11DeviceContext* DX11::GetContext()
 	return myImmediateContext;
 }
 
-ID3D11DepthStencilView* DX11::GetDepthStencilView()
+Ref<DepthStencil> DX11::GetDepthStencilView()
 {
 	return myDepthStencilView;
+}
+
+ID3D11ShaderResourceView* DX11::GetDepthSRV()
+{
+	return myDepthStencilSRV;
 }
 
 VRSystem& DX11::GetVRSystem()
@@ -68,14 +73,14 @@ VRSystem& DX11::GetVRSystem()
 
 void DX11::TurnZBufferOn()
 {
-	myImmediateContext->OMSetDepthStencilState(pDSState, 1);
+	//myImmediateContext->OMSetDepthStencilState(pDSState, 1);
 	return;
 }
 
 void DX11::TurnZBufferOff()
 {
 
-	myImmediateContext->OMSetDepthStencilState(myDepthDisabledStencilState, 1);
+	//myImmediateContext->OMSetDepthStencilState(myDepthDisabledStencilState, 1);
 	return;
 }
 
@@ -230,29 +235,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 		return false;
 	}
 
-	// CREATE DEPTH STENCIL
-	ID3D11Texture2D* pDepthStencil = NULL;
-	D3D11_TEXTURE2D_DESC descDepth;
-	ZeroMemory(&descDepth, sizeof(descDepth));
-	descDepth.Width = myRenderWidth;// swapDesc.BufferDesc.Width;
-	descDepth.Height = myRenderHeight;// swapDesc.BufferDesc.Height;
-	descDepth.MipLevels = 1;
-	descDepth.Format = DXGI_FORMAT_D32_FLOAT;// DXGI_FORMAT_D32_FLOAT;//DXGI_FORMAT_D24_UNORM_S8_UINT;;//pDeviceSettings->d3d11.AutoDepthStencilFormat;
-	// DXGI_FORMAT_D32_FLOAT_S8X24_UINT
-	descDepth.SampleDesc.Count = 1;
-	descDepth.SampleDesc.Quality = 0;
-	descDepth.Usage = D3D11_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	descDepth.CPUAccessFlags = 0;
-	descDepth.MiscFlags = 0;
-	descDepth.ArraySize = 1;
-
-	result = Device->CreateTexture2D(&descDepth, NULL, &pDepthStencil);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D")
-	if (FAILED(result))
-	{
-		return false;
-	}
+	
 
 	D3D11_DEPTH_STENCIL_DESC dsDesc;
 	ZeroMemory(&dsDesc, sizeof(dsDesc));
@@ -287,31 +270,16 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	}
 
 	// Bind depth stencil state
-	myImmediateContext->OMSetDepthStencilState(pDSState, 1);
+	//myImmediateContext->OMSetDepthStencilState(pDSState, 1);
 
 
 
-	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-	ZeroMemory(&descDSV, sizeof(descDSV));
-	descDSV.Format = descDepth.Format;// DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	//descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
-	descDSV.Texture2D.MipSlice = 0;
 
-	// Create the depth stencil view
-	result = Device->CreateDepthStencilView(pDepthStencil, &descDSV, &myDepthStencilView);  // [out] Depth stencil view
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil View");
-	if (FAILED(result))
-	{
-		WCHAR buf[100];
-		wsprintf(buf, L"%x", result);
-		/*MyDebug(buf);
-		MyDebug(L"CreateDepthStencilView failed.");*/
-		return false;
-	}
+	// CREATE DEPTH STENCIL
+	myDepthStencilView = TextureAssetHandler::CreateDepthStencil(L"Render Depth", myRenderWidth, myRenderHeight);
 
 	//BIND RENDER TARGET VIEW
-	myImmediateContext->OMSetRenderTargets(1, &myRenderTargetView, myDepthStencilView); // depth stencil view is for shadow map
+	myImmediateContext->OMSetRenderTargets(1, &myRenderTargetView, myDepthStencilView->myDSV.Get()); // depth stencil view is for shadow map
 
 
 	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
@@ -358,36 +326,36 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	//Device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
 
 
-	D3D11_RASTERIZER_DESC rasterizerDesc = {};
-	rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
-	rasterizerDesc.CullMode = D3D11_CULL_NONE;  // or D3D11_CULL_NONE to disable backface culling
-	rasterizerDesc.FrontCounterClockwise = true; // Set to TRUE if your models use counterclockwise winding order for front faces
-	rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
+	//D3D11_RASTERIZER_DESC rasterizerDesc = {};
+	//rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
+	//rasterizerDesc.CullMode = D3D11_CULL_NONE;  // or D3D11_CULL_NONE to disable backface culling
+	//rasterizerDesc.FrontCounterClockwise = true; // Set to TRUE if your models use counterclockwise winding order for front faces
+	//rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
 
-	
-	result = Device->CreateRasterizerState(&rasterizerDesc, &myFrontCulling);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Rasterizer State");
-	if (FAILED(result))
-	{
-		return false;
-	}
+	//
+	//result = Device->CreateRasterizerState(&rasterizerDesc, &myFrontCulling);
+	//GE_ASSERT(SUCCEEDED(result), "Failed to create Rasterizer State");
+	//if (FAILED(result))
+	//{
+	//	return false;
+	//}
 
 	// Set the rasterizer state
 	//myImmediateContext->RSSetState(myFrontCulling);
 
 	
-	rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
-	rasterizerDesc.CullMode = D3D11_CULL_BACK;  // or D3D11_CULL_NONE to disable backface culling
-	rasterizerDesc.FrontCounterClockwise = FALSE; // Set to TRUE if your models use counterclockwise winding order for front faces
-	rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
+	//rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
+	//rasterizerDesc.CullMode = D3D11_CULL_BACK;  // or D3D11_CULL_NONE to disable backface culling
+	//rasterizerDesc.FrontCounterClockwise = FALSE; // Set to TRUE if your models use counterclockwise winding order for front faces
+	//rasterizerDesc.DepthClipEnable = TRUE; // Enable depth clipping
 
-	
-	result = Device->CreateRasterizerState(&rasterizerDesc, &myBackCulling);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Rasterizer State");
-	if (FAILED(result))
-	{
-		return false;
-	}
+	//
+	//result = Device->CreateRasterizerState(&rasterizerDesc, &myBackCulling);
+	//GE_ASSERT(SUCCEEDED(result), "Failed to create Rasterizer State");
+	//if (FAILED(result))
+	//{
+	//	return false;
+	//}
 	// Set the rasterizer state
 	//myImmediateContext->RSSetState(rasterizerState);
 
@@ -868,7 +836,7 @@ void DX11::Resize()
 	// Release the existing resources
 	myImmediateContext->OMSetRenderTargets(0, nullptr, nullptr);
 	SafeRelease(myRenderTargetView);
-	SafeRelease(myDepthStencilView);
+	//SafeRelease(myDepthStencilView);
 	SafeRelease(myBackBufferTex);
 
 
@@ -906,38 +874,40 @@ void DX11::Resize()
 		return;
 	}
 
+	myDepthStencilView = TextureAssetHandler::CreateDepthStencil(L"Render Depth", myRenderWidth, myRenderHeight);
+
 	// Create a depth-stencil buffer with the same dimensions
-	ID3D11Texture2D* pDepthStencil = NULL;
-	D3D11_TEXTURE2D_DESC depthStencilDesc = {};
-	depthStencilDesc.Width = myRenderWidth;
-	depthStencilDesc.Height = myRenderHeight;
-	depthStencilDesc.MipLevels = 1;
-	depthStencilDesc.ArraySize = 1;
-	depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
-	depthStencilDesc.SampleDesc.Count = 1;
-	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	//ID3D11Texture2D* pDepthStencil = NULL;
+	//D3D11_TEXTURE2D_DESC depthStencilDesc = {};
+	//depthStencilDesc.Width = myRenderWidth;
+	//depthStencilDesc.Height = myRenderHeight;
+	//depthStencilDesc.MipLevels = 1;
+	//depthStencilDesc.ArraySize = 1;
+	//depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	//depthStencilDesc.SampleDesc.Count = 1;
+	//depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	//depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
-	hr = Device->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
-	if (FAILED(hr))
-	{
-		// Handle the error
-		return;
-	}
+	//hr = Device->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
+	//if (FAILED(hr))
+	//{
+	//	// Handle the error
+	//	return;
+	//}
 
-	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-	ZeroMemory(&descDSV, sizeof(descDSV));
-	descDSV.Format = depthStencilDesc.Format;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	descDSV.Texture2D.MipSlice = 0;
+	//D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	//ZeroMemory(&descDSV, sizeof(descDSV));
+	//descDSV.Format = depthStencilDesc.Format;
+	//descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	//descDSV.Texture2D.MipSlice = 0;
 
-	hr = Device->CreateDepthStencilView(pDepthStencil, &descDSV, &myDepthStencilView);
-	if (FAILED(hr))
-	{
-		// Handle the error
-		return;
-	}
-	SafeRelease(pDepthStencil);
+	//hr = Device->CreateDepthStencilView(pDepthStencil, &descDSV, myDepthStencilView->myDSV.GetAddressOf());
+	//if (FAILED(hr))
+	//{
+	//	// Handle the error
+	//	return;
+	//}
+	//SafeRelease(pDepthStencil);
 
 
 	// Update the viewport with the new dimensions

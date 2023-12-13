@@ -89,9 +89,13 @@ public:
 	{
 		myLightData.Color = aColor;
 		myLightData.Intensity = anIntensity;
+
+		
+
+		
 	}
 
-	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer) = 0;
+	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) = 0;
 
 	FORCEINLINE void SetColor(Vector3f aColor)
 	{
@@ -114,7 +118,7 @@ public:
 	FORCEINLINE void SetDirection(Vector3f aDirection)
 	{
 		myLocalDirection = aDirection;
-		myLightData.Direction = CommonUtilities::Quat::FromEulers(ToRadians(aDirection)).Forward();
+		myLightData.Direction = aDirection;
 	}
 	FORCEINLINE Vector3f GetDirection()
 	{
@@ -163,14 +167,27 @@ public:
 		return myShadowMap->myDSV;
 	}
 
+	inline static ID3D11DepthStencilState* pShadowDepthStencilState = nullptr;
+
 	void ClearShadowMap()
 	{
+
+		if (!pShadowDepthStencilState)
+		{
+			D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+			dsDesc.DepthEnable = TRUE; // Enable depth testing
+			dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // Allow writing to the depth buffer
+			dsDesc.DepthFunc = D3D11_COMPARISON_LESS; // Depth test function
+
+			DX11::Get().GetDevice()->CreateDepthStencilState(&dsDesc, &pShadowDepthStencilState);
+		}
+
 		if (HasShadowMap())
 		{
 			if (myShadowMap->myDSV)
 			{
-				DX11::Get().Get().GetContext()->ClearDepthStencilView(myShadowMap->myDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
-				DX11::Get().Get().GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
+				//DX11::Get().GetContext()->ClearDepthStencilView(myShadowMap->myDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+				//DX11::Get().GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
 			}
 		}
 	}
@@ -181,7 +198,12 @@ public:
 		{
 			if(myShadowMap->myDSV)
 			{
-				DX11::Get().Get().GetContext()->OMSetRenderTargets(0, nullptr, myShadowMap->myDSV.Get());
+				DX11::Get().GetContext()->ClearDepthStencilView(myShadowMap->myDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+				DX11::Get().GetContext()->OMSetDepthStencilState(pShadowDepthStencilState, 0);
+
+
+				DX11::Get().GetContext()->RSSetViewports(1, &myShadowMap->myViewport);
+				DX11::Get().GetContext()->OMSetRenderTargets(0, nullptr, myShadowMap->myDSV.Get());
 			}
 		}
 	}

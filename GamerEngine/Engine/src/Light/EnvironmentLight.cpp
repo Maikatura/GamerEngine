@@ -2,7 +2,7 @@
 #include <Light/EnvironmentLight.h>
 
 
-void EnvironmentLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer)
+void EnvironmentLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex)
 {
 	if (myTexture)
 	{

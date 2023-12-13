@@ -2,9 +2,9 @@
 #include "../Data/ShaderStructs.hlsli"
 #include "../Data/Samplers.hlsli"
 
-DeferredPixelOutput main(FullscreenVertexToPixel input)
+PixelOutput main(FullscreenVertexToPixel input)
 {
-	DeferredPixelOutput output;
+    PixelOutput output;
 
 	float4 color = albedoTexture.Sample(defaultSampler, input.UV);
 	//float tau = 6.28318530718f;

@@ -13,7 +13,7 @@ class EnvironmentLight : public Light
 public:
 
 
-	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer) override;
+	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) override;
 
 	void SetData(TransformComponent* data) override;
 };

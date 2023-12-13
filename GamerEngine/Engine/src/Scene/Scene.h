@@ -63,7 +63,6 @@ public:
 	void SceneReady(bool isSceneReady);
 
 	void Clean();
-	std::vector<Light*> GetSomeLights();
 	std::vector<Light*>& GetLights();
 	void RemoveLight(Light* aLight);
 	void ResetLights();

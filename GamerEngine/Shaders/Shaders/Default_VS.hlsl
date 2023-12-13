@@ -33,6 +33,7 @@ VertexToPixel main(VertexInput input)
     float4 viewPosition = mul(FB_ToView, vertexWorldPosition);
 
     result.Position = mul(FB_ToProjection, viewPosition);
+    result.ViewPosition = viewPosition.xyz;
     result.WorldNormal = mul((float3x3) OB_ToWorld, input.Normal); // Assuming Normal is in object space
     result.WorldPosition = vertexWorldPosition.xyz;
 
@@ -46,8 +47,8 @@ VertexToPixel main(VertexInput input)
     float3x3 skinNormalRotation = (float3x3)skinningMatrix;
 
     result.Normal = mul(worldNormalRotation, mul(input.Normal, skinNormalRotation));
-	result.Tangent	=	mul(worldNormalRotation, mul(input.Tangent,	skinNormalRotation));
-	result.Binormal	=	mul(worldNormalRotation, mul(input.Binormal,	skinNormalRotation));
+	result.Tangent = mul(worldNormalRotation, mul(input.Tangent, skinNormalRotation));
+	result.Binormal	= mul(worldNormalRotation, mul(input.Binormal, skinNormalRotation));
 
 	result.VxColor = input.VxColor;
 	result.VxColor2 = input.VxColor2;

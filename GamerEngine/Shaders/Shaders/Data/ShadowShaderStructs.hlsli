@@ -3,6 +3,8 @@ struct ShadowGeometryToPixel
     float4 Position : SV_POSITION;
     float4 FragPos : POSITION;
     uint Slice : SV_RenderTargetArrayIndex;
+    float3 Normal : NORMAL;
+    float2 UV : TEXCOORD0;
 };
 
 struct ShadowPixelOut

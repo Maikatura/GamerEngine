@@ -26,6 +26,7 @@ public:
 	static void UnloadUnusedTextures();
 
 	static Ref<DepthStencil> CreateDepthStencil(const std::wstring& aName, size_t aWidth, size_t aHeight);
+	static Ref<DepthStencil> CreatePointLightMap(const std::wstring& aName, size_t aWidth, size_t aHeight);
 
 	static ID3D11PixelShader* GetPixelShader(const std::string& aPath);
 	static ID3D11VertexShader* GetVertexShader(const std::string& aPath);

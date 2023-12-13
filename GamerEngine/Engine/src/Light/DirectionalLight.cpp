@@ -8,6 +8,7 @@
 #include "Math/Quaternion.hpp"
 #include "Render/RendererBase.h"
 #include "Components/TransfromComponent.h"
+#include "ImGui/imgui.h"
 
 
 DirectionalLight::DirectionalLight()
@@ -49,20 +50,27 @@ void DirectionalLight::Update()
 
 
 
-	auto quatRot = CommonUtilities::Quaternionf::FromEulers(ToRadians(Vector3f{ myTransformComp->GetRotation().x, 0.0f,  myTransformComp->GetRotation().z }));
-	auto matrix = ComposeFromTRS(myTransformComp->GetPosition(), quatRot, { 1, 1, 1 });
+	
+	Vector3f rotation = myTransformComp->GetRotation();
+	CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z)));
+
+	// Set the direction using the rotation quaternion
+
+	SetDirection(rotationQuaternion.Forward());
+
+	myLightData.CastShadows = myCastShadows;
 
 
+	// Set the LightView using the inverse of the transformation matrix
 
-
-	myLightData.Direction = quatRot.Forward();
 	myLightData.Position = Renderer::GetCamera()->GetPosition() + (myLightData.Direction * -3000.f);
+	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, rotationQuaternion, { 1, 1, 1 }));
 
-	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(matrix);
+	
 	myLightData.ShadowMapIndex = 19;
 }
 
-void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer)
+void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex)
 {
 	if(myLightData.CastShadows)
 	{

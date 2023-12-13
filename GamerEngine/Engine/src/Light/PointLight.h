@@ -10,15 +10,13 @@ public:
 	virtual ~PointLight() override = default;
 
 
-	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer) override;
+	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) override;
 
 	void Update() override;
 
 	void SetRange(float aRange);
 
 	void SetData(TransformComponent* aTransform) override;
-
-	void CreatePointLightMap(Vector2f aResolution);
 
 	FORCEINLINE float GetRange() const
 	{

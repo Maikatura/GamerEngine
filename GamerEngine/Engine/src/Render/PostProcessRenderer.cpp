@@ -220,7 +220,7 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			SetBlendState(BlendState::Additive);
 
 			
-			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture, DX11::Get().GetDepthStencilView());
+			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture, nullptr);
 			break;
 		}
 

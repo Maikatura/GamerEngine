@@ -70,7 +70,8 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 		return;
 	}
 
-	
+	//aLight->ClearShadowMap();
+	aLight->SetShadowMapAsDepth();
 
 	HRESULT result = S_FALSE;
 	D3D11_MAPPED_SUBRESOURCE bufferData;
@@ -82,13 +83,10 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 	bool isCubeMap = lightData.LightType == 2;
 
 	myFrameBufferData.View = lightData.LightView[0];
-	myFrameBufferData.Projection = lightData.LightProjection;
 	myFrameBufferData.CamTranslation = lightData.Position;
+	myFrameBufferData.Projection = lightData.LightProjection;
 	myFrameBufferData.RenderMode = static_cast<unsigned int>(0);
 
-
-	
-	DX11::Get().GetContext()->RSSetViewports(1, &aLight->GetViewport());
 
 
 	DX11::Get().GetContext()->PSSetShader(nullptr, nullptr, 0);
@@ -103,7 +101,6 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 	if(isCubeMap)
 	{
-		DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 		myPointLightView.myPointLightViews[0] = lightData.LightView[0];
 		myPointLightView.myPointLightViews[1] = lightData.LightView[1];
 		myPointLightView.myPointLightViews[2] = lightData.LightView[2];
@@ -120,12 +117,13 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 		memcpy(bufferData.pData, &myPointLightView, sizeof(PointLightView));
 		DX11::Get().GetContext()->Unmap(myPointLightBuffer.Get(), 0);
 		DX11::Get().GetContext()->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
+		DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+
 	}
 
-	ModelAssetHandler::Get().ResetRenderedModels();
+	//ModelAssetHandler::Get().ResetRenderedModels();
 
-	aLight->ClearShadowMap();
-	aLight->SetShadowMapAsDepth();
+	
 
 	for(const auto& RenderBuffer : aModelList)
 	{
@@ -136,74 +134,57 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 		auto& model = RenderBuffer.myModel;
 		bool isInstanced = false; //model->HasRenderedInstance();
 
+
+		myObjectBufferData.IsInstanced = isInstanced;
+		myObjectBufferData.World = RenderBuffer.myTransform;
+		myObjectBufferData.WorldInv = Matrix4x4f::GetFastInverse(RenderBuffer.myTransform);
+		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
+
+
+		myObjectBufferData.myHasBones = false;
+		if (model->GetSkeleton()->GetRoot())
+		{
+			auto bones = model->GetBoneTransform();
+			myObjectBufferData.myHasBones = true;
+			memcpy_s(
+				&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
+				&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
+			);
+		}
+
+		result = DX11::Get().GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		if (FAILED(result))
+		{
+
+		}
+
+		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
+		DX11::Get().GetContext()->Unmap(myObjectBuffer.Get(), 0);
+
+		DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+
 		for(unsigned int m = 0; m < model->GetNumMeshes(); m++)
 		{
-			const ModelInstance::MeshData& meshData = model->GetMeshData(m);
+			ModelInstance::MeshData& meshData = model->GetMeshData(m);
 
-			myObjectBufferData.IsInstanced = isInstanced;
-			myObjectBufferData.World = RenderBuffer.myTransform;
-			ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-
-
-			myObjectBufferData.myHasBones = false;
-			if(model->GetSkeleton()->GetRoot())
-			{
-				auto bones = model->GetBoneTransform();
-				myObjectBufferData.myHasBones = true;
-				memcpy_s(
-					&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
-					&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
-				);
-			}
-
-			result = DX11::Get().GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-			if(FAILED(result))
-			{
-
-			}
-
-			memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
-			DX11::Get().GetContext()->Unmap(myObjectBuffer.Get(), 0);
 			
-			DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-			DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-
-			//if(!model->GetMaterial().empty())
-			//{
-				//model->GetMaterial()[0]->SetAsResource(myMaterialBuffer.Get());
-
-				//if(model->RenderWithDeferred())
-				//{
-				//	DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
-				//	DX11::Get().GetContext()->PSSetShader(myDeferredPS.Get(), nullptr, 0);
-				//}
-				//else
-				//{
-					DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
-					//DX11::Get().GetContext()->PSSetShader(meshData.myPixelShader.Get(), nullptr, 0);
-				//}
-				//DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
-			//}
-
 			DX11::Get().GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
+			DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
+			DX11::Get().GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+			DX11::Get().GetContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)meshData.myPrimitiveTopology);
+
+			meshData.MaterialData.SetAsResource(myMaterialBuffer.Get());
+			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+
 
 			if(isCubeMap)
 			{
 				DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-				DX11::Get().GetContext()->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
 				DX11::Get().GetContext()->GSSetShader(myShadowGeometryShader.Get(), nullptr, 0);
 			}
-			else
-			{
-				DX11::Get().GetContext()->GSSetShader(nullptr, nullptr, 0);
-			}
 
-
-		
 			
-
-			DX11::Get().GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-			DX11::Get().GetContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)meshData.myPrimitiveTopology);
 
 			/*if(isInstanced && !model->HasBeenRendered())
 			{

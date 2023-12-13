@@ -7,9 +7,9 @@
 #include "Data/ShadowFunctions.hlsli"
 #include "Data/LightBuffer.hlsli"
 
-DeferredPixelOutput main(FullscreenVertexToPixel input)
+PixelOutput main(FullscreenVertexToPixel input)
 {
-    DeferredPixelOutput result;
+    PixelOutput result;
 
     const float4 albedo = albedoTexture.Sample(defaultSampler, input.UV);
     if (albedo.a <= 0.05f)

@@ -2,9 +2,9 @@
 #include "../Data/ShaderStructs.hlsli"
 #include "../Data/Samplers.hlsli"
 
-DeferredPixelOutput main(FullscreenVertexToPixel input)
+PixelOutput main(FullscreenVertexToPixel input)
 {
-	DeferredPixelOutput output;
+    PixelOutput output;
 
 	float3 color1 = albedoTexture.Sample(defaultSampler, input.UV).rgb;
 	float3 color2 = normalTexture.Sample(defaultSampler, input.UV).rgb;

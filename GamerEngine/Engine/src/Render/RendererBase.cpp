@@ -224,12 +224,12 @@ bool RendererBase::Init()
 
 
 	{
-		D3D11_DEPTH_STENCIL_DESC depthStencilDesc{};
+		D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
 		depthStencilDesc.DepthEnable = TRUE;
 		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadWrite]);;
+		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadWrite]);
 
 		if(FAILED(result))
 		{
@@ -244,7 +244,7 @@ bool RendererBase::Init()
 		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 		depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadOnly]);;
+		HRESULT result = DX11::Get().GetDevice()->CreateDepthStencilState(&depthStencilDesc, &myDepthStencilStates[(int)DepthStencilState::ReadOnly]);
 
 		if(FAILED(result))
 		{

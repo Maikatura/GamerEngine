@@ -279,6 +279,18 @@ void GraphicsEngine::BeginFrame()
 	//DX11::Get().BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
 	//
 	ResetStates();
+
+	Vector4f clearColor = Renderer::GetClearColor();
+	clearColor.z = 1.0f;
+	clearColor.w = 1.0f;
+
+	auto renderTarget = DX11::Get().GetRenderTargetView();
+	DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView()->myDSV.Get());
+	float clearDepth = 1.0f;
+	UINT8 clearStencil = 0;
+
+	DX11::Get().GetContext()->ClearDepthStencilView(DX11::Get().GetDepthStencilView()->myDSV.Get(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
+	DX11::Get().GetContext()->ClearRenderTargetView(DX11::Get().GetRenderTargetView(), &clearColor.x);
 }
 
 void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
@@ -379,7 +391,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(anEye);
 
 
-	std::vector<Light*> someLightList = scene->GetSomeLights();
+	std::vector<Light*> someLightList = scene->GetLights();
 
 	const Ref<DirectionalLight>& directionalLight = scene->GetDirLight();
 	const Ref<EnvironmentLight>& environmentLight = scene->GetEnvLight();
@@ -397,58 +409,60 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	}
 
 
-	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-	RendererBase::SetBlendState(BlendState::None);
+	//RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
+	//RendererBase::SetBlendState(BlendState::None);
+	
 
-	if (GetRenderModeInt() != 9)
+	
 	{
+		PROFILE_CPU_SCOPE("Render Shadows");
+		myShadowRenderer->ClearResources();
+	
+		//myShadowRenderer->Render(environmentLight.get(), modelList);
+		//myShadowRenderer->Render(directionalLight.get(), modelList);
+	
+		for (auto& light : someLightList)
 		{
-			PROFILE_CPU_SCOPE("Render Shadows");
-			myShadowRenderer->ClearResources();
-	
-			myShadowRenderer->Render(environmentLight.get(), modelList);
-			myShadowRenderer->Render(directionalLight.get(), modelList);
-	
-			for (auto& light : someLightList)
-			{
-				myShadowRenderer->Render(light, modelList);
-			}
-	
+			myShadowRenderer->Render(light, modelList);
 		}
+	
 	}
+	
+
+	auto depth = DX11::Get().GetDepthStencilView()->mySRV;
+	DX11::Get().GetContext()->PSSetShaderResources(120, 1, &depth);
 
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetBlendState(BlendState::None);
 
-	
-
-	
-	{
-		PROFILE_CPU_SCOPE("Generate GBuffer");
-		myGBuffer->ClearResource(0);
-		myGBuffer->SetAsTarget();
-		myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
-		myGBuffer->ClearTarget();
-		myGBuffer->SetAsResource(0);
-	}
-
-	
-
-	{
-		PROFILE_CPU_SCOPE("Render With Deferred Renderer");
-		RendererBase::SetBlendState(BlendState::Alpha);
-		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
-		myDeferredRenderer->ClearTarget();
-	}
+	//{
+	//	PROFILE_CPU_SCOPE("Generate GBuffer");
+	//	myGBuffer->ClearResource(0);
+	//	myGBuffer->SetAsTarget();
+	//	myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
+	//	myGBuffer->ClearTarget();
+	//	myGBuffer->SetAsResource(0);
+	//}
+	//
+	//
+	//
+	//{
+	//	PROFILE_CPU_SCOPE("Render With Deferred Renderer");
+	//	RendererBase::SetBlendState(BlendState::Alpha);
+	//	myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
+	//	myDeferredRenderer->ClearTarget();
+	//}
 
 
 	
 
 	//myGBuffer->ClearTarget();
 
-	if (GetRenderModeInt() == 9) return;
-	
+
+
+
 	{
+		DX11::Get().ResetRenderTarget(myUseEditor, true);
 		PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
 		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 		RendererBase::SetBlendState(BlendState::None);
@@ -459,7 +473,6 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		PROFILE_CPU_SCOPE("Render SSAO");
 		(renderSSAO == true) ? myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection) : myPostProcessRenderer->ClearTargets();
 		DX11::Get().TurnZBufferOn();
-		myPostProcessRenderer->ClearTargets();
 	}
 
 	{
@@ -557,24 +570,14 @@ void GraphicsEngine::OnFrameRender()
 		if (myUseEditor)
 		{
 			//DX11::Get().TurnZBufferOff();
-			DX11::Get().GetScreenView()->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
-			DX11::Get().GetScreenView()->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView(), 0.5f, 0.5f, 0.5f, 1.0f);
+			DX11::Get().GetScreenView()->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView()->myDSV.Get());
+			DX11::Get().GetScreenView()->ClearRenderTarget(DX11::Get().GetContext(), nullptr, 0.5f, 0.5f, 0.5f, 1.0f);
 		}
 		else
 		{
 			//DX11::Get().TurnZBufferOff();
 			//DX11::Get().GetContext()->RSSetState(DX11::Get().myBackCulling);
-			Vector4f clearColor = Renderer::GetClearColor();
-			clearColor.z = 1.0f;
-			clearColor.w = 1.0f;
-
-			auto renderTarget = DX11::Get().GetRenderTargetView();
-			DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView());
-			float clearDepth = 1.0f;
-			UINT8 clearStencil = 0;
-
-			DX11::Get().GetContext()->ClearDepthStencilView(DX11::Get().GetDepthStencilView(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
-			DX11::Get().GetContext()->ClearRenderTargetView(DX11::Get().GetRenderTargetView(), &clearColor.x);
+			
 
 		}
 

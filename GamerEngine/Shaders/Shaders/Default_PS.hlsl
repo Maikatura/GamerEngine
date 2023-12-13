@@ -13,28 +13,6 @@
 #define SHADOW_MAP_TEXCOORD_SCALE 8192.0f
 #define SHADOW_MAP_TEXCOORD_BIAS 0.0001f
 
-// Inline function for shadow sampling
-inline bool SampleShadow(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightProjection, float3 aWorldPosition)
-{
-    float4 w2lView = mul(aLightView, float4(aWorldPosition, 1));
-    float4 v2lProj = mul(aLightProjection, w2lView);
-
-    float2 projectedTexCoord;
-    projectedTexCoord.x = v2lProj.x / v2lProj.w / 2.0f + 0.5f;
-    projectedTexCoord.y = -v2lProj.y / v2lProj.w / 2.0f + 0.5f;
-
-    if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y)
-    {
-        float vDepth = (v2lProj.z / v2lProj.w) - SHADOW_BIAS;
-        float lDepth = aShadowMap.Sample(pointClampSampler, projectedTexCoord).r;
-        if (lDepth < vDepth)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 PixelOutput main(VertexToPixel input)
 {
 	PixelOutput result = { 0,0,0,0 };
@@ -48,10 +26,16 @@ PixelOutput main(VertexToPixel input)
 		return result;
 	}
 
-    const float3 albedo = albedoSample.rgb * MB_Color;
-    const float3 normalMap = normalTexture.Sample(defaultSampler, input.UV).agb;
-    const float4 material = materialTexture.Sample(defaultSampler, input.UV).rgba;
+    float3 albedo = albedoSample.rgb * MB_Color;
 
+	[flatten]
+    if (FB_RenderMode >= 16 && FB_RenderMode <= 19)
+    {
+        albedo = 1.0f;
+    }
+
+	const float3 normalMap = normalTexture.Sample(defaultSampler, input.UV).agb;
+    float4 material = materialTexture.Sample(defaultSampler, input.UV);
    
     const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
 
@@ -103,28 +87,34 @@ PixelOutput main(VertexToPixel input)
 
     if (LB_DirectionalLight.CastShadows)
     {
-        const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
-        const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
-
-        float3 projectedTexCoord;
-        projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
-        projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
-
-        if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
+        LightData Light = LB_DirectionalLight;
+        if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
         {
-            const float shadowBias = 0.0005f;
-            const float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - shadowBias;
-            projectedTexCoord.z = viewDepth;
-            const float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
-
-            if (lightDepth < viewDepth)
-            {
-                float flaking = 0.8f;
-                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / 8192.0f);
-                directShadow *= saturate(shadow * (1 - flaking) + flaking);
-                directLighting *= shadow;
-            }
+            directLighting *= SHADOW_MAP_TEXCOORD_BIAS;
         }
+
+        //const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
+        //const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
+
+        //float3 projectedTexCoord;
+        //projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
+        //projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
+
+        //if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
+        //{
+        //    const float shadowBias = 0.0005f;
+        //    const float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - shadowBias;
+        //    projectedTexCoord.z = viewDepth;
+        //    const float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
+
+        //    if (lightDepth < viewDepth)
+        //    {
+        //        float flaking = 0.8f;
+        //        float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / SHADOW_MAP_TEXCOORD_SCALE);
+        //        directShadow *= saturate(shadow * (1 - flaking) + flaking);
+        //        directLighting *= shadow;
+        //    }
+        //}
     }
 
 	[unroll(20)]
@@ -141,12 +131,10 @@ PixelOutput main(VertexToPixel input)
 
 				if(Light.CastShadows)
 				{
-					
-                    if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, .0001f, Light.CastShadows))
+					if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, 0.00000001f, Light.CastShadows))
 					{
-						const float shadow = 0.005f;
-						pointTemp *= shadow;
-					}
+						pointTemp *= SHADOW_MAP_TEXCOORD_BIAS;
+                    }
 				}
 				pointLight += pointTemp;
 				break;
@@ -165,16 +153,15 @@ PixelOutput main(VertexToPixel input)
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.Range, Light.Position, -Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
 				if(Light.CastShadows)
 				{
 				
-					if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, .0001f, Light.CastShadows))
+                    if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
-						const float shadow = 0.001f;
-						spotTemp *= shadow;
+                        spotTemp *= SHADOW_MAP_TEXCOORD_BIAS;
 					}
 				}
 				spotLight += spotTemp;
@@ -296,7 +283,6 @@ PixelOutput main(VertexToPixel input)
 			result.Color.a = 1.0f;
 			break;
 	}
-
 
 
 	return result;

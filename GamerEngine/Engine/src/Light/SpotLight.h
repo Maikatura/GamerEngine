@@ -12,7 +12,7 @@ public:
 	virtual ~SpotLight() override = default;
 
 
-	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer) override;
+	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) override;
 
 	void SetRange(float aRange);
 	void SetInnerCone(float aRadius);

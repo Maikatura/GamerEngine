@@ -9,7 +9,6 @@
 
 class LightAssetHandler
 {
-	static inline std::vector<Ref<Light>> myLights{};
 	static inline Ref<DirectionalLight> myDirectionalLight;
 	static inline Ref<EnvironmentLight> myEnvironmentLight;
 

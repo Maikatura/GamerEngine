@@ -12,7 +12,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.00532430038
+      Delay: -0.00654490059
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
@@ -123,8 +123,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [599.193848, 7.27356768, 639.748901]
-      Rotation: [27.4599953, -131.269043, 0.000104271501]
+      Translation: [700.761963, 70.5958633, 419.186188]
+      Rotation: [32.0801735, -127.837296, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
       ChildrenSize: 0
       Children:
@@ -139,8 +139,8 @@ Entities:
       Tag: Directional Light
     TransformComponent:
       Translation: [344.794495, -192.594482, 461.394836]
-      Rotation: [-132.477005, -0, 139.735001]
-      Scale: [0.995311499, 0.999503672, 0.999617577]
+      Rotation: [139.138275, 38.5, 0]
+      Scale: [0.995143116, 0.999491096, 0.999615252]
       ChildrenSize: 0
       Children:
         {}
@@ -215,7 +215,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.00693499995
+      Delay: -0.00816299953
       Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:
@@ -223,3 +223,19 @@ Entities:
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
+  - Entity: 16591687773649836614
+    TagComponent:
+      Tag: Spot Light
+    TransformComponent:
+      Translation: [-1.34535182, -328.410828, 97.8043137]
+      Rotation: [131.000992, -0, 0]
+      Scale: [0.999831736, 1.0999974, 0.999964535]
+      ChildrenSize: 0
+      Children:
+        {}
+    SpotLightComponent:
+      Color: [1, 0, 1, 1]
+      Intensity: 200000
+      Range: 10000
+      InnerCone: 210
+      OuterCone: 230
