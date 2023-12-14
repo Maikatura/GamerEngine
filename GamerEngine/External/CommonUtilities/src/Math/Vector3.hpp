@@ -23,6 +23,7 @@ namespace CommonUtilities
 		~Vector3<T>() = default; //Destructor (compiler generated)
 
 		Vector3<T>& operator=(const Vector3<T>& aVector3) = default; 	//Assignment operator (compiler generated) 
+
 		void operator=(const T& aScaler);
 		Vector3<T> operator-() const;
 

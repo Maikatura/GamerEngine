@@ -22,6 +22,8 @@ namespace CommonUtilities
 		//Copy constructor (compiler generated)
 		Vector4<T>(const Vector4<T>& aVector) = default;
 
+		Vector4<T>(Vector3<T> aVec3, const T& aW = static_cast<T>(0));
+
 		//Assignment operator (compiler generated)
 		Vector4<T>& operator=(const Vector4<T>& aVector) = default;
 		void operator=(const Vector3<T>& aVector);
@@ -70,6 +72,15 @@ namespace CommonUtilities
 		y = aY;
 		z = aZ;
 		w = aW;
+	}
+
+	template <class T>
+	Vector4<T>::Vector4(Vector3<T> aVec3, const T& aW) : x(aVec3.x),
+		y(aVec3.y),
+		z(aVec3.z),
+		w(aW)
+	{
+
 	}
 
 	template <class T>

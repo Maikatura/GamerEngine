@@ -27,6 +27,7 @@ public:
 	Vector3f Color;
 	float Intensity = 1;
 	Vector3f Direction;
+	bool CastShadow = true;
 	bool Active = true;
 	bool SmoothShadows = false;
 

@@ -36,7 +36,7 @@ namespace CommonUtilities
 		Vector3<T> ToEularAngles();
 
 
-
+		
 
 		static Matrix4x4<T> CreateLookAt(const Vector3<T>& eye, const Vector3<T>& target, const Vector3<T>& up);
 		static Matrix4x4<T> CreateRotationAroundX(T aAngleInRadians);
@@ -57,7 +57,6 @@ namespace CommonUtilities
 
 
 		constexpr static Matrix4x4<T> AffineInverse(const Matrix4x4<T>& aAffineMatrix);
-		static Matrix4x4<T> AffliteMatrix(const Matrix4x4<T> aMatrix);
 
 		void DecomposeTransform(Vector3<T>& aTranslate, Vector3<T>& aRotation, Vector3<T>& aScale);
 
@@ -86,6 +85,7 @@ namespace CommonUtilities
 		std::array<T, MatrixSize> myMatrix;
 	};
 
+
 	template <typename T>
 	constexpr Vector3<T> Matrix4x4<T>::TransformPoint(const Vector3<T>& aPoint) const
 	{
@@ -106,20 +106,13 @@ namespace CommonUtilities
 	{
 		Matrix4x4<T> projection;
 
-
-		// Scaling elements
-		projection(1, 1) = static_cast<T>(2) / (aRight - aLeft);
-		projection(2, 2) = static_cast<T>(2) / (aTop - aBottom);
-		projection(3, 3) = -static_cast<T>(2) / (aFar - aNear); // Negative sign for the depth range
-
-		// Translation elements
-		projection(4, 1) = -((aRight + aLeft) / (aRight - aLeft));
-		projection(4, 2) = -((aTop + aBottom) / (aTop - aBottom));
-		projection(4, 3) = -((aFar + aNear) / (aFar - aNear)); // Negative sign
-
-		// Homogeneous coordinate element
+		projection(1, 1) = static_cast<T>(2.0) / (aRight - aLeft);
+		projection(2, 2) = static_cast<T>(2.0) / (aTop - aBottom);
+		projection(3, 3) = static_cast<T>(1.0) / (aFar - aNear);
+		projection(4, 1) = static_cast<T>(-((aRight + aLeft) / (aRight - aLeft)));
+		projection(4, 2) = static_cast<T>(-((aTop + aBottom) / (aTop - aBottom)));
+		projection(4, 3) = static_cast<T>(-(aNear / (aNear - aFar)));
 		projection(4, 4) = static_cast<T>(1);
-
 
 		return projection;
 	}
@@ -808,34 +801,16 @@ namespace CommonUtilities
 		inversedMatrix(3, 2) = det23 * oneOverDeterminant;
 		inversedMatrix(3, 3) = det33 * oneOverDeterminant;
 
-		Vector3<T> vec3 = inversedMatrix.TransformPoint({ -aAffineMatrix(4, 1), -aAffineMatrix(4, 2), -aAffineMatrix(4, 3), -aAffineMatrix(4, 4) });
-		inversedMatrix(3, 1) = vec3.x;
-		inversedMatrix(3, 2) = vec3.y;
-		inversedMatrix(3, 3) = vec3.z;
-		inversedMatrix(3, 4) = static_cast<T>(1.0);
-		return inversedMatrix;
-	}
 
-	template <class T>
-	Matrix4x4<T> Matrix4x4<T>::AffliteMatrix(const Matrix4x4<T> aMatrix)
-	{
-		Matrix4x4<T> inversedMatrix = aMatrix;
-		Matrix4x4<T> inversedRotation;
-		for(int row = 0; row < 4 - 1; row++)
-		{
-			for(int column = 0; column < 4 - 1; column++)
-			{
-				inversedMatrix(row + 1, column + 1) = aMatrix(column + 1, row + 1);
-				inversedRotation(row + 1, column + 1) = inversedMatrix(row + 1, column + 1);
-			}
-		}
 
-		Vector4<T> negativeTranslation(-inversedMatrix(4, 1), -inversedMatrix(4, 2), -inversedMatrix(4, 3), 1.0f);
-		Vector4<T> inversedTranslation = negativeTranslation * inversedRotation;
-		inversedMatrix(4, 1) = inversedTranslation.x;
-		inversedMatrix(4, 2) = inversedTranslation.y;
-		inversedMatrix(4, 3) = inversedTranslation.z;
+		 Vector4<T> test = Vector4<T>{ inversedMatrix.TransformPoint(-aAffineMatrix[3]), static_cast<T>(1.0) };
+		 inversedMatrix(12) = test.x;
+		 inversedMatrix(13) = test.y;
+		 inversedMatrix(14) = test.z;
+		 inversedMatrix(15) = test.w;
+
 
 		return inversedMatrix;
 	}
+
 }
