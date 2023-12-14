@@ -1,9 +1,16 @@
 #pragma once
 #include <Layers/Layer.h>
+
+#include "Components/Camera.h"
 #include "ImGuizmo/ImGuizmo.h"
 
 #include "Components/TransfromComponent.h"
 #include "Math/MathTypes.hpp"
+
+namespace ImGuizmo
+{
+	struct matrix_t;
+}
 
 class Entity;
 
@@ -24,6 +31,8 @@ public:
 private:
 
 	Vector2f MouseToViewport(Vector2f aWindowSize, float windowScale);
+
+	void EditTransform(Ref<Entity> aEntity);
 
 	void RenderEntityParts(Ref<Entity> aEntity);
 

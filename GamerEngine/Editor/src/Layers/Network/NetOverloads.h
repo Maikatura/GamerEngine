@@ -40,6 +40,7 @@ inline TurNet::TurMessage& operator<<(TurNet::TurMessage& msg, const Vector3f& d
 	return msg;
 }
 
+
 inline TurNet::TurMessage& operator>>(TurNet::TurMessage& msg, TransformComponent& data)
 {
 	Vector3f pos;

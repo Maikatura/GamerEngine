@@ -102,107 +102,7 @@ void EditorView::RenderSceneView(Ref<Entity> aEntity)
 
 void EditorView::RenderEntityParts(Ref<Entity> aEntity)
 {
-	if(!SceneManager::Get().GetScene()->GetRegistry().valid(aEntity->GetHandle()))
-	{
-		return;
-	}
-
-	if(!aEntity->HasComponent<TransformComponent>())
-	{
-		return;
-	}
-
-	Matrix4x4f projectionView = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
-	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
-	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(view);
-
-	DirectX::XMFLOAT4X4 localMat{};
-	DirectX::XMFLOAT4X4 viewMat{};
-	DirectX::XMFLOAT4X4 projMat{};
-
-	memcpy_s(&viewMat, sizeof(Matrix4x4f), &viewInverse, sizeof(Matrix4x4f));
-	memcpy_s(&projMat, sizeof(Matrix4x4f), &projectionView, sizeof(Matrix4x4f));
-
-	TransformComponent& transform = aEntity->GetComponent<TransformComponent>();
-	float translate[3] = { transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z };
-	float rotation[3] = { transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z };
-	float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
-
-	ImGuizmo::RecomposeMatrixFromComponents(translate, rotation, scale, *localMat.m);
-
-	if(!ImGui::IsMouseDown(ImGuiMouseButton_Right))
-	{
-		if(ImGui::IsKeyPressed(ImGuiKey_W))
-		{
-			myOperation = ImGuizmo::OPERATION::TRANSLATE;
-		}
-		if(ImGui::IsKeyPressed(ImGuiKey_E))
-		{
-			myOperation = ImGuizmo::OPERATION::ROTATE;
-		}
-		if(ImGui::IsKeyPressed(ImGuiKey_R))
-		{
-			myOperation = ImGuizmo::OPERATION::SCALE;
-		}
-	}
-
-	ImGuizmo::Enable(true);
-
-
-	ImGuizmo::Manipulate(*viewMat.m,
-		*projMat.m,
-		myOperation,
-		SettingKeybinds::GetEditMode(),
-		*localMat.m,
-		NULL,
-		NULL
-	);
-
-	if(ImGuizmo::IsOver() && ImGuizmo::IsUsing())
-	{
-		myIsEditingPosition = true;
-	}
-	else
-	{
-		myIsEditingPosition = false;
-	}
-
-
-
-	ImGuizmo::DecomposeMatrixToComponents(*localMat.m, translate, rotation, scale);
-
-	memcpy_s(&transform.GetPosition(), sizeof(Vector3f), &translate[0], sizeof(Vector3f));
-	memcpy_s(&transform.GetRotation(), sizeof(Vector3f), &rotation[0], sizeof(Vector3f));
-	memcpy_s(&transform.GetScale(), sizeof(Vector3f), &scale[0], sizeof(Vector3f));
-
-	if(myIsEditingPosition != myOldIsEditingPosition)
-	{
-		if (myIsFirstTimeEditing)
-		{
-			myStartTranslate = transform;
-			ConsoleHelper::Log(LogType::Info, "Transform Editing Started");
-		}
-		else
-		{
-			myEditedTranslate = transform;
-			auto moveCommand = new PositionCommand(aEntity, myStartTranslate, myEditedTranslate);
-			CommandManager::DoCommand(moveCommand);
-			ConsoleHelper::Log(LogType::Info, "Transform Editing Done");
-
-			TurNet::TurMessage outMsg;
-			ObjectMoveMessage moveMsg;
-			moveMsg.EntityID = aEntity->GetComponent<IDComponent>().ID;
-			moveMsg.Transform = transform;
-		
-			outMsg << moveMsg;
-
-			NetworkingLayer::GetClient().SendToServer(outMsg);
-		}
-
-		myIsFirstTimeEditing = !myIsFirstTimeEditing;
-	}
-
-	myOldIsEditingPosition = myIsEditingPosition;
+	EditTransform(aEntity);
 }
 
 void EditorView::RenderGameView()
@@ -243,6 +143,99 @@ Vector2f EditorView::MouseToViewport(Vector2f aWindowSize, float windowScale)
 	std::cout << "Error: Currently Broken, u cant select item in the viewport yet\n";
 
  	return { 0,0 };
+}
+
+void EditorView::EditTransform(Ref<Entity> aEntity)
+{
+
+	if (!SceneManager::Get().GetScene()->GetRegistry().valid(aEntity->GetHandle()))
+	{
+		return;
+	}
+
+	if (!aEntity->HasComponent<TransformComponent>())
+	{
+		return;
+	}
+
+	auto& transform = aEntity->GetComponent<TransformComponent>();
+	Matrix4x4f projectionView = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
+	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
+	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(view);
+
+	Matrix4x4f localMat{};
+	float translate[3] = { transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z };
+	float rotation[3] = { transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z };
+	float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
+
+	ImGuizmo::RecomposeMatrixFromComponents(translate, rotation, scale, localMat.Ptr());
+
+	if (!ImGui::IsMouseDown(ImGuiMouseButton_Right))
+	{
+		if (ImGui::IsKeyPressed(ImGuiKey_W))
+		{
+			myOperation = ImGuizmo::OPERATION::TRANSLATE;
+		}
+		if (ImGui::IsKeyPressed(ImGuiKey_E))
+		{
+			myOperation = ImGuizmo::OPERATION::ROTATE;
+		}
+		if (ImGui::IsKeyPressed(ImGuiKey_R))
+		{
+			myOperation = ImGuizmo::OPERATION::SCALE;
+		}
+	}
+
+	ImGuizmo::Enable(true);
+
+	if (!ImGui::IsMouseDown(ImGuiMouseButton_Right))
+	{
+		if (ImGuizmo::Manipulate(viewInverse.Ptr(),
+			projectionView.Ptr(),
+			myOperation,
+			SettingKeybinds::GetEditMode(),
+			localMat.Ptr(),
+			NULL,
+			NULL
+		))
+		{
+			ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
+
+			transform.SetPosition({ translate[0] , translate[1] ,translate[2] });
+			transform.SetRotation({ rotation[0] , rotation[1] ,rotation[2] });
+			transform.SetScale({ scale[0] , scale[1] ,scale[2] });
+		}
+	}
+
+
+	if (ImGuizmo::IsOver() && ImGuizmo::IsUsing())
+	{
+		myIsEditingPosition = true;
+	}
+	else
+	{
+		myIsEditingPosition = false;
+	}
+
+	if (myIsEditingPosition != myOldIsEditingPosition)
+	{
+		if (myIsFirstTimeEditing)
+		{
+			myStartTranslate = transform;
+			ConsoleHelper::Log(LogType::Info, "Transform Editing Started");
+		}
+		else
+		{
+			myEditedTranslate = transform;
+			auto moveCommand = new PositionCommand(aEntity, myStartTranslate, myEditedTranslate);
+			CommandManager::DoCommand(moveCommand);
+			ConsoleHelper::Log(LogType::Info, "Transform Editing Done");
+		}
+
+		myIsFirstTimeEditing = !myIsFirstTimeEditing;
+	}
+
+	myOldIsEditingPosition = myIsEditingPosition;
 }
 
 

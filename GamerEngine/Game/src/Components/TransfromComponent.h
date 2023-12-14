@@ -8,6 +8,8 @@ class TransformComponent : public Component
 	Vector3f Rotation = { 0.0f, 0.0f, 0.0f };
 	Vector3f Scale = { 1.0f, 1.0f, 1.0f };
 
+	Matrix4x4f Matrix;
+
 public:
 
 	Ref<Entity> myParent;
@@ -24,6 +26,7 @@ public:
 		: Translation(translation)
 	{}
 
+
 	Vector3f GetPosition() const
 	{
 		return Translation;
@@ -32,11 +35,6 @@ public:
 	Vector3f& GetPosition()
 	{
 		return Translation;
-	}
-
-	void SetPosition(Vector3f aPosition)
-	{
-		Translation = aPosition;
 	}
 
 	Vector3f GetRotation() const
@@ -49,11 +47,6 @@ public:
 		return Rotation;
 	}
 
-	void SetRotation(Vector3f aRotation)
-	{
-		Rotation = aRotation;
-	}
-
 	Vector3f GetScale() const
 	{
 		return Scale;
@@ -64,9 +57,29 @@ public:
 		return Scale;
 	}
 
+	void SetPosition(Vector3f aPosition)
+	{
+		Translation = aPosition;
+	}
+
+	void SetRotation(Vector3f aRotation)
+	{
+		Rotation = aRotation;
+	}
+
 	void SetScale(Vector3f aScale)
 	{
 		Scale = aScale;
+	}
+
+	Matrix4x4f GetMatrix() const
+	{
+		return Matrix;
+	}
+
+	Matrix4x4f& GetMatrix()
+	{
+		return Matrix;
 	}
 
 
@@ -113,10 +126,7 @@ public:
 		return Translation + forwardVector * forwardDistance;
 	}
 
-	Matrix4x4f GetMatrix()
-	{
-		return ComposeFromTRS(Translation, CommonUtilities::Quat::FromEulers(ToRadians(Rotation)), Scale);
-	}
+	
 
 	void SetChild(Ref<Entity> aChild)
 	{
@@ -164,5 +174,22 @@ public:
 
 		return (myParent->GetHandle() != entt::null);
 	}
+
+
+	void UpdateTransformFromMatrix()
+	{
+		Translation = Matrix.GetPosition();
+		Rotation = Matrix.GetRotation().Eulers();
+		Scale = Matrix.GetScale();
+	}
+
+	void BuildTransform()
+	{
+		CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(Rotation.x, Rotation.y, Rotation.z)));
+		Matrix = ComposeFromTRS(Translation, rotationQuaternion, Scale);
+	}
+
+private:
+
 };
 

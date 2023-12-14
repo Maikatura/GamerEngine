@@ -154,7 +154,7 @@ public:
 
 	void SetCastShadows(bool aCastShadows)
 	{
-		myCastShadows = aCastShadows;
+		myLightData.CastShadows = aCastShadows;
 	}
 
 	bool HasShadowMap()

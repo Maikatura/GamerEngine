@@ -50,7 +50,7 @@ void DirectionalLight::Update()
 
 
 
-	
+	myTransformComp->GetRotation().z = 0.0f;
 	Vector3f rotation = myTransformComp->GetRotation();
 	CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z)));
 
@@ -63,7 +63,8 @@ void DirectionalLight::Update()
 
 	// Set the LightView using the inverse of the transformation matrix
 
-	myLightData.Position = Renderer::GetCamera()->GetPosition() + (myLightData.Direction * -3000.f);
+	SetLightPosition(myTransform->GetPosition());
+	//myLightData.Position = Renderer::GetCamera()->GetPosition() + (myLightData.Direction * 3000.f);
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, rotationQuaternion, { 1, 1, 1 }));
 
 	

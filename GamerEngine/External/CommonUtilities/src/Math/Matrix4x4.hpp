@@ -28,11 +28,14 @@ namespace CommonUtilities
 		const T& operator()(const size_t anIndex) const;
 
 
+		T* Ptr();
+		const T* Ptr() const;
 
 		Vector3<T> operator[](const size_t anIndex);
 		const Vector3<T> operator[](const size_t anIndex) const;
 		Vector3<T> ToEularAngles();
-		CommonUtilities::Quaternion<T> GetQuat();
+
+		
 
 
 
@@ -68,9 +71,9 @@ namespace CommonUtilities
 		Vector3<T> GetForward();
 		Vector4<T> GetForwardW();
 
-		Vector3<T> GetPosition() const;
+		Vector3<T> GetPosition();
 		Vector4<T> GetPositionW() const;
-		Vector3<T> GetRotation() const;
+		Quaternion<T> GetRotation();
 		Vector3<T> GetRawRotation();
 		Vector3<T> GetScale() const;
 
@@ -126,7 +129,7 @@ namespace CommonUtilities
 	template <class T>
 	Vector3<T> Matrix4x4<T>::GetScale() const
 	{
-		return { myMatrix[0], myMatrix[5], myMatrix[11] };
+		return { myMatrix[0], myMatrix[5], myMatrix[10] };
 	}
 
 	template <typename T>
@@ -141,7 +144,7 @@ namespace CommonUtilities
 	template<typename T>
 	Matrix4x4<T>::Matrix4x4(const Matrix4x4<T>& aMatrix)
 	{
-		for(int i = 0; i < 16; i++)
+		for(size_t i = 0; i < 16; i++)
 		{
 			myMatrix[i] = aMatrix(i);
 		}
@@ -173,6 +176,18 @@ namespace CommonUtilities
 	const T& Matrix4x4<T>::operator()(const size_t anIndex) const
 	{
 		return myMatrix[anIndex];
+	}
+
+	template <class T>
+	T* Matrix4x4<T>::Ptr()
+	{
+		return &myMatrix[0];
+	}
+
+	template <class T>
+	const T* Matrix4x4<T>::Ptr() const
+	{
+		return &myMatrix[0];
 	}
 
 	template <class T>
@@ -214,49 +229,9 @@ namespace CommonUtilities
 	}
 
 	template <class T>
-	Quaternion<T> Matrix4x4<T>::GetQuat()
+	Quaternion<T> Matrix4x4<T>::GetRotation()
 	{
-		Quaternion<T> quaternion;
-
-		T trace = myMatrix[0] + myMatrix[5] + myMatrix[10];
-		T S;
-
-		if (trace > 0.0f) {
-			S = 0.5f / sqrt(trace + 1.0f);
-			quaternion.w = 0.25f / S;
-			quaternion.x = (myMatrix[9] - myMatrix[6]) * S;
-			quaternion.y = (myMatrix[2] - myMatrix[8]) * S;
-			quaternion.z = (myMatrix[4] - myMatrix[1]) * S;
-		}
-		else {
-			if (myMatrix[0] > myMatrix[5] && myMatrix[0] > myMatrix[10]) {
-				S = 2.0f * sqrt(1.0f + myMatrix[0] - myMatrix[5] - myMatrix[10]);
-				quaternion.w = (myMatrix[9] - myMatrix[6]) / S;
-				quaternion.x = 0.25f * S;
-				quaternion.y = (myMatrix[1] + myMatrix[4]) / S;
-				quaternion.z = (myMatrix[2] + myMatrix[8]) / S;
-			}
-			else if (myMatrix[5] > myMatrix[10]) {
-				S = 2.0f * sqrt(1.0f + myMatrix[5] - myMatrix[0] - myMatrix[10]);
-				quaternion.w = (myMatrix[2] - myMatrix[8]) / S;
-				quaternion.x = (myMatrix[1] + myMatrix[4]) / S;
-				quaternion.y = 0.25f * S;
-				quaternion.z = (myMatrix[6] + myMatrix[9]) / S;
-			}
-			else {
-				S = 2.0f * sqrt(1.0f + myMatrix[10] - myMatrix[0] - myMatrix[5]);
-				quaternion.w = (myMatrix[4] - myMatrix[1]) / S;
-				quaternion.x = (myMatrix[2] + myMatrix[8]) / S;
-				quaternion.y = (myMatrix[6] + myMatrix[9]) / S;
-				quaternion.z = 0.25f * S;
-			}
-		}
-
-		quaternion.x = quaternion.x;
-		quaternion.y = quaternion.y;
-		quaternion.z = quaternion.z;
-
-		return quaternion;
+		return Quaternion<T>::FromRotationMatrix4x4(*this);
 	}
 
 	template <class T>
@@ -761,7 +736,7 @@ namespace CommonUtilities
 
 
 	template <class T>
-	Vector3<T> Matrix4x4<T>::GetPosition() const
+	Vector3<T> Matrix4x4<T>::GetPosition()
 	{
 		return Vector3<T>{ myMatrix[12], myMatrix[13], myMatrix[14] };
 	}
@@ -772,7 +747,7 @@ namespace CommonUtilities
 		return Vector4<T>{ myMatrix[12], myMatrix[13], myMatrix[14], myMatrix[15] };
 	}
 
-	template <class T>
+	/*template <class T>
 	Vector3<T> Matrix4x4<T>::GetRotation() const
 	{
 		Vector3<T> aRotation = { 0,0,0 };
@@ -782,7 +757,7 @@ namespace CommonUtilities
 		aRotation.y = radToDeg * static_cast<T>(std::atan2(-myMatrix[2], myMatrix[0]));
 		aRotation.z = radToDeg * static_cast<T>(std::atan2(myMatrix[1], myMatrix[5]));
 		return aRotation;
-	}
+	}*/
 
 	template <class T>
 	Vector3<T> Matrix4x4<T>::GetRawRotation()

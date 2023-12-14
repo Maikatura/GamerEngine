@@ -260,6 +260,18 @@ void Scene::OnRender()
 	}
 
 	{
+		const auto& view = myRegistry.view<TransformComponent>();
+		if (view != nullptr)
+		{
+			for (const auto& entity : view)
+			{
+				auto& transform = view.get<TransformComponent>(entity);
+				transform.BuildTransform();
+			}
+		}
+	}
+
+	{
 		const auto& view = myRegistry.view<TransformComponent, CameraComponent>();
 		if(view != nullptr)
 		{

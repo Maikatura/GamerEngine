@@ -5,7 +5,7 @@
 #include "Scene/SceneManager.h"
 #include "Components/TransfromComponent.h"
 
-void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom)
+void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransform)
 {
 
 	if (!aModel.GetModel())
@@ -16,12 +16,9 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 	//Transform transform = Transform();
 
 
-	auto test = ComposeFromTRS(aTransfrom.GetPosition(), CommonUtilities::Quaternionf::FromEulers(ToRadians(aTransfrom.GetRotation())), aTransfrom.GetScale());
-	//auto test2 = ComposeFromTRS(aTransfrom.Translation, test.GetQuat(), aTransfrom.Scale);
-	//transform.ComposeTransform(aTransfrom.Translation, aTransfrom.Rotation, aTransfrom.Scale);
-	aModel.GetModel()->SetTransform(test);
 
-	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(), test, aModel.GetModel()});
+	aModel.GetModel()->SetTransform(aTransform.GetMatrix());
+	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel()});
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
