@@ -22,22 +22,22 @@ PixelOutput main(VertexToPixel input)
 	if(albedoSample.a == 0)
 	{
 		discard;
-		result.Color = float4(0.0f, 0.0f, 0.0f, 0.0f);
+        result.Color = 0;
 		return result;
 	}
 
+    result.Color = albedoSample;
     float3 albedo = albedoSample.rgb * MB_Color;
-
+	const float3 normalMap = normalTexture.Sample(defaultSampler, input.UV).agb;
+    float4 material = materialTexture.Sample(defaultSampler, input.UV);
+    const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
+	
 	[flatten]
     if (FB_RenderMode >= 16 && FB_RenderMode <= 19)
     {
         albedo = 1.0f;
     }
-
-	const float3 normalMap = normalTexture.Sample(defaultSampler, input.UV).agb;
-    float4 material = materialTexture.Sample(defaultSampler, input.UV);
-   
-    const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
+	
 
     const float ambientOcclusion = normalMap.b;
     const float metalness = material.r;
@@ -68,15 +68,16 @@ PixelOutput main(VertexToPixel input)
 
 	float3 pointLight = 0;
 	float3 spotLight = 0;
+    float3 directLighting = 0;
 
 	//float interleavedGradientNoise = InterleavedGradientNoise(input.UV * float2(512, 512));
 
-	float3 directLighting = EvaluateDirectionalLight(
+	float3 dirLightTemp = EvaluateDirectionalLight(
 		diffuseColor,
 		specularColor,
 		normal,
 		roughness,
-		LB_DirectionalLight.Color.rgb,
+		LB_DirectionalLight.Color,
 		LB_DirectionalLight.Intensity,
 		-LB_DirectionalLight.Direction,
 		toEye
@@ -90,27 +91,31 @@ PixelOutput main(VertexToPixel input)
         LightData Light = LB_DirectionalLight;
         if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
         {
-            directLighting *= SHADOW_MAP_TEXCOORD_BIAS;
+            dirLightTemp *= SHADOW_MAP_TEXCOORD_BIAS;
         }
+
+        directLighting += dirLightTemp;
 
         //const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
         //const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
-
+		//
         //float3 projectedTexCoord;
         //projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
         //projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
-
+		//
+		//
+		//
         //if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
         //{
         //    const float shadowBias = 0.0005f;
         //    const float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - shadowBias;
         //    projectedTexCoord.z = viewDepth;
         //    const float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
-
+		//
         //    if (lightDepth < viewDepth)
         //    {
         //        float flaking = 0.8f;
-        //        float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 1.0f / SHADOW_MAP_TEXCOORD_SCALE);
+        //        float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 0.005f / SHADOW_MAP_TEXCOORD_SCALE);
         //        directShadow *= saturate(shadow * (1 - flaking) + flaking);
         //        directLighting *= shadow;
         //    }

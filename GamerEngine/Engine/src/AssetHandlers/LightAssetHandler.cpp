@@ -75,7 +75,7 @@ Ref<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor, float anInt
 	result->myShadowMap = TextureAssetHandler::CreatePointLightMap(L"Point Light", static_cast<size_t>(resolution.x), static_cast<size_t>(resolution.y));
 
 	result->myLightData.NearPlane = nearPlane;
-	result->myLightData.FarPlane = aRange;
+	result->myLightData.FarPlane = farPlane;
 	result->myLightData.LightProjection = Matrix4x4f::CreateOrthographicProjection(-resolution.x, resolution.x, -resolution.y, resolution.y, nearPlane, farPlane);
 
 	return result;

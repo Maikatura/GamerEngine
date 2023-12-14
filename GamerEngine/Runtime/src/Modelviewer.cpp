@@ -81,7 +81,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     );
 
     SceneManager::Get().Initialize();
-    SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
+    SceneManager::Get().LoadScene("Assets\\Scenes\\TestDirLight.csf");
  
     while(bShouldRun)
     {

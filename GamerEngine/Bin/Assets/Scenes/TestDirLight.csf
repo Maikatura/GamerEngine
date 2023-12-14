@@ -1,0 +1,169 @@
+Scene: SceneTesting
+Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\TestDirLight.csf
+Entities:
+  - Entity: 17697230832881840710
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [-1000, 0, 0]
+      Rotation: [0.000104055282, 89.9779739, -179.999893]
+      Scale: [999.995361, 499.998962, 0.999983132]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00871630106
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 7440434943858370797
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, 0, -1000]
+      Rotation: [0, -0, 0]
+      Scale: [1000, 500, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00276760012
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 5923227853819891854
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [2.60566139, -423.337097, 346.803772]
+      Rotation: [0, -17.2238941, 0]
+      Scale: [31.1136951, 31.1136589, 31.1136951]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00237979996
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 1828353707181980437
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, -500, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1000, 2, 1000]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -107374176
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [856.388428, 61.5584946, 732.193176]
+      Rotation: [25.7113361, -122.788696, 0.000104271501]
+      Scale: [0.999961138, 0.999956548, 0.999987185]
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 25000
+      Primary: true
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [398.829315, -192.594482, 413.590668]
+      Rotation: [-34.5, 44.25, 0]
+      Scale: [1, 1, 0.99961251]
+      ChildrenSize: 0
+      Children:
+        {}
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [0, 0, 0]
+      Intensity: 1
+  - Entity: 4333660610956395841
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [-81.6692352, -314.294617, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00174780004
+      Path: Assets\Models\Buddah_Test_Bakes_low.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 17804868780395308565
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [208.703613, -447.781891, -264.415192]
+      Rotation: [0, -0, 0]
+      Scale: [2.92320013, 2.92320013, 2.92320013]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00164969999
+      Path: Assets\Models\Gremlin.fbx
+      TextureSize: 2
+      Texture:
+        0:
+          Albedo: assets\models\t_gremlin_c.dds
+          Normal: assets\models\t_gremlin_n.dds
+          Material: assets\models\t_gremlin_m.dds
+        1:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 6560000753651608803
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [517.780334, -374.075806, -5.75302601]
+      Rotation: [0.000571832294, 74.9530182, -0.000114527298]
+      Scale: [45.734478, 45.7344627, 45.734478]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.0104612997
+      Path: Assets\Models\pedal.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds

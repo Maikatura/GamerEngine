@@ -190,14 +190,7 @@ void EditorView::EditTransform(Ref<Entity> aEntity)
 
 	if (!ImGui::IsMouseDown(ImGuiMouseButton_Right))
 	{
-		if (ImGuizmo::Manipulate(viewInverse.Ptr(),
-			projectionView.Ptr(),
-			myOperation,
-			SettingKeybinds::GetEditMode(),
-			localMat.Ptr(),
-			NULL,
-			NULL
-		))
+		if (ImGuizmo::Manipulate(viewInverse.Ptr(),projectionView.Ptr(), myOperation, SettingKeybinds::GetEditMode(),localMat.Ptr(),NULL,NULL))
 		{
 			ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
 

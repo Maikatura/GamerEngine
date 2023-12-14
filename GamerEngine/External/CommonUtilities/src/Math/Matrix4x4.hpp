@@ -35,7 +35,6 @@ namespace CommonUtilities
 		const Vector3<T> operator[](const size_t anIndex) const;
 		Vector3<T> ToEularAngles();
 
-		
 
 
 
