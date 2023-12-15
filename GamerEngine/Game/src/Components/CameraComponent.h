@@ -9,7 +9,7 @@ class TransformComponent;
 class CameraComponent : public Component
 {
 
-	Vector3f myRotation;
+	CommonUtilities::Quat myRotation;
 	Vector2ui myRes;
 	Vector3f myPosition;
 

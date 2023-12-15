@@ -12,7 +12,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.00871630106
+      Delay: -0.00951720029
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
@@ -39,6 +39,48 @@ Entities:
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
+  - Entity: 2108338710293810877
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [-565.934998, -333.057129, 281.225342]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [0, 0.819607854, 1, 1]
+      Intensity: 100000
+      Range: 1000
+  - Entity: 11770492277339510883
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [430.818726, -242.848526, 207.688873]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [0, 1, 0, 1]
+      Intensity: 100000
+      Range: 1000
+  - Entity: 8532554453439454148
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [-12.9125671, -302.407776, 174.294037]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [1, 1, 0, 1]
+      Intensity: 50000
+      Range: 1000
   - Entity: 5923227853819891854
     TagComponent:
       Tag: Default Entity Name
@@ -81,8 +123,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [856.388428, 61.5584946, 732.193176]
-      Rotation: [25.7113361, -122.788696, 0.000104271501]
+      Translation: [913.992676, 14.5542355, 769.518066]
+      Rotation: [21.5864048, -130.87381, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
       ChildrenSize: 0
       Children:
@@ -96,9 +138,9 @@ Entities:
     TagComponent:
       Tag: Directional Light
     TransformComponent:
-      Translation: [398.829315, -192.594482, 413.590668]
-      Rotation: [-34.5, 44.25, 0]
-      Scale: [1, 1, 0.99961251]
+      Translation: [581.920532, 61.3632202, 447.524689]
+      Rotation: [36.25, -27.75, 0]
+      Scale: [0.995143712, 0.999491751, 0.999616146]
       ChildrenSize: 0
       Children:
         {}
@@ -106,6 +148,20 @@ Entities:
       Color: [1, 1, 1]
       Direction: [0, 0, 0]
       Intensity: 1
+  - Entity: 15553723860272066188
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [-665.988525, -174.381638, -525.506958]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [1, 0, 1, 1]
+      Intensity: 100000
+      Range: 1000
   - Entity: 4333660610956395841
     TagComponent:
       Tag: Default Entity Name
@@ -159,7 +215,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.0104612997
+      Delay: -0.0121189998
       Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:
@@ -167,3 +223,19 @@ Entities:
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
+  - Entity: 16591687773649836614
+    TagComponent:
+      Tag: Spot Light
+    TransformComponent:
+      Translation: [31.9802132, -390.553802, 181.997971]
+      Rotation: [152.466568, -27.9873199, 0]
+      Scale: [0.999782264, 1.09994328, 0.999852419]
+      ChildrenSize: 0
+      Children:
+        {}
+    SpotLightComponent:
+      Color: [1, 0.0470588244, 1, 1]
+      Intensity: 200000
+      Range: 7944
+      InnerCone: 5
+      OuterCone: 37

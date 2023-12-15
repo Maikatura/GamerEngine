@@ -633,7 +633,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 			dirLightComp.Intensity = dirLightComponent["Intensity"].as<float>();
 
 			dirLightComp.myDirectionalLight->Init(dirLightComp.Color, dirLightComp.Intensity);
-			dirLightComp.myDirectionalLight->SetDirection(dirLightComp.Direction);
+			dirLightComp.myDirectionalLight->SetLightDirection(CommonUtilities::Quat::FromEulers(dirLightComp.Direction));
 			dirLightComp.myDirectionalLight->SetPosition(0, 0, 0);
 		}
 		

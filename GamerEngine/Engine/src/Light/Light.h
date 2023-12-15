@@ -61,7 +61,7 @@ protected:
 	Ref<RenderTexture> myWorldNormalMap;
 	Ref<RenderTexture> myFluxMap;
 
-	Vector3f myLocalDirection;
+	CommonUtilities::Quat myLocalDirection;
 
 	TransformComponent* myTransformComp;
 
@@ -115,12 +115,12 @@ public:
 		return myLightData.Intensity;
 	}
 
-	FORCEINLINE void SetDirection(Vector3f aDirection)
+	FORCEINLINE void SetLightDirection(CommonUtilities::Quat aDirection)
 	{
 		myLocalDirection = aDirection;
-		myLightData.Direction = aDirection;
+		myLightData.Direction = aDirection.Forward();
 	}
-	FORCEINLINE Vector3f GetDirection()
+	FORCEINLINE CommonUtilities::Quat GetLightDirection()
 	{
 		return myLocalDirection;
 	}

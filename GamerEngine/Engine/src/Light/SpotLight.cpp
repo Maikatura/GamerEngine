@@ -39,7 +39,7 @@ void SpotLight::Update()
 	CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z)));
 
 	// Set the direction using the rotation quaternion
-	SetDirection(rotationQuaternion.Forward());
+	SetLightDirection(rotationQuaternion);
 	SetLightPosition(myTransform->GetPosition());
 
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, rotationQuaternion, { 1, 1, 1 }));

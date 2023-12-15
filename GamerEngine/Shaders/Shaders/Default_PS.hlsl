@@ -88,38 +88,38 @@ PixelOutput main(VertexToPixel input)
 
     if (LB_DirectionalLight.CastShadows)
     {
-        LightData Light = LB_DirectionalLight;
-        if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
-        {
-            dirLightTemp *= SHADOW_MAP_TEXCOORD_BIAS;
-        }
+        //LightData Light = LB_DirectionalLight;
+        //if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+        //{
+        //    dirLightTemp *= SHADOW_MAP_TEXCOORD_BIAS;
+        //}
 
         directLighting += dirLightTemp;
 
-        //const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
-        //const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
-		//
-        //float3 projectedTexCoord;
-        //projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
-        //projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
-		//
-		//
-		//
-        //if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
-        //{
-        //    const float shadowBias = 0.0005f;
-        //    const float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - shadowBias;
-        //    projectedTexCoord.z = viewDepth;
-        //    const float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
-		//
-        //    if (lightDepth < viewDepth)
-        //    {
-        //        float flaking = 0.8f;
-        //        float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 0.005f / SHADOW_MAP_TEXCOORD_SCALE);
-        //        directShadow *= saturate(shadow * (1 - flaking) + flaking);
-        //        directLighting *= shadow;
-        //    }
-        //}
+        const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
+        const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
+		
+        float3 projectedTexCoord;
+        projectedTexCoord.x = lightViewToLightProj.x / lightViewToLightProj.w / 2.0f + 0.5f;
+        projectedTexCoord.y = -lightViewToLightProj.y / lightViewToLightProj.w / 2.0f + 0.5f;
+		
+		
+		
+        if (saturate(projectedTexCoord.x) == projectedTexCoord.x && saturate(projectedTexCoord.y) == projectedTexCoord.y && worldToLightView.z >= 0)
+        {
+            const float shadowBias = 0.0005f;
+            const float viewDepth = (lightViewToLightProj.z / lightViewToLightProj.w) - shadowBias;
+            projectedTexCoord.z = viewDepth;
+            const float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
+		
+            if (lightDepth < viewDepth)
+            {
+                float flaking = 0.8f;
+                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord, 0.0005f / SHADOW_MAP_TEXCOORD_SCALE);
+                directShadow *= saturate(shadow * (1 - flaking) + flaking);
+                directLighting *= shadow;
+            }
+        }
     }
 
 	[unroll(20)]

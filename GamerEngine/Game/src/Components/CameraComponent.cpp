@@ -8,7 +8,7 @@
 
 CameraComponent::CameraComponent()
 {
-	Initialize(90, 0.1f, 25000.0f, { DX11::Get().GetScreenSize().x, DX11::Get().GetScreenSize().y });
+	Initialize(90, 0.1f, 250000.0f, { DX11::Get().GetScreenSize().x, DX11::Get().GetScreenSize().y });
 }
 
 void CameraComponent::Initialize(float aHorizontalFoV, float aNearPlane, float aFarPlane, Vector2ui aResolution)
@@ -93,7 +93,7 @@ Vector3f CameraComponent::GetPosition()
 
 Vector3f CameraComponent::GetForward()
 {
-	return myRotation.Normalized();
+	return myRotation.Forward();
 }
 
 Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(VREye anEye)
@@ -138,14 +138,14 @@ void CameraComponent::SetHasMoved(bool aMoveValue)
 void CameraComponent::BuildTransform(TransformComponent* aTransform)
 {
 	myPosition = aTransform->GetPosition();
-	myRotation = aTransform->GetRotation();
+	myRotation = CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation()));
 
 #if ENABLE_VR
 	CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
 	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
-	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
+	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), myRotation, aTransform->GetScale());
 #else
-	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation())), aTransform->GetScale());
+	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), myRotation, aTransform->GetScale());
 #endif
 	
 

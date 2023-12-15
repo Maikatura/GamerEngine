@@ -15,16 +15,16 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 	myDirectionalLight->Init(aColor, anIntensity);
 
 	myDirectionalLight->SetLightPosition({0, 0, 0});
-	myDirectionalLight->SetDirection(aRotation);
+	myDirectionalLight->SetLightDirection(CommonUtilities::Quat::FromEulers(aRotation));
 
 
 	myDirectionalLight->myLightData.LightType = 1;
 
+#define DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION 8192.0f
 
 	constexpr float nearPlane = 30.0f;
-	constexpr float farPlane = 250000.0f;
-	const Vector2f resolution = Vector2f(8192.0f, 8192.0f);
-	constexpr float DIVIDE = 0.4f;
+	constexpr float farPlane = 25000.0f;
+	constexpr float DIVIDE = 2.0f;
 
 	myDirectionalLight->myNearPlane = nearPlane;
 	myDirectionalLight->myFarPlane = farPlane;
@@ -41,8 +41,8 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 
 	//myDirectionalLight->myLightData.LightProjection = lightProjection;
 
-	myDirectionalLight->myLightData.LightProjection = Matrix4x4f::CreateOrthographicProjection(-resolution.x * DIVIDE, resolution.x * DIVIDE, -resolution.y * DIVIDE, resolution.y * DIVIDE, nearPlane, farPlane);
-	myDirectionalLight->myShadowMap = TextureAssetHandler::CreateDepthStencil(L"DirectionalLight", static_cast<size_t>(resolution.x), static_cast<size_t>(resolution.y));
+	myDirectionalLight->myLightData.LightProjection = Matrix4x4f::CreateOrthographicProjection(-DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION * DIVIDE, DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION * DIVIDE, -DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION * DIVIDE, DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION * DIVIDE, nearPlane, farPlane);
+	myDirectionalLight->myShadowMap = TextureAssetHandler::CreateDepthStencil(L"DirectionalLight", static_cast<size_t>(DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION), static_cast<size_t>(DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION));
 	myDirectionalLight->myLightData.CastShadows = true;
 
 

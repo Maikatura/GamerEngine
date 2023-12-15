@@ -803,11 +803,11 @@ namespace CommonUtilities
 
 
 
-		 Vector4<T> test = Vector4<T>{ inversedMatrix.TransformPoint(-aAffineMatrix[3]), static_cast<T>(1.0) };
-		 inversedMatrix(12) = test.x;
-		 inversedMatrix(13) = test.y;
-		 inversedMatrix(14) = test.z;
-		 inversedMatrix(15) = test.w;
+		 Vector4<T> point = Vector4<T>{ inversedMatrix.TransformPoint(-aAffineMatrix[3]), static_cast<T>(1.0) };
+		 inversedMatrix(12) = point.x;
+		 inversedMatrix(13) = point.y;
+		 inversedMatrix(14) = point.z;
+		 inversedMatrix(15) = point.w;
 
 
 		return inversedMatrix;
