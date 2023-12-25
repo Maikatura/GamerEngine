@@ -46,7 +46,6 @@
     <IntDir>..\Temp\Intermediate\Shaders\Debug\</IntDir>
     <TargetName>Shaders_Debug</TargetName>
     <TargetExt>.exe</TargetExt>
-    <MultiProcFXC>true</MultiProcFXC>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,7 +53,6 @@
     <IntDir>..\Temp\Intermediate\Shaders\Release\</IntDir>
     <TargetName>Shaders_Release</TargetName>
     <TargetExt>.exe</TargetExt>
-    <MultiProcFXC>true</MultiProcFXC>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
