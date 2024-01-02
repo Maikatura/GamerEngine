@@ -189,6 +189,13 @@ public:
 		Matrix = ComposeFromTRS(Translation, rotationQuaternion, Scale);
 	}
 
+	GraphicsTransform AsGraphicsTransform()
+	{
+		GraphicsTransform transform;
+		Matrix4x4f::DecomposeTransformTRS(GetMatrix(), transform.Translation, transform.Rotation, transform.Scale);
+		return transform;
+	}
+
 private:
 
 };

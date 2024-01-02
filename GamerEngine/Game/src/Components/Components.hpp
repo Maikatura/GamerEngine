@@ -24,12 +24,7 @@ struct NativeScriptComponent;
 class DirectionalLightComponent : public Component
 {
 public:
-	Vector3f Color;
-	float Intensity = 1;
-	Vector3f Direction;
-	bool CastShadow = true;
-	bool Active = true;
-	bool SmoothShadows = false;
+	
 
 	DirectionalLightComponent()
 	{
@@ -37,18 +32,34 @@ public:
 	}
 
 
+	void OnUpdate() override
+	{
+		myDirectionalLight->SetColor(Color);
+		myDirectionalLight->SetIntensity(Intensity);
+		myDirectionalLight->SetCastShadows(CastShadow);
+		myDirectionalLight->SetActive(Active);
 
+	}
+
+	Vector3f Color;
+	float Intensity = 1.0f;
+	Vector3f Direction;
+	bool CastShadow = true;
+	bool Active = true;
+	bool SmoothShadows = false;
 
 	Ref<DirectionalLight> myDirectionalLight;
 };
 
 struct PointLightComponent : public Component
 {
+public:
 	PointLightComponent()
 	{
 		Color = { 1, 1, 0 };
 		Intensity = 1.0f;
 		Range = 4.0f;
+		Active = true;
 
 		myPointLight = LightAssetHandler::CreatePointLight(Color, Intensity, Range, { 0,0,0 });
 	}
@@ -59,18 +70,21 @@ struct PointLightComponent : public Component
 		myPointLight->SetRange(Range);
 		myPointLight->SetIntensity(Intensity);
 		myPointLight->SetCastShadows(CastShadow);
+		myPointLight->SetActive(Active);
 	}
 
 	Vector3f Color;
 	float Intensity;
 	float Range;
 	bool CastShadow;
+	bool Active;
 
 	Ref<PointLight> myPointLight;
 };
 
 struct SpotLightComponent : public Component
 {
+public:
 	SpotLightComponent()
 	{
 		Color = { 1, 0, 1 };
@@ -90,6 +104,7 @@ struct SpotLightComponent : public Component
 		mySpotLight->SetInnerCone(InnerCone);
 		mySpotLight->SetOuterCone(OuterCone);
 		mySpotLight->SetCastShadows(CastShadow);
+		mySpotLight->SetActive(Active);
 	}
 
 	Vector3f Color;
@@ -98,6 +113,7 @@ struct SpotLightComponent : public Component
 	float InnerCone;
 	float OuterCone;
 	bool CastShadow;
+	bool Active;
 
 	Ref<SpotLight> mySpotLight;
 };

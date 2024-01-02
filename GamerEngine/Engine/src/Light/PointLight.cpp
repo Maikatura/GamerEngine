@@ -16,15 +16,21 @@ void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer
 
 void PointLight::Update()
 {
-	//SetDirection(myTransformComp->GetRotation());
+	SetLightDirection(CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 0, 0 })));
 	SetLightPosition(myTransformComp->GetPosition());
 	//SetIntensity(myLightData.Intensity);
 
 
 	myLightData.CastShadows = myCastShadows;
 
-	myLightData.LightView[0] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 90, 0 })), { 1, 1, 1 }));
-	myLightData.LightView[1] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, -90, 0 })), { 1, 1, 1 }));
+
+	
+
+	myCamera.GetTransform().Translation = myLightData.Position;
+	myCamera.GetTransform().Rotation = CommonUtilities::Quat::FromEulers({ 0, DEG_TO_RAD * 90, 0 });
+
+	myLightData.LightView[0] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, -90, 0 })), { 1, 1, 1 }));
+	myLightData.LightView[1] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 90, 0 })), { 1, 1, 1 }));
 	myLightData.LightView[2] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ -90, 0, 0 })), { 1, 1, 1 }));
 	myLightData.LightView[3] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{  90, 0, 0 })), { 1, 1, 1 }));
 	myLightData.LightView[4] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 0, 0 })), { 1, 1, 1 }));
@@ -33,14 +39,11 @@ void PointLight::Update()
 	PointLightNum++;
 }
 
-void PointLight::SetRange(float aRange)
-{
-	myLightData.Range = aRange;
-}
 
 void PointLight::SetData(TransformComponent* aTransform)
 {
 	myTransformComp = aTransform;
+	myCamera.SetPerspective(90, { 2048, 2048 }, myLightData.NearPlane, myLightData.FarPlane);
 }
 
 

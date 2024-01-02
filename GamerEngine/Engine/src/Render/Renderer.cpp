@@ -17,7 +17,6 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 
 
 
-	aModel.GetModel()->SetTransform(aTransform.GetMatrix());
 	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel()});
 }
 

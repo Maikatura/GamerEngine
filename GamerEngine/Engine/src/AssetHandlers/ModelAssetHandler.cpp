@@ -787,13 +787,19 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			}
 
+			CommonUtilities::AABB3D<float> bounds;
+			bounds.InitWithMinAndMax(
+				{ tgaModel.BoxBounds.Min[0],
+					tgaModel.BoxBounds.Min[1],
+					tgaModel.BoxBounds.Min[2]
+				},
+				{
+					tgaModel.BoxBounds.Max[0],
+					tgaModel.BoxBounds.Max[1],
+					tgaModel.BoxBounds.Max[2]
+				});
 
-			/*for (size_t i = 0; i < 3; i++)
-			{
-				mdlInstance->BoxBounds.BoxExtents.push_back(tgaModel.BoxSphereBounds.BoxExtents[i]);
-				mdlInstance->BoxBounds.Center.push_back(tgaModel.BoxSphereBounds.Center[i]);
-			}
-			mdl->BoxBounds.Radius = tgaModel.BoxSphereBounds.Radius;*/
+			mdlInstance->SetBoxBounds(bounds);
 
 			int size = static_cast<int>(mesh.Indices.size());
 			mdlIndices.resize(size);
@@ -979,13 +985,10 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 				mdlInstance->Init(modelData, aFilePath);
 			}
 
-
+			
 		}
 
 		mdlInstance->Name = ansiFileName;
-
-
-
 		myModelRegistry.push_back(mdlInstance);
 
 		return true;

@@ -84,7 +84,7 @@ public:
 		return (myLightData.ShadowMapIndex < aLight.GetLightBufferData().ShadowMapIndex);
 	}
 
-	virtual ~Light() override = default;
+	virtual ~Light() = default;
 	virtual void Init(Vector3f aColor, float anIntensity)
 	{
 		myLightData.Color = aColor;
@@ -108,12 +108,23 @@ public:
 
 	FORCEINLINE void SetIntensity(float aIntensity)
 	{
-		myLightData.Intensity = aIntensity;
+		myLightData.Intensity = aIntensity * 100000.0f;
 	}
 	FORCEINLINE float GetIntensity() const
 	{
 		return myLightData.Intensity;
 	}
+
+	FORCEINLINE void SetRange(float aRange)
+	{
+		myLightData.Range = aRange * 10000.0f;
+	}
+
+	FORCEINLINE float GetRange() const
+	{
+		return myLightData.Range;
+	}
+
 
 	FORCEINLINE void SetLightDirection(CommonUtilities::Quat aDirection)
 	{

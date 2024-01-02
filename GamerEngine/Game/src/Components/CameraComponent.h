@@ -1,4 +1,5 @@
 #pragma once
+#include "Camera.h"
 #include "Component.h"
 #include "Math/Frustum.h"
 #include "Math/MathTypes.hpp"
@@ -15,7 +16,7 @@ class CameraComponent : public Component
 
 public:
 
-	
+	GraphicsTransform myTransform;
 
 	Matrix4x4f ProjectionLeft;
 	Matrix4x4f ViewPosLeft;
@@ -45,6 +46,12 @@ public:
 	float GetHorizontalFoV();
 	float GetVerticalFoV();
 	Vector2ui GetResolution();
+
+
+	CommonUtilities::Frustum GetFrustum() const
+	{
+		return myFrustum;
+	}
 
 	void SetCameraSpeed(float aCameraSpeed);
 	float GetCameraSpeed();

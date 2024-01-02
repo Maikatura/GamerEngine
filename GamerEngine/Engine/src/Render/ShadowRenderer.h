@@ -14,14 +14,14 @@ using namespace Microsoft::WRL;
 
 class ShadowRenderer : public RendererBase
 {
-	struct PointLightView
+	struct ShadowCubeBuffer
 	{
 		Vector3f SC_LightTranslation;
 		float SC_FarPlane;
 		Matrix4x4f SC_Projection;
-		Matrix4x4f myPointLightViews[6];
+		Matrix4x4f SC_Views[6];
 
-	} myPointLightView;
+	} myShadowCubeData;
 
 	ComPtr<ID3D11Buffer> myPointLightBuffer;
 

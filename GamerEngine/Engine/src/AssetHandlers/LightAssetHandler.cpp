@@ -90,7 +90,6 @@ Ref<SpotLight> LightAssetHandler::CreateSpotLight(Vector3f aColor, float anInten
 	result->SetRange(aRange);
 	result->SetInnerCone(aInnerCone);
 	result->SetOuterCone(aOuterCone);
-	result->SetPosition(aPosition.x, aPosition.y, aPosition.z);
 	result->myLightData.LightType = 3;
 	result->myLightData.CastShadows = true;
 

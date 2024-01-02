@@ -3,7 +3,7 @@
 
 void ParticleSystem::Update()
 {
-	SceneObject::Update();
+	
 
 	for (ParticleEmitter& emitter : myEmitters)
 	{

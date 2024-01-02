@@ -14,7 +14,6 @@
 DirectionalLight::DirectionalLight()
 {
 	SetLightDirection(CommonUtilities::Quat::FromEulers({ 0,0,0 }));
-	myDirLight = nullptr;
 }
 
 DirectionalLight::DirectionalLight(const Vector3f aColor, const Vector3f aRotation, float aIntensity)
@@ -26,39 +25,18 @@ DirectionalLight::DirectionalLight(const Vector3f aColor, const Vector3f aRotati
 
 void DirectionalLight::Update()
 {
-	if (!myDirLight)
-	{
-		return;
-	}
-
-	SetActive(myDirLight->Active);
-	SetIntensity(myDirLight->Intensity);
-	SetColor(myDirLight->Color);
-	SetCastShadows(myDirLight->CastShadow);
-
-
 	myLightData.NearPlane = myNearPlane;
 	myLightData.FarPlane = myFarPlane;
 
-	myLightData.SmoothShadows = myDirLight->SmoothShadows;
-
-	/*if (!Renderer::GetCamera())
-	{
-		return;
-	}*/
-
-	
 	// Set the direction using the rotation quaternion
 	//myTransformComp->GetRotation().z = 0.0f;
+	//SetLightPosition(myTransformComp->GetPosition() - (myLightData.Direction * 3000.0f));
+
+
 	Vector3f rotation = myTransformComp->GetRotation();
 	CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z)));
 
-
-
-
-	//SetLightPosition(myTransformComp->GetPosition() - (myLightData.Direction * 3000.0f));
 	SetLightDirection(rotationQuaternion);
-
 	SetLightPosition(Renderer::GetCamera()->GetPosition() + myLightData.Direction * -1000.f);
 	myLightData.LightView[0] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, rotationQuaternion, { 1, 1, 1 }));
 	
@@ -78,14 +56,9 @@ void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLight
 	}
 }
 
-void DirectionalLight::SetData(TransformComponent* aTransform, DirectionalLightComponent* dirLight)
+void DirectionalLight::SetData(TransformComponent* aTransform)
 {
 	myTransformComp = aTransform;
-	myDirLight = dirLight;
-
-	
-
-	//myTransform->Translation = { 10000.0f, 10000.0f , 10000.0f };
 }
 
 

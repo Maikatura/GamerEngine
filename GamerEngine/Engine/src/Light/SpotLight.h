@@ -14,7 +14,6 @@ public:
 
 	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) override;
 
-	void SetRange(float aRange);
 	void SetInnerCone(float aRadius);
 	void SetOuterCone(float aRadius);
 
@@ -22,11 +21,6 @@ public:
 	void Update() override;
 
 	void SetData(TransformComponent* data) override;
-
-	FORCEINLINE float GetRange() const
-	{
-		return myLightData.Range;
-	}
 
 	FORCEINLINE float GetInnerCone() const
 	{

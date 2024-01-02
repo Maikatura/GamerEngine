@@ -54,6 +54,8 @@ void CameraComponent::Resize(Vector2ui aResolution)
 	Projection(3, 4) = 1.0f / Q;
 	Projection(4, 3) = -Q * myNearPlane;
 	Projection(4, 4) = 1.0f;
+
+
 }
 
 float CameraComponent::GetResScale()
@@ -140,6 +142,9 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	myPosition = aTransform->GetPosition();
 	myRotation = CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation()));
 
+	myTransform = aTransform->AsGraphicsTransform();
+	
+
 #if ENABLE_VR
 	CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
 	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
@@ -148,6 +153,9 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), myRotation, aTransform->GetScale());
 #endif
 	
+
+	myFrustum = CommonUtilities::CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetPosition(), myRotation, {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
+
 
 	//ViewProjection = Matrix4x4f(1.0f);
 

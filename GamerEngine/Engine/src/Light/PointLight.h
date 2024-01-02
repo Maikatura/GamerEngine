@@ -1,5 +1,6 @@
 #pragma once
 #include "Light.h"
+#include "Components/Camera.h"
 
 
 class PointLight : public Light
@@ -14,12 +15,7 @@ public:
 
 	void Update() override;
 
-	void SetRange(float aRange);
-
 	void SetData(TransformComponent* aTransform) override;
 
-	FORCEINLINE float GetRange() const
-	{
-		return myLightData.Range;
-	}
+	Camera myCamera;
 };

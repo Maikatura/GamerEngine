@@ -3,16 +3,16 @@ Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\
 Entities:
   - Entity: 17697230832881840710
     TagComponent:
-      Tag: Default Entity Name
+      Tag: Wall
     TransformComponent:
       Translation: [-1000, 0, 0]
-      Rotation: [0.000104055282, 89.9779739, -179.999893]
-      Scale: [999.995361, 499.998962, 0.999983132]
+      Rotation: [0.000104055282, 89.9779739, 0]
+      Scale: [1000, 499.998962, 0.999983132]
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Delay: -0.0103249
+      Delay: -0.0121713001
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
@@ -22,7 +22,7 @@ Entities:
           Material: resources\textures\t_default_m.dds
   - Entity: 7440434943858370797
     TagComponent:
-      Tag: Default Entity Name
+      Tag: Wall
     TransformComponent:
       Translation: [0, 0, -1000]
       Rotation: [0, -0, 0]
@@ -43,16 +43,16 @@ Entities:
     TagComponent:
       Tag: Point Light
     TransformComponent:
-      Translation: [-565.934998, -333.057129, 281.225342]
+      Translation: [355.787933, -333.057129, 381.575256]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
       ChildrenSize: 0
       Children:
         {}
     PointLightComponent:
-      Color: [0, 0.819607854, 1, 1]
-      Intensity: 100000
-      Range: 1000
+      Color: [0, 0.819607854, 1]
+      Intensity: 1
+      Range: 0.100000001
   - Entity: 11770492277339510883
     TagComponent:
       Tag: Point Light
@@ -64,9 +64,9 @@ Entities:
       Children:
         {}
     PointLightComponent:
-      Color: [0, 1, 0, 1]
-      Intensity: 100000
-      Range: 1000
+      Color: [0, 1, 0]
+      Intensity: 1
+      Range: 0.100000001
   - Entity: 8532554453439454148
     TagComponent:
       Tag: Point Light
@@ -78,14 +78,14 @@ Entities:
       Children:
         {}
     PointLightComponent:
-      Color: [1, 1, 0, 1]
-      Intensity: 50000
-      Range: 1000
+      Color: [1, 1, 0]
+      Intensity: 1
+      Range: 0.100000001
   - Entity: 5923227853819891854
     TagComponent:
-      Tag: Default Entity Name
+      Tag: Cube
     TransformComponent:
-      Translation: [2.60566139, -423.337097, 346.803772]
+      Translation: [-886.975281, -331.673431, 166.128571]
       Rotation: [0, -17.2238941, 0]
       Scale: [31.1136951, 31.1136589, 31.1136951]
       ChildrenSize: 0
@@ -123,8 +123,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [1001.23914, 75.6487122, 581.658264]
-      Rotation: [31.3215923, -123.910599, 0.000104271501]
+      Translation: [880.662415, 212.615189, 588.863647]
+      Rotation: [15.6466303, -109.324478, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
       ChildrenSize: 0
       Children:
@@ -147,21 +147,21 @@ Entities:
     DirectionalLightComponent:
       Color: [1, 1, 1]
       Direction: [0, 0, 0]
-      Intensity: 1
+      Intensity: 0
   - Entity: 15553723860272066188
     TagComponent:
       Tag: Point Light
     TransformComponent:
-      Translation: [-665.988525, -174.381638, -525.506958]
+      Translation: [-793.53949, -192.672516, 191.7379]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
       ChildrenSize: 0
       Children:
         {}
     PointLightComponent:
-      Color: [1, 0, 1, 1]
-      Intensity: 100000
-      Range: 1000
+      Color: [1, 0, 1]
+      Intensity: 1
+      Range: 0.0500000007
   - Entity: 4333660610956395841
     TagComponent:
       Tag: Default Entity Name
@@ -215,7 +215,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.0126320003
+      Delay: -0.0161289014
       Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:
@@ -234,8 +234,8 @@ Entities:
       Children:
         {}
     SpotLightComponent:
-      Color: [1, 0.0470588244, 1, 1]
-      Intensity: 200000
-      Range: 7944
+      Color: [1, 0.0470588244, 1]
+      Intensity: 2
+      Range: 0.100000001
       InnerCone: 5
       OuterCone: 37

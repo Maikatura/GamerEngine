@@ -40,7 +40,7 @@ bool ShadowRenderer::Initialize()
 		return false;
 	}
 
-	bufferDescription.ByteWidth = sizeof(PointLightView);
+	bufferDescription.ByteWidth = sizeof(ShadowCubeBuffer);
 	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myPointLightBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
@@ -82,11 +82,13 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 	const Light::LightBufferData lightData = aLight->GetLightBufferData();
 	bool isCubeMap = lightData.LightType == 2;
 
+	ZeroMemory(&myFrameBufferData, sizeof(FrameBufferData));
+	ZeroMemory(&myObjectBufferData, sizeof(ObjectBufferData));
+
 	myFrameBufferData.View = lightData.LightView[0];
 	myFrameBufferData.CamTranslation = lightData.Position;
 	myFrameBufferData.Projection = lightData.LightProjection;
 	myFrameBufferData.RenderMode = static_cast<unsigned int>(0);
-
 
 
 	DX11::Get().GetContext()->PSSetShader(nullptr, nullptr, 0);
@@ -101,20 +103,21 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 	if(isCubeMap)
 	{
-		myPointLightView.myPointLightViews[0] = lightData.LightView[0];
-		myPointLightView.myPointLightViews[1] = lightData.LightView[1];
-		myPointLightView.myPointLightViews[2] = lightData.LightView[2];
-		myPointLightView.myPointLightViews[3] = lightData.LightView[3];
-		myPointLightView.myPointLightViews[4] = lightData.LightView[4];
-		myPointLightView.myPointLightViews[5] = lightData.LightView[5];
+		myShadowCubeData.SC_Views[0] = lightData.LightView[0];
+		myShadowCubeData.SC_Views[1] = lightData.LightView[1];
+		myShadowCubeData.SC_Views[2] = lightData.LightView[2];
+		myShadowCubeData.SC_Views[3] = lightData.LightView[3];
+		myShadowCubeData.SC_Views[4] = lightData.LightView[4];
+		myShadowCubeData.SC_Views[5] = lightData.LightView[5];
 
-		myPointLightView.SC_LightTranslation = lightData.Position;
-		myPointLightView.SC_Projection = lightData.LightProjection;
+		myShadowCubeData.SC_LightTranslation = lightData.Position;
+		myShadowCubeData.SC_Projection = lightData.LightProjection;
+		myShadowCubeData.SC_FarPlane = lightData.FarPlane;
 
 
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 		DX11::Get().GetContext()->Map(myPointLightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-		memcpy(bufferData.pData, &myPointLightView, sizeof(PointLightView));
+		memcpy(bufferData.pData, &myShadowCubeData, sizeof(ShadowCubeBuffer));
 		DX11::Get().GetContext()->Unmap(myPointLightBuffer.Get(), 0);
 		DX11::Get().GetContext()->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
 		DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
@@ -125,19 +128,22 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 	
 
-	for(const auto& RenderBuffer : aModelList)
+	for(const RenderBuffer& modelBuffer : aModelList)
 	{
-		if(!RenderBuffer.myModel)
+		Ref<ModelInstance> model = modelBuffer.myModel;
+
+		if (model == nullptr)
 		{
-			continue;
+			return;
 		}
-		auto& model = RenderBuffer.myModel;
+
+
 		bool isInstanced = false; //model->HasRenderedInstance();
 
 
 		myObjectBufferData.IsInstanced = isInstanced;
-		myObjectBufferData.World = RenderBuffer.myTransform;
-		myObjectBufferData.WorldInv = Matrix4x4f::GetFastInverse(RenderBuffer.myTransform);
+		myObjectBufferData.World = modelBuffer.myTransform;
+		myObjectBufferData.WorldInv = Matrix4x4f::GetFastInverse(modelBuffer.myTransform);
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
 
@@ -180,7 +186,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 			if(isCubeMap)
 			{
-				DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+				DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myObjectBuffer.GetAddressOf());
 				DX11::Get().GetContext()->GSSetShader(myShadowGeometryShader.Get(), nullptr, 0);
 			}
 

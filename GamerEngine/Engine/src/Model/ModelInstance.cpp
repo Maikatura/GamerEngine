@@ -115,7 +115,6 @@ void ModelInstance::Update()
 
 	
 
-	SceneObject::Update();
 	auto anAnimState = GetAnimationState();
 
 	if(GetSkeleton()->GetRoot() && anAnimState->myCurrentAnimation != nullptr)

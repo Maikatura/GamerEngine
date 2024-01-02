@@ -447,10 +447,11 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 	DrawComponent<SpotLightComponent>("Spot Light", aEntity, [](auto& component, auto aEntity)
 	{
-		
+
+		ImGui::Checkbox("Active", &component.Active);
 		ImGui::ColorEdit3("Color", &component.Color.x);
-		ImGui::DragFloat("Intensity", &component.Intensity);
-		ImGui::DragFloat("Range", &component.Range);
+		ImGui::DragFloat("Intensity", &component.Intensity, 0.1f);
+		ImGui::DragFloat("Range", &component.Range, 0.1f);
 		ImGui::DragFloat("Inner Cone", &component.InnerCone);
 		ImGui::DragFloat("Outer Cone", &component.OuterCone);
 
@@ -461,11 +462,10 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 	DrawComponent<PointLightComponent>("Point Light", aEntity, [](auto& component, auto aEntity)
 	{
-			
-
+			ImGui::Checkbox("Active", &component.Active);
 			ImGui::ColorEdit3("Color", &component.Color.x);
-			ImGui::DragFloat("Intensity", &component.Intensity);
-			ImGui::DragFloat("Range", &component.Range);
+			ImGui::DragFloat("Intensity", &component.Intensity, 0.1f);
+			ImGui::DragFloat("Range", &component.Range, 0.1f);
 			ImGui::Checkbox("Cast Shadows", &component.CastShadow);
 
 			int tempIndex = component.myPointLight->GetLightBufferData().ShadowMapIndex;

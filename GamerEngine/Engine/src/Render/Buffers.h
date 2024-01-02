@@ -40,8 +40,8 @@ struct FrameBufferData
 	Matrix4x4f Projection;
 	Vector3f CamTranslation;
 	unsigned int RenderMode;
-	float NearPlane;
-	float FarPlane;
+	float NearPlane = 0.0f;
+	float FarPlane = 0.0f;
 	float DeltaTime;
 	float TotalTime;
 	Vector2ui Resolution;

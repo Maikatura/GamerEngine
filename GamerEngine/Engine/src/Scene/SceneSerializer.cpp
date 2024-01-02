@@ -333,12 +333,12 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::Key << "SpotLightComponent";
 		out << YAML::BeginMap; // SpotLightComponent
 
-		auto& tc = entity.GetComponent<SpotLightComponent>().mySpotLight;
-		out << YAML::Key << "Color" << YAML::Value << tc->GetColor();
-		out << YAML::Key << "Intensity" << YAML::Value << tc->GetIntensity();
-		out << YAML::Key << "Range" << YAML::Value << tc->GetRange();
-		out << YAML::Key << "InnerCone" << YAML::Value << tc->GetInnerCone();
-		out << YAML::Key << "OuterCone" << YAML::Value << tc->GetOuterCone();
+		auto& tc = entity.GetComponent<SpotLightComponent>();
+		out << YAML::Key << "Color" << YAML::Value << tc.Color;
+		out << YAML::Key << "Intensity" << YAML::Value << tc.Intensity;
+		out << YAML::Key << "Range" << YAML::Value << tc.Range;
+		out << YAML::Key << "InnerCone" << YAML::Value << tc.InnerCone;
+		out << YAML::Key << "OuterCone" << YAML::Value << tc.OuterCone;
 
 		out << YAML::EndMap; // SpotLightComponent
 	}
@@ -351,7 +351,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 		out << YAML::BeginMap; // PointLightComponent
 
 		auto& tc = entity.GetComponent<PointLightComponent>();
-		out << YAML::Key << "Color" << YAML::Value << tc.myPointLight->GetColor();
+		out << YAML::Key << "Color" << YAML::Value << tc.Color;
 		out << YAML::Key << "Intensity" << YAML::Value << tc.Intensity;
 		out << YAML::Key << "Range" << YAML::Value << tc.Range;
 
@@ -634,7 +634,6 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 
 			dirLightComp.myDirectionalLight->Init(dirLightComp.Color, dirLightComp.Intensity);
 			dirLightComp.myDirectionalLight->SetLightDirection(CommonUtilities::Quat::FromEulers(dirLightComp.Direction));
-			dirLightComp.myDirectionalLight->SetPosition(0, 0, 0);
 		}
 		
 	}
@@ -647,13 +646,12 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 			auto& spotLightComp = deserializedEntity.AddComponent<SpotLightComponent>();
 
 
-			Vector4f color = spotLightComponent["Color"].as<Vector4f>();
+			spotLightComp.Color = spotLightComponent["Color"].as<Vector3f>();
 			float intensity = spotLightComponent["Intensity"].as<float>();
 			float range = spotLightComponent["Range"].as<float>();
 			float innerCone = spotLightComponent["InnerCone"].as<float>();
 			float outerCone = spotLightComponent["OuterCone"].as<float>();
 
-			spotLightComp.Color = Vector3f{ color.x,  color.y,  color.z };
 			spotLightComp.Intensity = intensity;
 			spotLightComp.Range = range;
 			spotLightComp.InnerCone = innerCone;
@@ -668,13 +666,10 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 		{
 			auto& pointLightComp = deserializedEntity.AddComponent<PointLightComponent>();
 
-			Vector4f color = (pointLightComponent["Color"]) ? pointLightComponent["Color"].as<Vector4f>() : Vector4f();
-			float intensity = (pointLightComponent["Intensity"]) ? pointLightComponent["Intensity"].as<float>() : 1.0f;
-			float range = (pointLightComponent["Range"]) ? pointLightComponent["Range"].as<float>() : 1.0f;
 
-			pointLightComp.Color = Vector3f{ color.x,  color.y,  color.z };
-			pointLightComp.Intensity = intensity;
-			pointLightComp.Range = range;
+			pointLightComp.Color = (pointLightComponent["Color"]) ? pointLightComponent["Color"].as<Vector3f>() : Vector3f();
+			pointLightComp.Intensity = (pointLightComponent["Intensity"]) ? pointLightComponent["Intensity"].as<float>() : 1.0f;
+			pointLightComp.Range = (pointLightComponent["Range"]) ? pointLightComponent["Range"].as<float>() : 1.0f;;
 		}
 	}
 

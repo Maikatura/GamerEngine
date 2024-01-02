@@ -271,6 +271,9 @@ void Scene::OnRender()
 		}
 	}
 
+
+	CommonUtilities::Frustum cameraFrustum;
+
 	{
 		const auto& view = myRegistry.view<TransformComponent, CameraComponent>();
 		if(view != nullptr)
@@ -283,6 +286,7 @@ void Scene::OnRender()
 				{
 					camera.BuildTransform(&transform);
 					Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
+					cameraFrustum = Renderer::GetCamera()->GetFrustum();
 					break;
 				}
 			}
@@ -308,10 +312,14 @@ void Scene::OnRender()
 			for(const auto& entity : view)
 			{
 				auto [transform, dirLight] = view.get<TransformComponent, DirectionalLightComponent>(entity);
+				if (dirLight.myDirectionalLight)
+				{
+					myDirectionalLight = dirLight.myDirectionalLight;
+					dirLight.myDirectionalLight->SetData(&transform);
+					dirLight.OnUpdate();
+					RenderLight(dirLight.myDirectionalLight.get());
 
-				myDirectionalLight = dirLight.myDirectionalLight;
-				myDirectionalLight->SetData(&transform, &dirLight);
-				RenderLight(myDirectionalLight.get());
+				}
 			}
 		}
 	}
@@ -393,27 +401,12 @@ void Scene::OnRender()
 				if(model.GetModel())
 				{
 
-					/*const auto& realModel =  model.GetModel()->GetModel();
-					for(int i = 0; i < model.GetModel()->GetNumMeshes(); i++)
+					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetMatrix());
+					if (transformedBounds.IsOnFrustum(cameraFrustum))
 					{
-						auto transformedBounds = CommonUtilities::AABB({
-								realModel->BoxBounds.Center[0],
-								realModel->BoxBounds.Center[1],
-								realModel->BoxBounds.Center[2]
-							},
-
-							{
-								realModel->BoxBounds.BoxExtents[0],
-								realModel->BoxBounds.BoxExtents[1],
-								realModel->BoxBounds.BoxExtents[2]
-							}).Transform(transform.GetMatrix());
-						if(transformedBounds.IsOnFrustum(Renderer::GetCamera()->myFrustum))
-						{*/
-							Entity entityPtr = Entity{ entity, this };
-							model.GetModel()->AddRenderedInstance(&transform);
-							Renderer::Render(&entityPtr, model, transform);
-						//}
-					//}
+						Entity entityPtr = Entity{ entity, this };
+						Renderer::Render(&entityPtr, model, transform);
+					}
 				}
 			}
 		}

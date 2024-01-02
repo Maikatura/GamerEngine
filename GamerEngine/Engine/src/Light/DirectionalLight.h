@@ -9,8 +9,6 @@ class DirectionalLight : public Light
 
 	friend class LightAssetHandler;
 
-	DirectionalLightComponent* myDirLight;
-
 
 public:
 
@@ -21,5 +19,5 @@ public:
 	void Update() override;
 
 	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) override;
-	void SetData(TransformComponent* aTransform, DirectionalLightComponent* dirLight) override;
+	void SetData(TransformComponent* aTransform) override;
 };

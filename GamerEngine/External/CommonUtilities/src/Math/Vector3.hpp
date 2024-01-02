@@ -39,6 +39,7 @@ namespace CommonUtilities
 		Vector3<T> Blend(Vector3<T> aBlendState1, Vector3<T> aBlendState2, T aBlendAmount);
 
 		const Vector3<T> operator* (const T& aRval) const;
+		const Vector3<T> operator* (const Vector3<T>& aRval) const;
 
 		static Vector3<T> Lerp(Vector3<T> aStart, Vector3<T> aEnd, float aTime);
 		static Vector3<T> Normalize(const Vector3<T>& aVec);
@@ -48,6 +49,8 @@ namespace CommonUtilities
 		static Vector3<T> Right();
 		static Vector3<T> Up();
 		static Vector3<T> Forward();
+
+
 	};
 
 	template <class T>
@@ -155,6 +158,12 @@ namespace CommonUtilities
 	const Vector3<T> Vector3<T>::operator* (const T& aRval) const
 	{
 		return Vector3<T>(x * aRval, y * aRval, z * aRval);
+	}
+
+	template<typename T>
+	const Vector3<T> Vector3<T>::operator* (const Vector3<T>& aRval) const
+	{
+		return Vector3<T>(x * aRval.x, y * aRval.y, z * aRval.z);
 	}
 
 	template <class T>

@@ -1,65 +1,106 @@
 #pragma once
-#include "Components/ScriptableEntity.h"
-#include "Render/Renderer.h"
 #include "Math/Frustum.h"
+#include "Math/MathTypes.hpp"
+#include "Math/Ray.hpp"
 #define PI 3.14f
+
+
+struct GraphicsTransform
+{
+	Vector3f Translation{ 0.0f, 0.0f, 0.0f };
+	CommonUtilities::Quat Rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
+	Vector3f Scale{ 1.0f, 1.0f, 1.0f };
+
+	GraphicsTransform() = default;
+	GraphicsTransform(const GraphicsTransform&) = default;
+
+	GraphicsTransform(const Vector3f& aTranslation, const CommonUtilities::Quat& aRotation, const Vector3f& aScale)
+		: Translation(aTranslation)
+		, Rotation(aRotation)
+		, Scale(aScale)
+	{}
+
+	Matrix4x4f GetMatrix() const
+	{
+		return ComposeFromTRS(Translation, Rotation, Scale);
+	}
+
+
+	static GraphicsTransform Combine(const GraphicsTransform& aSecond, const GraphicsTransform& aFirst)
+	{
+		GraphicsTransform out;
+		out.Scale = aSecond.Scale * aFirst.Scale;
+
+		out.Rotation = aFirst.Rotation * aSecond.Rotation;
+
+		out.Translation = aSecond.Rotation * (aSecond.Scale * aFirst.Translation);
+		out.Translation = aSecond.Translation + out.Translation;
+
+		return out;
+	}
+
+	void Mix(const GraphicsTransform& aTransToMixWith, float t)
+	{
+		const  CommonUtilities::Quat& secondRot = aTransToMixWith.Rotation;
+		Translation = Vector3f::Lerp(Translation, aTransToMixWith.Translation, t);
+		Rotation = CommonUtilities::Quat::Slerp(Rotation, secondRot, t);
+		Scale = Vector3f::Lerp(Scale, aTransToMixWith.Scale, t);
+	}
+
+	static GraphicsTransform Mix(const GraphicsTransform& aFirstTransform, const GraphicsTransform& aSecondTransform, float aT)
+	{
+		GraphicsTransform resultTrans = aFirstTransform;
+		resultTrans.Mix(aSecondTransform, aT);
+
+		return resultTrans;
+	}
+
+	static GraphicsTransform Inverse(const GraphicsTransform& aTransform)
+	{
+		GraphicsTransform inv;
+		inv.Rotation = CommonUtilities::Quat::Inverse(aTransform.Rotation);
+		inv.Scale.x = std::abs(aTransform.Scale.x) < 0.0001f ? 0.0f : 1.0f / aTransform.Scale.x;
+		inv.Scale.y = std::abs(aTransform.Scale.y) < 0.0001f ? 0.0f : 1.0f / aTransform.Scale.y;
+		inv.Scale.z = std::abs(aTransform.Scale.z) < 0.0001f ? 0.0f : 1.0f / aTransform.Scale.z;
+		Vector3f invTrans = aTransform.Translation * -1.0f;
+		inv.Translation = inv.Rotation * (inv.Scale * invTrans);
+		return inv;
+	}
+};
 
 class Camera
 {
-	CommonUtilities::Frustum myCameraFrustum;
-	Matrix4x4f myProjection;
-	Matrix4x4f myViewProjection;
-
-	float myNearPlane = 0.1f;
-	float myFarPlane = 1500.0f;
-	float myFoV = 90.0f;
-	float myVFoV = 0.0f;
-
 public:
+	Camera() = default;
+	void SetPerspective(float aHorizontalFoV, const Vector2ui& aResolution, float aNearClipPlane, float aFarClipPlane);
+	void SetOrthographicPerspective(float aLeft, float aRight, float aBottom, float aTop, float aNear, float aFar);
+	const Matrix4x4f& GetProjection() const { return myProjection; }
+	float GetNearClipPlane() const { return myNearClipPlane; }
+	float GetFarClipPlane() const { return myFarClipPlane; }
+	float GetHFoV() const { return myHFoV; }
+	float GetVFoV() const { return myVFoV; }
+	float GetAspectRatio() const { return myAspectRatio; }
+	float GetAspectRatioVertical() const { return 1.0f / myAspectRatio; }
 
+	Matrix4x4f GetViewMatrix() const;
+	Matrix4x4f GetWorldViewMatrix() const;
+	const Vector2ui& GetResolution() { return myResolution; }
 
-	bool Initialize(float aHorizontalFoV, CommonUtilities::Vector2<unsigned int> aResolution, float aNearPlane, float aFarPlane)
-	{
-		assert(aNearPlane < aFarPlane);
-		assert(aNearPlane >= 0.01f);
+	GraphicsTransform& GetTransform() { return myTransform; }
+	const GraphicsTransform& GetTransform() const { return myTransform; }
 
-		myFoV = aHorizontalFoV;
+	Vector3f ScreenToWorldPos(Vector2f aMousePos, float aZ) const;
+	CommonUtilities::Ray<float> ScreenToWorldRay(Vector2f aMousePos) const;
 
-		myNearPlane = aNearPlane;
-		myFarPlane = aFarPlane;
-
-		Resize(aResolution);
-
-		return true;
-	}
-	void Resize(CommonUtilities::Vector2<unsigned int> aResolution)
-	{
-		myVFoV = myFoV * (PI / 180.f);
-		const float vFoVRad = 2 * std::atan(std::tan(myVFoV / 2) * (static_cast<float>(aResolution.y) / static_cast<float>(aResolution.x)));
-
-		const float myXScale = 1 / std::tanf(myVFoV * 0.5f);
-		const float myYScale = 1 / std::tanf(vFoVRad * 0.5f);
-		const float Q = myFarPlane / (myFarPlane - myNearPlane);
-
-		myProjection(1, 1) = myXScale;
-		myProjection(2, 2) = myYScale;
-		myProjection(3, 3) = Q;
-		myProjection(3, 4) = 1.0f / Q;
-		myProjection(4, 3) = -Q * myNearPlane;
-		myProjection(4, 4) = 0.0f;
-
-		myCameraFrustum = CommonUtilities::CreateFrustumFromCamera(myViewProjection, myVFoV, myVFoV, myNearPlane, myFarPlane);
-
-	}
-
-	void SetViewMatrix(CommonUtilities::Matrix4x4<float> aViewMatrix) { myViewProjection = aViewMatrix; }
-
-	FORCEINLINE CommonUtilities::Matrix4x4<float> const& GetViewMatrix() const { return myViewProjection; }
-	FORCEINLINE CommonUtilities::Matrix4x4<float> const& GetProjectionMatrix() const { return myProjection; }
-	FORCEINLINE float GetNearPlane() const { return myNearPlane; }
-	FORCEINLINE float GetFarPlane() const { return myFarPlane; }
-
-
+	const CommonUtilities::Frustum& GetFrustum() const;
 private:
-
+	Matrix4x4f myProjection{};
+	GraphicsTransform myTransform{};
+	CommonUtilities::Frustum myFrustum;
+	Vector2ui myResolution{ 0, 0 };
+	float myHFoV{ 30.0f };
+	float myVFoV{ 0.0f }; //Calculated from HFoV
+	float myAspectRatio{ 16.0f / 9.0f };
+	float myNearClipPlane{ 0.3f };
+	float myFarClipPlane{ 50000.0f };
 };

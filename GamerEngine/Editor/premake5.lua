@@ -52,7 +52,7 @@ defines
 
 libdirs 
 { 
-	"%{wks.location}/lib/"
+	"%{wks.location}/Temp/lib/"
 }
 
 includedirs{

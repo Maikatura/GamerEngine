@@ -5,6 +5,8 @@
 #include <Math/mathTypes.hpp>
 #include <Model/Material.h>
 
+#include "Math/AABB3D.hpp"
+
 class TransformComponent;
 
 
@@ -124,9 +126,12 @@ private:
 	bool myIsLoaded = false;
 	std::wstring myPath;
 	
+	CommonUtilities::AABB3D<float> myBoxBounds;
 
 
 public:
+
+
 
 	void Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton);
 	void Init(const MeshData& aMeshData, const std::wstring& aPath);
@@ -139,6 +144,17 @@ public:
 	bool IsLoaded() { return myIsLoaded; }
 
 	const std::wstring& GetName() { return myPath; }
+
+	CommonUtilities::AABB3D<float> GetBoxBounds() const
+	{
+		return myBoxBounds;
+	}
+
+	void SetBoxBounds(CommonUtilities::AABB3D<float> aBounds)
+	{
+		myBoxBounds = aBounds;
+	}
+
 
 	FORCEINLINE bool HasRenderedInstance() const
 	{
@@ -172,7 +188,7 @@ public:
 
 
 	void PlayAnimation(std::wstring aAnimationPath);
-	virtual void Update() override;
+	virtual void Update();
 
 
 	void UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent);

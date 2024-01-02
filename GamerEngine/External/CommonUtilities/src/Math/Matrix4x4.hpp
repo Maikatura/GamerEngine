@@ -55,12 +55,18 @@ namespace CommonUtilities
 		constexpr Vector3<T> TransformPoint(const Vector3<T>& aPoint) const;
 		constexpr Vector3<T> TransformPoint(const Vector4<T>& aPoint) const; //Transform as w = 1
 
-
+		constexpr Vector3<T> TransformVector(const Vector4<T>& aVector) const; // Transform as w = 0
+		constexpr static Matrix4x4<T> CreatePerspectiveHFoVResolution(const T& aHorizontalFoV, const Vector2<uint32_t>& aResolution, const T& aNearClipPlane, const T& aFarClipPlane);
 		constexpr static Matrix4x4<T> AffineInverse(const Matrix4x4<T>& aAffineMatrix);
 
 		void DecomposeTransform(Vector3<T>& aTranslate, Vector3<T>& aRotation, Vector3<T>& aScale);
+		Vector3<T> GetTranslation();
+		constexpr static void DecomposeTransformTRS(const Matrix4x4<T>& aTransform, Vector3<T>& aOutTranslation, Quaternion<T>& aOutRotation, Vector3<T>& aOutScale);
 
 		bool ContainsPosition(Vector3<T>& aTranslate);
+
+
+
 
 		static Matrix4x4<T> CreateRollPitchYawMatrix(Vector3<T>& aRotation);
 
@@ -85,6 +91,51 @@ namespace CommonUtilities
 		std::array<T, MatrixSize> myMatrix;
 	};
 
+	template <typename T>
+	constexpr void Matrix4x4<T>::DecomposeTransformTRS(const Matrix4x4<T>& aTransform, Vector3<T>& aOutTranslation, Quaternion<T>& aOutRotation, Vector3<T>& aOutScale)
+	{
+		Matrix4x4<T> transform = aTransform;
+
+		aOutTranslation = transform.GetTranslation();
+		aOutScale = transform.GetScale();
+
+		transform[0].Normalize();
+		transform[1].Normalize();
+		transform[2].Normalize();
+		aOutRotation = Quaternion<T>::FromRotationMatrix4x4(transform);
+	}
+
+	template <typename T>
+	constexpr Vector3<T> Matrix4x4<T>::TransformVector(const Vector4<T>& aVector) const
+	{
+		Vector4<T> output = operator*(Vector4<T>(aVector.x, aVector.y, aVector.z, 0.0f), *this);
+		return Vector3<T>{output.x, output.y, output.z};
+	}
+
+	template <typename T>
+	constexpr Matrix4x4<T> Matrix4x4<T>::CreatePerspectiveHFoVResolution(const T& aHorizontalFoV, const Vector2<uint32_t>& aResolution, const T& aNearClipPlane, const T& aFarClipPlane)
+	{
+		assert(aNearClipPlane < aFarClipPlane && "Near clip plane can't be larger than far clip plane");
+		assert(aNearClipPlane >= static_cast<T>(0.001) && "Near clip plane is too small!");
+
+		T hFoVRad = aHorizontalFoV * 0.017453f;
+		T vFoVRad = static_cast<T>(2.0) * std::atan(std::tan(hFoVRad / static_cast<T>(2.0))) * (static_cast<float>(aResolution.y) / static_cast<float>(aResolution.x));
+
+		T xScale = static_cast<T>(1.0) / std::tan(hFoVRad * static_cast<T>(0.5));
+		T yScale = static_cast<T>(1.0) / std::tan(vFoVRad * static_cast<T>(0.5));
+
+		T Q = aFarClipPlane / (aFarClipPlane - aNearClipPlane);
+
+		Matrix4x4<T> projection;
+		projection(1, 1) = xScale;
+		projection(2, 2) = yScale;
+		projection(3, 3) = Q;
+		projection(3, 4) = static_cast<T>(1.0) / Q;
+		projection(4, 3) = Q * -aNearClipPlane;
+		projection(4, 4) = static_cast<T>(0.0);
+
+		return projection;
+	}
 
 	template <typename T>
 	constexpr Vector3<T> Matrix4x4<T>::TransformPoint(const Vector3<T>& aPoint) const
@@ -681,6 +732,12 @@ namespace CommonUtilities
 		aScale.x = mat(1,1);
 		aScale.y = mat(2,2);
 		aScale.z = mat(3,3);
+	}
+
+	template <class T>
+	Vector3<T> Matrix4x4<T>::GetTranslation()
+	{
+		return Vector3<T>{ myMatrix[12], myMatrix[13], myMatrix[14] };
 	}
 
 	template <class T>

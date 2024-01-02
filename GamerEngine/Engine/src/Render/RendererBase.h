@@ -19,7 +19,7 @@ protected:
 	ObjectBufferData myObjectBufferData{};
 	Vector4f myMaterialBufferData;
 	/*BlendShapeData myBlendshapeBufferData{};*/
-
+	
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myFrameBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myObjectBuffer;
 	//Microsoft::WRL::ComPtr<ID3D11Buffer> myBlendShapeBuffer;

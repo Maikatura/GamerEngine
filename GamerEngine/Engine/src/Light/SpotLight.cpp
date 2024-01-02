@@ -15,12 +15,6 @@ void SpotLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer,
 	}
 }
 
-
-void SpotLight::SetRange(float aRange)
-{
-	myLightData.Range = aRange;
-}
-
 void SpotLight::SetInnerCone(float aRadius)
 {
 	myLightData.SpotInnerRadius = aRadius;

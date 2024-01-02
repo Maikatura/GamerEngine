@@ -6,7 +6,7 @@
 namespace CommonUtilities
 {
 	const float DegToRad = static_cast<float>(3.141f / 180.0f);
-
+	const float RadToDeg = static_cast<float>(180.0f / 3.141f);
 
 	template <typename T>
 	struct TFrustum

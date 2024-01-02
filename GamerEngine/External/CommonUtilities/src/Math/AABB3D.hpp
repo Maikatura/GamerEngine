@@ -162,7 +162,7 @@ namespace CommonUtilities
 			std::abs(Vector3<T>::Dot(Vector3<T>::Forward(), transformUp)) +
 			std::abs(Vector3<T>::Dot(Vector3<T>::Forward(), transformForward)));
 
-		return { worldCenter, transformedExtentX, transformedExtentY, transformedExtentZ };
+		return { worldCenter, transformedExtentX * aTransform.GetScale().x, transformedExtentY * aTransform.GetScale().y, transformedExtentZ * aTransform.GetScale().z };
 	}
 
 
