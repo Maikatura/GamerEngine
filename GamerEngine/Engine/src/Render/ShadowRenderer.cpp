@@ -91,8 +91,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 	myFrameBufferData.RenderMode = static_cast<unsigned int>(0);
 
 
-	DX11::Get().GetContext()->PSSetShader(nullptr, nullptr, 0);
-	DX11::Get().GetContext()->GSSetShader(nullptr, nullptr, 0);
+
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
@@ -120,9 +119,16 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 		memcpy(bufferData.pData, &myShadowCubeData, sizeof(ShadowCubeBuffer));
 		DX11::Get().GetContext()->Unmap(myPointLightBuffer.Get(), 0);
 		DX11::Get().GetContext()->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
+		DX11::Get().GetContext()->PSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
 		DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-
 	}
+	else
+	{
+		
+		DX11::Get().GetContext()->GSSetShader(nullptr, nullptr, 0);
+	}
+	DX11::Get().GetContext()->PSSetShader(nullptr, nullptr, 0);
+
 
 	//ModelAssetHandler::Get().ResetRenderedModels();
 
@@ -170,6 +176,12 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 		DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 		DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
+		if (isCubeMap)
+		{
+			DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myObjectBuffer.GetAddressOf());
+			DX11::Get().GetContext()->GSSetShader(myShadowGeometryShader.Get(), nullptr, 0);
+		}
+
 		for(unsigned int m = 0; m < model->GetNumMeshes(); m++)
 		{
 			ModelInstance::MeshData& meshData = model->GetMeshData(m);
@@ -184,11 +196,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 
 
-			if(isCubeMap)
-			{
-				DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myObjectBuffer.GetAddressOf());
-				DX11::Get().GetContext()->GSSetShader(myShadowGeometryShader.Get(), nullptr, 0);
-			}
+			
 
 			
 

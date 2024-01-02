@@ -60,6 +60,7 @@ public:
 		Intensity = 1.0f;
 		Range = 4.0f;
 		Active = true;
+		CastShadow = true;
 
 		myPointLight = LightAssetHandler::CreatePointLight(Color, Intensity, Range, { 0,0,0 });
 	}

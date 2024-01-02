@@ -58,11 +58,13 @@ Ref<EnvironmentLight> LightAssetHandler::CreateEnvironmentLight(const std::wstri
 	return myEnvironmentLight;
 }
 
+#define POINT_LIGHT_SHADOW_MAP_RESOLUTION 2048
+
 Ref<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor, float anIntensity, float aRange,
 	Vector3f aPosition)
 {
 	Ref<PointLight> result = MakeRef<PointLight>();
-	
+
 	result->Init(aColor, anIntensity);
 	result->SetRange(aRange);
 	result->SetLightPosition(aPosition);
@@ -71,12 +73,12 @@ Ref<PointLight> LightAssetHandler::CreatePointLight(Vector3f aColor, float anInt
 
 	constexpr float nearPlane = 0.1f;
 	constexpr float farPlane = 25000.0f;
-	const Vector2f resolution = { 2048, 2048 };
+	const Vector2ui resolution = { POINT_LIGHT_SHADOW_MAP_RESOLUTION, POINT_LIGHT_SHADOW_MAP_RESOLUTION };
 	result->myShadowMap = TextureAssetHandler::CreatePointLightMap(L"Point Light", static_cast<size_t>(resolution.x), static_cast<size_t>(resolution.y));
 
 	result->myLightData.NearPlane = nearPlane;
 	result->myLightData.FarPlane = farPlane;
-	result->myLightData.LightProjection = Matrix4x4f::CreateOrthographicProjection(-resolution.x, resolution.x, -resolution.y, resolution.y, nearPlane, farPlane);
+	result->myLightData.LightProjection = Matrix4x4f::CreatePerspectiveHFoVResolution(90, { resolution.x, resolution.y }, nearPlane, farPlane);
 
 	return result;
 }

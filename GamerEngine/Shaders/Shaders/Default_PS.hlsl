@@ -136,10 +136,10 @@ PixelOutput main(VertexToPixel input)
 
 				if(Light.CastShadows)
 				{
-					if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, 0.00000001f, Light.CastShadows))
+                        if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
-						pointTemp *= SHADOW_MAP_TEXCOORD_BIAS;
-                    }
+                            pointTemp *= SHADOW_BIAS;
+                        }
 				}
 				pointLight += pointTemp;
 				break;
@@ -166,8 +166,8 @@ PixelOutput main(VertexToPixel input)
 				
                     if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
-                        spotTemp *= SHADOW_MAP_TEXCOORD_BIAS;
-					}
+                            spotTemp *= SHADOW_BIAS;
+                        }
 				}
 				spotLight += spotTemp;
 				break;
