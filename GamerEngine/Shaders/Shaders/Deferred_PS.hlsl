@@ -6,7 +6,10 @@
 #include "Data/LightBuffer.hlsli"
 #include "Data/Shadows.hlsli"
 
-
+// Constants
+#define SHADOW_BIAS 0.01f
+#define SHADOW_MAP_TEXCOORD_SCALE 8192.0f
+#define SHADOW_MAP_TEXCOORD_BIAS 0.0001f
 
 DeferredPixelOutput main(FullscreenVertexToPixel input)
 {
@@ -21,18 +24,20 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 	}
 
 	//Albedo less versions of light render modes
-	[flatten]
-	if(FB_RenderMode >= 16 && FB_RenderMode <= 19)
-	{
-		albedo = 1.0f;
-	}
+	
 
 	const float3 normal = normalTexture.Sample(defaultSampler, input.UV).rgb;
 	const float4 material = materialTexture.Sample(defaultSampler, input.UV).rgba;
-	const float3 vertexNormal = vertexNormalTexture.Sample(defaultSampler, input.UV).rgb;
+	const float3 vertexNormal = vertexNormalTexture.Sample(defaultSampler, input.UV).agb;
 	const float4 worldPosition = worldPositionTexture.Sample(defaultSampler, input.UV).rgba;
 	const float ambientOcclusion = ambientOcclusionTexture.Sample(defaultSampler, input.UV).r;
 	const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
+
+	[flatten]
+		if (FB_RenderMode >= 16 && FB_RenderMode <= 19)
+		{
+			albedo = 1.0f;
+		}
 
 	const float metalness = material.r;
 	const float roughness = material.g;
@@ -56,20 +61,21 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 		specularColor
 	);
 
-	ambientLighting *= ssao;
+	//ambientLighting *= ssao; // This is currently broken
     
 
 	float3 pointLight = 0;
 	float3 spotLight = 0;
+	float3 directLighting = 0;
 
 	//float interleavedGradientNoise = InterleavedGradientNoise(input.UV * float2(512, 512));
 
-    float3 directLighting = EvaluateDirectionalLight(
+	float3 dirLightTemp = EvaluateDirectionalLight(
 		diffuseColor,
 		specularColor,
 		normal,
 		roughness,
-		LB_DirectionalLight.Color.rgb,
+		LB_DirectionalLight.Color,
 		LB_DirectionalLight.Intensity,
 		-LB_DirectionalLight.Direction,
 		toEye
@@ -79,32 +85,13 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 
 	if(LB_DirectionalLight.CastShadows)
 	{
-        const float4 worldToLightView = mul(worldPosition, LB_DirectionalLight.LightView[0]);
-        const float4 lightViewToLightProj = mul(worldToLightView, LB_DirectionalLight.LightProjection);
+		LightData Light = LB_DirectionalLight;
+		if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+		{
+			dirLightTemp *= SHADOW_BIAS;
+		}
 
-        float4 projectedTexCoord = float4(0.0f, 0.0f, 0.0f, 0.0f);
-
-        projectedTexCoord.xy = lightViewToLightProj.xy / (2.0f * lightViewToLightProj.w) + float2(0.5f, -0.5f);
-
-        bool validTexCoord = saturate(projectedTexCoord) == projectedTexCoord;
-        bool inFrontOfLight = worldToLightView.z >= 0.0f;
-
-        if (validTexCoord && inFrontOfLight)
-        {
-            const float shadowBias = 0.00008f;
-            float viewDepth = lightViewToLightProj.z / lightViewToLightProj.w - shadowBias;
-            projectedTexCoord.z = viewDepth;
-    
-            float lightDepth = dirLightShadowTexture.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0).r;
-    
-            if (lightDepth < viewDepth)
-            {
-                float flaking = 0.8f;
-                float shadow = SampleShadowsPCF16(dirLightShadowTexture, projectedTexCoord.xyz, 1.0f / 8192.0f);
-                directShadow *= saturate(shadow * (1 - flaking) + flaking);
-                directLighting *= shadow;
-            }
-        }
+		directLighting += dirLightTemp;
     }
 
 	[unroll(20)]
@@ -119,14 +106,11 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
 					Light.Range, Light.Position, toEye, worldPosition.xyz);
 
-				if(Light.CastShadows)
+				if (Light.CastShadows)
 				{
-				
-
-					if(GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, .0005f, Light.CastShadows))
+					if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
-						const float shadow = 0.05f;
-						pointTemp *= shadow;
+						pointTemp *= SHADOW_BIAS;
 					}
 				}
 				pointLight += pointTemp;
@@ -146,15 +130,15 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.Range, Light.Position, -Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
-				if(Light.CastShadows)
+				if (Light.CastShadows)
 				{
-					if(GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, .0001f, Light.CastShadows))
+
+					if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
-						const float shadow = 0.05f;
-						spotTemp *= shadow;
+						spotTemp *= SHADOW_BIAS;
 					}
 				}
 				spotLight += spotTemp;
@@ -166,7 +150,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 
     float emissiveStrength = 10.0f;
 	float3 emissiveColor = emissive * emissiveIntensity * albedo.xyz * emissiveStrength;
-    float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight) * directShadow);
+    float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight));
 
 
 	switch(FB_RenderMode)
@@ -180,7 +164,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 			result.Color.rgb = float3(albedo.rg, 0.0f);
 			result.Color.a = 1.0f;
 			break;
-		case 2://RenderMode::VertexColor:
+		case 2://RenderMode::VertexColor: // Wrong
 			result.Color.rgb = albedo.rgb; //Albedo is set to VertexColor in GBuffer when RenderMode::VertexColor
 			result.Color.a = 1.0f;
 			break;
@@ -228,8 +212,8 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 			result.Color.a = 1.0f;
 			break;
 		case 8://RenderMode::AmbientLight:
-			result.Color.rgb = finalColor;
-			//result.Color.rgb = ambientLighting;
+			//result.Color.rgb = finalColor;
+			result.Color.rgb = ambientLighting;
 			result.Color.a = 1.0f;
 			break;
 		case 9://RenderMode::PointLight:

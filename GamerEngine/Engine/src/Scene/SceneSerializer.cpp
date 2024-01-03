@@ -320,7 +320,6 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 		auto& tc = entity.GetComponent<DirectionalLightComponent>();
 		out << YAML::Key << "Color" << YAML::Value << tc.Color;
-		out << YAML::Key << "Direction" << YAML::Value << tc.Direction;
 		out << YAML::Key << "Intensity" << YAML::Value << tc.Intensity;
 
 		out << YAML::EndMap; // DirectionalLightComponent
@@ -629,11 +628,9 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 			auto& dirLightComp = deserializedEntity.AddComponent<DirectionalLightComponent>();
 
 			dirLightComp.Color = dirLightComponent["Color"].as<Vector3f>();
-			dirLightComp.Direction = dirLightComponent["Direction"].as<Vector3f>();
 			dirLightComp.Intensity = dirLightComponent["Intensity"].as<float>();
 
 			dirLightComp.myDirectionalLight->Init(dirLightComp.Color, dirLightComp.Intensity);
-			dirLightComp.myDirectionalLight->SetLightDirection(CommonUtilities::Quat::FromEulers(dirLightComp.Direction));
 		}
 		
 	}

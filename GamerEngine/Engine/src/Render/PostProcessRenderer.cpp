@@ -49,10 +49,12 @@ bool PostProcessRenderer::Initialize()
 void PostProcessRenderer::ReInitialize()
 {
 	myHasInited = false;
+	int width = 0;
+	int height = 0;
 
 	RECT clientRect = DX11::Get().GetClientSize();
-	float width = static_cast<float>(clientRect.right - clientRect.left);
-	float height = static_cast<float>(clientRect.bottom - clientRect.top);
+	width = clientRect.right - clientRect.left;
+	height = clientRect.bottom - clientRect.top;
 
 
 	mySSAOTexture = MakeRef<RenderTexture>();
@@ -71,7 +73,7 @@ void PostProcessRenderer::ReInitialize()
 	myBlur = MakeRef<RenderTexture>();
 	myBlur->Initialize(DX11::Get().GetDevice(), static_cast<int>(width * .25f), static_cast<int>(height * .25f));
 
-	myNoiseTexture->SetAsResource(8);
+	myNoiseTexture->SetAsResource(9);
 }
 
 Ref<RenderTexture> PostProcessRenderer::CreateRenderTexture(const std::string& aName, float aWidth, float aHeight, DXGI_FORMAT aFormat)
@@ -110,7 +112,7 @@ Ref<RenderTexture> PostProcessRenderer::CreateRenderTexture(const std::string& a
 	return nullptr;
 }
 
-void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection)
+void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection, VREye aEye)
 {
 	if(!Renderer::GetCamera())
 	{
@@ -173,15 +175,30 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 
 		case PP_SSAO:
 		{
-			myNoiseTexture->SetAsResource(9);
+			//myNoiseTexture->SetAsResource(9);
 
 			HRESULT result = S_FALSE;
 			D3D11_MAPPED_SUBRESOURCE bufferData;
-			 
-			const Vector2ui Resolution = {
-				static_cast<unsigned int>(DX11::Get().GetScreenSize().x),
-				static_cast<unsigned int>(DX11::Get().GetScreenSize().y)
-			};
+
+			Vector2ui Resolution;
+
+			if (GraphicsEngine::Get()->GetEditorMode())
+			{
+				Resolution = GraphicsEngine::Get()->GetEditorWindowSize();
+			}
+			else
+			{
+				RECT clientRect = DX11::Get().GetClientSize();
+				uint32_t width = aEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
+				uint32_t height = aEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
+
+				Resolution = {
+					static_cast<unsigned int>(width),
+					static_cast<unsigned int>(height)
+				};
+			}
+
+			
 
 			myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
 			myFrameBufferData.CamTranslation = aView.GetPosition();
@@ -195,7 +212,7 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			myFrameBufferData.DeltaTime = 0;
 			myFrameBufferData.TotalTime = 0;
 
-			myFrustum = CreateFrustumFromCamera(aView, Renderer::GetCamera()->GetVerticalFoV(), Renderer::GetCamera()->GetHorizontalFoV(), Renderer::GetCamera()->myNearPlane, Renderer::GetCamera()->myFarPlane);
+			myFrustum = Renderer::GetCamera()->GetFrustum();
 			myFrameBufferData.FrustrumCorners[0] = myFrustum.NearTopLeft;
 			myFrameBufferData.FrustrumCorners[1] = myFrustum.NearTopRight;
 			myFrameBufferData.FrustrumCorners[2] = myFrustum.NearBottomLeft;
@@ -253,13 +270,7 @@ void PostProcessRenderer::RenderTextureOnSlot(int aSlot,int aResourceSlot, PostP
 	aRenderTexture->ClearRenderTarget(DX11::Get().GetContext(), depthStencilView, 0.0f, 0.0f, 0.0f, 0.0f);
 	DX11::Get().GetContext()->PSSetShaderResources(aSlot, 1, &nullsrv);
 
-
-	
-
 	aRenderTexture->SetRenderTarget(DX11::Get().GetContext(), depthStencilView);
-
-	
-
 	RenderPass(aPass);
 
 	DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());

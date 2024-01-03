@@ -16,7 +16,7 @@ void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer
 
 void PointLight::Update()
 {
-	SetLightDirection(CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 0, 0 })));
+	SetLightDirection({0,0,0});
 	SetLightPosition(myTransformComp->GetPosition());
 	//SetIntensity(myLightData.Intensity);
 
@@ -28,12 +28,20 @@ void PointLight::Update()
 	myCamera.GetTransform().Translation = myLightData.Position;
 	myCamera.GetTransform().Rotation = CommonUtilities::Quat::FromEulers({ 0, DEG_TO_RAD * 90, 0 });
 
-	myLightData.LightView[0] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 90, 0 })), { 1, 1, 1 }));
-	myLightData.LightView[1] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, -90, 0 })), { 1, 1, 1 }));
-	myLightData.LightView[2] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ -90, 0, 0 })), { 1, 1, 1 }));
-	myLightData.LightView[3] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 90, 0, 0 })), { 1, 1, 1 }));
-	myLightData.LightView[4] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 0, 0 })), { 1, 1, 1 }));
-	myLightData.LightView[5] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0,  180, 0 })), { 1, 1, 1 }));
+	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, -90, 0 })), { 1, 1, 1 }));
+	myLightData.LightView[1] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 90, 0 })), { 1, 1, 1 }));
+	myLightData.LightView[2] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 90, 0, 0 })), { 1, 1, 1 }));
+	myLightData.LightView[3] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ -90, 0, 0 })), { 1, 1, 1 }));
+	myLightData.LightView[4] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 0, 0 })), { 1, 1, 1 }));
+	myLightData.LightView[5] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0,  180, 0 })), { 1, 1, 1 }));
+
+	//myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat(0.7071f, 0.0f, 0.7071f, 0.0f), { 1, 1, 1 }));
+	//myLightData.LightView[1] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat(0.7071f, 0.0f, -0.7071f, 0.0f), { 1, 1, 1 }));
+	//myLightData.LightView[2] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat(0.7071f, -0.7071f, 0.0f, 0.0f), { 1, 1, 1 }));
+	//myLightData.LightView[3] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat(0.7071f, 0.7071f, 0.0f, 0.0f), { 1, 1, 1 }));
+	//myLightData.LightView[4] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat(1.0f, 0.0f, 0.0f, 0.0f), { 1, 1, 1 }));
+	//myLightData.LightView[5] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat(0.0f, 0.0f, 1.0f, 0.0f), { 1.0f, 1.0f, 1.0f }));
+
 	myLightData.Direction =	(ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f{ 0, 0, 0 })), { 1, 1, 1 })).GetForward();
 
 	myLightData.ShadowMapIndex = PointLightNum;

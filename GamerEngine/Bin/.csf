@@ -6,13 +6,13 @@ Entities:
       Tag: Wall
     TransformComponent:
       Translation: [-1000, 0, 0]
-      Rotation: [0.000104055282, 89.9779739, -179.999893]
-      Scale: [999.995361, 499.998962, 0.999983132]
+      Rotation: [0.000104055282, 89.9779739, 0]
+      Scale: [1000, 499.998962, 0.999983132]
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Delay: -0.0114962999
+      Delay: -0.0148724997
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
@@ -31,7 +31,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.00276760012
+      Delay: -0.00389210018
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
@@ -71,28 +71,28 @@ Entities:
     TagComponent:
       Tag: Point Light
     TransformComponent:
-      Translation: [-12.9125671, -302.407776, 174.294037]
+      Translation: [-12.9125671, -423.798096, -101.987244]
       Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
+      Scale: [1, 0.999999881, 0.999999881]
       ChildrenSize: 0
       Children:
         {}
     PointLightComponent:
       Color: [1, 1, 0]
-      Intensity: 1
-      Range: 0.100000001
+      Intensity: 0.300000012
+      Range: 0.0199999996
   - Entity: 5923227853819891854
     TagComponent:
       Tag: Cube
     TransformComponent:
-      Translation: [-750.045593, -423.337097, 113.475075]
+      Translation: [-897.241028, -220.918106, 133.040054]
       Rotation: [0, -17.2238941, 0]
       Scale: [31.1136951, 31.1136589, 31.1136951]
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Delay: -0.00237979996
+      Delay: -0.00350430002
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
@@ -123,8 +123,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [-336.093597, 117.637032, 669.842712]
-      Rotation: [26.5695953, -145.162903, 0.000104271501]
+      Translation: [1543.25012, 747.666199, -783.312683]
+      Rotation: [-31.6421928, 53.8271484, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
       ChildrenSize: 0
       Children:
@@ -139,20 +139,19 @@ Entities:
       Tag: Directional Light
     TransformComponent:
       Translation: [581.920532, 61.3632202, 447.524689]
-      Rotation: [45.75, 26, 0]
+      Rotation: [-62.25, 38.75, 0]
       Scale: [0.995143712, 0.999491751, 0.999616146]
       ChildrenSize: 0
       Children:
         {}
     DirectionalLightComponent:
       Color: [1, 1, 1]
-      Direction: [0, 0, 0]
-      Intensity: 0
+      Intensity: 1
   - Entity: 15553723860272066188
     TagComponent:
       Tag: Point Light
     TransformComponent:
-      Translation: [-585.611511, -340.996155, 167.28244]
+      Translation: [-745.853027, -192.672516, 183.067719]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
       ChildrenSize: 0
@@ -192,7 +191,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.00164969999
+      Delay: -0.0068597002
       Path: Assets\Models\Gremlin.fbx
       TextureSize: 2
       Texture:
@@ -215,7 +214,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.015413601
+      Delay: -0.0220269002
       Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:

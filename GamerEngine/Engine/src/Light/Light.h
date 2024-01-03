@@ -126,10 +126,10 @@ public:
 	}
 
 
-	FORCEINLINE void SetLightDirection(CommonUtilities::Quat aDirection)
+	FORCEINLINE void SetLightDirection(const Vector3f& aDirection)
 	{
-		myLocalDirection = aDirection;
-		myLightData.Direction = aDirection.Forward();
+		//myLocalDirection = aDirection;
+		myLightData.Direction = aDirection;
 	}
 	FORCEINLINE CommonUtilities::Quat GetLightDirection()
 	{

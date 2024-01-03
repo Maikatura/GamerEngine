@@ -64,7 +64,7 @@ PixelOutput main(VertexToPixel input)
 		specularColor
 	);
 
-	ambientLighting *= ssao;
+	//ambientLighting *= ssao; // This is currently broken
 
 	float3 pointLight = 0;
 	float3 spotLight = 0;
@@ -88,15 +88,15 @@ PixelOutput main(VertexToPixel input)
 
     if (LB_DirectionalLight.CastShadows)
     {
-        //LightData Light = LB_DirectionalLight;
-        //if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
-        //{
-        //    dirLightTemp *= SHADOW_MAP_TEXCOORD_BIAS;
-        //}
+        LightData Light = LB_DirectionalLight;
+        if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+        {
+            dirLightTemp *= SHADOW_BIAS;
+        }
 
         directLighting += dirLightTemp;
 
-        const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
+       /* const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
         const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
 		
         float3 projectedTexCoord;
@@ -119,7 +119,7 @@ PixelOutput main(VertexToPixel input)
                 directShadow *= saturate(shadow * (1 - flaking) + flaking);
                 directLighting *= shadow;
             }
-        }
+        }*/
     }
 
 	[unroll(20)]
@@ -136,10 +136,10 @@ PixelOutput main(VertexToPixel input)
 
 				if(Light.CastShadows)
 				{
-                        if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+					if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
                             pointTemp *= SHADOW_BIAS;
-                        }
+					}
 				}
 				pointLight += pointTemp;
 				break;
@@ -158,7 +158,7 @@ PixelOutput main(VertexToPixel input)
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.Range, Light.Position, -Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
 				if(Light.CastShadows)

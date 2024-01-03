@@ -70,7 +70,7 @@ namespace CommonUtilities
 
 		static Matrix4x4<T> CreateRollPitchYawMatrix(Vector3<T>& aRotation);
 
-		Vector3<T> GetSide();
+		Vector3<T> GetRight();
 		Vector3<T> GetUp();
 		Vector3<T> GetForward();
 		Vector4<T> GetForwardW();
@@ -524,30 +524,24 @@ namespace CommonUtilities
 	void operator*=(Matrix4x4<T>& aFirstMatrix4, const Matrix4x4<T>& aSecondMatrix4)
 	{
 		Matrix4x4<T> result;
-		T sum = 0;
-
-		for(int row = 1; row <= 4; ++row)
+		
+		for (int row = 1; row <= 4; ++row)
 		{
-			for(int column = 1; column <= 4; ++column)
+			for (int column = 1; column <= 4; ++column)
 			{
+				T sum = 0;
 
-				for(int temp = 1; temp <= 4; ++temp)
+				for (int temp = 1; temp <= 4; ++temp)
 				{
 					sum += aFirstMatrix4(row, temp) * aSecondMatrix4(temp, column);
 				}
 
 				result(row, column) = sum;
-				sum = 0;
 			}
 		}
 
-		for(int row = 1; row <= 4; ++row)
-		{
-			for(int column = 1; column <= 4; ++column)
-			{
-				aFirstMatrix4(row, column) = result(row, column);
-			}
-		}
+		aFirstMatrix4 = result;
+
 	}
 
 	template<typename T>
@@ -760,7 +754,7 @@ namespace CommonUtilities
 	}
 
 	template <class T>
-	Vector3<T> Matrix4x4<T>::GetSide()
+	Vector3<T> Matrix4x4<T>::GetRight()
 	{
 		return Vector3<T>{ myMatrix[0], myMatrix[1], myMatrix[2] };
 	}
@@ -829,17 +823,16 @@ namespace CommonUtilities
 
 		assert(determinant != static_cast<T>(0) && "Matrix does not have an inverse");
 
-		//calculate adjugate
 		T det11 = (aAffineMatrix(2, 2) * aAffineMatrix(3, 3) - aAffineMatrix(2, 3) * aAffineMatrix(3, 2));
-		T det12 = -(aAffineMatrix(2, 1) * aAffineMatrix(3, 3) - aAffineMatrix(2, 3) * aAffineMatrix(3, 1));
-		T det13 = (aAffineMatrix(2, 1) * aAffineMatrix(3, 2) - aAffineMatrix(2, 2) * aAffineMatrix(3, 1));
+		T det12 = -(aAffineMatrix(1, 2) * aAffineMatrix(3, 3) - aAffineMatrix(1, 3) * aAffineMatrix(3, 2));
+		T det13 = (aAffineMatrix(1, 2) * aAffineMatrix(2, 3) - aAffineMatrix(1, 3) * aAffineMatrix(2, 2));
 
-		T det21 = -(aAffineMatrix(1, 2) * aAffineMatrix(3, 3) - aAffineMatrix(1, 3) * aAffineMatrix(3, 2));
+		T det21 = -(aAffineMatrix(2, 1) * aAffineMatrix(3, 3) - aAffineMatrix(2, 3) * aAffineMatrix(3, 1));
 		T det22 = (aAffineMatrix(1, 1) * aAffineMatrix(3, 3) - aAffineMatrix(1, 3) * aAffineMatrix(3, 1));
-		T det23 = -(aAffineMatrix(1, 1) * aAffineMatrix(3, 2) - aAffineMatrix(1, 2) * aAffineMatrix(3, 1));
+		T det23 = -(aAffineMatrix(1, 1) * aAffineMatrix(2, 3) - aAffineMatrix(1, 2) * aAffineMatrix(2, 1));
 
-		T det31 = (aAffineMatrix(1, 2) * aAffineMatrix(2, 3) - aAffineMatrix(1, 3) * aAffineMatrix(2, 2));
-		T det32 = -(aAffineMatrix(1, 1) * aAffineMatrix(2, 3) - aAffineMatrix(1, 3) * aAffineMatrix(2, 1));
+		T det31 = (aAffineMatrix(2, 1) * aAffineMatrix(3, 2) - aAffineMatrix(2, 2) * aAffineMatrix(3, 1));
+		T det32 = -(aAffineMatrix(1, 1) * aAffineMatrix(3, 2) - aAffineMatrix(1, 2) * aAffineMatrix(3, 1));
 		T det33 = (aAffineMatrix(1, 1) * aAffineMatrix(2, 2) - aAffineMatrix(1, 2) * aAffineMatrix(2, 1));
 
 		//inverse rotation and scale matrix

@@ -401,9 +401,9 @@ void Scene::OnRender()
 				if(model.GetModel())
 				{
 
-					/*auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetMatrix());
-					if (transformedBounds.IsOnFrustum(cameraFrustum))
-					{*/
+					//auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetMatrix());
+					//if (transformedBounds.IsOnFrustum(cameraFrustum))
+					//{
 						Entity entityPtr = Entity{ entity, this };
 						Renderer::Render(&entityPtr, model, transform);
 					//}

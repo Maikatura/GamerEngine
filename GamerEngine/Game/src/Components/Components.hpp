@@ -35,7 +35,7 @@ public:
 	void OnUpdate() override
 	{
 		myDirectionalLight->SetColor(Color);
-		myDirectionalLight->SetIntensity(Intensity);
+		myDirectionalLight->SetIntensity(Intensity * 0.00001f);
 		myDirectionalLight->SetCastShadows(CastShadow);
 		myDirectionalLight->SetActive(Active);
 
@@ -43,7 +43,6 @@ public:
 
 	Vector3f Color;
 	float Intensity = 1.0f;
-	Vector3f Direction;
 	bool CastShadow = true;
 	bool Active = true;
 	bool SmoothShadows = false;

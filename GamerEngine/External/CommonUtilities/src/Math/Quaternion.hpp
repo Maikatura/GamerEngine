@@ -229,21 +229,58 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Matrix4x4<T> Quaternion<T>::GetRotationMatrix4x4() const
 	{
-		Matrix4x4<T> rotationMatrix;
 
-		rotationMatrix(1, 1) = static_cast<T>(1) - static_cast<T>(2) * (y * y + z * z);
-		rotationMatrix(1, 2) = static_cast<T>(2) * (x * y + w * z);
-		rotationMatrix(1, 3) = static_cast<T>(2) * (x * z - w * y);
+		T xx = x * x;
+		T yy = y * y;
+		T zz = z * z;
+		T xy = x * y;
+		T xz = x * z;
+		T yz = y * z;
+		T wx = w * x;
+		T wy = w * y;
+		T wz = w * z;
 
-		rotationMatrix(2, 1) = static_cast<T>(2) * (x * y - w * z);
-		rotationMatrix(2, 2) = static_cast<T>(1) - static_cast<T>(2) * (x * x + z * z);
-		rotationMatrix(2, 3) = static_cast<T>(2) * (y * z + w * x);
 
-		rotationMatrix(3, 1) = static_cast<T>(2) * (x * z + w * y);
-		rotationMatrix(3, 2) = static_cast<T>(2) * (y * z - w * x);
-		rotationMatrix(3, 3) = static_cast<T>(1) - static_cast<T>(2) * (x * x + y * y);
+		Matrix4x4<T> result;
 
-		return rotationMatrix;
+		result(1, 1) = static_cast<T>(1) - static_cast<T>(2) * (yy + zz);
+		result(1, 2) = static_cast<T>(2) * (xy - wz);
+		result(1, 3) = static_cast<T>(2) * (xz + wy);
+		result(1, 4) = static_cast<T>(0);
+
+		result(2, 1) = static_cast<T>(2) * (xy + wz);
+		result(2, 2) = static_cast<T>(1) - static_cast<T>(2) * (xx + zz);
+		result(2, 3) = static_cast<T>(2) * (yz - wx);
+		result(2, 4) = static_cast<T>(0);
+
+		result(3, 1) = static_cast<T>(2) * (xz - wy);
+		result(3, 2) = static_cast<T>(2) * (yz + wx);
+		result(3, 3) = static_cast<T>(1) - static_cast<T>(2) * (xx + yy);
+		result(3, 4) = static_cast<T>(0);
+
+		result(4, 1) = static_cast<T>(0);
+		result(4, 2) = static_cast<T>(0);
+		result(4, 3) = static_cast<T>(0);
+		result(4, 4) = static_cast<T>(1);
+
+		return result;
+
+		/*Quaternion<T> normalizedQuat = *this;
+		normalizedQuat.Normalize();
+
+		rotationMatrix(1, 1) = static_cast<T>(1) - static_cast<T>(2) * (normalizedQuat.y * normalizedQuat.y + normalizedQuat.z * normalizedQuat.z);
+		rotationMatrix(1, 2) = static_cast<T>(2) * (normalizedQuat.x * normalizedQuat.y + normalizedQuat.w * normalizedQuat.z);
+		rotationMatrix(1, 3) = static_cast<T>(2) * (normalizedQuat.x * normalizedQuat.z - normalizedQuat.w * normalizedQuat.y);
+
+		rotationMatrix(2, 1) = static_cast<T>(2) * (normalizedQuat.x * normalizedQuat.y - normalizedQuat.w * normalizedQuat.z);
+		rotationMatrix(2, 2) = static_cast<T>(1) - static_cast<T>(2) * (normalizedQuat.x * normalizedQuat.x + normalizedQuat.z * normalizedQuat.z);
+		rotationMatrix(2, 3) = static_cast<T>(2) * (normalizedQuat.y * normalizedQuat.z + normalizedQuat.w * normalizedQuat.x);
+
+		rotationMatrix(3, 1) = static_cast<T>(2) * (normalizedQuat.x * normalizedQuat.z + normalizedQuat.w * normalizedQuat.y);
+		rotationMatrix(3, 2) = static_cast<T>(2) * (normalizedQuat.y * normalizedQuat.z - normalizedQuat.w * normalizedQuat.x);
+		rotationMatrix(3, 3) = static_cast<T>(1) - static_cast<T>(2) * (normalizedQuat.x * normalizedQuat.x + normalizedQuat.y * normalizedQuat.y);
+
+		return rotationMatrix;*/
 	}
 
 	template <typename T>
@@ -408,10 +445,10 @@ namespace CommonUtilities
 		float sr = std::sin(halfAngle.x);
 
 		Quaternion result(
-			cr * cp * cy + sr * sp * sy,
-			sr * cp * cy - cr * sp * sy,
+			cr * cp * cy - sr * sp * sy,
+			sr * cp * cy + cr * sp * sy,
 			cr * sp * cy + sr * cp * sy,
-			cr * cp * sy - sr * sp * cy
+			cr * cp * sy + sr * sp * cy
 		);
 
 		result.Normalize();

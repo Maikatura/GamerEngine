@@ -440,7 +440,6 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 	{
 		ImGui::Checkbox("Active", &component.Active);
 		ImGui::Checkbox("Smooth Shadows", &component.SmoothShadows);
-		ImGui::DragFloat3("Direction", &component.Direction.x);
 		ImGui::ColorEdit3("Light Color", &component.Color.x);
 		ImGui::DragFloat("Intensity", &component.Intensity, 0.1f, 0.0f, 10.0f);
 	});

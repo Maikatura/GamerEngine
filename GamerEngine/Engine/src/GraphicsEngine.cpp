@@ -435,28 +435,35 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetBlendState(BlendState::None);
 
-	//{
-	//	PROFILE_CPU_SCOPE("Generate GBuffer");
-	//	myGBuffer->ClearResource(0);
-	//	myGBuffer->SetAsTarget();
-	//	myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
-	//	myGBuffer->ClearTarget();
-	//	myGBuffer->SetAsResource(0);
-	//}
-	//
-	//
-	//
-	//{
-	//	PROFILE_CPU_SCOPE("Render With Deferred Renderer");
-	//	RendererBase::SetBlendState(BlendState::Alpha);
-	//	myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
-	//	myDeferredRenderer->ClearTarget();
-	//}
+	{
+		PROFILE_CPU_SCOPE("Generate GBuffer");
+		myGBuffer->ClearResource(0);
+		myGBuffer->SetAsTarget();
+		myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
+		myGBuffer->ClearTarget();
+		myGBuffer->SetAsResource(0);
+	}
 
+	// SSAO is currently broken
+	//{
+	//	PROFILE_CPU_SCOPE("Render SSAO");
+	//	myPostProcessRenderer->ClearTargets();
+	//	if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
+	//	//DX11::Get().TurnZBufferOn();
+	//}
+	
+	
+	{
+		PROFILE_CPU_SCOPE("Render With Deferred Renderer");
+		RendererBase::SetBlendState(BlendState::Alpha);
+		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
+		myDeferredRenderer->ClearTarget();
+	}
 
 	
+	
 
-	//myGBuffer->ClearTarget();
+	myGBuffer->ClearTarget();
 
 
 
@@ -469,11 +476,6 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
 
-	{
-		PROFILE_CPU_SCOPE("Render SSAO");
-		(renderSSAO == true) ? myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection) : myPostProcessRenderer->ClearTargets();
-		DX11::Get().TurnZBufferOn();
-	}
 
 	{
 		//PROFILE_SCOPE("Render With Forward Renderer (Sprites)");
@@ -626,11 +628,11 @@ void GraphicsEngine::EndFrame()
 	if (myIsMinimized) return;
 
 
-	{
-		PROFILE_CPU_SCOPE("Final Render Call");
-		DX11::Get().ResetRenderTarget(myUseEditor);
-		myDeferredRenderer->RenderLate();
-	}
+	//{
+	//	PROFILE_CPU_SCOPE("Final Render Call");
+	//	DX11::Get().ResetRenderTarget(myUseEditor);
+	//	myDeferredRenderer->RenderLate();
+	//}
 
 	{
 		PROFILE_CPU_SCOPE("End Of Frame");
@@ -721,5 +723,17 @@ void GraphicsEngine::SetEngineRunning(bool aCondition)
 int GraphicsEngine::GetRenderPass()
 {
 	return myRenderPass;
+}
+
+Vector2ui GraphicsEngine::GetEditorWindowSize()
+{
+	return myEditorWindowSize;
+}
+
+void GraphicsEngine::SetEditorWindowSize(Vector2ui aEditorWindowSize)
+{
+	myEditorWindowSize = aEditorWindowSize;
+
+	myPostProcessRenderer->ReInitialize();
 }
 

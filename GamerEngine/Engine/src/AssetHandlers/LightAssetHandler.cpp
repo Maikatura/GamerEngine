@@ -15,7 +15,7 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 	myDirectionalLight->Init(aColor, anIntensity);
 
 	myDirectionalLight->SetLightPosition({0, 0, 0});
-	myDirectionalLight->SetLightDirection(CommonUtilities::Quat::FromEulers(aRotation));
+	myDirectionalLight->SetLightDirection({0,0,0});
 
 
 	myDirectionalLight->myLightData.LightType = 1;
@@ -23,7 +23,7 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 #define DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION 8192.0f
 
 	constexpr float nearPlane = 30.0f;
-	constexpr float farPlane = 25000.0f;
+	constexpr float farPlane = 250000.0f;
 	constexpr float DIVIDE = 2.0f;
 
 	myDirectionalLight->myNearPlane = nearPlane;

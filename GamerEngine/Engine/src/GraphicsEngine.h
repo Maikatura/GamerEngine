@@ -54,6 +54,8 @@ class GraphicsEngine
 	bool myIsPaused = false;
 	bool myIsRunning = true;
 
+	Vector2ui myEditorWindowSize;
+
 public:
 
 	static GraphicsEngine* Get();
@@ -96,12 +98,13 @@ public:
 	void SetEngineRunning(bool aCondition);
 	int GetRenderPass();
 
-	
+	Vector2ui GetEditorWindowSize();
+	void SetEditorWindowSize(Vector2ui aEditorWindowSize);
 
 	[[nodiscard]] HWND FORCEINLINE GetWindowHandle() const { return myWindowHandle; }
 	[[nodiscard]] SIZE FORCEINLINE GetWindowSize() const { return myWindowSize; }
 	[[nodiscard]] void FORCEINLINE SetWindowSize(int aX, int aY) { myWindowSize.cx = aX; myWindowSize.cy = aY; }
-
+	
 
 private:
 

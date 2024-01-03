@@ -28,15 +28,14 @@ void SpotLight::SetOuterCone(float aRadius)
 void SpotLight::Update()
 {
 	// Get the rotation quaternion
-	myTransform->GetRotation().z = 0.0f;
 	Vector3f rotation = myTransform->GetRotation();
-	CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z)));
+	Matrix4x4f viewMat = ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z))), { 1, 1, 1 });
 
 	// Set the direction using the rotation quaternion
-	SetLightDirection(rotationQuaternion);
+	SetLightDirection(viewMat.GetForward());
 	SetLightPosition(myTransform->GetPosition());
 
-	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(ComposeFromTRS(myLightData.Position, rotationQuaternion, { 1, 1, 1 }));
+	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(viewMat);
 
 	myLightData.ShadowMapIndex = SpotLightNum;
 	SpotLightNum++;

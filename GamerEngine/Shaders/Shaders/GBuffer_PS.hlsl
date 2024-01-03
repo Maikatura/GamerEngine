@@ -52,7 +52,7 @@ GBufferOutput main(VertexToPixel input)
             result.Normal = normalTexture.Sample(wrapSampler, input.UV).agbb;
 			break;
 		case 2://RenderMode::VertexColor:
-			result.Albedo.rgb = input.VxColor.rgb;
+			result.Albedo.rgb = albedo.rgb;
 			result.Albedo.a = 1.0f;
 			break;
 	}

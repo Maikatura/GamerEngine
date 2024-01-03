@@ -55,15 +55,20 @@ CommonUtilities::Vector3<T> ToRadians(const CommonUtilities::Vector3<T>& aVector
 template<class T>
 CommonUtilities::Matrix4x4<T> ComposeFromTRS(const CommonUtilities::Vector3<T>& aTranslation, const CommonUtilities::Quaternion<T>& aRotationQuat, const CommonUtilities::Vector3<T>& aScale)
 {
+	return CommonUtilities::Matrix4x4<T>::CreateScale(aScale) * aRotationQuat.GetRotationMatrix4x4() * CommonUtilities::Matrix4x4<T>::CreateTranslation(aTranslation);
+}
 
-	CommonUtilities::Matrix4x4<T> matrix = CommonUtilities::Matrix4x4<T>();
+template<class T>
+CommonUtilities::Matrix4x4<T> CreateCubeMapViewMatrix(const CommonUtilities::Vector3<T>& aCameraPos, const CommonUtilities::Vector3<T>& aTargetPos, const CommonUtilities::Vector3<T>& aUp, const CommonUtilities::Vector3<T>& aRight)
+{
+	CommonUtilities::Matrix4x4<T> returnMatrix;
 
+	CommonUtilities::Vector3<T> forward = CommonUtilities::Vector3<T>::Normalize(aTargetPos - aCameraPos);
 
-	matrix *= CommonUtilities::Matrix4x4<T>::CreateScale(aScale);
-	matrix *= aRotationQuat.GetRotationMatrix4x4();
-	matrix *= CommonUtilities::Matrix4x4<T>::CreateTranslation(aTranslation);
+	CommonUtilities::Vector3<T> orthoUp = CommonUtilities::Vector3<T>::Normalize(aUp - CommonUtilities::Vector3<T>::Dot(aUp, forward) * forward);
 
+	CommonUtilities::Vector3<T> orthoRight = CommonUtilities::Vector3<T>::Cross(orthoUp, forward);
 
-	return matrix;
+	return CommonUtilities::Matrix4x4<T>::CreateLookAt(aCameraPos, aTargetPos, orthoUp);
 }
 

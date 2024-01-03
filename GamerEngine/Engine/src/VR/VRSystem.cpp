@@ -6,7 +6,13 @@
 
 bool VRSystem::Init(HWND aWindowHandle)
 {
+	
+
 #if ENABLE_VR
+
+	
+
+
 	// Loading the SteamVR Runtime
 	vr::EVRInitError eError = vr::VRInitError_None;
 
@@ -144,3 +150,4 @@ Matrix4x4f VRSystem::GetHMDPose()
 {
 	return m_mat4HMDPose;
 }
+

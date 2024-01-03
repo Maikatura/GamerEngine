@@ -13,14 +13,14 @@
 
 DirectionalLight::DirectionalLight()
 {
-	SetLightDirection(CommonUtilities::Quat::FromEulers({ 0,0,0 }));
+	SetLightDirection({ 0,0,0 });
 }
 
 DirectionalLight::DirectionalLight(const Vector3f aColor, const Vector3f aRotation, float aIntensity)
 {
 	SetIntensity(aIntensity);
 	SetColor(aColor);
-	SetLightDirection(CommonUtilities::Quat::FromEulers(aRotation));
+	SetLightDirection(aRotation);
 }
 
 void DirectionalLight::Update()
@@ -34,12 +34,12 @@ void DirectionalLight::Update()
 
 
 	Vector3f rotation = myTransformComp->GetRotation();
-	CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z)));
+	Matrix4x4f viewMat = ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z))), { 1, 1, 1 });
 
-	SetLightDirection(rotationQuaternion);
-	SetLightPosition(Renderer::GetCamera()->GetPosition() + myLightData.Direction * -1000.f);
-	myLightData.LightView[0] = Matrix4x4f::AffineInverse(ComposeFromTRS(myLightData.Position, rotationQuaternion, { 1, 1, 1 }));
-	
+	//SetLightDirection(rotationQuaternion);
+	myLightData.Direction = viewMat.GetForward();
+	SetLightPosition(Renderer::GetCamera()->GetPosition() + myLightData.Direction * -10000.f);
+	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(viewMat);
 	myLightData.ShadowMapIndex = 19;
 }
 

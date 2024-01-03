@@ -33,8 +33,6 @@ void CameraController::OnUpdate()
 	TransformComponent& transform = GetComponent<TransformComponent>();
 	CameraControllerData& cameraData = GetComponent<CameraControllerData>();
 
-	auto transformMatrix = transform.GetMatrix();
-	
 	if(InputInternal::IsMousePressed(VK_LBUTTON) && IsHoveringSceneView)
 	{
 		cameraData.HasBeenActivated = true;
@@ -55,8 +53,9 @@ void CameraController::OnUpdate()
 
 	
 
-	transform.GetRotation().y += Input::GetMouseDelta().x * cameraData.myMouseSensitivity;
-	transform.GetRotation().x += Input::GetMouseDelta().y * cameraData.myMouseSensitivity;
+	transform.GetRotation().y -= Input::GetMouseDelta().x * cameraData.myMouseSensitivity;
+	transform.GetRotation().x -= Input::GetMouseDelta().y * cameraData.myMouseSensitivity;
+	
 
 	if (ImGui::GetIO().MouseWheel != 0.0f)
 	{
@@ -77,30 +76,30 @@ void CameraController::OnUpdate()
 	
 	if(InputInternal::IsKeyDown(ImGuiKey_W))
 	{
-		movement = 1.0f * transformMatrix.GetForward() * aDeltaTime * speed;
+		movement = 1.0f * transform.GetForward() * aDeltaTime * speed;
 	}
 	if(InputInternal::IsKeyDown(ImGuiKey_S))
 	{
-		movement += -1.0f * transformMatrix.GetForward() * aDeltaTime * speed;
+		movement += -1.0f * transform.GetForward() * aDeltaTime * speed;
 	}
 	if(InputInternal::IsKeyDown(ImGuiKey_D))
 	{
-		movement += 1.0f * transformMatrix.GetSide() * aDeltaTime * speed;
+		movement += 1.0f * transform.GetRight() * aDeltaTime * speed;
 	}
 
 	if(InputInternal::IsKeyDown(ImGuiKey_A))
 	{
-		movement += -1.0f * transformMatrix.GetSide() * aDeltaTime * speed;
+		movement += -1.0f * transform.GetRight() * aDeltaTime * speed;
 	}
 
 	if(InputInternal::IsKeyDown(ImGuiKey_Space))
 	{
-		movement += { 0.0f, 1.0f * aDeltaTime * speed, 0.0f };
+		movement += 1.0f * transform.GetUp() * aDeltaTime * speed;
 	}
 
 	if(InputInternal::IsKeyDown(ImGuiKey_Z))
 	{
-		movement += { 0.0f, -1.0f * aDeltaTime * speed, 0.0f };
+		movement += -1.0f * transform.GetUp() * aDeltaTime * speed;
 	}
 
 	if (movement != Vector3f::Zero() || oldMouseX != transform.GetRotation().x || oldMouseY != transform.GetRotation().y)

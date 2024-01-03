@@ -46,7 +46,7 @@ public:
 
 	Ref<RenderTexture> CreateRenderTexture(const std::string& aName, float aWidth, float aHeight, DXGI_FORMAT aFormat = DXGI_FORMAT_R8G8B8A8_UNORM);
 
-	void Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection);
+	void Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection, VREye aEye = VREye::None);
 
 
 	void RenderTextureOnSlot(int aSlot, int aResourceSlot, PostProcessPass aPass, Ref<RenderTexture> aRenderTexture, ID3D11DepthStencilView* depthStencilView = nullptr);

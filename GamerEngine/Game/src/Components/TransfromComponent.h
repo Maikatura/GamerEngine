@@ -74,13 +74,25 @@ public:
 
 	Matrix4x4f GetMatrix() const
 	{
-		return Matrix;
+		auto rot = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(Rotation.x, Rotation.y, Rotation.z)));
+		return ComposeFromTRS(Translation, rot , Scale);
 	}
 
-	Matrix4x4f& GetMatrix()
+	Vector3f GetForward()
 	{
-		return Matrix;
+		return GetMatrix().GetForward();
 	}
+
+	Vector3f GetRight()
+	{
+		return GetMatrix().GetRight();
+	}
+
+	Vector3f GetUp()
+	{
+		return GetMatrix().GetUp();
+	}
+
 
 
 	void LookAt(const Vector3f aPosition)
@@ -178,15 +190,15 @@ public:
 
 	void UpdateTransformFromMatrix()
 	{
-		Translation = Matrix.GetPosition();
+		/*Translation = Matrix.GetPosition();
 		Rotation = Matrix.GetRotation().Eulers();
-		Scale = Matrix.GetScale();
+		Scale = Matrix.GetScale();*/
 	}
 
 	void BuildTransform()
 	{
-		CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(Rotation.x, Rotation.y, Rotation.z)));
-		Matrix = ComposeFromTRS(Translation, rotationQuaternion, Scale);
+		/*CommonUtilities::Quat rotationQuaternion = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(Rotation.x, Rotation.y, Rotation.z)));
+		Matrix = ComposeFromTRS(Translation, rotationQuaternion, Scale);*/
 	}
 
 	GraphicsTransform AsGraphicsTransform()
