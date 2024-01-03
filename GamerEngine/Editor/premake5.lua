@@ -74,8 +74,7 @@ includedirs{
     	"%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.PhysicsEngine}",
 	--"%{IncludeDirs.PhysX}",
-	"%{IncludeDirs.Flecs}",
-	"%{IncludeDirs.DirectXTK}"
+	"%{IncludeDirs.Flecs}"
 }
 
 externalincludedirs {
@@ -98,7 +97,6 @@ links
 	"YamlCpp",
 	"OpenFBX",
 	"OpenVR",
-	"DirectXTK",
 	
 	"ImGui",
 	"msdfgen",

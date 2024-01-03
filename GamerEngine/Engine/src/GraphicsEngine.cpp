@@ -492,7 +492,9 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		myPostProcessRenderer->Render(PostProcessRenderer::PP_TONEMAP, view, projection);
 	}*/
 
-	
+	//LineRenderer::Get().DrawLine({ 0,0,0 }, { 0,1000, 0 });
+
+	//LineRenderer::Get().Render(view, projection);
 }
 
 void GraphicsEngine::OnFrameRender()
@@ -598,8 +600,10 @@ void GraphicsEngine::OnFrameRender()
 	{
 		PROFILE_CPU_SCOPE("Clean Scene");
 		scene->Clean();
-
+		//LineRenderer::Get().Clear();
 	}
+
+
 }
 
 void GraphicsEngine::StartUpdateThread()

@@ -124,7 +124,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		graphicsEngine.OnFrameRender();
 
 
-		//LineRenderer::Get().Render(view, projection);
 		{
 			myLayers.OnUpdate();
 			myLayers.OnImGuiRender();

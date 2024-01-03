@@ -60,7 +60,6 @@ includedirs{
 	"%{IncludeDirs.Json}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.PhysX}",
-	"%{IncludeDirs.DirectXTK}",
 	"%{IncludeDirs.msdfgen}",
 	"%{IncludeDirs.msdf_atlas_gen}",
 	"%{IncludeDirs.Flecs}../include2"
@@ -82,7 +81,6 @@ links
 	"Game",
 	"Shaders",
 	"Flecs",
-	"DirectXTK",
 	"ImGui",
 	"Json",
 	"msdfgen",

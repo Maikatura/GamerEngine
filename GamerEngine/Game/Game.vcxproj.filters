@@ -70,6 +70,9 @@
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\Camera.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\Components\CameraComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -86,8 +89,5 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
-    <ClCompile Include="src\Components\Camera.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

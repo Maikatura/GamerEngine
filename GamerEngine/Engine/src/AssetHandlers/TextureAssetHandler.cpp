@@ -8,10 +8,8 @@
 #include <filesystem>
 #include <fstream>
 
-#include "DDSTextureLoader.h"
 #include "Render/DepthStencil.h"
 #include "Scene/SceneManager.h"
-#include <WICTextureLoader.h>
 
 #include "Utilites/StringCast.h"
 #include "Utilites/COMInitializer.h"
@@ -124,10 +122,10 @@ bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 		}
 		else
 		{
-			createResult = DirectX::CreateWICTextureFromFile(DX11::Get().Get().GetDevice(), aFileName.c_str(),
+			/*createResult = DirectX::CreateWICTextureFromFile(DX11::Get().Get().GetDevice(), aFileName.c_str(),
 				result->myTexture.GetAddressOf(),
 				result->mySRV.GetAddressOf()
-			);
+			);*/
 		}
 
 		

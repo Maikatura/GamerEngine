@@ -97,7 +97,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;ws2_32.lib;..\External\openvr\lib\openvr_api.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\debug\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTk.lib;d3d11.lib;dxguid.lib;ws2_32.lib;..\External\openvr\lib\openvr_api.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\debug\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -128,7 +128,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;ws2_32.lib;..\External\openvr\lib\openvr_api.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTk.lib;d3d11.lib;dxguid.lib;ws2_32.lib;..\External\openvr\lib\openvr_api.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -159,7 +159,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;ws2_32.lib;..\External\openvr\lib\openvr_api.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTk.lib;d3d11.lib;dxguid.lib;ws2_32.lib;..\External\openvr\lib\openvr_api.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -200,9 +200,6 @@
     </ProjectReference>
     <ProjectReference Include="..\External\OpenVR\OpenVR.vcxproj">
       <Project>{7F884AC8-6B2A-759E-54E5-88F24026FCEE}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\External\DirectXTK\DirectXTK.vcxproj">
-      <Project>{F78B7304-63F6-277B-AC34-D92018DE05D0}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\msdf\msdfgen\msdfgen.vcxproj">
       <Project>{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA}</Project>

@@ -9,9 +9,6 @@ targetdir ("%{wks.location}/Temp/lib/")
 objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}_%{cfg.buildcfg}")
 targetname("%{prj.name}_%{cfg.buildcfg}")
 
-pchheader "pch.h"
-pchsource "src/pch.cpp"
-
 linkoptions
 {
     "-ignore:4006",
