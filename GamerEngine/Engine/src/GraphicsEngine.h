@@ -3,7 +3,7 @@
 #include <memory>
 #include <Utilites/InputManager.h>
 #include <vector>
-#include <Math/Vector4.hpp>
+#include <Math/MathTypes.hpp>
 #include <Types/EnumTypes.h>
 #include <thread>
 #include <functional>
