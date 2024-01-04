@@ -165,7 +165,7 @@ void EditorView::EditTransform(Ref<Entity> aEntity)
 
 	Matrix4x4f localMat{};
 	float translate[3] = { transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z };
-	float rotation[3] = { -transform.GetRotation().x, -transform.GetRotation().y, -transform.GetRotation().z };
+	float rotation[3] = { transform.GetRotation().x * CommonUtilities::DegToRad, transform.GetRotation().y * CommonUtilities::DegToRad, transform.GetRotation().z * CommonUtilities::DegToRad };
 	float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
 
 	ImGuizmo::RecomposeMatrixFromComponents(translate, rotation, scale, localMat.Ptr());
@@ -193,11 +193,14 @@ void EditorView::EditTransform(Ref<Entity> aEntity)
 		// THIS IS BROKEN AND I DON'T KNOW WHY...
 		if (ImGuizmo::Manipulate(viewInverse.Ptr(),projectionView.Ptr(), myOperation, SettingKeybinds::GetEditMode(),localMat.Ptr(),NULL,NULL))
 		{
-			ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
+			//ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
 
-			transform.SetPosition({ translate[0] , translate[1] ,translate[2] });
-			transform.SetRotation({ -rotation[0] , -rotation[1] ,-rotation[2] });
-			transform.SetScale({ scale[0] , scale[1] ,scale[2] });
+			auto rotQuat = localMat.GetRotation();
+			auto rotEuler = rotQuat.Eulers();
+
+			transform.SetPosition(localMat.GetPosition());
+			transform.SetRotation(rotEuler);
+			transform.SetScale(localMat.GetScale());
 		}
 	}
 

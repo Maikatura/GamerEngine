@@ -7,12 +7,10 @@
 #include "Vector.h"
 
 
-#define MatrixSize 16
+
 
 namespace CommonUtilities
 {
-	
-
 
 	template<class T>
 	class Matrix4x4
@@ -88,7 +86,7 @@ namespace CommonUtilities
 
 		void SetPosition(Vector4<T> aPosition);
 
-		std::array<T, MatrixSize> myMatrix;
+		std::array<T, 16> myMatrix;
 	};
 
 	template <typename T>
@@ -254,11 +252,13 @@ namespace CommonUtilities
 		angles.y = std::atan2(-myMatrix[2], std::sqrt(myMatrix[0] * myMatrix[0] + myMatrix[1] * myMatrix[1]));
 
 		// Calculate pitch (around X-axis)
-		if (std::abs(myMatrix[2]) < 1.0) {
+		if (std::abs(myMatrix[2]) < 1.0) 
+		{
 			angles.x = std::atan2(myMatrix[6], myMatrix[10]);
 			angles.z = std::atan2(myMatrix[1], myMatrix[0]);
 		}
-		else {
+		else 
+		{
 			angles.x = std::atan2(myMatrix[6], myMatrix[5]);
 			angles.z = 0.0f;
 		}

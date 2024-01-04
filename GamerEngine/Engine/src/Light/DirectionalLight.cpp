@@ -38,7 +38,7 @@ void DirectionalLight::Update()
 
 	//SetLightDirection(rotationQuaternion);
 	myLightData.Direction = viewMat.GetForward();
-	SetLightPosition(Renderer::GetCamera()->GetPosition() + myLightData.Direction * -10000.f);
+	SetLightPosition(Renderer::GetCamera()->GetPosition() + myLightData.Direction * -5000.f);
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(viewMat);
 	myLightData.ShadowMapIndex = 19;
 }

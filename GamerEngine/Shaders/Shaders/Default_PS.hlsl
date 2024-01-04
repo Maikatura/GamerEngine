@@ -64,7 +64,7 @@ PixelOutput main(VertexToPixel input)
 		specularColor
 	);
 
-	//ambientLighting *= ssao; // This is currently broken
+	// ambientLighting *= ssao; // This is currently broken
 
 	float3 pointLight = 0;
 	float3 spotLight = 0;
@@ -158,7 +158,7 @@ PixelOutput main(VertexToPixel input)
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, -Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
 				if(Light.CastShadows)

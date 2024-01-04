@@ -61,7 +61,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 		specularColor
 	);
 
-	//ambientLighting *= ssao; // This is currently broken
+	// ambientLighting *= ssao; // This is currently broken
     
 
 	float3 pointLight = 0;
@@ -130,12 +130,11 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 			{
 				float3 spotTemp = EvaluateSpotLight(diffuseColor,
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
-					Light.Range, Light.Position, -Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
+					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
 				if (Light.CastShadows)
 				{
-
 					if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
 						spotTemp *= SHADOW_BIAS;

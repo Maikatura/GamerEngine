@@ -35,7 +35,7 @@ GBufferOutput main(VertexToPixel input)
 	result.Albedo = albedo;
     result.Normal = float4(pixelNormal, 0.0f);
     result.Material = materialMap;
-    result.VertexNormal = float4(normalize(input.Normal), 0.0f);
+    result.VertexNormal = result.Normal;
 	result.WorldPosition = float4(input.WorldPosition.xyz, 1.0f);
 	result.AmbientOcclusion = ambientOcclusion;
 	result.ViewPosition = float4(input.Position.xyz, 1.0f);

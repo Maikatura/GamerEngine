@@ -61,6 +61,8 @@ bool ModelInstance::UpdateInstanceBuffer()
 
 bool ModelInstance::RenderWithDeferred()
 {
+	return false;
+
 	if (HasSkeleton())
 	{
 		return true;

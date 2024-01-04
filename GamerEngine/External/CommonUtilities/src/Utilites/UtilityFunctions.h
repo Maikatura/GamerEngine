@@ -7,7 +7,9 @@
 
 namespace CommonUtilities
 {
-
+	const float PI = 3.141f;
+	const float DegToRad = static_cast<float>(PI / 180.0f);
+	const float RadToDeg = static_cast<float>(180.0f / PI);
 
 	template<typename T>
 	T Distance(const T aFirst, const T aSecond)

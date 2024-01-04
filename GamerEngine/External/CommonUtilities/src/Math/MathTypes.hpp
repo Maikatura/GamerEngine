@@ -25,50 +25,55 @@ typedef CommonUtilities::Matrix4x4<double> Matrix4x4d;
 
 // Useful Tools To Convert
 
-template<class T>
-CommonUtilities::Vector3<T> ToVector3(const CommonUtilities::Vector4<T>& aVectorToConvert)
+
+namespace CommonUtilities
 {
-	return CommonUtilities::Vector3<T>(aVectorToConvert.x, aVectorToConvert.y, aVectorToConvert.z);
+	template<class T>
+	Vector3<T> ToVector3(const Vector4<T>& aVectorToConvert)
+	{
+		return Vector3<T>(aVectorToConvert.x, aVectorToConvert.y, aVectorToConvert.z);
+	}
+
+	template<class T>
+	Vector3<T> ToDegrees(const Vector3<T>& aVectorToConvert)
+	{
+		Vector3<T> returnVector3 = Vector3<T>(aVectorToConvert.x, aVectorToConvert.y, aVectorToConvert.z);
+		returnVector3 *= RadToDeg;
+
+		return returnVector3;
+	}
+
+
+	template<class T>
+	Vector3<T> ToRadians(const Vector3<T>& aVectorToConvert)
+	{
+		float degreeToRad = DegToRad;
+		Vector3<T> returnVector3 = Vector3<T>(aVectorToConvert.x, aVectorToConvert.y, aVectorToConvert.z);
+		returnVector3 *= degreeToRad;
+
+		return returnVector3;
+	}
+
+	template<class T>
+	Matrix4x4<T> ComposeFromTRS(const Vector3<T>& aTranslation, const Quaternion<T>& aRotationQuat, const Vector3<T>& aScale)
+	{
+		return Matrix4x4<T>::CreateScale(aScale) * aRotationQuat.GetRotationMatrix4x4() * Matrix4x4<T>::CreateTranslation(aTranslation);
+	}
+
+	template<class T>
+	Matrix4x4<T> CreateCubeMapViewMatrix(const Vector3<T>& aCameraPos, const Vector3<T>& aTargetPos, const Vector3<T>& aUp, const Vector3<T>& aRight)
+	{
+		Matrix4x4<T> returnMatrix;
+
+		Vector3<T> forward = Vector3<T>::Normalize(aTargetPos - aCameraPos);
+
+		Vector3<T> orthoUp = Vector3<T>::Normalize(aUp - Vector3<T>::Dot(aUp, forward) * forward);
+
+		Vector3<T> orthoRight = Vector3<T>::Cross(orthoUp, forward);
+
+		return Matrix4x4<T>::CreateLookAt(aCameraPos, aTargetPos, orthoUp);
+	}
 }
 
-template<class T>
-CommonUtilities::Vector3<T> ToDegrees(const CommonUtilities::Vector3<T>& aVectorToConvert)
-{
-	float radToDegree = 180.0f / 3.14159f;
-	CommonUtilities::Vector3<T> returnVector3 = CommonUtilities::Vector3<T>(aVectorToConvert.x, aVectorToConvert.y, aVectorToConvert.z);
-	returnVector3 *= radToDegree;
 
-	return returnVector3;
-}
-
-
-template<class T>
-CommonUtilities::Vector3<T> ToRadians(const CommonUtilities::Vector3<T>& aVectorToConvert)
-{
-	float degreeToRad = 3.14159f / 180.0f;
-	CommonUtilities::Vector3<T> returnVector3 = CommonUtilities::Vector3<T>(aVectorToConvert.x, aVectorToConvert.y, aVectorToConvert.z);
-	returnVector3 *= degreeToRad;
-
-	return returnVector3;
-}
-
-template<class T>
-CommonUtilities::Matrix4x4<T> ComposeFromTRS(const CommonUtilities::Vector3<T>& aTranslation, const CommonUtilities::Quaternion<T>& aRotationQuat, const CommonUtilities::Vector3<T>& aScale)
-{
-	return CommonUtilities::Matrix4x4<T>::CreateScale(aScale) * aRotationQuat.GetRotationMatrix4x4() * CommonUtilities::Matrix4x4<T>::CreateTranslation(aTranslation);
-}
-
-template<class T>
-CommonUtilities::Matrix4x4<T> CreateCubeMapViewMatrix(const CommonUtilities::Vector3<T>& aCameraPos, const CommonUtilities::Vector3<T>& aTargetPos, const CommonUtilities::Vector3<T>& aUp, const CommonUtilities::Vector3<T>& aRight)
-{
-	CommonUtilities::Matrix4x4<T> returnMatrix;
-
-	CommonUtilities::Vector3<T> forward = CommonUtilities::Vector3<T>::Normalize(aTargetPos - aCameraPos);
-
-	CommonUtilities::Vector3<T> orthoUp = CommonUtilities::Vector3<T>::Normalize(aUp - CommonUtilities::Vector3<T>::Dot(aUp, forward) * forward);
-
-	CommonUtilities::Vector3<T> orthoRight = CommonUtilities::Vector3<T>::Cross(orthoUp, forward);
-
-	return CommonUtilities::Matrix4x4<T>::CreateLookAt(aCameraPos, aTargetPos, orthoUp);
-}
 

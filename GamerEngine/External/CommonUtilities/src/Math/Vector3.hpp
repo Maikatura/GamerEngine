@@ -1,5 +1,6 @@
 #pragma once
 #include <cassert>
+#include <valarray>
 
 #include "Utilites/UtilityFunctions.h"
 
@@ -92,7 +93,7 @@ namespace CommonUtilities
 	template <class T>
 	T Vector3<T>::Length() const
 	{
-		return sqrt(x * x + y * y + z * z);
+		return std::sqrt(static_cast<float>(x) * static_cast<float>(x) + static_cast<float>(y) * static_cast<float>(y) + static_cast<float>(z) * static_cast<float>(z));
 	}
 
 	template <class T>

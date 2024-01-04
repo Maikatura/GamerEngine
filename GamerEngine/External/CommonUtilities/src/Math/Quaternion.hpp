@@ -324,66 +324,61 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::FromRotationMatrix3x3(const Matrix3x3<T>& aMatrix)
 	{
+		// THIS IS PBLY BROKEN :(
+
 		T m00 = aMatrix(1, 1);
-		T m01 = aMatrix(2, 1);
-		T m02 = aMatrix(3, 1);
-
-		T m10 = aMatrix(1, 2);
+		T m01 = aMatrix(1, 2);
+		T m02 = aMatrix(1, 3);
+		T m10 = aMatrix(2, 1);
 		T m11 = aMatrix(2, 2);
-		T m12 = aMatrix(3, 2);
-
-		T m20 = aMatrix(1, 3);
-		T m21 = aMatrix(2, 3);
+		T m12 = aMatrix(2, 3);
+		T m20 = aMatrix(3, 1);
+		T m21 = aMatrix(3, 2);
 		T m22 = aMatrix(3, 3);
 
-		Quaternion<T> quatFromMatrix;
+		// Calculate the squared magnitude of the quaternion
+		T t = m00 + m11 + m22 + static_cast<T>(1);
 
-		T t = static_cast<T>(0);
-		if(m22 < static_cast<T>(0))
+		Quaternion<T> q;
+
+		if (t > std::numeric_limits<T>::epsilon())
 		{
-			if(m00 > m11)
-			{
-				t = static_cast<T>(1) + m00 - m11 - m22;
+			t = static_cast<T>(0.5) / std::sqrt(t);
 
-				quatFromMatrix.x = t;
-				quatFromMatrix.y = m01 + m10;
-				quatFromMatrix.z = m20 + m02;
-				quatFromMatrix.w = m12 - m21;
-			}
-			else
-			{
-				t = static_cast<T>(1) - m00 + m11 - m22;
-				quatFromMatrix.x = m01 + m10;
-				quatFromMatrix.y = t;
-				quatFromMatrix.z = m12 + m21;
-				quatFromMatrix.w = m20 - m02;
-			}
+			q.w = static_cast<T>(0.25) / t;
+			q.x = (m21 - m12) * t;
+			q.y = (m02 - m20) * t;
+			q.z = (m10 - m01) * t;
 		}
 		else
 		{
-			if(m00 < -m11)
+			if (m00 > m11 && m00 > m22)
 			{
-				t = static_cast<T>(1) - m00 - m11 + m22;
-				quatFromMatrix.x = m20 + m02;
-				quatFromMatrix.y = m12 + m21;
-				quatFromMatrix.z = t;
-				quatFromMatrix.w = m01 - m10;
+				t = static_cast<T>(1) + m00 - m11 - m22;
+				q.w = (m21 - m12) / std::sqrt(t);
+				q.x = static_cast<T>(0.25) * std::sqrt(t);
+				q.y = (m01 + m10) / std::sqrt(t);
+				q.z = (m02 + m20) / std::sqrt(t);
+			}
+			else if (m11 > m22)
+			{
+				t = static_cast<T>(1) - m00 + m11 - m22;
+				q.w = (m02 - m20) / std::sqrt(t);
+				q.x = (m01 + m10) / std::sqrt(t);
+				q.y = static_cast<T>(0.25) * std::sqrt(t);
+				q.z = (m12 + m21) / std::sqrt(t);
 			}
 			else
 			{
-				t = static_cast<T>(1) + m00 + m11 + m22;
-				quatFromMatrix.x = m12 - m21;
-				quatFromMatrix.y = m20 - m02;
-				quatFromMatrix.z = m01 - m10;
-				quatFromMatrix.w = t;
+				t = static_cast<T>(1) - m00 - m11 + m22;
+				q.w = (m10 - m01) / std::sqrt(t);
+				q.x = (m02 + m20) / std::sqrt(t);
+				q.y = (m12 + m21) / std::sqrt(t);
+				q.z = static_cast<T>(0.25) * std::sqrt(t);
 			}
 		}
 
-		quatFromMatrix *= static_cast<T>(0.5) / std::sqrt(t);
-		quatFromMatrix.w *= static_cast<T>(-1);
-		quatFromMatrix.Normalize();
-
-		return Quat(quatFromMatrix.w, quatFromMatrix.x, quatFromMatrix.y, quatFromMatrix.z);
+		return q;
 	}
 
 	//From: https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
@@ -397,25 +392,30 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Vector3<T> Quaternion<T>::Eulers() const
 	{
-		Vector3<T> angles{ 0.0f , 0.0f, 0.0f };
+		// THIS IS PBLY BROKEN :(
 
-		float sinr_cosp = 2 * (w * x + y * z);
-		float cosr_cosp = 1 - 2 * (x * x + y * y);
-		angles.x = std::atan2(sinr_cosp, cosr_cosp);
+
+		Vector3<T> eulerAngles;
+
+		// Roll (x-axis rotation)
+		T sinRoll = static_cast<T>(2.0) * (w * x + y * z);
+		T cosRoll = static_cast<T>(1.0) - static_cast<T>(2.0) * (x * x + y * y);
+		eulerAngles.x = std::atan2(sinRoll, cosRoll);
 
 		// Pitch (y-axis rotation)
-		float sinp = 2 * (w * y - z * x);
-		if (std::abs(sinp) >= 1)
-			angles.y = std::copysign(PI_NUMBER / 2, sinp); // Use 90 degrees if out of range
+		T sinPitch = static_cast<T>(2.0) * (w * y - z * x);
+		// Avoid gimbal lock at the poles
+		if (std::abs(sinPitch) >= static_cast<T>(1.0))
+			eulerAngles.y = std::copysign(static_cast<T>(PI / 2), sinPitch);
 		else
-			angles.y = std::asin(sinp);
+			eulerAngles.y = std::asin(sinPitch);
 
 		// Yaw (z-axis rotation)
-		float siny_cosp = 2 * (w * z + x * y);
-		float cosy_cosp = 1 - 2 * (y * y + z * z);
-		angles.z = std::atan2(siny_cosp, cosy_cosp);
+		T sinYaw = static_cast<T>(2.0) * (w * z + x * y);
+		T cosYaw = static_cast<T>(1.0) - static_cast<T>(2.0) * (y * y + z * z);
+		eulerAngles.z = -std::atan2(sinYaw, cosYaw);
 
-		return angles;
+		return eulerAngles;
 	}
 
 	template <typename T>

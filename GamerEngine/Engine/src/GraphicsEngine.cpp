@@ -435,6 +435,9 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetBlendState(BlendState::None);
 
+
+	
+
 	{
 		PROFILE_CPU_SCOPE("Generate GBuffer");
 		myGBuffer->ClearResource(0);
@@ -445,12 +448,12 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	}
 
 	// SSAO is currently broken
-	//{
-	//	PROFILE_CPU_SCOPE("Render SSAO");
-	//	myPostProcessRenderer->ClearTargets();
-	//	if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
-	//	//DX11::Get().TurnZBufferOn();
-	//}
+	{
+		PROFILE_CPU_SCOPE("Render SSAO");
+		myPostProcessRenderer->ClearTargets();
+		if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
+		//DX11::Get().TurnZBufferOn();
+	}
 	
 	
 	{
@@ -462,10 +465,16 @@ void GraphicsEngine::RenderScene(VREye anEye)
 
 	
 	
-
+	//myPostProcessRenderer->ClearTargets();
 	myGBuffer->ClearTarget();
 
-
+	// SSAO is currently broken
+	//{
+	//	PROFILE_CPU_SCOPE("Render SSAO");
+	//	myPostProcessRenderer->ClearTargets();
+	//	if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
+	//	//DX11::Get().TurnZBufferOn();
+	//}
 
 
 	{
@@ -475,6 +484,8 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		RendererBase::SetBlendState(BlendState::None);
 		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
+
+	
 
 
 	{

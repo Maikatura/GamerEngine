@@ -19,7 +19,7 @@ bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightPr
 	if (saturate(lightUV.x) == lightUV.x && saturate(lightUV.y) == lightUV.y)
 	{
 		float vDepth = (v2lProj.z / v2lProj.w) - aBias;
-		float lDepth = aShadowMap.Sample(pointClampSampler, lightUV).r;
+        float lDepth = aShadowMap.Sample(wrapSampler, lightUV).r;
 		return (lDepth < vDepth);
 	}
 	return false;
@@ -46,7 +46,7 @@ bool GetShadowPixel(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLi
 		//float vDepth = ((length(fragToLight) / aRange) / v2lProj.w) - aBias;
 		if (saturate(lightUV.x) == lightUV.x && saturate(lightUV.y) == lightUV.y && w2lView.z > 0)
 		{
-			float lDepth = aShadowMap.Sample(pointClampSampler, fragToLight).r;
+            float lDepth = aShadowMap.Sample(wrapSampler, fragToLight).r;
 			if (lDepth < vDepth) return true;
 		}
 	}
@@ -63,7 +63,7 @@ float ResolveShadow(LightData light, Texture2D aShadowMap, float3 projectedTexCo
     }
     else
     {
-        return aShadowMap.SampleLevel(pointClampSampler, projectedTexCoord.xy, 0) >= projectedTexCoord.z;
+        return aShadowMap.SampleLevel(defaultSampler, projectedTexCoord.xy, 0) >= projectedTexCoord.z;
     }
 }
 
@@ -77,7 +77,7 @@ float ResolveShadowCube(LightData light, TextureCube aShadowMap, float projected
     }
     else
     {
-        float depth = aShadowMap.SampleLevel(pointClampSampler, fragToLight, 0).r;
+        float depth = aShadowMap.SampleLevel(defaultSampler, fragToLight, 0).r;
         if (depth < projectedDepth)
         {
             return saturate(worldToLightView.z / (light.Range * light.Range));
