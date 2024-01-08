@@ -140,7 +140,7 @@ void CameraComponent::SetHasMoved(bool aMoveValue)
 void CameraComponent::BuildTransform(TransformComponent* aTransform)
 {
 	myPosition = aTransform->GetPosition();
-	myRotation = CommonUtilities::Quat::FromEulers(ToRadians(aTransform->GetRotation()));
+	myRotation = Quatf::FromEulers(ToRadians(aTransform->GetRotation()));
 
 	myTransform = aTransform->AsGraphicsTransform();
 	

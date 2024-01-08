@@ -61,7 +61,7 @@ protected:
 	Ref<RenderTexture> myWorldNormalMap;
 	Ref<RenderTexture> myFluxMap;
 
-	CommonUtilities::Quat myLocalDirection;
+	Quatf myLocalDirection;
 
 	TransformComponent* myTransformComp;
 
@@ -131,7 +131,7 @@ public:
 		//myLocalDirection = aDirection;
 		myLightData.Direction = aDirection;
 	}
-	FORCEINLINE CommonUtilities::Quat GetLightDirection()
+	FORCEINLINE Quatf GetLightDirection()
 	{
 		return myLocalDirection;
 	}

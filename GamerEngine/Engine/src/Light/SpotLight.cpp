@@ -29,7 +29,7 @@ void SpotLight::Update()
 {
 	// Get the rotation quaternion
 	Vector3f rotation = myTransform->GetRotation();
-	Matrix4x4f viewMat = ComposeFromTRS(myLightData.Position, CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z))), { 1, 1, 1 });
+	Matrix4x4f viewMat = ComposeFromTRS(myLightData.Position, Quatf::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z))), { 1, 1, 1 });
 
 	// Set the direction using the rotation quaternion
 	SetLightDirection(viewMat.GetForward());

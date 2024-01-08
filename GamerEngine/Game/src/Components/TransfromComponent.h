@@ -74,7 +74,7 @@ public:
 
 	Matrix4x4f GetMatrix() const
 	{
-		auto rot = CommonUtilities::Quat::FromEulers(ToRadians(Vector3f(Rotation.x, Rotation.y, Rotation.z)));
+		auto rot = Quatf::FromEulers(ToRadians(Vector3f(Rotation.x, Rotation.y, Rotation.z)));
 		return ComposeFromTRS(Translation, rot , Scale);
 	}
 
@@ -134,7 +134,7 @@ public:
 	Vector3f Forward()
 	{
 		const float forwardDistance = 5.0f;
-		Vector3f forwardVector = CommonUtilities::Quat(Rotation).Forward();
+		Vector3f forwardVector = Quatf(Rotation).Forward();
 		return Translation + forwardVector * forwardDistance;
 	}
 

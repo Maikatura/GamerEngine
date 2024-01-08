@@ -51,10 +51,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msdf-atlas-gen", "External\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msdfgen", "External\msdf\msdfgen\msdfgen.vcxproj", "{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{23E4C901-0F47-59A6-B8CC-915CA40E2529}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcxproj", "{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -188,12 +184,6 @@ Global
 		{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA}.Distribution|x64.Build.0 = Distribution|x64
 		{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA}.Release|x64.ActiveCfg = Release|x64
 		{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA}.Release|x64.Build.0 = Release|x64
-		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Debug|x64.ActiveCfg = Debug|x64
-		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Debug|x64.Build.0 = Debug|x64
-		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Distribution|x64.ActiveCfg = Release|x64
-		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Distribution|x64.Build.0 = Release|x64
-		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Release|x64.ActiveCfg = Release|x64
-		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -220,6 +210,5 @@ Global
 		{89895BD8-7556-B6E3-9E6F-A48B8A9BEB71} = {6F244A6A-5BF2-3D70-4486-AE9630F319D5}
 		{38BD587B-248B-4C81-0D1F-BDA7F98B28E6} = {6F244A6A-5BF2-3D70-4486-AE9630F319D5}
 		{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA} = {6F244A6A-5BF2-3D70-4486-AE9630F319D5}
-		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7} = {23E4C901-0F47-59A6-B8CC-915CA40E2529}
 	EndGlobalSection
 EndGlobal

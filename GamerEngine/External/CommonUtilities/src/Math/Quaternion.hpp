@@ -72,13 +72,6 @@ namespace CommonUtilities
 		constexpr static Quaternion<T> CalculateAverageQuaternion(const Quaternion<T>* aQuaternions, size_t aCount);
 	};
 
-	using Quat = CommonUtilities::Quaternion<float>;
-	using Quatf = CommonUtilities::Quaternion<float>;
-	using Quatd = CommonUtilities::Quaternion<double>;
-
-	using Quaternionf = CommonUtilities::Quaternion<float>;
-	using Quaterniond = CommonUtilities::Quaternion<double>;
-
 	template <typename T>
 	std::ostream& operator<<(std::ostream& aOut, const Quaternion<T>& aQuaternion)
 	{
@@ -181,7 +174,7 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::Inverse(const Quaternion<T>& aQuaternion)
 	{
-		return Conjugate(Quat::Normalize(aQuaternion));
+		return Conjugate(Quaternion<T>::Normalize(aQuaternion));
 	}
 
 	template <typename T>
@@ -474,7 +467,7 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::Lerp(const Quaternion<T>& aQuaternionA, const Quaternion<T>& aQuaternionB, const T& aT)
 	{
-		return Quat();
+		return Quaternion<T>();
 	}
 
 	template <typename T>
@@ -527,13 +520,13 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::DeltaRotationLocal(const Quaternion<T>& aFromRotation, const Quaternion<T>& aToRotation)
 	{
-		return Quat::Inverse(aFromRotation) * aToRotation;
+		return Quaternion<T>::Inverse(aFromRotation) * aToRotation;
 	}
 
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::DeltaRotationWorld(const Quaternion<T>& aFromRotation, const Quaternion<T>& aToRotation)
 	{
-		return aToRotation * Quat::Inverse(aFromRotation);
+		return aToRotation * Quaternion<T>::Inverse(aFromRotation);
 	}
 
 	template <typename T>
@@ -545,7 +538,7 @@ namespace CommonUtilities
 		for(size_t index = 0; index < aCount; index++)
 		{
 			Quaternion<T> nextRotation = aQuaternions[index];
-			if(Quat::Dot(cumulativeRotation, nextRotation) < 0.0f)
+			if(Quaternion<T>::Dot(cumulativeRotation, nextRotation) < 0.0f)
 			{
 				nextRotation = -nextRotation;
 			}
@@ -641,16 +634,16 @@ namespace CommonUtilities
 	template <class T>
 	constexpr inline Vector3<T> operator*(const Quaternion<T>& aQuaternion, const Vector3<T>& aVector3)
 	{
-		Quat vectorAsQuat{ 0.0f, aVector3.x, aVector3.y, aVector3.z };
-		Quaternion<T> result = aQuaternion * vectorAsQuat * Quat::Conjugate(aQuaternion);
+		Quaternion vectorAsQuat{ 0.0f, aVector3.x, aVector3.y, aVector3.z };
+		Quaternion<T> result = aQuaternion * vectorAsQuat * Quaternion<T>::Conjugate(aQuaternion);
 		return Vector3<T> { result.x, result.y, result.z };
 	}
 
 	template <class T>
 	constexpr inline Vector4<T> operator*(const Quaternion<T>& aQuaternion, const Vector4<T>& aVector4)
 	{
-		Quat vectorAsQuat{ aVector4.w, aVector4.x, aVector4.y, aVector4.z };
-		Quaternion<T> result = aQuaternion * vectorAsQuat * Quat::Conjugate(aQuaternion);
+		Quaternion<T> vectorAsQuat{ aVector4.w, aVector4.x, aVector4.y, aVector4.z };
+		Quaternion<T> result = aQuaternion * vectorAsQuat * Quaternion<T>::Conjugate(aQuaternion);
 		return Vector4<T> { result.x, result.y, result.z, result.w };
 	}
 
