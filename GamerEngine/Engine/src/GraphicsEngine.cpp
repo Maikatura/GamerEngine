@@ -275,6 +275,7 @@ void GraphicsEngine::BeginFrame()
 		myWantToResizeBuffers = false;
 	}
 
+
 	//Vector4f clearColor = Renderer::GetClearColor();
 	//DX11::Get().BeginFrame({ clearColor.x, clearColor.y, clearColor.z, clearColor.w });
 	//

@@ -43,7 +43,7 @@ namespace CommonUtilities
 		static Matrix4x4<T> Transpose(const Matrix4x4<T>& aMatrixToTranspose);
 		static Matrix4x4<T> GetFastInverse(const Matrix4x4<T>& aTransform);
 		static Matrix4x4<T> Slerp(Matrix4x4<T> aMatrixOne, Matrix4x4<T> aMatrixTwo, float aTime);
-		static Matrix4x4<T> BuildTransform(Vector3<T> aTranslate, Vector3<T> aRotation, Vector3<T> aScale);
+
 		static Matrix4x4<T> CreateTranslation(const Vector3<T>& aTranslation);
 		static Matrix4x4<T> CreateScale(const Vector3<T>& aScale);
 
@@ -176,10 +176,13 @@ namespace CommonUtilities
 	template <typename T>
 	Matrix4x4<T>::Matrix4x4()
 	{
-		for(size_t i = 0; i < 16; i++)
-		{
-			myMatrix[i] = static_cast<T>(i % 5 == 0 ? 1 : 0);
-		}
+		myMatrix = {
+			static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+			static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0),
+			static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(0),
+			static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)
+		};
+		
 	}
 
 	template<typename T>
@@ -635,30 +638,7 @@ namespace CommonUtilities
 		return result;
 	}
 
-	template <class T>
-	Matrix4x4<T> Matrix4x4<T>::BuildTransform(Vector3<T> aTranslate, Vector3<T> aRotation, Vector3<T> aScale)
-	{
-		Matrix4x4<T> scaleMatrix = Matrix4x4<T>();
-		scaleMatrix(1, 1) = aScale.x;
-		scaleMatrix(2, 2) = aScale.y;
-		scaleMatrix(3, 3) = aScale.z;
-
-		//aRotation *= static_cast<T>(3.14159f) / static_cast<T>(180.0); // Convert degrees to radians
-
-		Matrix4x4<T> rotationMatrix = Matrix4x4<T>::CreateRotationAroundX(aRotation.x) *
-			Matrix4x4<T>::CreateRotationAroundY(aRotation.y) *
-			Matrix4x4<T>::CreateRotationAroundZ(aRotation.z);
-
-		Matrix4x4<T> translationMatrix = Matrix4x4<T>();
-		translationMatrix(4, 1) = aTranslate.x;
-		translationMatrix(4, 2) = aTranslate.y;
-		translationMatrix(4, 3) = aTranslate.z;
-
-		// Combine the transformations in the correct order (scale * rotate * translate)
-		Matrix4x4<T> transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
-
-		return transformMatrix;
-	}
+	
 
 	template <typename T>
 	inline Matrix4x4<T> Matrix4x4<T>::CreateTranslation(const Vector3<T>& aTranslation)

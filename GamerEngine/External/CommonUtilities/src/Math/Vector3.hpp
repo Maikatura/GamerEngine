@@ -1,5 +1,6 @@
 #pragma once
 #include <cassert>
+#include <ostream>
 #include <valarray>
 
 #include "Utilites/UtilityFunctions.h"
@@ -53,6 +54,14 @@ namespace CommonUtilities
 
 
 	};
+
+
+	template <typename T>
+	std::ostream& operator<<(std::ostream& aOut, const Vector3<T>& aVector3)
+	{
+		aOut << "(X: " << aVector3.x << " | Y: " << aVector3.y << " | Z: " << aVector3.z << ")";
+		return aOut;
+	}
 
 	template <class T>
 	Vector3<T>::Vector3()

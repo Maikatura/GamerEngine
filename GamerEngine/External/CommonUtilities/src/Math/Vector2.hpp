@@ -47,7 +47,14 @@ namespace CommonUtilities
 		void DebugPrint() const;
 
 	};
-	
+
+	template <typename T>
+	std::ostream& operator<<(std::ostream& aOut, const Vector2<T>& aVector3)
+	{
+		aOut << "(X: " << aVector3.x << " | Y: " << aVector3.y << ")";
+		return aOut;
+	}
+
 	template <class T>
 	Vector2<T>::Vector2()
 	{

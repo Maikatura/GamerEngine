@@ -385,30 +385,27 @@ namespace CommonUtilities
 	template <typename T>
 	constexpr Vector3<T> Quaternion<T>::Eulers() const
 	{
-		// THIS IS PBLY BROKEN :(
-
-
-		Vector3<T> eulerAngles;
-
 		// Roll (x-axis rotation)
 		T sinRoll = static_cast<T>(2.0) * (w * x + y * z);
 		T cosRoll = static_cast<T>(1.0) - static_cast<T>(2.0) * (x * x + y * y);
-		eulerAngles.x = std::atan2(sinRoll, cosRoll);
+		T roll = atan2(sinRoll, cosRoll);
 
 		// Pitch (y-axis rotation)
 		T sinPitch = static_cast<T>(2.0) * (w * y - z * x);
-		// Avoid gimbal lock at the poles
-		if (std::abs(sinPitch) >= static_cast<T>(1.0))
-			eulerAngles.y = std::copysign(static_cast<T>(PI / 2), sinPitch);
-		else
-			eulerAngles.y = std::asin(sinPitch);
+		if (std::abs(sinPitch) >= 1)
+			return Vector3<T>(
+				std::copysign(PI / static_cast<T>(2), sinPitch),
+				static_cast<T>(2) * atan2(x, w),
+				static_cast<T>(0)
+			);
+		T pitch = asin(sinPitch);
 
 		// Yaw (z-axis rotation)
 		T sinYaw = static_cast<T>(2.0) * (w * z + x * y);
 		T cosYaw = static_cast<T>(1.0) - static_cast<T>(2.0) * (y * y + z * z);
-		eulerAngles.z = -std::atan2(sinYaw, cosYaw);
+		T yaw = static_cast<T>(atan2(sinYaw, cosYaw));
 
-		return eulerAngles;
+		return Vector3<T>(roll, pitch, yaw);
 	}
 
 	template <typename T>
@@ -428,16 +425,16 @@ namespace CommonUtilities
 	constexpr Quaternion<T> Quaternion<T>::FromEulers(const Vector3<T>& aEulers)
 	{
 
-		Vector3<T> halfAngle = aEulers * static_cast<T>(0.5f);
+		Vector3<T> halfAngle = aEulers * static_cast<T>(0.5);
 
-		float cy = std::cos(halfAngle.z);
-		float sy = std::sin(halfAngle.z);
-		float cp = std::cos(halfAngle.y);
-		float sp = std::sin(halfAngle.y);
-		float cr = std::cos(halfAngle.x);
-		float sr = std::sin(halfAngle.x);
+		T cy = std::cos(halfAngle.z);
+		T sy = std::sin(halfAngle.z);
+		T cp = std::cos(halfAngle.y);
+		T sp = std::sin(halfAngle.y);
+		T cr = std::cos(halfAngle.x);
+		T sr = std::sin(halfAngle.x);
 
-		Quaternion result(
+		Quaternion<T> result(
 			cr * cp * cy - sr * sp * sy,
 			sr * cp * cy + cr * sp * sy,
 			cr * sp * cy + sr * cp * sy,

@@ -15,14 +15,12 @@ void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponen
 	
 	//Transform transform = Transform();
 
-
-
 	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel()});
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
 {
-	mySpritesToRender.push_back({ Matrix4x4f::BuildTransform(aTransfrom.GetPosition(), aTransfrom.GetRotation(), aTransfrom.GetScale()), aSprite });
+	mySpritesToRender.push_back({ aTransfrom.GetMatrix(), aSprite });
 }
 
 void Renderer::RenderLight(Light* aLight)
