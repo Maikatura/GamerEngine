@@ -428,6 +428,25 @@ namespace CommonUtilities
 		return result;
 	}
 
+	template<typename T>
+	Matrix4x4<T> operator*(const Matrix4x4<T>& aFirstMatrix4, const Matrix3x3<T>& aSecondMatrix4)
+	{
+		Matrix4x4<T> result;
+
+		for (int row = 1; row <= 3; row++)
+		{
+			for (int column = 1; column <= 3; column++)
+			{
+				if (row == column) result(row, column) = 0;
+				for (int i = 1; i <= 3; i++)
+				{
+					result(row, column) += aFirstMatrix4(row, i) * aSecondMatrix4(i, column);
+				}
+			}
+		}
+		return result;
+	}
+
 	template <typename T>
 	Vector3<T> operator*(const Matrix4x4<T>& aMatrix4, const Vector3<T>& aVector3)
 	{

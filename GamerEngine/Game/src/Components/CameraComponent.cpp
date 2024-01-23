@@ -140,7 +140,7 @@ void CameraComponent::SetHasMoved(bool aMoveValue)
 void CameraComponent::BuildTransform(TransformComponent* aTransform)
 {
 	myPosition = aTransform->GetPosition();
-	myRotation = Quatf::FromEulers(ToRadians(aTransform->GetRotation()));
+	
 
 	myTransform = aTransform->AsGraphicsTransform();
 	
@@ -148,13 +148,13 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 #if ENABLE_VR
 	CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
 	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
-	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), myRotation, aTransform->GetScale());
+	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), aTransform->GetRotation(), aTransform->GetScale());
 #else
 	ViewFlatProjection = aTransform->GetMatrix();
 #endif
 	
 
-	myFrustum = CommonUtilities::CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetPosition(), myRotation, {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
+	myFrustum = CommonUtilities::CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetPosition(), aTransform->GetRotation(), {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
 
 
 	//ViewProjection = Matrix4x4f(1.0f);

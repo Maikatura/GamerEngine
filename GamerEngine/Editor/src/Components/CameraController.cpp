@@ -53,8 +53,8 @@ void CameraController::OnUpdate()
 
 	
 
-	transform.GetRotation().y -= Input::GetMouseDelta().x * cameraData.myMouseSensitivity;
-	transform.GetRotation().x -= Input::GetMouseDelta().y * cameraData.myMouseSensitivity;
+	transform.GetRotation().y += Input::GetMouseDelta().x * cameraData.myMouseSensitivity;
+	transform.GetRotation().x += Input::GetMouseDelta().y * cameraData.myMouseSensitivity;
 	
 
 	if (ImGui::GetIO().MouseWheel != 0.0f)

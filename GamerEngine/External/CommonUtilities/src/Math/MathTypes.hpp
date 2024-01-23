@@ -63,9 +63,10 @@ namespace CommonUtilities
 	}
 
 	template<class T>
-	Matrix4x4<T> ComposeFromTRS(const Vector3<T>& aTranslation, const Quaternion<T>& aRotationQuat, const Vector3<T>& aScale)
+	Matrix4x4<T> ComposeFromTRS(const Vector3<T>& aTranslation, const Vector3<T>& aEulerDeg, const Vector3<T>& aScale)
 	{
-		return Matrix4x4<T>::CreateScale(aScale) * aRotationQuat.GetRotationMatrix4x4() * Matrix4x4<T>::CreateTranslation(aTranslation);
+		Matrix3x3<T> rotationMatrix = Matrix3x3<T>::CreateRotationAroundX(DegToRad * aEulerDeg.x) * Matrix3x3<T>::CreateRotationAroundY(DegToRad * aEulerDeg.y) * Matrix3x3<T>::CreateRotationAroundZ(DegToRad * aEulerDeg.z);
+		return Matrix4x4<T>::CreateScale(aScale) * rotationMatrix * Matrix4x4<T>::CreateTranslation(aTranslation);
 	}
 
 	template<class T>

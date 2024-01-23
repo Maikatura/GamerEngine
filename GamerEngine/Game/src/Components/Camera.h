@@ -22,7 +22,7 @@ struct GraphicsTransform
 
 	Matrix4x4f GetMatrix() const
 	{
-		return ComposeFromTRS(Translation, Rotation, Scale);
+		return ComposeFromTRS(Translation, {0,0,0}, Scale);
 	}
 
 

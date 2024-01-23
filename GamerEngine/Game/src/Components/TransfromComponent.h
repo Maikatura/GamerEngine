@@ -74,8 +74,7 @@ public:
 
 	Matrix4x4f GetMatrix() const
 	{
-		auto rot = Quatf::FromEulers(ToRadians(Vector3f(Rotation.x, Rotation.y, Rotation.z)));
-		return ComposeFromTRS(Translation, rot , Scale);
+		return ComposeFromTRS(Translation, Vector3f(Rotation.x, Rotation.y, Rotation.z), Scale);
 	}
 
 	Vector3f GetForward()

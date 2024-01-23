@@ -354,7 +354,6 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 		SceneManager::Get().GetScene()->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::Get().GetStatus() == SceneStatus::Complete);
 
 	}
-	
 
 //#ifdef _Distribution
 //	std::string fps = "FPS: " + std::to_string(Time::GetFPS());
@@ -437,8 +436,6 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	RendererBase::SetBlendState(BlendState::None);
 
 
-	
-
 	{
 		PROFILE_CPU_SCOPE("Generate GBuffer");
 		myGBuffer->ClearResource(0);
@@ -448,35 +445,26 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		myGBuffer->SetAsResource(0);
 	}
 
-	// SSAO is currently broken
 	{
 		PROFILE_CPU_SCOPE("Render SSAO");
 		myPostProcessRenderer->ClearTargets();
 		if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
-		//DX11::Get().TurnZBufferOn();
 	}
-	
-	
+
 	{
 		PROFILE_CPU_SCOPE("Render With Deferred Renderer");
 		RendererBase::SetBlendState(BlendState::Alpha);
 		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
 		myDeferredRenderer->ClearTarget();
+		myGBuffer->ClearResource(0);
+		myGBuffer->ClearTarget();
 	}
 
-	
-	
-	//myPostProcessRenderer->ClearTargets();
-	myGBuffer->ClearTarget();
-
-	// SSAO is currently broken
-	//{
-	//	PROFILE_CPU_SCOPE("Render SSAO");
-	//	myPostProcessRenderer->ClearTargets();
-	//	if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
-	//	//DX11::Get().TurnZBufferOn();
-	//}
-
+	{
+		PROFILE_CPU_SCOPE("Render SSAO");
+		myPostProcessRenderer->ClearTargets();
+		if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
+	}
 
 	{
 		DX11::Get().ResetRenderTarget(myUseEditor, true);
@@ -485,30 +473,6 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		RendererBase::SetBlendState(BlendState::None);
 		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
-
-	
-
-
-	{
-		//PROFILE_SCOPE("Render With Forward Renderer (Sprites)");
-		//RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
-		//DX11::Get().ResetRenderTarget(myUseEditor);
-		//myForwardRenderer->RenderSprites(view, projection, spriteList, directionalLight, environmentLight);
-	}
-
-	/*{
-		PROFILE_CPU_SCOPE("Render Bloom");
-		myPostProcessRenderer->Render(PostProcessRenderer::PP_BLOOM, view, projection);
-	}
-
-	{
-		PROFILE_CPU_SCOPE("Render Tonemap");
-		myPostProcessRenderer->Render(PostProcessRenderer::PP_TONEMAP, view, projection);
-	}*/
-
-	//LineRenderer::Get().DrawLine({ 0,0,0 }, { 0,1000, 0 });
-
-	//LineRenderer::Get().Render(view, projection);
 }
 
 void GraphicsEngine::OnFrameRender()

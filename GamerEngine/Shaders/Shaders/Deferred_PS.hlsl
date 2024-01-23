@@ -61,7 +61,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 		specularColor
 	);
 
-	// ambientLighting *= ssao; // This is currently broken
+	 ambientLighting *= ssao; // This is currently broken
     
 
 	float3 pointLight = 0;

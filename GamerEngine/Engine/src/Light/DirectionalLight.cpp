@@ -34,7 +34,7 @@ void DirectionalLight::Update()
 
 
 	Vector3f rotation = myTransformComp->GetRotation();
-	Matrix4x4f viewMat = ComposeFromTRS(myLightData.Position, Quatf::FromEulers(ToRadians(Vector3f(rotation.x, rotation.y, rotation.z))), { 1, 1, 1 });
+	Matrix4x4f viewMat = ComposeFromTRS(myLightData.Position, Vector3f(rotation.x, rotation.y, rotation.z), { 1, 1, 1 });
 
 	//SetLightDirection(rotationQuaternion);
 	myLightData.Direction = viewMat.GetForward();
