@@ -28,6 +28,11 @@ public:
 
 	DirectionalLightComponent()
 	{
+		Color = { 1,1,1 };
+		Intensity = 1.0f;
+		CastShadow = true;
+		Active = true;
+		SmoothShadow = false;
 		myDirectionalLight = LightAssetHandler::CreateDirectionalLight({ 1,1,1 }, 1.0f, { -140,60,178 });
 	}
 
@@ -42,10 +47,10 @@ public:
 	}
 
 	Vector3f Color;
-	float Intensity = 1.0f;
-	bool CastShadow = true;
-	bool Active = true;
-	bool SmoothShadows = false;
+	float Intensity;
+	bool CastShadow;
+	bool Active;
+	bool SmoothShadow;
 
 	Ref<DirectionalLight> myDirectionalLight;
 };
@@ -60,6 +65,7 @@ public:
 		Range = 4.0f;
 		Active = true;
 		CastShadow = true;
+		SmoothShadow = true;
 
 		myPointLight = LightAssetHandler::CreatePointLight(Color, Intensity, Range, { 0,0,0 });
 	}
@@ -78,6 +84,7 @@ public:
 	float Range;
 	bool CastShadow;
 	bool Active;
+	bool SmoothShadow;
 
 	Ref<PointLight> myPointLight;
 };
@@ -92,6 +99,7 @@ public:
 		Range = 4.0f;
 		InnerCone = 20.0f;
 		OuterCone = 130.0f;
+		SmoothShadow = true;
 
 		mySpotLight = LightAssetHandler::CreateSpotLight(Color, Intensity, Range, {0,0,0}, InnerCone, OuterCone);
 	}
@@ -114,6 +122,7 @@ public:
 	float OuterCone;
 	bool CastShadow;
 	bool Active;
+	bool SmoothShadow;
 
 	Ref<SpotLight> mySpotLight;
 };

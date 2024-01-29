@@ -1,11 +1,15 @@
 #pragma once
-#include "Matrix4x4.hpp"
 #include "Vector3.hpp"
 #include "Vector4.hpp"
 #include <array>
 
 namespace CommonUtilities
 {
+
+
+	template<typename T>
+	class Matrix4x4;
+
 	template<typename T>
 	class Matrix3x3
 	{

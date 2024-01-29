@@ -314,6 +314,11 @@ void Scene::OnRender()
 				auto [transform, dirLight] = view.get<TransformComponent, DirectionalLightComponent>(entity);
 				if (dirLight.myDirectionalLight)
 				{
+					if (!dirLight.Active) 
+					{ 
+						continue; 
+					}
+
 					myDirectionalLight = dirLight.myDirectionalLight;
 					dirLight.myDirectionalLight->SetData(&transform);
 					dirLight.OnUpdate();
@@ -333,6 +338,11 @@ void Scene::OnRender()
 				auto [transform, pointLight] = view.get<TransformComponent, PointLightComponent>(entity);
 				if(pointLight.myPointLight)
 				{
+					if (!pointLight.Active)
+					{
+						continue;
+					}
+
 					pointLight.myPointLight->SetData(&transform);
 					pointLight.OnUpdate();
 					RenderLight(pointLight.myPointLight.get());
@@ -348,9 +358,16 @@ void Scene::OnRender()
 		{
 			for(const auto& entity : view)
 			{
+
+
 				auto [transform, spotLight] = view.get<TransformComponent, SpotLightComponent>(entity);
 				if(spotLight.mySpotLight)
 				{
+					if (!spotLight.Active)
+					{
+						continue;
+					}
+
 					spotLight.mySpotLight->SetData(&transform);
 					spotLight.OnUpdate();
 					RenderLight(spotLight.mySpotLight.get());

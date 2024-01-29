@@ -3,8 +3,8 @@
 #include <cassert>
 #include <cmath>
 #include <math.h>
-#include "Quaternion.hpp"
 #include "Vector.h"
+#include "Matrix3x3.hpp"
 
 
 
@@ -59,7 +59,6 @@ namespace CommonUtilities
 
 		void DecomposeTransform(Vector3<T>& aTranslate, Vector3<T>& aRotation, Vector3<T>& aScale);
 		Vector3<T> GetTranslation();
-		constexpr static void DecomposeTransformTRS(const Matrix4x4<T>& aTransform, Vector3<T>& aOutTranslation, Quaternion<T>& aOutRotation, Vector3<T>& aOutScale);
 
 		bool ContainsPosition(Vector3<T>& aTranslate);
 
@@ -75,8 +74,7 @@ namespace CommonUtilities
 
 		Vector3<T> GetPosition();
 		Vector4<T> GetPositionW() const;
-		Quaternion<T> GetRotation();
-		Vector3<T> GetRawRotation();
+		Vector3<T> GetRotation();
 		Vector3<T> GetScale() const;
 
 
@@ -89,19 +87,7 @@ namespace CommonUtilities
 		std::array<T, 16> myMatrix;
 	};
 
-	template <typename T>
-	constexpr void Matrix4x4<T>::DecomposeTransformTRS(const Matrix4x4<T>& aTransform, Vector3<T>& aOutTranslation, Quaternion<T>& aOutRotation, Vector3<T>& aOutScale)
-	{
-		Matrix4x4<T> transform = aTransform;
 
-		aOutTranslation = transform.GetTranslation();
-		aOutScale = transform.GetScale();
-
-		transform[0].Normalize();
-		transform[1].Normalize();
-		transform[2].Normalize();
-		aOutRotation = Quaternion<T>::FromRotationMatrix4x4(transform);
-	}
 
 	template <typename T>
 	constexpr Vector3<T> Matrix4x4<T>::TransformVector(const Vector4<T>& aVector) const
@@ -274,12 +260,7 @@ namespace CommonUtilities
 		return angles;
 	}
 
-	template <class T>
-	Quaternion<T> Matrix4x4<T>::GetRotation()
-	{
-		return Quaternion<T>::FromRotationMatrix4x4(*this);
-	}
-
+	
 	template <class T>
 	Matrix4x4<T> Matrix4x4<T>::CreateLookAt(const Vector3<T>& eye, const Vector3<T>& target, const Vector3<T>& up)
 	{
@@ -363,32 +344,6 @@ namespace CommonUtilities
 	{
 		Matrix4x4<T> result(aFirstMatrix4);
 		result += aSecondMatrix4;
-
-		return result;
-	}
-
-	template<typename T>
-	CommonUtilities::Matrix4x4<T> operator*(Matrix4x4<T>& aMatrix, const Quaternion<T>& quaternion)
-	{
-		float qx = quaternion.x;
-		float qy = quaternion.y;
-		float qz = quaternion.z;
-		float qw = quaternion.w;
-
-		float rotationMatrix[16] = {
-			1.0f - 2.0f * (qy * qy + qz * qz), 2.0f * (qx * qy - qz * qw), 2.0f * (qx * qz + qy * qw), 0.0f,
-			2.0f * (qx * qy + qz * qw), 1.0f - 2.0f * (qx * qx + qz * qz), 2.0f * (qy * qz - qx * qw), 0.0f,
-			2.0f * (qx * qz - qy * qw), 2.0f * (qy * qz + qx * qw), 1.0f - 2.0f * (qx * qx + qy * qy), 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
-
-		Matrix4x4<T> result;
-
-		for (int i = 0; i < 16; ++i) {
-			for (int j = 0; j < 4; ++j) {
-				result(i) += aMatrix(j) * rotationMatrix[j * 4 + i % 4];
-			}
-		}
 
 		return result;
 	}
@@ -802,7 +757,7 @@ namespace CommonUtilities
 	}*/
 
 	template <class T>
-	Vector3<T> Matrix4x4<T>::GetRawRotation()
+	Vector3<T> Matrix4x4<T>::GetRotation()
 	{
 		Vector3<T> aRotation = {0,0,0};
 

@@ -9,7 +9,7 @@
 
 void SpotLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex)
 {
-	if(myLightData.CastShadows)
+	if(GetActive())
 	{
 		DX11::Get().GetContext()->PSSetShaderResources(20 + aShaderIndex, 1, myShadowMap->mySRV.GetAddressOf());
 	}

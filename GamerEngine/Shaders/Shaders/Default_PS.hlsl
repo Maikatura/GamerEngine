@@ -86,15 +86,15 @@ PixelOutput main(VertexToPixel input)
 	float directShadow = 1.0f;
 
 
-    if (LB_DirectionalLight.CastShadows)
+    
+    LightData Light = LB_DirectionalLight;
+    if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
     {
-        LightData Light = LB_DirectionalLight;
-        if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
-        {
-            dirLightTemp *= SHADOW_BIAS;
-        }
+        dirLightTemp *= SHADOW_BIAS;
+    }
+		
 
-        directLighting += dirLightTemp;
+    directLighting += dirLightTemp;
 
        /* const float4 worldToLightView = mul(LB_DirectionalLight.LightView[0], worldPosition);
         const float4 lightViewToLightProj = mul(LB_DirectionalLight.LightProjection, worldToLightView);
@@ -120,7 +120,7 @@ PixelOutput main(VertexToPixel input)
                 directLighting *= shadow;
             }
         }*/
-    }
+   
 
 	[unroll(20)]
 	for(unsigned int l = 0; l < LB_NumLightsPoint; l++)
@@ -134,13 +134,12 @@ PixelOutput main(VertexToPixel input)
 					specularColor, normal, roughness, Light.Color, Light.Intensity,
 					Light.Range, Light.Position, toEye, worldPosition.xyz);
 
-				if(Light.CastShadows)
+				
+				if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 				{
-					if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
-					{
-                            pointTemp *= SHADOW_BIAS;
-					}
+					pointTemp *= SHADOW_BIAS;
 				}
+			
 				pointLight += pointTemp;
 				break;
 			}
@@ -161,13 +160,9 @@ PixelOutput main(VertexToPixel input)
 					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
-				if(Light.CastShadows)
+				if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 				{
-				
-                    if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
-					{
-                            spotTemp *= SHADOW_BIAS;
-                        }
+					spotTemp *= SHADOW_BIAS;
 				}
 				spotLight += spotTemp;
 				break;

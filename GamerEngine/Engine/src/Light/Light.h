@@ -6,7 +6,6 @@
 
 
 #include "Framework/DX11.h"
-#include "Math/Quaternion.hpp"
 #include "Render/DepthStencil.h"
 #include "Render/RenderTexture.h"
 
@@ -61,7 +60,7 @@ protected:
 	Ref<RenderTexture> myWorldNormalMap;
 	Ref<RenderTexture> myFluxMap;
 
-	Quatf myLocalDirection;
+	Vector3f myLocalDirection;
 
 	TransformComponent* myTransformComp;
 
@@ -97,6 +96,12 @@ public:
 
 	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) = 0;
 
+	FORCEINLINE bool GetActive() const
+	{
+		return myIsActive;
+	}
+
+
 	FORCEINLINE void SetColor(Vector3f aColor)
 	{
 		myLightData.Color = aColor;
@@ -128,10 +133,10 @@ public:
 
 	FORCEINLINE void SetLightDirection(const Vector3f& aDirection)
 	{
-		//myLocalDirection = aDirection;
+		myLocalDirection = aDirection;
 		myLightData.Direction = aDirection;
 	}
-	FORCEINLINE Quatf GetLightDirection()
+	FORCEINLINE Vector3f GetLightDirection()
 	{
 		return myLocalDirection;
 	}

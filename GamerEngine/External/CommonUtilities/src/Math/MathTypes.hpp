@@ -27,11 +27,6 @@ typedef CommonUtilities::Matrix4x4<double> Matrix4x4d;
 typedef CommonUtilities::Matrix4x4<int> Matrix4x4i;
 typedef CommonUtilities::Matrix4x4<unsigned int> Matrix4x4ui;
 
-typedef CommonUtilities::Quaternion<float> Quatf;
-typedef CommonUtilities::Quaternion<double> Quatd;
-typedef CommonUtilities::Quaternion<int> Quati;
-typedef CommonUtilities::Quaternion<unsigned int> Quatui;
-
 
 // Useful Tools To Convert
 namespace CommonUtilities
@@ -50,7 +45,6 @@ namespace CommonUtilities
 
 		return returnVector3;
 	}
-
 
 	template<class T>
 	Vector3<T> ToRadians(const Vector3<T>& aVectorToConvert)

@@ -439,15 +439,21 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 	DrawComponent<DirectionalLightComponent>("Directional Light", aEntity, [](auto& component, auto aEntity)
 	{
 		ImGui::Checkbox("Active", &component.Active);
-		ImGui::Checkbox("Smooth Shadows", &component.SmoothShadows);
+		ImGui::Checkbox("Cast Shadows", &component.CastShadow);
+		ImGui::Checkbox("Smooth Shadows", &component.SmoothShadow);
+
 		ImGui::ColorEdit3("Light Color", &component.Color.x);
 		ImGui::DragFloat("Intensity", &component.Intensity, 0.1f, 0.0f, 10.0f);
+		
 	});
 
 	DrawComponent<SpotLightComponent>("Spot Light", aEntity, [](auto& component, auto aEntity)
 	{
 
 		ImGui::Checkbox("Active", &component.Active);
+		ImGui::Checkbox("Cast Shadows", &component.CastShadow);
+		ImGui::Checkbox("Smooth Shadows", &component.SmoothShadow);
+
 		ImGui::ColorEdit3("Color", &component.Color.x);
 		ImGui::DragFloat("Intensity", &component.Intensity, 0.1f);
 		ImGui::DragFloat("Range", &component.Range, 0.1f);
@@ -462,10 +468,12 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 	DrawComponent<PointLightComponent>("Point Light", aEntity, [](auto& component, auto aEntity)
 	{
 			ImGui::Checkbox("Active", &component.Active);
+			ImGui::Checkbox("Cast Shadows", &component.CastShadow);
+			ImGui::Checkbox("Smooth Shadows", &component.SmoothShadow);
+
 			ImGui::ColorEdit3("Color", &component.Color.x);
 			ImGui::DragFloat("Intensity", &component.Intensity, 0.1f);
 			ImGui::DragFloat("Range", &component.Range, 0.1f);
-			ImGui::Checkbox("Cast Shadows", &component.CastShadow);
 
 			int tempIndex = component.myPointLight->GetLightBufferData().ShadowMapIndex;
 			ImGui::DragInt("Index", &tempIndex);

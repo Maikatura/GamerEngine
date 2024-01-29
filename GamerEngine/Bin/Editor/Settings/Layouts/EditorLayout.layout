@@ -16,6 +16,6 @@ Windows:
   - Name: Help Panel
     IsOpen: false
   - Name: Profiler
-    IsOpen: true
+    IsOpen: false
   - Name: Texture Browser
     IsOpen: false

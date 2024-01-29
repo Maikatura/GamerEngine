@@ -8,13 +8,13 @@
 struct GraphicsTransform
 {
 	Vector3f Translation{ 0.0f, 0.0f, 0.0f };
-	Quatf Rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
+	Vector3f Rotation{ 0.0f, 0.0f, 0.0f };
 	Vector3f Scale{ 1.0f, 1.0f, 1.0f };
 
 	GraphicsTransform() = default;
 	GraphicsTransform(const GraphicsTransform&) = default;
 
-	GraphicsTransform(const Vector3f& aTranslation, const Quatf& aRotation, const Vector3f& aScale)
+	GraphicsTransform(const Vector3f& aTranslation, const Vector3f& aRotation, const Vector3f& aScale)
 		: Translation(aTranslation)
 		, Rotation(aRotation)
 		, Scale(aScale)
@@ -41,9 +41,9 @@ struct GraphicsTransform
 
 	void Mix(const GraphicsTransform& aTransToMixWith, float t)
 	{
-		const  Quatf& secondRot = aTransToMixWith.Rotation;
+		//const  Quatf& secondRot = aTransToMixWith.Rotation;
 		Translation = Vector3f::Lerp(Translation, aTransToMixWith.Translation, t);
-		Rotation = Quatf::Slerp(Rotation, secondRot, t);
+		//Rotation = Quatf::Slerp(Rotation, secondRot, t);
 		Scale = Vector3f::Lerp(Scale, aTransToMixWith.Scale, t);
 	}
 
@@ -58,7 +58,7 @@ struct GraphicsTransform
 	static GraphicsTransform Inverse(const GraphicsTransform& aTransform)
 	{
 		GraphicsTransform inv;
-		inv.Rotation = Quatf::Inverse(aTransform.Rotation);
+		//inv.Rotation = Quatf::Inverse(aTransform.Rotation);
 		inv.Scale.x = std::abs(aTransform.Scale.x) < 0.0001f ? 0.0f : 1.0f / aTransform.Scale.x;
 		inv.Scale.y = std::abs(aTransform.Scale.y) < 0.0001f ? 0.0f : 1.0f / aTransform.Scale.y;
 		inv.Scale.z = std::abs(aTransform.Scale.z) < 0.0001f ? 0.0f : 1.0f / aTransform.Scale.z;

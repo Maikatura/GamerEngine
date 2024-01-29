@@ -173,7 +173,7 @@ void NetworkingLayer::UpdateCamera()
 			mySendTime += myMoveSendTime;
 
 			const Vector3f position = Renderer::GetCamera()->ViewProjection.GetPosition();
-			const Vector3f rotation = Renderer::GetCamera()->ViewProjection.GetRotation().Eulers();
+			const Vector3f rotation = Renderer::GetCamera()->ViewProjection.GetRotation();
 
 
 			TurNet::TurMessage outMsg;

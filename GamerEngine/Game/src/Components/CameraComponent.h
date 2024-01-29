@@ -10,7 +10,7 @@ class TransformComponent;
 class CameraComponent : public Component
 {
 
-	Quatf myRotation;
+	Vector3f myRotation;
 	Vector2ui myRes;
 	Vector3f myPosition;
 

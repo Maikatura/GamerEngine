@@ -132,9 +132,13 @@ public:
 
 	Vector3f Forward()
 	{
-		const float forwardDistance = 5.0f;
+		/*const float forwardDistance = 5.0f;
 		Vector3f forwardVector = Quatf(Rotation).Forward();
-		return Translation + forwardVector * forwardDistance;
+		return Translation + forwardVector * forwardDistance;*/
+
+		// TODO : FIX THIS FORWARD IN TRANSFORMCOMPONENT
+
+		return Vector3f();
 	}
 
 	
@@ -203,7 +207,7 @@ public:
 	GraphicsTransform AsGraphicsTransform()
 	{
 		GraphicsTransform transform;
-		Matrix4x4f::DecomposeTransformTRS(GetMatrix(), transform.Translation, transform.Rotation, transform.Scale);
+		//(GetMatrix(), transform.Translation, transform.Rotation, transform.Scale);
 		return transform;
 	}
 

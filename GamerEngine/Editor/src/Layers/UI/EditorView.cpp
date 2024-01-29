@@ -196,9 +196,6 @@ void EditorView::EditTransform(Ref<Entity> aEntity)
 
 			ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
 
-			auto rotQuat = localMat.GetRotation();
-			auto rotEuler = rotQuat.Eulers();
-
 			transform.SetPosition({ translate[0], translate[1], translate[2] });
 			transform.SetRotation(Vector3f{ rotation[0], rotation[1], rotation[2]});
 			transform.SetScale({ scale[0], scale[1], scale[2] });
