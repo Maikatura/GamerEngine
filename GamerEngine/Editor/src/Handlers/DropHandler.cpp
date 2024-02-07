@@ -6,11 +6,10 @@
 #include "Utilites/StringCast.h"
 #include "AssetHandlers/ModelAssetHandler.h"
 #include "Debugger/ConsoleHelper.h"
-#include "Scene/SceneSerializer.h"
+
 #include "Types/FileExtensions.h"
 
 #include "Components/Components.hpp"
-#include "Render/Renderer.h"
 #include "Scene/SceneManager.h"
 
 std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
@@ -48,20 +47,15 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 
 			if(fbxExt == extension)
 			{
-				auto& modelComp = SceneManager::Get().GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
+				SceneManager::Get().GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
 				ConsoleHelper::Log(LogType::Info, "Loaded a model '" + path.filename().string() + "' into the scene");
 			}
 
 			if(sceneExt == extension)
 			{
-
 				GraphicsEngine::Get()->SetEngineUpdateRuntime(false);
-
 				SceneManager::Get().LoadScene(stringPath);
-				
-
 				ConsoleHelper::Log(LogType::Info, "Loaded a scene '" + stringPath + "'");
-
 			}
 		}
 
@@ -75,7 +69,7 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 std::wstring DropHandler::DropFileEntity(Entity& aEntity)
 {
 
-	bool hasFound = false;
+	bool hasFound;
 	if(ImGui::BeginDragDropTarget())
 	{
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM");

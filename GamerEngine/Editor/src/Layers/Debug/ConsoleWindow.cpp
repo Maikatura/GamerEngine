@@ -9,10 +9,7 @@ ConsoleWindow::ConsoleWindow() : Layer("Console Window")
 
 void ConsoleWindow::OnImGuiRender()
 {
-
 	BeginMenu();
-
-
-
+	
 	EndMenu();
 }

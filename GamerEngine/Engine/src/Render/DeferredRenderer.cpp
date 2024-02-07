@@ -1,6 +1,5 @@
 #include <GraphicsEngine.pch.h>
 #include <Render/DeferredRenderer.h>
-
 #include "ForwardRenderer.h"
 #include "GraphicsEngine.h"
 #include "Renderer.h"
@@ -9,14 +8,14 @@
 
 void GBuffer::SetAsTarget()
 {
-	ID3D11RenderTargetView* rtvList[GBufferTexture::GBufferTexture_Count];
-	for(int i = 0; i < myRenderTextures.size(); i++)
+	ID3D11RenderTargetView* rtvList[GBufferTexture::EGBufferTexture_Count];
+	for(size_t i = 0; i < myRenderTextures.size(); i++)
 	{
 		rtvList[i] = myRenderTextures[i].GetRenderTargetView();
 		
 	}
 
-	DX11::Get().GetContext()->OMSetRenderTargets(GBufferTexture::GBufferTexture_Count, &rtvList[0], DX11::Get().GetDepthStencilView()->myDSV.Get());
+	DX11::Get().GetContext()->OMSetRenderTargets(GBufferTexture::EGBufferTexture_Count, &rtvList[0], DX11::Get().GetDepthStencilView()->myDSV.Get());
 }
 
 void GBuffer::ClearTarget()
@@ -27,22 +26,22 @@ void GBuffer::ClearTarget()
 
 void GBuffer::SetAsResource(unsigned int aStartSlot)
 {
-	ID3D11ShaderResourceView* mySRVList[GBufferTexture::GBufferTexture_Count];
-	for(int t = 0; t < GBufferTexture::GBufferTexture_Count; t++)
+	ID3D11ShaderResourceView* mySRVList[GBufferTexture::EGBufferTexture_Count];
+	for(int t = 0; t < GBufferTexture::EGBufferTexture_Count; t++)
 	{
 		mySRVList[t] = myRenderTextures[t].GetShaderResourceView();
 	}
 
 	//DX11::Get().GetContext()->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &mySRVList[0]);
-	DX11::Get().GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &mySRVList[0]);
+	DX11::Get().GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::EGBufferTexture_Count, &mySRVList[0]);
 	
 }
 
 void GBuffer::ClearResource(unsigned int aStartSlot)
 {
 
-	ID3D11ShaderResourceView* srvList[GBufferTexture::GBufferTexture_Count];
-	for(int i = 0; i < GBufferTexture::GBufferTexture_Count; i++)
+	ID3D11ShaderResourceView* srvList[GBufferTexture::EGBufferTexture_Count];
+	for(int i = 0; i < GBufferTexture::EGBufferTexture_Count; i++)
 	{
 		srvList[i] = nullptr;
 		myRenderTextures[i].ClearRenderTarget(DX11::Get().GetContext(),nullptr, 0, 0, 0, 0);
@@ -50,13 +49,13 @@ void GBuffer::ClearResource(unsigned int aStartSlot)
 
 
 	//DX11::Get().GetContext()->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
-	DX11::Get().GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
+	DX11::Get().GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::EGBufferTexture_Count, &srvList[0]);
 }
 
 void GBuffer::Clear()
 {
-	Vector4f clCol = { 0, 0, 0, 0 };
-	for(int i = 0; i < GBufferTexture::GBufferTexture_Count; i++)
+	const Vector4f clCol = { 0, 0, 0, 0 };
+	for(int i = 0; i < GBufferTexture::EGBufferTexture_Count; i++)
 	{
 		myRenderTextures[i].ClearRenderTarget(DX11::Get().GetContext(), nullptr, clCol.x, clCol.y, clCol.z, clCol.w);
 	}
@@ -64,38 +63,33 @@ void GBuffer::Clear()
 
 void GBuffer::Release()
 {
-	for(unsigned t = 0; t < myRenderTextures.size(); t++)
+	for (auto& myRenderTexture : myRenderTextures)
 	{
-		myRenderTextures[t].Shutdown();
+		myRenderTexture.Shutdown();
 	}
 }
 
 bool GBuffer::CreateGBuffer()
 {
-
+	const RECT clientRect = DX11::Get().GetClientSize();
+	const int width = static_cast<int>(clientRect.right - clientRect.left);
+	const int height = static_cast<int>(clientRect.bottom - clientRect.top);
 	
-	RECT clientRect = DX11::Get().GetClientSize();
+	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_Albedo].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R8G8B8A8_UNORM, "Albedo GBuffer");
 
-	int width = static_cast<UINT>(clientRect.right - clientRect.left);
-	int height = static_cast<UINT>(clientRect.bottom - clientRect.top);
+	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_Normal].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Normal GBuffer");
 
-	
+	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_Material].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Material GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Albedo].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R8G8B8A8_UNORM, "Albedo GBuffer");
+	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_VertexNormal].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Vertex Normal GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Normal].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Normal GBuffer");
+	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_Position].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R32G32B32A32_FLOAT, "Position GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Material].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Material GBuffer");
+	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_AmbientOcclusion].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R8_UNORM, "AO GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_VertexNormal].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "Vertex Normal GBuffer");
+	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_ViewPosition].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R32G32B32A32_FLOAT, "View Position GBuffer");
 
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_Position].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R32G32B32A32_FLOAT, "Position GBuffer");
-
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_AmbientOcclusion].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R8_UNORM, "AO GBuffer");
-
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_ViewPosition].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R32G32B32A32_FLOAT, "View Position GBuffer");
-
-	myRenderTextures[GBuffer::GBufferTexture::GBufferTexture_ViewNormal].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "View Normal GBuffer");
+	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_ViewNormal].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "View Normal GBuffer");
 
 	myRenderer.Initialize(DX11::Get().GetDevice(), width, height);
 
@@ -107,22 +101,24 @@ RenderTexture& GBuffer::GetRenderer()
 	return myRenderer;
 }
 
-std::array<RenderTexture, GBuffer::GBufferTexture_Count>& GBuffer::GetPasses()
+std::array<RenderTexture, GBuffer::EGBufferTexture_Count>& GBuffer::GetPasses()
 {
 	return myRenderTextures;
 }
 
 bool DeferredRenderer::Initialize()
 {
-	HRESULT result;
+	mySceneLightBufferData = {};
 
-	D3D11_BUFFER_DESC bufferDescription = { 0 };
+	
+	D3D11_BUFFER_DESC bufferDescription;
+	ZeroMemory(&bufferDescription, sizeof(D3D11_BUFFER_DESC));
 	bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
 	bufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	bufferDescription.ByteWidth = sizeof(FrameBufferData);
-	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myFrameBuffer.GetAddressOf());
+	HRESULT result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myFrameBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -171,9 +167,9 @@ bool DeferredRenderer::Initialize()
 	return true;
 }
 
-void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye)
+void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye)
 {
-	auto* camera = Renderer::GetCamera();
+	const auto* camera = Renderer::GetCamera();
 	if(!camera)
 	{
 		return;
@@ -184,8 +180,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 	{
 		return;
 	}
-
-	HRESULT result = S_FALSE;
+	
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
 	myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
@@ -196,9 +191,9 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 	myFrameBufferData.NearPlane = camera->myNearPlane;
 
 
-	RECT clientRect = DX11::Get().GetClientSize();
-	uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
-	uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
+	const RECT clientRect = DX11::Get().GetClientSize();
+	const uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
+	const uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
 
 	const Vector2ui Resolution = {
 		width,
@@ -208,14 +203,14 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	HRESULT result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if (FAILED(result))
 	{
 		// BOOM?
 		return;
 	}
 
-	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
+	memcpy_s(bufferData.pData,sizeof(FrameBufferData), &myFrameBufferData, sizeof(FrameBufferData));
 	DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
 
 	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
@@ -241,8 +236,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 		ModelAssetHandler::Get().ResetRenderedModels();
 
 
-		bool isInstanced = false; //model->HasRenderedInstance();
-
+		const bool isInstanced = false; // model->HasRenderedInstance();
 
 		myObjectBufferData.IsInstanced = isInstanced;
 		myObjectBufferData.World = modelBuffer.myTransform;
@@ -257,12 +251,17 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 			myObjectBufferData.myHasBones = true;
 			memcpy_s(
 				&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
-				&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
+				bones.data(), sizeof(Matrix4x4f) * MAX_MODEL_BONES
 			);
 		}
 
 		result = DX11::Get().GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
+		if (FAILED(result))
+		{
+			// BOOM?
+			return;
+		}
+		memcpy_s(bufferData.pData,sizeof(ObjectBufferData), &myObjectBufferData, sizeof(ObjectBufferData));
 		DX11::Get().GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
 
@@ -271,9 +270,9 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 
 		DX11::Get().GetContext()->PSSetShader(myGBufferPS.Get(), nullptr, 0);
 
-		for(int index = 0; index < model->GetNumMeshes(); index++)
+		for(size_t index = 0; index < model->GetNumMeshes(); index++)
 		{
-			ModelInstance::MeshData& meshData = model->GetMeshData(index);
+			ModelInstance::MeshData& meshData = model->GetMeshData(static_cast<unsigned>(index));
 			meshData.MaterialData.SetAsResource(myMaterialBuffer);
 			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 			DX11::Get().GetContext()->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
@@ -331,16 +330,15 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection,
 	}
 }
 
-void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Ref<DirectionalLight>& aDirectionalLight,
-	const Ref<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime, VREye anEye)
+void DeferredRenderer::Render(Matrix4x4f aView, const Matrix4x4f& aProjection, const Ref<DirectionalLight>& aDirectionalLight,
+	const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, float aDeltaTime, float aTotalTime, VREye anEye)
 {
-	auto* camera = Renderer::GetCamera();
+	const auto* camera = Renderer::GetCamera();
 	if(!camera)
 	{
 		return;
 	}
 
-	HRESULT result = S_FALSE;
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 	
 	myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
@@ -349,10 +347,10 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 	myFrameBufferData.RenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
 	myFrameBufferData.FarPlane = camera->myFarPlane;
 	myFrameBufferData.NearPlane = camera->myNearPlane;
-	
-	RECT clientRect = DX11::Get().GetClientSize();
-	uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
-	uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
+
+	const RECT clientRect = DX11::Get().GetClientSize();
+	const uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
+	const uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
 
 	const Vector2ui Resolution = {
 		width,
@@ -361,10 +359,10 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 	myFrameBufferData.Resolution = Resolution;
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	HRESULT result = result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 	if (SUCCEEDED(result))
 	{
-		memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
+		memcpy_s(bufferData.pData,sizeof(FrameBufferData), &myFrameBufferData, sizeof(FrameBufferData));
 		DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
 	}
 	else
@@ -391,26 +389,26 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 	ZeroMemory(mySceneLightBufferData.LightsPoint, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
 	ZeroMemory(mySceneLightBufferData.LightsSpot, sizeof(Light::LightBufferData) * MAX_DEFERRED_LIGHTS);
 
-	for (size_t l = 0; l < aLightList.size(); l++)
+	for (const auto light : aLightList)
 	{
-		if (aLightList[l]->GetLightBufferData().LightType == 1)
+		if (light->GetLightBufferData().LightType == 1)
 		{
 			continue;
 		}
 		else
 		{
-			if (aLightList[l]->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_FORWARD_LIGHTS)
+			if (light->GetLightBufferData().LightType == 2 && mySceneLightBufferData.NumLightsPoint < MAX_FORWARD_LIGHTS)
 			{
-				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = aLightList[l]->GetLightBufferData();
-				aLightList[l]->SetAsResource(nullptr, mySceneLightBufferData.NumLightsPoint);
+				mySceneLightBufferData.LightsPoint[mySceneLightBufferData.NumLightsPoint] = light->GetLightBufferData();
+				light->SetAsResource(nullptr, mySceneLightBufferData.NumLightsPoint);
 				mySceneLightBufferData.NumLightsPoint++;
 
 			}
 
-			if (aLightList[l]->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_FORWARD_LIGHTS)
+			if (light->GetLightBufferData().LightType == 3 && mySceneLightBufferData.NumLightsSpot < MAX_FORWARD_LIGHTS)
 			{
-				mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = aLightList[l]->GetLightBufferData();
-				aLightList[l]->SetAsResource(nullptr, mySceneLightBufferData.NumLightsSpot);
+				mySceneLightBufferData.LightsSpot[mySceneLightBufferData.NumLightsSpot] = light->GetLightBufferData();
+				light->SetAsResource(nullptr, mySceneLightBufferData.NumLightsSpot);
 				mySceneLightBufferData.NumLightsSpot++;
 			}
 		}
@@ -425,7 +423,7 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 
 	if (SUCCEEDED(result))
 	{
-		memcpy(bufferData.pData, &mySceneLightBufferData, sizeof(SceneLightBuffer));
+		memcpy_s(bufferData.pData,sizeof(SceneLightBuffer), &mySceneLightBufferData, sizeof(SceneLightBuffer));
 		DX11::Get().GetContext()->Unmap(myLightBuffer.Get(), 0);
 	}
 	else
@@ -447,7 +445,7 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 		// ?? what happen?????????
 	}
 
-	Vector4f MaterialColor = { 1,1,1,1 };
+	const Vector4f MaterialColor = { 1,1,1,1 };
 	memcpy(bufferData.pData, &MaterialColor, sizeof(Vector4f));
 	DX11::Get().GetContext()->Unmap(myMaterialBuffer.Get(), 0);
 
@@ -465,12 +463,9 @@ void DeferredRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const Re
 	DX11::Get().GetContext()->Draw(3, 0);
 }
 
-void DeferredRenderer::RenderLate()
+void DeferredRenderer::RenderLate() const
 {
-
-
-
-	auto srv = GBuffer::GetRenderer().GetShaderResourceView();
+	const auto srv = GBuffer::GetRenderer().GetShaderResourceView();
 	DX11::Get().GetContext()->PSSetShaderResources(0, 1, &srv);
 	DX11::Get().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	DX11::Get().GetContext()->IASetInputLayout(nullptr);
@@ -488,9 +483,9 @@ void DeferredRenderer::RenderLate()
 void DeferredRenderer::ClearTarget()
 {
 	ID3D11ShaderResourceView* srvList[1];
-	for(int i = 0; i < 1; i++)
+	for (auto& i : srvList)
 	{
-		srvList[i] = nullptr;
+		i = nullptr;
 	}
 	DX11::Get().GetContext()->PSSetShaderResources(0, 1, &srvList[0]);
 	DX11::Get().GetContext()->VSSetShaderResources(0, 1, &srvList[0]);

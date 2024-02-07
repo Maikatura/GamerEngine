@@ -6,21 +6,19 @@
 #include "GraphicsEngine.h"
 #include "Renderer.h"
 #include "Framework/DX11.h"
-#include <Sort/sort.hpp>
-
 #include "AssetHandlers/ModelAssetHandler.h"
 
 bool ShadowRenderer::Initialize()
 {
-	HRESULT result = S_FALSE;
-
-	D3D11_BUFFER_DESC bufferDescription = { 0 };
+	D3D11_BUFFER_DESC bufferDescription;
+	ZeroMemory(&bufferDescription, sizeof(D3D11_BUFFER_DESC));
+	
 	bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
 	bufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	bufferDescription.ByteWidth = sizeof(FrameBufferData);
-	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myFrameBuffer.GetAddressOf());
+	HRESULT result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myFrameBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -49,7 +47,7 @@ bool ShadowRenderer::Initialize()
 
 	std::ifstream gsFile;
 	gsFile.open("Shaders\\ShadowCube_GS.cso", std::ios::binary);
-	std::string gsData = { std::istreambuf_iterator(gsFile), std::istreambuf_iterator<char>() };
+	const std::string gsData = { std::istreambuf_iterator(gsFile), std::istreambuf_iterator<char>() };
 	DX11::Get().GetDevice()->CreateGeometryShader(gsData.data(), gsData.size(), nullptr, myShadowGeometryShader.GetAddressOf());
 	gsFile.close();
 
@@ -72,15 +70,14 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 	//aLight->ClearShadowMap();
 	aLight->SetShadowMapAsDepth();
-
-	HRESULT result = S_FALSE;
+	
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
 
 	//aLight->SetAsResource(nullptr);
 
 	const Light::LightBufferData lightData = aLight->GetLightBufferData();
-	bool isCubeMap = lightData.LightType == 2;
+	const bool isCubeMap = lightData.LightType == 2;
 
 	ZeroMemory(&myFrameBufferData, sizeof(FrameBufferData));
 	ZeroMemory(&myObjectBufferData, sizeof(ObjectBufferData));
@@ -94,8 +91,12 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 
 	ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-	memcpy(bufferData.pData, &myFrameBufferData, sizeof(FrameBufferData));
+	HRESULT result = DX11::Get().GetContext()->Map(myFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+	if (FAILED(result))
+	{
+		return;
+	}
+	memcpy_s(bufferData.pData, sizeof(FrameBufferData), &myFrameBufferData, sizeof(FrameBufferData));
 	DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
 	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 	DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
@@ -115,8 +116,12 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		DX11::Get().GetContext()->Map(myPointLightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-		memcpy(bufferData.pData, &myShadowCubeData, sizeof(ShadowCubeBuffer));
+		result = DX11::Get().GetContext()->Map(myPointLightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
+		if (FAILED(result))
+		{
+			return;
+		}
+		memcpy_s(bufferData.pData, sizeof(ShadowCubeBuffer), &myShadowCubeData, sizeof(ShadowCubeBuffer));
 		DX11::Get().GetContext()->Unmap(myPointLightBuffer.Get(), 0);
 		DX11::Get().GetContext()->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
 		DX11::Get().GetContext()->PSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
@@ -144,7 +149,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 		}
 
 
-		bool isInstanced = false; //model->HasRenderedInstance();
+		const bool isInstanced = false; //model->HasRenderedInstance();
 
 
 		myObjectBufferData.IsInstanced = isInstanced;
@@ -160,17 +165,17 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			myObjectBufferData.myHasBones = true;
 			memcpy_s(
 				&myObjectBufferData.BoneData[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES,
-				&bones[0], sizeof(Matrix4x4f) * MAX_MODEL_BONES
+				bones.data(), sizeof(Matrix4x4f) * MAX_MODEL_BONES
 			);
 		}
 
 		result = DX11::Get().GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
 		if (FAILED(result))
 		{
-
+			return;
 		}
 
-		memcpy(bufferData.pData, &myObjectBufferData, sizeof(ObjectBufferData));
+		memcpy_s(bufferData.pData, sizeof(ObjectBufferData), &myObjectBufferData, sizeof(ObjectBufferData));
 		DX11::Get().GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
 		DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
@@ -190,7 +195,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			DX11::Get().GetContext()->IASetInputLayout(meshData.myInputLayout.Get());
 			DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader.Get(), nullptr, 0);
 			DX11::Get().GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-			DX11::Get().GetContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)meshData.myPrimitiveTopology);
+			DX11::Get().GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology));
 
 			meshData.MaterialData.SetAsResource(myMaterialBuffer.Get());
 			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
@@ -251,14 +256,13 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 void ShadowRenderer::ClearResources()
 {
-	ID3D11ShaderResourceView* srvnull = nullptr;
-	//DX11::Get().GetContext()->VSSetShaderResources(19, 1, &srvnull);
-	DX11::Get().GetContext()->PSSetShaderResources(19, 1, &srvnull);
+	ID3D11ShaderResourceView* srvNull = nullptr;
+	
+	DX11::Get().GetContext()->PSSetShaderResources(19, 1, &srvNull);
 
 	for(int i = 0; i < 40; i++)
 	{
-		//DX11::Get().GetContext()->VSSetShaderResources(20 + i, 1, &srvnull);
-		DX11::Get().GetContext()->PSSetShaderResources(20 + i, 1, &srvnull);
+		DX11::Get().GetContext()->PSSetShaderResources(20 + i, 1, &srvNull);
 	}
 }
 

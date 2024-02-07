@@ -1,4 +1,5 @@
 #pragma once
+#include "ScriptableEntity.h"
 
 class ScriptableEntity;
 class Entity;

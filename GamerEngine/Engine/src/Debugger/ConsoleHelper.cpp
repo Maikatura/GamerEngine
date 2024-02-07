@@ -32,7 +32,7 @@ void ConsoleHelper::Log(LogType aLogType, const std::string& aLogMessage)
 {
 	Init();
 
-	int color = 0;
+	int color;
 
 	std::string logMessage = aLogMessage;
 

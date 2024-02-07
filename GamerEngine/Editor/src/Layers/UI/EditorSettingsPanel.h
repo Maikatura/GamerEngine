@@ -46,7 +46,6 @@ private:
 	inline static const std::string myConfigPath = "Editor\\Settings\\";
 
 	int myCurrentTab = 0;
-	bool myIsOpen = true;
 
 
 };

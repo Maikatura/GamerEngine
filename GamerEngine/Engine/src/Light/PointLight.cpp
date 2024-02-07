@@ -5,7 +5,7 @@
 #include "Framework/DX11.h"
 #include "Components/TransfromComponent.h"
 
-void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex)
+void PointLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex)
 {
 	if(GetActive())
 	{

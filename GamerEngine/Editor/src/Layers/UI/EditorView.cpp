@@ -20,11 +20,10 @@
 #include "Managers/Commands/PositionCommand.h"
 #include "Scene/SceneManager.h"
 #include "Layers/NetworkingLayer.h"
-#include "Layers/Network/MoveObjectMessage.h"
 #include "Input/Input.h"
 #include "Render/DeferredRenderer.h"
 
-EditorView::EditorView() : Layer("Scene")
+EditorView::EditorView() : Layer("Scene"), myStartTranslate(TransformComponent()), myEditedTranslate(TransformComponent())
 {
 
 }
@@ -42,12 +41,12 @@ void EditorView::OnImGuiRender()
 
 	//RenderGameView();
 
-	Ref<Entity> thisEntity = MakeRef<Entity>(entity);
+	const Ref<Entity> thisEntity = MakeRef<Entity>(entity);
 
 	RenderSceneView(thisEntity);
 }
 
-void EditorView::RenderSceneView(Ref<Entity> aEntity)
+void EditorView::RenderSceneView(const Ref<Entity>& aEntity)
 {
 	static ImGuiWindowFlags gizmoWindowFlags = 0;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
@@ -55,7 +54,7 @@ void EditorView::RenderSceneView(Ref<Entity> aEntity)
 	BeginMenu(gizmoWindowFlags);
 	ImGui::BeginChild("SceneView");
 
-	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	const ImGuiWindow* window = ImGui::GetCurrentWindow();
 	gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
 
 	CameraController::IsHoveringSceneView = ImGui::IsWindowHovered();
@@ -65,27 +64,17 @@ void EditorView::RenderSceneView(Ref<Entity> aEntity)
 
 	ImVec2 windowSize = ImGui::GetWindowSize();
 
-	auto view = SceneManager::Get().GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
-	for(auto entity : view)
+	const auto view = SceneManager::Get().GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
+	for(const auto entity : view)
 	{
 		auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 		camera.Resize({ static_cast<unsigned int>(windowSize.x), static_cast<unsigned int>(windowSize.y) });
 	}
 
 
-	
-	int pass = GraphicsEngine::Get()->GetRenderPass();
+	const int pass = GraphicsEngine::Get()->GetRenderPass();
 
-	if (pass == 0)
-	{
-		ImGui::Image(DX11::Get().Get().GetScreenView()->GetShaderResourceView(), {windowSize.x, windowSize.y}); // Use this
-	}
-	else
-	{
-		ImGui::Image(GBuffer::GetPasses()[pass - 1].GetShaderResourceView(), {windowSize.x, windowSize.y});
-	}
-
-
+	ImGui::Image(pass == 0 ? DX11::Get().Get().GetScreenView()->GetShaderResourceView() : GBuffer::GetPasses()[pass - 1].GetShaderResourceView(), {windowSize.x, windowSize.y}); // Use this
 	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowSize.x, windowSize.y);
 	//ImGui::Image(GBuffer::GetPasses()[6].GetShaderResourceView(), {windowSize.x, windowSize.y});
 	
@@ -94,13 +83,13 @@ void EditorView::RenderSceneView(Ref<Entity> aEntity)
 	RenderEntityParts(aEntity);
 
 	ImGui::EndChild();
-	ImRect rect = ImGui::GetCurrentWindow()->WorkRect;
+	const ImRect rect = ImGui::GetCurrentWindow()->WorkRect;
 	DropHandler::DropFileScene(rect, static_cast<ImGuiID>(1231089013290));
 	EndMenu();
 	ImGui::PopStyleVar();
 }
 
-void EditorView::RenderEntityParts(Ref<Entity> aEntity)
+void EditorView::RenderEntityParts(const Ref<Entity>& aEntity)
 {
 	EditTransform(aEntity);
 }
@@ -145,7 +134,7 @@ Vector2f EditorView::MouseToViewport(Vector2f aWindowSize, float windowScale)
  	return { 0,0 };
 }
 
-void EditorView::EditTransform(Ref<Entity> aEntity)
+void EditorView::EditTransform(const Ref<Entity>& aEntity)
 {
 
 	if (!SceneManager::Get().GetScene()->GetRegistry().valid(aEntity->GetHandle()))
@@ -160,7 +149,7 @@ void EditorView::EditTransform(Ref<Entity> aEntity)
 
 	auto& transform = aEntity->GetComponent<TransformComponent>();
 	Matrix4x4f projectionView = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
-	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
+	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
 	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(view);
 
 	Matrix4x4f localMat = transform.GetMatrix();
@@ -191,7 +180,7 @@ void EditorView::EditTransform(Ref<Entity> aEntity)
 	if (!ImGui::IsMouseDown(ImGuiMouseButton_Right))
 	{
 		// THIS IS BROKEN AND I DON'T KNOW WHY...
-		if (ImGuizmo::Manipulate(viewInverse.Ptr(),projectionView.Ptr(), myOperation, SettingKeybinds::GetEditMode(),localMat.Ptr(),NULL,NULL))
+		if (ImGuizmo::Manipulate(viewInverse.Ptr(),projectionView.Ptr(), myOperation, SettingKeybinds::GetEditMode(),localMat.Ptr(),nullptr,nullptr))
 		{
 
 			ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
@@ -222,7 +211,7 @@ void EditorView::EditTransform(Ref<Entity> aEntity)
 		else
 		{
 			myEditedTranslate = transform;
-			auto moveCommand = new PositionCommand(aEntity, myStartTranslate, myEditedTranslate);
+			const auto moveCommand = new PositionCommand(aEntity, myStartTranslate, myEditedTranslate);
 			CommandManager::DoCommand(moveCommand);
 			ConsoleHelper::Log(LogType::Info, "Transform Editing Done");
 		}

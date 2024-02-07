@@ -5,17 +5,14 @@
 #include <Model/Texture.h>
 #include "GraphicsEngine.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Scene/Scene.h"
 #include <ImGui/imgui_stdlib.h>
 #include <Types/FileExtensions.h>
 #include "Render/SelectionData.h"
 #include "Utilites/StringCast.h"
-#include <fstream>
-
 #include "Components/CameraController.h"
 #include "Debugger/ConsoleHelper.h"
 #include "Scene/SceneManager.h"
-#include "Scene/SceneSerializer.h"
+#include <fstream>
 
 extern const std::filesystem::path AssetPath = "Assets";
 
@@ -115,12 +112,12 @@ void FileExplorer::OnImGuiRender()
 	ImGui::PopStyleVar();
 	ImGui::NewLine();
 
-	float panelWidth = ImGui::GetContentRegionAvail().x;
-	int columnCount = (int)(panelWidth / cellSize);
+	const float panelWidth = ImGui::GetContentRegionAvail().x;
+	int columnCount = static_cast<int>(panelWidth / cellSize);
 	if(columnCount < 1)
 		columnCount = 1;
 
-	ImGui::Columns(columnCount, 0, false);
+	ImGui::Columns(columnCount, nullptr, false);
 	
 	LoopThroughFiles();
 
@@ -139,15 +136,15 @@ void FileExplorer::OnImGuiRender()
 
 void FileExplorer::LoopThroughFiles()
 {
-	auto sortedDirectories = GetSortedDirectory();
+	const auto sortedDirectories = GetSortedDirectory();
 	for(auto& directoryEntry : sortedDirectories)
 	{
 		myCurrentPath = directoryEntry.path();
 		std::string filenameString = myCurrentPath.filename().string();
 
 
-		auto fileType = GetFileType(directoryEntry);
-		auto icon = SelectIcon(directoryEntry, fileType);
+		const auto fileType = GetFileType(directoryEntry);
+		const auto icon = SelectIcon(directoryEntry, fileType);
 
 		ImGui::PushID(filenameString.c_str());
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
@@ -196,7 +193,7 @@ void FileExplorer::LoopThroughFiles()
 			else
 			{
 				HandleFile(directoryEntry, fileType);
-				std::cout << "Swag" << std::endl;
+				std::cout << "Swag" << '\n';
 			}
 			
 
@@ -232,7 +229,7 @@ inline bool FileExists(const std::string& name)
 
 void FileExplorer::HoveredWithItem()
 {
-	auto vectorPath = GraphicsEngine::Get()->GetDropPath();
+	const auto vectorPath = GraphicsEngine::Get()->GetDropPath();
 
 	for(size_t i = 0; i < vectorPath.size(); i++)
 	{
@@ -261,7 +258,7 @@ void FileExplorer::HoveredWithItem()
 	}
 }
 
-std::vector<std::filesystem::directory_entry> FileExplorer::GetSortedDirectory()
+std::vector<std::filesystem::directory_entry> FileExplorer::GetSortedDirectory() const
 {
 	std::vector<std::filesystem::directory_entry> sortedByDirectory;
 	for(auto& directoryEntry : std::filesystem::directory_iterator(myCurrentDirectory))

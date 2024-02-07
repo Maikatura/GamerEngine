@@ -62,19 +62,19 @@ public:
 
 	void SceneReady(bool isSceneReady);
 
-	void Clean();
+	static void Clean();
 	std::vector<Light*>& GetLights();
-	void RemoveLight(Light* aLight);
+	void RemoveLight(const Light* aLight);
 	void ResetLights();
 	void RenderLight(Light* light);
 
 	Entity GetNetworkEntity(TurNet::TurMessage* aMessage);
 
 	void SetSceneStatus(SceneStatus aSceneStatus);
-	SceneStatus GetSceneStatus();
-	bool IsReady();
+	SceneStatus GetSceneStatus() const;
+	bool IsReady() const;
 
-	static void SetCameraHandle(std::function<void(Entity)> aCameraHandle);
+	static void SetCameraHandle(const std::function<void(Entity)>& aCameraHandle);
 
 private:
 	SceneStatus mySceneStatus;

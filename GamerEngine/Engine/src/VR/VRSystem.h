@@ -29,19 +29,18 @@ private:
 	char m_rDevClassChar[vr::k_unMaxTrackedDeviceCount];   // for each device, a character representing its class
 
 public:
-
-	bool Init(HWND aWindowHandle);
+	static bool Init(HWND aWindowHandle);
 
 	void Update();
 
 
-	uint32_t GetWidth();
-	uint32_t GetHeight();
+	uint32_t GetWidth() const;
+	uint32_t GetHeight() const;
 
 	void SetWidth(uint32_t aWidth);
 	void SetHeight(uint32_t aHeight);
-	bool IsVrNull();
-	Matrix4x4f GetEyeToHeadTransform(VREye anEye);
-	Matrix4x4f GetProjectionMatrix(VREye anEye, float aNearPlane, float aFarPlane);
+	bool IsVrNull() const;
+	Matrix4x4f GetEyeToHeadTransform(VREye anEye) const;
+	Matrix4x4f GetProjectionMatrix(VREye anEye, float aNearPlane, float aFarPlane) const;
 	Matrix4x4f GetHMDPose();
 };

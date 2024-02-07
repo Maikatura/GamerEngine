@@ -8,16 +8,12 @@
 #include "Render/Renderer.h"
 #include "Managers/DropManager.h"
 #include <Managers/CommandManager.h>
-
 #include <Render/ForwardRenderer.h>
-
 #include "Profiler/Profiler.h"
 #include "Render/DeferredRenderer.h"
-#include "Render/LineRenderer.h"
 #include "Render/ShadowRenderer.h"
 #include "Render/PostProcessRenderer.h"
 #include "Scene/SceneManager.h"
-
 #include "Font/Font.h"
 
 GraphicsEngine* GraphicsEngine::Get()
@@ -36,9 +32,9 @@ GraphicsEngine::~GraphicsEngine()
 
 bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	unsigned someWidth, unsigned someHeight,
-	bool enableDeviceDebug, std::wstring aName, bool aBoolToUseEditor, bool isVRMode)
+	bool enableDeviceDebug, const std::wstring& aName, bool aBoolToUseEditor, bool isVRMode)
 {
-	OleInitialize(NULL);
+	OleInitialize(nullptr);
 
 	myInstance = this;
 	myUseEditor = aBoolToUseEditor;
@@ -67,8 +63,8 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		this
 	);
 
-	myWindowSize.cx = someWidth;
-	myWindowSize.cy = someHeight;
+	myWindowSize.cx = static_cast<long>(someWidth);
+	myWindowSize.cy = static_cast<long>(someHeight);
 
 	myDropManager = MakeRef<DropManager>();
 	RegisterDragDrop(myWindowHandle, myDropManager.get());
@@ -161,85 +157,90 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
 	switch (uMsg)
 	{
-	case WM_CREATE:
-	{
-		const CREATESTRUCT* createdStruct = reinterpret_cast<CREATESTRUCT*>(lParam);
-		graphicsEnginePtr = static_cast<GraphicsEngine*>(createdStruct->lpCreateParams);
-	}
-
-	case WM_SIZE:
-	{
-		if (DX11::Get().GetDevice() != NULL)
+		case WM_CREATE:
 		{
-			Get()->SetWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+			const CREATESTRUCT* createdStruct = reinterpret_cast<CREATESTRUCT*>(lParam);
+			graphicsEnginePtr = static_cast<GraphicsEngine*>(createdStruct->lpCreateParams);
+			break;
+		}
 
-			switch (wParam)
+		case WM_SIZE:
+		{
+			if (DX11::Get().GetDevice() != NULL)
 			{
-			case SIZE_MAXIMIZED:
-				graphicsEnginePtr->SetUpdateBuffers(true);
-				graphicsEnginePtr->SetMinimized(false);
-				break;
+				Get()->SetWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 
-			case SIZE_MINIMIZED:
-				graphicsEnginePtr->SetMinimized(true);
-				break;
+				switch (wParam)
+				{
+				case SIZE_MAXIMIZED:
+					graphicsEnginePtr->SetUpdateBuffers(true);
+					graphicsEnginePtr->SetMinimized(false);
+					break;
 
-			case SIZE_RESTORED:
-				graphicsEnginePtr->SetUpdateBuffers(true);
-				graphicsEnginePtr->SetMinimized(false);
-				break;
+				case SIZE_MINIMIZED:
+					graphicsEnginePtr->SetMinimized(true);
+					break;
 
-			case SIZE_MAXSHOW:
-				graphicsEnginePtr->SetUpdateBuffers(true);
-				graphicsEnginePtr->SetMinimized(false);
-				break;
+				case SIZE_RESTORED:
+					graphicsEnginePtr->SetUpdateBuffers(true);
+					graphicsEnginePtr->SetMinimized(false);
+					break;
+
+				case SIZE_MAXSHOW:
+					graphicsEnginePtr->SetUpdateBuffers(true);
+					graphicsEnginePtr->SetMinimized(false);
+					break;
+				default: break;
+				}
 			}
+			break;
 		}
-	}
 
-	case WM_EXITSIZEMOVE:
-	{
-		if (DX11::Get().GetDevice() != NULL)
+		case WM_EXITSIZEMOVE:
 		{
-			graphicsEnginePtr->SetUpdateBuffers(true);
+			if (DX11::Get().GetDevice() != NULL)
+			{
+				graphicsEnginePtr->SetUpdateBuffers(true);
+			}
+			break;
 		}
-	}
 
-	case WM_SYSCOMMAND:
-	{
-		if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+		case WM_SYSCOMMAND:
 		{
-			return 0;
+			if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+			{
+				return 0;
+			}
+			break;
 		}
-		break;
-	}
 
 
 
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-	}
+		case WM_DESTROY:
+		{
+			PostQuitMessage(0);
+			break;
+		}
 
-	case WM_DROPFILES:
-	{
-		std::cout << "Dropped something\n";
-		break;
-	}
+		case WM_DROPFILES:
+		{
+			std::cout << "Dropped something\n";
+			break;
+		}
 
-	case WM_QUIT:
-	{
-		graphicsEnginePtr->SetEngineRunning(false);
-		std::cout << "Test\n";
-		break;
-	}
+		case WM_QUIT:
+		{
+			graphicsEnginePtr->SetEngineRunning(false);
+			std::cout << "Test\n";
+			break;
+		}
 
-	case WM_CLOSE:
-	{
-		graphicsEnginePtr->SetEngineRunning(false);
-		std::cout << "Dropped something\n";
-		break;
-	}
+		case WM_CLOSE:
+		{
+			graphicsEnginePtr->SetEngineRunning(false);
+			std::cout << "Dropped something\n";
+			break;
+		}
 
 	}
 
@@ -263,7 +264,7 @@ void GraphicsEngine::BeginFrame()
 			{
 				myGBuffer->Release();
 				DX11::Get().Resize();
-				auto scene = SceneManager::Get().GetScene();
+				const auto scene = SceneManager::Get().GetScene();
 				scene->Resize({ static_cast<unsigned int>(Get()->GetWindowSize().cx), static_cast<unsigned int>(Get()->GetWindowSize().cy) });
 				myGBuffer->CreateGBuffer();
 				myPostProcessRenderer->ReInitialize();
@@ -285,10 +286,10 @@ void GraphicsEngine::BeginFrame()
 	clearColor.z = 1.0f;
 	clearColor.w = 1.0f;
 
-	auto renderTarget = DX11::Get().GetRenderTargetView();
+	const auto renderTarget = DX11::Get().GetRenderTargetView();
 	DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView()->myDSV.Get());
-	float clearDepth = 1.0f;
-	UINT8 clearStencil = 0;
+	constexpr float clearDepth = 1.0f;
+	constexpr UINT8 clearStencil = 0;
 
 	DX11::Get().GetContext()->ClearDepthStencilView(DX11::Get().GetDepthStencilView()->myDSV.Get(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
 	DX11::Get().GetContext()->ClearRenderTargetView(DX11::Get().GetRenderTargetView(), &clearColor.x);
@@ -342,7 +343,7 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	{
 		myRenderPass++;
 
-		if (GBuffer::GBufferTexture::GBufferTexture_Count + 1 == myRenderPass)
+		if (GBuffer::GBufferTexture::EGBufferTexture_Count + 1 == myRenderPass)
 		{
 			myRenderPass = 0;
 		}
@@ -363,14 +364,14 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 	//}
 }
 
-void GraphicsEngine::RenderScene(VREye anEye)
+void GraphicsEngine::RenderScene(const VREye anEye) const
 {
 	if (!SceneManager::Get().IsReady())
 	{
 		return;
 	}
 
-	auto scene = SceneManager::Get().GetScene();
+	const Ref<Scene> scene = SceneManager::Get().GetScene();
 
 	if (!scene)
 	{
@@ -387,18 +388,18 @@ void GraphicsEngine::RenderScene(VREye anEye)
 		return;
 	}
 
-	Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(anEye);
-	Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(anEye);
+	const Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(anEye);
+	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(anEye);
 
 
-	std::vector<Light*> someLightList = scene->GetLights();
+	const std::vector<Light*> someLightList = scene->GetLights();
 
 	const Ref<DirectionalLight>& directionalLight = scene->GetDirLight();
 	const Ref<EnvironmentLight>& environmentLight = scene->GetEnvLight();
 	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
 	std::vector<RenderBuffer2D>& spriteList = Renderer::GetSprites();
 
-	float deltaTime = Time::GetDeltaTime();
+	const float deltaTime = Time::GetDeltaTime();
 
 	// TODO : CLEAN THIS MESS UP
 
@@ -475,7 +476,7 @@ void GraphicsEngine::RenderScene(VREye anEye)
 	}
 }
 
-void GraphicsEngine::OnFrameRender()
+void GraphicsEngine::OnFrameRender() const
 {
 	if (myWantToResizeBuffers) return;
 	if (myIsMinimized) return;
@@ -486,7 +487,7 @@ void GraphicsEngine::OnFrameRender()
 		return;
 	}
 
-	auto scene = SceneManager::Get().GetScene();
+	const auto scene = SceneManager::Get().GetScene();
 
 	if (!scene)
 	{
@@ -599,7 +600,7 @@ void GraphicsEngine::StopUpdateThread()
 {
 }
 
-void GraphicsEngine::EndFrame()
+void GraphicsEngine::EndFrame() const
 {
 	if (myIsMinimized) return;
 
@@ -637,12 +638,12 @@ void GraphicsEngine::SetUpdateBuffers(bool aUpdate)
 	myWantToResizeBuffers = aUpdate;
 }
 
-void GraphicsEngine::SetWinProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> aFunction)
+void GraphicsEngine::SetWinProc(const std::function<bool(HWND, UINT, WPARAM, LPARAM)>& aFunction)
 {
 	myWinProcFunction = aFunction;
 }
 
-void GraphicsEngine::ResetStates() const
+void GraphicsEngine::ResetStates()
 {
 	PROFILE_CPU_SCOPE("Reset States");
 	RendererBase::SetBlendState(BlendState::None);
@@ -656,12 +657,12 @@ void GraphicsEngine::ResetStates() const
 	RendererBase::SetSamplerState(6u, SamplerState::ComparisonLinearClamp);
 }
 
-std::vector<std::string> GraphicsEngine::GetDropPath()
+std::vector<std::string> GraphicsEngine::GetDropPath() const
 {
 	return myDropManager->GetDropPaths();
 }
 
-bool GraphicsEngine::GetEngineUpdateRuntime()
+bool GraphicsEngine::GetEngineUpdateRuntime() const
 {
 	return myUpdateCondition;
 }
@@ -671,7 +672,7 @@ void GraphicsEngine::SetEngineUpdateRuntime(bool aCondition)
 	myUpdateCondition = aCondition;
 }
 
-bool GraphicsEngine::GetPauseState()
+bool GraphicsEngine::GetPauseState() const
 {
 	return myIsPaused;
 }
@@ -681,12 +682,12 @@ void GraphicsEngine::SetPauseState(bool aCondition)
 	myIsPaused = aCondition;
 }
 
-bool GraphicsEngine::GetEditorMode()
+bool GraphicsEngine::GetEditorMode() const
 {
 	return myUseEditor;
 }
 
-bool GraphicsEngine::GetEngineRunning()
+bool GraphicsEngine::GetEngineRunning() const
 {
 	return myIsRunning;
 }
@@ -696,12 +697,12 @@ void GraphicsEngine::SetEngineRunning(bool aCondition)
 	myIsRunning = aCondition;
 }
 
-int GraphicsEngine::GetRenderPass()
+int GraphicsEngine::GetRenderPass() const
 {
 	return myRenderPass;
 }
 
-Vector2ui GraphicsEngine::GetEditorWindowSize()
+Vector2ui GraphicsEngine::GetEditorWindowSize() const
 {
 	return myEditorWindowSize;
 }

@@ -18,6 +18,6 @@ public:
 
 	void Update() override;
 
-	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) override;
+	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex) override;
 	void SetData(TransformComponent* aTransform) override;
 };

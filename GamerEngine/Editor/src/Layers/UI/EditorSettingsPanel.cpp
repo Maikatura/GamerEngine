@@ -5,18 +5,11 @@
 #include <rapidjson/JsonReader.hpp>
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
-#include "Windows.h"
-
 #include <GraphicsEngine.h>
-
 #include "Time.hpp"
 #include "ImGuiAdded/ImGuiExtra.h"
 #include "Render/Renderer.h"
-#include "Scene/Scene.h"
-#include "Scene/SceneSerializer.h"
 #include <imgui_markdown/imgui_markdown.h>
-
-#include "Layers/EditorColorScheme.h"
 #include "Scene/SceneManager.h"
 
 ImFont* H1 = NULL;
@@ -148,7 +141,7 @@ void EditorSettingsPanel::LoadConfig()
 
 #pragma endregion
 
-	std::string path = myConfigPath + "EditorConfig.data";
+	const std::string path = myConfigPath + "EditorConfig.data";
 	auto document = JsonReader::ReadJson(path.c_str());
 
 	mySettings.myClearColor.x = document["x"].GetFloat();

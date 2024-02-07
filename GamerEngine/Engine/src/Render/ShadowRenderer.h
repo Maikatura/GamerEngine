@@ -33,6 +33,6 @@ public:
 	bool Initialize();
 
 	void Render(Light* aLight, const std::vector<RenderBuffer>& aModelList);
-	void ClearResources();
-	void ClearTarget();
+	static void ClearResources();
+	static void ClearTarget();
 };

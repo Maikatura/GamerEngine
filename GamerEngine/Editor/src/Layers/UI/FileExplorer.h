@@ -29,7 +29,7 @@ public:
 
 
 private:
-	std::vector<std::filesystem::directory_entry> GetSortedDirectory();
+	std::vector<std::filesystem::directory_entry> GetSortedDirectory() const;
 
 	std::filesystem::path myCurrentPath;
 	std::filesystem::path myCurrentDirectory;

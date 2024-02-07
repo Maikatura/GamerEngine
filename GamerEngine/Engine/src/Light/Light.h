@@ -94,7 +94,7 @@ public:
 		
 	}
 
-	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) = 0;
+	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex) = 0;
 
 	FORCEINLINE bool GetActive() const
 	{

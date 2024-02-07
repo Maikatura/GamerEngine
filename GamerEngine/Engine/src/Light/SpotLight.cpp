@@ -7,7 +7,7 @@
 #include "Render/Renderer.h"
 #include "Components/TransfromComponent.h"
 
-void SpotLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex)
+void SpotLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex)
 {
 	if(GetActive())
 	{

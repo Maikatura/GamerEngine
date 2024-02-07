@@ -42,7 +42,7 @@ void DirectionalLight::Update()
 	myLightData.ShadowMapIndex = 19;
 }
 
-void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex)
+void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex)
 {
 	if(GetActive())
 	{

@@ -1,11 +1,9 @@
 #include "Editor.pch.h"
 #include "Inspector.h"
-#include <GraphicsEngine.h>
 #include <Model/Entity.h>
 #include <Render/SelectionData.h>
 #include <Scene/Scene.h>
 #include "Utilites/StringCast.h"
-#include "AssetHandlers/ModelAssetHandler.h"
 #include "Audio/Audio.h"
 #include "Components/CameraController.h"
 #include "Components/Components.hpp"
@@ -15,9 +13,6 @@
 #include "ImGuiAdded/ImGuiExtra.h"
 #include "Model/ModelInstance.h"
 #include "Particles/ParticleEmitter.h"
-#include "Light/EnvironmentLight.h"
-#include "Light/SpotLight.h"
-#include "Light/PointLight.h"
 #include "Handlers/DropHandler.h"
 #include "Layers/NetworkingLayer.h"
 #include "Layers/Network/MoveObjectMessage.h"
@@ -57,22 +52,21 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 	{
 		auto& tag = aEntity.GetComponent<TagComponent>();
 
-		std::string tagName = tag.Tag;
 
 		ImGuiInputTextFlags flags = ImGuiInputTextFlags_None;
-		if (tagName == "SceneCamera (DONT TOUCH)")
+		if (tag.Tag == "SceneCamera (DONT TOUCH)")
 		{
 			flags |= ImGuiInputTextFlags_ReadOnly;
 			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
 		}
 
 		ImGui::InputText(ICON_FK_TAG" Tag", &tag.Tag, flags);
-		if (tagName == "SceneCamera (DONT TOUCH)")
+		if (tag.Tag == "SceneCamera (DONT TOUCH)")
 		{
 			ImGui::PopStyleColor();
 		}
 
-		if (tag.Tag == "")
+		if (tag.Tag.empty())
 		{
 			tag.Tag = "Default Name";
 		}
@@ -91,21 +85,20 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 			auto& rotation = component.GetRotation();
 			auto& scale = component.GetScale();
 
-			bool myIsEditValues = false;
 
 			if (ImGui::DragFloat3("Position", &translate.x, 0.25f))
 			{
-				myIsEditValues = true;
+				
 			}
 
 			if (ImGui::DragFloat3("Rotation", &rotation.x, 0.25f))
 			{
-				myIsEditValues = true;
+				
 			}
 
 			if (ImGui::DragFloat3("Scale", &scale.x, 0.05f))
 			{
-				myIsEditValues = true;
+				
 			}
 
 			//component.SetPosition(translate);
@@ -215,7 +208,6 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 					//std::map<std::string, std::vector<Model::MeshData&>> sortedMaterials(materialGroups.begin(), materialGroups.end());
 
-					int i = 0;
 
 					//for (auto& [name, group] : materialGroups)
 					//{

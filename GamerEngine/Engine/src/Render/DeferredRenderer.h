@@ -4,11 +4,8 @@
 #include "Render/Buffers.h"
 #include "RenderBuffer.h"
 #include "RendererBase.h"
-
 #include "Light/DirectionalLight.h"
 #include "Light/EnvironmentLight.h"
-#include "Light/SpotLight.h"
-#include "Light/PointLight.h"
 
 constexpr UINT MAX_DEFERRED_LIGHTS = 20;
 
@@ -19,35 +16,35 @@ class GBuffer
 	public:
 		enum GBufferTexture
 		{
-			GBufferTexture_Albedo,
-			GBufferTexture_Normal,
-			GBufferTexture_Material,
-			GBufferTexture_VertexNormal,
-			GBufferTexture_Position,
-			GBufferTexture_AmbientOcclusion,
-			GBufferTexture_ViewPosition,
-			GBufferTexture_ViewNormal,
-			GBufferTexture_Count
+			EGBufferTexture_Albedo,
+			EGBufferTexture_Normal,
+			EGBufferTexture_Material,
+			EGBufferTexture_VertexNormal,
+			EGBufferTexture_Position,
+			EGBufferTexture_AmbientOcclusion,
+			EGBufferTexture_ViewPosition,
+			EGBufferTexture_ViewNormal,
+			EGBufferTexture_Count
 		};
 
-		void SetAsTarget();
-		void ClearTarget();
-		void SetAsResource(unsigned int aStartSlot);
-		void ClearResource(unsigned int aStartSlot);
-		void Clear();
+		static void SetAsTarget();
+		static void ClearTarget();
+		static void SetAsResource(unsigned int aStartSlot);
+		static void ClearResource(unsigned int aStartSlot);
+		static void Clear();
 
-		void Release();
+		static void Release();
 
-		bool CreateGBuffer();
+		static bool CreateGBuffer();
 
 		static RenderTexture& GetRenderer();
 
-		static std::array<RenderTexture, GBufferTexture::GBufferTexture_Count>& GetPasses();
+		static std::array<RenderTexture, GBufferTexture::EGBufferTexture_Count>& GetPasses();
 	
 	private:
 
 		ID3D11Texture2D* myTexture;
-		inline static std::array<RenderTexture, GBufferTexture::GBufferTexture_Count> myRenderTextures;
+		inline static std::array<RenderTexture, GBufferTexture::EGBufferTexture_Count> myRenderTextures;
 
 		inline static RenderTexture myRenderer;
 };
@@ -56,10 +53,10 @@ class DeferredRenderer : public RendererBase
 {
 	public:
 		bool Initialize();
-		void GenerateGBuffer(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye);
-		void Render(Matrix4x4f aView, Matrix4x4f aProjection, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, std::vector<Light*> aLightList, float aDetlaTime, float aTotalTime, VREye anEye);
-		void RenderLate();
-		void ClearTarget();
+		void GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye);
+		void Render(Matrix4x4f aView, const Matrix4x4f& aProjection, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, float aDeltaTime, float aTotalTime, VREye anEye);
+		void RenderLate() const;
+		static void ClearTarget();
 
 	private:
 
@@ -76,7 +73,7 @@ class DeferredRenderer : public RendererBase
 			float Padding2;
 		};
 		
-		SceneLightBuffer mySceneLightBufferData;
+		SceneLightBuffer mySceneLightBufferData = {};
 		
 		ComPtr<ID3D11Buffer> myLightBuffer;
 

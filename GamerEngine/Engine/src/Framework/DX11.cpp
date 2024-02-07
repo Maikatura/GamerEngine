@@ -1,24 +1,33 @@
 #include <GraphicsEngine.pch.h>
 #include <Framework/DX11.h>
 #include <Model/Vertex.h>
-#include <vector>
-#include <fstream>
 #include <Model/Model.h>
 
-#include "openvr.h"
 
-DX11::DX11()
-{}
+DX11::DX11(): BackBufferTex(nullptr), IDBufferDesc(), StagingTexDesc(), featureLevel(), driverType(),
+              myBackBufferTex(nullptr),
+              myRenderTargetView(nullptr),
+              myDepthStencilSRV(nullptr),
+              myViewport(),
+              pDSState(nullptr),
+              myDepthDisabledStencilState(nullptr),
+              myImmediateContext(nullptr),
+              myVRSystem(),
+              myRenderWidth(0),
+              myRenderHeight(0), myFrontCulling(nullptr),
+              myBackCulling(nullptr)
+{
+}
 
 DX11::~DX11()
-{}
+= default;
 
 ComPtr<IDXGISwapChain> DX11::GetSwapChain()
 {
 	return SwapChain;
 }
 
-ID3D11RasterizerState* DX11::GetFrontCulling()
+ID3D11RasterizerState* DX11::GetFrontCulling() const
 {
 	return myFrontCulling;
 }
@@ -41,17 +50,17 @@ void DX11::ResetRenderTarget(bool isUsingEditor, bool useDepth)
 	}
 }
 
-Vector2ui DX11::GetScreenSize()
+Vector2ui DX11::GetScreenSize() const
 {
 	return Vector2ui{ myRenderWidth,myRenderHeight };
 }
 
-ID3D11Device* DX11::GetDevice()
+ID3D11Device* DX11::GetDevice() const
 {
 	return Device.Get();
 }
 
-ID3D11DeviceContext* DX11::GetContext()
+ID3D11DeviceContext* DX11::GetContext() const
 {
 	return myImmediateContext;
 }
@@ -61,7 +70,7 @@ Ref<DepthStencil> DX11::GetDepthStencilView()
 	return myDepthStencilView;
 }
 
-ID3D11ShaderResourceView* DX11::GetDepthSRV()
+ID3D11ShaderResourceView* DX11::GetDepthSRV() const
 {
 	return myDepthStencilSRV;
 }
@@ -99,7 +108,7 @@ Ref<RenderTexture>& DX11::GetScreenView()
 	return myScreenView;
 }
 
-ID3D11RenderTargetView* DX11::GetRenderTargetView()
+ID3D11RenderTargetView* DX11::GetRenderTargetView() const
 {
 	return myRenderTargetView;
 }
@@ -186,12 +195,12 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
-	HRESULT errorCode;
+	HRESULT errorCode = S_FALSE;
 	for (unsigned i = 0; i < numDriverTypes; ++i)
 	{
-		errorCode = D3D11CreateDeviceAndSwapChain(NULL, driverTypes[i], NULL, createDeviceFlags,
-			featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &SwapChain, &Device,
-			&featureLevel, &myImmediateContext);
+		errorCode = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, createDeviceFlags,
+		                                          featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &SwapChain, &Device,
+		                                          &featureLevel, &myImmediateContext);
 
 		GE_ASSERT(SUCCEEDED(result), "Failed to create SwapChain and Device")
 		if (SUCCEEDED(errorCode))
@@ -263,7 +272,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// Create depth stencil state
 	result = Device->CreateDepthStencilState(&dsDesc, &pDSState);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D");
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D")
 	if (FAILED(result))
 	{
 		return false;
@@ -308,7 +317,7 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// Create the state using the device.
 	result = Device->CreateDepthStencilState(&depthDisabledStencilDesc, &myDepthDisabledStencilState);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil State");
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil State")
 	if (FAILED(result))
 	{
 		return false;
@@ -421,8 +430,8 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// Initialize the render to texture object.
 	myScreenView->SetName("Window View");
-	result = myScreenView->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target (Flatscreen)");
+	result = myScreenView->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target (Flatscreen)")
 	if (FAILED(result))
 	{
 		return false;
@@ -538,21 +547,25 @@ RECT DX11::GetClientSize()
 	return clientRect;
 }
 
-UINT DX11::GetScreenObjectId(UINT x, UINT y)
+UINT DX11::GetScreenObjectId(const UINT x, const UINT y) const
 {
 	if (x >= IDBufferDesc.Width) return 0;
 	if (y >= IDBufferDesc.Height) return 0;
 
-	D3D11_BOX b = { x, y, 0, x + 1, y + 1, 1 };
+	const D3D11_BOX b = { x, y, 0, x + 1, y + 1, 1 };
 	GetContext()->CopySubresourceRegion(StagingTex.Get(), 0, 0, 0, 0, IDBufferTex.Get(), 0, &b);
 
 	D3D11_MAPPED_SUBRESOURCE mapped;
-	HRESULT h = GetContext()->Map(StagingTex.Get(), 0, D3D11_MAP_READ, 0, &mapped);
-	UINT32* p = (UINT32*)mapped.pData;
+	const HRESULT h = GetContext()->Map(StagingTex.Get(), 0, D3D11_MAP_READ, 0, &mapped);
+	if (FAILED(h))
+	{
+		return 0;
+	}
+	const UINT32* p = static_cast<UINT32*>(mapped.pData);
 	GetContext()->Unmap(StagingTex.Get(), 0);
 	//const FLOAT clear[4] = { 0, 0, 0, 0 };
 	//DX11::ourContext->ClearRenderTargetView(DX11::ourIDBuffer.Get(), clear);
-	if (p == NULL) return 0;
+	if (p == nullptr) return 0;
 	return *p;
 }
 
@@ -561,8 +574,7 @@ bool DX11::CreateSwapChain(bool aEnableDeviceDebug)
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
-	HRESULT result = S_FALSE;
-
+	
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 	swapChainDesc.BufferDesc.Width = clientRect.right - clientRect.left;
@@ -582,13 +594,13 @@ bool DX11::CreateSwapChain(bool aEnableDeviceDebug)
 	swapChainDesc.Flags = 0;
 
 	constexpr UINT numberOfFeatureLevels = 1;
-	D3D_FEATURE_LEVEL featureLevels[numberOfFeatureLevels] =
+	constexpr D3D_FEATURE_LEVEL featureLevels[numberOfFeatureLevels] =
 	{
 		//D3D_FEATURE_LEVEL_11_1, --add this if supported by the device, otherwise everything will crash!
 		D3D_FEATURE_LEVEL_11_0
 	};
 
-	result = D3D11CreateDeviceAndSwapChain(
+	const HRESULT result = D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
@@ -615,10 +627,7 @@ bool DX11::CreateTexture2D()
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
-	HRESULT result = S_FALSE;
-
-
-	result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBufferTex);
+	HRESULT result = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&BackBufferTex));
 	if (FAILED(result))
 		return false;
 
@@ -634,12 +643,12 @@ bool DX11::CreateTexture2D()
 
 bool DX11::CreateDepthBuffer()
 {
-	HRESULT result = S_FALSE;
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
 	ComPtr<ID3D11Texture2D> depthBufferTexture;
-	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
+	D3D11_TEXTURE2D_DESC depthBufferDesc;
+	ZeroMemory(&depthBufferDesc, sizeof(D3D11_TEXTURE2D_DESC));
 	depthBufferDesc.Width = clientRect.right - clientRect.left;
 	depthBufferDesc.Height = clientRect.bottom - clientRect.top;
 	depthBufferDesc.ArraySize = 1;
@@ -648,7 +657,7 @@ bool DX11::CreateDepthBuffer()
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
 
-	result = Device->CreateTexture2D(&depthBufferDesc, nullptr, depthBufferTexture.GetAddressOf());
+	HRESULT result = Device->CreateTexture2D(&depthBufferDesc, nullptr, depthBufferTexture.GetAddressOf());
 	if (FAILED(result))
 		return false;
 
@@ -679,9 +688,6 @@ bool DX11::ResizeViewport()
 
 bool DX11::CreateShaderResourceView()
 {
-	HRESULT result = S_FALSE;
-
-
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
@@ -701,7 +707,7 @@ bool DX11::CreateShaderResourceView()
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.SampleDesc.Quality = 0;
 
-	result = Device->CreateTexture2D(&textureDesc, nullptr, &BackBufferTex);
+	HRESULT result = Device->CreateTexture2D(&textureDesc, nullptr, &BackBufferTex);
 	if (FAILED(result))
 		return false;
 
@@ -732,7 +738,6 @@ bool DX11::CreateShaderResourceView()
 
 bool DX11::CreateSampler()
 {
-	HRESULT result = S_FALSE;
 	D3D11_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -748,7 +753,7 @@ bool DX11::CreateSampler()
 	samplerDesc.MinLOD = -D3D11_FLOAT32_MAX;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = Device->CreateSamplerState(&samplerDesc, SampleStateDefault.GetAddressOf());
+	const HRESULT result = Device->CreateSamplerState(&samplerDesc, SampleStateDefault.GetAddressOf());
 	if (FAILED(result))
 		return false;
 
@@ -759,13 +764,11 @@ bool DX11::CreateSampler()
 
 bool DX11::CreateSelectionView()
 {
-	HRESULT result = S_OK;
-
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
 	D3D11_TEXTURE2D_DESC textureDesc;
-	ZeroMemory(&textureDesc, sizeof(textureDesc));
+	ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
 	textureDesc.Width = static_cast<UINT>(clientRect.right - clientRect.left);
 	textureDesc.Height = static_cast<UINT>(clientRect.bottom - clientRect.top);
@@ -782,16 +785,17 @@ bool DX11::CreateSelectionView()
 
 	IDBufferDesc = textureDesc;
 
-	Device->CreateTexture2D(&textureDesc, nullptr, IDBufferTex.GetAddressOf());
+	HRESULT result = Device->CreateTexture2D(&textureDesc, nullptr, IDBufferTex.GetAddressOf());
 	if (FAILED(result))
 		return false;
 
-	D3D11_RENDER_TARGET_VIEW_DESC IDBufferViewDesc{};
-	IDBufferViewDesc.Format = IDBufferDesc.Format;
-	IDBufferViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	IDBufferViewDesc.Texture2D.MipSlice = 0;
+	D3D11_RENDER_TARGET_VIEW_DESC idBufferViewDesc;
+	ZeroMemory(&idBufferViewDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+	idBufferViewDesc.Format = IDBufferDesc.Format;
+	idBufferViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	idBufferViewDesc.Texture2D.MipSlice = 0;
 
-	result = Device->CreateRenderTargetView(IDBufferTex.Get(), &IDBufferViewDesc, IDBuffer.GetAddressOf());
+	result = Device->CreateRenderTargetView(IDBufferTex.Get(), &idBufferViewDesc, IDBuffer.GetAddressOf());
 	if (FAILED(result)) return false;
 
 	StagingTexDesc.Width = 1;
@@ -803,7 +807,7 @@ bool DX11::CreateSelectionView()
 	StagingTexDesc.BindFlags = 0;
 	StagingTexDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	StagingTexDesc.MiscFlags = 0;
-	result = Device->CreateTexture2D(&StagingTexDesc, NULL, StagingTex.GetAddressOf());
+	result = Device->CreateTexture2D(&StagingTexDesc, nullptr, StagingTex.GetAddressOf());
 	if (FAILED(result))
 		return false;
 
@@ -935,7 +939,7 @@ void DX11::Resize()
 	}
 
 	// Initialize the render to texture object.
-	hr = m_RenderTextureLeft->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
+	hr = m_RenderTextureLeft->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
 	if (!hr)
 	{
 		return;
@@ -948,7 +952,7 @@ void DX11::Resize()
 	}
 
 	// Initialize the render to texture object.
-	hr = m_RenderTextureRight->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
+	hr = m_RenderTextureRight->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
 	if (!hr)
 	{
 		return;
@@ -965,7 +969,7 @@ void DX11::Resize()
 
 
 	// Initialize the render to texture object.
-	hr = myScreenView->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
+	hr = myScreenView->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
 	if (!hr)
 	{
 		return;

@@ -11,7 +11,7 @@ public:
 	virtual ~PointLight() override = default;
 
 
-	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, int aShaderIndex) override;
+	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex) override;
 
 	void Update() override;
 

@@ -1,6 +1,5 @@
 #include "Editor.pch.h"
 #include <Components/CameraController.h>
-#include "Components/Camera.h"
 #include "Components/Components.hpp"
 #include <Input/InputInternal.h>
 
@@ -24,7 +23,7 @@ void CameraController::OnUpdate()
 		return;
 	}
 
-	float aDeltaTime = Time::GetDeltaTime();
+	const float aDeltaTime = Time::GetDeltaTime();
 
 	Vector3f movement;
 
@@ -48,8 +47,8 @@ void CameraController::OnUpdate()
 		return;
 	}
 
-	float oldMouseX = transform.GetRotation().x;
-	float oldMouseY = transform.GetRotation().y;
+	const float oldMouseX = transform.GetRotation().x;
+	const float oldMouseY = transform.GetRotation().y;
 
 	
 

@@ -20,15 +20,7 @@ public:
 	CameraController();
 
 	inline static bool IsHoveringSceneView = false;
-
-	float GetSpeed() const;
-	float GetSpeedMul() const;
-	float GetMaxSpeed() const;
-
-
-	void SetSpeed(float aSpeed);
-	void SetSpeedMul(float aSpeedMultiply);
-	void SetMaxSpeed(float aMaxSpeed);
+	
 
 	void OnUpdate() override;
 

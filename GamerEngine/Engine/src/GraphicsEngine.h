@@ -62,43 +62,43 @@ public:
 
 	~GraphicsEngine();
 
-	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug, std::wstring aName = L"GamerEngine", bool aBoolToUseEditor = false, bool isVRMode = false);
+	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug, const std::wstring& aName = L"GamerEngine", bool aBoolToUseEditor = false, bool isVRMode = false);
 
 	void BeginFrame();
-	void EndFrame();
+	void EndFrame() const;
 	void OnFrameUpdate(bool aShouldRunLoop);
-	void RenderScene(VREye anEye);
-	void OnFrameRender();
+	void RenderScene(VREye anEye) const;
+	void OnFrameRender() const;
 
 	void StartUpdateThread();
-	void StopUpdateThread();
+	static void StopUpdateThread();
 
 	void SetMinimized(bool aMinimizedState);
 	void SetUpdateBuffers(bool aUpdate);
 
-	void SetWinProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> aFunction);
+	void SetWinProc(const std::function<bool(HWND, UINT, WPARAM, LPARAM)>& aFunction);
 
 	void SetRenderMode(RenderMode aRenderMode) { myRenderMode = aRenderMode; }
 	RenderMode GetRenderMode() const { return myRenderMode; }
 	int GetRenderModeInt() const { return (int)myRenderMode; }
 
-	void ResetStates() const;
+	static void ResetStates();
 	
 
-	std::vector<std::string> GetDropPath();
+	std::vector<std::string> GetDropPath() const;
 
-	bool GetEngineUpdateRuntime();
+	bool GetEngineUpdateRuntime() const;
 	void SetEngineUpdateRuntime(bool aCondition);
 
-	bool GetPauseState();
+	bool GetPauseState() const;
 	void SetPauseState(bool aCondition);
-	bool GetEditorMode();
+	bool GetEditorMode() const;
 
-	bool GetEngineRunning();
+	bool GetEngineRunning() const;
 	void SetEngineRunning(bool aCondition);
-	int GetRenderPass();
+	int GetRenderPass() const;
 
-	Vector2ui GetEditorWindowSize();
+	Vector2ui GetEditorWindowSize() const;
 	void SetEditorWindowSize(Vector2ui aEditorWindowSize);
 
 	[[nodiscard]] HWND FORCEINLINE GetWindowHandle() const { return myWindowHandle; }

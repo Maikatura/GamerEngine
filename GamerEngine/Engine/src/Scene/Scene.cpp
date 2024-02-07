@@ -2,9 +2,7 @@
 #include <Scene/Scene.h>
 #include <Model/Entity.h>
 #include <Components/Components.hpp>
-#include "GraphicsEngine.h"
 #include "AssetHandlers/LightAssetHandler.h"
-#include "AssetHandlers/ModelAssetHandler.h"
 #include "Light/DirectionalLight.h"
 #include "Light/EnvironmentLight.h"
 #include "Light/SpotLight.h"
@@ -12,9 +10,6 @@
 #include <Model/ModelInstance.h>
 #include "Particles/ParticleEmitter.h"
 #include "Render/Renderer.h"
-#include <Components/ScriptableEntity.h>
-
-#include "SceneManager.h"
 #include "..\..\..\Game\src\Components\TransfromComponent.h"
 #include "Components/NativeScriptComponent.h"
 #include "Components/Network/NetworkComponent.h"
@@ -24,7 +19,7 @@
 //#include "flecs.h"
 
 
-Scene::Scene() : mySceneIsReady(false), mySceneStatus(SceneStatus::None)
+Scene::Scene() : mySceneStatus(SceneStatus::None)
 {
 
 }
@@ -81,8 +76,8 @@ void Scene::Clear()
 
 void Scene::Resize(Vector2ui aNewWindowSize)
 {
-	auto view = myRegistry.view<CameraComponent>();
-	for(auto entity : view)
+	const auto view = myRegistry.view<CameraComponent>();
+	for(const auto entity : view)
 	{
 		auto& camera = view.get<CameraComponent>(entity);
 		camera.Resize(aNewWindowSize);
@@ -128,29 +123,29 @@ void Scene::DeleteEntity(Entity aEntity)
 
 	if(aEntity.HasComponent<PointLightComponent>())
 	{
-		for(int i = 0; i < myLightToRender.size(); i++)
+		for(size_t i = 0; i < myLightToRender.size(); i++)
 		{
 			if(myLightToRender[i] == aEntity.GetComponent<PointLightComponent>().myPointLight.get())
 			{
-				myLightToRender.erase(myLightToRender.begin() + i);
+				myLightToRender.erase(myLightToRender.begin() + static_cast<int>(i));
 			}
 		}
 	}
 
 	if(aEntity.HasComponent<SpotLightComponent>())
 	{
-		for(int i = 0; i < myLightToRender.size(); i++)
+		for(size_t i = 0; i < myLightToRender.size(); i++)
 		{
 			if(myLightToRender[i] == aEntity.GetComponent<SpotLightComponent>().mySpotLight.get())
 			{
-				myLightToRender.erase(myLightToRender.begin() + i);
+				myLightToRender.erase(myLightToRender.begin() + static_cast<int>(i));
 			}
 		}
 	}
 
 	if(aEntity.HasComponent<DirectionalLightComponent>())
 	{
-		for(int i = 0; i < myLightToRender.size(); i++)
+		for(size_t i = 0; i < myLightToRender.size(); i++)
 		{
 			if(myLightToRender[i] == myDirectionalLight.get())
 			{
@@ -169,7 +164,7 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 
 	
 	{
-		myRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+		myRegistry.view<NativeScriptComponent>().each([&](auto entity, auto& nsc)
 		{
 			if(!nsc.Instance)
 			{
@@ -431,9 +426,9 @@ void Scene::OnRender()
 
 	{
 		//myLightToRender.push_back(myEnvironmentLight.get());
-		for(size_t i = 0; i < myLightToRender.size(); i++)
+		for (const auto& light : myLightToRender)
 		{
-			myLightToRender[i]->Update();
+			light->Update();
 		}
 		CommonUtilities::MergeSort(myLightToRender);
 	}
@@ -470,7 +465,7 @@ std::vector<Light*>& Scene::GetLights()
 	return myLightToRender;
 }
 
-void Scene::RemoveLight(Light* aLight)
+void Scene::RemoveLight(const Light* aLight)
 {
 	for(int i = 0; i < myLightToRender.size(); i++)
 	{
@@ -510,7 +505,6 @@ Entity Scene::GetNetworkEntity(TurNet::TurMessage* aMessage)
 		if(component.GetID() == networkID)
 		{
 			entityReturn = Entity(entity, this);
-
 		}
 	}
 
@@ -522,17 +516,17 @@ void Scene::SetSceneStatus(SceneStatus aSceneStatus)
 	mySceneStatus = aSceneStatus;
 }
 
-SceneStatus Scene::GetSceneStatus()
+SceneStatus Scene::GetSceneStatus() const
 {
 	return mySceneStatus;
 }
 
-bool Scene::IsReady()
+bool Scene::IsReady() const
 {
 	return mySceneIsReady;
 }
 
-void Scene::SetCameraHandle(std::function<void(Entity)> aCameraHandle)
+void Scene::SetCameraHandle(const std::function<void(Entity)>& aCameraHandle)
 {
 	myEditorCamHandler = aCameraHandle;
 }

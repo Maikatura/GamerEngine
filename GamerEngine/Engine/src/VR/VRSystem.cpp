@@ -69,11 +69,11 @@ void VRSystem::Update()
 	if (!m_pHMD)
 		return;
 
-	vr::VRCompositor()->WaitGetPoses(m_rTrackedDevicePose, vr::k_unMaxTrackedDeviceCount, NULL, 0);
+	vr::VRCompositor()->WaitGetPoses(m_rTrackedDevicePose, vr::k_unMaxTrackedDeviceCount, nullptr, 0);
 
 	m_iValidPoseCount = 0;
 	m_strPoseClasses = "";
-	for (int nDevice = 0; nDevice < vr::k_unMaxTrackedDeviceCount; ++nDevice)
+	for (uint32_t nDevice = 0; nDevice < vr::k_unMaxTrackedDeviceCount; ++nDevice)
 	{
 		if (m_rTrackedDevicePose[nDevice].bPoseIsValid)
 		{
@@ -83,12 +83,14 @@ void VRSystem::Update()
 			{
 				switch (m_pHMD->GetTrackedDeviceClass(nDevice))
 				{
-				case vr::TrackedDeviceClass_Controller:        m_rDevClassChar[nDevice] = 'C'; break;
-				case vr::TrackedDeviceClass_HMD:               m_rDevClassChar[nDevice] = 'H'; break;
-				case vr::TrackedDeviceClass_Invalid:           m_rDevClassChar[nDevice] = 'I'; break;
-				case vr::TrackedDeviceClass_GenericTracker:    m_rDevClassChar[nDevice] = 'O'; break;
-				case vr::TrackedDeviceClass_TrackingReference: m_rDevClassChar[nDevice] = 'T'; break;
-				default:                                       m_rDevClassChar[nDevice] = '?'; break;
+				case vr::TrackedDeviceClass_Controller:        m_rDevClassChar[nDevice] = 'C';	break;
+				case vr::TrackedDeviceClass_HMD:               m_rDevClassChar[nDevice] = 'H';	break;
+				case vr::TrackedDeviceClass_Invalid:           m_rDevClassChar[nDevice] = 'I';	break;
+				case vr::TrackedDeviceClass_GenericTracker:    m_rDevClassChar[nDevice] = 'O';	break;
+				case vr::TrackedDeviceClass_TrackingReference: m_rDevClassChar[nDevice] = 'T';	break;
+				case vr::TrackedDeviceClass_DisplayRedirect:									break;
+				case vr::TrackedDeviceClass_Max:												break;
+				default:                                       m_rDevClassChar[nDevice] = '?';	break;
 				}
 			}
 			m_strPoseClasses += m_rDevClassChar[nDevice];
@@ -106,12 +108,12 @@ void VRSystem::Update()
 
 }
 
-uint32_t VRSystem::GetWidth()
+uint32_t VRSystem::GetWidth() const
 {
 	return myRenderWidth;
 }
 
-uint32_t VRSystem::GetHeight()
+uint32_t VRSystem::GetHeight() const
 {
 	return myRenderHeight;
 }
@@ -126,7 +128,7 @@ void VRSystem::SetHeight(uint32_t aHeight)
 	myRenderHeight = aHeight;
 }
 
-bool VRSystem::IsVrNull()
+bool VRSystem::IsVrNull() const
 {
 	if (m_pHMD)
 	{
@@ -136,12 +138,12 @@ bool VRSystem::IsVrNull()
 	return false;
 }
 
-Matrix4x4f VRSystem::GetEyeToHeadTransform(VREye anEye)
+Matrix4x4f VRSystem::GetEyeToHeadTransform(VREye anEye) const
 {
 	return ConvertSteamVRMatrixToMatrix4(m_pHMD->GetEyeToHeadTransform(VREye::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right));
 }
 
-Matrix4x4f VRSystem::GetProjectionMatrix(VREye anEye, float aNearPlane, float aFarPlane)
+Matrix4x4f VRSystem::GetProjectionMatrix(VREye anEye, float aNearPlane, float aFarPlane) const
 {
 	return ConvertSteamVRMatrixToMatrix4(m_pHMD->GetProjectionMatrix(VREye::Left == anEye ? vr::Hmd_Eye::Eye_Left : vr::Hmd_Eye::Eye_Right, aNearPlane, aFarPlane));
 }

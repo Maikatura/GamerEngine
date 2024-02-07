@@ -89,26 +89,26 @@ public:
 	DX11();
 	~DX11();
 	ComPtr<IDXGISwapChain> GetSwapChain();
-	ID3D11RasterizerState* GetFrontCulling();
+	ID3D11RasterizerState* GetFrontCulling() const;
 
 	static DX11& Get();
 
-	ID3D11Device* GetDevice();
+	ID3D11Device* GetDevice() const;
 
-	ID3D11DeviceContext* GetContext();
+	ID3D11DeviceContext* GetContext() const;
 
 	Ref<DepthStencil> GetDepthStencilView();
-	ID3D11ShaderResourceView* GetDepthSRV();
+	ID3D11ShaderResourceView* GetDepthSRV() const;
 
 	VRSystem& GetVRSystem();
 
-	void TurnZBufferOn();
-	void TurnZBufferOff();
+	static void TurnZBufferOn();
+	static void TurnZBufferOff();
 
 	Ref<RenderTexture>& GetLeftEyeView();
 	Ref<RenderTexture>& GetRightEyeView();
 	Ref<RenderTexture>& GetScreenView();
-	ID3D11RenderTargetView* GetRenderTargetView();
+	ID3D11RenderTargetView* GetRenderTargetView() const;
 	
 
 
@@ -116,10 +116,10 @@ public:
 
 	void UpdateHMDMatrixPose();
 	bool Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR = false);
-	void BeginFrame(std::array<float, 4> aClearColor = { 0.0f, 0.0f, 0.0f, 0.0f });
+	static void BeginFrame(std::array<float, 4> aClearColor = { 0.0f, 0.0f, 0.0f, 0.0f });
 	void EndFrame();
 
-	RECT GetClientSize();
+	static RECT GetClientSize();
 
 	void Resize();
 
@@ -127,11 +127,11 @@ public:
 
 	void ResetRenderTarget(bool isUsingEditor = false, bool useDepth = true);
 
-	Vector2ui GetScreenSize();
+	Vector2ui GetScreenSize() const;
 
 
-	UINT GetScreenObjectId(UINT x, UINT y);
-	bool ResizeViewport();
+	UINT GetScreenObjectId(UINT x, UINT y) const;
+	static bool ResizeViewport();
 
 private:
 
