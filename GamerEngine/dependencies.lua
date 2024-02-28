@@ -30,6 +30,7 @@ IncludeDirs["OpenXR"] = "%{wks.location}/External/openxr/include/"
 IncludeDirs["DirectXTK"] = "%{wks.location}/External/directxtk/inc/"
 IncludeDirs["msdf_atlas_gen"] = "%{wks.location}/External/msdf/msdf-atlas-gen/"
 IncludeDirs["msdfgen"] = "%{wks.location}/External/msdf/msdfgen/"
+IncludeDirs["JoltPhysics"] = "%{wks.location}/External/JoltPhysics/JoltPhysics"
 
 --Libaries
 LibDirs = {}

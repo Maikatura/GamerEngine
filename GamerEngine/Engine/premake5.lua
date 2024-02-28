@@ -62,7 +62,8 @@ includedirs{
 	"%{IncludeDirs.PhysX}",
 	"%{IncludeDirs.msdfgen}",
 	"%{IncludeDirs.msdf_atlas_gen}",
-	"%{IncludeDirs.Flecs}../include2"
+	"%{IncludeDirs.Flecs}../include2",
+	"%{IncludeDirs.JoltPhysics}"
 	
 }
 
@@ -84,7 +85,8 @@ links
 	"ImGui",
 	"Json",
 	"msdfgen",
-	--"openxr"
+	--"openxr",
+	"JoltPhysics"
 }
 
 files 

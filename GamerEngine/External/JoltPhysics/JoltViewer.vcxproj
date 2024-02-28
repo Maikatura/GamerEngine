@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribution|x64">
+      <Configuration>Distribution</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{90451B40-7CFD-5C8D-E504-36E9D1DBF77D}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>JoltViewer</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\Hazelnut\Tools\JoltViewer\</OutDir>
+    <IntDir>bin\Debug-windows-x86_64\JoltViewer\</IntDir>
+    <TargetName>JoltViewer</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\Hazelnut\Tools\JoltViewer\</OutDir>
+    <IntDir>bin\Release-windows-x86_64\JoltViewer\</IntDir>
+    <TargetName>JoltViewer</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\Hazelnut\Tools\JoltViewer\</OutDir>
+    <IntDir>bin\Distribution-windows-x86_64\JoltViewer\</IntDir>
+    <TargetName>JoltViewer</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>JPH_USE_LZCNT;JPH_USE_TZCNT;JPH_USE_F16C;JPH_USE_FMADD;JPH_DEBUG_RENDERER;JPH_FLOATING_POINT_EXCEPTIONS_ENABLED;JPH_EXTERNAL_PROFILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>JoltPhysics\TestFramework;JoltPhysics;JoltViewer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Shcore.lib;D3D12.lib;DXGI.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>JPH_USE_LZCNT;JPH_USE_TZCNT;JPH_USE_F16C;JPH_USE_FMADD;JPH_DEBUG_RENDERER;JPH_FLOATING_POINT_EXCEPTIONS_ENABLED;JPH_EXTERNAL_PROFILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>JoltPhysics\TestFramework;JoltPhysics;JoltViewer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Shcore.lib;D3D12.lib;DXGI.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>JPH_USE_LZCNT;JPH_USE_TZCNT;JPH_USE_F16C;JPH_USE_FMADD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>JoltPhysics\TestFramework;JoltPhysics;JoltViewer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>Shcore.lib;D3D12.lib;DXGI.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="JoltPhysics\TestFramework\Application\Application.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Application\DebugUI.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Application\EntryPoint.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Image\BlitSurface.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Image\LoadBMP.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Image\LoadTGA.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Image\Surface.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Image\ZoomImage.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Input\Keyboard.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Input\Mouse.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Math\Perlin.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\CommandQueue.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\ConstantBuffer.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\DebugRendererImp.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\DescriptorHeap.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\FatalErrorIfFailed.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\Font.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\Frustum.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\PipelineState.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\RenderInstances.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\RenderPrimitive.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\Renderer.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\Texture.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\TestFramework.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIAnimation.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIAnimationSlide.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIButton.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UICheckBox.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIComboBox.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIElement.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIEventListener.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIHorizontalStack.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIImage.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIManager.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UISlider.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIStaticText.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UITextButton.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UITexturedQuad.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIVerticalStack.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Utils\CustomMemoryHook.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Utils\Log.h" />
+    <ClInclude Include="JoltPhysics\TestFramework\Utils\ReadData.h" />
+    <ClInclude Include="JoltViewer\JoltViewer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="JoltPhysics\TestFramework\Application\Application.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Application\DebugUI.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Image\BlitSurface.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Image\LoadBMP.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Image\LoadTGA.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Image\Surface.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Image\ZoomImage.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Input\Keyboard.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Input\Mouse.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Math\Perlin.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\ConstantBuffer.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\DebugRendererImp.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\FatalErrorIfFailed.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\Font.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\PipelineState.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\RenderInstances.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\RenderPrimitive.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\Renderer.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\Texture.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIAnimation.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIAnimationSlide.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIButton.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UICheckBox.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIComboBox.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIElement.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIHorizontalStack.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIImage.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIManager.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UISlider.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIStaticText.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UITextButton.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIVerticalStack.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Utils\CustomMemoryHook.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Utils\Log.cpp" />
+    <ClCompile Include="JoltPhysics\TestFramework\Utils\ReadData.cpp" />
+    <ClCompile Include="JoltViewer\DummyProfiler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="JoltViewer\JoltViewer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="JoltPhysics.vcxproj">
+      <Project>{812AB974-EDDF-316A-76D4-2B41E288286E}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

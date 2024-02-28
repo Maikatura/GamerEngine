@@ -60,7 +60,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\openxr\include;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\json;..\External\WICTextureLoader;.;..\External\msdf\msdfgen;..\External\msdf\msdf-atlas-gen;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\openxr\include;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\json;..\External\WICTextureLoader;.;..\External\msdf\msdfgen;..\External\msdf\msdf-atlas-gen;..\External\flecs\include2;..\External\JoltPhysics\JoltPhysics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -86,7 +86,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\openxr\include;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\json;..\External\WICTextureLoader;.;..\External\msdf\msdfgen;..\External\msdf\msdf-atlas-gen;..\External\flecs\include2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\TurNet;..\External\CommonUtilities\src;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\openxr\include;..\External\entt;..\Game\src;..\External\ImGui\src;..\External\yaml-cpp;..\External\json;..\External\WICTextureLoader;.;..\External\msdf\msdfgen;..\External\msdf\msdf-atlas-gen;..\External\flecs\include2;..\External\JoltPhysics\JoltPhysics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -153,6 +153,33 @@
     <ClInclude Include="src\Particles\ParticleEmitter.h" />
     <ClInclude Include="src\Particles\ParticleEmitterTemplate.h" />
     <ClInclude Include="src\Particles\ParticleSystem.h" />
+    <ClInclude Include="src\Physics\CharacterController.h" />
+    <ClInclude Include="src\Physics\ColliderMaterial.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltAPI.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltBinaryStream.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltBody.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltCaptureManager.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltCharacterController.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltContactListener.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltCookingFactory.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltLayerInterface.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltMaterial.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltScene.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltShapes.h" />
+    <ClInclude Include="src\Physics\JoltPhysics\JoltUtils.h" />
+    <ClInclude Include="src\Physics\MeshColliderCache.h" />
+    <ClInclude Include="src\Physics\MeshCookingFactory.h" />
+    <ClInclude Include="src\Physics\PhysicsAPI.h" />
+    <ClInclude Include="src\Physics\PhysicsBody.h" />
+    <ClInclude Include="src\Physics\PhysicsCaptureManager.h" />
+    <ClInclude Include="src\Physics\PhysicsContactCallback.h" />
+    <ClInclude Include="src\Physics\PhysicsLayer.h" />
+    <ClInclude Include="src\Physics\PhysicsScene.h" />
+    <ClInclude Include="src\Physics\PhysicsSettings.h" />
+    <ClInclude Include="src\Physics\PhysicsShapes.h" />
+    <ClInclude Include="src\Physics\PhysicsSystem.h" />
+    <ClInclude Include="src\Physics\PhysicsTypes.h" />
+    <ClInclude Include="src\Physics\SceneQueries.h" />
     <ClInclude Include="src\Render\Buffers.h" />
     <ClInclude Include="src\Render\DeferredRenderer.h" />
     <ClInclude Include="src\Render\DepthStencil.h" />
@@ -207,6 +234,28 @@
     <ClCompile Include="src\Particles\ParticleEmitter.cpp" />
     <ClCompile Include="src\Particles\ParticleEmitterTemplate.cpp" />
     <ClCompile Include="src\Particles\ParticleSystem.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltAPI.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltBinaryStream.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltBody.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltCaptureManager.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltCharacterController.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltContactListener.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltCookingFactory.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltLayerInterface.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltMaterial.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltProfiler.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltScene.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltShapes.cpp" />
+    <ClCompile Include="src\Physics\JoltPhysics\JoltUtils.cpp" />
+    <ClCompile Include="src\Physics\MeshColliderCache.cpp" />
+    <ClCompile Include="src\Physics\MeshCookingFactory.cpp" />
+    <ClCompile Include="src\Physics\PhysicsAPI.cpp" />
+    <ClCompile Include="src\Physics\PhysicsBody.cpp" />
+    <ClCompile Include="src\Physics\PhysicsCaptureManager.cpp" />
+    <ClCompile Include="src\Physics\PhysicsLayer.cpp" />
+    <ClCompile Include="src\Physics\PhysicsScene.cpp" />
+    <ClCompile Include="src\Physics\PhysicsShapes.cpp" />
+    <ClCompile Include="src\Physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\Render\DeferredRenderer.cpp" />
     <ClCompile Include="src\Render\ForwardRenderer.cpp" />
     <ClCompile Include="src\Render\LineRenderer.cpp" />
@@ -253,6 +302,9 @@
     </ProjectReference>
     <ProjectReference Include="..\External\msdf\msdfgen\msdfgen.vcxproj">
       <Project>{8900D8DD-F5DF-5679-FEF7-E14F6A56BDDA}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\JoltPhysics\JoltPhysics.vcxproj">
+      <Project>{812AB974-EDDF-316A-76D4-2B41E288286E}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

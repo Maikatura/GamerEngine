@@ -40,6 +40,12 @@
     <Filter Include="Particles">
       <UniqueIdentifier>{6C2A9B3B-D894-4FB2-21D3-00588D7C2D07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{888B590D-F46A-D8A8-FD82-637F69E13E0A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\JoltPhysics">
+      <UniqueIdentifier>{F39E7C25-5F00-5A33-E86D-A0E554CE90F2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Render">
       <UniqueIdentifier>{C5BB87CE-B15D-B2A4-9A18-C6F8865939F5}</UniqueIdentifier>
     </Filter>
@@ -182,6 +188,87 @@
     </ClInclude>
     <ClInclude Include="src\Particles\ParticleSystem.h">
       <Filter>Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\CharacterController.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\ColliderMaterial.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltAPI.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltBinaryStream.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltBody.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltCaptureManager.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltCharacterController.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltContactListener.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltCookingFactory.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltLayerInterface.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltMaterial.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltScene.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltShapes.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JoltPhysics\JoltUtils.h">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\MeshColliderCache.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\MeshCookingFactory.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsAPI.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsCaptureManager.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsContactCallback.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsLayer.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsScene.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsSettings.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsShapes.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsSystem.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsTypes.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\SceneQueries.h">
+      <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Render\Buffers.h">
       <Filter>Render</Filter>
@@ -328,6 +415,72 @@
     </ClCompile>
     <ClCompile Include="src\Particles\ParticleSystem.cpp">
       <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltAPI.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltBinaryStream.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltBody.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltCaptureManager.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltCharacterController.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltContactListener.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltCookingFactory.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltLayerInterface.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltMaterial.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltProfiler.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltScene.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltShapes.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\JoltPhysics\JoltUtils.cpp">
+      <Filter>Physics\JoltPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\MeshColliderCache.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\MeshCookingFactory.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsAPI.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsCaptureManager.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsLayer.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsScene.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsShapes.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsSystem.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Render\DeferredRenderer.cpp">
       <Filter>Render</Filter>

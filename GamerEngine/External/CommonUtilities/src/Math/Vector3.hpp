@@ -20,7 +20,8 @@ namespace CommonUtilities
 		T z = 0;
 
 		Vector3<T>(); //Creates a null-vector 
-		Vector3<T>(const T& aX, const T& aY, const T& aZ); //Creates a vector (aX, aY, aZ) 
+		Vector3<T>(const T& aX, const T& aY, const T& aZ); //Creates a vector (aX, aY, aZ)
+		Vector3<T>(const T& aValue);
 		Vector3<T>(const Vector3<T>& aVector) = default; //Copy constructor (compiler generated) 
 		~Vector3<T>() = default; //Destructor (compiler generated)
 
@@ -77,6 +78,14 @@ namespace CommonUtilities
 		x = aX;
 		y = aY;
 		z = aZ;
+	}
+
+	template <class T>
+	Vector3<T>::Vector3(const T& aValue)
+	{
+		x = aValue;
+		y = aValue;
+		z = aValue;
 	}
 
 	template <class T>
