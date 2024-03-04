@@ -39,6 +39,7 @@
 #include "Managers/ThreadPool.h"
 #include <Core/Assert.h>
 #include "Utilites/Asserts.h"
+#include "Utilites/Pointers.h"
 
 #if _DEBUG
 #include <dxgidebug.h>

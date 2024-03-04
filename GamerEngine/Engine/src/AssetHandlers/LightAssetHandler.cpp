@@ -24,7 +24,7 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 
 	constexpr float nearPlane = 30.0f;
 	constexpr float farPlane = 250000.0f;
-	constexpr float DIVIDE = 2.0f;
+	constexpr float DIVIDE = .4f;
 
 	myDirectionalLight->myNearPlane = nearPlane;
 	myDirectionalLight->myFarPlane = farPlane;
