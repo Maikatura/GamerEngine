@@ -1,7 +1,7 @@
 #pragma once
 #include "Render2D.h"
 #include <Math/MathTypes.hpp>
-#include "Model/ModelInstance.h"
+#include "..\Model\Model.h"
 
 class ParticleEmitter;
 

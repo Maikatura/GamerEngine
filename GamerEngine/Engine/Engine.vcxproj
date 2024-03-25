@@ -141,9 +141,8 @@
     <ClInclude Include="src\Managers\ThreadPool.hpp" />
     <ClInclude Include="src\Model\Entity.h" />
     <ClInclude Include="src\Model\Material.h" />
-    <ClInclude Include="src\Model\Model.h" />
     <ClInclude Include="src\Model\ModelData.h" />
-    <ClInclude Include="src\Model\ModelInstance.h" />
+    <ClInclude Include="src\Model\Model.h" />
     <ClInclude Include="src\Model\Render2D.h" />
     <ClInclude Include="src\Model\SceneObject.h" />
     <ClInclude Include="src\Model\SelectedObject.hpp" />
@@ -227,7 +226,6 @@
     <ClCompile Include="src\Model\Entity.cpp" />
     <ClCompile Include="src\Model\Material.cpp" />
     <ClCompile Include="src\Model\Model.cpp" />
-    <ClCompile Include="src\Model\ModelInstance.cpp" />
     <ClCompile Include="src\Model\SceneObject.cpp" />
     <ClCompile Include="src\Model\Texture.cpp" />
     <ClCompile Include="src\Model\Transform.cpp" />

@@ -5,7 +5,7 @@
 
 #include "AssetHandlers/ModelAssetHandler.h"
 #include "Components/Component.h"
-#include "Model/ModelInstance.h"
+#include "..\..\..\Engine\src\Model\Model.h"
 #include "Utilites/COMInitializer.h"
 
 class ModelData

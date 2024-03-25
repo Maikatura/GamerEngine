@@ -2,7 +2,7 @@
 #include <Layers/Layer.h>
 #include <memory>
 #include <vector>
-#include "Model/ModelInstance.h"
+#include "..\..\..\..\Engine\src\Model\Model.h"
 #include "Utilites/Pointers.h"
 
 class Entity;

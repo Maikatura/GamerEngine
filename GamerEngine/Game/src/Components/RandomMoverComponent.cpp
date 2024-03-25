@@ -2,6 +2,7 @@
 #include "Components/Network/NetworkComponent.h"
 #include <random>
 
+#include "Time.hpp"
 #include "Network/NetworkSettings.h"
 #include "TurNet/Server/ServerMessageQueue.h"
 #include "../../Editor/src/Layers/Network/MoveObjectMessage.h"

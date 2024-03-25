@@ -498,188 +498,188 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 	ofbx::IScene* scene = LoadModelScene(Helpers::string_cast<std::string>(aFilePath));
 
 
-	const ofbx::Mesh* mesh = nullptr;
-	for (int i = 0; i < scene->getAllObjectCount(); ++i)
-	{
-		Ref<Model> mdl = MakeRef<Model>();
-		const ofbx::Object* object = scene->getAllObjects()[i];
-		if (object->getType() == ofbx::Object::Type::MESH)
-		{
-			mesh = static_cast<const ofbx::Mesh*>(object);
-
-			if (!mesh)
-			{
-				return false;
-			}
-
-			// Access the vertex and index data from the mesh
-			const ofbx::Geometry* geometry = mesh->getGeometry();
-			const ofbx::Vec3* vertexPositions = geometry->getVertices();
-			const int vertexCount = geometry->getVertexCount();
-			const int* indices = geometry->getFaceIndices();
-			const int indexCount = geometry->getIndexCount();
-
-			std::vector<Vertex> mdlVertices(vertexCount);
-			for (int x = 0; x < vertexCount; ++x)
-			{
-				mdlVertices[x].Position = Vector4f{
-					static_cast<float>(vertexPositions[x].x),
-					static_cast<float>(vertexPositions[x].y),
-					static_cast<float>(vertexPositions[x].z),
-					1.0f
-				};
-
-
-
-				for (int vCol = 0; vCol < 4; vCol++)
-				{
-					if (mesh->getGeometry()->getColors())
-					{
-						mdlVertices[x].VertexColors[vCol] = {
-						static_cast<float>(mesh->getGeometry()->getColors()[0].x),
-						static_cast<float>(mesh->getGeometry()->getColors()[0].y),
-						static_cast<float>(mesh->getGeometry()->getColors()[0].z),
-						static_cast<float>(mesh->getGeometry()->getColors()[0].w)
-						};
-					}
-				}
-
-				for (int uvCh = 0; uvCh < 4; uvCh++)
-				{
-					if (mesh->getGeometry()->getUVs(uvCh))
-					{
-						mdlVertices[x].UVs[uvCh].x = static_cast<float>(mesh->getGeometry()->getUVs(uvCh)->x);
-						mdlVertices[x].UVs[uvCh].y = static_cast<float>(mesh->getGeometry()->getUVs(uvCh)->y);
-					}
-
-				}
-
-				if (mesh->getGeometry()->getTangents())
-				{
-					mdlVertices[x].Tangent = Vector3f{
-
-						static_cast<float>(mesh->getGeometry()->getTangents()[x].x),
-						static_cast<float>(mesh->getGeometry()->getTangents()[x].y),
-						static_cast<float>(mesh->getGeometry()->getTangents()[x].z)
-					};
-				}
-
-				//mdlVertices[v].Binormal = {
-				//	mesh.Vertices[v].BiNormal[0],
-				//	mesh.Vertices[v].BiNormal[1],
-				//	mesh.Vertices[v].BiNormal[2]
-				//};
-
-				if (mesh->getGeometry()->getNormals())
-				{
-					mdlVertices[x].Normal = {
-						static_cast<float>(mesh->getGeometry()->getNormals()[x].x),
-						static_cast<float>(mesh->getGeometry()->getNormals()[x].y),
-						static_cast<float>(mesh->getGeometry()->getNormals()[x].z)
-					};
-				}
-
-			}
-
-			std::vector<unsigned int> mdlIndices(indexCount);
-			for (int i = 0; i < indexCount; ++i)
-			{
-				mdlIndices[i] = indices[i];
-			}
-
-			D3D11_BUFFER_DESC vertexBufferDesc = {};
-			vertexBufferDesc.ByteWidth = static_cast<UINT>(mdlVertices.size()) * static_cast<UINT>(sizeof(Vertex));
-			vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-			vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-			D3D11_SUBRESOURCE_DATA vertexSubResourceData = {};
-			vertexSubResourceData.pSysMem = &mdlVertices[0];
-			vertexSubResourceData.SysMemPitch = 0;
-			vertexSubResourceData.SysMemSlicePitch = 0;
-
-			ID3D11Buffer* vertexBuffer;
-			result = DX11::Get().GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
-			if (FAILED(result))
-			{
-				return false;
-			}
-
-			D3D11_BUFFER_DESC indexBufferDesc = {};
-			indexBufferDesc.ByteWidth = static_cast<UINT>(mdlIndices.size()) * static_cast<UINT>(sizeof(unsigned));
-			indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-			indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-
-			D3D11_SUBRESOURCE_DATA indexSubresourceData = {};
-			indexSubresourceData.pSysMem = &mdlIndices[0];
-			indexSubresourceData.SysMemPitch = 0;
-			indexSubresourceData.SysMemSlicePitch = 0;
-
-			ID3D11Buffer* indexBuffer;
-			result = DX11::Get().GetDevice()->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
-			if (FAILED(result))
-			{
-				return false;
-			}
-
-
-			auto layout = CreateLayout();
-
-			std::ifstream vsFile;
-			vsFile.open("Shaders/Default_VS.cso", std::ios::binary);
-			std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
-			ID3D11VertexShader* vertexShader;
-			result = DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
-			if (FAILED(result))
-			{
-				return false;
-			}
-			vsFile.close();
-
-			std::ifstream psFile;
-			psFile.open("Shaders/Default_PS.cso", std::ios::binary);
-			std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
-			ID3D11PixelShader* pixelShader;
-			result = DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
-			if (FAILED(result))
-			{
-				return false;
-			}
-			psFile.close();
-
-			ID3D11InputLayout* inputLayout;
-			result = DX11::Get().GetDevice()->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
-			if (FAILED(result))
-			{
-				return false;
-			}
-
-			ModelInstance::MeshData modelData = {};
-			modelData.myNumberOfVertices = static_cast<UINT>(mdlVertices.size());
-			modelData.myNumberOfIndices = static_cast<UINT>(mdlIndices.size());
-			modelData.myStride = sizeof(Vertex);
-			modelData.myOffset = 0;
-			modelData.myVertexBuffer = vertexBuffer;
-			modelData.myIndexBuffer = indexBuffer;
-			modelData.myVertexShader = vertexShader;
-			modelData.myPixelShader = pixelShader;
-			modelData.myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-			modelData.myInputLayout = inputLayout;
-			modelData.myMeshName = mesh->name;
-			modelData.myMaterialIndex = 0;
-
-
-			//mdl->Init(modelData, aFilePath);
-		}
-
-		mdl->Name = Helpers::string_cast<std::string>(aFilePath);
-		Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
-
-		//mdlInstance->Init(mdl);
-
-		myModelRegistry.push_back(mdlInstance);
-
-		return true;
-	}
+	//const ofbx::Mesh* mesh = nullptr;
+	//for (int i = 0; i < scene->getAllObjectCount(); ++i)
+	//{
+	// 	Ref<Model> mdl = MakeRef<Model>();
+	// 	const ofbx::Object* object = scene->getAllObjects()[i];
+	// 	if (object->getType() == ofbx::Object::Type::MESH)
+	// 	{
+	// 		mesh = static_cast<const ofbx::Mesh*>(object);
+	//
+	// 		if (!mesh)
+	// 		{
+	// 			return false;
+	// 		}
+	//
+	// 		// Access the vertex and index data from the mesh
+	// 		const ofbx::Geometry* geometry = mesh->getGeometry();
+	// 		const ofbx::Vec3* vertexPositions = geometry->getVertices();
+	// 		const int vertexCount = geometry->getVertexCount();
+	// 		const int* indices = geometry->getFaceIndices();
+	// 		const int indexCount = geometry->getIndexCount();
+	//
+	// 		std::vector<Vertex> mdlVertices(vertexCount);
+	// 		for (int x = 0; x < vertexCount; ++x)
+	// 		{
+	// 			mdlVertices[x].Position = Vector4f{
+	// 				static_cast<float>(vertexPositions[x].x),
+	// 				static_cast<float>(vertexPositions[x].y),
+	// 				static_cast<float>(vertexPositions[x].z),
+	// 				1.0f
+	// 			};
+	//
+	//
+	//
+	// 			for (int vCol = 0; vCol < 4; vCol++)
+	// 			{
+	// 				if (mesh->getGeometry()->getColors())
+	// 				{
+	// 					mdlVertices[x].VertexColors[vCol] = {
+	// 					static_cast<float>(mesh->getGeometry()->getColors()[0].x),
+	// 					static_cast<float>(mesh->getGeometry()->getColors()[0].y),
+	// 					static_cast<float>(mesh->getGeometry()->getColors()[0].z),
+	// 					static_cast<float>(mesh->getGeometry()->getColors()[0].w)
+	// 					};
+	// 				}
+	// 			}
+	//
+	// 			for (int uvCh = 0; uvCh < 4; uvCh++)
+	// 			{
+	// 				if (mesh->getGeometry()->getUVs(uvCh))
+	// 				{
+	// 					mdlVertices[x].UVs[uvCh].x = static_cast<float>(mesh->getGeometry()->getUVs(uvCh)->x);
+	// 					mdlVertices[x].UVs[uvCh].y = static_cast<float>(mesh->getGeometry()->getUVs(uvCh)->y);
+	// 				}
+	//
+	// 			}
+	//
+	// 			if (mesh->getGeometry()->getTangents())
+	// 			{
+	// 				mdlVertices[x].Tangent = Vector3f{
+	//
+	// 					static_cast<float>(mesh->getGeometry()->getTangents()[x].x),
+	// 					static_cast<float>(mesh->getGeometry()->getTangents()[x].y),
+	// 					static_cast<float>(mesh->getGeometry()->getTangents()[x].z)
+	// 				};
+	// 			}
+	//
+	// 			//mdlVertices[v].Binormal = {
+	// 			//	mesh.Vertices[v].BiNormal[0],
+	// 			//	mesh.Vertices[v].BiNormal[1],
+	// 			//	mesh.Vertices[v].BiNormal[2]
+	// 			//};
+	//
+	// 			if (mesh->getGeometry()->getNormals())
+	// 			{
+	// 				mdlVertices[x].Normal = {
+	// 					static_cast<float>(mesh->getGeometry()->getNormals()[x].x),
+	// 					static_cast<float>(mesh->getGeometry()->getNormals()[x].y),
+	// 					static_cast<float>(mesh->getGeometry()->getNormals()[x].z)
+	// 				};
+	// 			}
+	//
+	// 		}
+	//
+	// 		std::vector<unsigned int> mdlIndices(indexCount);
+	// 		for (int i = 0; i < indexCount; ++i)
+	// 		{
+	// 			mdlIndices[i] = indices[i];
+	// 		}
+	//
+	// 		D3D11_BUFFER_DESC vertexBufferDesc = {};
+	// 		vertexBufferDesc.ByteWidth = static_cast<UINT>(mdlVertices.size()) * static_cast<UINT>(sizeof(Vertex));
+	// 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	// 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	//
+	// 		D3D11_SUBRESOURCE_DATA vertexSubResourceData = {};
+	// 		vertexSubResourceData.pSysMem = &mdlVertices[0];
+	// 		vertexSubResourceData.SysMemPitch = 0;
+	// 		vertexSubResourceData.SysMemSlicePitch = 0;
+	//
+	// 		ID3D11Buffer* vertexBuffer;
+	// 		result = DX11::Get().GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, &vertexBuffer);
+	// 		if (FAILED(result))
+	// 		{
+	// 			return false;
+	// 		}
+	//
+	// 		D3D11_BUFFER_DESC indexBufferDesc = {};
+	// 		indexBufferDesc.ByteWidth = static_cast<UINT>(mdlIndices.size()) * static_cast<UINT>(sizeof(unsigned));
+	// 		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	// 		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	//
+	// 		D3D11_SUBRESOURCE_DATA indexSubresourceData = {};
+	// 		indexSubresourceData.pSysMem = &mdlIndices[0];
+	// 		indexSubresourceData.SysMemPitch = 0;
+	// 		indexSubresourceData.SysMemSlicePitch = 0;
+	//
+	// 		ID3D11Buffer* indexBuffer;
+	// 		result = DX11::Get().GetDevice()->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &indexBuffer);
+	// 		if (FAILED(result))
+	// 		{
+	// 			return false;
+	// 		}
+	//
+	//
+	// 		auto layout = CreateLayout();
+	//
+	// 		std::ifstream vsFile;
+	// 		vsFile.open("Shaders/Default_VS.cso", std::ios::binary);
+	// 		std::string vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
+	// 		ID3D11VertexShader* vertexShader;
+	// 		result = DX11::Get().GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
+	// 		if (FAILED(result))
+	// 		{
+	// 			return false;
+	// 		}
+	// 		vsFile.close();
+	//
+	// 		std::ifstream psFile;
+	// 		psFile.open("Shaders/Default_PS.cso", std::ios::binary);
+	// 		std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
+	// 		ID3D11PixelShader* pixelShader;
+	// 		result = DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
+	// 		if (FAILED(result))
+	// 		{
+	// 			return false;
+	// 		}
+	// 		psFile.close();
+	//
+	// 		ID3D11InputLayout* inputLayout;
+	// 		result = DX11::Get().GetDevice()->CreateInputLayout(layout.data(), sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), &inputLayout);
+	// 		if (FAILED(result))
+	// 		{
+	// 			return false;
+	// 		}
+	//
+	// 		ModelInstance::MeshData modelData = {};
+	// 		modelData.myNumberOfVertices = static_cast<UINT>(mdlVertices.size());
+	// 		modelData.myNumberOfIndices = static_cast<UINT>(mdlIndices.size());
+	// 		modelData.myStride = sizeof(Vertex);
+	// 		modelData.myOffset = 0;
+	// 		modelData.myVertexBuffer = vertexBuffer;
+	// 		modelData.myIndexBuffer = indexBuffer;
+	// 		modelData.myVertexShader = vertexShader;
+	// 		modelData.myPixelShader = pixelShader;
+	// 		modelData.myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	// 		modelData.myInputLayout = inputLayout;
+	// 		modelData.myMeshName = mesh->name;
+	// 		modelData.myMaterialIndex = 0;
+	//
+	//
+	// 		//mdl->Init(modelData, aFilePath);
+	// 	}
+	//
+	// 	mdl->Name = Helpers::string_cast<std::string>(aFilePath);
+	// 	Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
+	//
+	// 	//mdlInstance->Init(mdl);
+	//
+	// 	myModelRegistry.push_back(mdlInstance);
+	//
+	// 	return true;
+	// }
 
 
 

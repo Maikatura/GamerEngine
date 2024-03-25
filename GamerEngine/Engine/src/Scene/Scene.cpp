@@ -7,7 +7,7 @@
 #include "Light/EnvironmentLight.h"
 #include "Light/SpotLight.h"
 #include "Light/PointLight.h"
-#include <Model/ModelInstance.h>
+#include <Model\Model.h>
 #include "Particles/ParticleEmitter.h"
 #include "Render/Renderer.h"
 #include "..\..\..\Game\src\Components\TransfromComponent.h"

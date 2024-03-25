@@ -11,7 +11,7 @@
 #include "Components/Network/NetworkComponent.h"
 #include "Fonts/IconsForkAwesome.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Model/ModelInstance.h"
+#include "..\..\..\..\Engine\src\Model\Model.h"
 #include "Particles/ParticleEmitter.h"
 #include "Handlers/DropHandler.h"
 #include "Layers/NetworkingLayer.h"

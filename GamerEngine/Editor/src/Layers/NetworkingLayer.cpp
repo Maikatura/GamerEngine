@@ -1,6 +1,7 @@
 #include "Editor.pch.h"
 #include <Layers/NetworkingLayer.h>
 
+#include "Time.hpp"
 #include "Components/Components.hpp"
 #include "Components/Network/NetworkComponent.h"
 #include "Model/Entity.h"

@@ -5,7 +5,6 @@
 #include <memory>
 #include <Model/Model.h>
 #include <vector>
-#include "Model/ModelInstance.h"
 #include <thread>
 #include <queue>
 #include <vector>

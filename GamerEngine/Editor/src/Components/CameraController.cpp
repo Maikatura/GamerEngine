@@ -3,6 +3,7 @@
 #include "Components/Components.hpp"
 #include <Input/InputInternal.h>
 
+#include "Time.hpp"
 #include "Utilites/UtilityFunctions.h"
 #include "Input/Input.h"
 #include "Scene/SceneManager.h"

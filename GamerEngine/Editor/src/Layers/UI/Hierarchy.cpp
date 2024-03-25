@@ -17,7 +17,7 @@
 #include <Components/Components.hpp>
 #include <Components/CameraController.h>
 #include <Particles/ParticleEmitter.h>
-#include <Model/ModelInstance.h>
+#include <..\..\..\..\Engine\src\Model\Model.h>
 
 #include "..\..\..\..\Game\src\Components\TransfromComponent.h"
 #include "Debugger/ConsoleHelper.h"
