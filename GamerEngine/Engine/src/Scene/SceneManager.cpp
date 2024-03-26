@@ -1,16 +1,14 @@
 #include "GraphicsEngine.pch.h"
 #include "SceneManager.h"
-
 #include "GraphicsEngine.h"
 #include "SceneSerializer.h"
-#include "Components/CameraComponent.h"
-#include "Components/Components.hpp"
-#include "Components/Network/NetworkComponent.h"
+#include "Components/AllComponents.h"
 #include "Debugger/ConsoleHelper.h"
-#include "model/Entity.h"
 #include "Particles/ParticleEmitter.h"
 #include "Render/SelectionData.h"
-#include "Utilites/COMInitializer.h"
+
+
+
 
 bool SceneManager::IsHeadless()
 {

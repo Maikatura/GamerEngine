@@ -57,12 +57,12 @@ bool CommonUtilities::InputManager::IsMouseMoving() const
 }
 
 
-CommonUtilities::Vector3<float> CommonUtilities::InputManager::MouseDelta() const
+Vector2f CommonUtilities::InputManager::MouseDelta()
 {
-	const float xDelta = myCurrentMousePosition.x - myPrevioustMousePosition.x;
-	const float yDelta = myCurrentMousePosition.y - myPrevioustMousePosition.y;
+	myMouseDelta.x = myCurrentMousePosition.x - myPrevioustMousePosition.x;
+	myMouseDelta.y = myCurrentMousePosition.y - myPrevioustMousePosition.y;
 
-	return Vector3<float>(xDelta, yDelta,0);
+	return myMouseDelta;
 }
 
 bool CommonUtilities::InputManager::IsScrolling() const
@@ -164,5 +164,22 @@ bool CommonUtilities::InputManager::UpdateEvents(UINT message, WPARAM wParam, LP
 	}
 
 	return false;
+}
+
+void CommonUtilities::InputManager::SetMousePos(int aX, int aY)
+{
+	SetCursorPos(aX, aY);
+}
+
+Vector2i CommonUtilities::InputManager::GetMousePos()
+{
+	Vector2i mousePos;
+	POINT p;
+	GetCursorPos(&p);
+
+	mousePos.x = p.x;
+	mousePos.y = p.y;
+
+	return mousePos;
 }
 

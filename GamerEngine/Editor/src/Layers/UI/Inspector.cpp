@@ -5,18 +5,17 @@
 #include <Scene/Scene.h>
 #include "Utilites/StringCast.h"
 #include "Audio/Audio.h"
-#include "Components/CameraController.h"
-#include "Components/Components.hpp"
-#include "Components/NativeScriptComponent.h"
-#include "Components/Network/NetworkComponent.h"
 #include "Fonts/IconsForkAwesome.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "..\..\..\..\Engine\src\Model\Model.h"
+#include "Model\Model.h"
 #include "Particles/ParticleEmitter.h"
 #include "Handlers/DropHandler.h"
 #include "Layers/NetworkingLayer.h"
 #include "Layers/Network/MoveObjectMessage.h"
 #include "Scene/SceneManager.h"
+#include "Components/AllComponents.h"
+#include "Components/NativeScriptComponent.h"
+
 
 
 Inspector::Inspector() : Layer("Inspector")
@@ -43,7 +42,7 @@ void Inspector::OnImGuiRender()
 	EndMenu();
 }
 
-void Inspector::DrawSceneObject(Entity& aEntity)
+void Inspector::DrawSceneObject(Entity aEntity)
 {
 	static ImGuiInputTextFlags flagsReadOnly;
 	flagsReadOnly |= ImGuiInputTextFlags_ReadOnly;
@@ -476,38 +475,38 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 		auto check = aEntity.GetComponent<NativeScriptComponent>().Instance;
 		if (check != nullptr)
 		{
-			auto randomMove = dynamic_cast<RandomMoverComponent*>(check);
-			if (randomMove)
-			{
-				if (ImGui::TreeNodeEx("RandomMoverComponent", ImGuiTreeNodeFlags_DefaultOpen, "Random Mover Component"))
-				{
-					Vector3f minArea = randomMove->GetMinArea();
-					Vector3f maxArea = randomMove->GetMaxArea();
-
-					ImGui::DragFloat3("MinRandom", &minArea.x, 1.0f);
-					ImGui::DragScalarN("MaxRandom", ImGuiDataType_Float, &maxArea.x, 3, 1.0f, &minArea.x);
-
-					if (minArea.x > maxArea.x)
-					{
-						maxArea.x = minArea.x;
-					}
-
-					if (minArea.y > maxArea.y)
-					{
-						maxArea.y = minArea.y;
-					}
-
-					if (minArea.z > maxArea.x)
-					{
-						maxArea.z = minArea.z;
-					}
-
-					randomMove->SetMinArea(minArea);
-					randomMove->SetMaxArea(maxArea);
-
-					ImGui::TreePop();
-				}
-			}
+			// auto randomMove = dynamic_cast<RandomMoverComponent*>(check);
+			// if (randomMove)
+			// {
+			// 	if (ImGui::TreeNodeEx("RandomMoverComponent", ImGuiTreeNodeFlags_DefaultOpen, "Random Mover Component"))
+			// 	{
+			// 		Vector3f minArea = randomMove->GetMinArea();
+			// 		Vector3f maxArea = randomMove->GetMaxArea();
+			//
+			// 		ImGui::DragFloat3("MinRandom", &minArea.x, 1.0f);
+			// 		ImGui::DragScalarN("MaxRandom", ImGuiDataType_Float, &maxArea.x, 3, 1.0f, &minArea.x);
+			//
+			// 		if (minArea.x > maxArea.x)
+			// 		{
+			// 			maxArea.x = minArea.x;
+			// 		}
+			//
+			// 		if (minArea.y > maxArea.y)
+			// 		{
+			// 			maxArea.y = minArea.y;
+			// 		}
+			//
+			// 		if (minArea.z > maxArea.x)
+			// 		{
+			// 			maxArea.z = minArea.z;
+			// 		}
+			//
+			// 		randomMove->SetMinArea(minArea);
+			// 		randomMove->SetMaxArea(maxArea);
+			//
+			// 		ImGui::TreePop();
+			// 	}
+			// }
 		}
 	}
 	
@@ -542,7 +541,7 @@ void Inspector::DrawSceneObject(Entity& aEntity)
 
 }
 
-void Inspector::AddComponent(Entity& aEntity)
+void Inspector::AddComponent(Entity aEntity)
 {
 	if (ImGui::ButtonCenter("Add Component"))
 	{
@@ -571,7 +570,7 @@ void Inspector::AddComponent(Entity& aEntity)
 
 		if (ImGui::MenuItem("Random Mover Component"))
 		{
-			aEntity.AddComponent<NativeScriptComponent>().Bind<RandomMoverComponent>();
+			//aEntity.AddComponent<NativeScriptComponent>().Bind<RandomMoverComponent>();
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -624,7 +623,7 @@ void Inspector::DrawComponent(const std::string& aName, Entity aEntity, std::fun
 	}
 }
 
-bool Inspector::ShowTexturePicker(Entity& aEntity, Ref<Material>& selectedMaterial, TextureType textureType)
+bool Inspector::ShowTexturePicker(Entity aEntity, Ref<Material>& selectedMaterial, TextureType textureType)
 {
 	bool textureChanged = false;
 	static bool openPopup = false; // Track whether to open the popup
@@ -684,10 +683,10 @@ bool Inspector::ShowTexturePicker(Entity& aEntity, Ref<Material>& selectedMateri
 }
 
 #pragma optimize( "", off )
-void Inspector::DrawFileObject(Entity& aEntity)
+void Inspector::DrawFileObject(Entity aEntity)
 {
 	aEntity;
-	Ref<SelectedObejct> selectedObjectData = SelectionData::GetSelectedObject();
+	Ref<SelectedObject> selectedObjectData = SelectionData::GetSelectedObject();
 
 	switch (selectedObjectData->FileType)
 	{

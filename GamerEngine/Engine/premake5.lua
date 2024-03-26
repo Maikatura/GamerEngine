@@ -79,7 +79,6 @@ links
 	"FBXImporter",
 	"OpenFBX",
 	"WICTextureLoader",
-	"Game",
 	"Shaders",
 	"Flecs",
 	"ImGui",

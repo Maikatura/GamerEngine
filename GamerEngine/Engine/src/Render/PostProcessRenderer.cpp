@@ -52,9 +52,9 @@ void PostProcessRenderer::ReInitialize()
 	int width = 0;
 	int height = 0;
 
-	RECT clientRect = DX11::Get().GetClientSize();
-	width = clientRect.right - clientRect.left;
-	height = clientRect.bottom - clientRect.top;
+	Rect clientRect = DX11::Get().GetClientSize();
+	width = clientRect.Right - clientRect.Left;
+	height = clientRect.Bottom - clientRect.Top;
 
 
 	mySSAOTexture = MakeRef<RenderTexture>();
@@ -188,9 +188,9 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			}
 			else
 			{
-				RECT clientRect = DX11::Get().GetClientSize();
-				uint32_t width = aEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
-				uint32_t height = aEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
+				Rect clientRect = DX11::Get().GetClientSize();
+				uint32_t width = aEye == VREye::None ? clientRect.Right - clientRect.Left : DX11::Get().GetScreenSize().x;
+				uint32_t height = aEye == VREye::None ? clientRect.Bottom - clientRect.Top : DX11::Get().GetScreenSize().y;
 
 				Resolution = {
 					static_cast<unsigned int>(width),

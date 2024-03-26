@@ -2,7 +2,7 @@
 #include <Types/EnumTypes.h>
 
 
-struct SelectedObejct
+struct SelectedObject
 {
 	FileType FileType;
 	void* FileData;

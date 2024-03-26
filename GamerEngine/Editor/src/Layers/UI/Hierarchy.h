@@ -2,7 +2,7 @@
 #include <Layers/Layer.h>
 #include <memory>
 #include <vector>
-#include "..\..\..\..\Engine\src\Model\Model.h"
+#include "Model/Model.h"
 #include "Utilites/Pointers.h"
 
 class Entity;
@@ -26,7 +26,7 @@ public:
 	void DrawArmature(Entity& aEntity, Ref<ModelInstance> aModel);
 	void LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned int aBoneID = 0);
 
-	bool LoopThoughChildren(Ref<Entity> aEntity);
+	bool LoopThoughChildren(Entity* aEntity);
 	void CheckIfUserWantToSetParent(Entity& entity);
 	void IsItemHovered(Entity& aEntity);
 

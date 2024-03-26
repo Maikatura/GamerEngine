@@ -69,7 +69,6 @@ links
 {
 	"FBXImporter",
 	"Engine",
-	"Game",
 	"Json",
 	"YamlCpp",
 	"Flecs",

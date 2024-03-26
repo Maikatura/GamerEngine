@@ -18,6 +18,8 @@
   UVec4.cpp
   Vec3.cpp
   ObjectStream.cpp
+  Generating Code...
+  Compiling...
   ObjectStreamBinaryIn.cpp
   ObjectStreamBinaryOut.cpp
   ObjectStreamIn.cpp
@@ -38,6 +40,8 @@
   CharacterVirtual.cpp
   BroadPhase.cpp
   BroadPhaseBruteForce.cpp
+  Generating Code...
+  Compiling...
   BroadPhaseQuadTree.cpp
   QuadTree.cpp
   CastConvexVsTriangles.cpp
@@ -58,6 +62,8 @@
   CapsuleShape.cpp
   CompoundShape.cpp
   ConvexHullShape.cpp
+  Generating Code...
+  Compiling...
   ConvexShape.cpp
   CylinderShape.cpp
   DecoratedShape.cpp
@@ -78,6 +84,8 @@
   ConstraintManager.cpp
   ContactConstraintManager.cpp
   DistanceConstraint.cpp
+  Generating Code...
+  Compiling...
   FixedConstraint.cpp
   GearConstraint.cpp
   HingeConstraint.cpp
@@ -98,6 +106,8 @@
   PhysicsLock.cpp
   PhysicsScene.cpp
   PhysicsSystem.cpp
+  Generating Code...
+  Compiling...
   PhysicsUpdateContext.cpp
   Ragdoll.cpp
   StateRecorderImpl.cpp
@@ -118,6 +128,8 @@
   DebugRendererPlayback.cpp
   DebugRendererRecorder.cpp
   SkeletalAnimation.cpp
+  Generating Code...
+  Compiling...
   Skeleton.cpp
   SkeletonMapper.cpp
   SkeletonPose.cpp
@@ -129,4 +141,5 @@
   TriangleSplitterLongestAxis.cpp
   TriangleSplitterMean.cpp
   TriangleSplitterMorton.cpp
-  JoltPhysics.vcxproj -> C:\Users\simon\Documents\GitHub\Hazel\Hazel\vendor\JoltPhysics\bin\Debug-windows-x86_64\JoltPhysics\JoltPhysics.lib
+  Generating Code...
+  JoltPhysics.vcxproj -> C:\Users\zyro\Documents\Github\GamerEngine\GamerEngine\External\JoltPhysics\bin\Debug-windows-x86_64\JoltPhysics\JoltPhysics.lib

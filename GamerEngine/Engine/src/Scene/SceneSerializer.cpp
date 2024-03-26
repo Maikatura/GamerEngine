@@ -1,21 +1,16 @@
 #include "GraphicsEngine.pch.h"
-#include "Scene.h"
 #include <Scene/SceneSerializer.h>
+#include "Scene.h"
 #include "Model/Entity.h"
-#include "Components/Components.hpp"
 #include <fstream>
 #include <yaml-cpp/yaml.h>
 #include "Utilites/StringCast.h"
 #include "AssetHandlers/ModelAssetHandler.h"
 #include "Particles/ParticleEmitter.h"
-#include <Light/DirectionalLight.h>
-#include <Light/EnvironmentLight.h>
 #include <entt.hpp>
-#include "..\..\..\Game\src\Components\TransfromComponent.h"
+#include "Components/AllComponents.h"
+#include "Components/CameraController.h"
 #include "Components/NativeScriptComponent.h"
-#include "Components/RandomMoverComponent.h"
-#include "Components/Network/NetworkComponent.h"
-#include "Utilites/COMInitializer.h"
 
 namespace YAML
 {
@@ -377,21 +372,21 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 	if (entity.HasComponent<NativeScriptComponent>())
 	{
-		std::cout << "Saving Component: NativeScriptComponent" << std::endl;
-
-		auto comp = entity.GetComponent<NativeScriptComponent>().Instance;
-		if (auto ranMover = dynamic_cast<RandomMoverComponent*>(comp))
-		{
-			out << YAML::Key << "RandomMoverComponent";
-			out << YAML::BeginMap; // RandomMoverComponent
-
-			out << YAML::Key << "MinArea" << YAML::Value << ranMover->GetMinArea();
-			out << YAML::Key << "MaxArea" << YAML::Value << ranMover->GetMaxArea();
-
-
-			out << YAML::EndMap; // RandomMoverComponent
-
-		}
+		// std::cout << "Saving Component: NativeScriptComponent" << std::endl;
+		//
+		// auto comp = entity.GetComponent<NativeScriptComponent>().Instance;
+		// if (auto ranMover = dynamic_cast<RandomMoverComponent*>(comp))
+		// {
+		// 	out << YAML::Key << "RandomMoverComponent";
+		// 	out << YAML::BeginMap; // RandomMoverComponent
+		//
+		// 	out << YAML::Key << "MinArea" << YAML::Value << ranMover->GetMinArea();
+		// 	out << YAML::Key << "MaxArea" << YAML::Value << ranMover->GetMaxArea();
+		//
+		//
+		// 	out << YAML::EndMap; // RandomMoverComponent
+		//
+		// }
 
 
 	}
@@ -469,7 +464,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 		auto& camera = deserializedEntity.AddComponent<CameraComponent>();
 		/*deserializedEntity.AddComponent<CameraControllerData>();
 		deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();*/
-		//deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
 		float FoV = cameraComponent["FOV"].as<float>();
 		float NearPlane = cameraComponent["NearPlane"].as<float>();
@@ -680,16 +675,16 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 		netComp.SetID((networkComp["ID"]) ? networkComp["ID"].as<UUID2>() : UUID2());
 	}
 
-	auto randomMover = aEntityNode["RandomMoverComponent"];
-	if (randomMover)
-	{
-		deserializedEntity.AddComponent<NativeScriptComponent>().Bind<RandomMoverComponent>();
-		auto& ranMoverData =  deserializedEntity.AddComponent<RandomMoverData>();
-
-		ranMoverData.myMinArea = randomMover["MinArea"].as<Vector3f>();
-		ranMoverData.myMaxArea = randomMover["MaxArea"].as<Vector3f>();
-
-	}
+	// auto randomMover = aEntityNode["RandomMoverComponent"];
+	// if (randomMover)
+	// {
+	// 	deserializedEntity.AddComponent<NativeScriptComponent>().Bind<RandomMoverComponent>();
+	// 	auto& ranMoverData =  deserializedEntity.AddComponent<RandomMoverData>();
+	//
+	// 	ranMoverData.myMinArea = randomMover["MinArea"].as<Vector3f>();
+	// 	ranMoverData.myMaxArea = randomMover["MaxArea"].as<Vector3f>();
+	//
+	// }
 
 }
 
@@ -787,7 +782,7 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 				auto e2Id = entityTwo->GetUUID();
 				if(e1Id == e2Id)
 				{
-					entityOne->GetComponent<TransformComponent>().SetParent(entityTwo);
+					entityOne->GetComponent<TransformComponent>().SetParent(entityTwo.get());
 
 				}
 			}
@@ -796,8 +791,8 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 			{
 				if(entityOne->GetComponent<TransformComponent>().TempChildren[i] == entityTwo->GetUUID())
 				{
-					entityOne->GetComponent<TransformComponent>().SetChild(entityTwo);
-					entityTwo->GetComponent<TransformComponent>().SetParent(entityOne);
+					entityOne->GetComponent<TransformComponent>().SetChild(entityTwo.get());
+					entityTwo->GetComponent<TransformComponent>().SetParent(entityOne.get());
 				}
 			}
 

@@ -71,9 +71,9 @@ void GBuffer::Release()
 
 bool GBuffer::CreateGBuffer()
 {
-	const RECT clientRect = DX11::Get().GetClientSize();
-	const int width = static_cast<int>(clientRect.right - clientRect.left);
-	const int height = static_cast<int>(clientRect.bottom - clientRect.top);
+	const Rect clientRect = DX11::Get().GetClientSize();
+	const int width = static_cast<int>(clientRect.Right - clientRect.Left);
+	const int height = static_cast<int>(clientRect.Bottom - clientRect.Top);
 	
 	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_Albedo].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R8G8B8A8_UNORM, "Albedo GBuffer");
 
@@ -191,9 +191,9 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 	myFrameBufferData.NearPlane = camera->myNearPlane;
 
 
-	const RECT clientRect = DX11::Get().GetClientSize();
-	const uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
-	const uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
+	const Rect clientRect = DX11::Get().GetClientSize();
+	const uint32_t width = anEye == VREye::None ? clientRect.Right - clientRect.Left : DX11::Get().GetScreenSize().x;
+	const uint32_t height = anEye == VREye::None ? clientRect.Bottom - clientRect.Top : DX11::Get().GetScreenSize().y;
 
 	const Vector2ui Resolution = {
 		width,
@@ -348,9 +348,9 @@ void DeferredRenderer::Render(Matrix4x4f aView, const Matrix4x4f& aProjection, c
 	myFrameBufferData.FarPlane = camera->myFarPlane;
 	myFrameBufferData.NearPlane = camera->myNearPlane;
 
-	const RECT clientRect = DX11::Get().GetClientSize();
-	const uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
-	const uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
+	const Rect clientRect = DX11::Get().GetClientSize();
+	const uint32_t width = anEye == VREye::None ? clientRect.Right - clientRect.Left : DX11::Get().GetScreenSize().x;
+	const uint32_t height = anEye == VREye::None ? clientRect.Bottom - clientRect.Top : DX11::Get().GetScreenSize().y;
 
 	const Vector2ui Resolution = {
 		width,

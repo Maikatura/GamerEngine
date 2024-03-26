@@ -13,11 +13,8 @@
 #include <GraphicsEngine.h>
 #include <Render/LineRenderer.h> 
 #include "Physics.h"
-#include "Components/CameraController.h"
-#include "Components/NativeScriptComponent.h"
 #include "Layers/EditorLayers.h"
 #include "Layers/UI/EditorSettingsPanel.h"
-#include "model/Entity.h"
 #include "Scene/SceneManager.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -82,15 +79,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	EditorSettingsPanel::LoadConfig();
 	LineRenderer::Get().Init();
 	Physics::Get().Init();
-
-
-	auto cameraFunc = std::function<void(Entity)>([](Entity aEntity)
-	{
-		aEntity.AddComponent<CameraControllerData>();
-		aEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-	});
 	
-	Scene::SetCameraHandle(cameraFunc);
 
 	SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
 	

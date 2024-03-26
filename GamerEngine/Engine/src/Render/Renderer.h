@@ -3,6 +3,7 @@
 #include "Components/Components.hpp"
 #include <vector>
 
+#include "Components/ModelComponent.h"
 #include "Light/Light.h"
 #include "Sort/Sort.hpp"
 

@@ -101,10 +101,6 @@ Ref<Texture> TextureAssetHandler::GetTexture(const std::wstring& aName)
 
 bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 {
-	if (SceneManager::Get().IsHeadless())
-	{
-		return false;
-	}
 
 	if (const auto It = myRegistry.find(aFileName); It == myRegistry.end())
 	{

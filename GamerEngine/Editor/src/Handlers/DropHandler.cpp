@@ -2,15 +2,13 @@
 #include <filesystem>
 #include <Handlers/DropHandler.h>
 
-#include "GraphicsEngine.h"
 #include "Utilites/StringCast.h"
 #include "AssetHandlers/ModelAssetHandler.h"
 #include "Debugger/ConsoleHelper.h"
 
 #include "Types/FileExtensions.h"
-
-#include "Components/Components.hpp"
 #include "Scene/SceneManager.h"
+#include "Components/AllComponents.h"
 
 std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 {

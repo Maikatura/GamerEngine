@@ -45,7 +45,7 @@ namespace CommonUtilities
 		void Print() const;
 
 		void DebugPrint() const;
-
+		bool operator==(const Vector2& vector2) const;
 	};
 
 	template <typename T>
@@ -130,6 +130,12 @@ namespace CommonUtilities
 			"\tY: " << y <<
 			"\tSize:\t" << sizeof(*this) <<
 			std::endl;
+	}
+
+	template <class T>
+	bool Vector2<T>::operator==(const Vector2& vector2) const
+	{
+		return x == vector2.x && y == vector2.y;
 	}
 
 	//Returns the vector sum of aVector0 and aVector1 

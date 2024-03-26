@@ -540,11 +540,22 @@ void DX11::EndFrame()
 
 }
 
-RECT DX11::GetClientSize()
+
+
+Rect DX11::GetClientSize()
 {
 	RECT clientRect;
 	GetClientRect(WindowHandle, &clientRect);
-	return clientRect;
+
+
+	Rect returnValue;
+	returnValue.Left = clientRect.left;
+	returnValue.Right = clientRect.right;
+	returnValue.Bottom = clientRect.bottom;
+	returnValue.Top = clientRect.top;
+	
+
+	return returnValue;
 }
 
 UINT DX11::GetScreenObjectId(const UINT x, const UINT y) const

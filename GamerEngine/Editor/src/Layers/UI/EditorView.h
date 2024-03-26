@@ -6,6 +6,7 @@
 
 #include "Components/TransfromComponent.h"
 #include "Math/MathTypes.hpp"
+#include "Utilites/Pointers.h"
 
 namespace ImGuizmo
 {

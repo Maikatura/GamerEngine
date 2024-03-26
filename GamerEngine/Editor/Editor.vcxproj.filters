@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Components">
-      <UniqueIdentifier>{6B7DD516-5735-1764-C03C-F0BFAC13B254}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Handlers">
       <UniqueIdentifier>{B62BEE20-A2F8-482C-CB11-37D4B73D7EBA}</UniqueIdentifier>
     </Filter>
@@ -33,9 +30,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Components\CameraController.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor.h" />
     <ClInclude Include="src\Editor.pch.h" />
     <ClInclude Include="src\Handlers\DropHandler.h">
@@ -148,9 +142,6 @@
     <ClInclude Include="src\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Components\CameraController.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor.cpp" />
     <ClCompile Include="src\Editor.pch.cpp" />
     <ClCompile Include="src\Handlers\DropHandler.cpp">

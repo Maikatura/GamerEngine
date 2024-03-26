@@ -43,7 +43,6 @@ include "PhysicsEngine"
 
 
 group "Engine"
-include "Game"
 include "Engine"
 
 group "Server"

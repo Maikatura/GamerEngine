@@ -2,6 +2,7 @@
 #include <memory>
 #include "model/SelectedObject.hpp"
 #include <Model/Entity.h>
+#include "Utilites/Pointers.h"
 
 class SelectionData
 {
@@ -15,11 +16,11 @@ public:
 		mySelectedObject->Size = sizeof(T);
 	}
 
-	static Ref<SelectedObejct> GetSelectedObject()
+	static Ref<SelectedObject> GetSelectedObject()
 	{
 		if(mySelectedObject == nullptr)
 		{
-			mySelectedObject = MakeRef<SelectedObejct>(FileType::Error, nullptr);
+			mySelectedObject = MakeRef<SelectedObject>(FileType::Error, nullptr);
 		}
 
 		return mySelectedObject;
@@ -44,5 +45,5 @@ public:
 private:
 
 	inline static Entity myEntity;
-	inline static Ref<SelectedObejct> mySelectedObject = nullptr;
+	inline static Ref<SelectedObject> mySelectedObject = nullptr;
 };

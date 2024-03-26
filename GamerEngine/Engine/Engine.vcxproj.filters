@@ -7,6 +7,15 @@
     <Filter Include="Audio">
       <UniqueIdentifier>{9718D90C-032D-01BE-CCAE-A41D3882FDEE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{6B7DD516-5735-1764-C03C-F0BFAC13B254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Audio">
+      <UniqueIdentifier>{AC2F53F1-9828-7243-C15A-57C8ADB2514F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Network">
+      <UniqueIdentifier>{E49A6957-D07E-2AAD-39DF-240025E2142F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
@@ -36,6 +45,9 @@
     </Filter>
     <Filter Include="Model">
       <UniqueIdentifier>{D6F3AE0D-4208-D7BE-0B8A-7A1E775DD3EF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{8F6A0D6C-FB49-8C07-0462-17DE70C0F268}</UniqueIdentifier>
     </Filter>
     <Filter Include="Particles">
       <UniqueIdentifier>{6C2A9B3B-D894-4FB2-21D3-00588D7C2D07}</UniqueIdentifier>
@@ -83,6 +95,57 @@
     </ClInclude>
     <ClInclude Include="src\Audio\AudioManager.h">
       <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\AllComponents.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Animator.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Audio\AudioSource.h">
+      <Filter>Components\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Camera.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\CameraComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\CameraController.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Component.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Components.hpp">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\IDComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ModelComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\NativeScriptComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Network\NetworkComponent.h">
+      <Filter>Components\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\RandomMoverComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Rotater.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ScriptableEntity.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\TagComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\TransfromComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Assert.h">
       <Filter>Core</Filter>
@@ -159,9 +222,6 @@
     <ClInclude Include="src\Model\ModelData.h">
       <Filter>Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Model\ModelInstance.h">
-      <Filter>Model</Filter>
-    </ClInclude>
     <ClInclude Include="src\Model\Render2D.h">
       <Filter>Model</Filter>
     </ClInclude>
@@ -179,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="src\Model\Vertex.h">
       <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Network\NetworkSettings.h">
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="src\Particles\ParticleEmitter.h">
       <Filter>Particles</Filter>
@@ -357,6 +420,30 @@
     <ClCompile Include="src\Audio\AudioManager.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
+    <ClCompile Include="src\Components\Camera.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\CameraComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\CameraController.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\Component.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\Network\NetworkComponent.cpp">
+      <Filter>Components\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\RandomMoverComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\ScriptableEntity.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\TransfromComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\Debugger\ConsoleHelper.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
@@ -393,9 +480,6 @@
       <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="src\Model\Model.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Model\ModelInstance.cpp">
       <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="src\Model\SceneObject.cpp">

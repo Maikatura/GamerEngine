@@ -84,6 +84,11 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	myPostProcessRenderer = MakeRef<PostProcessRenderer>();
 	myGBuffer = MakeRef<GBuffer>();
 
+	Time::Update();
+	Input::Init();
+	AudioManager::Init();
+	SceneManager::Get().Initialize();
+	
 	if (!myForwardRenderer->Initialize())
 	{
 		GE_LOG_ERROR("Failed to init Forward Renderer");
@@ -115,10 +120,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		return false;
 	}
 
-	Time::Update();
-	Input::Init();
-	AudioManager::Init();
-	SceneManager::Get().Initialize();
+	
 
 	if (!myUseEditor)
 	{
@@ -352,7 +354,11 @@ void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
 
 	{
 		PROFILE_CPU_SCOPE("Update Loop");
-		SceneManager::Get().GetScene()->OnUpdate((aShouldRunLoop && !myIsPaused), SceneManager::Get().GetStatus() == SceneStatus::Complete);
+
+		if (SceneManager::Get().GetScene())
+		{
+			SceneManager::Get().Update();
+		}
 
 	}
 

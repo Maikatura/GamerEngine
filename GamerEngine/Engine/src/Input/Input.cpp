@@ -24,6 +24,16 @@ bool Input::IsMouseDown(const int aMouseKey)
 	return myInput->IsMouseDown(aMouseKey);
 }
 
+bool Input::IsMousePressed(const int aMouseKey)
+{
+	return myInput->IsMousePressed(aMouseKey);
+}
+
+bool Input::IsMouseReleased(const int aMouseKey)
+{
+	return myInput->IsMouseReleased(aMouseKey);
+}
+
 bool Input::IsKeyReleased(const int aKey)
 {
 	return myInput->IsKeyReleased(aKey);
@@ -39,12 +49,22 @@ bool Input::IsKeyPressed(const int aKey)
 	return myInput->IsKeyPressed(aKey);
 }
 
+float Input::GetMouseWheel()
+{
+	return myInput->ScrollDelta();
+}
+
 CommonUtilities::Vector2<float> Input::GetMouseDelta()
 {
 	return { static_cast<float>(myInput->MouseDelta().x), static_cast<float>(myInput->MouseDelta().y) };
 }
 
-CommonUtilities::Vector2<float> Input::GetMousePos()
+Vector2i Input::GetMousePos()
 {
-	return { static_cast<float>(myInput->GetMousePos().x), static_cast<float>(myInput->GetMousePos().y) };
+	return myInput->GetMousePos();
+}
+
+void Input::SetMousePos(int aX, int aY)
+{
+	myInput->SetMousePos(aX, aY);
 }

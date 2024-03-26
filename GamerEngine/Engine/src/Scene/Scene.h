@@ -6,6 +6,7 @@
 
 #include "Light/Light.h"
 #include "Sort/Sort.hpp"
+
 #include <mutex>
 //#include "flecs.h"
 
@@ -67,8 +68,6 @@ public:
 	void RemoveLight(const Light* aLight);
 	void ResetLights();
 	void RenderLight(Light* light);
-
-	Entity GetNetworkEntity(TurNet::TurMessage* aMessage);
 
 	void SetSceneStatus(SceneStatus aSceneStatus);
 	SceneStatus GetSceneStatus() const;

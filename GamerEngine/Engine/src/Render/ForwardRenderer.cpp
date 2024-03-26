@@ -91,9 +91,9 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 	myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
 
 
-	RECT clientRect = DX11::Get().GetClientSize();
-	uint32_t width = anEye == VREye::None ? clientRect.right - clientRect.left : DX11::Get().GetScreenSize().x;
-	uint32_t height = anEye == VREye::None ? clientRect.bottom - clientRect.top : DX11::Get().GetScreenSize().y;
+	Rect clientRect = DX11::Get().GetClientSize();
+	uint32_t width = anEye == VREye::None ? clientRect.Right - clientRect.Left : DX11::Get().GetScreenSize().x;
+	uint32_t height = anEye == VREye::None ? clientRect.Bottom - clientRect.Top : DX11::Get().GetScreenSize().y;
 
 	const Vector2ui Resolution = {
 		width,

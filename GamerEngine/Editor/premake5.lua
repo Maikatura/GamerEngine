@@ -87,7 +87,6 @@ links
 {
 	"FBXImporter",
 	"Engine",
-	"Game",
 	"PhysicsEngine",
 	"Flecs",
 	

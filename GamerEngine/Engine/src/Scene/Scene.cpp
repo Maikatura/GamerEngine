@@ -1,20 +1,12 @@
 #include <GraphicsEngine.pch.h>
 #include <Scene/Scene.h>
 #include <Model/Entity.h>
-#include <Components/Components.hpp>
 #include "AssetHandlers/LightAssetHandler.h"
-#include "Light/DirectionalLight.h"
-#include "Light/EnvironmentLight.h"
-#include "Light/SpotLight.h"
-#include "Light/PointLight.h"
 #include <Model\Model.h>
 #include "Particles/ParticleEmitter.h"
 #include "Render/Renderer.h"
-#include "..\..\..\Game\src\Components\TransfromComponent.h"
+#include "Components/AllComponents.h"
 #include "Components/NativeScriptComponent.h"
-#include "Components/Network/NetworkComponent.h"
-#include "Math/AABB3D.hpp"
-#include "TurNet/Shared/DataHandling/TurMessage.h"
 
 //#include "flecs.h"
 
@@ -118,7 +110,7 @@ void Scene::DeleteEntity(Entity aEntity)
 {
 	if(aEntity.HasComponent<NativeScriptComponent>())
 	{
-		aEntity.GetComponent<NativeScriptComponent>().DestroyScript;
+		aEntity.GetComponent<NativeScriptComponent>().DestroyInstanceFunction();
 	}
 
 	if(aEntity.HasComponent<PointLightComponent>())
@@ -163,26 +155,7 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 	if(mySceneStatus != SceneStatus::Complete) return;
 
 	
-	{
-		myRegistry.view<NativeScriptComponent>().each([&](auto entity, auto& nsc)
-		{
-			if(!nsc.Instance)
-			{
-				nsc.Instance = nsc.InstantiateScript();
-				nsc.Instance->myEntity = Entity{ entity, this };
-				nsc.Instance->OnCreate();
-			}
-
-			if(nsc.Instance)
-			{
-				if((aShouldRunLoop || nsc.Instance->RunInEditor()))
-				{
-					nsc.Instance->OnUpdate();
-				}
-			}
-
-		});
-	}
+	
 
 	{
 		const auto& view = myRegistry.view<ModelComponent>();
@@ -200,6 +173,22 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 	if(aShouldRunLoop)
 	{
 		{
+			myRegistry.view<NativeScriptComponent>().each([this](auto entity, auto& nsc)
+			{
+				if(!nsc.Instance)
+				{
+					nsc.InstantiateFunction();
+					nsc.Instance->myEntity = { entity, this };
+					nsc.OnCreateFunction(nsc.Instance);
+				}
+
+				nsc.OnUpdateFunction(nsc.Instance, Time::GetDeltaTime());
+
+			});
+		}
+
+		
+		{
 			const auto& view = myRegistry.view<Network::NetworkComponent>();
 
 			if(view != nullptr)
@@ -210,8 +199,8 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 					auto& networkComponent = view.get<Network::NetworkComponent>(entity);
 					auto aEntity = Entity{ entity, this };
 
-					networkComponent.SetEntity(&aEntity);
-					networkComponent.OnUpdate();
+					// networkComponent.SetEntity(&aEntity);
+					// networkComponent.OnUpdate();
 				}
 			}
 		}
@@ -485,30 +474,6 @@ void Scene::ResetLights()
 void Scene::RenderLight(Light* aLight)
 {
 	myLightToRender.push_back(aLight);
-}
-
-Entity Scene::GetNetworkEntity(TurNet::TurMessage* aMessage)
-{
-
-	int networkID;
-	*aMessage >> networkID;
-
-
-	Entity entityReturn;
-	const auto& view = myRegistry.view<Network::NetworkComponent>();
-
-
-	for(const auto& entity : view)
-	{
-		auto& component = view.get<Network::NetworkComponent>(entity);
-
-		if(component.GetID() == networkID)
-		{
-			entityReturn = Entity(entity, this);
-		}
-	}
-
-	return entityReturn;
 }
 
 void Scene::SetSceneStatus(SceneStatus aSceneStatus)

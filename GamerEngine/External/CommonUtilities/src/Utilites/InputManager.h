@@ -1,6 +1,8 @@
 #pragma once
 #include <bitset>
 #include <Windows.h>
+
+#include "Math/MathTypes.hpp"
 #include "Math/Vector3.hpp"
 
 namespace CommonUtilities
@@ -22,7 +24,7 @@ namespace CommonUtilities
         bool IsMouseReleased(const int aMouseKeyCode) const;
 
         bool IsMouseMoving() const;
-        Vector3<float> MouseDelta() const;
+        Vector2f MouseDelta();
         bool IsScrolling() const;
         float ScrollDelta();
         POINT GetMousePos() const;
@@ -30,7 +32,8 @@ namespace CommonUtilities
 
         void Update();
         bool UpdateEvents(UINT message, WPARAM wParam, LPARAM lParam);
-
+        void SetMousePos(int aX, int aY);
+        Vector2i GetMousePos();
 
     private:
         HWND myHWND;
@@ -48,6 +51,7 @@ namespace CommonUtilities
         Vector3<float> mySavedMousePosition;
         Vector3<float> myPrevioustMousePosition;
         Vector3<float> myCurrentMousePosition;
+        Vector2f myMouseDelta;
 
         Vector3<float> myCurrentRelativeMousePosition;
 

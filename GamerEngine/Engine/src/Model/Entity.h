@@ -1,10 +1,10 @@
 #pragma once
 #include <entt.hpp>
-#include <Scene/Scene.h>
 
 #include "Components/IDComponent.h"
-#include "Scene/UUID.h"
+#include "Scene/Scene.h"
 
+class Scene;
 
 class Entity
 {
@@ -22,12 +22,29 @@ public:
 	{
 		myEntityHandle = other.myEntityHandle;
 		myScene = other.myScene;
-
+	
 		return *this;
 	}
 
 	UUID2 GetUUID() { return GetComponent<IDComponent>().ID; }
 
+	template<typename T>
+	T& AddComponent()
+	{
+		T& component = myScene->GetRegistry().emplace<T>(myEntityHandle);
+		//myScene->OnComponentAdded<T>(*this, component);
+		return component;
+	}
+	
+
+	template<typename T>
+	T& AddOrReplaceComponent()
+	{
+		T& component = myScene->GetRegistry().emplace_or_replace<T>(myEntityHandle);
+		//myScene->OnComponentAdded<T>(*this, component);
+		return component;
+	}
+	
 	template<typename T, typename... Args>
 	T& AddComponent(Args&&... args)
 	{
@@ -35,6 +52,7 @@ public:
 		//myScene->OnComponentAdded<T>(*this, component);
 		return component;
 	}
+	
 
 	template<typename T, typename... Args>
 	T& AddOrReplaceComponent(Args&&... args)
@@ -45,16 +63,13 @@ public:
 	}
 
 	template<typename T>
-	T* GetScriptComponent();
-
-	template<typename T>
 	T& GetComponent()
 	{
 		return myScene->GetRegistry().get<T>(myEntityHandle);
 	}
 
 	template<typename T>
-	bool HasComponent() const
+	bool HasComponent()
 	{
 		return myScene->GetRegistry().all_of<T>(myEntityHandle);
 	}
@@ -64,6 +79,7 @@ public:
 	{
 		myScene->GetRegistry().remove<T>(myEntityHandle);
 	}
+	
 
 	operator bool() const { return myEntityHandle != entt::null; }
 	operator entt::entity() const { return myEntityHandle; }

@@ -4,8 +4,6 @@
 #include <GraphicsEngine.h>
 #include <Framework/DX11.h>
 #include <Scene/Scene.h>
-
-#include "Components/Components.hpp"
 #include "imgui/imgui_internal.h"
 #include "ImGuiAdded/ImGuiExtra.h"
 #include "Render/Renderer.h"
@@ -20,7 +18,6 @@
 #include "Managers/Commands/PositionCommand.h"
 #include "Scene/SceneManager.h"
 #include "Layers/NetworkingLayer.h"
-#include "Input/Input.h"
 #include "Render/DeferredRenderer.h"
 
 EditorView::EditorView() : Layer("Scene"), myStartTranslate(TransformComponent()), myEditedTranslate(TransformComponent())

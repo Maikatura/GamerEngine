@@ -30,6 +30,14 @@ struct ID3D11Texture2D;
 struct ID3D11ShaderResourceView;
 struct D3D11_TEXTURE2D_DESC;
 
+class Rect
+{
+public:
+	int Left;
+	int Right;
+	int Bottom;
+	int Top;
+};
 
 
 class DX11 
@@ -119,7 +127,7 @@ public:
 	static void BeginFrame(std::array<float, 4> aClearColor = { 0.0f, 0.0f, 0.0f, 0.0f });
 	void EndFrame();
 
-	static RECT GetClientSize();
+	static Rect GetClientSize();
 
 	void Resize();
 

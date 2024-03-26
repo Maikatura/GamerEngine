@@ -24,12 +24,18 @@ class SceneManager
 
 	bool myIsHeadless = false;
 
+	inline static Ref<SceneManager> myInstance;
+	
 public:
 
 	static SceneManager& Get()
 	{
-		static SceneManager instance;
-		return instance;
+		if (!myInstance)
+		{
+			myInstance = MakeRef<SceneManager>();
+		}
+		
+		return *myInstance;
 	}
 
 	bool IsHeadless();

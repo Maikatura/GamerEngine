@@ -3,8 +3,7 @@
 
 #include <Types/EnumTypes.h>
 #include <Model/Entity.h>
-
-#include "Components/RandomMoverComponent.h"
+#include "Model/Material.h"
 
 class Inspector : public Layer
 {
@@ -14,15 +13,15 @@ public:
 
 	void OnImGuiRender() override;
 
-	void DrawSceneObject(Entity& aEntity);
-	void DrawFileObject(Entity& aEntity);
+	void DrawSceneObject(Entity aEntity);
+	void DrawFileObject(Entity aEntity);
 
 
 	template <typename T>
 	static void DrawComponent(const std::string& aName, Entity aEntity, std::function<void(T&, Entity)> aFunction);
 
-	void AddComponent(Entity& aEntity);
-	bool ShowTexturePicker(Entity& aEntity, Ref<Material>& selectedMaterial, TextureType textureType);
+	void AddComponent(Entity aEntity);
+	bool ShowTexturePicker(Entity aEntity, Ref<Material>& selectedMaterial, TextureType textureType);
 
 private:
 
