@@ -3,7 +3,7 @@
 #include <TurNet/Client/ClientUDP.h>
 
 #include "Components/Components.hpp"
-#include "Model/Entity.h"
+#include "Core/Model/Entity.h"
 #include "TurNet/Server/ServerUDP.h"
 
 

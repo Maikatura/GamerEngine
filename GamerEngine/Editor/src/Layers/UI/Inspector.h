@@ -2,8 +2,8 @@
 #include <Layers/Layer.h>
 
 #include <Types/EnumTypes.h>
-#include <Model/Entity.h>
-#include "Model/Material.h"
+#include <Core/Model/Entity.h>
+#include "Core/Model/Material.h"
 
 class Inspector : public Layer
 {

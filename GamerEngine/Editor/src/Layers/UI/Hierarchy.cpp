@@ -7,15 +7,15 @@
 // Helpers
 #include <Utilites/StringCast.h>
 #include <Handlers/DropHandler.h>
-#include <Render/SelectionData.h>
+#include <Core/Rendering/SelectionData.h>
 
 // Scene
 #include <Scene/Scene.h>
-#include <Model/Entity.h>
+#include <Core/Model/Entity.h>
 
 //Components
 #include "Components/AllComponents.h"
-#include <Model/Model.h>
+#include <Core/Model/Model.h>
 
 #include "Debugger/ConsoleHelper.h"
 

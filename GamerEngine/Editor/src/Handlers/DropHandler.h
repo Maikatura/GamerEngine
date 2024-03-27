@@ -1,6 +1,6 @@
 #pragma once
 #include "imgui/imgui_internal.h"
-#include "Model/Entity.h"
+#include "Core/Model/Entity.h"
 
 
 class DropHandler

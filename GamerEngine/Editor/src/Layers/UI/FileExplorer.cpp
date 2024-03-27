@@ -2,16 +2,20 @@
 #include "FileExplorer.h"
 #include "ImGui/imgui.h"
 #include <AssetHandlers/TextureAssetHandler.h>
-#include <Model/Texture.h>
+#include <Core/Model/Texture.h>
 #include "GraphicsEngine.h"
 #include "ImGuiAdded/ImGuiExtra.h"
 #include <ImGui/imgui_stdlib.h>
 #include <Types/FileExtensions.h>
-#include "Render/SelectionData.h"
+#include "Core/Rendering/SelectionData.h"
 #include "Utilites/StringCast.h"
 #include "Debugger/ConsoleHelper.h"
 #include "Scene/SceneManager.h"
 #include <fstream>
+#include <regex>
+
+#include "Compilers/ShaderCompiler.h"
+#include "Core/Rendering/PixelShader.h"
 
 extern const std::filesystem::path AssetPath = "Assets";
 
@@ -158,6 +162,7 @@ void FileExplorer::LoopThroughFiles()
 		{
 			mySelectedPath = directoryEntry.path();
 		}
+		
 
 		if(ImGui::BeginPopupContextItem())
 		{
@@ -174,6 +179,16 @@ void FileExplorer::LoopThroughFiles()
 			{
 				myDeletePath = myCurrentPath;
 				myConfirmCheck = true;
+			}
+
+			if (mySelectedPath.extension() == ".hlsl")
+			{
+				if(ImGui::MenuItem("Compile"))
+				{
+					std::filesystem::path csoFile = mySelectedPath;
+					csoFile.replace_extension(".cso");
+					PixelShader::Compile(std::filesystem::absolute(mySelectedPath).string(), "Shaders\\Custom\\" + csoFile.filename().string());
+				}
 			}
 
 			ImGui::EndPopup();
@@ -193,6 +208,8 @@ void FileExplorer::LoopThroughFiles()
 			{
 				HandleFile(directoryEntry, fileType);
 				std::cout << "Swag" << '\n';
+
+				
 			}
 			
 
@@ -365,7 +382,13 @@ void FileExplorer::HandleFile(std::filesystem::directory_entry aPath, FileType a
 		case FileType::Error: break;
 		case FileType::Folder: break;
 		case FileType::FBX: break;
-		case FileType::Shader: break;
+		case FileType::Shader:
+		{
+			std::wstring widePath = aPath.path().wstring();
+			ShellExecute(0, 0, widePath.c_str(), 0, 0 , SW_SHOW);
+			break;
+		}
+			
 		case FileType::Model: break;
 		case FileType::Texture: break;
 		case FileType::Audio: break;

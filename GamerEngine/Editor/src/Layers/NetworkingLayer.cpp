@@ -4,7 +4,7 @@
 #include "Time.hpp"
 #include "Components/Components.hpp"
 #include "Components/Network/NetworkComponent.h"
-#include "Model/Entity.h"
+#include "Core/Model/Entity.h"
 #include "Network/CreateObjectMessage.h"
 #include "Scene/SceneManager.h"
 #include "TurNet/Shared/Utility/TurCompare.h"
@@ -17,7 +17,7 @@
 #include "Network/PlayerMoveMessage.h"
 #include "Network/SkinChangerMessage.h"
 #include "AssetHandlers/ModelAssetHandler.h"
-#include "Render/Renderer.h"
+#include "Core/Rendering/Renderer.h"
 
 using namespace std::chrono_literals;
 

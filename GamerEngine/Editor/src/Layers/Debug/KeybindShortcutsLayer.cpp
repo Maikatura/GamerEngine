@@ -18,8 +18,13 @@ void KeybindShortcutsLayer::OnImGuiRender()
 		if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('S') && !Input::IsMouseDown(VK_LBUTTON))
 		{
 			const std::string path = FileDialog::SaveFile("Scene File (*.csf)\0*.csf\0");
-			SceneManager::Get().SaveScene(path + ".csf");
-			ConsoleHelper::Log(LogType::Info, std::string("Saved scene to '" + path + "'"));
+			if (!path.empty())
+			{
+				SceneManager::Get().SaveScene(path + ".csf");
+				ConsoleHelper::Log(LogType::Info, "Saved scene to '%s'", path.c_str());	
+			}
+			
+			
 		}
 	}
 }

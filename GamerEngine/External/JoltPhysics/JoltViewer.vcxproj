@@ -55,23 +55,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\..\Hazelnut\Tools\JoltViewer\</OutDir>
-    <IntDir>bin\Debug-windows-x86_64\JoltViewer\</IntDir>
-    <TargetName>JoltViewer</TargetName>
+    <OutDir>..\..\bin\tools\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\JoltViewer\Debug\</IntDir>
+    <TargetName>JoltViewer_Debug</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\..\Hazelnut\Tools\JoltViewer\</OutDir>
-    <IntDir>bin\Release-windows-x86_64\JoltViewer\</IntDir>
-    <TargetName>JoltViewer</TargetName>
+    <OutDir>..\..\bin\tools\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\JoltViewer\Release\</IntDir>
+    <TargetName>JoltViewer_Release</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\..\Hazelnut\Tools\JoltViewer\</OutDir>
-    <IntDir>bin\Distribution-windows-x86_64\JoltViewer\</IntDir>
-    <TargetName>JoltViewer</TargetName>
+    <OutDir>..\..\bin\tools\</OutDir>
+    <IntDir>..\..\Temp\Intermediate\JoltViewer\Distribution\</IntDir>
+    <TargetName>JoltViewer_Distribution</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -92,7 +92,7 @@
       <AdditionalDependencies>Shcore.lib;D3D12.lib;DXGI.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul)</Command>
+      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\bin\tools\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\bin\tools\Assets" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -117,7 +117,7 @@
       <AdditionalDependencies>Shcore.lib;D3D12.lib;DXGI.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul)</Command>
+      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\bin\tools\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\bin\tools\Assets" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
@@ -136,7 +136,7 @@
       <AdditionalDependencies>Shcore.lib;D3D12.lib;DXGI.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\..\Hazelnut\Tools\JoltViewer\Assets" &gt; nul)</Command>
+      <Command>IF EXIST "JoltPhysics\Assets"\ (xcopy /Q /E /Y /I "JoltPhysics\Assets" "..\..\bin\tools\Assets" &gt; nul) ELSE (xcopy /Q /Y /I "JoltPhysics\Assets" "..\..\bin\tools\Assets" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

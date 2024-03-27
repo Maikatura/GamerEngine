@@ -46,14 +46,14 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 			if(fbxExt == extension)
 			{
 				SceneManager::Get().GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
-				ConsoleHelper::Log(LogType::Info, "Loaded a model '" + path.filename().string() + "' into the scene");
+				ConsoleHelper::Log(LogType::Info, "Loaded a model '%s' into the scene", path.filename().string().c_str());
 			}
 
 			if(sceneExt == extension)
 			{
 				GraphicsEngine::Get()->SetEngineUpdateRuntime(false);
 				SceneManager::Get().LoadScene(stringPath);
-				ConsoleHelper::Log(LogType::Info, "Loaded a scene '" + stringPath + "'");
+				ConsoleHelper::Log(LogType::Info, "Loaded a scene '%s'", stringPath.c_str());
 			}
 		}
 
@@ -108,7 +108,7 @@ std::wstring DropHandler::DropFileEntity(Entity& aEntity)
 				modelComp.GetModel()->PlayAnimation(wPath);
 				std::filesystem::path modelName = modelComp.GetModel()->GetName();
 
-				ConsoleHelper::Log(LogType::Info, "Added a Animation | Model " + modelName.filename().string() + " got the animation " + path.filename().string());
+				ConsoleHelper::Log(LogType::Info, "Added a Animation | Model %s got the animation %s", modelName.filename().string().c_str(), path.filename().string());
 			}
 
 

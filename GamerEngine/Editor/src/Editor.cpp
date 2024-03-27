@@ -9,9 +9,9 @@
 
 
 #include <Profiler/Profiler.h>
-#include <Framework/DX11.h>
+#include <Core/Framework/DX11.h>
 #include <GraphicsEngine.h>
-#include <Render/LineRenderer.h> 
+#include <Core/Rendering/LineRenderer.h> 
 #include "Physics.h"
 #include "Layers/EditorLayers.h"
 #include "Layers/UI/EditorSettingsPanel.h"

@@ -1,13 +1,13 @@
 #include "Editor.pch.h"
 #include "Inspector.h"
-#include <Model/Entity.h>
-#include <Render/SelectionData.h>
+#include <Core/Model/Entity.h>
+#include <Core/Rendering/SelectionData.h>
 #include <Scene/Scene.h>
 #include "Utilites/StringCast.h"
 #include "Audio/Audio.h"
 #include "Fonts/IconsForkAwesome.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Model\Model.h"
+#include "Core/Model/Model.h"
 #include "Particles/ParticleEmitter.h"
 #include "Handlers/DropHandler.h"
 #include "Layers/NetworkingLayer.h"
@@ -216,6 +216,63 @@ void Inspector::DrawSceneObject(Entity aEntity)
 						{
 							auto& meshData = component.GetModel()->GetMeshData(i);
 							auto& material = meshData.MaterialData;
+
+
+							{
+								ImGui::BeginGroup();
+
+								ShaderHandler& shaderHandler = ShaderHandler::Get();
+								ShaderHandler::PixelShaderMap& pixelShaderMap = shaderHandler.GetPixelShaderMap();
+
+
+								
+								
+								// Create a vector of shader names
+								std::vector<std::string> shaderNames;
+								for (const auto& pair : pixelShaderMap)
+								{
+									shaderNames.push_back(pair.first);
+								}
+
+
+								int currentShader = 0;
+								for(int shaderIndex = 0; shaderIndex < shaderNames.size(); shaderIndex++)
+								{
+									if (shaderNames[shaderIndex] == meshData.myPixelShader->Path())
+									{
+										currentShader = shaderIndex;
+										break;
+									}
+								}
+								
+								std::string label = "##Shaders" + std::to_string(i);
+								
+								// Create a combo box with the shader names
+								if (ImGui::BeginCombo(label.c_str(), shaderNames[currentShader].c_str()))
+								{
+									for (int n = 0; n < shaderNames.size(); n++)
+									{
+										bool isSelected = (currentShader == n);
+										if (ImGui::Selectable(shaderNames[n].c_str(), isSelected))
+										{
+											currentShader = n;
+										}
+
+										// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+										if (isSelected)
+										{
+											ImGui::SetItemDefaultFocus();
+										}
+									}
+									ImGui::EndCombo();
+								}
+
+								// Get the selected shader
+								meshData.myPixelShader = pixelShaderMap[shaderNames[currentShader]];
+
+
+								ImGui::EndGroup();
+							}
 
 							{
 								ImGui::BeginGroup();

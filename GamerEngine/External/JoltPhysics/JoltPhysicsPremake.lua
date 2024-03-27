@@ -4,8 +4,9 @@ project "JoltPhysics"
     cppdialect "C++17"
     staticruntime "off"
 
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+    targetdir ("%{wks.location}/Temp/lib/")
+	objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}")
+	targetname("%{prj.name}_%{cfg.buildcfg}")
 
     files
     {

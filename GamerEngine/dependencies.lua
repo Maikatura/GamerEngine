@@ -4,10 +4,9 @@
 
 --Includes
 IncludeDirs = {}
-IncludeDirs["GraphicsEngine"] = "%{wks.location}/Engine/src/"
-IncludeDirs["Game"] = "%{wks.location}/Game/src"
-IncludeDirs["Components"] = "%{wks.location}/Engine/src/"
-IncludeDirs["PhysicsEngine"] = "%{wks.location}/PhysicsEngine/src/"
+IncludeDirs["GraphicsEngine"] = "%{wks.location}/Backend/Engine/src/"
+IncludeDirs["Components"] = "%{wks.location}/Backend/Engine/src/"
+IncludeDirs["Physics"] = "%{wks.location}/Backend/Physics/src/"
 
 -- Eternal Includes
 

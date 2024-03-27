@@ -125,6 +125,9 @@
     <ClInclude Include="src\Layers\UI\ProfilerLayer.h">
       <Filter>Layers\UI</Filter>
     </ClInclude>
+    <ClInclude Include="src\Layers\UI\ShaderToolLayer.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
     <ClInclude Include="src\Layers\UI\TextureBrowserLayer.h">
       <Filter>Layers\UI</Filter>
     </ClInclude>
@@ -196,6 +199,9 @@
       <Filter>Layers\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Layers\UI\ProfilerLayer.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\ShaderToolLayer.cpp">
       <Filter>Layers\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Layers\UI\TextureBrowserLayer.cpp">

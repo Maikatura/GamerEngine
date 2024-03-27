@@ -1,5 +1,8 @@
 #pragma once
 #include <bitset>
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <Windows.h>
 
 #include "Math/MathTypes.hpp"
@@ -11,7 +14,7 @@ namespace CommonUtilities
     class InputManager
     {
     public:
-        InputManager();
+        InputManager(HWND aHWND);
         ~InputManager();
 
         bool IsKeyDown(const int aKeyCode) const;
@@ -32,15 +35,15 @@ namespace CommonUtilities
 
         void Update();
         bool UpdateEvents(UINT message, WPARAM wParam, LPARAM lParam);
-        void SetMousePos(int aX, int aY);
+        void SetMousePos(Vector2i aPos);
         Vector2i GetMousePos();
 
     private:
         HWND myHWND;
 
-        std::bitset<3> myCurrentMousePress;
-        std::bitset<3> myPreviousMousePress;
-        std::bitset<3> mySavedMousePress;
+        std::bitset<7> myCurrentMousePress;
+        std::bitset<7> myPreviousMousePress;
+        std::bitset<7> mySavedMousePress;
 
         float myCurrentScrollDelta;
         float myLastScrollDelta;
@@ -48,15 +51,17 @@ namespace CommonUtilities
 
         POINT myMousePoint;
 
-        Vector3<float> mySavedMousePosition;
-        Vector3<float> myPrevioustMousePosition;
-        Vector3<float> myCurrentMousePosition;
+        Vector2f mySavedMousePosition;
+        Vector2f myPreviousMousePosition;
+        Vector2f myCurrentMousePosition;
         Vector2f myMouseDelta;
 
-        Vector3<float> myCurrentRelativeMousePosition;
+        Vector2f myCurrentRelativeMousePosition;
 
         std::bitset<256> mySavedWindowsKeyboardState;
         std::bitset<256> myCurrentKeyboardState;
         std::bitset<256> myPreviousKeyboardState;
+
+        bool myWindowIsActive = false;
     };
 }

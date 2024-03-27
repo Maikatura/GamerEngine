@@ -37,13 +37,10 @@ include "External/JoltPhysics/JoltPhysicsPremake"
 include "External/JoltPhysics/JoltViewerPremake"
 	
 group "Backend"
-include "Shaders"
-include "AudioEngine"
-include "PhysicsEngine"
+include "Backend/Shaders"
+include "Backend/Audio"
+include "Backend/Physics"
+include "Backend/Engine"
 
-
-group "Engine"
-include "Engine"
-
-group "Server"
+--group "Server"
 --include "Server"

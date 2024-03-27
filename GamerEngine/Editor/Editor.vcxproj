@@ -60,9 +60,9 @@
       <PrecompiledHeaderFile>Editor.pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>26812;26451;2220;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;.;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -73,7 +73,7 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;.;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,9 +89,9 @@
       <PrecompiledHeaderFile>Editor.pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>26812;26451;2220;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;.;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -104,7 +104,7 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\Game\src;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\PhysicsEngine\src;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;.;..\External\json;..\External\TurNet;..\External\WICTextureLoader;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,6 +149,7 @@
     <ClInclude Include="src\Layers\UI\Inspector.h" />
     <ClInclude Include="src\Layers\UI\MainMenuBar.h" />
     <ClInclude Include="src\Layers\UI\ProfilerLayer.h" />
+    <ClInclude Include="src\Layers\UI\ShaderToolLayer.h" />
     <ClInclude Include="src\Layers\UI\TextureBrowserLayer.h" />
     <ClInclude Include="src\Project\ProjectConfig.h" />
     <ClInclude Include="src\Project\ProjectSerializer.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="src\Layers\UI\Inspector.cpp" />
     <ClCompile Include="src\Layers\UI\MainMenuBar.cpp" />
     <ClCompile Include="src\Layers\UI\ProfilerLayer.cpp" />
+    <ClCompile Include="src\Layers\UI\ShaderToolLayer.cpp" />
     <ClCompile Include="src\Layers\UI\TextureBrowserLayer.cpp" />
     <ClCompile Include="src\Project\ProjectConfig.cpp" />
     <ClCompile Include="src\Project\ProjectSerializer.cpp" />
@@ -198,11 +200,11 @@
     <ProjectReference Include="..\External\FBXImporter\FBXImporter.vcxproj">
       <Project>{5711F0AA-C3C6-68A0-4CBB-6277B86F5FA4}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Engine\Engine.vcxproj">
+    <ProjectReference Include="..\Backend\Engine\Engine.vcxproj">
       <Project>{DBC7D3B0-C769-FE86-B024-12DB9C6585D7}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\PhysicsEngine\PhysicsEngine.vcxproj">
-      <Project>{9ED4FA58-0A95-768F-D3CF-BF0C3F4FBB6B}</Project>
+    <ProjectReference Include="..\Backend\Physics\Physics.vcxproj">
+      <Project>{888B590D-F46A-D8A8-FD82-637F69E13E0A}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\flecs\Flecs.vcxproj">
       <Project>{32A72E0D-9EBB-56BE-673D-FA1DD31053EF}</Project>

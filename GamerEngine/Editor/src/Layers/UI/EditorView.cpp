@@ -2,13 +2,13 @@
 #include "EditorView.h"
 #include <DirectXMath.h>
 #include <GraphicsEngine.h>
-#include <Framework/DX11.h>
+#include <Core/Framework/DX11.h>
 #include <Scene/Scene.h>
 #include "imgui/imgui_internal.h"
 #include "ImGuiAdded/ImGuiExtra.h"
-#include "Render/Renderer.h"
-#include "Render/SelectionData.h"
-#include <Model/Entity.h>
+#include "Core/Rendering/Renderer.h"
+#include "Core/Rendering/SelectionData.h"
+#include <Core/Model/Entity.h>
 #include <Components/CameraController.h>
 
 #include "SettingKeybinds.h"
@@ -18,7 +18,7 @@
 #include "Managers/Commands/PositionCommand.h"
 #include "Scene/SceneManager.h"
 #include "Layers/NetworkingLayer.h"
-#include "Render/DeferredRenderer.h"
+#include "Core/Rendering/DeferredRenderer.h"
 
 EditorView::EditorView() : Layer("Scene"), myStartTranslate(TransformComponent()), myEditedTranslate(TransformComponent())
 {

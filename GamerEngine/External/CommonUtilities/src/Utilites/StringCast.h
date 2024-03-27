@@ -26,6 +26,19 @@ namespace Helpers
 		return distr(rndEngine);
 	}
 
+	inline std::string ToLowerCase(const std::string& input)
+	{
+		std::string result;
+		std::locale loc;
+
+		for (char c : input)
+		{
+			result += std::tolower(c, loc);
+		}
+
+		return result;
+	}
+
 	inline std::wstring ToLowerCase(const std::wstring& input)
 	{
 		std::wstring result;

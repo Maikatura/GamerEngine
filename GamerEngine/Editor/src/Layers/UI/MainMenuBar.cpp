@@ -14,7 +14,7 @@
 #include "Scene/SceneSerializer.h"
 #include "Snapshots/SnapshotManager.h"
 #include "SettingKeybinds.h"
-#include "Render/DeferredRenderer.h"
+#include "Core/Rendering/DeferredRenderer.h"
 
 
 MainMenuBar::MainMenuBar(EditorLayers& aLayer) : Layer("MainMenuBar", true, false), myLayers(aLayer)
@@ -36,14 +36,19 @@ void MainMenuBar::RenderMainBar()
             {
                 std::string path = FileDialog::OpenFile("Scene File (*.csf)\0*.csf\0");
                 SceneManager::Get().LoadScene(path);
-                ConsoleHelper::Log(LogType::Info, std::string("Open Scene from '" + SceneManager::Get().GetScene()->GetPath() + "'"));
+                ConsoleHelper::Log(LogType::Info, "Open Scene from '%s'", SceneManager::Get().GetScene()->GetPath().c_str());
             }
 
             if (ImGui::MenuItem("Save"))
             {
                 std::string path = FileDialog::SaveFile("Scene File (*.csf)\0*.csf\0");
-                SceneManager::Get().SaveScene(path + ".csf");
-                ConsoleHelper::Log(LogType::Info, std::string("Saved scene to '" + SceneManager::Get().GetScene()->GetPath() + "'"));
+                if (!path.empty())
+                {
+                    SceneManager::Get().SaveScene(path + ".csf");
+                    ConsoleHelper::Log(LogType::Info, "Saved scene to '%s'", SceneManager::Get().GetScene()->GetPath().c_str());
+                    
+                }
+                
             }
 
             ImGui::EndMenu();

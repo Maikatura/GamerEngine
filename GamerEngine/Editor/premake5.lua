@@ -34,7 +34,6 @@ disablewarnings
 {
     "26812", --prefer enum class over enum
     "26451", --arithmetic overflow
-	"2220"
 }
 
 defines
@@ -72,7 +71,7 @@ includedirs{
 	"%{IncludeDirs.OpenFBX}",
 	"%{IncludeDirs.OpenVR}",
     	"%{IncludeDirs.FBXSDK}",
-	"%{IncludeDirs.PhysicsEngine}",
+	"%{IncludeDirs.Physics}",
 	--"%{IncludeDirs.PhysX}",
 	"%{IncludeDirs.Flecs}"
 }
@@ -87,7 +86,7 @@ links
 {
 	"FBXImporter",
 	"Engine",
-	"PhysicsEngine",
+	"Physics",
 	"Flecs",
 	
 	--"PhysX",

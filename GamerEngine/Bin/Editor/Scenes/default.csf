@@ -12,11 +12,12 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.0158521999
+      Delay: -0.0175373983
       Path: Assets\Models\Shapes\Cube.fbx
       TextureSize: 1
       Texture:
         0:
+          PixelShader: Shaders\Default_PS.cso
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
@@ -36,6 +37,7 @@ Entities:
       TextureSize: 1
       Texture:
         0:
+          PixelShader: Shaders\Default_PS.cso
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
@@ -97,6 +99,7 @@ Entities:
       TextureSize: 1
       Texture:
         0:
+          PixelShader: Shaders\Default_PS.cso
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
@@ -116,6 +119,7 @@ Entities:
       TextureSize: 1
       Texture:
         0:
+          PixelShader: Shaders\Default_PS.cso
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
@@ -123,8 +127,8 @@ Entities:
     TagComponent:
       Tag: EditorCamera
     TransformComponent:
-      Translation: [973.355225, 451.401947, 616.622742]
-      Rotation: [36.0741463, 246.216721, 0.000104271501]
+      Translation: [944.596313, -139.352951, 695.795959]
+      Rotation: [9.67393684, 599.976318, 0.000104271501]
       Scale: [0.999961138, 0.999956548, 0.999987185]
       ChildrenSize: 0
       Children:
@@ -165,9 +169,9 @@ Entities:
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [-81.6692352, -314.294617, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
+      Translation: [-295.953369, -243.054459, 188.168915]
+      Rotation: [0, 51.0960884, 0]
+      Scale: [0.999988794, 0.999972641, 0.999985039]
       ChildrenSize: 0
       Children:
         {}
@@ -177,6 +181,7 @@ Entities:
       TextureSize: 1
       Texture:
         0:
+          PixelShader: Shaders\Custom\Default_Toon_PS.cso
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
@@ -184,9 +189,9 @@ Entities:
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [208.703613, -447.781891, -264.415192]
-      Rotation: [0, -0, 0]
-      Scale: [2.92320013, 2.92320013, 2.92320013]
+      Translation: [208.703613, -447.781891, 595.80957]
+      Rotation: [179.237335, 69.041069, 179.22493]
+      Scale: [2.92320156, 2.92319965, 2.92319942]
       ChildrenSize: 0
       Children:
         {}
@@ -196,10 +201,12 @@ Entities:
       TextureSize: 2
       Texture:
         0:
+          PixelShader: Shaders\Default_PS.cso
           Albedo: assets\models\t_gremlin_c.dds
           Normal: assets\models\t_gremlin_n.dds
           Material: assets\models\t_gremlin_m.dds
         1:
+          PixelShader: Shaders\Default_PS.cso
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
@@ -214,11 +221,12 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.0225090999
+      Delay: -0.0254165977
       Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:
         0:
+          PixelShader: Shaders\Default_PS.cso
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds

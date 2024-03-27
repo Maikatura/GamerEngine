@@ -3,8 +3,15 @@
 
 class ConsoleWindow : public Layer
 {
-public:
-	ConsoleWindow();
+	public:
+		ConsoleWindow();
 
-	void OnImGuiRender() override;
+		void OnImGuiRender() override;
+
+	
+		
+	
+	private:
+		int myOldSize = 0;
+		bool scrollToBottom;
 };
