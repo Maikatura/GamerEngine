@@ -43,13 +43,13 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 			const auto extension = path.extension().string();
 
 
-			if(fbxExt == extension)
+			if(Helpers::ToLowerCase(fbxExt) == Helpers::ToLowerCase(extension))
 			{
 				SceneManager::Get().GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
 				ConsoleHelper::Log(LogType::Info, "Loaded a model '%s' into the scene", path.filename().string().c_str());
 			}
 
-			if(sceneExt == extension)
+			if(sceneExt == Helpers::ToLowerCase(extension))
 			{
 				GraphicsEngine::Get()->SetEngineUpdateRuntime(false);
 				SceneManager::Get().LoadScene(stringPath);

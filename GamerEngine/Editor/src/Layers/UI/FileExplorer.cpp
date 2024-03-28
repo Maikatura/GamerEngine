@@ -34,24 +34,24 @@ FileExplorer::FileExplorer() : Layer("File Explorer"), myCurrentDirectory(AssetP
 	myFileType.insert({ FileType::Text,		TextureAssetHandler::GetTexture(L"Editor\\icons\\text.dds") });
 	myFileType.insert({ FileType::DLL,		TextureAssetHandler::GetTexture(L"Editor\\icons\\dll.dds") });
 
-	myExtensionsMap.insert({ shaderExt,	FileType::Shader });
-	myExtensionsMap.insert({ dllExt,		FileType::DLL });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(shaderExt),	FileType::Shader });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(dllExt),		FileType::DLL });
 
-	myExtensionsMap.insert({ textureExt0,	FileType::Texture });
-	myExtensionsMap.insert({ textureExt1,	FileType::Texture });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(textureExt0),	FileType::Texture });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(textureExt1),	FileType::Texture });
 
-	myExtensionsMap.insert({ textExt,		FileType::Text });
-	myExtensionsMap.insert({ jsonExt,		FileType::Text });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(textExt),		FileType::Text });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(jsonExt),		FileType::Text });
 
-	myExtensionsMap.insert({ fbxExt,		FileType::Model });
-	myExtensionsMap.insert({ animationExt,	FileType::Animation });
-	myExtensionsMap.insert({ prefabExt,	FileType::Prefab });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(fbxExt),		FileType::Model });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(animationExt),	FileType::Animation });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(prefabExt),	FileType::Prefab });
 
-	myExtensionsMap.insert({ mp3Ext,		FileType::Audio });
-	myExtensionsMap.insert({ wavExt,		FileType::Audio });
-	myExtensionsMap.insert({ oggExt,		FileType::Audio });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(mp3Ext),		FileType::Audio });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(wavExt),		FileType::Audio });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(oggExt),		FileType::Audio });
 
-	myExtensionsMap.insert({ sceneExt,		FileType::Scene });
+	myExtensionsMap.insert({ Helpers::ToLowerCase(sceneExt),		FileType::Scene });
 
 	myDeletePath = "";
 }
@@ -63,24 +63,38 @@ void FileExplorer::OnImGuiRender()
 
 	if(ImGui::BeginPopupContextWindow("FILECREATOR") && !ImGui::IsItemHovered())
 	{
-		if(ImGui::MenuItem("Create Scene"))
+		if (ImGui::BeginMenu("Create"))
 		{
+			if (ImGui::MenuItem("Scene"))
+			{
+				/*SharedRef<Scene> scene = MakeSharedRef<Scene>();
+
+				auto camera = scene->CreateEntity("Camera");
+				
+				auto& cameraComp = camera.AddComponent<CameraComponent>();
+				camera.AddComponent<CameraControllerData>();
+				camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+				
+				cameraComp.myFarPlane = 25000.0f;
+				cameraComp.myNearPlane = 0.01f;
+				cameraComp.myFoV = 90.0f;
+				cameraComp.Primary = true;*/
+
+				/*SceneSerializer saveNewScene(scene);
+				saveNewScene.Serialize(myCurrentDirectory.string() + "\\" + "New Scene.csf");*/
+			}
+
+			if (ImGui::MenuItem("Shader"))
+			{
+				// Do something when Submenu 1 is clicked
+			}
+
+			if (ImGui::MenuItem("C# Script"))
+			{
+				// Do something when Submenu 1 is clicked
+			}
 			
-			/*SharedRef<Scene> scene = MakeSharedRef<Scene>();
-
-			auto camera = scene->CreateEntity("Camera");
-
-			auto& cameraComp = camera.AddComponent<CameraComponent>();
-			camera.AddComponent<CameraControllerData>();
-			camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
-			cameraComp.myFarPlane = 25000.0f;
-			cameraComp.myNearPlane = 0.01f;
-			cameraComp.myFoV = 90.0f;
-			cameraComp.Primary = true;*/
-
-			/*SceneSerializer saveNewScene(scene);
-			saveNewScene.Serialize(myCurrentDirectory.string() + "\\" + "New Scene.csf");*/
+			ImGui::EndMenu();
 		}
 
 		ImGui::EndPopup();
@@ -137,6 +151,40 @@ void FileExplorer::OnImGuiRender()
 	EndMenu();
 }
 
+void FileExplorer::PopupMenu(const std::filesystem::directory_entry& aDirEntry)
+{
+	if(ImGui::BeginPopupContextItem())
+	{
+		myConfirmCheck = false;
+		
+		
+		if(ImGui::MenuItem("Rename"))
+		{
+			mySelectedPath = aDirEntry.path();
+			myRenameBuffer = mySelectedPath.filename().string();
+			myIsRenaming = true;
+		}
+
+		if(ImGui::MenuItem("Delete"))
+		{
+			myDeletePath = myCurrentPath;
+			myConfirmCheck = true;
+		}
+
+		if (mySelectedPath.extension() == ".hlsl")
+		{
+			if(ImGui::MenuItem("Compile"))
+			{
+				std::filesystem::path csoFile = mySelectedPath;
+				csoFile.replace_extension("cso");
+				PixelShader::Compile(std::filesystem::absolute(mySelectedPath).string(), "Shaders\\Custom\\" + csoFile.filename().string());
+			}
+		}
+
+		ImGui::EndPopup();
+	}
+}
+
 void FileExplorer::LoopThroughFiles()
 {
 	const auto sortedDirectories = GetSortedDirectory();
@@ -164,35 +212,7 @@ void FileExplorer::LoopThroughFiles()
 		}
 		
 
-		if(ImGui::BeginPopupContextItem())
-		{
-			myConfirmCheck = false;
-
-			if(ImGui::MenuItem("Rename"))
-			{
-				mySelectedPath = directoryEntry.path();
-				myRenameBuffer = mySelectedPath.filename().string();
-				myIsRenaming = true;
-			}
-
-			if(ImGui::MenuItem("Delete"))
-			{
-				myDeletePath = myCurrentPath;
-				myConfirmCheck = true;
-			}
-
-			if (mySelectedPath.extension() == ".hlsl")
-			{
-				if(ImGui::MenuItem("Compile"))
-				{
-					std::filesystem::path csoFile = mySelectedPath;
-					csoFile.replace_extension(".cso");
-					PixelShader::Compile(std::filesystem::absolute(mySelectedPath).string(), "Shaders\\Custom\\" + csoFile.filename().string());
-				}
-			}
-
-			ImGui::EndPopup();
-		}
+		PopupMenu(directoryEntry);
 
 		ExplorerDragDropSourceSetter(icon);
 
@@ -413,7 +433,7 @@ FileType FileExplorer::GetFileType(std::filesystem::directory_entry aDirectory)
 
 	if(aDirectory.is_directory()) return FileType::Folder;
 
-	std::string fileExt = aDirectory.path().extension().string();
+	std::string fileExt = Helpers::ToLowerCase(aDirectory.path().extension().string());
 
 	auto out = myExtensionsMap.find(fileExt);
 	if(out == myExtensionsMap.end())
@@ -429,19 +449,22 @@ void FileExplorer::ExplorerDragDropSourceSetter(Ref<Texture> aIcon)
 	if(ImGui::BeginDragDropSource())
 	{
 		const wchar_t* itemPath = myCurrentPath.c_str();
-		if(myExtensionsMap[myCurrentPath.extension().string()] == FileType::Scene)
+
+		std::string lowerExtension = Helpers::ToLowerCase(myCurrentPath.extension().string());
+
+		if(myExtensionsMap[lowerExtension] == FileType::Scene)
 		{
 			ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
 		}
-		else if(myExtensionsMap[myCurrentPath.extension().string()] == FileType::Texture)
+		else if(myExtensionsMap[lowerExtension] == FileType::Texture)
 		{
 			ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
 		}
-		else if(myExtensionsMap[myCurrentPath.extension().string()] == FileType::Model)
+		else if(myExtensionsMap[lowerExtension] == FileType::Model)
 		{
 			ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
 		}
-		else if(myExtensionsMap[myCurrentPath.extension().string()] == FileType::Animation)
+		else if(myExtensionsMap[lowerExtension] == FileType::Animation)
 		{
 			ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
 		}

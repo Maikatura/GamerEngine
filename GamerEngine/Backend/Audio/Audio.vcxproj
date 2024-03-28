@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Audio\Debug\</IntDir>
-    <TargetName>Audio_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\Audio\</IntDir>
+    <TargetName>Debug/Audio</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Audio\Release\</IntDir>
-    <TargetName>Audio_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\Audio\</IntDir>
+    <TargetName>Release/Audio</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

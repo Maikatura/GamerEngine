@@ -32,7 +32,7 @@
 
 #include "Modelviewer.h"
 #include "GraphicsEngine.h"
-#include "Render/LineRenderer.h"
+#include "Core/Rendering/LineRenderer.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
 #include "Scene/SceneSerializer.h"

@@ -48,7 +48,7 @@ class PixelShader
             return buffer.str();
         }
 
-    static std::string PreprocessShaderCode(const std::string& shaderCode, const std::string& currentFilePath)
+        static std::string PreprocessShaderCode(const std::string& shaderCode, const std::string& currentFilePath)
         {
             std::string preprocessedCode = shaderCode;
             std::regex includeRegex("#include [<\"]([^>\"]+)[>\"]");

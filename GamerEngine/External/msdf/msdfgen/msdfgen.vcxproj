@@ -55,20 +55,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\..\Temp\Intermediate\msdfgen\Debug\</IntDir>
-    <TargetName>msdfgen_Debug</TargetName>
+    <IntDir>..\..\..\Temp\Intermediate\Debug\msdfgen\</IntDir>
+    <TargetName>Debug/msdfgen</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\..\Temp\Intermediate\msdfgen\Release\</IntDir>
-    <TargetName>msdfgen_Release</TargetName>
+    <IntDir>..\..\..\Temp\Intermediate\Release\msdfgen\</IntDir>
+    <TargetName>Release/msdfgen</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <OutDir>..\..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\..\Temp\Intermediate\msdfgen\Distribution\</IntDir>
-    <TargetName>msdfgen_Distribution</TargetName>
+    <IntDir>..\..\..\Temp\Intermediate\Distribution\msdfgen\</IntDir>
+    <TargetName>Distribution/msdfgen</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

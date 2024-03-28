@@ -1,6 +1,6 @@
 #include "GraphicsEngine.pch.h"
-#include <Model/Transform.h>
-#include <Model/SceneObject.h>
+#include <Core/Model/Transform.h>
+#include <Core/Model/SceneObject.h>
 
 
 Transform::Transform(Vector3f somePosition, Vector3f someRotation, Vector3f someScale)

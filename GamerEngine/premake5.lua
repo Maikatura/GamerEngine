@@ -16,6 +16,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 group "Application"
 include "Editor"
 include "Runtime"
+include "Backend/Gamer-ScriptCore"
 
 group "External"
 include "External/CommonUtilities"

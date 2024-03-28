@@ -15,6 +15,7 @@
 #include "Core/Rendering/PostProcessRenderer.h"
 #include "Scene/SceneManager.h"
 #include "Font/Font.h"
+#include "Scripting/ScriptEngine.h"
 
 GraphicsEngine* GraphicsEngine::Get()
 {
@@ -84,10 +85,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	myPostProcessRenderer = MakeRef<PostProcessRenderer>();
 	myGBuffer = MakeRef<GBuffer>();
 
-	Time::Update();
-	Input::Init(myWindowHandle);
-	AudioManager::Init();
-	SceneManager::Get().Initialize();
+	
 	
 	if (!myForwardRenderer->Initialize())
 	{
@@ -120,7 +118,11 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		return false;
 	}
 
-	
+	Time::Update();
+	Input::Init(myWindowHandle);
+	AudioManager::Init();
+	SceneManager::Get().Initialize();
+	ScriptEngine::Init();
 
 	if (!myUseEditor)
 	{

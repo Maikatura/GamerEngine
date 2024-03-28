@@ -1,7 +1,7 @@
 #include "GraphicsEngine.pch.h"
 #include "TransfromComponent.h"
 
-#include "Model/Entity.h"
+#include "Core/Model/Entity.h"
 
 std::vector<Entity*> TransformComponent::GetChildren() const
 {

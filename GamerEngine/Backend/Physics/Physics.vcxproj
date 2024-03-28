@@ -42,15 +42,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Physics\Debug\</IntDir>
-    <TargetName>Physics_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\Physics\</IntDir>
+    <TargetName>Debug/Physics</TargetName>
     <TargetExt>.lib</TargetExt>
     <ExternalIncludePath>..\Engine\src;..\..\External\CommonUtilities\src;.;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Physics\Release\</IntDir>
-    <TargetName>Physics_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\Physics\</IntDir>
+    <TargetName>Release/Physics</TargetName>
     <TargetExt>.lib</TargetExt>
     <ExternalIncludePath>..\Engine\src;..\..\External\CommonUtilities\src;.;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>

@@ -9,8 +9,8 @@ filter "system:windows"
     --debugdir "JoltPhysics/"
 
     targetdir ("%{wks.location}/bin/tools/")
-    objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}")
-    targetname("%{prj.name}_%{cfg.buildcfg}")
+    objdir ("%{wks.location}/Temp/Intermediate/%{cfg.buildcfg}/%{prj.name}")
+    targetname("%{cfg.buildcfg}/%{prj.name}")
 
     files
     {

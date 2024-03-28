@@ -43,15 +43,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\bin\Shaders\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Shaders\Debug\</IntDir>
-    <TargetName>Shaders_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\Shaders\</IntDir>
+    <TargetName>Debug/Shaders</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\bin\Shaders\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Shaders\Release\</IntDir>
-    <TargetName>Shaders_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\Shaders\</IntDir>
+    <TargetName>Release/Shaders</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

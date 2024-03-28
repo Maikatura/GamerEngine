@@ -55,20 +55,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\msdf-atlas-gen\Debug\</IntDir>
-    <TargetName>msdf-atlas-gen</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\msdf-atlas-gen\</IntDir>
+    <TargetName>Debug/msdf-atlas-gen</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\msdf-atlas-gen\Release\</IntDir>
-    <TargetName>msdf-atlas-gen</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\msdf-atlas-gen\</IntDir>
+    <TargetName>Release/msdf-atlas-gen</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\msdf-atlas-gen\Distribution\</IntDir>
-    <TargetName>msdf-atlas-gen</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Distribution\msdf-atlas-gen\</IntDir>
+    <TargetName>Distribution/msdf-atlas-gen</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

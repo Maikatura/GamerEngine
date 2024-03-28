@@ -1,6 +1,6 @@
 #include "GraphicsEngine.pch.h"
 #include <Particles/ParticleEmitterTemplate.h>
-#include "Render/Renderer.h"
+#include "Core/Rendering/Renderer.h"
 
 bool ParticleVertex::operator<(const ParticleVertex& aParticle) const
 {

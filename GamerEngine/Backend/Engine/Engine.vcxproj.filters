@@ -67,6 +67,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{B3F7140E-1F0C-3DBF-E88D-E01E546139F0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripting">
+      <UniqueIdentifier>{985A7358-04C5-27CF-4D03-D974B9AC0524}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Types">
       <UniqueIdentifier>{3A4E330E-A662-5BBF-6FE4-FE1EDBB757F0}</UniqueIdentifier>
     </Filter>
@@ -399,6 +402,9 @@
     <ClInclude Include="src\Scene\UUID.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scripting\ScriptEngine.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
     <ClInclude Include="src\Time.hpp" />
     <ClInclude Include="src\Types\EnumTypes.h">
       <Filter>Types</Filter>
@@ -634,6 +640,9 @@
     </ClCompile>
     <ClCompile Include="src\Scene\UUID.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\ScriptEngine.cpp">
+      <Filter>Scripting</Filter>
     </ClCompile>
     <ClCompile Include="src\VR\VRSystem.cpp">
       <Filter>VR</Filter>

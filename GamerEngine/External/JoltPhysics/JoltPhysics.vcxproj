@@ -55,20 +55,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\JoltPhysics\Debug\</IntDir>
-    <TargetName>JoltPhysics_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\JoltPhysics\</IntDir>
+    <TargetName>Debug/JoltPhysics</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\JoltPhysics\Release\</IntDir>
-    <TargetName>JoltPhysics_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\JoltPhysics\</IntDir>
+    <TargetName>Release/JoltPhysics</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\JoltPhysics\Distribution\</IntDir>
-    <TargetName>JoltPhysics_Distribution</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Distribution\JoltPhysics\</IntDir>
+    <TargetName>Distribution/JoltPhysics</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

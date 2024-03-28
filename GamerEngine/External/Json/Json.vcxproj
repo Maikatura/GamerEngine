@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Json\Debug\</IntDir>
-    <TargetName>Json_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\Json\</IntDir>
+    <TargetName>Debug/Json</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Json\Release\</IntDir>
-    <TargetName>Json_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\Json\</IntDir>
+    <TargetName>Release/Json</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -14,7 +14,8 @@ public:
 
 	FileExplorer();
 	void OnImGuiRender() override;
-
+	
+	void PopupMenu(const std::filesystem::directory_entry& aValue);
 	void LoopThroughFiles();
 
 	void HoveredWithItem();

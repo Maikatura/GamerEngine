@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\OpenVR\Debug\</IntDir>
-    <TargetName>OpenVR_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\OpenVR\</IntDir>
+    <TargetName>Debug/OpenVR</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\OpenVR\Release\</IntDir>
-    <TargetName>OpenVR_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\OpenVR\</IntDir>
+    <TargetName>Release/OpenVR</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

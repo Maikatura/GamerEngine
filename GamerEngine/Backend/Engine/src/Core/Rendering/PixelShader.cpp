@@ -46,22 +46,15 @@ Microsoft::WRL::ComPtr<ID3D11PixelShader> PixelShader::Get()
 
 Ref<PixelShader> PixelShader::Compile(const std::string& sourceCode, const std::string& outputFilePath)
 {
-    std::cout << sourceCode << std::endl;
-
     std::string shaderCode = ReadFile(sourceCode);
-
     std::filesystem::path workingDirectory = "editor\\shaders\\";
-
-
-
     std::string preprocessedShaderCode = PreprocessShaderCode(shaderCode, workingDirectory.string());
-
     ID3DBlob* compiledShader = ShaderCompiler::CompileShader(preprocessedShaderCode, "main", "ps_5_0", outputFilePath);
 
     if (!compiledShader)
     {
         return nullptr;
     }
-
-    return ShaderHandler::Get().LoadPixelShader("Shaders\\custom\\" + std::filesystem::path(sourceCode).filename().string() + ".cso");
+    
+    return ShaderHandler::Get().LoadPixelShader(outputFilePath);
 }

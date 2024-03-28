@@ -14,7 +14,7 @@ PixelOutput main(VertexToPixel input)
 	}
 
     result.Color = albedoSample;
-    float3 albedo = float3(1.0f, 1.0f, 0.0f);
+    float3 albedo = albedoSample.rgb * MB_Color;
 	const float3 normalMap = normalTexture.Sample(defaultSampler, input.UV).agb;
     float4 material = materialTexture.Sample(defaultSampler, input.UV);
     const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
@@ -34,9 +34,6 @@ PixelOutput main(VertexToPixel input)
 
     float4 worldPosition = float4(input.WorldPosition.xyz, 1.0f);
     float3 normal = CalculatePixelNormal(normalMap, input.Tangent, input.Binormal, input.Normal);
-
-	// Calculate the dot product of the light direction and the normal
-    
 	
 	
     const float3 toEye = normalize(FB_CamTranslation.xyz - input.WorldPosition.xyz);

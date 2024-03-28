@@ -12,8 +12,8 @@ configmap {
     ["Distribution"] = "Release"
 }
 targetdir ("%{wks.location}/Temp/lib/")
-objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}")
-targetname("%{prj.name}_%{cfg.buildcfg}")
+objdir ("%{wks.location}/Temp/Intermediate/%{cfg.buildcfg}/%{prj.name}")
+targetname("%{cfg.buildcfg}/%{prj.name}")
 
 
 pchheader "GraphicsEngine.pch.h"
@@ -54,6 +54,7 @@ includedirs{
 	"%{IncludeDirs.OpenVR}",
 	"%{IncludeDirs.OpenXR}",
 	"%{IncludeDirs.Entt}",
+	"%{IncludeDirs.mono}",
 	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.ImGui}",
 	"%{IncludeDirs.YamlCpp}",
@@ -63,7 +64,8 @@ includedirs{
 	"%{IncludeDirs.msdfgen}",
 	"%{IncludeDirs.msdf_atlas_gen}",
 	"%{IncludeDirs.Flecs}../include2",
-	"%{IncludeDirs.JoltPhysics}"
+	"%{IncludeDirs.JoltPhysics}",
+	"%{IncludeDirs.mono}"
 	
 }
 
@@ -85,7 +87,12 @@ links
 	"Json",
 	"msdfgen",
 	--"openxr",
-	"JoltPhysics"
+	"JoltPhysics",
+	"%{Libs.mono}",
+	"%{Libs.WinSock}",
+	"%{Libs.WinMM}",
+	"%{Libs.WinVersion}",
+	"%{Libs.BCrypt}"
 }
 
 files 

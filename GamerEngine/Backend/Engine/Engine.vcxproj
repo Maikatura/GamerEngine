@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Engine\Debug\</IntDir>
-    <TargetName>Engine_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\Engine\</IntDir>
+    <TargetName>Debug/Engine</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Engine\Release\</IntDir>
-    <TargetName>Engine_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\Engine\</IntDir>
+    <TargetName>Release/Engine</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -60,7 +60,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\..\External\TurNet;..\..\External\CommonUtilities\src;..\..\External\FBXImporter;..\..\External\OpenFBX\src;..\..\External\openvr\headers;..\..\External\openxr\include;..\..\External\entt;..\..\External\ImGui\src;..\..\External\yaml-cpp;..\..\External\json;..\..\External\WICTextureLoader;.;..\..\External\msdf\msdfgen;..\..\External\msdf\msdf-atlas-gen;..\..\External\flecs\include2;..\..\External\JoltPhysics\JoltPhysics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\..\External\TurNet;..\..\External\CommonUtilities\src;..\..\External\FBXImporter;..\..\External\OpenFBX\src;..\..\External\openvr\headers;..\..\External\openxr\include;..\..\External\entt;..\..\External\ImGui\src;..\..\External\yaml-cpp;..\..\External\json;..\..\External\WICTextureLoader;.;..\..\External\msdf\msdfgen;..\..\External\msdf\msdf-atlas-gen;..\..\External\flecs\include2;..\..\External\JoltPhysics\JoltPhysics;..\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -74,6 +74,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
+      <AdditionalDependencies>..\vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -86,7 +87,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\..\External\TurNet;..\..\External\CommonUtilities\src;..\..\External\FBXImporter;..\..\External\OpenFBX\src;..\..\External\openvr\headers;..\..\External\openxr\include;..\..\External\entt;..\..\External\ImGui\src;..\..\External\yaml-cpp;..\..\External\json;..\..\External\WICTextureLoader;.;..\..\External\msdf\msdfgen;..\..\External\msdf\msdf-atlas-gen;..\..\External\flecs\include2;..\..\External\JoltPhysics\JoltPhysics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\..\External\TurNet;..\..\External\CommonUtilities\src;..\..\External\FBXImporter;..\..\External\OpenFBX\src;..\..\External\openvr\headers;..\..\External\openxr\include;..\..\External\entt;..\..\External\ImGui\src;..\..\External\yaml-cpp;..\..\External\json;..\..\External\WICTextureLoader;.;..\..\External\msdf\msdfgen;..\..\External\msdf\msdf-atlas-gen;..\..\External\flecs\include2;..\..\External\JoltPhysics\JoltPhysics;..\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -103,6 +104,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
+      <AdditionalDependencies>..\vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -218,6 +220,7 @@
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Scene\UUID.h" />
+    <ClInclude Include="src\Scripting\ScriptEngine.h" />
     <ClInclude Include="src\Time.hpp" />
     <ClInclude Include="src\Types\EnumTypes.h" />
     <ClInclude Include="src\Types\FileExtensions.h" />
@@ -302,6 +305,7 @@
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\Scene\UUID.cpp" />
+    <ClCompile Include="src\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="src\VR\VRSystem.cpp" />
   </ItemGroup>
   <ItemGroup>

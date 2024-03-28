@@ -1,5 +1,5 @@
 #include "GraphicsEngine.pch.h"
-#include <Render/Renderer.h>
+#include <Core/Rendering/Renderer.h>
 #include <Core/Model/Entity.h>
 
 #include "Scene/SceneManager.h"

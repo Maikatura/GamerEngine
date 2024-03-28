@@ -55,20 +55,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\..\..\Temp\Intermediate\freetype\Debug\</IntDir>
-    <TargetName>freetype</TargetName>
+    <IntDir>..\..\..\..\Temp\Intermediate\Debug\freetype\</IntDir>
+    <TargetName>Debug/freetype</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\..\..\Temp\Intermediate\freetype\Release\</IntDir>
-    <TargetName>freetype</TargetName>
+    <IntDir>..\..\..\..\Temp\Intermediate\Release\freetype\</IntDir>
+    <TargetName>Release/freetype</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <OutDir>..\..\..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\..\..\Temp\Intermediate\freetype\Distribution\</IntDir>
-    <TargetName>freetype</TargetName>
+    <IntDir>..\..\..\..\Temp\Intermediate\Distribution\freetype\</IntDir>
+    <TargetName>Distribution/freetype</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

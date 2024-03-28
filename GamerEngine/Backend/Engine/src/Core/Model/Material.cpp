@@ -1,7 +1,7 @@
 #include "GraphicsEngine.pch.h"
-#include <Model/Material.h>
+#include <Core/Model/Material.h>
 
-#include <Framework/DX11.h>
+#include <Core/Framework/DX11.h>
 
 Material::Material()
 {

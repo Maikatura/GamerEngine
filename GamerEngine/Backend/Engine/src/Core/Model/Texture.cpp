@@ -1,6 +1,6 @@
 #include "GraphicsEngine.pch.h"
-#include <Model/Texture.h>
-#include <Framework/DX11.h>
+#include <Core/Model/Texture.h>
+#include <Core/Framework/DX11.h>
 
 
 TextureType Texture::GetTextureType()

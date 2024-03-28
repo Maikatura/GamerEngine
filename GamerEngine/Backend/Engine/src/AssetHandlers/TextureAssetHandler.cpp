@@ -2,17 +2,18 @@
 
 #include <iostream>
 #include <AssetHandlers/TextureAssetHandler.h>
-#include <Model/Texture.h>
+#include <Core/Model/Texture.h>
 #include <AssetHandlers/DDSTextureLoader11.h>
-#include <Framework/DX11.h>
+#include <Core/Framework/DX11.h>
 #include <filesystem>
 #include <fstream>
 
-#include "Render/DepthStencil.h"
+#include "Core/Rendering/DepthStencil.h"
 #include "Scene/SceneManager.h"
 
 #include "Utilites/StringCast.h"
 #include "Utilites/COMInitializer.h"
+#include "WICTextureLoader/WICTextureLoader11.h"
 
 
 void TextureAssetHandler::Clear()
@@ -118,10 +119,10 @@ bool TextureAssetHandler::LoadTexture(const std::wstring& aFileName)
 		}
 		else
 		{
-			/*createResult = DirectX::CreateWICTextureFromFile(DX11::Get().Get().GetDevice(), aFileName.c_str(),
+			createResult = DirectX::CreateWICTextureFromFile(DX11::Get().Get().GetDevice(), aFileName.c_str(),
 				result->myTexture.GetAddressOf(),
 				result->mySRV.GetAddressOf()
-			);*/
+			);
 		}
 
 		

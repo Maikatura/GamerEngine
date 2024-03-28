@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Flecs\Debug\</IntDir>
-    <TargetName>Flecs_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\Flecs\</IntDir>
+    <TargetName>Debug/Flecs</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\Flecs\Release\</IntDir>
-    <TargetName>Flecs_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\Flecs\</IntDir>
+    <TargetName>Release/Flecs</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

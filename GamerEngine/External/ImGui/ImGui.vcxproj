@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\ImGui\Debug\</IntDir>
-    <TargetName>ImGui_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\ImGui\</IntDir>
+    <TargetName>Debug/ImGui</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\ImGui\Release\</IntDir>
-    <TargetName>ImGui_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\ImGui\</IntDir>
+    <TargetName>Release/ImGui</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

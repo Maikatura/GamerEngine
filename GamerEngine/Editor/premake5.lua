@@ -12,8 +12,8 @@ configmap {
     ["Distribution"] = "Release"
 }
 targetdir ("%{wks.location}/Bin/")
-objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}")
-targetname("%{prj.name}_%{cfg.buildcfg}")
+objdir ("%{wks.location}/Temp/Intermediate/%{cfg.buildcfg}/%{prj.name}")
+targetname("%{cfg.buildcfg}/%{prj.name}")
 
 pchheader "Editor.pch.h"
 pchsource "src/Editor.pch.cpp"
@@ -73,7 +73,8 @@ includedirs{
     	"%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.Physics}",
 	--"%{IncludeDirs.PhysX}",
-	"%{IncludeDirs.Flecs}"
+	"%{IncludeDirs.Flecs}",
+	"%{IncludeDirs.mono}"
 }
 
 externalincludedirs {
@@ -103,12 +104,16 @@ links
 	
 	--"cryptlib",
 	"TurNet",
-	"ws2_32.lib",
 	
 	"d3d11.lib",
 	"dxguid.lib",
 	"opengl32.lib",
-	"%{Libs.OpenVR}"
+	"%{Libs.OpenVR}",
+	"%{Libs.mono}",
+	"%{Libs.WinSock}",
+	"%{Libs.WinMM}",
+	"%{Libs.WinVersion}",
+	"%{Libs.BCrypt}"
 }
 
 files 

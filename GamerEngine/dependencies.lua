@@ -10,6 +10,8 @@ IncludeDirs["Physics"] = "%{wks.location}/Backend/Physics/src/"
 
 -- Eternal Includes
 
+
+IncludeDirs["mono"] = "%{wks.location}/Backend/vendor/mono/include/"
 IncludeDirs["Flecs"] = "%{wks.location}/External/flecs/include/"
 IncludeDirs["PyBullet"] = "%{wks.location}/External/PhysX/src"
 IncludeDirs["TurNet"] = "%{wks.location}/External/TurNet/"
@@ -33,6 +35,7 @@ IncludeDirs["JoltPhysics"] = "%{wks.location}/External/JoltPhysics/JoltPhysics"
 
 --Libaries
 LibDirs = {}
+LibDirs["Mono"] = "%{wks.location}/backend/vendor/mono/lib/%{cfg.buildcfg}"
 LibDirs["CommonUtilities"] = "%{wks.location}/External/CommonUtilities/src/"
 LibDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/lib/"
 
@@ -41,6 +44,13 @@ LibDirs["FBXSDK"] = "%{wks.location}/External/FBXImporter/ThirdParty/FBXSDK/lib/
 --Libs["Example"] = "%{LibDirs.Example}/example.lib"
 
 Libs = {}
+Libs["mono"] = "%{LibDirs.Mono}/libmono-static-sgen.lib"
 Libs["FBXSDK_DEBUG"] = "%{LibDirs.FBXSDK}/debug/libfbxsdk.lib"
 Libs["FBXSDK_RELEASE"] = "%{LibDirs.FBXSDK}/release/libfbxsdk.lib"
 Libs["OpenVR"] = "%{wks.location}/External/openvr/lib/openvr_api.lib"
+
+-- Windows
+Libs["WinSock"] = "Ws2_32.lib"
+Libs["WinMM"] = "Winmm.lib"
+Libs["WinVersion"] = "Version.lib"
+Libs["BCrypt"] = "Bcrypt.lib"

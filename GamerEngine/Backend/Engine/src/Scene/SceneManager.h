@@ -20,7 +20,7 @@ class SceneManager
 	std::atomic<bool> mySaveDone = true;
 	std::atomic<bool> myLoadDone = true;
 
-	SceneStatus mySceneStatus;
+	SceneStatus mySceneStatus = SceneStatus::None;
 
 	bool myIsHeadless = false;
 

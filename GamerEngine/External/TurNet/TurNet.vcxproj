@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\TurNet\Debug\</IntDir>
-    <TargetName>TurNet_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\TurNet\</IntDir>
+    <TargetName>Debug/TurNet</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\TurNet\Release\</IntDir>
-    <TargetName>TurNet_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\TurNet\</IntDir>
+    <TargetName>Release/TurNet</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
