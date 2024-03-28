@@ -24,6 +24,8 @@ GraphicsEngine* GraphicsEngine::Get()
 
 GraphicsEngine::~GraphicsEngine()
 {
+	ScriptEngine::Shutdown();
+
 	StopUpdateThread();
 
 	TextureAssetHandler::Clear();
