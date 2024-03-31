@@ -142,7 +142,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 	for(const RenderBuffer& modelBuffer : aModelList)
 	{
-		Ref<ModelInstance> model = modelBuffer.myModel;
+		Ref<GamerEngine::Model> model = modelBuffer.myModel;
 
 		if (model == nullptr)
 		{
@@ -190,7 +190,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 		for(unsigned int m = 0; m < model->GetNumMeshes(); m++)
 		{
-			ModelInstance::MeshData& meshData = model->GetMeshData(m);
+			GamerEngine::Model::MeshData& meshData = model->GetMeshData(m);
 
 			
 			DX11::Get().GetContext()->IASetInputLayout(meshData.myVertexShader->GetInputLayout().Get());
@@ -205,7 +205,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 			/*if(isInstanced && !model->HasBeenRendered())
 			{
 				myInstancedTransformBufferData.clear();
-				std::vector<ModelInstance::RenderedInstanceData> myTransformData = model->GetTransformVector();
+				std::vector<Model::RenderedInstanceData> myTransformData = model->GetTransformVector();
 				for(int i = 0; i < myTransformData.size(); i++)
 				{
 					auto matrix = myTransformData[i].World->GetMatrix();

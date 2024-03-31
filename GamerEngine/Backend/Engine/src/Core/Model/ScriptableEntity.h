@@ -56,8 +56,8 @@ public:
 
 
 private:
-	Entity myEntity;
-	friend class Scene;
+	GamerEngine::Entity myEntity;
+	friend class GamerEngine::Scene;
 };
 
 

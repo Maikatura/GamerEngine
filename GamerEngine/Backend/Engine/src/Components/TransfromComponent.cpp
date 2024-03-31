@@ -3,7 +3,7 @@
 
 #include "Core/Model/Entity.h"
 
-std::vector<Entity*> TransformComponent::GetChildren() const
+std::vector<GamerEngine::Entity*> TransformComponent::GetChildren() const
 {
 	return myChildren;
 }

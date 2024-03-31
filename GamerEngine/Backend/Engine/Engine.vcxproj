@@ -110,6 +110,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scripting\ScriptUtils.h" />
     <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\AssetHandlers\LightAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\MetaFileHandler.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="src\VR\VRSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scripting\ScriptUtils.cpp" />
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp" />
     <ClCompile Include="src\AssetHandlers\LightAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\MetaFileHandler.cpp" />

@@ -4,119 +4,127 @@
 #include "Components/IDComponent.h"
 #include "Scene/Scene.h"
 
-class Scene;
 
-class Entity
+namespace GamerEngine
 {
-public:
 
-	Entity() : myScene(nullptr)
-	{ }
 
-	Entity(entt::entity aHandle, Scene* aScene) : myEntityHandle(aHandle), myScene(aScene) 
-	{ }
 
-	Entity(const Entity& other) = default;
+	class Scene;
 
-	Entity operator=(const Entity& other)
+	class Entity
 	{
-		myEntityHandle = other.myEntityHandle;
-		myScene = other.myScene;
-	
-		return *this;
-	}
+	public:
 
-	UUID2 GetUUID() { return GetComponent<IDComponent>().ID; }
+		Entity() : myScene(nullptr)
+		{ }
 
-	template<typename T>
-	T& AddComponent()
-	{
-		T& component = myScene->GetRegistry().emplace<T>(myEntityHandle);
-		//myScene->OnComponentAdded<T>(*this, component);
-		return component;
-	}
-	
+		Entity(entt::entity aHandle, Scene* aScene) : myEntityHandle(aHandle), myScene(aScene)
+		{ }
 
-	template<typename T>
-	T& AddOrReplaceComponent()
-	{
-		T& component = myScene->GetRegistry().emplace_or_replace<T>(myEntityHandle);
-		//myScene->OnComponentAdded<T>(*this, component);
-		return component;
-	}
-	
-	template<typename T, typename... Args>
-	T& AddComponent(Args&&... args)
-	{
-		T& component = myScene->GetRegistry().emplace<T>(myEntityHandle, std::forward<Args>(args)...);
-		//myScene->OnComponentAdded<T>(*this, component);
-		return component;
-	}
-	
+		Entity(const Entity& other) = default;
 
-	template<typename T, typename... Args>
-	T& AddOrReplaceComponent(Args&&... args)
-	{
-		T& component = myScene->GetRegistry().emplace_or_replace<T>(myEntityHandle, std::forward<Args>(args)...);
-		//myScene->OnComponentAdded<T>(*this, component);
-		return component;
-	}
-
-	template<typename T>
-	T& GetComponent()
-	{
-		return myScene->GetRegistry().get<T>(myEntityHandle);
-	}
-
-	template<typename T>
-	bool HasComponent()
-	{
-		return myScene->GetRegistry().all_of<T>(myEntityHandle);
-	}
-
-	template<typename T>
-	void RemoveComponent()
-	{
-		myScene->GetRegistry().remove<T>(myEntityHandle);
-	}
-	
-
-	operator bool() const { return myEntityHandle != entt::null; }
-	operator entt::entity() const { return myEntityHandle; }
-	operator uint32_t() const { return (uint32_t)myEntityHandle; }
-
-	bool operator==(const Entity& other) const
-	{
-		return myEntityHandle == other.myEntityHandle && myScene == other.myScene;
-	}
-
-	bool operator!=(const Entity& other) const
-	{
-		return !(*this == other);
-	}
-
-	entt::entity GetHandle() const
-	{
-		if (myEntityHandle == entt::null)
+		Entity operator=(const Entity& other)
 		{
-			return entt::null;
+			myEntityHandle = other.myEntityHandle;
+			myScene = other.myScene;
+
+			return *this;
 		}
-		return myEntityHandle;
-	}
+
+		UUID2 GetUUID() { return GetComponent<IDComponent>().ID; }
+
+		template<typename T>
+		T& AddComponent()
+		{
+			T& component = myScene->GetRegistry().emplace<T>(myEntityHandle);
+			//myScene->OnComponentAdded<T>(*this, component);
+			return component;
+		}
 
 
-	uint32_t GetID() const
-	{
-		return (uint32_t)myEntityHandle;
-	}
+		template<typename T>
+		T& AddOrReplaceComponent()
+		{
+			T& component = myScene->GetRegistry().emplace_or_replace<T>(myEntityHandle);
+			//myScene->OnComponentAdded<T>(*this, component);
+			return component;
+		}
+
+		template<typename T, typename... Args>
+		T& AddComponent(Args&&... args)
+		{
+			T& component = myScene->GetRegistry().emplace<T>(myEntityHandle, std::forward<Args>(args)...);
+			//myScene->OnComponentAdded<T>(*this, component);
+			return component;
+		}
+
+
+		template<typename T, typename... Args>
+		T& AddOrReplaceComponent(Args&&... args)
+		{
+			T& component = myScene->GetRegistry().emplace_or_replace<T>(myEntityHandle, std::forward<Args>(args)...);
+			//myScene->OnComponentAdded<T>(*this, component);
+			return component;
+		}
+
+		template<typename T>
+		T& GetComponent()
+		{
+			return myScene->GetRegistry().get<T>(myEntityHandle);
+		}
+
+		template<typename T>
+		bool HasComponent()
+		{
+			return myScene->GetRegistry().all_of<T>(myEntityHandle);
+		}
+
+		template<typename T>
+		void RemoveComponent()
+		{
+			myScene->GetRegistry().remove<T>(myEntityHandle);
+		}
+
+
+		operator bool() const { return myEntityHandle != entt::null; }
+		operator entt::entity() const { return myEntityHandle; }
+		operator uint32_t() const { return (uint32_t)myEntityHandle; }
+
+		bool operator==(const Entity& other) const
+		{
+			return myEntityHandle == other.myEntityHandle && myScene == other.myScene;
+		}
+
+		bool operator!=(const Entity& other) const
+		{
+			return !(*this == other);
+		}
+
+		entt::entity GetHandle() const
+		{
+			if (myEntityHandle == entt::null)
+			{
+				return entt::null;
+			}
+			return myEntityHandle;
+		}
+
+
+		uint32_t GetID() const
+		{
+			return (uint32_t)myEntityHandle;
+		}
 
 
 
 
-private:
+	private:
 
-	entt::entity myEntityHandle{ entt::null };
-	Scene* myScene = nullptr;
-};
+		entt::entity myEntityHandle{ entt::null };
+		Scene* myScene = nullptr;
+	};
+
+}
 
 

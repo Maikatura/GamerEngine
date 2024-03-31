@@ -5,7 +5,7 @@
 #include "Scene/SceneManager.h"
 #include "Components/TransfromComponent.h"
 
-void Renderer::Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransform)
+void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransform)
 {
 
 	if (!aModel.GetModel())

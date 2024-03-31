@@ -418,6 +418,9 @@
     <ClInclude Include="src\VR\VRSystem.h">
       <Filter>VR</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scripting\ScriptUtils.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp">
@@ -646,6 +649,9 @@
     </ClCompile>
     <ClCompile Include="src\VR\VRSystem.cpp">
       <Filter>VR</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\ScriptUtils.cpp">
+      <Filter>Scripting</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

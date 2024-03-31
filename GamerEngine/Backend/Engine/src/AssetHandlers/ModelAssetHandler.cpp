@@ -337,7 +337,7 @@ bool ModelAssetHandler::InitUnitCube()
 
 	//mdl->Init(modelData, L"Cube");
 
-	//Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
+	//Ref<Model> mdlInstance = MakeRef<Model>();
 	//mdlInstance->Init(mdl);
 
 	//myModelRegistry.insert({ L"Cube", mdlInstance });
@@ -621,7 +621,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 	// 			return false;
 	// 		}
 	//
-	// 		ModelInstance::MeshData modelData = {};
+	// 		Model::MeshData modelData = {};
 	// 		modelData.myNumberOfVertices = static_cast<UINT>(mdlVertices.size());
 	// 		modelData.myNumberOfIndices = static_cast<UINT>(mdlIndices.size());
 	// 		modelData.myStride = sizeof(Vertex);
@@ -640,7 +640,7 @@ bool ModelAssetHandler::LoadModelNewTesting(const std::wstring& aFilePath)
 	// 	}
 	//
 	// 	mdl->Name = Helpers::string_cast<std::string>(aFilePath);
-	// 	Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
+	// 	Ref<Model> mdlInstance = MakeRef<Model>();
 	//
 	// 	//mdlInstance->Init(mdl);
 	//
@@ -680,7 +680,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 	importer.InitImporter();
 	if (importer.LoadModel(aFilePath, tgaModel))
 	{
-		Ref<ModelInstance> mdlInstance = MakeRef<ModelInstance>();
+		Ref<GamerEngine::Model> mdlInstance = MakeRef<GamerEngine::Model>();
 
 		for (size_t i = 0; i < tgaModel.Elements.size(); i++)
 		{
@@ -782,13 +782,13 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			}*/
 
 
-			Skeleton mdlSkeleton;
+			GamerEngine::Skeleton mdlSkeleton;
 			const bool hasSkeleton = tgaModel.Skeleton.GetRoot();
 			if (hasSkeleton)
 			{
 				for (size_t i = 0; i < tgaModel.Skeleton.Bones.size(); i++)
 				{
-					mdlSkeleton.Bones.push_back(Bone());
+					mdlSkeleton.Bones.push_back(GamerEngine::Bone());
 					mdlSkeleton.Bones[i].BindPoseInverse = *((Matrix4x4f*)&tgaModel.Skeleton.Bones[i].BindPoseInverse);
 					mdlSkeleton.Bones[i].Children = tgaModel.Skeleton.Bones[i].Children;
 					//mdlSkeleton.Bones[i].Name = tgaModel.Skeleton.Bones[i].Name;
@@ -842,7 +842,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			
 			
 
-			ModelInstance::MeshData modelData = {};
+			GamerEngine::Model::MeshData modelData = {};
 			modelData.myNumberOfVertices = static_cast<UINT>(mdlVertices.size());
 			modelData.myNumberOfIndices = static_cast<UINT>(mdlIndices.size());
 			modelData.myStride = sizeof(Vertex);
@@ -942,7 +942,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const std::wstring& someFilePath)
 {
 	const std::string ansiFileName = Helpers::string_cast<std::string>(someFilePath);
-	Ref<ModelInstance> model = GetModelInstance(aModelName);
+	Ref<GamerEngine::Model> model = GetModelInstance(aModelName);
 
 	TGA::FBX::Animation tgaAnimation;
 	if (!TGA::FBX::Importer::LoadAnimation(someFilePath, tgaAnimation))
@@ -950,14 +950,14 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 		return false;
 	}
 
-	Animation animOut;
+	GamerEngine::Animation animOut;
 	animOut.Duration = static_cast<float>(tgaAnimation.Duration);
 	animOut.FramesPerSecond = tgaAnimation.FramesPerSecond;
 	animOut.Length = tgaAnimation.Length;
 	animOut.Name = Helpers::string_cast<std::wstring>(tgaAnimation.Name);
 	for (int i = 0; i < static_cast<int>(tgaAnimation.Length); i++)
 	{
-		Animation::Frame frames; //{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
+		GamerEngine::Animation::Frame frames; //{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
 		for (int y = 0; y < tgaAnimation.Frames[i].LocalTransforms.size(); y++)
 		{
 			frames.LocalTransforms.push_back(*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
@@ -984,7 +984,7 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 //	return model->second->GetModel();
 //}
 
-Ref<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFilePath)
+Ref<GamerEngine::Model> ModelAssetHandler::GetModelInstance(const std::wstring& aFilePath)
 {
 
 	if (!std::filesystem::exists(aFilePath))
@@ -1025,7 +1025,7 @@ Ref<ModelInstance> ModelAssetHandler::GetModelInstance(const std::wstring& aFile
 
 	if (myModelRegistry.empty())
 	{
-		auto returnValue = MakeRef<ModelInstance>();
+		auto returnValue = MakeRef<GamerEngine::Model>();
 		return returnValue;
 	}
 

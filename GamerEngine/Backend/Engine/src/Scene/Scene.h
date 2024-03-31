@@ -10,17 +10,23 @@
 #include <mutex>
 //#include "flecs.h"
 
-class ModelInstance;
 class DirectionalLight;
 class EnvironmentLight;
 class SpotLight;
 class PointLight;
-class Entity;
 
 namespace TurNet
 {
 	struct TurMessage;
 }
+
+namespace GamerEngine
+{
+
+
+class Model;
+class Entity;
+
 
 enum class SceneStatus
 {
@@ -99,5 +105,8 @@ private:
 
 	friend class Entity;
 };
+
+
+}
 
 

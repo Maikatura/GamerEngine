@@ -26,12 +26,12 @@ public:
 		return mySelectedObject;
 	}
 
-	static void SetEntityObject(Entity aEntity)
+	static void SetEntityObject(GamerEngine::Entity aEntity)
 	{
 		myEntity = aEntity;
 	}
 
-	static Entity GetEntityObject()
+	static GamerEngine::Entity GetEntityObject()
 	{
 		return myEntity;
 	}
@@ -44,6 +44,6 @@ public:
 
 private:
 
-	inline static Entity myEntity;
+	inline static GamerEngine::Entity myEntity;
 	inline static Ref<SelectedObject> mySelectedObject = nullptr;
 };

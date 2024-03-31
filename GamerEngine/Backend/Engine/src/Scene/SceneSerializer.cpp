@@ -129,11 +129,11 @@ YAML::Emitter& operator<<(YAML::Emitter& out, const Vector4f& v)
 	return out;
 }
 
-SceneSerializer::SceneSerializer(Scene* scene)
+SceneSerializer::SceneSerializer(GamerEngine::Scene* scene)
 	: myScene(scene)
 {}
 
-static void SerializeEntity(YAML::Emitter& out, Entity entity)
+static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 {
 	std::cout << "Saving Entity: Start" << std::endl;
 
@@ -406,7 +406,7 @@ static void SerializeEntity(YAML::Emitter& out, Entity entity)
 
 
 
-void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, bool isHeadless)
+void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Scene* aScene, bool isHeadless)
 {
 	uint64_t uuid = aEntityNode["Entity"].as<uint64_t>();
 
@@ -416,7 +416,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, b
 		name = tagComponent["Tag"].as<std::string>();
 
 
-	Entity deserializedEntity = aScene->CreateEntityWithUUID(uuid, name);
+	GamerEngine::Entity deserializedEntity = aScene->CreateEntityWithUUID(uuid, name);
 
 	ConsoleHelper::Log(LogType::Info, "Loading Entity with UUID: %llu Name: %s" , uuid, name.c_str());
 
@@ -708,7 +708,7 @@ void SceneSerializer::Serialize(const std::string& aFilepath)
 	out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 	myScene->GetRegistry().each([&](auto entityID)
 		{
-			Entity entity = { entityID, myScene };
+			GamerEngine::Entity entity = { entityID, myScene };
 			if(!entity)
 				return;
 
@@ -779,8 +779,8 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 	{
 		for(auto& entity2 : view)
 		{
-			Ref<Entity> entityOne = MakeRef<Entity>(Entity{ entity1, myScene });
-			Ref<Entity> entityTwo = MakeRef<Entity>(Entity{ entity2, myScene });
+			Ref<GamerEngine::Entity> entityOne = MakeRef<GamerEngine::Entity>(GamerEngine::Entity{ entity1, myScene });
+			Ref<GamerEngine::Entity> entityTwo = MakeRef<GamerEngine::Entity>(GamerEngine::Entity{ entity2, myScene });
 
 			if (!entityOne || !entityTwo)
 			{

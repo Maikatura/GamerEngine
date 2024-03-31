@@ -5,8 +5,11 @@
 #include "Core/Model/Model.h"
 #include "Utilites/Pointers.h"
 
-class Entity;
-class ModelInstance;
+
+namespace GamerEngine
+{
+	class Entity;
+}
 
 class Hierarchy : public Layer
 {
@@ -16,19 +19,19 @@ public:
 
 	void OnImGuiRender() override;
 
-	void DrawEntityNode(Entity& aEntity);
+	void DrawEntityNode(GamerEngine::Entity& aEntity);
 
 	void DropAFile();
 
-	void DrawEntityPopupMenu(Ref<ModelInstance> aModel);
+	void DrawEntityPopupMenu(Ref<GamerEngine::Model> aModel);
 	void DrawWindowPopupMenu();
 
-	void DrawArmature(Entity& aEntity, Ref<ModelInstance> aModel);
-	void LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned int aBoneID = 0);
+	void DrawArmature(GamerEngine::Entity& aEntity, Ref<GamerEngine::Model> aModel);
+	void LoopBones(const GamerEngine::Skeleton* aSkeleton, const GamerEngine::Bone* aBone, unsigned int aBoneID = 0);
 
-	bool LoopThoughChildren(Entity* aEntity);
-	void CheckIfUserWantToSetParent(Entity& entity);
-	void IsItemHovered(Entity& aEntity);
+	bool LoopThoughChildren(GamerEngine::Entity* aEntity);
+	void CheckIfUserWantToSetParent(GamerEngine::Entity& entity);
+	void IsItemHovered(GamerEngine::Entity& aEntity);
 
 
 

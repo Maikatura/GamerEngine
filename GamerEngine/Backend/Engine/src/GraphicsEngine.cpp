@@ -24,7 +24,7 @@ GraphicsEngine* GraphicsEngine::Get()
 
 GraphicsEngine::~GraphicsEngine()
 {
-	ScriptEngine::Shutdown();
+	GamerEngine::ScriptEngine::Shutdown();
 
 	StopUpdateThread();
 
@@ -124,7 +124,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 	Input::Init(myWindowHandle);
 	AudioManager::Init();
 	SceneManager::Get().Initialize();
-	ScriptEngine::Init();
+	GamerEngine::ScriptEngine::Init();
 
 	if (!myUseEditor)
 	{
@@ -266,7 +266,7 @@ void GraphicsEngine::BeginFrame()
 	{
 		if(DX11::Get().GetSwapChain())
 		{
-			if (SceneManager::Get().GetStatus() == SceneStatus::Complete)
+			if (SceneManager::Get().GetStatus() == GamerEngine::SceneStatus::Complete)
 			{
 				myGBuffer->Release();
 				DX11::Get().Resize();
@@ -381,14 +381,14 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 		return;
 	}
 
-	const Ref<Scene> scene = SceneManager::Get().GetScene();
+	const Ref<GamerEngine::Scene> scene = SceneManager::Get().GetScene();
 
 	if (!scene)
 	{
 		return;
 	}
 
-	if (SceneManager::Get().GetStatus() != SceneStatus::Complete)
+	if (SceneManager::Get().GetStatus() != GamerEngine::SceneStatus::Complete)
 	{
 		return;
 	}
@@ -632,7 +632,7 @@ void GraphicsEngine::EndFrame() const
 	
 	//myDropManager->ClearPaths();
 
-	if (SceneManager::Get().GetStatus() == SceneStatus::NeedSwap)
+	if (SceneManager::Get().GetStatus() == GamerEngine::SceneStatus::NeedSwap)
 	{
 		SceneManager::Get().SwapScene();
 	}

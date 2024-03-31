@@ -22,8 +22,8 @@ void SceneManager::SetHeadless(bool isHeadless)
 
 void SceneManager::Initialize()
 {
-	myScene = MakeRef<Scene>();
-	mySceneStatus = SceneStatus::Complete;
+	myScene = MakeRef<GamerEngine::Scene>();
+	mySceneStatus = GamerEngine::SceneStatus::Complete;
 }
 
 void SceneManager::LoadScene(const std::string& aFilepath)
@@ -39,7 +39,7 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 		{
 			//myScene->SceneReady(false);
 			
-			SelectionData::SetEntityObject(Entity{ entt::null, nullptr });
+			SelectionData::SetEntityObject(GamerEngine::Entity{ entt::null, nullptr });
 
 			if(GraphicsEngine::Get())
 			{
@@ -51,20 +51,20 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 				myLoadDone = false;
 
 				// Move the old scene into a temporary smart pointer
-				Ref<Scene> oldScene = myScene;
+				Ref<GamerEngine::Scene> oldScene = myScene;
 
 				ThreadPool::Get().EnqueueTask([&, aFilepath]() 
 					{
-					mySceneStatus = SceneStatus::Loading;
+					mySceneStatus = GamerEngine::SceneStatus::Loading;
 
-					Ref<Scene> newScene = MakeRef<Scene>();
+					Ref<GamerEngine::Scene> newScene = MakeRef<GamerEngine::Scene>();
 
 					SceneSerializer sceneLoad(newScene.get());
 					if (sceneLoad.Deserialize(aFilepath, myIsHeadless)) 
 					{
 						// Swap the scenes only if the new scene is loaded successfully
 						mySwapScene = newScene;
-						mySceneStatus = SceneStatus::NeedSwap;
+						mySceneStatus = GamerEngine::SceneStatus::NeedSwap;
 
 						// At this point, oldScene will automatically be destroyed
 					}
@@ -99,7 +99,7 @@ void SceneManager::SaveScene(const std::string& aFilepath)
 
 void SceneManager::Update()
 {
-	if (mySaveDone && myLoadDone && mySceneStatus == SceneStatus::Complete)
+	if (mySaveDone && myLoadDone && mySceneStatus == GamerEngine::SceneStatus::Complete)
 	{
 		if (myScene)
 		{
@@ -113,7 +113,7 @@ void SceneManager::Update()
 
 void SceneManager::Render()
 {
-	if (mySaveDone && myLoadDone && mySceneStatus == SceneStatus::Complete)
+	if (mySaveDone && myLoadDone && mySceneStatus == GamerEngine::SceneStatus::Complete)
 	{
 		if (myScene)
 		{
@@ -123,7 +123,7 @@ void SceneManager::Render()
 	
 }
 
-Ref<Scene> SceneManager::GetScene()
+Ref<GamerEngine::Scene> SceneManager::GetScene()
 {
 	if(!myScene)
 	{
@@ -132,7 +132,7 @@ Ref<Scene> SceneManager::GetScene()
 
 	if (myScene)
 	{
-		if (mySceneStatus == SceneStatus::Complete)
+		if (mySceneStatus == GamerEngine::SceneStatus::Complete)
 		{
 			return myScene;
 		}
@@ -143,22 +143,22 @@ Ref<Scene> SceneManager::GetScene()
 
 bool SceneManager::IsReady()
 {
-	return (mySceneStatus == SceneStatus::Complete && mySaveDone && myLoadDone);
+	return (mySceneStatus == GamerEngine::SceneStatus::Complete && mySaveDone && myLoadDone);
 }
 
-SceneStatus SceneManager::GetStatus()
+GamerEngine::SceneStatus SceneManager::GetStatus()
 {
 	return mySceneStatus;
 }
 
-Entity SceneManager::ConstructEntity(entt::entity aEntityValue)
+GamerEngine::Entity SceneManager::ConstructEntity(entt::entity aEntityValue)
 {
-	return Entity(aEntityValue, myScene.get());
+	return GamerEngine::Entity(aEntityValue, myScene.get());
 }
 
-Entity SceneManager::CreateEntityType(int aEntityType, const UUID2& aUUID)
+GamerEngine::Entity SceneManager::CreateEntityType(int aEntityType, const UUID2& aUUID)
 {
-	Entity aEntity;
+	GamerEngine::Entity aEntity;
 
 	if (aUUID == 0)
 	{
@@ -216,7 +216,7 @@ Entity SceneManager::CreateEntityType(int aEntityType, const UUID2& aUUID)
 
 void SceneManager::SwapScene()
 {
-	if (mySceneStatus == SceneStatus::NeedSwap && mySaveDone && myLoadDone) 
+	if (mySceneStatus == GamerEngine::SceneStatus::NeedSwap && mySaveDone && myLoadDone)
 	{
 		
 		myScene = std::move(mySwapScene);
@@ -228,11 +228,11 @@ void SceneManager::SwapScene()
 
 		if (myScene)
 		{
-			myScene->SetSceneStatus(SceneStatus::Complete);
+			myScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
 			myScene->SceneReady(true);
 		}
 
-		mySceneStatus = SceneStatus::Complete;
+		mySceneStatus = GamerEngine::SceneStatus::Complete;
 	}
 
 }

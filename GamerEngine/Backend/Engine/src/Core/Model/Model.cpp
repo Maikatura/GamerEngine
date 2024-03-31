@@ -4,13 +4,15 @@
 #include "Core/Framework/DX11.h"
 #include "Components/Components.hpp"
 
-void ModelInstance::Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
+
+
+void GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
 {
 	mySkeleton = aSkeleton;
 	Init(aMeshData, aPath);
 }
 
-void ModelInstance::Init(const MeshData& aMeshData, const std::wstring& aPath)
+void  GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aPath)
 {
 	myMeshData.push_back(aMeshData);
 	myPath = aPath;
@@ -28,13 +30,13 @@ void ModelInstance::Init(const MeshData& aMeshData, const std::wstring& aPath)
 	}
 }
 
-void ModelInstance::AddRenderedInstance(TransformComponent* aTransform)
+void GamerEngine::Model::AddRenderedInstance(TransformComponent* aTransform)
 {
 	RenderedInstanceData data = {aTransform};
 	myRenderedInstances.push_back(data);
 }
 
-bool ModelInstance::UpdateInstanceBuffer()
+bool GamerEngine::Model::UpdateInstanceBuffer()
 {
 	HRESULT result = E_FAIL;
 
@@ -59,7 +61,7 @@ bool ModelInstance::UpdateInstanceBuffer()
 	return true;
 }
 
-bool ModelInstance::RenderWithDeferred()
+bool GamerEngine::Model::RenderWithDeferred()
 {
 
 	if (HasSkeleton())
@@ -70,29 +72,29 @@ bool ModelInstance::RenderWithDeferred()
 	return false;
 }
 
-bool ModelInstance::HasBeenRendered()
+bool GamerEngine::Model::HasBeenRendered()
 {
 	return myHasBeenRendered;
 }
 
-void ModelInstance::ClearInstanceData()
+void GamerEngine::Model::ClearInstanceData()
 {
 	myFirstTimeInit = true;
 	myRenderedInstances.clear();
 }
 
-void ModelInstance::SetHasBeenRenderer(bool aValue)
+void GamerEngine::Model::SetHasBeenRenderer(bool aValue)
 {
 	myHasBeenRendered = aValue;
 }
 
-void ModelInstance::PlayAnimation(std::wstring aAnimationPath)
+void GamerEngine::Model::PlayAnimation(std::wstring aAnimationPath)
 {
 	myAnimState->myCurrentAnimation = &GetSkeleton()->Animations[aAnimationPath];
 	myAnimState->myCurrentAnimation->Frames = GetSkeleton()->Animations[aAnimationPath].Frames;
 }
 
-void ModelInstance::Update()
+void GamerEngine::Model::Update()
 {
 	// TODO : TEST REMOVE LATE!!!!
 	/*if(myModel)
@@ -137,12 +139,12 @@ void ModelInstance::Update()
 	}
 }
 
-void ModelInstance::EditorUpdate()
+void GamerEngine::Model::EditorUpdate()
 {
 	
 }
 
-void ModelInstance::UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent)
+void GamerEngine::Model::UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent)
 {
 	int length = static_cast<int>(anAnimState->myCurrentAnimation->Length);
 

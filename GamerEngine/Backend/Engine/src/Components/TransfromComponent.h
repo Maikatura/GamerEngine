@@ -1,8 +1,10 @@
 #pragma once
 #include <entt.hpp>
 #include "Camera.h"
-
-class Entity;
+namespace GamerEngine
+{
+	class Entity;
+}
 
 class TransformComponent
 {
@@ -14,8 +16,8 @@ class TransformComponent
 
 public:
 
-	Entity* myParent;
-	std::vector<Entity*> myChildren{};
+	GamerEngine::Entity* myParent;
+	std::vector<GamerEngine::Entity*> myChildren{};
 
 
 	uint64_t TempParent;
@@ -143,14 +145,14 @@ public:
 		return Vector3f();
 	}
 
-	
 
-	void SetChild(Entity* aChild)
+
+	void SetChild(GamerEngine::Entity* aChild)
 	{
 		myChildren.push_back(aChild);
 	}
 
-	void RemoveChild(Entity* aChild)
+	void RemoveChild(GamerEngine::Entity* aChild)
 	{
 		for (size_t i = 0; i < myChildren.size(); i++)
 		{
@@ -162,7 +164,7 @@ public:
 		}
 	}
 
-	void SetParent(Entity* aParent)
+	void SetParent(GamerEngine::Entity* aParent)
 	{
 		myParent = aParent;
 	}
@@ -172,12 +174,12 @@ public:
 		myParent = nullptr;
 	}
 
-	Entity* GetParent() const
+	GamerEngine::Entity* GetParent() const
 	{
 		return myParent;
 	}
 
-	std::vector<Entity*> GetChildren() const;
+	std::vector<GamerEngine::Entity*> GetChildren() const;
 
 	bool HasParent();
 

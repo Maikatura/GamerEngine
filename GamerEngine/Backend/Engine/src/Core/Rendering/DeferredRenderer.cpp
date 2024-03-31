@@ -218,7 +218,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 
 	for(const RenderBuffer& modelBuffer : aModelList)
 	{
-		Ref<ModelInstance> model = modelBuffer.myModel;
+		Ref<GamerEngine::Model> model = modelBuffer.myModel;
 		if(model == nullptr)
 		{
 			return;
@@ -272,7 +272,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 
 		for(size_t index = 0; index < model->GetNumMeshes(); index++)
 		{
-			ModelInstance::MeshData& meshData = model->GetMeshData(static_cast<unsigned>(index));
+			GamerEngine::Model::MeshData& meshData = model->GetMeshData(static_cast<unsigned>(index));
 			meshData.MaterialData.SetAsResource(myMaterialBuffer);
 			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 			DX11::Get().GetContext()->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
@@ -290,7 +290,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 			/*if(isInstanced && !model->HasBeenRendered())
 			{
 				myInstancedTransformBufferData.clear();
-				std::vector<ModelInstance::RenderedInstanceData> myTransformData = model->GetTransformVector();
+				std::vector<Model::RenderedInstanceData> myTransformData = model->GetTransformVector();
 				for(int i = 0; i < myTransformData.size(); i++)
 				{
 					auto matrix = myTransformData[i].World->GetMatrix();

@@ -12,7 +12,7 @@ class RenderBuffer
 public:
 	uint32_t myId;
 	Matrix4x4f myTransform;
-	Ref<ModelInstance> myModel;
+	Ref<GamerEngine::Model> myModel;
 };
 
 class RenderBuffer2D

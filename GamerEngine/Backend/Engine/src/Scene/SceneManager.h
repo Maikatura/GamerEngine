@@ -13,14 +13,14 @@ class SceneManager
 {
 
 	
-	Ref<Scene> myScene;
-	Ref<Scene> mySwapScene;
+	Ref<GamerEngine::Scene> myScene;
+	Ref<GamerEngine::Scene> mySwapScene;
 	std::mutex mySceneMutex;
 
 	std::atomic<bool> mySaveDone = true;
 	std::atomic<bool> myLoadDone = true;
 
-	SceneStatus mySceneStatus = SceneStatus::None;
+	GamerEngine::SceneStatus mySceneStatus = GamerEngine::SceneStatus::None;
 
 	bool myIsHeadless = false;
 
@@ -47,14 +47,14 @@ public:
 	
 	void Update();
 	void Render();
-	Ref<Scene> GetScene();
+	Ref<GamerEngine::Scene> GetScene();
 	
 	bool IsReady();
 	
-	SceneStatus GetStatus();
+	GamerEngine::SceneStatus GetStatus();
 	
-	Entity ConstructEntity(entt::entity aEntityValue);
+	GamerEngine::Entity ConstructEntity(entt::entity aEntityValue);
 	
-	Entity CreateEntityType(int aEntityType, const UUID2& aUUID = 0);
+	GamerEngine::Entity CreateEntityType(int aEntityType, const UUID2& aUUID = 0);
 	void SwapScene();
 };

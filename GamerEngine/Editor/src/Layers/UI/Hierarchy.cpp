@@ -27,7 +27,7 @@
 #include "Layers/Network/CreateObjectMessage.h"
 #include <Data/HashTable.hpp>
 
-std::vector<Entity> mySelectedEntity;
+std::vector<GamerEngine::Entity> mySelectedEntity;
 
 Hierarchy::Hierarchy() : Layer("Hierarchy")
 {}
@@ -61,7 +61,7 @@ void Hierarchy::OnImGuiRender()
 				return;
 			}
 
-			Entity entity{ entityID, SceneManager::Get().GetScene().get()};
+			GamerEngine::Entity entity{ entityID, SceneManager::Get().GetScene().get()};
 
 			if(entity.GetComponent<TransformComponent>().HasParent())
 			{
@@ -92,12 +92,12 @@ void Hierarchy::OnImGuiRender()
 			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SceneHierarchy");
 			if(payload != nullptr)
 			{
-				std::vector<Entity>& entityDataVector = *static_cast<std::vector<Entity>*>(payload->Data);
-				entityDataVector.resize(payload->DataSize / sizeof(Entity));
+				std::vector<GamerEngine::Entity>& entityDataVector = *static_cast<std::vector<GamerEngine::Entity>*>(payload->Data);
+				entityDataVector.resize(payload->DataSize / sizeof(GamerEngine::Entity));
 
 				for(size_t i = 0; i < entityDataVector.size(); i++)
 				{
-					Ref<Entity> draggedEntity = MakeRef<Entity>(entityDataVector[i]);
+					Ref<GamerEngine::Entity> draggedEntity = MakeRef<GamerEngine::Entity>(entityDataVector[i]);
 					if(draggedEntity->GetComponent<TransformComponent>().HasParent())
 					{
 						auto parent = draggedEntity->GetComponent<TransformComponent>().GetParent();
@@ -117,7 +117,7 @@ void Hierarchy::OnImGuiRender()
 	myEntityList.clear();
 }
 
-void Hierarchy::DrawEntityNode(Entity& aEntity)
+void Hierarchy::DrawEntityNode(GamerEngine::Entity& aEntity)
 {
 	for(size_t i = 0; i < myEntityList.size(); i++)
 	{
@@ -213,7 +213,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 
 		for(int i = 0; i < aEntity.GetComponent<TransformComponent>().myChildren.size(); i++)
 		{
-			Entity entity{ aEntity.GetComponent<TransformComponent>().myChildren[i]->GetHandle(), SceneManager::Get().GetScene().get() };
+			GamerEngine::Entity entity{ aEntity.GetComponent<TransformComponent>().myChildren[i]->GetHandle(), SceneManager::Get().GetScene().get() };
 			DrawEntityNode(entity);
 		}
 		ImGui::TreePop();
@@ -227,7 +227,7 @@ void Hierarchy::DrawEntityNode(Entity& aEntity)
 
 }
 
-void Hierarchy::DrawEntityPopupMenu(Ref<ModelInstance> aModel)
+void Hierarchy::DrawEntityPopupMenu(Ref<GamerEngine::Model> aModel)
 {
 	if(ImGui::BeginPopupContextItem())
 	{
@@ -246,7 +246,7 @@ void Hierarchy::DrawWindowPopupMenu()
 	{
 		int createIndex = -1;
 
-		Entity entity;
+		GamerEngine::Entity entity;
 
 		if(ImGui::MenuItem("Create"))
 		{
@@ -307,7 +307,7 @@ void Hierarchy::DrawWindowPopupMenu()
 	}
 }
 
-void Hierarchy::DrawArmature(Entity& aEntity, Ref<ModelInstance> aModel)
+void Hierarchy::DrawArmature(GamerEngine::Entity& aEntity, Ref<GamerEngine::Model> aModel)
 {
 	if(aModel->GetSkeleton())
 	{
@@ -357,7 +357,7 @@ void Hierarchy::DrawArmature(Entity& aEntity, Ref<ModelInstance> aModel)
 
 }
 
-void Hierarchy::LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned int aBoneID)
+void Hierarchy::LoopBones(const GamerEngine::Skeleton* aSkeleton, const GamerEngine::Bone* aBone, unsigned int aBoneID)
 {
 	const std::string& nameID = aSkeleton->BoneNames[aBoneID];
 
@@ -381,9 +381,9 @@ void Hierarchy::LoopBones(const Skeleton* aSkeleton, const Bone* aBone, unsigned
 	}
 }
 
-bool Hierarchy::LoopThoughChildren(Entity* aEntity)
+bool Hierarchy::LoopThoughChildren(GamerEngine::Entity* aEntity)
 {
-	for(Entity* ent : aEntity->GetComponent<TransformComponent>().myChildren)
+	for(GamerEngine::Entity* ent : aEntity->GetComponent<TransformComponent>().myChildren)
 	{
 		if(ent->GetID() == aEntity->GetID())
 		{
@@ -398,14 +398,14 @@ bool Hierarchy::LoopThoughChildren(Entity* aEntity)
 	return false;
 }
 
-void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
+void Hierarchy::CheckIfUserWantToSetParent(GamerEngine::Entity& aEntity)
 {
 
-	Ref<Entity> entity = MakeRef<Entity>(aEntity);
+	Ref<GamerEngine::Entity> entity = MakeRef<GamerEngine::Entity>(aEntity);
 
 	if(ImGui::BeginDragDropSource())
 	{
-		ImGui::SetDragDropPayload("SceneHierarchy", static_cast<void*>(&mySelectedEntity), sizeof(Entity) * mySelectedEntity.size());
+		ImGui::SetDragDropPayload("SceneHierarchy", static_cast<void*>(&mySelectedEntity), sizeof(GamerEngine::Entity) * mySelectedEntity.size());
 
 		for(size_t i = 0; i < mySelectedEntity.size(); i++)
 		{
@@ -421,10 +421,10 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 		bool hasMoved = false;
 		if(payload != nullptr)
 		{
-			std::vector<Entity>& entityDataVector = *static_cast<std::vector<Entity>*>(payload->Data);
-			entityDataVector.resize(payload->DataSize / sizeof(Entity));
+			std::vector<GamerEngine::Entity>& entityDataVector = *static_cast<std::vector<GamerEngine::Entity>*>(payload->Data);
+			entityDataVector.resize(payload->DataSize / sizeof(GamerEngine::Entity));
 
-			std::vector<Entity> aChildEntityList;
+			std::vector<GamerEngine::Entity> aChildEntityList;
 
 			for(size_t i = 0; i < entityDataVector.size(); i++)
 			{
@@ -433,7 +433,7 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 
 			for(int i = 0; i < aChildEntityList.size(); i++)
 			{
-				Ref<Entity> aChildEntity = MakeRef<Entity>(aChildEntityList[i]);
+				Ref<GamerEngine::Entity> aChildEntity = MakeRef<GamerEngine::Entity>(aChildEntityList[i]);
 
 				bool shouldExit = false;
 				if(!entity->GetComponent<TransformComponent>().HasParent() && !aChildEntity->GetComponent<TransformComponent>().HasParent())
@@ -446,7 +446,7 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 				else if(entity->GetComponent<TransformComponent>().HasParent() && !aChildEntity->GetComponent<TransformComponent>().HasParent())
 				{
 
-					Entity* entityParent = entity.get();
+					GamerEngine::Entity* entityParent = entity.get();
 					bool done = false;
 					while(!done)
 					{
@@ -491,7 +491,7 @@ void Hierarchy::CheckIfUserWantToSetParent(Entity& aEntity)
 				else if(entity->GetComponent<TransformComponent>().HasParent() && aChildEntity->GetComponent<TransformComponent>().HasParent())
 				{
 
-					Entity* entityParent = entity.get();
+					GamerEngine::Entity* entityParent = entity.get();
 
 
 					bool done = false;
@@ -550,7 +550,7 @@ void Hierarchy::DropAFile()
 
 }
 
-void Hierarchy::IsItemHovered(Entity& aEntity)
+void Hierarchy::IsItemHovered(GamerEngine::Entity& aEntity)
 {
 	aEntity;
 }

@@ -36,7 +36,7 @@ class ModelComponent
 public:
 	ModelComponent() = default;
 	ModelComponent(const ModelComponent&) = default;
-	ModelComponent(Ref<ModelInstance> aModel) : myModel(aModel)
+	ModelComponent(Ref<GamerEngine::Model> aModel) : myModel(aModel)
 	{ }
 
 	ModelComponent(const std::wstring& aModelPath, float aDelay = 0.0f, bool aShouldThread = true)
@@ -98,7 +98,7 @@ public:
 		myPath = L"";
 	}
 
-	Ref<ModelInstance> GetModel()
+	Ref<GamerEngine::Model> GetModel()
 	{
 		if (!myModel)
 		{
@@ -126,7 +126,7 @@ public:
 		}
 	}
 
-	void SetModel(Ref<ModelInstance> aModel)
+	void SetModel(Ref<GamerEngine::Model> aModel)
 	{
 		/*if(myModel)
 		{
@@ -189,5 +189,5 @@ private:
 	float myDelay = 0.0f;
 	bool myIsLoaded = false;
 	std::wstring myPath;
-	Ref<ModelInstance> myModel = nullptr;
+	Ref<GamerEngine::Model> myModel = nullptr;
 };

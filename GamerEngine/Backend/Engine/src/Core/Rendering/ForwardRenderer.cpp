@@ -181,7 +181,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 	for(const RenderBuffer& modelBuffer : aModelList)
 	{
-		Ref<ModelInstance> model = modelBuffer.myModel;
+		Ref<GamerEngine::Model> model = modelBuffer.myModel;
 
 
 		if(model == nullptr)
@@ -204,7 +204,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 
 
-		Ref<ModelInstance> modelInstance = model;
+		Ref<GamerEngine::Model> modelInstance = model;
 
 		//bool isInstanced = modelInstance->HasRenderedInstance();
 		bool isInstanced = false;
@@ -239,7 +239,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 		for(int index = 0; index < modelInstance->GetNumMeshes(); index++)
 		{
-			ModelInstance::MeshData& meshData = modelInstance->GetMeshData(index);
+			GamerEngine::Model::MeshData& meshData = modelInstance->GetMeshData(index);
 
 			DX11::Get().GetContext()->IASetInputLayout(meshData.myVertexShader->GetInputLayout().Get());
 			DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader->Get().Get(), nullptr, 0);
@@ -262,7 +262,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			/*if(isInstanced && !model->HasBeenRendered())
 			{
 				myInstancedTransformBufferData.clear();
-				std::vector<ModelInstance::RenderedInstanceData> myTransformData = model->GetTransformVector();
+				std::vector<Model::RenderedInstanceData> myTransformData = model->GetTransformVector();
 				for(int i = 0; i < myTransformData.size(); i++)
 				{
 					auto matrix = myTransformData[i].World->GetMatrix();

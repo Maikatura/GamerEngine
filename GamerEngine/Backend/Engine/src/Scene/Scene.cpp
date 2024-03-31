@@ -11,12 +11,12 @@
 //#include "flecs.h"
 
 
-Scene::Scene() : mySceneStatus(SceneStatus::None)
+GamerEngine::Scene::Scene() : mySceneStatus(SceneStatus::None)
 {
 
 }
 
-Scene::~Scene()
+GamerEngine::Scene::~Scene()
 {
 	//myWorld.quit();
 
@@ -24,7 +24,7 @@ Scene::~Scene()
 	Clear();
 }
 
-bool Scene::Initialize()
+bool GamerEngine::Scene::Initialize()
 {
 	myDirectionalLight = nullptr;
 	myEnvironmentLight = LightAssetHandler::CreateEnvironmentLight(L"resources\\textures\\studio_cubemap.dds");
@@ -45,7 +45,7 @@ bool Scene::Initialize()
 	return true;
 }
 
-void Scene::Clear()
+void GamerEngine::Scene::Clear()
 {
 	//mySceneIsReady = false;
 
@@ -66,7 +66,7 @@ void Scene::Clear()
 		});*/
 }
 
-void Scene::Resize(Vector2ui aNewWindowSize)
+void GamerEngine::Scene::Resize(Vector2ui aNewWindowSize)
 {
 	const auto view = myRegistry.view<CameraComponent>();
 	for(const auto entity : view)
@@ -76,18 +76,18 @@ void Scene::Resize(Vector2ui aNewWindowSize)
 	}
 }
 
-entt::registry& Scene::GetRegistry()
+entt::registry& GamerEngine::Scene::GetRegistry()
 {
 	return myRegistry;
 }
 
-Entity Scene::CreateEntity(const std::string& aName)
+GamerEngine::Entity GamerEngine::Scene::CreateEntity(const std::string& aName)
 {
 	return CreateEntityWithUUID(UUID2(), aName);
 }
 
 
-Entity Scene::CreateEntityWithUUID(const UUID2& aUUID, const std::string& aName)
+GamerEngine::Entity GamerEngine::Scene::CreateEntityWithUUID(const UUID2& aUUID, const std::string& aName)
 {
 	Entity entity = { myRegistry.create(), this };
 	auto& idComp = entity.AddComponent<IDComponent>(aUUID);
@@ -106,7 +106,7 @@ Entity Scene::CreateEntityWithUUID(const UUID2& aUUID, const std::string& aName)
 	return entity;
 }
 
-void Scene::DeleteEntity(Entity aEntity)
+void GamerEngine::Scene::DeleteEntity(Entity aEntity)
 {
 	if(aEntity.HasComponent<NativeScriptComponent>())
 	{
@@ -149,7 +149,7 @@ void Scene::DeleteEntity(Entity aEntity)
 	myRegistry.destroy(aEntity);
 }
 
-void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
+void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 {
 	if(!mySceneIsReady) return;
 	if(mySceneStatus != SceneStatus::Complete) return;
@@ -234,7 +234,7 @@ void Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 	}
 }
 
-void Scene::OnRender()
+void GamerEngine::Scene::OnRender()
 {
 	if(mySceneStatus != SceneStatus::Complete) return;
 	if (!mySceneIsReady) return;
@@ -423,38 +423,38 @@ void Scene::OnRender()
 	}
 }
 
-const std::string& Scene::GetPath()
+const std::string& GamerEngine::Scene::GetPath()
 {
 	return myPath;
 }
 
-Ref<DirectionalLight> Scene::GetDirLight()
+Ref<DirectionalLight> GamerEngine::Scene::GetDirLight()
 {
 	return myDirectionalLight;
 }
 
-Ref<EnvironmentLight> Scene::GetEnvLight()
+Ref<EnvironmentLight> GamerEngine::Scene::GetEnvLight()
 {
 	return myEnvironmentLight;
 }
 
-void Scene::SceneReady(bool isSceneReady)
+void GamerEngine::Scene::SceneReady(bool isSceneReady)
 {
 	mySceneIsReady = isSceneReady;
 }
 
-void Scene::Clean()
+void GamerEngine::Scene::Clean()
 {
 	Light::Reset();
 }
 
-std::vector<Light*>& Scene::GetLights()
+std::vector<Light*>& GamerEngine::Scene::GetLights()
 {
 	CommonUtilities::MergeSortPtr(myLightToRender);
 	return myLightToRender;
 }
 
-void Scene::RemoveLight(const Light* aLight)
+void GamerEngine::Scene::RemoveLight(const Light* aLight)
 {
 	for(int i = 0; i < myLightToRender.size(); i++)
 	{
@@ -466,83 +466,83 @@ void Scene::RemoveLight(const Light* aLight)
 	}
 }
 
-void Scene::ResetLights()
+void GamerEngine::Scene::ResetLights()
 {
 	myLightToRender.clear();
 }
 
-void Scene::RenderLight(Light* aLight)
+void GamerEngine::Scene::RenderLight(Light* aLight)
 {
 	myLightToRender.push_back(aLight);
 }
 
-void Scene::SetSceneStatus(SceneStatus aSceneStatus)
+void GamerEngine::Scene::SetSceneStatus(SceneStatus aSceneStatus)
 {
 	mySceneStatus = aSceneStatus;
 }
 
-SceneStatus Scene::GetSceneStatus() const
+GamerEngine::SceneStatus GamerEngine::Scene::GetSceneStatus() const
 {
 	return mySceneStatus;
 }
 
-bool Scene::IsReady() const
+bool GamerEngine::Scene::IsReady() const
 {
 	return mySceneIsReady;
 }
 
-void Scene::SetCameraHandle(const std::function<void(Entity)>& aCameraHandle)
+void GamerEngine::Scene::SetCameraHandle(const std::function<void(Entity)>& aCameraHandle)
 {
 	myEditorCamHandler = aCameraHandle;
 }
 
-void Scene::SetPath(const std::string& aPath)
+void GamerEngine::Scene::SetPath(const std::string& aPath)
 {
 	myPath = aPath;
 }
 
 template <typename T>
-void Scene::OnComponentAdded(Entity entity, T& component)
+void GamerEngine::Scene::OnComponentAdded(Entity entity, T& component)
 {
 	//static_assert(sizeof(T) == 0);
 }
 
 template<>
-void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
+void GamerEngine::Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
+void GamerEngine::Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
+void GamerEngine::Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+void GamerEngine::Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
+void GamerEngine::Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
+void GamerEngine::Scene::OnComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<ParticleEmitter>(Entity entity, ParticleEmitter& component)
+void GamerEngine::Scene::OnComponentAdded<ParticleEmitter>(Entity entity, ParticleEmitter& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<DirectionalLightComponent>(Entity entity, DirectionalLightComponent& component)
+void GamerEngine::Scene::OnComponentAdded<DirectionalLightComponent>(Entity entity, DirectionalLightComponent& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<SpotLightComponent>(Entity entity, SpotLightComponent& component)
+void GamerEngine::Scene::OnComponentAdded<SpotLightComponent>(Entity entity, SpotLightComponent& component)
 {}
 
 template<>
-void Scene::OnComponentAdded<PointLightComponent>(Entity entity, PointLightComponent& component)
+void GamerEngine::Scene::OnComponentAdded<PointLightComponent>(Entity entity, PointLightComponent& component)
 {}

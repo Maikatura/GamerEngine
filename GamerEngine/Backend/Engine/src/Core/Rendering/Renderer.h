@@ -8,7 +8,12 @@
 #include "Sort/Sort.hpp"
 
 class ParticleEmitter;
-class Entity;
+
+namespace GamerEngine
+{
+	class Entity;
+	
+}
 
 class Renderer
 {
@@ -21,7 +26,7 @@ public:
 		myProjection = aProjection;
 	}
 
-	static void Render(Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom);
+	static void Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom);
 	static void RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom);
 	static void RenderLight(Light* aLight);
 

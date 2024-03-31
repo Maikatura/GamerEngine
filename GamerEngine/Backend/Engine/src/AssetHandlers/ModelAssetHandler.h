@@ -20,7 +20,7 @@ namespace ofbx
 
 class ModelAssetHandler
 {
-	std::vector<Ref<ModelInstance>> myModelRegistry;
+	std::vector<Ref<GamerEngine::Model>> myModelRegistry;
 
 	std::vector<std::thread> myThreads;
 	std::queue<std::function<void()>> myTaskQueue;
@@ -54,7 +54,7 @@ public:
 	bool LoadAnimationData(const std::wstring& aModelName, const std::wstring& someFilePath);
 
 	//Ref<Model> GetModel(const std::wstring& aFilePath);
-	Ref<ModelInstance> GetModelInstance(const std::wstring& aModelName);
+	Ref<GamerEngine::Model> GetModelInstance(const std::wstring& aModelName);
 
 
 	void EnqueueLoadTask(std::function<void()> task)
@@ -108,7 +108,7 @@ private:
 	
 
 private:
-	std::array<D3D11_INPUT_ELEMENT_DESC, InputLayoutSize> CreateLayout();
+	
 
 };
 
