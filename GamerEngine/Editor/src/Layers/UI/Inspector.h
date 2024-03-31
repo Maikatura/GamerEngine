@@ -13,15 +13,15 @@ public:
 
 	void OnImGuiRender() override;
 
-	void DrawSceneObject(Entity aEntity);
-	void DrawFileObject(Entity aEntity);
+	void DrawSceneObject(GamerEngine::Entity aEntity);
+	void DrawFileObject(GamerEngine::Entity aEntity);
 
 
 	template <typename T>
-	static void DrawComponent(const std::string& aName, Entity aEntity, std::function<void(T&, Entity)> aFunction);
+	static void DrawComponent(const std::string& aName, GamerEngine::Entity aEntity, std::function<void(T&, GamerEngine::Entity)> aFunction);
 
-	void AddComponent(Entity aEntity);
-	bool ShowTexturePicker(Entity aEntity, Ref<Material>& selectedMaterial, TextureType textureType);
+	void AddComponent(GamerEngine::Entity aEntity);
+	bool ShowTexturePicker(GamerEngine::Entity aEntity, Ref<Material>& selectedMaterial, TextureType textureType);
 
 private:
 

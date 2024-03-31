@@ -27,7 +27,7 @@ EditorView::EditorView() : Layer("Scene"), myStartTranslate(TransformComponent()
 
 void EditorView::OnImGuiRender()
 {
-	Entity entity = SelectionData::GetEntityObject();
+	GamerEngine::Entity entity = SelectionData::GetEntityObject();
 
 	if(!SceneManager::Get().GetScene())
 	{
@@ -38,12 +38,12 @@ void EditorView::OnImGuiRender()
 
 	//RenderGameView();
 
-	const Ref<Entity> thisEntity = MakeRef<Entity>(entity);
+	const Ref<GamerEngine::Entity> thisEntity = MakeRef<GamerEngine::Entity>(entity);
 
 	RenderSceneView(thisEntity);
 }
 
-void EditorView::RenderSceneView(const Ref<Entity>& aEntity)
+void EditorView::RenderSceneView(const Ref<GamerEngine::Entity>& aEntity)
 {
 	static ImGuiWindowFlags gizmoWindowFlags = 0;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
@@ -86,7 +86,7 @@ void EditorView::RenderSceneView(const Ref<Entity>& aEntity)
 	ImGui::PopStyleVar();
 }
 
-void EditorView::RenderEntityParts(const Ref<Entity>& aEntity)
+void EditorView::RenderEntityParts(const Ref<GamerEngine::Entity>& aEntity)
 {
 	EditTransform(aEntity);
 }
@@ -131,7 +131,7 @@ Vector2f EditorView::MouseToViewport(Vector2f aWindowSize, float windowScale)
  	return { 0,0 };
 }
 
-void EditorView::EditTransform(const Ref<Entity>& aEntity)
+void EditorView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 {
 
 	if (!SceneManager::Get().GetScene()->GetRegistry().valid(aEntity->GetHandle()))

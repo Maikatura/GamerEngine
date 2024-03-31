@@ -12,7 +12,7 @@ struct ClientData
 	uint64_t ClientID;
 	float MoveSpeed;
 	std::chrono::steady_clock::time_point Time;
-	Entity myEntity;
+	GamerEngine::Entity myEntity;
 	Vector3f Translation;
 	Vector3f Rotation;
 	bool IsServer;

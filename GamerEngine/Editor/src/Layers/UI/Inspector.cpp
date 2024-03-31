@@ -25,7 +25,7 @@ void Inspector::OnImGuiRender()
 {
 	BeginMenu();
 
-	Entity entity = SelectionData::GetEntityObject();
+	GamerEngine::Entity entity = SelectionData::GetEntityObject();
 
 	if (SceneManager::Get().GetScene())
 	{
@@ -42,7 +42,7 @@ void Inspector::OnImGuiRender()
 	EndMenu();
 }
 
-void Inspector::DrawSceneObject(Entity aEntity)
+void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 {
 	static ImGuiInputTextFlags flagsReadOnly;
 	flagsReadOnly |= ImGuiInputTextFlags_ReadOnly;
@@ -598,7 +598,7 @@ void Inspector::DrawSceneObject(Entity aEntity)
 
 }
 
-void Inspector::AddComponent(Entity aEntity)
+void Inspector::AddComponent(GamerEngine::Entity aEntity)
 {
 	if (ImGui::ButtonCenter("Add Component"))
 	{
@@ -638,7 +638,7 @@ void Inspector::AddComponent(Entity aEntity)
 
 
 template<typename T>
-void Inspector::DrawComponent(const std::string& aName, Entity aEntity, std::function<void(T&, Entity)> aFunction)
+void Inspector::DrawComponent(const std::string& aName, GamerEngine::Entity aEntity, std::function<void(T&, GamerEngine::Entity)> aFunction)
 {
 
 	const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
@@ -680,7 +680,7 @@ void Inspector::DrawComponent(const std::string& aName, Entity aEntity, std::fun
 	}
 }
 
-bool Inspector::ShowTexturePicker(Entity aEntity, Ref<Material>& selectedMaterial, TextureType textureType)
+bool Inspector::ShowTexturePicker(GamerEngine::Entity aEntity, Ref<Material>& selectedMaterial, TextureType textureType)
 {
 	bool textureChanged = false;
 	static bool openPopup = false; // Track whether to open the popup
@@ -740,7 +740,7 @@ bool Inspector::ShowTexturePicker(Entity aEntity, Ref<Material>& selectedMateria
 }
 
 #pragma optimize( "", off )
-void Inspector::DrawFileObject(Entity aEntity)
+void Inspector::DrawFileObject(GamerEngine::Entity aEntity)
 {
 	aEntity;
 	Ref<SelectedObject> selectedObjectData = SelectionData::GetSelectedObject();

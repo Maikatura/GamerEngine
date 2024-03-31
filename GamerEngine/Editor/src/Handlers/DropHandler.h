@@ -8,5 +8,5 @@ class DropHandler
 public:
 	static std::wstring DropFileScene(ImRect dropRect = { 0,0,0,0 }, ImGuiID aId = 0);
 
-	static std::wstring DropFileEntity(Entity& aEntity);
+	static std::wstring DropFileEntity(GamerEngine::Entity& aEntity);
 };

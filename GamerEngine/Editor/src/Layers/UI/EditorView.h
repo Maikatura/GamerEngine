@@ -24,7 +24,7 @@ public:
 
 	void OnImGuiRender() override;
 
-	void RenderSceneView(const Ref<Entity>& aEntity);
+	void RenderSceneView(const Ref<GamerEngine::Entity>& aEntity);
 	void RenderGameView();
 
 	void OnUpdate() override;
@@ -33,9 +33,9 @@ private:
 
 	Vector2f MouseToViewport(Vector2f aWindowSize, float windowScale);
 
-	void EditTransform(const Ref<Entity>& aEntity);
+	void EditTransform(const Ref<GamerEngine::Entity>& aEntity);
 
-	void RenderEntityParts(const Ref<Entity>& aEntity);
+	void RenderEntityParts(const Ref<GamerEngine::Entity>& aEntity);
 
 	int myTabOpen = 0;
 	int myRenderPass = 0;

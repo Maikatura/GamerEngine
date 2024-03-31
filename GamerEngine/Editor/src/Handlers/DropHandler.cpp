@@ -64,7 +64,7 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 	return L"";
 }
 
-std::wstring DropHandler::DropFileEntity(Entity& aEntity)
+std::wstring DropHandler::DropFileEntity(GamerEngine::Entity& aEntity)
 {
 
 	bool hasFound;

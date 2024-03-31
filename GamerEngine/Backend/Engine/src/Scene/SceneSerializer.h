@@ -4,12 +4,16 @@ namespace YAML
 	class Node;
 }
 
-class Scene;
+
+namespace GamerEngine
+{
+	class Scene;
+}
 
 class SceneSerializer
 {
 public:
-	SceneSerializer(Scene* scene);
+	SceneSerializer(GamerEngine::Scene* scene);
 
 	void Serialize(const std::string& aFilepath);
 	void SerializeRuntime(const std::string& aFilepath);
@@ -17,9 +21,9 @@ public:
 	bool Deserialize(const std::string& filepath, bool loadTextures = true);
 	bool DeserializeRuntime(const std::string& aFilepath);
 
-	static void DeserializeEntity(YAML::Node aEntityNode, Scene* aScene, bool isHeadless = false);
+	static void DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Scene* aScene, bool isHeadless = false);
 private:
-	Scene* myScene;
+	GamerEngine::Scene* myScene;
 
 };
 
