@@ -110,7 +110,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Scripting\ScriptUtils.h" />
     <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\AssetHandlers\LightAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\MetaFileHandler.h" />
@@ -222,6 +221,7 @@
     <ClInclude Include="src\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Scene\UUID.h" />
     <ClInclude Include="src\Scripting\ScriptEngine.h" />
+    <ClInclude Include="src\Scripting\ScriptUtils.h" />
     <ClInclude Include="src\Time.hpp" />
     <ClInclude Include="src\Types\EnumTypes.h" />
     <ClInclude Include="src\Types\FileExtensions.h" />
@@ -229,7 +229,6 @@
     <ClInclude Include="src\VR\VRSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Scripting\ScriptUtils.cpp" />
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp" />
     <ClCompile Include="src\AssetHandlers\LightAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\MetaFileHandler.cpp" />
@@ -308,6 +307,7 @@
     <ClCompile Include="src\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\Scene\UUID.cpp" />
     <ClCompile Include="src\Scripting\ScriptEngine.cpp" />
+    <ClCompile Include="src\Scripting\ScriptUtils.cpp" />
     <ClCompile Include="src\VR\VRSystem.cpp" />
   </ItemGroup>
   <ItemGroup>

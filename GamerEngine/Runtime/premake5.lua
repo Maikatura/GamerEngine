@@ -48,7 +48,6 @@ includedirs{
 	"%{IncludeDirs.YamlCpp}",
 	"%{IncludeDirs.ImGuiOnly}",
 	"%{IncludeDirs.Entt}",
-	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.Json}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
@@ -56,7 +55,8 @@ includedirs{
     	"%{IncludeDirs.FBXSDK}",
 	"%{IncludeDirs.Flecs}",
 	
-	"%{IncludeDirs.TurNet}"
+	"%{IncludeDirs.TurNet}",
+	"%{IncludeDirs.mono}"
 }
 
 externalincludedirs {
@@ -82,8 +82,12 @@ links
 	"freetype",	
 
 	"TurNet",
-	"ws2_32.lib",
-	"%{Libs.OpenVR}"
+	"%{Libs.OpenVR}",
+	"%{Libs.mono}",
+	"%{Libs.WinSock}",
+	"%{Libs.WinMM}",
+	"%{Libs.WinVersion}",
+	"%{Libs.BCrypt}"
 }
 
 files 
