@@ -23,6 +23,7 @@ GamerEngine/Bin/Assets/Exclude/*
 !**/Layers/Debug
 !**/ThirdParty/FBXSDK/lib/debug
 !**/ThirdParty/FBXSDK/lib/release
+!**/GamerEngine/Backend/vendor/mono/lib/**
 
 
 
