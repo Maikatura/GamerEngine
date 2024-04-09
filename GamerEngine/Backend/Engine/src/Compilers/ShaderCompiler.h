@@ -2,7 +2,6 @@
 #include <d3dcompiler.h>
 #include <string>
 #include <fstream>
-#include "Debugger/ConsoleHelper.h"
 
 class ShaderCompiler
 {

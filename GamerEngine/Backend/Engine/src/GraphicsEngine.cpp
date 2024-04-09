@@ -79,7 +79,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		return false;
 	}
 
-	Engine::Font font("resources\\fonts\\OpenSans.ttf");
+	myFont = MakeRef<GamerEngine::Font>("resources\\fonts\\OpenSans.ttf");
 
 	myForwardRenderer = MakeRef<ForwardRenderer>();
 	myDeferredRenderer = MakeRef<DeferredRenderer>();
@@ -422,7 +422,7 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 
 	//RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
 	//RendererBase::SetBlendState(BlendState::None);
-	
+
 
 	
 	{
@@ -484,6 +484,9 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 		RendererBase::SetBlendState(BlendState::None);
 		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
+
+	Renderer::RenderString("Test", myFont, Matrix4x4f(1.0f), Vector4f(1.0f));
+
 }
 
 void GraphicsEngine::OnFrameRender() const

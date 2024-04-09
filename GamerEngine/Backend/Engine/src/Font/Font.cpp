@@ -8,7 +8,7 @@
 #include "Utilites/StringCast.h"
 #include <Font/MSDFData.h>
 
-namespace Engine
+namespace GamerEngine
 {
 
 	template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S,N> GenFunc>
@@ -58,7 +58,7 @@ namespace Engine
 		return texture;
 	};
 
-	Font::Font(const std::filesystem::path& aFontPath) : myData(new MSDFData())
+	GamerEngine::Font::Font(const std::filesystem::path& aFontPath) : myData(new GamerEngine::MSDFData())
 	{
 		msdfgen::FreetypeHandle* ft = msdfgen::initializeFreetype();
 		std::string fileString = aFontPath.string();

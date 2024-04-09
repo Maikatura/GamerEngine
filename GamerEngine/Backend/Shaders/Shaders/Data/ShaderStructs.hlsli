@@ -125,6 +125,8 @@ struct RectVertexOutput
 };
 
 
+
+
 cbuffer FrameBuffer	: register(b0)
 {
 	float4x4 FB_ToView;
@@ -162,4 +164,11 @@ cbuffer LineCBuffer : register(b6)
     float4x4 LCB_ToView;
     float4x4 LCB_ToProjection;
 };
+
+cbuffer TextCBuffer : register(b7)
+{
+    float4x4 Text_Position;
+    float4 Text_Color;
+};
+
 #endif

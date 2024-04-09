@@ -110,6 +110,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="src\Data\FastVector.hpp" />
     <ClInclude Include="src\Data\HashTable.hpp" />
     <ClInclude Include="src\Data\Pointer.h" />
     <ClInclude Include="src\Data\SharedRef.h" />

@@ -3,7 +3,7 @@
 #include "FontGeometry.h"
 #include "GlyphGeometry.h"
 
-namespace Engine
+namespace GamerEngine
 {
 	
 

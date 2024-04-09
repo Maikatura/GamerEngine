@@ -9,6 +9,7 @@
 #include <functional>
 
 #include "openvr.h"
+#include "Font/Font.h"
 #include "Utilites/Pointers.h"
 
 enum class VREye;
@@ -26,6 +27,7 @@ class GraphicsEngine
 {
 	SIZE myWindowSize{0,0};
 	HWND myWindowHandle{};
+	Ref<GamerEngine::Font> myFont;
 
 	// Container window message pump.
 	static LRESULT CALLBACK WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam);

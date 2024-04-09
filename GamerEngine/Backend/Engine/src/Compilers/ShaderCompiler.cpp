@@ -1,8 +1,10 @@
 ﻿#include "GraphicsEngine.pch.h"
 #include "ShaderCompiler.h"
 
+#include "Debugger/ConsoleHelper.h"
+
 ID3DBlob* ShaderCompiler::CompileShader(const std::string& sourceCode, const std::string& entryPoint,
-	const std::string& shaderModel, const std::string& outputFilePath)
+                                        const std::string& shaderModel, const std::string& outputFilePath)
 {
 	ID3DBlob* compiledShader = nullptr;
 	ID3DBlob* errorMessage = nullptr;

@@ -51,8 +51,6 @@ public:
 		shared_ptr<EnvironmentLight>& anEnvironmentLight);
 
 
-	void RenderString(const std::string& aString, Ref<Engine::Font> aFont, Matrix4x4f aTransform, Vector4f aColor);
-
 	void BuildDepth();
 
 	void ClearBuffer();

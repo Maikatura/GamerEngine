@@ -5,7 +5,7 @@
 #include "Utilites/Pointers.h"
 
 
-namespace Engine
+namespace GamerEngine
 {
 
 	struct MSDFData;

@@ -1,6 +1,8 @@
 #pragma once
 #include <cassert>
 
+#include "MathTypes.hpp"
+
 
 namespace CommonUtilities
 {
@@ -23,6 +25,7 @@ namespace CommonUtilities
 		Vector4<T>(const Vector4<T>& aVector) = default;
 
 		Vector4<T>(Vector3<T> aVec3, const T& aW = static_cast<T>(0));
+		Vector4<T>(CommonUtilities::Vector2<float> aVector2, float aY, float aZ);
 
 		//Assignment operator (compiler generated)
 		Vector4<T>& operator=(const Vector4<T>& aVector) = default;
@@ -86,6 +89,12 @@ namespace CommonUtilities
 		y(aVec3.y),
 		z(aVec3.z),
 		w(aW)
+	{
+
+	}
+
+	template <class T>
+	Vector4<T>::Vector4(CommonUtilities::Vector2<float> aVector2, float aZ, float aW) : x(aVector2.x), y(aVector2.y), z(aZ), w(aW)
 	{
 
 	}
