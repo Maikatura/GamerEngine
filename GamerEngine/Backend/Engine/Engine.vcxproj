@@ -110,6 +110,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\AssetHandlers\FontAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\AssetHandlers\LightAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\MetaFileHandler.h" />
@@ -230,6 +231,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp" />
+    <ClCompile Include="src\AssetHandlers\FontAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\LightAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\MetaFileHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\ModelAssetHandler.cpp" />

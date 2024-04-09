@@ -20,6 +20,16 @@ namespace GamerEngine
 	
 }
 
+
+struct TextVertex
+{
+	Vector3f Position;
+	Vector4f Color;
+	Vector2f TexCoord;
+
+	int EntityID;
+};
+
 class Renderer
 {
 public:
