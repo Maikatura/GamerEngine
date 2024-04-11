@@ -53,6 +53,7 @@ namespace CommonUtilities
 		static Vector3<T> Up();
 		static Vector3<T> Forward();
 
+		static Vector3<T> Abs(const Vector3<T>& aRval);
 
 	};
 
@@ -217,6 +218,12 @@ namespace CommonUtilities
 	Vector3<T> Vector3<T>::Forward()
 	{
 		return Vector3<T> { static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) };
+	}
+
+	template <class T>
+	Vector3<T> Vector3<T>::Abs(const Vector3<T>& aRval)
+	{
+		return { std::abs(aRval.x), std::abs(aRval.y), std::abs(aRval.z) };
 	}
 
 	template <class T>

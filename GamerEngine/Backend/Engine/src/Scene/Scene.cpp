@@ -405,11 +405,11 @@ void GamerEngine::Scene::OnRender()
 
 
 					
-					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetMatrix());
+					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetPosition(), transform.GetRotation(), transform.GetScale());
 
-					LineRenderer::Get().DrawCube(transform.GetPosition(), transformedBounds.GetExtents(), transform.GetRotation());
+					LineRenderer::Get().DrawCube(transform.GetPosition(), transformedBounds.GetExtentsUnCentered(), transform.GetRotation());
 
-					if (transformedBounds.IsOnFrustum(cameraFrustum, transform.GetMatrix()))
+					if (transformedBounds.IsOnFrustum(cameraFrustum))
 					 {
 						Entity entityPtr = Entity{ entity, this };
 						Renderer::Render(&entityPtr, model, transform);

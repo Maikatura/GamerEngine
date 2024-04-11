@@ -13,7 +13,7 @@ configmap {
 }
 targetdir ("%{wks.location}/Bin/")
 objdir ("%{wks.location}/Temp/Intermediate/%{cfg.buildcfg}/%{prj.name}")
-targetname("%{cfg.buildcfg}/%{prj.name}")
+targetname("%{prj.name}_%{cfg.buildcfg}")
 
 pchheader "Editor.pch.h"
 pchsource "src/Editor.pch.cpp"

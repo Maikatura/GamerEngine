@@ -25,8 +25,9 @@ namespace CommonUtilities
 		constexpr const Vector3<T>& GetMax() const;
 		constexpr Vector3<T> GetCenter() const;
 		constexpr Vector3<T> GetExtents() const;
+		constexpr Vector3<T> GetExtentsUnCentered() const;
 
-		constexpr AABB3D<T> Transform(const Matrix4x4<T>& aTransform) const;
+		constexpr AABB3D<T> Transform(Vector3<T> aPosition, Vector3<T> aRotation, Vector3<T> aScale) const;
 
 		constexpr bool Intersects(const AABB3D<T>& aAABB) const;
 		constexpr bool IsOnFrustum(const TFrustum<T>& aFrustum) const;
@@ -139,9 +140,44 @@ namespace CommonUtilities
 	}
 
 	template <typename T>
-constexpr AABB3D<T> AABB3D<T>::Transform(const Matrix4x4<T>& aTransform) const
+	constexpr Vector3<T> AABB3D<T>::GetExtentsUnCentered() const
 	{
-		return { GetCenter(), GetExtents() * aTransform.GetScale() };
+		return myMax - myMin;
+	}
+
+	template <typename T>
+	constexpr AABB3D<T> AABB3D<T>::Transform(Vector3<T> aPosition, Vector3<T> aRotation, Vector3<T> aScale ) const
+	{
+	
+		aRotation *= static_cast<T>(3.1415f / 180.0f);
+
+		// Create rotation matrix
+		Matrix4x4<T> rotationMatrix = Matrix4x4<T>::CreateRotationAroundX(aRotation.x) * Matrix4x4<T>::CreateRotationAroundY(aRotation.y) * Matrix4x4<T>::CreateRotationAroundZ(aRotation.z);
+
+		// Define the min and max points of the cube, taking scale into account
+		Vector3<T> halfSize = GetExtents();
+		Vector3<T> halfScaledSize = halfSize * Vector3<T>::Abs(aScale);
+		Vector3<T> minPoint = aPosition - halfScaledSize;
+		Vector3<T> maxPoint = aPosition + halfScaledSize;
+
+		// Apply rotation to min and max points
+		Vector3<T> relativeMinPosition = minPoint - aPosition;
+		Vector3<T> rotatedMinPosition = rotationMatrix * relativeMinPosition;
+		minPoint = aPosition + rotatedMinPosition;
+
+		Vector3<T> relativeMaxPosition = maxPoint - aPosition;
+		Vector3<T> rotatedMaxPosition = rotationMatrix * relativeMaxPosition;
+		maxPoint = aPosition + rotatedMaxPosition;
+
+		// Initialize the cube with center and extents
+		//return InitWithCenterAndExtents<T>((minPoint + maxPoint) * static_cast<T>(0.5), (maxPoint - minPoint) * static_cast<T>(0.5));
+
+		AABB3D<T> returnObject;
+
+		returnObject.InitWithCenterAndExtents((minPoint + maxPoint) * 0.5f, (maxPoint - minPoint) * 0.5f);
+
+		return returnObject;
+
 	}
 
 

@@ -10,6 +10,12 @@ ShaderHandler& ShaderHandler::Get()
 
 ShaderHandler::ShaderHandler()
 {
+
+    if (!std::filesystem::exists("Shaders\\Custom"))
+    {
+        std::filesystem::create_directories("Shaders\\Custom");
+    }
+
     for (const auto& entry : std::filesystem::directory_iterator("Shaders\\Custom"))
     {
         if (entry.is_regular_file())

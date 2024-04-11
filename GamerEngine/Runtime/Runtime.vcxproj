@@ -57,21 +57,21 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\Intermediate\Debug\Runtime\</IntDir>
-    <TargetName>Debug/Runtime</TargetName>
+    <TargetName>Runtime_Debug</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\Intermediate\Release\Runtime\</IntDir>
-    <TargetName>Release/Runtime</TargetName>
+    <TargetName>Runtime_Release</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\Intermediate\Distribution\Runtime\</IntDir>
-    <TargetName>Distribution/Runtime</TargetName>
+    <TargetName>Runtime_Distribution</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

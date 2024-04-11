@@ -44,14 +44,14 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\Intermediate\Debug\Editor\</IntDir>
-    <TargetName>Debug/Editor</TargetName>
+    <TargetName>Editor_Debug</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\Bin\</OutDir>
     <IntDir>..\Temp\Intermediate\Release\Editor\</IntDir>
-    <TargetName>Release/Editor</TargetName>
+    <TargetName>Editor_Release</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
