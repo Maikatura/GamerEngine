@@ -7,6 +7,7 @@
 #include "Core/Rendering/Renderer.h"
 #include "Components/AllComponents.h"
 #include "Components/NativeScriptComponent.h"
+#include "Core/Rendering/LineRenderer.h"
 
 //#include "flecs.h"
 
@@ -402,8 +403,13 @@ void GamerEngine::Scene::OnRender()
 				if(model.GetModel())
 				{
 
-					 auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetMatrix());
-					 if (transformedBounds.IsOnFrustum(cameraFrustum))
+
+					
+					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetMatrix());
+
+					LineRenderer::Get().DrawCube(transform.GetPosition(), transformedBounds.GetExtents(), transform.GetRotation());
+
+					if (transformedBounds.IsOnFrustum(cameraFrustum, transform.GetMatrix()))
 					 {
 						Entity entityPtr = Entity{ entity, this };
 						Renderer::Render(&entityPtr, model, transform);

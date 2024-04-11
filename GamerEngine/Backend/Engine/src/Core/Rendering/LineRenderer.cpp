@@ -116,113 +116,40 @@ void LineRenderer::DrawLine(const Vector3f& aStartPoint, const Vector3f& aEndPoi
 void LineRenderer::DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation,  Vector4f aColor)
 {
 #if _DEBUG
-	// Data
-	float halfSizeX = (aSize.x * 0.5f);
-	float halfSizeY = (aSize.y * 0.5f);
-	float halfSizeZ = (aSize.z * 0.5f);
 
-	Vector3f p1;
-	Vector3f p2;
-	Vector3f p3;
-	Vector3f p4;
-	Vector3f p5;
-	Vector3f p6;
-	Vector3f p7;
-	Vector3f p8;
+		// Convert rotation from degrees to radians
+		aRotation *= 3.1415f / 180.0f;
 
-	LineVertex v1;
-	LineVertex v2;
-	LineVertex v3;
-	LineVertex v4;
+		// Create rotation matrix
+		Matrix4x4f rotationMatrix = Matrix4x4f::CreateRotationAroundX(aRotation.x) * Matrix4x4f::CreateRotationAroundY(aRotation.y) * Matrix4x4f::CreateRotationAroundZ(aRotation.z);
 
+		// Define the 8 points of the cube
+		Vector3f halfSize = aSize * 0.5f;
+		std::array<Vector3f, 8> points = {
+			aPosition + Vector3f(-halfSize.x, -halfSize.y, -halfSize.z),
+			aPosition + Vector3f(halfSize.x, -halfSize.y, -halfSize.z),
+			aPosition + Vector3f(halfSize.x, -halfSize.y, halfSize.z),
+			aPosition + Vector3f(-halfSize.x, -halfSize.y, halfSize.z),
+			aPosition + Vector3f(-halfSize.x, halfSize.y, -halfSize.z),
+			aPosition + Vector3f(halfSize.x, halfSize.y, -halfSize.z),
+			aPosition + Vector3f(halfSize.x, halfSize.y, halfSize.z),
+			aPosition + Vector3f(-halfSize.x, halfSize.y, halfSize.z)
+		};
 
-	aRotation *= 3.1415f / 180.0f;
+		// Apply rotation to each point
+		for (Vector3f& point : points) {
+			Vector3f relativePosition = point - aPosition;
+			Vector3f rotatedPosition = rotationMatrix * relativePosition;
+			point = aPosition + rotatedPosition;
+		}
 
-	// Lower Half 
-	{
-		p1 = { aPosition.x + halfSizeX, aPosition.y - halfSizeY, aPosition.z + halfSizeZ };
-		p2 = { aPosition.x + halfSizeX, aPosition.y - halfSizeY, aPosition.z - halfSizeZ };
-		p3 = { aPosition.x - halfSizeX, aPosition.y - halfSizeY, aPosition.z - halfSizeZ };
-		p4 = { aPosition.x - halfSizeX, aPosition.y - halfSizeY, aPosition.z + halfSizeZ };
+		// Draw the 12 edges of the cube
+		for (int i = 0; i < 4; ++i) {
+			DrawLine(points[i], points[(i + 1) % 4], aColor); // Bottom square
+			DrawLine(points[i + 4], points[((i + 1) % 4) + 4], aColor); // Top square
+			DrawLine(points[i], points[i + 4], aColor); // Vertical lines
+		}
 
-		v1.Position = { p1.x , p1.y , p1.z, 1.0f };
-		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v2.Position = { p2.x , p2.y , p2.z, 1.0f };
-		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-
-		v3.Position = { p3.x , p3.y , p3.z , 1.0f };
-		v3.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v4.Position = { p4.x , p4.y , p4.z, 1.0f };
-		v4.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		myLinesToRender.push_back({ v1, v2 });
-		myLinesToRender.push_back({ v2, v3 });
-		myLinesToRender.push_back({ v3, v4 });
-		myLinesToRender.push_back({ v4, v1 });
-	}
-	// Top Half
-	{
-		p5 = { aPosition.x + halfSizeX , aPosition.y + halfSizeY, aPosition.z + halfSizeZ };
-		p6 = { aPosition.x + halfSizeX , aPosition.y + halfSizeY, aPosition.z - halfSizeZ };
-		p7 = { aPosition.x - halfSizeX , aPosition.y + halfSizeY, aPosition.z - halfSizeZ };
-		p8 = { aPosition.x - halfSizeX , aPosition.y + halfSizeY, aPosition.z + halfSizeZ };
-
-
-		v1.Position = { p5.x , p5.y , p5.z, 1.0f };
-		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v2.Position = { p6.x , p6.y , p6.z , 1.0f };
-		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v3.Position = { p7.x , p7.y , p7.z, 1.0f };
-		v3.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v4.Position = { p8.x , p8.y , p8.z , 1.0f };
-		v4.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		myLinesToRender.push_back({ v1, v2 });
-		myLinesToRender.push_back({ v2, v3 });
-		myLinesToRender.push_back({ v3, v4 });
-		myLinesToRender.push_back({ v4, v1 });
-	}
-	// Between Lower and Top
-	{
-		v1.Position = { p1.x , p1.y , p1.z, 1.0f };
-		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v2.Position = { p5.x , p5.y , p5.z , 1.0f };
-		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		myLinesToRender.push_back({ v1, v2 });
-
-		v1.Position = { p2.x , p2.y , p2.z , 1.0f };
-		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v2.Position = { p6.x , p6.y , p6.z , 1.0f };
-		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		myLinesToRender.push_back({ v1, v2 });
-
-		v1.Position = { p3.x , p3.y , p3.z , 1.0f };
-		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v2.Position = { p7.x , p7.y , p7.z , 1.0f };
-		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-
-		myLinesToRender.push_back({ v1, v2 });
-
-		v1.Position = { p4.x , p4.y , p4.z, 1.0f };
-		v1.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		v2.Position = { p8.x , p8.y , p8.z , 1.0f };
-		v2.Color = { aColor.x , aColor.y , aColor.z, aColor.w };
-
-		myLinesToRender.push_back({ v1, v2 });
-	}
 #endif
 }
 
@@ -292,6 +219,8 @@ void LineRenderer::Render(const Matrix4x4f& aView,const Matrix4x4f& aProjection)
 		DX11::Get().GetContext()->IASetVertexBuffers(0, 1, myBuffer.GetAddressOf(), &stride, &offset);
 		DX11::Get().GetContext()->Draw(2, 0);
 	}
+
+	Clear();
 #endif
 }
 

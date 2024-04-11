@@ -583,7 +583,6 @@ void GraphicsEngine::OnFrameRender() const
 
 
 	}
-		LineRenderer::Get().DrawLine({500,0,0}, {500,10000,0}, {1,0,0,1}, 1.0f);
 
 	{
 		PROFILE_CPU_SCOPE("Render Screen");
