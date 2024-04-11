@@ -1,11 +1,15 @@
 #pragma once
-#include "Matrix4x4.hpp"
 #include "Vector3.hpp"
 #include "Vector4.hpp"
 #include <array>
 
 namespace CommonUtilities
 {
+
+
+	template<typename T>
+	class Matrix4x4;
+
 	template<typename T>
 	class Matrix3x3
 	{
@@ -20,27 +24,19 @@ namespace CommonUtilities
 		static Matrix3x3<T> CreateRotationAroundZ(T aAngleInRadians);
 		static Matrix3x3<T> Transpose(const Matrix3x3<T>& aMatrixToTranspose);
 
-		std::array<std::array<T, 3>, 3> myMatrix;
+		std::array<T, 9> myMatrix;
 
 	};
 
 	template <typename T>
 	Matrix3x3<T>::Matrix3x3()
 	{
-		for (unsigned int i = 1; i <= 3; ++i)
-		{
-			for (unsigned int j = 1; j <= 3; ++j)
-			{
-				if (i == j)
-				{
-					myMatrix[i - 1][j - 1] = 1;
-				}
-				else
-				{
-					myMatrix[i - 1][j - 1] = 0;
-				}
-			}
-		}
+		myMatrix = {
+			static_cast<T>(1), static_cast<T>(0), static_cast<T>(0),
+			static_cast<T>(0), static_cast<T>(1), static_cast<T>(0),
+			static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)
+		};
+
 	}
 
 	template <typename T>
@@ -52,11 +48,13 @@ namespace CommonUtilities
 	template <typename T>
 	Matrix3x3<T>::Matrix3x3(const Matrix4x4<T>& aMatrix)
 	{
-		for (unsigned int i = 1; i <= 3; ++i)
+		int index = 0;
+		for (unsigned int i = 0; i < 3; ++i)
 		{
-			for (unsigned int j = 1; j <= 3; ++j)
+			for (unsigned int j = 0; j < 3; ++j)
 			{
-				myMatrix[i - 1][j - 1] = aMatrix(i, j);
+				myMatrix[index] = aMatrix(i + 1, j + 1);
+				index++;
 			}
 		}
 
@@ -65,13 +63,13 @@ namespace CommonUtilities
 	template <typename T>
 	T& Matrix3x3<T>::operator()(const int aRow, const int aColumn)
 	{
-		return myMatrix[aRow - 1][aColumn - 1];
+		return myMatrix[(aRow - 1) * 3 + (aColumn - 1)];
 	}
 
 	template <typename T>
 	const T& Matrix3x3<T>::operator()(const int aRow, const int aColumn) const
 	{
-		return myMatrix[aRow - 1][aColumn - 1];
+		return myMatrix[(aRow - 1) * 3 + (aColumn - 1)];
 	}
 
 	template<typename T>

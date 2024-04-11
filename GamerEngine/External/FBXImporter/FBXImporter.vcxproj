@@ -55,22 +55,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\FBXImporter\Debug\</IntDir>
-    <TargetName>FBXImporter_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\FBXImporter\</IntDir>
+    <TargetName>Debug/FBXImporter</TargetName>
     <TargetExt>.lib</TargetExt>
     <ExternalIncludePath>ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\FBXImporter\Release\</IntDir>
-    <TargetName>FBXImporter_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\FBXImporter\</IntDir>
+    <TargetName>Release/FBXImporter</TargetName>
     <TargetExt>.lib</TargetExt>
     <ExternalIncludePath>ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\FBXImporter\Distribution\</IntDir>
-    <TargetName>FBXImporter_Distribution</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Distribution\FBXImporter\</IntDir>
+    <TargetName>Distribution/FBXImporter</TargetName>
     <TargetExt>.lib</TargetExt>
     <ExternalIncludePath>ThirdParty\FBXSDK\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>

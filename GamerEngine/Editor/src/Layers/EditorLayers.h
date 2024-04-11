@@ -6,10 +6,12 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "Utilites/Pointers.h"
+
 
 class EditorLayers
 {
-	std::vector<std::shared_ptr<Layer>> myLayers;
+	std::vector<Ref<Layer>> myLayers;
 
 public:
 	EditorLayers();
@@ -18,7 +20,7 @@ public:
 	void Init();
 
 
-	void AddLayer(std::shared_ptr<Layer> aLayer);
+	void AddLayer(Ref<Layer> aLayer);
 
 	void Destory();
 
@@ -31,7 +33,7 @@ public:
 	void BeginFrame();
 	void EndFrame();
 
-	void LoadLayout(YAML::Node window, std::vector<std::shared_ptr<Layer>>::const_reference layer);
+	void LoadLayout(YAML::Node window, std::vector<Ref<Layer>>::const_reference layer);
 	bool ShouldRunEngine();
 	void SetShouldEngineRun(bool aCond);
 
@@ -44,5 +46,7 @@ private:
 	std::string myImGuiSettingsFile = "Editor\\Settings\\Layouts\\";
 
 	void AddDefaultLayers();
+
+	bool myShouldProfile = false;
 
 };

@@ -7,6 +7,8 @@
 #include "Shellapi.h"
 #include <string>
 
+#include "Fonts/IconsForkAwesome.h"
+
 static ImGui::MarkdownConfig mdConfig;
 
 static ImFont* H1 = NULL;

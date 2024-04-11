@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\TurNet\Debug\</IntDir>
-    <TargetName>TurNet_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\TurNet\</IntDir>
+    <TargetName>Debug/TurNet</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\TurNet\Release\</IntDir>
-    <TargetName>TurNet_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\TurNet\</IntDir>
+    <TargetName>Release/TurNet</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -58,7 +58,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>26812;26451;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\CryptoPP;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -83,7 +83,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>26812;26451;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\CryptoPP;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -138,11 +138,6 @@
     <ClCompile Include="TurNet\Shared\Managment\WorkerThread.cpp" />
     <ClCompile Include="TurNet\Shared\TurNetworkBase.cpp" />
     <ClCompile Include="TurNet\Shared\Utility\TurTimer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\cryptopp\CryptoPP.vcxproj">
-      <Project>{267AC9BA-1247-24C6-3B60-126E278C5954}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

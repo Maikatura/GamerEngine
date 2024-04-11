@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\CommonUtilities\Debug\</IntDir>
-    <TargetName>CommonUtilities_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\CommonUtilities\</IntDir>
+    <TargetName>Debug/CommonUtilities</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\CommonUtilities\Release\</IntDir>
-    <TargetName>CommonUtilities_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\CommonUtilities\</IntDir>
+    <TargetName>Release/CommonUtilities</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -110,6 +110,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="src\Data\FastVector.hpp" />
     <ClInclude Include="src\Data\HashTable.hpp" />
     <ClInclude Include="src\Data\Pointer.h" />
     <ClInclude Include="src\Data\SharedRef.h" />
@@ -128,7 +129,6 @@
     <ClInclude Include="src\Math\Matrix4x4.hpp" />
     <ClInclude Include="src\Math\Plane.hpp" />
     <ClInclude Include="src\Math\PlaneVolume.hpp" />
-    <ClInclude Include="src\Math\Quaternion.hpp" />
     <ClInclude Include="src\Math\Ray.hpp" />
     <ClInclude Include="src\Math\Sphere.hpp" />
     <ClInclude Include="src\Math\Vector.h" />
@@ -136,11 +136,15 @@
     <ClInclude Include="src\Math\Vector3.hpp" />
     <ClInclude Include="src\Math\Vector4.hpp" />
     <ClInclude Include="src\Sort\Sort.hpp" />
+    <ClInclude Include="src\Utilites\Asserts.h" />
+    <ClInclude Include="src\Utilites\COMInitializer.h" />
     <ClInclude Include="src\Utilites\InputManager.h" />
     <ClInclude Include="src\Utilites\PerformaceTimer.h" />
+    <ClInclude Include="src\Utilites\Pointers.h" />
     <ClInclude Include="src\Utilites\ProfilerMacro.h" />
     <ClInclude Include="src\Utilites\Queue.hpp" />
     <ClInclude Include="src\Utilites\Stack.hpp" />
+    <ClInclude Include="src\Utilites\StringCast.h" />
     <ClInclude Include="src\Utilites\Timer.h" />
     <ClInclude Include="src\Utilites\UtilityFunctions.h" />
     <ClInclude Include="src\Utilites\VisualProfiler.h" />
@@ -149,6 +153,7 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Utilites\COMInitializer.cpp" />
     <ClCompile Include="src\Utilites\InputManager.cpp" />
     <ClCompile Include="src\Utilites\Timer.cpp" />
   </ItemGroup>

@@ -1,12 +1,9 @@
 #pragma once
-#include "Matrix4x4.hpp"
 #include "Plane.hpp"
-#include "Vector3.hpp"
+#include "MathTypes.hpp"
 
 namespace CommonUtilities
 {
-	const float DegToRad = static_cast<float>(3.141f / 180.0f);
-
 
 	template <typename T>
 	struct TFrustum
@@ -20,21 +17,21 @@ namespace CommonUtilities
 		Plane<T> FarPlane;
 		Plane<T> NearPlane;
 
-		Vector3<float> FarTopLeft;
-		Vector3<float> FarTopRight;
-		Vector3<float> FarBottomLeft;
-		Vector3<float> FarBottomRight;
+		Vector3<T> FarTopLeft;
+		Vector3<T> FarTopRight;
+		Vector3<T> FarBottomLeft;
+		Vector3<T> FarBottomRight;
 
-		Vector3<float> NearTopLeft;
-		Vector3<float> NearTopRight;
-		Vector3<float> NearBottomLeft;
-		Vector3<float> NearBottomRight;
+		Vector3<T> NearTopLeft;
+		Vector3<T> NearTopRight;
+		Vector3<T> NearBottomLeft;
+		Vector3<T> NearBottomRight;
 	};
 
 	using Frustum = TFrustum<float>;
 
 	template <typename T>
-	inline TFrustum<T> CreateFrustumFromCamera(Matrix4x4<T>& aCameraTransform, T aVFovDeg, T aHFovDeg, T aNearPlane, T aFarPlane)
+	inline TFrustum<T> CreateFrustumFromCamera(Matrix4x4<T> aCameraTransform, T aVFovDeg, T aHFovDeg, T aNearPlane, T aFarPlane)
 	{
 		TFrustum<T> frustum;
 

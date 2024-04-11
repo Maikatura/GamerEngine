@@ -1,5 +1,7 @@
 #pragma once
 #include <cassert>
+#include <ostream>
+#include <valarray>
 
 #include "Utilites/UtilityFunctions.h"
 
@@ -18,11 +20,13 @@ namespace CommonUtilities
 		T z = 0;
 
 		Vector3<T>(); //Creates a null-vector 
-		Vector3<T>(const T& aX, const T& aY, const T& aZ); //Creates a vector (aX, aY, aZ) 
+		Vector3<T>(const T& aX, const T& aY, const T& aZ); //Creates a vector (aX, aY, aZ)
+		Vector3<T>(const T& aValue);
 		Vector3<T>(const Vector3<T>& aVector) = default; //Copy constructor (compiler generated) 
 		~Vector3<T>() = default; //Destructor (compiler generated)
 
 		Vector3<T>& operator=(const Vector3<T>& aVector3) = default; 	//Assignment operator (compiler generated) 
+
 		void operator=(const T& aScaler);
 		Vector3<T> operator-() const;
 
@@ -38,6 +42,7 @@ namespace CommonUtilities
 		Vector3<T> Blend(Vector3<T> aBlendState1, Vector3<T> aBlendState2, T aBlendAmount);
 
 		const Vector3<T> operator* (const T& aRval) const;
+		const Vector3<T> operator* (const Vector3<T>& aRval) const;
 
 		static Vector3<T> Lerp(Vector3<T> aStart, Vector3<T> aEnd, float aTime);
 		static Vector3<T> Normalize(const Vector3<T>& aVec);
@@ -47,7 +52,17 @@ namespace CommonUtilities
 		static Vector3<T> Right();
 		static Vector3<T> Up();
 		static Vector3<T> Forward();
+
+
 	};
+
+
+	template <typename T>
+	std::ostream& operator<<(std::ostream& aOut, const Vector3<T>& aVector3)
+	{
+		aOut << "(X: " << aVector3.x << " | Y: " << aVector3.y << " | Z: " << aVector3.z << ")";
+		return aOut;
+	}
 
 	template <class T>
 	Vector3<T>::Vector3()
@@ -63,6 +78,14 @@ namespace CommonUtilities
 		x = aX;
 		y = aY;
 		z = aZ;
+	}
+
+	template <class T>
+	Vector3<T>::Vector3(const T& aValue)
+	{
+		x = aValue;
+		y = aValue;
+		z = aValue;
 	}
 
 	template <class T>
@@ -88,7 +111,7 @@ namespace CommonUtilities
 	template <class T>
 	T Vector3<T>::Length() const
 	{
-		return sqrt(x * x + y * y + z * z);
+		return std::sqrt(static_cast<float>(x) * static_cast<float>(x) + static_cast<float>(y) * static_cast<float>(y) + static_cast<float>(z) * static_cast<float>(z));
 	}
 
 	template <class T>
@@ -109,10 +132,6 @@ namespace CommonUtilities
 	template <class T>
 	void Vector3<T>::Normalize()
 	{
-		assert(x != 0 && "X is 0 and cant be normilized");
-		assert(y != 0 && "Y is 0 and cant be normilized");
-		assert(z != 0 && "Z is 0 and cant be normilized");
-
 		Vector3<T> normalized = Normalized();
 
 		x = normalized.x;
@@ -158,6 +177,12 @@ namespace CommonUtilities
 	const Vector3<T> Vector3<T>::operator* (const T& aRval) const
 	{
 		return Vector3<T>(x * aRval, y * aRval, z * aRval);
+	}
+
+	template<typename T>
+	const Vector3<T> Vector3<T>::operator* (const Vector3<T>& aRval) const
+	{
+		return Vector3<T>(x * aRval.x, y * aRval.y, z * aRval.z);
 	}
 
 	template <class T>

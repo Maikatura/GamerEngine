@@ -3,7 +3,7 @@
 #include <TurNet/Client/ClientUDP.h>
 
 #include "Components/Components.hpp"
-#include "Renderer/Model/Entity.h"
+#include "Core/Model/Entity.h"
 #include "TurNet/Server/ServerUDP.h"
 
 
@@ -12,7 +12,7 @@ struct ClientData
 	uint64_t ClientID;
 	float MoveSpeed;
 	std::chrono::steady_clock::time_point Time;
-	Entity myEntity;
+	GamerEngine::Entity myEntity;
 	Vector3f Translation;
 	Vector3f Rotation;
 	bool IsServer;

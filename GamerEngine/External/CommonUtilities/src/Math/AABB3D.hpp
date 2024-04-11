@@ -139,30 +139,9 @@ namespace CommonUtilities
 	}
 
 	template <typename T>
-	constexpr AABB3D<T> AABB3D<T>::Transform(const Matrix4x4<T>& aTransform) const
+constexpr AABB3D<T> AABB3D<T>::Transform(const Matrix4x4<T>& aTransform) const
 	{
-		Vector3<T> center = (myMax + myMin) * 0.5f;
-		Vector3<T> extents = myMax - center;
-
-		Vector3<T> worldCenter = aTransform.TransformPoint(center);
-
-		Vector3<T> transformRight = aTransform[0] * extents.x;
-		Vector3<T> transformUp = aTransform[1] * extents.y;
-		Vector3<T> transformForward = aTransform[2] * extents.z;
-
-		T transformedExtentX = static_cast<T>(std::abs(Vector3<T>::Dot(Vector3<T>::Right(), transformRight)) +
-			std::abs(Vector3<T>::Dot(Vector3<T>::Right(), transformUp)) +
-			std::abs(Vector3<T>::Dot(Vector3<T>::Right(), transformForward)));
-
-		T transformedExtentY = static_cast<T>(std::abs(Vector3<T>::Dot(Vector3<T>::Up(), transformRight)) +
-			std::abs(Vector3<T>::Dot(Vector3<T>::Up(), transformUp)) +
-			std::abs(Vector3<T>::Dot(Vector3<T>::Up(), transformForward)));
-
-		T transformedExtentZ = static_cast<T>(std::abs(Vector3<T>::Dot(Vector3<T>::Forward(), transformRight)) +
-			std::abs(Vector3<T>::Dot(Vector3<T>::Forward(), transformUp)) +
-			std::abs(Vector3<T>::Dot(Vector3<T>::Forward(), transformForward)));
-
-		return { worldCenter, transformedExtentX, transformedExtentY, transformedExtentZ };
+		return { GetCenter(), GetExtents() * aTransform.GetScale() };
 	}
 
 

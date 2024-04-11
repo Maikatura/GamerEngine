@@ -1,0 +1,61 @@
+#pragma once
+#include <vector>
+#include <Math/MathTypes.hpp>
+#include <wrl/client.h>
+#include <d3d11.h>
+
+// TODO : OPTIMIZE THE LINE RENDERER
+
+struct ID3D11Buffer;
+struct ID3D11InputLayout;
+struct ID3D11VertexShader;
+struct ID3D11PixelShader;
+
+struct LineVertex
+{
+	Vector4f Position;
+	Vector4f Color;
+	float LineWidth;
+};
+
+struct LineCBufferData
+{
+	Matrix4x4f World;
+	Matrix4x4f View;
+	Matrix4x4f Projection;
+};
+
+
+class LineRenderer
+{
+public:
+
+
+	static LineRenderer& Get();
+
+	bool Init();
+
+	void DrawPoint(Vector3f aPosition, Vector4f aColor = {1,1,1,1});
+	void DrawLine(const Vector3f& aStartPoint, const Vector3f& aEndPoint, const Vector4f& aColor = { 1,1,1,1 }, float aWidth = 1.0f);
+	void DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation = { 0,0,0 }, Vector4f aColor = { 1,1,1,1 });
+	void DrawCircle(Vector3f aPosition, float aRadius, int aTesselation = 24);
+
+
+	void Render(const Matrix4x4f& aView,const Matrix4x4f& aProjection);
+	void Clear();
+
+private:
+
+	std::vector<std::array<LineVertex, 2>> myLinesToRender;
+
+	LineCBufferData myLineCBufferData;
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> myLineCBuffer;
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> myBuffer;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> myInputLayout;
+
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> myLineVertexShader;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> myLinePixelShader;
+	Microsoft::WRL::ComPtr<ID3D11GeometryShader> myLineGeometryShader;
+};

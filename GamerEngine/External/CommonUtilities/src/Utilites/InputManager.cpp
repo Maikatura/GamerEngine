@@ -1,10 +1,13 @@
 #include "pch.h"
 #include <Utilites/InputManager.h>
 #include <string>
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <Windowsx.h>
 
 
-CommonUtilities::InputManager::InputManager() : myCurrentScrollDelta(0), mySavedScrollDelta(0), myLastScrollDelta(0)
+CommonUtilities::InputManager::InputManager(HWND aHWND) : myCurrentScrollDelta(0), mySavedScrollDelta(0), myLastScrollDelta(0), myHWND(aHWND)
 {
 	
 }
@@ -53,16 +56,16 @@ bool CommonUtilities::InputManager::IsMouseReleased(const int aMouseKeyCode) con
 
 bool CommonUtilities::InputManager::IsMouseMoving() const
 {
-	return (myCurrentMousePosition.x != myPrevioustMousePosition.x && myCurrentMousePosition.y != myPrevioustMousePosition.y);
+	return (myCurrentMousePosition.x != myPreviousMousePosition.x && myCurrentMousePosition.y != myPreviousMousePosition.y);
 }
 
 
-CommonUtilities::Vector3<float> CommonUtilities::InputManager::MouseDelta() const
+Vector2f CommonUtilities::InputManager::MouseDelta()
 {
-	const float xDelta = myCurrentMousePosition.x - myPrevioustMousePosition.x;
-	const float yDelta = myCurrentMousePosition.y - myPrevioustMousePosition.y;
+	myMouseDelta.x = myCurrentMousePosition.x - myPreviousMousePosition.x;
+	myMouseDelta.y = myCurrentMousePosition.y - myPreviousMousePosition.y;
 
-	return Vector3<float>(xDelta, yDelta,0);
+	return myMouseDelta;
 }
 
 bool CommonUtilities::InputManager::IsScrolling() const
@@ -89,10 +92,26 @@ POINT CommonUtilities::InputManager::GetMousePosRelativeToWindow() const
 
 void CommonUtilities::InputManager::Update()
 {
+	if (GetFocus() != myHWND)
+	{
+		// Reset all key states
+		for (int i = 0; i < 256; i++)
+		{
+			mySavedWindowsKeyboardState[i] = false;
+		}
+
+		// Reset all mouse states
+		for (int i = 0; i < 7; i++) // Increase the size to 7
+		{
+			mySavedMousePress[i] = false;
+		}
+	}
+	
+	
 	myPreviousKeyboardState = myCurrentKeyboardState;
 	myCurrentKeyboardState = mySavedWindowsKeyboardState;
 
-	myPrevioustMousePosition = myCurrentMousePosition;
+	myPreviousMousePosition = myCurrentMousePosition;
 	myCurrentMousePosition = mySavedMousePosition;
 
 	myPreviousMousePress = myCurrentMousePress;
@@ -102,12 +121,15 @@ void CommonUtilities::InputManager::Update()
 	myCurrentScrollDelta = mySavedScrollDelta;
 
 	mySavedScrollDelta = 0.0f;
+	
+	
+	
+	
 }
 
 
 bool CommonUtilities::InputManager::UpdateEvents(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	
 	switch (message)
 	{
 		case WM_KEYDOWN:
@@ -164,5 +186,40 @@ bool CommonUtilities::InputManager::UpdateEvents(UINT message, WPARAM wParam, LP
 	}
 
 	return false;
+}
+
+void CommonUtilities::InputManager::SetMousePos(Vector2i aPos)
+{
+	// Get the window's position and size
+	RECT windowRect;
+	GetWindowRect(myHWND, &windowRect);
+	int windowX = windowRect.left;
+	int windowY = windowRect.top;
+
+	// Calculate the new cursor position
+	int newX = windowX + aPos.x;
+	int newY = windowY + aPos.y;
+
+	// Set the cursor position
+	SetCursorPos(newX, newY);
+}
+
+Vector2i CommonUtilities::InputManager::GetMousePos()
+{
+	Vector2i mousePos;
+	POINT p;
+	GetCursorPos(&p);
+
+	// Get the window's position
+	RECT windowRect;
+	GetWindowRect(myHWND, &windowRect);
+	int windowX = windowRect.left;
+	int windowY = windowRect.top;
+
+	// Calculate the cursor position relative to the window
+	mousePos.x = p.x - windowX;
+	mousePos.y = p.y - windowY;
+
+	return mousePos;
 }
 

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "ImGuizmo/GraphEditor.h"
-#include "Renderer/Render/SelectionData.h"
+#include "Core/Rendering/SelectionData.h"
 
 template <typename T, std::size_t N>
 struct Array

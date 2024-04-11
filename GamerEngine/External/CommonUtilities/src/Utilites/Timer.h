@@ -17,6 +17,7 @@ namespace CommonUtilities
         float GetDeltaTime() const;
         double GetTotalTime() const;
         int GetElapsedFrames() const;
+        float GetFrameTime();
 
     private:
 

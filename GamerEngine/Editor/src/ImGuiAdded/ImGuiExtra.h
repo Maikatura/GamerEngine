@@ -2,8 +2,6 @@
 #include <functional>
 #include <ImGui/imgui.h>
 
-#include "imgui/imgui_internal.h"
-
 namespace ImGui
 {
 	inline void ImGuiCenterNextWindow() noexcept
@@ -14,17 +12,17 @@ namespace ImGui
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, mid);
 	}
 
-	inline void Alert(const char* msg, bool* open) noexcept
+	inline void Alert(const std::string& msg, bool* open) noexcept
 	{
 		if(*open)
 		{
-			ImGui::OpenPopup(msg);
+			ImGui::OpenPopup(msg.c_str());
 			ImGuiCenterNextWindow();
 
 			*open = false;
 		}
 
-		if(ImGui::BeginPopup(msg))
+		if(ImGui::BeginPopup(msg.c_str()))
 		{
 			ImGui::Text("Alert");
 			ImGui::SameLine(ImGui::GetWindowWidth() - 25);
@@ -36,13 +34,13 @@ namespace ImGui
 			ImGui::Separator();
 			ImGui::Spacing();
 
-			ImGui::Text(msg);
+			ImGui::Text(msg.c_str());
 
 			ImGui::EndPopup();
 		}
 	}
 
-	inline void Confirm(const char* popup, std::function<void()> yes, std::function<void()> no, bool& isOpen) noexcept
+	inline void Confirm(const char* popup, const std::function<void()>& yes, std::function<void()> no, bool& isOpen) noexcept
 	{
 		if(!isOpen) return;
 
@@ -144,7 +142,7 @@ namespace ImGui
 	}
 
 
-
+	
 
 	
 }

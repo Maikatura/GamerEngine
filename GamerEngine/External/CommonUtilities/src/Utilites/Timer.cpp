@@ -49,5 +49,10 @@ double CommonUtilities::Timer::GetTotalTime() const
 
 int CommonUtilities::Timer::GetElapsedFrames() const
 {
-    return myElapsedFrames - 1;
+    return static_cast<int>(myElapsedFrames) - 1;
+}
+
+float CommonUtilities::Timer::GetFrameTime()
+{
+	return (myFramesPerSecond != 0) ? 1000.0f / static_cast<float>(myFramesPerSecond) : 0.0f;
 }

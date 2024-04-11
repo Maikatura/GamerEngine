@@ -55,20 +55,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\OpenFBX\Debug\</IntDir>
-    <TargetName>OpenFBX_Debug</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Debug\OpenFBX\</IntDir>
+    <TargetName>Debug/OpenFBX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\OpenFBX\Release\</IntDir>
-    <TargetName>OpenFBX_Release</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Release\OpenFBX\</IntDir>
+    <TargetName>Release/OpenFBX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
-    <IntDir>..\..\Temp\Intermediate\OpenFBX\Distribution\</IntDir>
-    <TargetName>OpenFBX_Distribution</TargetName>
+    <IntDir>..\..\Temp\Intermediate\Distribution\OpenFBX\</IntDir>
+    <TargetName>Distribution/OpenFBX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -12,8 +12,8 @@ configmap {
     ["Distribution"] = "Release"
 }
 targetdir ("%{wks.location}/Bin/")
-objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}")
-targetname("%{prj.name}_%{cfg.buildcfg}")
+objdir ("%{wks.location}/Temp/Intermediate/%{cfg.buildcfg}/%{prj.name}")
+targetname("%{cfg.buildcfg}/%{prj.name}")
 
 pchheader "Editor.pch.h"
 pchsource "src/Editor.pch.cpp"
@@ -34,25 +34,28 @@ disablewarnings
 {
     "26812", --prefer enum class over enum
     "26451", --arithmetic overflow
-	"2220"
 }
 
 defines
 {
-    "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS",
+	"GE_PLATFORM_WINDOWS",
+	"GE_NETWORK",
+
+    	"_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS",
 	"_WINSOCKAPI_",
 	"NOMINMAX",
 	"_CRT_SECURE_NO_WARNINGS",
-	"_HAS_EXCEPTIONS=0"
+	"_HAS_EXCEPTIONS=0",
+	"WITH_PROFILING=1"
 }
 
 libdirs 
 { 
-	"%{wks.location}/lib/"
+	"%{wks.location}/Temp/lib/"
 }
 
 includedirs{
-    "./src",
+    	"./src",
 	"%{IncludeDirs.RapidJson}",
 	"%{IncludeDirs.ImGui}",
 	"%{IncludeDirs.GraphicsEngine}",
@@ -60,16 +63,17 @@ includedirs{
 	"%{IncludeDirs.YamlCpp}",
 	"%{IncludeDirs.ImGuiOnly}",
 	"%{IncludeDirs.Entt}",
-	"%{IncludeDirs.Game}",
-	"%{IncludeDirs.RapidJson}",
+	"%{IncludeDirs.Json}",
 	"%{IncludeDirs.TurNet}",
 	"%{IncludeDirs.WICTextureLoader}",
 	"%{IncludeDirs.FBXImporter}",
 	"%{IncludeDirs.OpenFBX}",
-    "%{IncludeDirs.FBXSDK}",
-	"%{IncludeDirs.PhysicsEngine}",
-	"%{IncludeDirs.PyBullet}",
-	"%{IncludeDirs.Flecs}"
+	"%{IncludeDirs.OpenVR}",
+    	"%{IncludeDirs.FBXSDK}",
+	"%{IncludeDirs.Physics}",
+	--"%{IncludeDirs.PhysX}",
+	"%{IncludeDirs.Flecs}",
+	"%{IncludeDirs.mono}"
 }
 
 externalincludedirs {
@@ -82,23 +86,33 @@ links
 {
 	"FBXImporter",
 	"Engine",
-	"Game",
-	"PhysicsEngine",
+	"Physics",
 	"Flecs",
 	
-	"RapidJson",
+	--"PhysX",
+	
+	"Json",
 	"YamlCpp",
 	"OpenFBX",
+	"OpenVR",
 	
 	"ImGui",
+	"msdfgen",
+	"msdf-atlas-gen",
+	"freetype",
 	
 	--"cryptlib",
 	"TurNet",
-	"ws2_32.lib",
 	
 	"d3d11.lib",
 	"dxguid.lib",
-	"opengl32.lib"
+	"opengl32.lib",
+	"%{Libs.OpenVR}",
+	"%{Libs.mono}",
+	"%{Libs.WinSock}",
+	"%{Libs.WinMM}",
+	"%{Libs.WinVersion}",
+	"%{Libs.BCrypt}"
 }
 
 files 

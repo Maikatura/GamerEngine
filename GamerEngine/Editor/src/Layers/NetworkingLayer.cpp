@@ -1,11 +1,12 @@
 #include "Editor.pch.h"
 #include <Layers/NetworkingLayer.h>
 
+#include "Time.hpp"
 #include "Components/Components.hpp"
 #include "Components/Network/NetworkComponent.h"
-#include "Renderer/Model/Entity.h"
+#include "Core/Model/Entity.h"
 #include "Network/CreateObjectMessage.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Scene/SceneManager.h"
 #include "TurNet/Shared/Utility/TurCompare.h"
 
 #include "Network/NetOverloads.h"
@@ -15,8 +16,8 @@
 #include "Network/PlayerDisconnectMessage.h"
 #include "Network/PlayerMoveMessage.h"
 #include "Network/SkinChangerMessage.h"
-#include "Renderer/AssetHandlers/ModelAssetHandler.h"
-#include "Renderer/Render/Renderer.h"
+#include "AssetHandlers/ModelAssetHandler.h"
+#include "Core/Rendering/Renderer.h"
 
 using namespace std::chrono_literals;
 
@@ -128,14 +129,14 @@ void NetworkingLayer::OnUpdate()
 
 	for(int i = 0; i < myPlayers.size(); i++)
 	{
-		if(!SceneManager::GetScene()->GetRegistry().valid(myPlayers[i].myEntity))
+		if(!SceneManager::Get().GetScene()->GetRegistry().valid(myPlayers[i].myEntity))
 		{
 			continue;
 		}
 
 		auto& transComp = myPlayers[i].myEntity.GetComponent<TransformComponent>();
 
-		float distance = (myPlayers[i].Translation - transComp.Translation).Length();
+		float distance = (myPlayers[i].Translation - transComp.GetPosition()).Length();
 		
 		//float distanceRot = (myPlayers[i].Rotation - transComp.Rotation).Length();
 
@@ -144,13 +145,13 @@ void NetworkingLayer::OnUpdate()
 		std::chrono::steady_clock::time_point clockNow = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double, std::milli> time = clockNow - myPlayers[i].Time;
 
-		Vector3f oldPosition = transComp.Translation;
+		Vector3f oldPosition = transComp.GetPosition();
 		//Vector3f newPosition = oldPosition + (myPlayers[i].MoveSpeed * Time::GetDeltaTime());
 
 		float lerpTime = static_cast<float>(time.count()) / 1000.0f;
 		float time_to_reach_targetTan = CommonUtilities::Max(0.0f, (distance / myPlayers[i].MoveSpeed) - lerpTime);
-		transComp.Translation = Vector3f::Lerp(transComp.Translation, myPlayers[i].Translation, Time::GetDeltaTime());
-		transComp.Rotation = myPlayers[i].Rotation;
+		transComp.SetPosition(Vector3f::Lerp(transComp.GetPosition(), myPlayers[i].Translation, Time::GetDeltaTime()));
+		transComp.SetPosition(myPlayers[i].Rotation);
 	}
 
 }
@@ -217,10 +218,10 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Got Something from server";
 
-				auto view = SceneManager::GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
+				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
 				for(auto entity : view)
 				{
-					if (!SceneManager::GetScene()->GetRegistry().valid(entity))
+					if (!SceneManager::Get().GetScene()->GetRegistry().valid(entity))
 					{
 						return;
 					}
@@ -230,7 +231,7 @@ void NetworkingLayer::StartNetworkingClient()
 					if(ID.ID == moveMsg.EntityID)
 					{
 						auto& netComp = view.get<Network::NetworkComponent>(entity);
-						netComp.SetNewPosition(moveMsg.Transform.Translation);
+						netComp.SetNewPosition(moveMsg.Transform.GetPosition());
 						std::cout << moveMsg << std::endl;
 					}
 				}
@@ -243,10 +244,10 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Server Moved A Object" << std::endl;
 
-				auto view = SceneManager::GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
+				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
 				for(auto& entity : view)
 				{
-					if(!SceneManager::GetScene()->GetRegistry().valid(entity))
+					if(!SceneManager::Get().GetScene()->GetRegistry().valid(entity))
 					{
 						return;
 					}
@@ -254,7 +255,7 @@ void NetworkingLayer::StartNetworkingClient()
 					auto& netComp = view.get< Network::NetworkComponent>(entity);
 					if(netComp.GetID() == moveMsg.EntityID)
 					{
-						netComp.SetNewPosition(moveMsg.Transform.Translation);
+						netComp.SetNewPosition(moveMsg.Transform.GetPosition());
 					}
 				}
 				break;
@@ -266,7 +267,7 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Got Something from server" << std::endl;
 
-				SceneManager::CreateEntityType(createMsg.EntityType, createMsg.EntityID);
+				SceneManager::Get().CreateEntityType(createMsg.EntityType, createMsg.EntityID);
 
 				break;
 			}
@@ -300,17 +301,17 @@ void NetworkingLayer::StartNetworkingClient()
 				data.Time = std::chrono::high_resolution_clock::now();
 				data.Rotation = { 0.0f,0.0f,0.0f };
 
-				data.myEntity = SceneManager::CreateEntityType(0, id);
-				data.myEntity.GetComponent<TransformComponent>().Translation = playerConnectMsg.Translation;
-				data.myEntity.GetComponent<TransformComponent>().Scale = { scale, scale ,scale };
+				data.myEntity = SceneManager::Get().CreateEntityType(0, id);
+				data.myEntity.GetComponent<TransformComponent>().SetPosition(playerConnectMsg.Translation);
+				data.myEntity.GetComponent<TransformComponent>().SetScale({ scale, scale ,scale });
 				auto& networkComp = data.myEntity.AddComponent<Network::NetworkComponent>();
 				networkComp.SetID(id);
 				networkComp.SetServer(playerConnectMsg.IsServer);
 
 				auto model = data.myEntity.AddComponent<ModelComponent>(ModelAssetHandler::Get().GetModelInstance(L"Editor\\Models\\network\\NetworkCube.fbx"));
-				model.GetModel()->GetMaterial()[0].SetAlbedoTexture(TextureAssetHandler::GetTexture(L"Editor\\Models\\network\\NetworkCube.dds"));
-				model.GetModel()->GetMaterial()[0].SetNormalTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_N.dds"));
-				model.GetModel()->GetMaterial()[0].SetMaterialTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_M.dds"));
+				model.GetModel()->GetMeshData(0).MaterialData.SetAlbedoTexture(TextureAssetHandler::GetTexture(L"Editor\\Models\\network\\NetworkCube.dds"));
+				model.GetModel()->GetMeshData(0).MaterialData.SetNormalTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_N.dds"));
+				model.GetModel()->GetMeshData(0).MaterialData.SetMaterialTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_M.dds"));
 				myPlayers.push_back(data);
 
 				break;
@@ -345,7 +346,7 @@ void NetworkingLayer::StartNetworkingClient()
 				{
 					if(myPlayers[i].ClientID == disMsg.ClientID)
 					{
-						SceneManager::GetScene()->DeleteEntity(myPlayers[i].myEntity);
+						SceneManager::Get().GetScene()->DeleteEntity(myPlayers[i].myEntity);
 					}
 				}
 

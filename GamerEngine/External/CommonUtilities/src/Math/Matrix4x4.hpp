@@ -4,14 +4,13 @@
 #include <cmath>
 #include <math.h>
 #include "Vector.h"
+#include "Matrix3x3.hpp"
 
 
-#define MatrixSize 16
+
 
 namespace CommonUtilities
 {
-	
-
 
 	template<class T>
 	class Matrix4x4
@@ -19,22 +18,32 @@ namespace CommonUtilities
 	public:
 		Matrix4x4<T>();
 		Matrix4x4<T>(const Matrix4x4<T>& aMatrix);
+		Matrix4x4(T aValue);
 
 		T& operator()(const size_t aRow, const size_t aColumn);
 		const T& operator()(const size_t aRow, const size_t aColumn) const;
 		T& operator()(const size_t anIndex);
 		const T& operator()(const size_t anIndex) const;
 
+
+		T* Ptr();
+		const T* Ptr() const;
+
 		Vector3<T> operator[](const size_t anIndex);
 		const Vector3<T> operator[](const size_t anIndex) const;
+		Vector3<T> ToEularAngles();
 
+
+		
+
+		static Matrix4x4<T> CreateLookAt(const Vector3<T>& eye, const Vector3<T>& target, const Vector3<T>& up);
 		static Matrix4x4<T> CreateRotationAroundX(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundY(T aAngleInRadians);
 		static Matrix4x4<T> CreateRotationAroundZ(T aAngleInRadians);
 		static Matrix4x4<T> Transpose(const Matrix4x4<T>& aMatrixToTranspose);
 		static Matrix4x4<T> GetFastInverse(const Matrix4x4<T>& aTransform);
 		static Matrix4x4<T> Slerp(Matrix4x4<T> aMatrixOne, Matrix4x4<T> aMatrixTwo, float aTime);
-		static Matrix4x4<T> BuildTransform(Vector3<T> aTranslate, Vector3<T> aRotation, Vector3<T> aScale);
+
 		static Matrix4x4<T> CreateTranslation(const Vector3<T>& aTranslation);
 		static Matrix4x4<T> CreateScale(const Vector3<T>& aScale);
 
@@ -44,25 +53,28 @@ namespace CommonUtilities
 		constexpr Vector3<T> TransformPoint(const Vector3<T>& aPoint) const;
 		constexpr Vector3<T> TransformPoint(const Vector4<T>& aPoint) const; //Transform as w = 1
 
-
+		constexpr Vector3<T> TransformVector(const Vector4<T>& aVector) const; // Transform as w = 0
+		constexpr static Matrix4x4<T> CreatePerspectiveHFoVResolution(const T& aHorizontalFoV, const Vector2<uint32_t>& aResolution, const T& aNearClipPlane, const T& aFarClipPlane);
 		constexpr static Matrix4x4<T> AffineInverse(const Matrix4x4<T>& aAffineMatrix);
-		static Matrix4x4<T> AffliteMatrix(const Matrix4x4<T> aMatrix);
 
 		void DecomposeTransform(Vector3<T>& aTranslate, Vector3<T>& aRotation, Vector3<T>& aScale);
+		Vector3<T> GetTranslation();
 
 		bool ContainsPosition(Vector3<T>& aTranslate);
 
+
+
+
 		static Matrix4x4<T> CreateRollPitchYawMatrix(Vector3<T>& aRotation);
 
-		Vector3<T> GetSide();
+		Vector3<T> GetRight();
 		Vector3<T> GetUp();
 		Vector3<T> GetForward();
 		Vector4<T> GetForwardW();
 
-		Vector3<T> GetPosition() const;
+		Vector3<T> GetPosition();
 		Vector4<T> GetPositionW() const;
-		Vector3<T> GetRotation() const;
-		Vector3<T> GetRawRotation();
+		Vector3<T> GetRotation();
 		Vector3<T> GetScale() const;
 
 
@@ -72,8 +84,42 @@ namespace CommonUtilities
 
 		void SetPosition(Vector4<T> aPosition);
 
-		std::array<T, MatrixSize> myMatrix;
+		std::array<T, 16> myMatrix;
 	};
+
+
+
+	template <typename T>
+	constexpr Vector3<T> Matrix4x4<T>::TransformVector(const Vector4<T>& aVector) const
+	{
+		Vector4<T> output = operator*(Vector4<T>(aVector.x, aVector.y, aVector.z, 0.0f), *this);
+		return Vector3<T>{output.x, output.y, output.z};
+	}
+
+	template <typename T>
+	constexpr Matrix4x4<T> Matrix4x4<T>::CreatePerspectiveHFoVResolution(const T& aHorizontalFoV, const Vector2<uint32_t>& aResolution, const T& aNearClipPlane, const T& aFarClipPlane)
+	{
+		assert(aNearClipPlane < aFarClipPlane && "Near clip plane can't be larger than far clip plane");
+		assert(aNearClipPlane >= static_cast<T>(0.001) && "Near clip plane is too small!");
+
+		T hFoVRad = aHorizontalFoV * 0.017453f;
+		T vFoVRad = static_cast<T>(2.0) * std::atan(std::tan(hFoVRad / static_cast<T>(2.0))) * (static_cast<float>(aResolution.y) / static_cast<float>(aResolution.x));
+
+		T xScale = static_cast<T>(1.0) / std::tan(hFoVRad * static_cast<T>(0.5));
+		T yScale = static_cast<T>(1.0) / std::tan(vFoVRad * static_cast<T>(0.5));
+
+		T Q = aFarClipPlane / (aFarClipPlane - aNearClipPlane);
+
+		Matrix4x4<T> projection;
+		projection(1, 1) = xScale;
+		projection(2, 2) = yScale;
+		projection(3, 3) = Q;
+		projection(3, 4) = static_cast<T>(1.0) / Q;
+		projection(4, 3) = Q * -aNearClipPlane;
+		projection(4, 4) = static_cast<T>(0.0);
+
+		return projection;
+	}
 
 	template <typename T>
 	constexpr Vector3<T> Matrix4x4<T>::TransformPoint(const Vector3<T>& aPoint) const
@@ -95,7 +141,6 @@ namespace CommonUtilities
 	{
 		Matrix4x4<T> projection;
 
-
 		projection(1, 1) = static_cast<T>(2.0) / (aRight - aLeft);
 		projection(2, 2) = static_cast<T>(2.0) / (aTop - aBottom);
 		projection(3, 3) = static_cast<T>(1.0) / (aFar - aNear);
@@ -104,7 +149,6 @@ namespace CommonUtilities
 		projection(4, 3) = static_cast<T>(-(aNear / (aNear - aFar)));
 		projection(4, 4) = static_cast<T>(1);
 
-
 		return projection;
 	}
 
@@ -112,24 +156,36 @@ namespace CommonUtilities
 	template <class T>
 	Vector3<T> Matrix4x4<T>::GetScale() const
 	{
-		return { myMatrix[0], myMatrix[5], myMatrix[11] };
+		return { myMatrix[0], myMatrix[5], myMatrix[10] };
 	}
 
 	template <typename T>
 	Matrix4x4<T>::Matrix4x4()
 	{
-		for(size_t i = 0; i < 16; i++)
-		{
-			myMatrix[i] = static_cast<T>(i % 5 == 0 ? 1 : 0);
-		}
+		myMatrix = {
+			static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+			static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0),
+			static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(0),
+			static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)
+		};
+		
 	}
 
 	template<typename T>
 	Matrix4x4<T>::Matrix4x4(const Matrix4x4<T>& aMatrix)
 	{
-		for(int i = 0; i < 16; i++)
+		for(size_t i = 0; i < 16; i++)
 		{
 			myMatrix[i] = aMatrix(i);
+		}
+	}
+
+	template<typename T>
+	Matrix4x4<T>::Matrix4x4(T aValue)
+	{
+		for (int i = 0; i < 16; i++)
+		{
+			myMatrix[i] = aValue;
 		}
 	}
 
@@ -153,6 +209,18 @@ namespace CommonUtilities
 	}
 
 	template <class T>
+	T* Matrix4x4<T>::Ptr()
+	{
+		return &myMatrix[0];
+	}
+
+	template <class T>
+	const T* Matrix4x4<T>::Ptr() const
+	{
+		return &myMatrix[0];
+	}
+
+	template <class T>
 	Vector3<T> Matrix4x4<T>::operator[](const size_t anIndex)
 	{
 		return Vector3<T>(myMatrix[(4 * anIndex) + 0], myMatrix[(4 * anIndex) + 1], myMatrix[(4 * anIndex) + 2]);
@@ -162,6 +230,67 @@ namespace CommonUtilities
 	const Vector3<T> Matrix4x4<T>::operator[](const size_t anIndex) const
 	{
 		return Vector3<T>(myMatrix[(4 * anIndex) + 0], myMatrix[(4 * anIndex) + 1], myMatrix[(4 * anIndex) + 2]);
+	}
+
+	template <class T>
+	Vector3<T> Matrix4x4<T>::ToEularAngles()
+	{
+		Vector3<T> angles;
+
+		// Calculate yaw (around Y-axis)
+		angles.y = std::atan2(-myMatrix[2], std::sqrt(myMatrix[0] * myMatrix[0] + myMatrix[1] * myMatrix[1]));
+
+		// Calculate pitch (around X-axis)
+		if (std::abs(myMatrix[2]) < 1.0) 
+		{
+			angles.x = std::atan2(myMatrix[6], myMatrix[10]);
+			angles.z = std::atan2(myMatrix[1], myMatrix[0]);
+		}
+		else 
+		{
+			angles.x = std::atan2(myMatrix[6], myMatrix[5]);
+			angles.z = 0.0f;
+		}
+
+		// Convert radians to degrees if needed
+		angles.x = angles.x * 180.0f / 3.14159f;
+		angles.y = angles.y * 180.0f / 3.14159f;
+		angles.z = angles.z * 180.0f / 3.14159f;
+
+		return angles;
+	}
+
+	
+	template <class T>
+	Matrix4x4<T> Matrix4x4<T>::CreateLookAt(const Vector3<T>& eye, const Vector3<T>& target, const Vector3<T>& up)
+	{
+		Vector3 zAxis = eye.Normalized() - target.Normalized();
+		Vector3 xAxis = up.Cross(zAxis).Normalized();
+		Vector3 yAxis = zAxis.Cross(xAxis);
+
+		Matrix4x4 viewMatrix;
+
+		viewMatrix(0) = xAxis.x;
+		viewMatrix(1) = xAxis.y;
+		viewMatrix(2) = xAxis.z;
+		viewMatrix(3) = -xAxis.Dot(eye);
+				  
+		viewMatrix(4) = yAxis.x;
+		viewMatrix(5) = yAxis.y;
+		viewMatrix(6) = yAxis.z;
+		viewMatrix(7) = -yAxis.Dot(eye);
+				  
+		viewMatrix(8) = zAxis.x;
+		viewMatrix(9) = zAxis.y;
+		viewMatrix(10) = zAxis.z;
+		viewMatrix(11) = -zAxis.Dot(eye);
+				  
+		viewMatrix(12) = 0.0f;
+		viewMatrix(13) = 0.0f;
+		viewMatrix(14) = 0.0f;
+		viewMatrix(15) = 1.0f;
+
+		return viewMatrix;
 	}
 
 	template <class T>
@@ -219,6 +348,7 @@ namespace CommonUtilities
 		return result;
 	}
 
+
 	template<typename T>
 	Matrix4x4<T> operator-(const Matrix4x4<T>& aFirstMatrix4, const Matrix4x4<T>& aSecondMatrix4)
 	{
@@ -245,6 +375,25 @@ namespace CommonUtilities
 			{
 				if(row == column) result(row, column) = 0;
 				for(int i = 1; i <= 4; i++)
+				{
+					result(row, column) += aFirstMatrix4(row, i) * aSecondMatrix4(i, column);
+				}
+			}
+		}
+		return result;
+	}
+
+	template<typename T>
+	Matrix4x4<T> operator*(const Matrix4x4<T>& aFirstMatrix4, const Matrix3x3<T>& aSecondMatrix4)
+	{
+		Matrix4x4<T> result;
+
+		for (int row = 1; row <= 3; row++)
+		{
+			for (int column = 1; column <= 3; column++)
+			{
+				if (row == column) result(row, column) = 0;
+				for (int i = 1; i <= 3; i++)
 				{
 					result(row, column) += aFirstMatrix4(row, i) * aSecondMatrix4(i, column);
 				}
@@ -299,6 +448,8 @@ namespace CommonUtilities
 		return result;
 	}
 
+	
+
 	template<typename T>
 	void operator+=(Matrix4x4<T>& aFirstMatrix4, const Matrix4x4<T>& aSecondMatrix4)
 	{
@@ -350,30 +501,24 @@ namespace CommonUtilities
 	void operator*=(Matrix4x4<T>& aFirstMatrix4, const Matrix4x4<T>& aSecondMatrix4)
 	{
 		Matrix4x4<T> result;
-		T sum = 0;
-
-		for(int row = 1; row <= 4; ++row)
+		
+		for (int row = 1; row <= 4; ++row)
 		{
-			for(int column = 1; column <= 4; ++column)
+			for (int column = 1; column <= 4; ++column)
 			{
+				T sum = 0;
 
-				for(int temp = 1; temp <= 4; ++temp)
+				for (int temp = 1; temp <= 4; ++temp)
 				{
 					sum += aFirstMatrix4(row, temp) * aSecondMatrix4(temp, column);
 				}
 
 				result(row, column) = sum;
-				sum = 0;
 			}
 		}
 
-		for(int row = 1; row <= 4; ++row)
-		{
-			for(int column = 1; column <= 4; ++column)
-			{
-				aFirstMatrix4(row, column) = result(row, column);
-			}
-		}
+		aFirstMatrix4 = result;
+
 	}
 
 	template<typename T>
@@ -467,27 +612,7 @@ namespace CommonUtilities
 		return result;
 	}
 
-	template <class T>
-	Matrix4x4<T> Matrix4x4<T>::BuildTransform(Vector3<T> aTranslate, Vector3<T> aRotation, Vector3<T> aScale)
-	{
-		Matrix4x4<T> output = Matrix4x4<T>();
-
-		output(1, 1) *= aScale.x;
-		output(2, 2) *= aScale.y;
-		output(3, 3) *= aScale.z;
-
-		aRotation *= 3.14159f / 180.0f;
-		output *= Matrix4x4<T>::CreateRotationAroundX(aRotation.x);
-		output *= Matrix4x4<T>::CreateRotationAroundY(aRotation.y);
-		output *= Matrix4x4<T>::CreateRotationAroundZ(aRotation.z);
-
-		output(4, 1) = aTranslate.x;
-		output(4, 2) = aTranslate.y;
-		output(4, 3) = aTranslate.z;
-		output(4, 4) = static_cast<T>(1);
-
-		return output;
-	}
+	
 
 	template <typename T>
 	inline Matrix4x4<T> Matrix4x4<T>::CreateTranslation(const Vector3<T>& aTranslation)
@@ -558,6 +683,12 @@ namespace CommonUtilities
 	}
 
 	template <class T>
+	Vector3<T> Matrix4x4<T>::GetTranslation()
+	{
+		return Vector3<T>{ myMatrix[12], myMatrix[13], myMatrix[14] };
+	}
+
+	template <class T>
 	bool Matrix4x4<T>::ContainsPosition(Vector3<T>& aTranslate)
 	{
 		return true;
@@ -577,7 +708,7 @@ namespace CommonUtilities
 	}
 
 	template <class T>
-	Vector3<T> Matrix4x4<T>::GetSide()
+	Vector3<T> Matrix4x4<T>::GetRight()
 	{
 		return Vector3<T>{ myMatrix[0], myMatrix[1], myMatrix[2] };
 	}
@@ -602,7 +733,7 @@ namespace CommonUtilities
 
 
 	template <class T>
-	Vector3<T> Matrix4x4<T>::GetPosition() const
+	Vector3<T> Matrix4x4<T>::GetPosition()
 	{
 		return Vector3<T>{ myMatrix[12], myMatrix[13], myMatrix[14] };
 	}
@@ -613,30 +744,26 @@ namespace CommonUtilities
 		return Vector4<T>{ myMatrix[12], myMatrix[13], myMatrix[14], myMatrix[15] };
 	}
 
-	template <class T>
+	/*template <class T>
 	Vector3<T> Matrix4x4<T>::GetRotation() const
 	{
 		Vector3<T> aRotation = { 0,0,0 };
 
 		T radToDeg = 180.0f / 3.14159f;
 		aRotation.x = radToDeg * static_cast<T>(std::atan2(myMatrix[6], myMatrix[10]));
-		aRotation.y = radToDeg * static_cast<T>(std::atan2(-myMatrix[2], std::sqrtf(myMatrix[6] * myMatrix[6] + myMatrix[10] * myMatrix[10])));
-		aRotation.z = radToDeg * static_cast<T>(std::atan2(myMatrix[1], myMatrix[0]));
+		aRotation.y = radToDeg * static_cast<T>(std::atan2(-myMatrix[2], myMatrix[0]));
+		aRotation.z = radToDeg * static_cast<T>(std::atan2(myMatrix[1], myMatrix[5]));
 		return aRotation;
-	}
+	}*/
 
 	template <class T>
-	Vector3<T> Matrix4x4<T>::GetRawRotation()
+	Vector3<T> Matrix4x4<T>::GetRotation()
 	{
 		Vector3<T> aRotation = {0,0,0};
 
-		
-
-		T radToDeg = 180.0f / 3.14159f;
-		aRotation.x = radToDeg * static_cast<T>(std::atan2f(myMatrix[1][2], myMatrix[2][2]));
-		aRotation.y = radToDeg * static_cast<T>(std::atan2f(-myMatrix[0][2], std::sqrtf(myMatrix[1][2] * myMatrix[1][2] + myMatrix[2][2] * myMatrix[2][2])));
-		aRotation.z = radToDeg * static_cast<T>(std::atan2f(myMatrix[0][1], myMatrix[0][0]));
-
+		aRotation.x = static_cast<T>(std::atan2(myMatrix[6], myMatrix[10]));
+		aRotation.y = static_cast<T>(std::atan2(-myMatrix[2], myMatrix[0]));
+		aRotation.z = static_cast<T>(std::atan2(myMatrix[1], myMatrix[5]));
 		return aRotation;
 	}
 
@@ -650,17 +777,16 @@ namespace CommonUtilities
 
 		assert(determinant != static_cast<T>(0) && "Matrix does not have an inverse");
 
-		//calculate adjugate
 		T det11 = (aAffineMatrix(2, 2) * aAffineMatrix(3, 3) - aAffineMatrix(2, 3) * aAffineMatrix(3, 2));
-		T det12 = -(aAffineMatrix(2, 1) * aAffineMatrix(3, 3) - aAffineMatrix(2, 3) * aAffineMatrix(3, 1));
-		T det13 = (aAffineMatrix(2, 1) * aAffineMatrix(3, 2) - aAffineMatrix(2, 2) * aAffineMatrix(3, 1));
+		T det12 = -(aAffineMatrix(1, 2) * aAffineMatrix(3, 3) - aAffineMatrix(1, 3) * aAffineMatrix(3, 2));
+		T det13 = (aAffineMatrix(1, 2) * aAffineMatrix(2, 3) - aAffineMatrix(1, 3) * aAffineMatrix(2, 2));
 
-		T det21 = -(aAffineMatrix(1, 2) * aAffineMatrix(3, 3) - aAffineMatrix(1, 3) * aAffineMatrix(3, 2));
+		T det21 = -(aAffineMatrix(2, 1) * aAffineMatrix(3, 3) - aAffineMatrix(2, 3) * aAffineMatrix(3, 1));
 		T det22 = (aAffineMatrix(1, 1) * aAffineMatrix(3, 3) - aAffineMatrix(1, 3) * aAffineMatrix(3, 1));
-		T det23 = -(aAffineMatrix(1, 1) * aAffineMatrix(3, 2) - aAffineMatrix(1, 2) * aAffineMatrix(3, 1));
+		T det23 = -(aAffineMatrix(1, 1) * aAffineMatrix(2, 3) - aAffineMatrix(1, 2) * aAffineMatrix(2, 1));
 
-		T det31 = (aAffineMatrix(1, 2) * aAffineMatrix(2, 3) - aAffineMatrix(1, 3) * aAffineMatrix(2, 2));
-		T det32 = -(aAffineMatrix(1, 1) * aAffineMatrix(2, 3) - aAffineMatrix(1, 3) * aAffineMatrix(2, 1));
+		T det31 = (aAffineMatrix(2, 1) * aAffineMatrix(3, 2) - aAffineMatrix(2, 2) * aAffineMatrix(3, 1));
+		T det32 = -(aAffineMatrix(1, 1) * aAffineMatrix(3, 2) - aAffineMatrix(1, 2) * aAffineMatrix(3, 1));
 		T det33 = (aAffineMatrix(1, 1) * aAffineMatrix(2, 2) - aAffineMatrix(1, 2) * aAffineMatrix(2, 1));
 
 		//inverse rotation and scale matrix
@@ -679,34 +805,16 @@ namespace CommonUtilities
 		inversedMatrix(3, 2) = det23 * oneOverDeterminant;
 		inversedMatrix(3, 3) = det33 * oneOverDeterminant;
 
-		Vector3<T> vec3 = inversedMatrix.TransformPoint({ -aAffineMatrix(4, 1), -aAffineMatrix(4, 2), -aAffineMatrix(4, 3), -aAffineMatrix(4, 4) });
-		inversedMatrix(3, 1) = vec3.x;
-		inversedMatrix(3, 2) = vec3.y;
-		inversedMatrix(3, 3) = vec3.z;
-		inversedMatrix(3, 4) = static_cast<T>(1.0);
-		return inversedMatrix;
-	}
 
-	template <class T>
-	Matrix4x4<T> Matrix4x4<T>::AffliteMatrix(const Matrix4x4<T> aMatrix)
-	{
-		Matrix4x4<T> inversedMatrix = aMatrix;
-		Matrix4x4<T> inversedRotation;
-		for(int row = 0; row < 4 - 1; row++)
-		{
-			for(int column = 0; column < 4 - 1; column++)
-			{
-				inversedMatrix(row + 1, column + 1) = aMatrix(column + 1, row + 1);
-				inversedRotation(row + 1, column + 1) = inversedMatrix(row + 1, column + 1);
-			}
-		}
 
-		Vector4<T> negativeTranslation(-inversedMatrix(4, 1), -inversedMatrix(4, 2), -inversedMatrix(4, 3), 1.0f);
-		Vector4<T> inversedTranslation = negativeTranslation * inversedRotation;
-		inversedMatrix(4, 1) = inversedTranslation.x;
-		inversedMatrix(4, 2) = inversedTranslation.y;
-		inversedMatrix(4, 3) = inversedTranslation.z;
+		 Vector4<T> point = Vector4<T>{ inversedMatrix.TransformPoint(-aAffineMatrix[3]), static_cast<T>(1.0) };
+		 inversedMatrix(12) = point.x;
+		 inversedMatrix(13) = point.y;
+		 inversedMatrix(14) = point.z;
+		 inversedMatrix(15) = point.w;
+
 
 		return inversedMatrix;
 	}
+
 }

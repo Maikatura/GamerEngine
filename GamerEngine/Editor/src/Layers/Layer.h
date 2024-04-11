@@ -7,9 +7,11 @@ public:
 	Layer(const std::string& aLayerName, bool aAlwaysOpen = false, bool aSaveLayerSettings = true, const std::string& aCategory = "");
 	virtual ~Layer() = default;
 
+	virtual void OnBeginFrame();
 	virtual bool OnRender();
 	virtual bool EndFrame();
 	virtual void OnImGuiRender();
+
 
 	virtual void OnUpdate();
 
@@ -27,7 +29,6 @@ public:
 
 	bool BeginMenu(ImGuiWindowFlags aFlag = 0);
 	void EndMenu();
-
 
 protected:
 	bool mySaveLayer = true;

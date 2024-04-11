@@ -23,6 +23,9 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="src\Data\FastVector.hpp">
+      <Filter>src\Data</Filter>
+    </ClInclude>
     <ClInclude Include="src\Data\HashTable.hpp">
       <Filter>src\Data</Filter>
     </ClInclude>
@@ -77,9 +80,6 @@
     <ClInclude Include="src\Math\PlaneVolume.hpp">
       <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Math\Quaternion.hpp">
-      <Filter>src\Math</Filter>
-    </ClInclude>
     <ClInclude Include="src\Math\Ray.hpp">
       <Filter>src\Math</Filter>
     </ClInclude>
@@ -101,10 +101,19 @@
     <ClInclude Include="src\Sort\Sort.hpp">
       <Filter>src\Sort</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilites\Asserts.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\COMInitializer.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utilites\InputManager.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
     <ClInclude Include="src\Utilites\PerformaceTimer.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\Pointers.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
     <ClInclude Include="src\Utilites\ProfilerMacro.h">
@@ -114,6 +123,9 @@
       <Filter>src\Utilites</Filter>
     </ClInclude>
     <ClInclude Include="src\Utilites\Stack.hpp">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilites\StringCast.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
     <ClInclude Include="src\Utilites\Timer.h">
@@ -128,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="src\Utilites\COMInitializer.cpp">
+      <Filter>src\Utilites</Filter>
+    </ClCompile>
     <ClCompile Include="src\Utilites\InputManager.cpp">
       <Filter>src\Utilites</Filter>
     </ClCompile>

@@ -2,16 +2,13 @@
 #include <filesystem>
 #include <Handlers/DropHandler.h>
 
-#include "Renderer/GraphicsEngine.h"
-#include "StringCast.h"
-#include "Renderer/AssetHandlers/ModelAssetHandler.h"
-#include "Renderer/Debugger/ConsoleHelper.h"
-#include "Renderer/Scene/SceneSerializer.h"
-#include "Renderer/Types/FileExtensions.h"
+#include "Utilites/StringCast.h"
+#include "AssetHandlers/ModelAssetHandler.h"
+#include "Debugger/ConsoleHelper.h"
 
-#include "Components/Components.hpp"
-#include "Renderer/Render/Renderer.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Types/FileExtensions.h"
+#include "Scene/SceneManager.h"
+#include "Components/AllComponents.h"
 
 std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 {
@@ -46,22 +43,17 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 			const auto extension = path.extension().string();
 
 
-			if(fbxExt == extension)
+			if(Helpers::ToLowerCase(fbxExt) == Helpers::ToLowerCase(extension))
 			{
-				auto& modelComp = SceneManager::GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
-				ConsoleHelper::Log(LogType::Info, "Loaded a model '" + path.filename().string() + "' into the scene");
+				SceneManager::Get().GetScene()->CreateEntity("").AddComponent<ModelComponent>(wPath);
+				ConsoleHelper::Log(LogType::Info, "Loaded a model '%s' into the scene", path.filename().string().c_str());
 			}
 
-			if(sceneExt == extension)
+			if(sceneExt == Helpers::ToLowerCase(extension))
 			{
-
 				GraphicsEngine::Get()->SetEngineUpdateRuntime(false);
-
-				SceneManager::LoadScene(stringPath);
-				
-
-				ConsoleHelper::Log(LogType::Info, "Loaded a scene '" + stringPath + "'");
-
+				SceneManager::Get().LoadScene(stringPath);
+				ConsoleHelper::Log(LogType::Info, "Loaded a scene '%s'", stringPath.c_str());
 			}
 		}
 
@@ -72,10 +64,10 @@ std::wstring DropHandler::DropFileScene(ImRect dropRect, ImGuiID aId)
 	return L"";
 }
 
-std::wstring DropHandler::DropFileEntity(Entity& aEntity)
+std::wstring DropHandler::DropFileEntity(GamerEngine::Entity& aEntity)
 {
 
-	bool hasFound = false;
+	bool hasFound;
 	if(ImGui::BeginDragDropTarget())
 	{
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM");
@@ -112,11 +104,11 @@ std::wstring DropHandler::DropFileEntity(Entity& aEntity)
 				}
 				auto& modelComp = aEntity.GetComponent<ModelComponent>();
 
-				ModelAssetHandler::Get().LoadAnimationData(modelComp.GetModel()->GetModel()->GetName(), wPath);
+				ModelAssetHandler::Get().LoadAnimationData(modelComp.GetModel()->GetName(), wPath);
 				modelComp.GetModel()->PlayAnimation(wPath);
-				std::filesystem::path modelName = modelComp.GetModel()->GetModel()->GetName();
+				std::filesystem::path modelName = modelComp.GetModel()->GetName();
 
-				ConsoleHelper::Log(LogType::Info, "Added a Animation | Model " + modelName.filename().string() + " got the animation " + path.filename().string());
+				ConsoleHelper::Log(LogType::Info, "Added a Animation | Model %s got the animation %s", modelName.filename().string().c_str(), path.filename().string());
 			}
 
 

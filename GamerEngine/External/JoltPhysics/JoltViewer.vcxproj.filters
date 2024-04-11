@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="JoltPhysics">
+      <UniqueIdentifier>{812AB974-EDDF-316A-76D4-2B41E288286E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltPhysics\TestFramework">
+      <UniqueIdentifier>{FE88B7FC-6A4B-EB86-B3FB-79131FFDC364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltPhysics\TestFramework\Application">
+      <UniqueIdentifier>{C1314CC5-2DF6-4AB5-F65B-7B7F62DFE6EA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltPhysics\TestFramework\Image">
+      <UniqueIdentifier>{70B18E2D-DC94-9D6D-E597-CBA951FA63BE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltPhysics\TestFramework\Input">
+      <UniqueIdentifier>{7D7F8F2D-E962-9E6D-F265-CCA95EC864BE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltPhysics\TestFramework\Math">
+      <UniqueIdentifier>{973CA918-8362-737F-6CA8-F84A586D984B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltPhysics\TestFramework\Renderer">
+      <UniqueIdentifier>{64CAB750-5006-BBBA-B918-D3B1A57363D5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltPhysics\TestFramework\UI">
+      <UniqueIdentifier>{6BA37620-575E-66CC-0016-DF16ECAFB05C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltPhysics\TestFramework\Utils">
+      <UniqueIdentifier>{DED06B2E-4AB4-7A6E-53B7-A8AABF1941BF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JoltViewer">
+      <UniqueIdentifier>{90451B40-7CFD-5C8D-E504-36E9D1DBF77D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="JoltPhysics\TestFramework\Application\Application.h">
+      <Filter>JoltPhysics\TestFramework\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Application\DebugUI.h">
+      <Filter>JoltPhysics\TestFramework\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Application\EntryPoint.h">
+      <Filter>JoltPhysics\TestFramework\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Image\BlitSurface.h">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Image\LoadBMP.h">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Image\LoadTGA.h">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Image\Surface.h">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Image\ZoomImage.h">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Input\Keyboard.h">
+      <Filter>JoltPhysics\TestFramework\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Input\Mouse.h">
+      <Filter>JoltPhysics\TestFramework\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Math\Perlin.h">
+      <Filter>JoltPhysics\TestFramework\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\CommandQueue.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\ConstantBuffer.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\DebugRendererImp.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\DescriptorHeap.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\FatalErrorIfFailed.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\Font.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\Frustum.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\PipelineState.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\RenderInstances.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\RenderPrimitive.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\Renderer.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Renderer\Texture.h">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\TestFramework.h">
+      <Filter>JoltPhysics\TestFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIAnimation.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIAnimationSlide.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIButton.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UICheckBox.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIComboBox.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIElement.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIEventListener.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIHorizontalStack.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIImage.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIManager.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UISlider.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIStaticText.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UITextButton.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UITexturedQuad.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\UI\UIVerticalStack.h">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Utils\CustomMemoryHook.h">
+      <Filter>JoltPhysics\TestFramework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Utils\Log.h">
+      <Filter>JoltPhysics\TestFramework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\TestFramework\Utils\ReadData.h">
+      <Filter>JoltPhysics\TestFramework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltViewer\JoltViewer.h">
+      <Filter>JoltViewer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="JoltPhysics\TestFramework\Application\Application.cpp">
+      <Filter>JoltPhysics\TestFramework\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Application\DebugUI.cpp">
+      <Filter>JoltPhysics\TestFramework\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Image\BlitSurface.cpp">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Image\LoadBMP.cpp">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Image\LoadTGA.cpp">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Image\Surface.cpp">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Image\ZoomImage.cpp">
+      <Filter>JoltPhysics\TestFramework\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Input\Keyboard.cpp">
+      <Filter>JoltPhysics\TestFramework\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Input\Mouse.cpp">
+      <Filter>JoltPhysics\TestFramework\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Math\Perlin.cpp">
+      <Filter>JoltPhysics\TestFramework\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\ConstantBuffer.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\DebugRendererImp.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\FatalErrorIfFailed.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\Font.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\PipelineState.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\RenderInstances.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\RenderPrimitive.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\Renderer.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Renderer\Texture.cpp">
+      <Filter>JoltPhysics\TestFramework\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIAnimation.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIAnimationSlide.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIButton.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UICheckBox.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIComboBox.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIElement.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIHorizontalStack.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIImage.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIManager.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UISlider.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIStaticText.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UITextButton.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\UI\UIVerticalStack.cpp">
+      <Filter>JoltPhysics\TestFramework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Utils\CustomMemoryHook.cpp">
+      <Filter>JoltPhysics\TestFramework\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Utils\Log.cpp">
+      <Filter>JoltPhysics\TestFramework\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\TestFramework\Utils\ReadData.cpp">
+      <Filter>JoltPhysics\TestFramework\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltViewer\DummyProfiler.cpp">
+      <Filter>JoltViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltViewer\JoltViewer.cpp">
+      <Filter>JoltViewer</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

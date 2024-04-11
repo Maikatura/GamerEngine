@@ -1,10 +1,9 @@
 #pragma once
 #include <Layers/Layer.h>
 
-#include <Renderer/Types/EnumTypes.h>
-#include <Renderer/Model/Entity.h>
-
-#include "Components/RandomMoverComponent.h"
+#include <Types/EnumTypes.h>
+#include <Core/Model/Entity.h>
+#include "Core/Model/Material.h"
 
 class Inspector : public Layer
 {
@@ -14,10 +13,15 @@ public:
 
 	void OnImGuiRender() override;
 
-	void DrawSceneObject(Entity& aEntity);
-	void DrawFileObject(Entity& aEntity);
+	void DrawSceneObject(GamerEngine::Entity aEntity);
+	void DrawFileObject(GamerEngine::Entity aEntity);
 
-	void AddComponent(Entity& aEntity);
+
+	template <typename T>
+	static void DrawComponent(const std::string& aName, GamerEngine::Entity aEntity, std::function<void(T&, GamerEngine::Entity)> aFunction);
+
+	void AddComponent(GamerEngine::Entity aEntity);
+	bool ShowTexturePicker(GamerEngine::Entity aEntity, Ref<Material>& selectedMaterial, TextureType textureType);
 
 private:
 

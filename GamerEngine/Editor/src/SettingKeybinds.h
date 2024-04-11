@@ -9,22 +9,32 @@ enum class EditorKeybinds
 };
 
 
-class EditorSettingsPanel
+
+
+class SettingKeybinds
 {
 public:
-	void CheckInput(EditorKeybinds aKeyInput)
+	static ImGuizmo::MODE GetEditMode()
 	{
-		switch (aKeyInput) {
-			case EditorKeybinds::TRANSLATE: 
-				break;
+		return myMode;
+	}
 
-			case EditorKeybinds::ROTATE: 
-				break;
+	static void SetEditModeType(ImGuizmo::MODE aMode)
+	{
+		myMode = aMode;
+	}
 
-			case EditorKeybinds::SCALE: 
-				break;
-		}
+	static std::string GetEditModeName()
+	{
+		return (ImGuizmo::MODE::LOCAL == myMode) ? "Local" : "World";
 	}
 
 private:
+
+
+
+
+
+	inline static ImGuizmo::MODE myMode;
+
 };

@@ -1,0 +1,106 @@
+Scene: SceneTesting
+Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Assets\Scenes\Tests\ParticleTest.csf
+Entities:
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [92.2944183, 203.494476, -5.17140198]
+      Rotation: [-108.933121, 88.260994, 131.488968]
+      Scale: [0.994756043, 0.999682605, 0.999712229]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [-44, 100, 85]
+      Intensity: 1.89999998
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [889.072632, 477.576904, 780.217041]
+      Rotation: [19.9693871, 229.649353, 0.000104271501]
+      Scale: [0.999961138, 0.999956548, 0.999987185]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 25000
+      Primary: true
+  - Entity: 16680899475570082786
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1000, 1, 1000]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -2.52000009e-05
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 8546459414820238174
+    TagComponent:
+      Tag: Particle Emitter
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ChildComponent:
+      ChildrenSize: 0
+      Children:
+        {}
+    ParticleComponent:
+      EmitterSettingsSize: 2
+      EmitterSettings:
+        0:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+        1:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+      ParticleSettingsSize: 2
+      ParticleSettings:
+        0:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 10, 0]
+          Scale: [1, 1, 1]
+          Color: [1, 0, 0, 1]
+        1:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 20, 0]
+          Scale: [0, 0, 0]
+          Color: [1, 0, 1, 1]

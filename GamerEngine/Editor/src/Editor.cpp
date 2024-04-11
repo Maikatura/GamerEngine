@@ -6,19 +6,16 @@
 #include "Windows.h"
 
 
-#include <Renderer/Framework/DX11.h>
-#include <Renderer/GraphicsEngine.h>
-#include <Renderer/Framework/DX11.h>
-#include <Renderer/Render/LineRenderer.h> 
 
+
+#include <Profiler/Profiler.h>
+#include <Core/Framework/DX11.h>
+#include <GraphicsEngine.h>
+#include <Core/Rendering/LineRenderer.h> 
 #include "Physics.h"
-#include "Time.hpp"
-#include "Components/CameraController.h"
-#include "Components/NativeScriptComponent.h"
 #include "Layers/EditorLayers.h"
 #include "Layers/UI/EditorSettingsPanel.h"
-#include "Renderer/model/Entity.h"
-#include "Renderer/Scene/SceneManager.h"
+#include "Scene/SceneManager.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -80,19 +77,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	myLayers.Init();
 	EditorSettingsPanel::LoadConfig();
-	LineRenderer::Init();
+	LineRenderer::Get().Init();
 	Physics::Get().Init();
-
-
-	auto cameraFunc = std::function<void(Entity)>([](Entity aEntity)
-	{
-		aEntity.AddComponent<CameraControllerData>();
-		aEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-	});
 	
-	Scene::SetCameraHandle(cameraFunc);
 
-	SceneManager::LoadScene("Editor\\Scenes\\default.csf");
+	SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
 	
 	while(bShouldRun)
 	{
@@ -113,22 +102,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			break;
 		}
 
+		
+
 		myLayers.BeginFrame();
 		graphicsEngine.BeginFrame();
 
 		//Physics::Get().Update();
 
-		//graphicsEngine.SetEngineUpdateRuntime(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameRender();
+		
 
-		/*LineRenderer::Render();
-		LineRenderer::Clear();*/
+		{
+			myLayers.OnUpdate();
+			myLayers.OnImGuiRender();
+			myLayers.EndFrame();
+		}
 
-		myLayers.OnUpdate();
-		myLayers.OnImGuiRender();
-
-		myLayers.EndFrame();
 		graphicsEngine.EndFrame();
 	}
 

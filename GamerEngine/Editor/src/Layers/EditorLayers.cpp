@@ -3,13 +3,15 @@
 #include <fstream>
 #include <Layers/EditorLayers.h>
 #include <iostream>
-#include <Renderer/GraphicsEngine.h>
-#include <Renderer/Framework/DX11.h>
+#include <GraphicsEngine.h>
+#include <Core/Framework/DX11.h>
 #include "ImGuizmo/ImGuizmo.h"
 #include <Layers/LayerHeader.h>
-#include "Renderer/Scene/Scene.h"
+#include "Scene/Scene.h"
 #include <Fonts/IconsForkAwesome.h>
-#include "Renderer/Debugger/ConsoleHelper.h"
+#include "Debugger/ConsoleHelper.h"
+#include "Profiler/Profiler.h"
+
 
 EditorLayers::EditorLayers()
 {}
@@ -32,7 +34,7 @@ void EditorLayers::Init()
 	//ImGui::StyleColorsDark();
 
 	ImGui_ImplWin32_Init(GraphicsEngine::Get()->GetWindowHandle());
-	ImGui_ImplDX11_Init(DX11::Device.Get(), DX11::Context.Get());
+	ImGui_ImplDX11_Init(DX11::Get().Get().GetDevice(), DX11::Get().GetContext());
 
 	ImGui::LoadIniSettingsFromDisk((myImGuiSettingsFile + "EditorLayout.data").c_str());
 
@@ -69,7 +71,7 @@ void EditorLayers::Init()
 	}
 }
 
-void EditorLayers::AddLayer(std::shared_ptr<Layer> aLayer)
+void EditorLayers::AddLayer(Ref<Layer> aLayer)
 {
 
 	bool windowExist = false;
@@ -124,12 +126,22 @@ void EditorLayers::BeginFrame()
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 
-	
-
 	ImGui::NewFrame();
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_None);
 	ImGuizmo::SetOrthographic(false);
 	ImGuizmo::BeginFrame();
+
+	
+	PROFILE_FRAME();
+	
+
+	for (int i = 0; i < myLayers.size(); i++)
+	{
+		if (!myLayers[i]->HasBeenAdded())
+		{
+			myLayers[i]->OnBeginFrame();
+		}
+	}
 
 	OnAttach();
 }
@@ -147,7 +159,7 @@ void EditorLayers::EndFrame()
 	}
 }
 
-void EditorLayers::LoadLayout(YAML::Node window, std::vector<std::shared_ptr<Layer>>::const_reference aLayer)
+void EditorLayers::LoadLayout(YAML::Node window, std::vector<Ref<Layer>>::const_reference aLayer)
 {
 	if(window["Name"].as<std::string>() == aLayer->GetLayerName())
 	{
@@ -167,16 +179,18 @@ void EditorLayers::SetShouldEngineRun(bool aCond)
 
 void EditorLayers::AddDefaultLayers()
 {
-	AddLayer(std::make_shared<MainMenuBar>(*this));
-	AddLayer(std::make_shared<ConsoleWindow>());
-	AddLayer(std::make_shared<FileExplorer>());
-	AddLayer(std::make_shared<Hierarchy>());
-	AddLayer(std::make_shared<Inspector>());
-	AddLayer(std::make_shared<AnimatorLayer>());
-	AddLayer(std::make_shared<EditorView>());
-	AddLayer(std::make_shared<KeybindShortcutsLayer>());
-	AddLayer(std::make_shared<NetworkingLayer>());
-	AddLayer(std::make_shared<HelpPanel>());
+	AddLayer(MakeRef<MainMenuBar>(*this));
+	AddLayer(MakeRef<ConsoleWindow>());
+	AddLayer(MakeRef<FileExplorer>());
+	AddLayer(MakeRef<Hierarchy>());
+	AddLayer(MakeRef<Inspector>());
+	AddLayer(MakeRef<AnimatorLayer>());
+	AddLayer(MakeRef<SceneView>());
+	AddLayer(MakeRef<KeybindShortcutsLayer>());
+	AddLayer(MakeRef<NetworkingLayer>());
+	AddLayer(MakeRef<HelpPanel>());
+	AddLayer(MakeRef<ProfilerLayer>(myShouldProfile));
+	AddLayer(MakeRef<TextureBrowserLayer>());
 }
 
 void EditorLayers::OnUpdate()
@@ -203,16 +217,15 @@ void EditorLayers::OnAttach()
 
 void EditorLayers::OnImGuiRender()
 {
-	DX11::Context->OMSetRenderTargets(1, DX11::BackBuffer.GetAddressOf(), NULL);
+	auto renderView = DX11::Get().GetRenderTargetView();
+	DX11::Get().GetContext()->OMSetRenderTargets(1, &renderView, NULL);
 
 	for(int i = 0; i < myLayers.size(); i++)
 	{
-		if (myLayers[i]->HasBeenAdded())
+		if (myLayers[i]->HasBeenAdded() && myLayers[i]->IsOpen())
 		{
-			if (myLayers[i]->IsOpen())
-			{
-				myLayers[i]->OnImGuiRender();
-			}
+			myLayers[i]->OnImGuiRender();
+			
 
 			/*if(!myLayers[i]->OnImGuiRender())
 			{

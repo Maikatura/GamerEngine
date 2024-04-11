@@ -24560,6 +24560,7 @@ class basic_registry {
         if(!cpool) {
             cpool.reset(new storage_type<Component>{});
             cpool->bind(forward_as_any(*this));
+
         }
 
         ENTT_ASSERT(cpool->type() == type_id<Component>(), "Unexpected type");

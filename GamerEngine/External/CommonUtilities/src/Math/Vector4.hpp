@@ -1,6 +1,8 @@
 #pragma once
 #include <cassert>
 
+#include "MathTypes.hpp"
+
 
 namespace CommonUtilities
 {
@@ -21,6 +23,9 @@ namespace CommonUtilities
 
 		//Copy constructor (compiler generated)
 		Vector4<T>(const Vector4<T>& aVector) = default;
+
+		Vector4<T>(Vector3<T> aVec3, const T& aW = static_cast<T>(0));
+		Vector4<T>(CommonUtilities::Vector2<float> aVector2, float aY, float aZ);
 
 		//Assignment operator (compiler generated)
 		Vector4<T>& operator=(const Vector4<T>& aVector) = default;
@@ -53,6 +58,13 @@ namespace CommonUtilities
 		static Vector4<T> Forward() { return Vector4<T>(0, 0, 1, 0); }
 	};
 
+	template <typename T>
+	std::ostream& operator<<(std::ostream& aOut, const Vector4<T>& aVector3)
+	{
+		aOut << "(X: " << aVector3.x << " | Y: " << aVector3.y << " | Z: " << aVector3.z << " | W: " << aVector3.w << ")";
+		return aOut;
+	}
+
 
 	template <class T>
 	Vector4<T>::Vector4()
@@ -70,6 +82,21 @@ namespace CommonUtilities
 		y = aY;
 		z = aZ;
 		w = aW;
+	}
+
+	template <class T>
+	Vector4<T>::Vector4(Vector3<T> aVec3, const T& aW) : x(aVec3.x),
+		y(aVec3.y),
+		z(aVec3.z),
+		w(aW)
+	{
+
+	}
+
+	template <class T>
+	Vector4<T>::Vector4(CommonUtilities::Vector2<float> aVector2, float aZ, float aW) : x(aVector2.x), y(aVector2.y), z(aZ), w(aW)
+	{
+
 	}
 
 	template <class T>

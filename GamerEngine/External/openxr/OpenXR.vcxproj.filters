@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\openxr">
+      <UniqueIdentifier>{347F3862-204D-2C68-09E1-9C8EF54D08CD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{E5D74254-D18F-84A1-3A97-5DFD266E1F92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external">
+      <UniqueIdentifier>{1F3C6D0D-0B9F-FCB1-B424-3568A066C834}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\android-jni-wrappers">
+      <UniqueIdentifier>{7E1510ED-EA83-656C-336D-206C9F1A5B08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\android-jni-wrappers\wrap">
+      <UniqueIdentifier>{E7E6E4BC-D338-BCAC-BC57-F9BCA848D595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jnipp">
+      <UniqueIdentifier>{8F511619-7B35-D76E-E495-D1C1D098C1F0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jnipp\tests">
+      <UniqueIdentifier>{B1EBA5B4-9D10-F534-C65B-DAC4B2DFF352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp">
+      <UniqueIdentifier>{4B0E06C4-379D-8F8D-E0BB-A388CC29A033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\example">
+      <UniqueIdentifier>{263B7D36-12F6-6CE2-BBAD-E52CA747B772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\example\readFromStream">
+      <UniqueIdentifier>{31EB9251-9D50-26D8-2629-C8B0928D1B47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\example\readFromString">
+      <UniqueIdentifier>{DCFD9251-4863-26D8-D13B-C8B03DA01B47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\example\streamWrite">
+      <UniqueIdentifier>{0CBE4388-F83A-37CB-21B8-37DF0D94D35E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\example\stringWrite">
+      <UniqueIdentifier>{97330114-83B0-F456-AC2D-F56A980991EA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\include">
+      <UniqueIdentifier>{BE503653-AA0B-26FF-53C3-9E493F5D708F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\include\json">
+      <UniqueIdentifier>{470F6B20-B37D-C09F-FC66-7B9F6814B63B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\src">
+      <UniqueIdentifier>{E2F9C559-CE1E-15DA-F769-FA69E3ED13F8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\src\jsontestrunner">
+      <UniqueIdentifier>{45EFF168-B17E-B353-BA7A-946B2689EE5F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\src\lib_json">
+      <UniqueIdentifier>{016FB08C-6DDD-050C-B6C6-C00B2274FBA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\external\jsoncpp\src\test_lib_json">
+      <UniqueIdentifier>{E0EDC576-CC3F-9D66-B55E-DA76A14FB64F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\loader">
+      <UniqueIdentifier>{73893A69-5F41-7CB6-C848-5512B41F17A7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\openxr\openxr.h">
+      <Filter>include\openxr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\openxr\openxr_platform.h">
+      <Filter>include\openxr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\openxr\openxr_platform_defines.h">
+      <Filter>include\openxr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\openxr\openxr_reflection.h">
+      <Filter>include\openxr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\openxr\openxr_reflection_parent_structs.h">
+      <Filter>include\openxr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\openxr\openxr_reflection_structs.h">
+      <Filter>include\openxr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\extra_algorithms.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\filesystem_utils.hpp">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\hex_and_handles.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\loader_interfaces.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\object_info.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\platform_utils.hpp">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\stdfs_conditions.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\unique_asset.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\vulkan_debug_object_namer.hpp">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\xr_dependencies.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\xr_linear.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\ObjectWrapperBase.h">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.content.h">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.content.impl.h">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.database.h">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.database.impl.h">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.net.h">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\android-jni-wrappers\wrap\android.net.impl.h">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jnipp\jnipp.h">
+      <Filter>src\external\jnipp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jnipp\tests\testing.h">
+      <Filter>src\external\jnipp\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\allocator.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\assertions.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\config.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\forwards.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\json.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\json_features.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\reader.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\value.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\version.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\include\json\writer.h">
+      <Filter>src\external\jsoncpp\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\src\lib_json\json_tool.h">
+      <Filter>src\external\jsoncpp\src\lib_json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\src\test_lib_json\fuzz.h">
+      <Filter>src\external\jsoncpp\src\test_lib_json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\jsoncpp\src\test_lib_json\jsontest.h">
+      <Filter>src\external\jsoncpp\src\test_lib_json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\android_utilities.h">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\api_layer_interface.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\exception_handling.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\loader_instance.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\loader_logger.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\loader_logger_recorders.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\loader_platform.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\manifest_file.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\runtime_interface.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\xr_generated_loader.hpp">
+      <Filter>src\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xr_generated_dispatch_table.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xr_generated_dispatch_table_core.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\common\filesystem_utils.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\object_info.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\android-jni-wrappers\wrap\android.content.cpp">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\android-jni-wrappers\wrap\android.database.cpp">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\android-jni-wrappers\wrap\android.net.cpp">
+      <Filter>src\external\android-jni-wrappers\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jnipp\jnipp.cpp">
+      <Filter>src\external\jnipp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jnipp\tests\external_create.cpp">
+      <Filter>src\external\jnipp\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jnipp\tests\external_detach.cpp">
+      <Filter>src\external\jnipp\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jnipp\tests\main.cpp">
+      <Filter>src\external\jnipp\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\example\readFromStream\readFromStream.cpp">
+      <Filter>src\external\jsoncpp\example\readFromStream</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\example\readFromString\readFromString.cpp">
+      <Filter>src\external\jsoncpp\example\readFromString</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\example\streamWrite\streamWrite.cpp">
+      <Filter>src\external\jsoncpp\example\streamWrite</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\example\stringWrite\stringWrite.cpp">
+      <Filter>src\external\jsoncpp\example\stringWrite</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\src\jsontestrunner\main.cpp">
+      <Filter>src\external\jsoncpp\src\jsontestrunner</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\src\lib_json\json_reader.cpp">
+      <Filter>src\external\jsoncpp\src\lib_json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\src\lib_json\json_value.cpp">
+      <Filter>src\external\jsoncpp\src\lib_json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\src\lib_json\json_writer.cpp">
+      <Filter>src\external\jsoncpp\src\lib_json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\src\test_lib_json\fuzz.cpp">
+      <Filter>src\external\jsoncpp\src\test_lib_json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\src\test_lib_json\jsontest.cpp">
+      <Filter>src\external\jsoncpp\src\test_lib_json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\jsoncpp\src\test_lib_json\main.cpp">
+      <Filter>src\external\jsoncpp\src\test_lib_json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\android_utilities.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\api_layer_interface.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\loader_core.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\loader_instance.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\loader_logger.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\loader_logger_recorders.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\manifest_file.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\runtime_interface.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\xr_generated_loader.cpp">
+      <Filter>src\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xr_generated_dispatch_table.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xr_generated_dispatch_table_core.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

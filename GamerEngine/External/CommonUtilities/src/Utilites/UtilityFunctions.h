@@ -7,29 +7,31 @@
 
 namespace CommonUtilities
 {
-
+	const float PI = 3.141f;
+	const float DegToRad = static_cast<float>(PI / 180.0f);
+	const float RadToDeg = static_cast<float>(180.0f / PI);
 
 	template<typename T>
-	T Distance(const T aFirst, const T aSecond)
+	inline T Distance(const T aFirst, const T aSecond)
 	{
 		return Abs(aFirst - aSecond);
 	}
 
 	template<typename T>
-	T Max(const T aFirst, const T aSecond)
+	inline T Max(const T aFirst, const T aSecond)
 	{
 		return ((aFirst > aSecond) ? aFirst : aSecond);
 	}
 
 	template <typename T>
-	T Min(const T aFirst, const T aSecond)
+	inline T Min(const T aFirst, const T aSecond)
 	{
 		return (aFirst < aSecond) ? aFirst : aSecond;
 	}
 
 
 	template <typename T>
-	T Abs(const T aAbsValue)
+	inline T Abs(const T aAbsValue)
 	{
 		if (aAbsValue < 0 || aAbsValue == 0)
 		{
@@ -42,7 +44,7 @@ namespace CommonUtilities
 	}
 
 	template <typename T>
-	T Clamp(T aClampValue, const T aMinValue, const T aMaxValue)
+	inline T Clamp(T aClampValue, const T aMinValue, const T aMaxValue)
 	{
 		assert(aMinValue <= aMaxValue && "ERROR! min value is larger than max value");
 
@@ -59,7 +61,7 @@ namespace CommonUtilities
 	}
 
 	template <typename T>
-	T Lerp(const T aMinValue, const T aMaxValue, const float aLerp)
+	inline T Lerp(const T aMinValue, const T aMaxValue, const float aLerp)
 	{
 		T returnValue = aMinValue + (aLerp * (aMaxValue - aMinValue));
 
@@ -67,13 +69,13 @@ namespace CommonUtilities
 	}
 
 	template <typename T>
-	T LerpMinMax(const T aMinValue, const T aMaxValue, const float aLerp)
+	inline T LerpMinMax(const T aMinValue, const T aMaxValue, const float aLerp)
 	{
 		return aMinValue + (aMaxValue - aMinValue) * (Min<float>(Max<float>(aLerp, 0), 1.f));
 	}
 
 	template <typename T>
-	void Swap(T& aFirstValue, T& aSecondValue)
+	inline void Swap(T& aFirstValue, T& aSecondValue)
 	{
 		T valueOne = aFirstValue;
 		T valueTwo = aSecondValue;
@@ -83,11 +85,16 @@ namespace CommonUtilities
 	}
 
 	template <typename T>
-	T Center(const T aFirst, const T aSecond)
+	inline T Center(const T aFirst, const T aSecond)
 	{
 		T center = aFirst - aSecond;
 
 		return aFirst + center;
 	}
 
+	template <typename T>
+	inline bool Equals(const T& a, const T& b, const T& epsilon)
+	{
+		return std::abs(a - b) <= epsilon;
+	}
 };

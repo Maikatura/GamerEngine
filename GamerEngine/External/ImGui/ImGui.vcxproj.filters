@@ -7,27 +7,36 @@
     <Filter Include="ImGui">
       <UniqueIdentifier>{C0FF640D-2C14-8DBE-F595-301E616989EF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ImGui\backend">
+      <UniqueIdentifier>{975EAA44-031F-267B-CC59-6FF838D96A57}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ImGuizmo">
       <UniqueIdentifier>{36FD234F-22CA-7E5A-4BE3-6C02370FB4E8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Profiler">
+      <UniqueIdentifier>{28AC12A2-1479-6DAD-3D92-5B5529BEA23B}</UniqueIdentifier>
     </Filter>
     <Filter Include="imgui_markdown">
       <UniqueIdentifier>{C2438F81-AE11-8387-97A5-F3AD83125FEC}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Fonts\IconsFontAwesome.h">
+      <Filter>Fonts</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fonts\IconsForkAwesome.h">
       <Filter>Fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImGui\backend\imgui_impl_dx11.h">
+      <Filter>ImGui\backend</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImGui\backend\imgui_impl_win32.h">
+      <Filter>ImGui\backend</Filter>
     </ClInclude>
     <ClInclude Include="src\ImGui\imconfig.h">
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\ImGui\imgui.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ImGui\imgui_impl_dx11.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ImGui\imgui_impl_win32.h">
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\ImGui\imgui_internal.h">
@@ -63,11 +72,20 @@
     <ClInclude Include="src\ImGuizmo\ImZoomSlider.h">
       <Filter>ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="src\Profiler\Profiler.h">
+      <Filter>Profiler</Filter>
+    </ClInclude>
     <ClInclude Include="src\imgui_markdown\imgui_markdown.h">
       <Filter>imgui_markdown</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ImGui\backend\imgui_impl_dx11.cpp">
+      <Filter>ImGui\backend</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImGui\backend\imgui_impl_win32.cpp">
+      <Filter>ImGui\backend</Filter>
+    </ClCompile>
     <ClCompile Include="src\ImGui\imgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
@@ -75,12 +93,6 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\ImGui\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_impl_dx11.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_impl_win32.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\ImGui\imgui_stdlib.cpp">
@@ -106,6 +118,12 @@
     </ClCompile>
     <ClCompile Include="src\ImGuizmo\ImSequencer.cpp">
       <Filter>ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Profiler\Profiler.cpp">
+      <Filter>Profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Profiler\ProfilerWindow.cpp">
+      <Filter>Profiler</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

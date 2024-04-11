@@ -14,6 +14,11 @@ void Layer::OnAttach()
     hasInited = true;
 }
 
+void Layer::OnBeginFrame()
+{
+
+}
+
 bool Layer::OnRender()
 {
     return false;

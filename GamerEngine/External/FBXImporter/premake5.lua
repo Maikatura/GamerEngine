@@ -6,8 +6,8 @@ cppdialect "C++17"
 staticruntime "Off"
 
 targetdir ("%{wks.location}/Temp/lib/")
-objdir ("%{wks.location}/Temp/Intermediate/%{prj.name}")
-targetname("%{prj.name}_%{cfg.buildcfg}")
+objdir ("%{wks.location}/Temp/Intermediate/%{cfg.buildcfg}/%{prj.name}")
+targetname("%{cfg.buildcfg}/%{prj.name}")
 
 pchheader "TGAFbx.pch.h"
 pchsource "TGAFbx.pch.cpp"
