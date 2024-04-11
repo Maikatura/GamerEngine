@@ -835,13 +835,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			{
 				return false;
 			}
-
-
 			
-
-			
-			
-
 			GamerEngine::Model::MeshData modelData = {};
 			modelData.myNumberOfVertices = static_cast<UINT>(mdlVertices.size());
 			modelData.myNumberOfIndices = static_cast<UINT>(mdlIndices.size());

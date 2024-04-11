@@ -17,7 +17,6 @@
 
 #ifdef GE_PLATFORM_WINDOWS
 #define WIN32_LEAN_AND_MEAN
-#define _WINSOCKAPI_ 
 #endif
 #endif
 

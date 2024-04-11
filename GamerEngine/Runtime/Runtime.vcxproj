@@ -80,8 +80,8 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\TurNet;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -91,14 +91,14 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\TurNet;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;..\External\openvr\lib\openvr_api.lib;..\backend\vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\debug\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxguid.lib;opengl32.lib;..\External\openvr\lib\openvr_api.lib;..\backend\vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\debug\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Temp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -108,8 +108,8 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\TurNet;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -121,15 +121,15 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\TurNet;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;..\External\openvr\lib\openvr_api.lib;..\backend\vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxguid.lib;opengl32.lib;..\External\openvr\lib\openvr_api.lib;..\backend\vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Temp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -139,8 +139,8 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_Distribution;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_Distribution;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\TurNet;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -152,15 +152,15 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_Distribution;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\FBXImporter;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\External\flecs\include;..\External\TurNet;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_NETWORK;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINSOCKAPI_;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WITH_PROFILING=1;_Distribution;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;.;..\External\ImGui\src;..\Backend\Engine\src;..\External\CommonUtilities\src;..\External\yaml-cpp;..\External\ImGui\src\ImGui;..\External\entt;..\External\json;..\External\WICTextureLoader;..\External\TurNet;..\External\FBXImporter;..\External\OpenFBX\src;..\External\openvr\headers;..\External\FBXImporter\ThirdParty\FBXSDK\include;..\Backend\Physics\src;..\External\flecs\include;..\Backend\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;..\External\openvr\lib\openvr_api.lib;..\backend\vendor\mono\lib\Distribution\libmono-static-sgen.lib;Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxguid.lib;opengl32.lib;..\External\openvr\lib\openvr_api.lib;..\backend\vendor\mono\lib\Distribution\libmono-static-sgen.lib;Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;..\External\FBXImporter\ThirdParty\FBXSDK\lib\release\libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Temp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4006 -ignore:4099 -ignore:4324 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -186,14 +186,20 @@
     <ProjectReference Include="..\Backend\Engine\Engine.vcxproj">
       <Project>{DBC7D3B0-C769-FE86-B024-12DB9C6585D7}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Backend\Physics\Physics.vcxproj">
+      <Project>{888B590D-F46A-D8A8-FD82-637F69E13E0A}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\External\flecs\Flecs.vcxproj">
+      <Project>{32A72E0D-9EBB-56BE-673D-FA1DD31053EF}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\External\Json\Json.vcxproj">
       <Project>{7F9B877C-6BD2-880D-14BF-6E1000D5040F}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\yaml-cpp\YamlCpp.vcxproj">
       <Project>{3BF5F3B0-A7D4-724C-B0EC-FD221C4BD9AD}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\External\flecs\Flecs.vcxproj">
-      <Project>{32A72E0D-9EBB-56BE-673D-FA1DD31053EF}</Project>
+    <ProjectReference Include="..\External\OpenFBX\OpenFBX.vcxproj">
+      <Project>{97529BD1-0332-1A6D-0C4A-A54378A880CE}</Project>
     </ProjectReference>
     <ProjectReference Include="..\External\OpenVR\OpenVR.vcxproj">
       <Project>{7F884AC8-6B2A-759E-54E5-88F24026FCEE}</Project>

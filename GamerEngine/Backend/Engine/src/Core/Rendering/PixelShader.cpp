@@ -7,6 +7,7 @@
 #include "Compilers/ShaderCompiler.h"
 #include "Core/Framework/DX11.h"
 #include "Utilites/StringCast.h"
+#include <d3dcompiler.h>
 
 PixelShader::PixelShader() : PixelShader("Shaders\\Default_PS.cso")
 {

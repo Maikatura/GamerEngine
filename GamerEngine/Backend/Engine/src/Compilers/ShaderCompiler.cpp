@@ -2,6 +2,7 @@
 #include "ShaderCompiler.h"
 
 #include "Debugger/ConsoleHelper.h"
+#include <d3dcompiler.h>
 
 ID3DBlob* ShaderCompiler::CompileShader(const std::string& sourceCode, const std::string& entryPoint,
                                         const std::string& shaderModel, const std::string& outputFilePath)

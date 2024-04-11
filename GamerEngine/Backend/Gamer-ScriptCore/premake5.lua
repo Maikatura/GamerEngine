@@ -9,8 +9,8 @@ objdir ("%{wks.location}/Temp/Resources/Scripts/Intermediates")
 
 files 
 {
-	"%{prj.name}/src/**.cs",
-	"%{prj.name}/properties/**.cs"
+	"./src/**.cs",
+	"./properties/**.cs"
 }
 
     

@@ -77,6 +77,9 @@ externalwarnings "Off"
 
 links
 {
+	"d3d11.lib",
+	"dxguid.lib",
+	"d3dcompiler.lib",
 	"CommonUtilities",
 	"FBXImporter",
 	"OpenFBX",

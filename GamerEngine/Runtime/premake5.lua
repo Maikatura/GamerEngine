@@ -32,16 +32,23 @@ defines
 {
 	"GE_PLATFORM_WINDOWS",
 	"GE_NETWORK",
-    	"_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS"
+
+    	"_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS",
+	"_WINSOCKAPI_",
+	"NOMINMAX",
+	"_CRT_SECURE_NO_WARNINGS",
+	"_HAS_EXCEPTIONS=0",
+	"WITH_PROFILING=1"
 }
 
 libdirs 
 { 
-	"%{wks.location}/lib/"
+	"%{wks.location}/Temp/lib/"
 }
 
 includedirs{
-    "./src",
+    	"./src",
+	"%{IncludeDirs.RapidJson}",
 	"%{IncludeDirs.ImGui}",
 	"%{IncludeDirs.GraphicsEngine}",
 	"%{IncludeDirs.CommonUtilities}",
@@ -50,12 +57,14 @@ includedirs{
 	"%{IncludeDirs.Entt}",
 	"%{IncludeDirs.Json}",
 	"%{IncludeDirs.WICTextureLoader}",
+	"%{IncludeDirs.TurNet}",
 	"%{IncludeDirs.FBXImporter}",
+	"%{IncludeDirs.OpenFBX}",
 	"%{IncludeDirs.OpenVR}",
     	"%{IncludeDirs.FBXSDK}",
-	"%{IncludeDirs.Flecs}",
-	
-	"%{IncludeDirs.TurNet}",
+	"%{IncludeDirs.Physics}",
+	--"%{IncludeDirs.PhysX}",
+	"%{IncludeDirs.Flecs}",	
 	"%{IncludeDirs.mono}"
 }
 
@@ -69,19 +78,26 @@ links
 {
 	"FBXImporter",
 	"Engine",
+	"Physics",
+	"Flecs",
+
+	--"PhysX",
+
 	"Json",
 	"YamlCpp",
-	"Flecs",
+	"OpenFBX",
 	"OpenVR",
-	"freetype",
-	"d3d11.lib",
-	"dxguid.lib",
 	
 	"msdfgen",
 	"msdf-atlas-gen",
-	"freetype",	
+	"freetype",
 
-	"TurNet",
+	"TurNet",	
+	
+	
+	"d3d11.lib",
+	"dxguid.lib",
+	"opengl32.lib",
 	"%{Libs.OpenVR}",
 	"%{Libs.mono}",
 	"%{Libs.WinSock}",

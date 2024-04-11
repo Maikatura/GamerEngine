@@ -485,7 +485,7 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
 
-	Renderer::RenderString("Test", myFont, Matrix4x4f(1.0f), Vector4f(1.0f));
+	//Renderer::RenderString("Test", myFont, Matrix4x4f(1.0f), Vector4f(1.0f));
 
 }
 

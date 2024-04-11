@@ -23,6 +23,9 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="src\Data\FastVector.hpp">
+      <Filter>src\Data</Filter>
+    </ClInclude>
     <ClInclude Include="src\Data\HashTable.hpp">
       <Filter>src\Data</Filter>
     </ClInclude>

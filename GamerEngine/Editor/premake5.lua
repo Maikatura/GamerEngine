@@ -55,7 +55,7 @@ libdirs
 }
 
 includedirs{
-    "./src",
+    	"./src",
 	"%{IncludeDirs.RapidJson}",
 	"%{IncludeDirs.ImGui}",
 	"%{IncludeDirs.GraphicsEngine}",
@@ -63,7 +63,6 @@ includedirs{
 	"%{IncludeDirs.YamlCpp}",
 	"%{IncludeDirs.ImGuiOnly}",
 	"%{IncludeDirs.Entt}",
-	"%{IncludeDirs.Game}",
 	"%{IncludeDirs.Json}",
 	"%{IncludeDirs.TurNet}",
 	"%{IncludeDirs.WICTextureLoader}",
