@@ -7,17 +7,6 @@
 #include "Core/Rendering/Renderer.h"
 
 
-ComPtr<ID3D11Buffer> LineRenderer::myLineCBuffer;
-ComPtr<ID3D11Buffer> LineRenderer::myBuffer;
-ComPtr<ID3D11InputLayout> LineRenderer::myInputLayout;
-
-ComPtr<ID3D11VertexShader> LineRenderer::myLineVertexShader;
-ComPtr<ID3D11PixelShader> LineRenderer::myLinePixelShader;
-
-LineCBufferData LineRenderer::myLineCBufferData;
-std::vector<std::array<LineVertex, 2>> LineRenderer::myLinesToRender;
-
-
 LineRenderer& LineRenderer::Get()
 {
 	static LineRenderer instance;
@@ -37,7 +26,7 @@ bool LineRenderer::Init()
 	D3D11_INPUT_ELEMENT_DESC layout[3] = {
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "WIDTH", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "WIDTH", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 	std::ifstream vsFile;
@@ -60,6 +49,16 @@ bool LineRenderer::Init()
 	}
 	psFile.close();
 
+	std::ifstream gsFile;
+	gsFile.open("Shaders\\Lineshader_GS.cso", std::ios::binary);
+	std::string gsData = { std::istreambuf_iterator<char>(gsFile), std::istreambuf_iterator<char>() };
+	result = DX11::Get().GetDevice()->CreateGeometryShader(gsData.data(), gsData.size(), nullptr, myLineGeometryShader.GetAddressOf());
+	if(FAILED(result))
+	{
+		return false;
+	}
+	gsFile.close();
+	
 	result = DX11::Get().GetDevice()->CreateInputLayout(layout, sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), vsData.data(), vsData.size(), myInputLayout.GetAddressOf());
 	if(FAILED(result))
 	{
@@ -102,12 +101,12 @@ void LineRenderer::DrawPoint(Vector3f aPosition, Vector4f aColor)
 #endif
 }
 
-void LineRenderer::DrawLine(Vector3f aStartPoint, Vector3f aEndPoint, Vector4f aColor)
+void LineRenderer::DrawLine(const Vector3f& aStartPoint, const Vector3f& aEndPoint, const Vector4f& aColor, float aWidth)
 {
 #if _DEBUG
 	std::array<LineVertex, 2> lines = {
-		LineVertex({aStartPoint.x,aStartPoint.y, aStartPoint.z, 1.0f }, aColor),
-		LineVertex({aEndPoint.x,aEndPoint.y, aEndPoint.z, 1.0f }, aColor)
+		LineVertex({aStartPoint.x,aStartPoint.y, aStartPoint.z, 1.0f }, aColor, aWidth),
+		LineVertex({aEndPoint.x,aEndPoint.y, aEndPoint.z, 1.0f }, aColor, aWidth)
 	};
 
 	myLinesToRender.push_back(lines);
@@ -242,7 +241,7 @@ void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselatio
 #endif
 }
 
-void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
+void LineRenderer::Render(const Matrix4x4f& aView,const Matrix4x4f& aProjection)
 {
 #if _DEBUG
 	D3D11_MAPPED_SUBRESOURCE bufferData;
@@ -262,6 +261,8 @@ void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
 	memcpy(bufferData.pData, &myLineCBufferData, sizeof(LineCBufferData));
 	DX11::Get().GetContext()->Unmap(myLineCBuffer.Get(), 0);
 
+	DX11::Get().GetContext()->VSSetConstantBuffers(6, 1, myLineCBuffer.GetAddressOf());
+
 	UINT stride = sizeof(LineVertex);
 	UINT offset = 0;
 
@@ -269,12 +270,12 @@ void LineRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection)
 
 	for (int i = 0; i < myLinesToRender.size(); i++)
 	{
-		DX11::Get().GetContext()->VSSetConstantBuffers(6, 1, myLineCBuffer.GetAddressOf());
 
 		DX11::Get().GetContext()->IASetInputLayout(myInputLayout.Get());
 		DX11::Get().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 		DX11::Get().GetContext()->VSSetShader(myLineVertexShader.Get(), NULL, 0);
+		//DX11::Get().GetContext()->GSSetShader(myLineGeometryShader.Get(), NULL, 0);
 		DX11::Get().GetContext()->PSSetShader(myLinePixelShader.Get(), NULL, 0);
 
 		D3D11_MAPPED_SUBRESOURCE lineData;

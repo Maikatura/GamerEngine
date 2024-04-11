@@ -185,7 +185,7 @@ void EditorLayers::AddDefaultLayers()
 	AddLayer(MakeRef<Hierarchy>());
 	AddLayer(MakeRef<Inspector>());
 	AddLayer(MakeRef<AnimatorLayer>());
-	AddLayer(MakeRef<EditorView>());
+	AddLayer(MakeRef<SceneView>());
 	AddLayer(MakeRef<KeybindShortcutsLayer>());
 	AddLayer(MakeRef<NetworkingLayer>());
 	AddLayer(MakeRef<HelpPanel>());

@@ -12,6 +12,9 @@ LineToPixel main(LineInput input)
 	LineToPixel result;
 	result.Color = input.Color;
 	result.Position = vertexProjectionPosition;
-
+	result.LineWidth = input.LineWidth;
+	result.ViewDir = -vertexProjectionPosition.xyz;
+	result.WorldPos = input.Position;
+	
 	return result;
 }

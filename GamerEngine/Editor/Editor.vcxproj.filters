@@ -101,9 +101,6 @@
     <ClInclude Include="src\Layers\UI\EditorSettingsPanel.h">
       <Filter>Layers\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Layers\UI\EditorView.h">
-      <Filter>Layers\UI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Layers\UI\FileExplorer.h">
       <Filter>Layers\UI</Filter>
     </ClInclude>
@@ -123,6 +120,9 @@
       <Filter>Layers\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Layers\UI\ProfilerLayer.h">
+      <Filter>Layers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\UI\SceneView.h">
       <Filter>Layers\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Layers\UI\ShaderToolLayer.h">
@@ -177,9 +177,6 @@
     <ClCompile Include="src\Layers\UI\EditorSettingsPanel.cpp">
       <Filter>Layers\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Layers\UI\EditorView.cpp">
-      <Filter>Layers\UI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Layers\UI\FileExplorer.cpp">
       <Filter>Layers\UI</Filter>
     </ClCompile>
@@ -199,6 +196,9 @@
       <Filter>Layers\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Layers\UI\ProfilerLayer.cpp">
+      <Filter>Layers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\UI\SceneView.cpp">
       <Filter>Layers\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Layers\UI\ShaderToolLayer.cpp">

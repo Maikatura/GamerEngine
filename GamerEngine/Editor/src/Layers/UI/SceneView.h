@@ -15,11 +15,11 @@ namespace ImGuizmo
 
 class Entity;
 
-class EditorView : public Layer
+class SceneView : public Layer
 {
 public:
 
-	EditorView();
+	SceneView();
 
 
 	void OnImGuiRender() override;

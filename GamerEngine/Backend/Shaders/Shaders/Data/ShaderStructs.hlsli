@@ -60,13 +60,16 @@ struct LineInput
 {
 	float4 Position		:	POSITION;
 	float4 Color			:	COLOR;
-	float4 Width			:	WIDTH;
+	float LineWidth			:	WIDTH;
 };
 
 struct LineToPixel
 {
 	float4 Position		:	SV_POSITION;
-	float4 Color			:	COLOR;
+	float4 Color		:	COLOR;
+	float LineWidth		:	WIDTH;
+	float3 ViewDir		:	VIEWDIRECTION;
+	float4 WorldPos		:	POSITION;
 };
 
 struct GBufferOutput

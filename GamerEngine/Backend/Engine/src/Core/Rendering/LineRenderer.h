@@ -2,7 +2,7 @@
 #include <vector>
 #include <Math/MathTypes.hpp>
 #include <wrl/client.h>
-
+#include <d3d11.h>
 
 // TODO : OPTIMIZE THE LINE RENDERER
 
@@ -15,6 +15,7 @@ struct LineVertex
 {
 	Vector4f Position;
 	Vector4f Color;
+	float LineWidth;
 };
 
 struct LineCBufferData
@@ -35,25 +36,26 @@ public:
 	bool Init();
 
 	void DrawPoint(Vector3f aPosition, Vector4f aColor = {1,1,1,1});
-	void DrawLine(Vector3f aStartPoint, Vector3f aEndPoint, Vector4f aColor = { 1,1,1,1 });
+	void DrawLine(const Vector3f& aStartPoint, const Vector3f& aEndPoint, const Vector4f& aColor = { 1,1,1,1 }, float aWidth = 1.0f);
 	void DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation = { 0,0,0 }, Vector4f aColor = { 1,1,1,1 });
 	void DrawCircle(Vector3f aPosition, float aRadius, int aTesselation = 24);
 
 
-	void Render(Matrix4x4f aView, Matrix4x4f aProjection);
+	void Render(const Matrix4x4f& aView,const Matrix4x4f& aProjection);
 	void Clear();
 
 private:
 
-	static std::vector<std::array<LineVertex, 2>> myLinesToRender;
+	std::vector<std::array<LineVertex, 2>> myLinesToRender;
 
-	static LineCBufferData myLineCBufferData;
+	LineCBufferData myLineCBufferData;
 
-	static Microsoft::WRL::ComPtr<ID3D11Buffer> myLineCBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> myLineCBuffer;
 
-	static Microsoft::WRL::ComPtr<ID3D11Buffer> myBuffer;
-	static Microsoft::WRL::ComPtr<ID3D11InputLayout> myInputLayout;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> myBuffer;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> myInputLayout;
 
-	static Microsoft::WRL::ComPtr<ID3D11VertexShader> myLineVertexShader;
-	static Microsoft::WRL::ComPtr<ID3D11PixelShader> myLinePixelShader;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> myLineVertexShader;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> myLinePixelShader;
+	Microsoft::WRL::ComPtr<ID3D11GeometryShader> myLineGeometryShader;
 };

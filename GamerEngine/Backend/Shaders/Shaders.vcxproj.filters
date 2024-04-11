@@ -15,6 +15,7 @@
     <FxCompile Include="Shaders\Environment_PS.hlsl" />
     <FxCompile Include="Shaders\Fullscreen_VS.hlsl" />
     <FxCompile Include="Shaders\GBuffer_PS.hlsl" />
+    <FxCompile Include="Shaders\Lineshader_GS.hlsl" />
     <FxCompile Include="Shaders\Lineshader_PS.hlsl" />
     <FxCompile Include="Shaders\Lineshader_VS.hlsl" />
     <FxCompile Include="Shaders\PostProcess\PP-Bloom_PS.hlsl">

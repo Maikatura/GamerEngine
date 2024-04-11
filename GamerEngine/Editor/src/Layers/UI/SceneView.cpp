@@ -1,5 +1,5 @@
 #include "Editor.pch.h"
-#include "EditorView.h"
+#include "SceneView.h"
 #include <DirectXMath.h>
 #include <GraphicsEngine.h>
 #include <Core/Framework/DX11.h>
@@ -20,12 +20,12 @@
 #include "Layers/NetworkingLayer.h"
 #include "Core/Rendering/DeferredRenderer.h"
 
-EditorView::EditorView() : Layer("Scene"), myStartTranslate(TransformComponent()), myEditedTranslate(TransformComponent())
+SceneView::SceneView() : Layer("Scene"), myStartTranslate(TransformComponent()), myEditedTranslate(TransformComponent())
 {
 
 }
 
-void EditorView::OnImGuiRender()
+void SceneView::OnImGuiRender()
 {
 	GamerEngine::Entity entity = SelectionData::GetEntityObject();
 
@@ -43,7 +43,7 @@ void EditorView::OnImGuiRender()
 	RenderSceneView(thisEntity);
 }
 
-void EditorView::RenderSceneView(const Ref<GamerEngine::Entity>& aEntity)
+void SceneView::RenderSceneView(const Ref<GamerEngine::Entity>& aEntity)
 {
 	static ImGuiWindowFlags gizmoWindowFlags = 0;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
@@ -86,12 +86,12 @@ void EditorView::RenderSceneView(const Ref<GamerEngine::Entity>& aEntity)
 	ImGui::PopStyleVar();
 }
 
-void EditorView::RenderEntityParts(const Ref<GamerEngine::Entity>& aEntity)
+void SceneView::RenderEntityParts(const Ref<GamerEngine::Entity>& aEntity)
 {
 	EditTransform(aEntity);
 }
 
-void EditorView::RenderGameView()
+void SceneView::RenderGameView()
 {
 	//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 	ImGui::Begin(EditorNames::GameViewName.c_str());
@@ -111,12 +111,12 @@ void EditorView::RenderGameView()
 	//ImGui::PopStyleVar();
 }
 
-void EditorView::OnUpdate()
+void SceneView::OnUpdate()
 {
 	
 }
 
-Vector2f EditorView::MouseToViewport(Vector2f aWindowSize, float windowScale)
+Vector2f SceneView::MouseToViewport(Vector2f aWindowSize, float windowScale)
 {
 	aWindowSize;
 	windowScale;
@@ -131,7 +131,7 @@ Vector2f EditorView::MouseToViewport(Vector2f aWindowSize, float windowScale)
  	return { 0,0 };
 }
 
-void EditorView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
+void SceneView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 {
 
 	if (!SceneManager::Get().GetScene()->GetRegistry().valid(aEntity->GetHandle()))
@@ -149,12 +149,12 @@ void EditorView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
 	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(view);
 
-	Matrix4x4f localMat = transform.GetMatrix();
+	Matrix4x4f localMat; // = transform.GetMatrix();
 	float translate[3] = { transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z };
-	float rotation[3] = { transform.GetRotation().x * CommonUtilities::DegToRad, transform.GetRotation().y * CommonUtilities::DegToRad, transform.GetRotation().z * CommonUtilities::DegToRad };
+	float rotation[3] = { transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z };
 	float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
 
-	//ImGuizmo::RecomposeMatrixFromComponents(translate, rotation, scale, localMat.Ptr());
+	ImGuizmo::RecomposeMatrixFromComponents(translate, rotation, scale, localMat.Ptr());
 
 	if (!ImGui::IsMouseDown(ImGuiMouseButton_Right))
 	{
@@ -179,7 +179,7 @@ void EditorView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 		// THIS IS BROKEN AND I DON'T KNOW WHY...
 		if (ImGuizmo::Manipulate(viewInverse.Ptr(),projectionView.Ptr(), myOperation, SettingKeybinds::GetEditMode(),localMat.Ptr(),nullptr,nullptr))
 		{
-
+			
 			ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
 
 			transform.SetPosition({ translate[0], translate[1], translate[2] });

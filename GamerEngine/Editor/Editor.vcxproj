@@ -141,7 +141,6 @@
     <ClInclude Include="src\Layers\NetworkingLayer.h" />
     <ClInclude Include="src\Layers\UI\AnimatorLayer.h" />
     <ClInclude Include="src\Layers\UI\EditorSettingsPanel.h" />
-    <ClInclude Include="src\Layers\UI\EditorView.h" />
     <ClInclude Include="src\Layers\UI\FileExplorer.h" />
     <ClInclude Include="src\Layers\UI\FileSearch.h" />
     <ClInclude Include="src\Layers\UI\HelpPanel.h" />
@@ -149,6 +148,7 @@
     <ClInclude Include="src\Layers\UI\Inspector.h" />
     <ClInclude Include="src\Layers\UI\MainMenuBar.h" />
     <ClInclude Include="src\Layers\UI\ProfilerLayer.h" />
+    <ClInclude Include="src\Layers\UI\SceneView.h" />
     <ClInclude Include="src\Layers\UI\ShaderToolLayer.h" />
     <ClInclude Include="src\Layers\UI\TextureBrowserLayer.h" />
     <ClInclude Include="src\Project\ProjectConfig.h" />
@@ -173,7 +173,6 @@
     <ClCompile Include="src\Layers\NetworkingLayer.cpp" />
     <ClCompile Include="src\Layers\UI\AnimatorLayer.cpp" />
     <ClCompile Include="src\Layers\UI\EditorSettingsPanel.cpp" />
-    <ClCompile Include="src\Layers\UI\EditorView.cpp" />
     <ClCompile Include="src\Layers\UI\FileExplorer.cpp" />
     <ClCompile Include="src\Layers\UI\FileSearch.cpp" />
     <ClCompile Include="src\Layers\UI\HelpPanel.cpp" />
@@ -181,6 +180,7 @@
     <ClCompile Include="src\Layers\UI\Inspector.cpp" />
     <ClCompile Include="src\Layers\UI\MainMenuBar.cpp" />
     <ClCompile Include="src\Layers\UI\ProfilerLayer.cpp" />
+    <ClCompile Include="src\Layers\UI\SceneView.cpp" />
     <ClCompile Include="src\Layers\UI\ShaderToolLayer.cpp" />
     <ClCompile Include="src\Layers\UI\TextureBrowserLayer.cpp" />
     <ClCompile Include="src\Project\ProjectConfig.cpp" />

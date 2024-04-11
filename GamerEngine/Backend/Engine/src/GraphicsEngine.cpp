@@ -11,6 +11,7 @@
 #include <Core/Rendering/ForwardRenderer.h>
 #include "Profiler/Profiler.h"
 #include "Core/Rendering/DeferredRenderer.h"
+#include "Core/Rendering/LineRenderer.h"
 #include "Core/Rendering/ShadowRenderer.h"
 #include "Core/Rendering/PostProcessRenderer.h"
 #include "Scene/SceneManager.h"
@@ -485,6 +486,11 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
 
+	{
+		PROFILE_CPU_SCOPE("Render Debug Lines");
+		LineRenderer::Get().Render(view, projection);
+	}
+
 	//Renderer::RenderString("Test", myFont, Matrix4x4f(1.0f), Vector4f(1.0f));
 
 }
@@ -577,10 +583,13 @@ void GraphicsEngine::OnFrameRender() const
 
 
 	}
+		LineRenderer::Get().DrawLine({500,0,0}, {500,10000,0}, {1,0,0,1}, 1.0f);
 
 	{
 		PROFILE_CPU_SCOPE("Render Screen");
 		RenderScene(VREye::None);
+
+		
 	}
 
 	
@@ -592,7 +601,6 @@ void GraphicsEngine::OnFrameRender() const
 	{
 		PROFILE_CPU_SCOPE("Clean Scene");
 		scene->Clean();
-		//LineRenderer::Get().Clear();
 	}
 
 
