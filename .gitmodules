@@ -1,0 +1,3 @@
+[submodule "GamerEngine/External/mono"]
+	path = GamerEngine/External/mono
+	url = https://github.com/mono/mono
