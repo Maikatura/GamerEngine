@@ -148,7 +148,7 @@ namespace GamerEngine
 
 		const std::wstring& GetName() { return myPath; }
 
-		CommonUtilities::AABB3D<float> GetBoxBounds() const
+		CommonUtilities::AABB3D<float>& GetBoxBounds()
 		{
 			return myBoxBounds;
 		}

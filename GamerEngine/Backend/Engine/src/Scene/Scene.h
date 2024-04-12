@@ -75,6 +75,8 @@ public:
 	void ResetLights();
 	void RenderLight(Light* light);
 
+	void SetDirectionalLight(Ref<DirectionalLight> aDirectionalLight);
+
 	void SetSceneStatus(SceneStatus aSceneStatus);
 	SceneStatus GetSceneStatus() const;
 	bool IsReady() const;

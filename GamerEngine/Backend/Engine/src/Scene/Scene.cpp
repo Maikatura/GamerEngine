@@ -116,34 +116,34 @@ void GamerEngine::Scene::DeleteEntity(Entity aEntity)
 
 	if(aEntity.HasComponent<PointLightComponent>())
 	{
-		for(size_t i = 0; i < myLightToRender.size(); i++)
+		auto& pointLight = aEntity.GetComponent<PointLightComponent>().myPointLight;
+		auto it = std::find(myLightToRender.begin(), myLightToRender.end(), pointLight.get());
+		if (it != myLightToRender.end())
 		{
-			if(myLightToRender[i] == aEntity.GetComponent<PointLightComponent>().myPointLight.get())
-			{
-				myLightToRender.erase(myLightToRender.begin() + static_cast<int>(i));
-			}
+			std::iter_swap(it, myLightToRender.end() - 1);
+			myLightToRender.pop_back();
 		}
 	}
 
 	if(aEntity.HasComponent<SpotLightComponent>())
 	{
-		for(size_t i = 0; i < myLightToRender.size(); i++)
+		auto& pointLight = aEntity.GetComponent<SpotLightComponent>().mySpotLight;
+		auto it = std::find(myLightToRender.begin(), myLightToRender.end(), pointLight.get());
+		if (it != myLightToRender.end())
 		{
-			if(myLightToRender[i] == aEntity.GetComponent<SpotLightComponent>().mySpotLight.get())
-			{
-				myLightToRender.erase(myLightToRender.begin() + static_cast<int>(i));
-			}
+			std::iter_swap(it, myLightToRender.end() - 1);
+			myLightToRender.pop_back();
 		}
 	}
 
 	if(aEntity.HasComponent<DirectionalLightComponent>())
 	{
-		for(size_t i = 0; i < myLightToRender.size(); i++)
+		auto& pointLight = aEntity.GetComponent<DirectionalLightComponent>().myDirectionalLight;
+		auto it = std::find(myLightToRender.begin(), myLightToRender.end(), pointLight.get());
+		if (it != myLightToRender.end())
 		{
-			if(myLightToRender[i] == myDirectionalLight.get())
-			{
-				myLightToRender.erase(myLightToRender.begin() + i);
-			}
+			std::iter_swap(it, myLightToRender.end() - 1);
+			myLightToRender.pop_back();
 		}
 	}
 
@@ -211,7 +211,6 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 
 			if(view != nullptr)
 			{
-
 				for(const auto& entity : view)
 				{
 					auto [transform, particleEmitter] = view.get<TransformComponent, ParticleEmitter>(entity);
@@ -297,20 +296,23 @@ void GamerEngine::Scene::OnRender()
 			for(const auto& entity : view)
 			{
 				auto [transform, dirLight] = view.get<TransformComponent, DirectionalLightComponent>(entity);
-				if (dirLight.myDirectionalLight)
+				if (dirLight.GetLight())
 				{
 					if (!dirLight.Active) 
 					{ 
 						continue; 
 					}
 
-					myDirectionalLight = dirLight.myDirectionalLight;
-					dirLight.myDirectionalLight->SetData(&transform);
+					dirLight.GetLight()->SetData(&transform);
 					dirLight.OnUpdate();
-					RenderLight(dirLight.myDirectionalLight.get());
+					RenderLight(dirLight.GetLight());
 
 				}
 			}
+		}
+		else
+		{
+			SetDirectionalLight(nullptr);
 		}
 	}
 
@@ -321,16 +323,16 @@ void GamerEngine::Scene::OnRender()
 			for(const auto& entity : view)
 			{
 				auto [transform, pointLight] = view.get<TransformComponent, PointLightComponent>(entity);
-				if(pointLight.myPointLight)
+				if(pointLight.GetLight())
 				{
 					if (!pointLight.Active)
 					{
 						continue;
 					}
 
-					pointLight.myPointLight->SetData(&transform);
+					pointLight.GetLight()->SetData(&transform);
 					pointLight.OnUpdate();
-					RenderLight(pointLight.myPointLight.get());
+					RenderLight(pointLight.GetLight());
 					
 				}
 			}
@@ -346,16 +348,16 @@ void GamerEngine::Scene::OnRender()
 
 
 				auto [transform, spotLight] = view.get<TransformComponent, SpotLightComponent>(entity);
-				if(spotLight.mySpotLight)
+				if(spotLight.GetLight())
 				{
 					if (!spotLight.Active)
 					{
 						continue;
 					}
 
-					spotLight.mySpotLight->SetData(&transform);
+					spotLight.GetLight()->SetData(&transform);
 					spotLight.OnUpdate();
-					RenderLight(spotLight.mySpotLight.get());
+					RenderLight(spotLight.GetLight());
 				}
 			}
 		}
@@ -407,7 +409,7 @@ void GamerEngine::Scene::OnRender()
 					
 					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetPosition(), transform.GetRotation(), transform.GetScale());
 
-					LineRenderer::Get().DrawCube(transform.GetPosition(), transformedBounds.GetExtentsUnCentered(), transform.GetRotation());
+					LineRenderer::Get().DrawAABB3D(transformedBounds);
 
 					if (transformedBounds.IsOnFrustum(cameraFrustum))
 					 {
@@ -480,6 +482,11 @@ void GamerEngine::Scene::ResetLights()
 void GamerEngine::Scene::RenderLight(Light* aLight)
 {
 	myLightToRender.push_back(aLight);
+}
+
+void GamerEngine::Scene::SetDirectionalLight(Ref<DirectionalLight> aDirectionalLight)
+{
+	myDirectionalLight = aDirectionalLight;
 }
 
 void GamerEngine::Scene::SetSceneStatus(SceneStatus aSceneStatus)

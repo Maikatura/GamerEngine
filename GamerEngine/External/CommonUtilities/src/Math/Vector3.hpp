@@ -40,6 +40,8 @@ namespace CommonUtilities
 		Vector3<T> Cross(const Vector3<T>& aVector) const; //Returns the cross product of this and aVector
 
 		Vector3<T> Blend(Vector3<T> aBlendState1, Vector3<T> aBlendState2, T aBlendAmount);
+		Vector3<T> Min(const Vector3<T>& aRval);
+		Vector3<T> Max(const Vector3<T>& aRval);
 
 		const Vector3<T> operator* (const T& aRval) const;
 		const Vector3<T> operator* (const Vector3<T>& aRval) const;
@@ -53,6 +55,8 @@ namespace CommonUtilities
 		static Vector3<T> Up();
 		static Vector3<T> Forward();
 
+
+		
 		static Vector3<T> Abs(const Vector3<T>& aRval);
 
 	};
@@ -217,7 +221,27 @@ namespace CommonUtilities
 	template <class T>
 	Vector3<T> Vector3<T>::Forward()
 	{
-		return Vector3<T> { static_cast<T>(0), static_cast<T>(0), static_cast<T>(1) };
+		return Vector3<T>(static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
+	}
+
+	template <class T>
+	Vector3<T> Vector3<T>::Min(const Vector3<T>& aRval)
+	{
+		return Vector3(
+			std::min(x, aRval.x), 
+			std::min(y, aRval.y), 
+			std::min(z, aRval.z)
+		);
+	}
+
+	template <class T>
+	Vector3<T> Vector3<T>::Max(const Vector3<T>& aRval)
+	{
+		return Vector3(
+			std::max(x, aRval.x), 
+			std::max(y, aRval.y), 
+			std::max(z, aRval.z)
+		);
 	}
 
 	template <class T>

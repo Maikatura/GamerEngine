@@ -184,6 +184,20 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 				ImGui::EndGroup();
 			}
 
+			/*{
+				ImGui::BeginGroup();
+
+
+				if (component.GetModel())
+				{
+					ImGui::DragFloat3("Min Bounds", &component.GetMinBounds().x);
+					ImGui::DragFloat3("Max Bounds", &component.GetMaxBounds().x);
+					
+				}
+
+				ImGui::EndGroup();
+			}*/
+
 
 			{
 				ImGui::BeginGroup();

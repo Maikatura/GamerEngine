@@ -30,6 +30,12 @@ public:
 		: Translation(translation), myParent(nullptr)
 	{}
 
+	~TransformComponent()
+	{
+		myParent = nullptr;
+		myChildren.clear();
+	}
+
 
 	Vector3f GetPosition() const
 	{

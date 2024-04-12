@@ -137,18 +137,53 @@ void LineRenderer::DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotati
 		};
 
 		// Apply rotation to each point
-		for (Vector3f& point : points) {
+		for (Vector3f& point : points) 
+		{
 			Vector3f relativePosition = point - aPosition;
 			Vector3f rotatedPosition = rotationMatrix * relativePosition;
 			point = aPosition + rotatedPosition;
 		}
 
 		// Draw the 12 edges of the cube
-		for (int i = 0; i < 4; ++i) {
+		for (int i = 0; i < 4; ++i) 
+		{
 			DrawLine(points[i], points[(i + 1) % 4], aColor); // Bottom square
 			DrawLine(points[i + 4], points[((i + 1) % 4) + 4], aColor); // Top square
 			DrawLine(points[i], points[i + 4], aColor); // Vertical lines
 		}
+
+#endif
+}
+
+void LineRenderer::DrawAABB3D(CommonUtilities::AABB3D<float> aAABB, Vector4f aColor)
+{
+#if _DEBUG
+	Vector3f min = aAABB.GetMin();
+	Vector3f max = aAABB.GetMax();
+
+	Vector3f p1 = { min.x, min.y, min.z };
+	Vector3f p2 = { max.x, min.y, min.z };
+	Vector3f p3 = { max.x, max.y, min.z };
+	Vector3f p4 = { min.x, max.y, min.z };
+	Vector3f p5 = { min.x, min.y, max.z };
+	Vector3f p6 = { max.x, min.y, max.z };
+	Vector3f p7 = { max.x, max.y, max.z };
+	Vector3f p8 = { min.x, max.y, max.z };
+
+	DrawLine(p1, p2, aColor);
+	DrawLine(p2, p3, aColor);
+	DrawLine(p3, p4, aColor);
+	DrawLine(p4, p1, aColor);
+
+	DrawLine(p5, p6, aColor);
+	DrawLine(p6, p7, aColor);
+	DrawLine(p7, p8, aColor);
+	DrawLine(p8, p5, aColor);
+
+	DrawLine(p1, p5, aColor);
+	DrawLine(p2, p6, aColor);
+	DrawLine(p3, p7, aColor);
+	DrawLine(p4, p8, aColor);
 
 #endif
 }

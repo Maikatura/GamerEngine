@@ -1,65 +1,77 @@
 #pragma once
 #include <Math/MathTypes.hpp>
 #include "AssetHandlers/LightAssetHandler.h"
+#include "Scene/SceneManager.h"
 
 
+class LightComponent
+{
+
+public:
+	virtual ~LightComponent() = default;
+
+	LightComponent()
+	{
+			Color = { 1,1,1 };
+			Intensity = 1.0f;
+			CastShadow = true;
+			Active = true;
+			SmoothShadow = false;
+	}
+
+	virtual void OnUpdate() = 0;
+
+	virtual Light* GetLight() = 0;
+
+	Vector3f Color;
+	float Intensity;
+	bool CastShadow;
+	bool Active;
+	bool SmoothShadow ;
 
 
+};
 
 
-
-
-
-class DirectionalLightComponent
+class DirectionalLightComponent : public LightComponent
 {
 public:
 	
 
 	DirectionalLightComponent()
 	{
-		Color = { 1,1,1 };
-		Intensity = 1.0f;
-		CastShadow = true;
-		Active = true;
-		SmoothShadow = false;
 		myDirectionalLight = LightAssetHandler::CreateDirectionalLight({ 1,1,1 }, 1.0f, { -140,60,178 });
 	}
 
 
-	void OnUpdate()
+	void OnUpdate() override
 	{
 		myDirectionalLight->SetColor(Color);
 		myDirectionalLight->SetIntensity(Intensity * 0.00001f);
 		myDirectionalLight->SetCastShadows(CastShadow);
 		myDirectionalLight->SetActive(Active);
 
+		SceneManager::Get().GetScene()->SetDirectionalLight(myDirectionalLight);
 	}
 
-	Vector3f Color;
-	float Intensity;
-	bool CastShadow;
-	bool Active;
-	bool SmoothShadow;
+	DirectionalLight* GetLight() override
+	{
+		return myDirectionalLight.get();
+	}
 
 	Ref<DirectionalLight> myDirectionalLight;
 };
 
-struct PointLightComponent
+class PointLightComponent : public LightComponent
 {
 public:
 	PointLightComponent()
 	{
-		Color = { 1, 1, 0 };
-		Intensity = 1.0f;
 		Range = 4.0f;
-		Active = true;
-		CastShadow = true;
-		SmoothShadow = true;
-
 		myPointLight = LightAssetHandler::CreatePointLight(Color, Intensity, Range, { 0,0,0 });
 	}
 
-	void OnUpdate()
+	void OnUpdate() override
 	{
 		myPointLight->SetColor(Color);
 		myPointLight->SetRange(Range);
@@ -68,32 +80,32 @@ public:
 		myPointLight->SetActive(Active);
 	}
 
-	Vector3f Color;
-	float Intensity;
+	PointLight* GetLight() override
+	{
+		return myPointLight.get();
+	}
+	
 	float Range;
-	bool CastShadow;
-	bool Active;
-	bool SmoothShadow;
+	
 
 	Ref<PointLight> myPointLight;
 };
 
-struct SpotLightComponent
+class SpotLightComponent : public LightComponent
 {
 public:
 	SpotLightComponent()
 	{
-		Color = { 1, 0, 1 };
-		Intensity = 1.0f;
+		
 		Range = 4.0f;
 		InnerCone = 20.0f;
 		OuterCone = 130.0f;
-		SmoothShadow = true;
+		
 
 		mySpotLight = LightAssetHandler::CreateSpotLight(Color, Intensity, Range, {0,0,0}, InnerCone, OuterCone);
 	}
 
-	void OnUpdate()
+	void OnUpdate() override
 	{
 		mySpotLight->SetColor(Color);
 		mySpotLight->SetRange(Range);
@@ -104,14 +116,16 @@ public:
 		mySpotLight->SetActive(Active);
 	}
 
-	Vector3f Color;
-	float Intensity;
+	SpotLight* GetLight() override
+	{
+		return mySpotLight.get();
+	}
+
+	
 	float Range;
 	float InnerCone;
 	float OuterCone;
-	bool CastShadow;
-	bool Active;
-	bool SmoothShadow;
+	
 
 	Ref<SpotLight> mySpotLight;
 };

@@ -6,6 +6,7 @@
 #include "Components/TransfromComponent.h"
 
 
+
 DirectionalLight::DirectionalLight()
 {
 	SetLightDirection({ 0,0,0 });
@@ -36,6 +37,7 @@ void DirectionalLight::Update()
 	SetLightPosition(Renderer::GetCamera()->GetPosition() - myLightData.Direction * 100000.f);
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(viewMat);
 	myLightData.ShadowMapIndex = 19;
+
 }
 
 void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex)

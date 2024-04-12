@@ -183,6 +183,17 @@ public:
 		myIsLoaded = isLoaded;
 	}
 
+	Vector3f& GetMinBounds()
+	{
+		return myBoundsMin;
+	}
+
+	Vector3f& GetMaxBounds()
+	{
+		return myBoundsMax;
+	}
+
+
 private:
 
 
@@ -190,4 +201,8 @@ private:
 	bool myIsLoaded = false;
 	std::wstring myPath;
 	Ref<GamerEngine::Model> myModel = nullptr;
+
+	Vector3f myBoundsMin;
+	Vector3f myBoundsMax;
+
 };
