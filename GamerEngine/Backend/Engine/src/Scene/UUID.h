@@ -2,15 +2,18 @@
 #include <cstdint>
 
 
-class UUID2
+namespace GamerEngine
 {
-public:
-	UUID2();
-	UUID2(uint64_t uuid);
-	UUID2(const UUID2&) = default;
+	class UUID
+	{
+	public:
+		UUID();
+		UUID(uint64_t uuid);
+		UUID(const UUID&) = default;
 
-	operator uint64_t() const { return myUUID; }
-	uint64_t Get() { return myUUID; }
-private:
-	uint64_t myUUID;
-};
+		operator uint64_t() const { return myUUID; }
+		uint64_t Get() { return myUUID; }
+	private:
+		uint64_t myUUID;
+	};
+}

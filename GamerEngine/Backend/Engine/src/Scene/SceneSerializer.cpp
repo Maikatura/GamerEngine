@@ -64,16 +64,16 @@ namespace YAML
 	};
 
 	template<>
-	struct convert<UUID2>
+	struct convert<GamerEngine::UUID>
 	{
-		static Node encode(const UUID2& rhs)
+		static Node encode(const GamerEngine::UUID& rhs)
 		{
 			Node node;
 			node.push_back(rhs);
 			return node;
 		}
 
-		static bool decode(const Node& node, UUID2& rhs)
+		static bool decode(const Node& node, GamerEngine::UUID& rhs)
 		{
 			rhs = node.as<uint64_t>();
 			return true;
@@ -683,7 +683,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 		auto& netComp = deserializedEntity.AddComponent<Network::NetworkComponent>();
 		netComp.SetServer((networkComp["IsServer"]) ? networkComp["IsServer"].as<bool>() : false);
 		netComp.SetShouldSmooth((networkComp["Smooth"]) ? networkComp["Smooth"].as<bool>() : false);
-		netComp.SetID((networkComp["ID"]) ? networkComp["ID"].as<UUID2>() : UUID2());
+		netComp.SetID((networkComp["ID"]) ? networkComp["ID"].as<GamerEngine::UUID>() : GamerEngine::UUID());
 	}
 
 	// auto randomMover = aEntityNode["RandomMoverComponent"];

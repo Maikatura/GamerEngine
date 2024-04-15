@@ -9,7 +9,7 @@
 #include "Managers/DropManager.h"
 #include <Managers/CommandManager.h>
 #include <Core/Rendering/ForwardRenderer.h>
-#include "Profiler/Profiler.h"
+//#include "Profiler/Profiler.h"
 #include "Core/Rendering/DeferredRenderer.h"
 #include "Core/Rendering/LineRenderer.h"
 #include "Core/Rendering/ShadowRenderer.h"
@@ -18,6 +18,7 @@
 #include "Font/Font.h"
 #include "Scripting/ScriptEngine.h"
 
+
 GraphicsEngine* GraphicsEngine::Get()
 {
 	return myInstance;
@@ -25,9 +26,13 @@ GraphicsEngine* GraphicsEngine::Get()
 
 GraphicsEngine::~GraphicsEngine()
 {
+
 	GamerEngine::ScriptEngine::Shutdown();
 
 	StopUpdateThread();
+
+	myUpdateShouldRun = false;
+	myUpdateThread.join();
 
 	TextureAssetHandler::Clear();
 	RevokeDragDrop(myWindowHandle);
@@ -129,9 +134,11 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 	if (!myUseEditor)
 	{
-		gCPUProfiler.Initialize(1, 512);
+		//gCPUProfiler.Initialize(1, 512);
 	}
 
+
+	myUpdateThread = std::thread(&GraphicsEngine::OnFrameUpdate, this);
 
 	return true;
 }
@@ -260,7 +267,7 @@ void GraphicsEngine::BeginFrame()
 
 	if (!myUseEditor)
 	{
-		PROFILE_FRAME();
+		//PROFILE_FRAME();
 	}
 
 	if(myWantToResizeBuffers)
@@ -302,81 +309,102 @@ void GraphicsEngine::BeginFrame()
 	DX11::Get().GetContext()->ClearRenderTargetView(DX11::Get().GetRenderTargetView(), &clearColor.x);
 }
 
-void GraphicsEngine::OnFrameUpdate(bool aShouldRunLoop)
+void GraphicsEngine::OnFrameUpdate()
 {
-	/*while (myIsRunning)
-	{*/
-	Time::Update();
-	Input::Update();
 
-	if (myIsMinimized) return;
-	
-	if (!SceneManager::Get().IsReady())
+	while (myUpdateShouldRun)
 	{
-		return;
-	}
+		
+		Input::Update();
+		Time::Update();
 
 
-	if (!aShouldRunLoop && myIsPaused)
-	{
-		if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
+		if (myIsMinimized) return;
+
+		if (!SceneManager::Get().IsReady())
 		{
-			CommandManager::Undo();
+			return;
 		}
 
-		if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
+
+		if (myIsPaused)
 		{
-			CommandManager::Redo();
+			if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
+			{
+				CommandManager::Undo();
+			}
+
+			if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
+			{
+				CommandManager::Redo();
+			}
 		}
-	}
 
 
 #if _DEBUG
-	if (Input::IsKeyPressed(VK_F6))
-	{
-		unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
-		currentRenderMode++;
-		if (currentRenderMode == static_cast<unsigned char>(RenderMode::COUNT))
+		if (Input::IsKeyPressed(VK_F6))
 		{
-			currentRenderMode = 0;
+			unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
+			currentRenderMode++;
+			if (currentRenderMode == static_cast<unsigned char>(RenderMode::COUNT))
+			{
+				currentRenderMode = 0;
+			}
+
+			std::cout << "Render Mode: " << currentRenderMode << "\n";
+
+			GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
 		}
 
-		std::cout << "Render Mode: " << currentRenderMode << "\n";
-
-		GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
-	}
-
-	if (Input::IsKeyPressed(VK_F7))
-	{
-		myRenderPass++;
-
-		if (GBuffer::GBufferTexture::EGBufferTexture_Count + 1 == myRenderPass)
+		if (Input::IsKeyPressed(VK_F7))
 		{
-			myRenderPass = 0;
+			myRenderPass++;
+
+			if (GBuffer::GBufferTexture::EGBufferTexture_Count + 1 == myRenderPass)
+			{
+				myRenderPass = 0;
+			}
 		}
-	}
 #endif
 
-	{
-		PROFILE_CPU_SCOPE("Update Loop");
-
-		if (SceneManager::Get().GetScene())
 		{
-			SceneManager::Get().Update();
+			//PROFILE_CPU_SCOPE("Update Loop");
+
+			if (SceneManager::Get().GetScene())
+			{
+				SceneManager::Get().Update();
+			}
+
+		}
+
+		//#ifdef _Distribution
+		//	std::string fps = "FPS: " + std::to_string(Time::GetFPS());
+		//	std::cout << fps.c_str() << std::endl;
+		//#endif
+
+			//}
+
+		while (myUpdateShouldRun)
+		{
+			if (myRenderIsDone)
+			{
+				Renderer::SwapBuffers();
+				Renderer::ClearUpdateBuffer();
+				myRenderIsDone = false;
+				break;
+			}
 		}
 
 	}
 
-//#ifdef _Distribution
-//	std::string fps = "FPS: " + std::to_string(Time::GetFPS());
-//	std::cout << fps.c_str() << std::endl;
-//#endif
 
-	//}
 }
 
 void GraphicsEngine::RenderScene(const VREye anEye) const
 {
+
+	
+
 	if (!SceneManager::Get().IsReady())
 	{
 		return;
@@ -427,7 +455,7 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 
 	
 	{
-		PROFILE_CPU_SCOPE("Render Shadows");
+		//PROFILE_CPU_SCOPE("Render Shadows");
 		myShadowRenderer->ClearResources();
 	
 		//myShadowRenderer->Render(environmentLight.get(), modelList);
@@ -449,45 +477,45 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 
 
 	{
-		PROFILE_CPU_SCOPE("Generate GBuffer");
-		myGBuffer->ClearResource(0);
-		myGBuffer->SetAsTarget();
-		myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
-		myGBuffer->ClearTarget();
-		myGBuffer->SetAsResource(0);
+		//PROFILE_CPU_SCOPE("Generate GBuffer");
+		//myGBuffer->ClearResource(0);
+		//myGBuffer->SetAsTarget();
+		//myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
+		//myGBuffer->ClearTarget();
+		//myGBuffer->SetAsResource(0);
 	}
 
 	{
-		PROFILE_CPU_SCOPE("Render SSAO");
-		myPostProcessRenderer->ClearTargets();
-		if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
+		//PROFILE_CPU_SCOPE("Render SSAO");
+		//myPostProcessRenderer->ClearTargets();
+		//if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
 	}
 
 	{
-		PROFILE_CPU_SCOPE("Render With Deferred Renderer");
-		RendererBase::SetBlendState(BlendState::Alpha);
-		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
-		myDeferredRenderer->ClearTarget();
-		myGBuffer->ClearResource(0);
-		myGBuffer->ClearTarget();
+		//PROFILE_CPU_SCOPE("Render With Deferred Renderer");
+		//RendererBase::SetBlendState(BlendState::Alpha);
+		//myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
+		//myDeferredRenderer->ClearTarget();
+		//myGBuffer->ClearResource(0);
+		//myGBuffer->ClearTarget();
 	}
 
 	{
-		PROFILE_CPU_SCOPE("Render SSAO");
+		//PROFILE_CPU_SCOPE("Render SSAO");
 		myPostProcessRenderer->ClearTargets();
 		if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
 	}
 
 	{
 		DX11::Get().ResetRenderTarget(myUseEditor, true);
-		PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
+		//PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
 		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 		RendererBase::SetBlendState(BlendState::None);
 		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
 
 	{
-		PROFILE_CPU_SCOPE("Render Debug Lines");
+		//PROFILE_CPU_SCOPE("Render Debug Lines");
 		LineRenderer::Get().Render(view, projection);
 	}
 
@@ -495,10 +523,16 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 
 }
 
-void GraphicsEngine::OnFrameRender() const
+void GraphicsEngine::OnFrameRender()
 {
 	if (myWantToResizeBuffers) return;
 	if (myIsMinimized) return;
+
+
+	while (myRenderIsDone)
+	{
+		// Just wait until Update id done so that renderer isn't done anymore
+	}
 
 
 	if (!SceneManager::Get().IsReady())
@@ -519,7 +553,7 @@ void GraphicsEngine::OnFrameRender() const
 	}
 
 	{
-		PROFILE_CPU_SCOPE("Scene Render Setup");
+		//PROFILE_CPU_SCOPE("Scene Render Setup");
 		scene->OnRender();
 	}
 
@@ -534,7 +568,7 @@ void GraphicsEngine::OnFrameRender() const
 
 		DX11::Get().GetContext()->RSSetState(DX11::Get().GetFrontCulling());
 		{
-			PROFILE_CPU_SCOPE("Render Left Eye (VR)");
+			//PROFILE_CPU_SCOPE("Render Left Eye (VR)");
 			DX11::Get().GetRightEyeView()->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
 			//Clear the render to texture background to blue so we can differentiate it from the rest of the normal scene.
 
@@ -546,7 +580,7 @@ void GraphicsEngine::OnFrameRender() const
 		}
 
 		{
-			PROFILE_CPU_SCOPE("Render Right Eye (VR)");
+			//PROFILE_CPU_SCOPE("Render Right Eye (VR)");
 			
 			// Set the render target to be the render to texture.
 			DX11::Get().GetRightEyeView()->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView());
@@ -566,7 +600,7 @@ void GraphicsEngine::OnFrameRender() const
 
 
 	{
-		PROFILE_CPU_SCOPE("View Render Setup");
+		//PROFILE_CPU_SCOPE("View Render Setup");
 		if (myUseEditor)
 		{
 			//DX11::Get().TurnZBufferOff();
@@ -585,7 +619,7 @@ void GraphicsEngine::OnFrameRender() const
 	}
 
 	{
-		PROFILE_CPU_SCOPE("Render Screen");
+		//PROFILE_CPU_SCOPE("Render Screen");
 		RenderScene(VREye::None);
 
 		
@@ -598,11 +632,11 @@ void GraphicsEngine::OnFrameRender() const
 
 
 	{
-		PROFILE_CPU_SCOPE("Clean Scene");
+		//PROFILE_CPU_SCOPE("Clean Scene");
 		scene->Clean();
 	}
 
-
+	myRenderIsDone = true;
 }
 
 void GraphicsEngine::StartUpdateThread()
@@ -618,6 +652,7 @@ void GraphicsEngine::StartUpdateThread()
 
 void GraphicsEngine::StopUpdateThread()
 {
+
 }
 
 void GraphicsEngine::EndFrame() const
@@ -632,7 +667,7 @@ void GraphicsEngine::EndFrame() const
 	//}
 
 	{
-		PROFILE_CPU_SCOPE("End Of Frame");
+		//PROFILE_CPU_SCOPE("End Of Frame");
 		DX11::Get().EndFrame();
 	}
 
@@ -665,7 +700,7 @@ void GraphicsEngine::SetWinProc(const std::function<bool(HWND, UINT, WPARAM, LPA
 
 void GraphicsEngine::ResetStates()
 {
-	PROFILE_CPU_SCOPE("Reset States");
+	//PROFILE_CPU_SCOPE("Reset States");
 	RendererBase::SetBlendState(BlendState::None);
 	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 	RendererBase::SetSamplerState(0u, SamplerState::Default);

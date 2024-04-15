@@ -7,18 +7,18 @@ Network::NetworkComponent::NetworkComponent()
 	myFirstStart = true;
 }
 
-Network::NetworkComponent::NetworkComponent(UUID2 aUUID)
+Network::NetworkComponent::NetworkComponent(GamerEngine::UUID aUUID)
 {
 	myServerId = aUUID;
 	myFirstStart = true;
 }
 
-UUID2 Network::NetworkComponent::GetID()
+GamerEngine::UUID Network::NetworkComponent::GetID()
 {
 	return myServerId;
 }
 
-void Network::NetworkComponent::SetID(UUID2 aUUID2)
+void Network::NetworkComponent::SetID(GamerEngine::UUID aUUID2)
 {
 	myServerId = aUUID2;
 }

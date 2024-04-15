@@ -223,6 +223,8 @@ bool RendererBase::Init()
 	}
 
 
+	
+
 	{
 		D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
 		depthStencilDesc.DepthEnable = TRUE;

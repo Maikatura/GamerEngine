@@ -8,7 +8,7 @@
 
 
 
-#include <Profiler/Profiler.h>
+//#include <Profiler/Profiler.h>
 #include <Core/Framework/DX11.h>
 #include <GraphicsEngine.h>
 #include <Core/Rendering/LineRenderer.h> 
@@ -109,7 +109,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		//Physics::Get().Update();
 
-		graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());
+		//graphicsEngine.OnFrameUpdate(myLayers.ShouldRunEngine());
 		graphicsEngine.OnFrameRender();
 		
 

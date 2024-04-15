@@ -4,6 +4,8 @@
 #include <AssetHandlers/TextureAssetHandler.h>
 #include <wrl/client.h>
 
+#include "Core/Asset/Asset.h"
+
 
 using namespace Microsoft::WRL;
 
@@ -15,7 +17,7 @@ enum class TextureType
 	COUNT
 };
 
-class Texture
+class Texture : public GamerEngine::Asset
 {
 	friend class TextureAssetHandler;
 	friend class PostProcessRenderer;
@@ -50,6 +52,8 @@ public:
 	Texture();
 	virtual ~Texture();
 
+	static GamerEngine::AssetType GetStaticType() { return GamerEngine::AssetType::Texture2D; }
+	virtual GamerEngine::AssetType GetType() const override { return GetStaticType(); }
 
 	void SetWidth(int aWidth) { myWidth = aWidth; }
 	void SetHeight(int aHeight) { myHeight = aHeight; }

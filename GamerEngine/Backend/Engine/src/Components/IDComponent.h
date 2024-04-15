@@ -4,11 +4,11 @@
 class IDComponent 
 {
 public:
-	UUID2 ID;
+	GamerEngine::UUID ID;
 
 	IDComponent() = default;
 	IDComponent(const IDComponent&) = default;
-	IDComponent(UUID2 aUUID)
+	IDComponent(GamerEngine::UUID aUUID)
 	{
 		ID = aUUID;
 	}

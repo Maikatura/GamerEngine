@@ -138,6 +138,11 @@
     <ClInclude Include="src\Components\TagComponent.h" />
     <ClInclude Include="src\Components\TransfromComponent.h" />
     <ClInclude Include="src\Core\Assert.h" />
+    <ClInclude Include="src\Core\Asset\Asset.h" />
+    <ClInclude Include="src\Core\Asset\AssetManager.h" />
+    <ClInclude Include="src\Core\Asset\AssetManagerBase.h" />
+    <ClInclude Include="src\Core\Asset\EditorAssetManager.h" />
+    <ClInclude Include="src\Core\Asset\RuntimeAssetManager.h" />
     <ClInclude Include="src\Core\Framework\DX11.h" />
     <ClInclude Include="src\Core\Model\Entity.h" />
     <ClInclude Include="src\Core\Model\Material.h" />
@@ -247,6 +252,11 @@
     <ClCompile Include="src\Components\Network\NetworkComponent.cpp" />
     <ClCompile Include="src\Components\RandomMoverComponent.cpp" />
     <ClCompile Include="src\Components\TransfromComponent.cpp" />
+    <ClCompile Include="src\Core\Asset\Asset.cpp" />
+    <ClCompile Include="src\Core\Asset\AssetManager.cpp" />
+    <ClCompile Include="src\Core\Asset\AssetManagerBase.cpp" />
+    <ClCompile Include="src\Core\Asset\EditorAssetManager.cpp" />
+    <ClCompile Include="src\Core\Asset\RuntimeAssetManager.cpp" />
     <ClCompile Include="src\Core\Framework\DX11.cpp" />
     <ClCompile Include="src\Core\Model\Entity.cpp" />
     <ClCompile Include="src\Core\Model\Material.cpp" />

@@ -140,6 +140,11 @@ void NetworkingLayer::OnUpdate()
 		
 		//float distanceRot = (myPlayers[i].Rotation - transComp.Rotation).Length();
 
+		if (!Renderer::GetCamera())
+		{
+			return;
+		}
+
 		Renderer::GetCamera()->GetCameraSpeed();
 
 		std::chrono::steady_clock::time_point clockNow = std::chrono::high_resolution_clock::now();
@@ -172,6 +177,8 @@ void NetworkingLayer::UpdateCamera()
 		if(Renderer::GetCamera()->HasMoved())
 		{
 			mySendTime += myMoveSendTime;
+
+
 
 			const Vector3f position = Renderer::GetCamera()->ViewProjection.GetPosition();
 			const Vector3f rotation = Renderer::GetCamera()->ViewProjection.GetRotation();
@@ -293,7 +300,7 @@ void NetworkingLayer::StartNetworkingClient()
 				ClientData data;
 				float scale = 20.0f;
 
-				UUID2 id = UUID2(playerConnectMsg.ClientID);
+				GamerEngine::UUID id = GamerEngine::UUID(playerConnectMsg.ClientID);
 				data.ClientID = id;
 				data.IsServer = playerConnectMsg.IsServer;
 				data.Translation = playerConnectMsg.Translation;

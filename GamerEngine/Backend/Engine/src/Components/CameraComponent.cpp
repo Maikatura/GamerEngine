@@ -158,11 +158,11 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 
 	myFrustum = CommonUtilities::CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetPosition(), aTransform->GetRotation(), {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
 
-	LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.FarBottomLeft, { 1,0,0,1 }, 1.0f);
-	LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.NearBottomRight, { 1,0,0,1 }, 1.0f);
-	LineRenderer::Get().DrawLine(myFrustum.NearBottomRight, myFrustum.FarBottomRight, { 1,0,0,1 }, 1.0f);
-	LineRenderer::Get().DrawLine(myFrustum.NearTopRight, myFrustum.FarTopRight, { 1,0,0,1 }, 1.0f);
-	LineRenderer::Get().DrawLine(myFrustum.NearTopLeft, myFrustum.FarTopLeft, { 1,0,0,1 }, 1.0f);
+	//LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.FarBottomLeft, { 1,0,0,1 }, 1.0f);
+	//LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.NearBottomRight, { 1,0,0,1 }, 1.0f);
+	//LineRenderer::Get().DrawLine(myFrustum.NearBottomRight, myFrustum.FarBottomRight, { 1,0,0,1 }, 1.0f);
+	//LineRenderer::Get().DrawLine(myFrustum.NearTopRight, myFrustum.FarTopRight, { 1,0,0,1 }, 1.0f);
+	//LineRenderer::Get().DrawLine(myFrustum.NearTopLeft, myFrustum.FarTopLeft, { 1,0,0,1 }, 1.0f);
 
 
 

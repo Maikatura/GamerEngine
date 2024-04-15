@@ -22,6 +22,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Asset">
+      <UniqueIdentifier>{3D53EDCC-290B-2F1A-9212-08767EE9C90A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Core\Framework">
       <UniqueIdentifier>{2BC21F60-1790-1366-0024-848CEC90EFCA}</UniqueIdentifier>
     </Filter>
@@ -161,6 +164,21 @@
     </ClInclude>
     <ClInclude Include="src\Core\Assert.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Asset\Asset.h">
+      <Filter>Core\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Asset\AssetManager.h">
+      <Filter>Core\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Asset\AssetManagerBase.h">
+      <Filter>Core\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Asset\EditorAssetManager.h">
+      <Filter>Core\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Asset\RuntimeAssetManager.h">
+      <Filter>Core\Asset</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Framework\DX11.h">
       <Filter>Core\Framework</Filter>
@@ -476,6 +494,21 @@
     </ClCompile>
     <ClCompile Include="src\Components\TransfromComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Asset\Asset.cpp">
+      <Filter>Core\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Asset\AssetManager.cpp">
+      <Filter>Core\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Asset\AssetManagerBase.cpp">
+      <Filter>Core\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Asset\EditorAssetManager.cpp">
+      <Filter>Core\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Asset\RuntimeAssetManager.cpp">
+      <Filter>Core\Asset</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Framework\DX11.cpp">
       <Filter>Core\Framework</Filter>

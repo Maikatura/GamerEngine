@@ -7,7 +7,9 @@
 #include <Types/EnumTypes.h>
 #include <thread>
 #include <functional>
-
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
 #include "openvr.h"
 #include "Font/Font.h"
 #include "Utilites/Pointers.h"
@@ -47,7 +49,10 @@ class GraphicsEngine
 	Ref<GBuffer> myGBuffer;
 
 	Ref<DropManager> myDropManager;
-	Ref<std::thread> myUpdateThread = nullptr;
+	std::thread myUpdateThread;
+
+	std::atomic_bool myRenderIsDone;
+	bool myUpdateShouldRun = true;
 
 	bool myUpdateCondition = false;
 	bool myUseEditor = true;
@@ -68,9 +73,9 @@ public:
 
 	void BeginFrame();
 	void EndFrame() const;
-	void OnFrameUpdate(bool aShouldRunLoop);
+	void OnFrameUpdate();
 	void RenderScene(VREye anEye) const;
-	void OnFrameRender() const;
+	void OnFrameRender();
 
 	void StartUpdateThread();
 	static void StopUpdateThread();

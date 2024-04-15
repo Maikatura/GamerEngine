@@ -50,7 +50,7 @@ void GamerEngine::Scene::Clear()
 {
 	//mySceneIsReady = false;
 
-	Renderer::Clear();
+	//Renderer::Clear();
 	myLightToRender.clear();
 
 
@@ -84,11 +84,11 @@ entt::registry& GamerEngine::Scene::GetRegistry()
 
 GamerEngine::Entity GamerEngine::Scene::CreateEntity(const std::string& aName)
 {
-	return CreateEntityWithUUID(UUID2(), aName);
+	return CreateEntityWithUUID(UUID(), aName);
 }
 
 
-GamerEngine::Entity GamerEngine::Scene::CreateEntityWithUUID(const UUID2& aUUID, const std::string& aName)
+GamerEngine::Entity GamerEngine::Scene::CreateEntityWithUUID(const UUID& aUUID, const std::string& aName)
 {
 	Entity entity = { myRegistry.create(), this };
 	auto& idComp = entity.AddComponent<IDComponent>(aUUID);
@@ -232,6 +232,66 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 			}
 		}
 	}
+
+	CommonUtilities::Frustum cameraFrustum;
+
+	{
+		const auto& view = myRegistry.view<TransformComponent, CameraComponent>();
+		if (view != nullptr)
+		{
+			for (const auto& entity : view)
+			{
+				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+
+				if (camera.Primary)
+				{
+					camera.BuildTransform(&transform);
+					Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
+					cameraFrustum = Renderer::GetCamera()->GetFrustum();
+					break;
+				}
+			}
+		}
+	}
+
+	{
+		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
+		if (view != nullptr)
+		{
+			for (const auto& entity : view)
+			{
+				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
+
+				if (!model.IsLoaded())
+				{
+					model.GetDelay() -= Time::GetDeltaTime();
+
+					if (model.GetDelay() <= 0.0f)
+					{
+						model.SetLoaded(true);
+					}
+
+					continue;
+				}
+
+				if (model.GetModel())
+				{
+
+
+
+					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetPosition(), transform.GetRotation(), transform.GetScale());
+
+					LineRenderer::Get().DrawAABB3D(transformedBounds);
+
+					if (transformedBounds.IsOnFrustum(cameraFrustum))
+					{
+						Entity entityPtr = Entity{ entity, this };
+						Renderer::Render(&entityPtr, model, transform);
+					}
+				}
+			}
+		}
+	}
 }
 
 void GamerEngine::Scene::OnRender()
@@ -256,26 +316,7 @@ void GamerEngine::Scene::OnRender()
 	}
 
 
-	CommonUtilities::Frustum cameraFrustum;
-
-	{
-		const auto& view = myRegistry.view<TransformComponent, CameraComponent>();
-		if(view != nullptr)
-		{
-			for(const auto& entity : view)
-			{
-				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-
-				if(camera.Primary)
-				{
-					camera.BuildTransform(&transform);
-					Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
-					cameraFrustum = Renderer::GetCamera()->GetFrustum();
-					break;
-				}
-			}
-		}
-	}
+	
 
 	{
 	
@@ -378,45 +419,6 @@ void GamerEngine::Scene::OnRender()
 					model.GetModel()->SetHasBeenRenderer(false);
 				}
 
-			}
-		}
-	}
-
-	{
-		const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
-		if(view != nullptr)
-		{
-			for(const auto& entity : view)
-			{
-				auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
-
-				if (!model.IsLoaded())
-				{
-					model.GetDelay() -= Time::GetDeltaTime();
-
-					if (model.GetDelay() <= 0.0f)
-					{
-						model.SetLoaded(true);
-					}
-
-					continue;
-				}
-
-				if(model.GetModel())
-				{
-
-
-					
-					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetPosition(), transform.GetRotation(), transform.GetScale());
-
-					LineRenderer::Get().DrawAABB3D(transformedBounds);
-
-					if (transformedBounds.IsOnFrustum(cameraFrustum))
-					 {
-						Entity entityPtr = Entity{ entity, this };
-						Renderer::Render(&entityPtr, model, transform);
-					}
-				}
 			}
 		}
 	}

@@ -10,17 +10,17 @@ namespace Network
 		bool myIsServer;
 		bool myShouldSmooth;
 		bool myFirstStart = true;
-		UUID2 myServerId;
+		GamerEngine::UUID myServerId;
 
 		Vector3f myNewTranslation;
 
 
 	public:
 		NetworkComponent();
-		NetworkComponent(UUID2 aUUID);
+		NetworkComponent(GamerEngine::UUID aUUID);
 
-		UUID2 GetID();
-		void SetID(UUID2 aUUID2);
+		GamerEngine::UUID GetID();
+		void SetID(GamerEngine::UUID aUUID2);
 
 		bool IsServer();
 		void SetServer(bool aIsServer);

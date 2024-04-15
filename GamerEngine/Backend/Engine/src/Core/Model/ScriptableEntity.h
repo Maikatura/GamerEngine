@@ -52,7 +52,7 @@ public:
 		
 	}
 
-	UUID2 GetUUID() { return myEntity.GetUUID(); }
+	GamerEngine::UUID GetUUID() { return myEntity.GetUUID(); }
 
 
 private:

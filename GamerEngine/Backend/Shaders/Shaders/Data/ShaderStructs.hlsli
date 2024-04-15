@@ -8,9 +8,9 @@ struct VertexInput
 {
 	float4 Position		:	POSITION;
 
-    float3 Normal : NORMAL;
-	float3 Tangent : TANGENT;
-    float3 Binormal : BINORMAL;
+    float3 Normal		:	NORMAL;
+	float3 Tangent		:	TANGENT;
+    float3 Binormal		:	BINORMAL;
 
 	float4 VxColor		:	COLOR0;
 	float4 VxColor2		:	COLOR1;

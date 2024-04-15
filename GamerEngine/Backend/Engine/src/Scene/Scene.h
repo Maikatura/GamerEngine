@@ -52,7 +52,7 @@ public:
 	entt::registry& GetRegistry();
 
 	Entity CreateEntity(const std::string& aName);
-	Entity CreateEntityWithUUID(const UUID2& aUUID, const std::string& aName);
+	Entity CreateEntityWithUUID(const UUID& aUUID, const std::string& aName);
 	void DeleteEntity(Entity aEntity);
 
 	virtual void OnUpdate(bool aShouldRunLoop = true, bool aLoadingScene = false);

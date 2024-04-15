@@ -323,6 +323,16 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	}
 
 
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+	ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+
+	ID3D11RasterizerState* rasterizerState;
+	GetDevice()->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+
+	GetContext()->RSSetState(rasterizerState);
+
 	//D3D11_RASTERIZER_DESC rasterizerDesc = {};
 	//rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
 	//rasterizerDesc.CullMode = D3D11_CULL_BACK;  // or D3D11_CULL_NONE to disable backface culling

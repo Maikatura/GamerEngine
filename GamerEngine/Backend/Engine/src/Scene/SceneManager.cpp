@@ -156,7 +156,7 @@ GamerEngine::Entity SceneManager::ConstructEntity(entt::entity aEntityValue)
 	return GamerEngine::Entity(aEntityValue, myScene.get());
 }
 
-GamerEngine::Entity SceneManager::CreateEntityType(int aEntityType, const UUID2& aUUID)
+GamerEngine::Entity SceneManager::CreateEntityType(int aEntityType, const GamerEngine::UUID& aUUID)
 {
 	GamerEngine::Entity aEntity;
 

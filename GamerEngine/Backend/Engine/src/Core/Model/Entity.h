@@ -32,7 +32,7 @@ namespace GamerEngine
 			return *this;
 		}
 
-		UUID2 GetUUID() { return GetComponent<IDComponent>().ID; }
+		GamerEngine::UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 
 		template<typename T>
 		T& AddComponent()

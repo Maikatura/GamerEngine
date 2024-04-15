@@ -1,11 +1,11 @@
 #include "Editor.pch.h"
 #include "ProfilerLayer.h"
-#include <Profiler/Profiler.h>
+//#include <Profiler/Profiler.h>
 
 
 ProfilerLayer::ProfilerLayer(bool& shouldUseProfiler) : Layer("Profiler", true, true), myUseProfiler(shouldUseProfiler)
 {
-	gCPUProfiler.Initialize(10, 512);
+	//gCPUProfiler.Initialize(10, 512);
 }
 
 void ProfilerLayer::OnImGuiRender()
@@ -16,7 +16,7 @@ void ProfilerLayer::OnImGuiRender()
 
 	BeginMenu();
 
-	DrawProfilerHUD();
+	//DrawProfilerHUD();
 
 	EndMenu();
 }

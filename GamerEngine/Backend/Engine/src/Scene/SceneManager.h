@@ -55,6 +55,6 @@ public:
 	
 	GamerEngine::Entity ConstructEntity(entt::entity aEntityValue);
 	
-	GamerEngine::Entity CreateEntityType(int aEntityType, const UUID2& aUUID = 0);
+	GamerEngine::Entity CreateEntityType(int aEntityType, const GamerEngine::UUID& aUUID = 0);
 	void SwapScene();
 };

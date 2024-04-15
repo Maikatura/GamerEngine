@@ -144,6 +144,11 @@ void SceneView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 		return;
 	}
 
+	if (!Renderer::GetCamera())
+	{
+		return;
+	}
+
 	auto& transform = aEntity->GetComponent<TransformComponent>();
 	Matrix4x4f projectionView = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
 	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);

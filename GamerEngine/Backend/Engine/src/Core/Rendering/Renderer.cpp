@@ -17,7 +17,7 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 	
 	//Transform transform = Transform();
 
-	myModelsToRender.push_back(RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel()});
+	myUpdateModels.push_back(RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel()});
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
@@ -122,4 +122,9 @@ void Renderer::SetClearColor(Vector4f aClearColor)
 const Vector4f Renderer::GetClearColor()
 {
 	return myClearColor;
+}
+
+void Renderer::SwapBuffers()
+{
+	std::swap(myUpdateModels, myRenderModels);
 }

@@ -10,7 +10,7 @@
 #include "Scene/Scene.h"
 #include <Fonts/IconsForkAwesome.h>
 #include "Debugger/ConsoleHelper.h"
-#include "Profiler/Profiler.h"
+//#include "Profiler/Profiler.h"
 
 
 EditorLayers::EditorLayers()
@@ -132,7 +132,7 @@ void EditorLayers::BeginFrame()
 	ImGuizmo::BeginFrame();
 
 	
-	PROFILE_FRAME();
+	//PROFILE_FRAME();
 	
 
 	for (int i = 0; i < myLayers.size(); i++)

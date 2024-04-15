@@ -80,9 +80,6 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
 
-
-
-
 	myFrameBufferData.View = Matrix4x4f::GetFastInverse(aView);
 	myFrameBufferData.CamTranslation = aView.GetPosition();
 	myFrameBufferData.Projection = aProjection;

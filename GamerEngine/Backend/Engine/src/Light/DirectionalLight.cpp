@@ -28,6 +28,16 @@ void DirectionalLight::Update()
 	//myTransformComp->GetRotation().z = 0.0f;
 	//SetLightPosition(myTransformComp->GetPosition() - (myLightData.Direction * 3000.0f));
 
+	if (!myTransformComp)
+	{
+		return;
+	}
+
+
+	if (!Renderer::GetCamera())
+	{
+		return;
+	}
 
 	Vector3f rotation = myTransformComp->GetRotation();
 	Matrix4x4f viewMat = ComposeFromTRS(myLightData.Position, Vector3f(rotation.x, rotation.y, rotation.z), { 1, 1, 1 });
