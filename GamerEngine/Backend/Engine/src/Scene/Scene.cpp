@@ -246,8 +246,8 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 				if (camera.Primary)
 				{
 					camera.BuildTransform(&transform);
+					cameraFrustum = camera.GetFrustum();
 					Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
-					cameraFrustum = Renderer::GetCamera()->GetFrustum();
 					break;
 				}
 			}
@@ -276,9 +276,6 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 
 				if (model.GetModel())
 				{
-
-
-
 					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetPosition(), transform.GetRotation(), transform.GetScale());
 
 					LineRenderer::Get().DrawAABB3D(transformedBounds);

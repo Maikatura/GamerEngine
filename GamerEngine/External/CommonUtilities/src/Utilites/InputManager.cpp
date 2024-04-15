@@ -92,20 +92,20 @@ POINT CommonUtilities::InputManager::GetMousePosRelativeToWindow() const
 
 void CommonUtilities::InputManager::Update()
 {
-	if (GetFocus() != myHWND)
-	{
-		// Reset all key states
-		for (int i = 0; i < 256; i++)
-		{
-			mySavedWindowsKeyboardState[i] = false;
-		}
+	//if (GetFocus() != myHWND)
+	//{
+	//	// Reset all key states
+	//	for (int i = 0; i < 256; i++)
+	//	{
+	//		mySavedWindowsKeyboardState[i] = false;
+	//	}
 
-		// Reset all mouse states
-		for (int i = 0; i < 7; i++) // Increase the size to 7
-		{
-			mySavedMousePress[i] = false;
-		}
-	}
+	//	// Reset all mouse states
+	//	for (int i = 0; i < 7; i++) // Increase the size to 7
+	//	{
+	//		mySavedMousePress[i] = false;
+	//	}
+	//}
 	
 	
 	myPreviousKeyboardState = myCurrentKeyboardState;
