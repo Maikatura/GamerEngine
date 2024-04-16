@@ -4,8 +4,6 @@
 #include "Core/Framework/DX11.h"
 #include "Components/Components.hpp"
 
-
-
 void GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
 {
 	mySkeleton = aSkeleton;
@@ -61,9 +59,9 @@ bool GamerEngine::Model::UpdateInstanceBuffer()
 	return true;
 }
 
-bool GamerEngine::Model::RenderWithDeferred()
+bool GamerEngine::Model::UseDeferred()
 {
-
+	return true;
 	if (HasSkeleton())
 	{
 		return false;
@@ -96,31 +94,10 @@ void GamerEngine::Model::PlayAnimation(std::wstring aAnimationPath)
 
 void GamerEngine::Model::Update()
 {
-	// TODO : TEST REMOVE LATE!!!!
-	/*if(myModel)
-	{
-		if(myModel->test.BoxExtents.size() > 0)
-		{
-			float boxX = (myModel->test.BoxExtents[0] + myModel->test.Center[0]) * GetTransform().GetScale().x;
-			float boxY = (myModel->test.BoxExtents[1] + myModel->test.Center[1]) * GetTransform().GetScale().y;
-			float boxZ = (myModel->test.BoxExtents[2] + myModel->test.Center[2]) * GetTransform().GetScale().z;
-
-			Vector3f bounds = { boxX, boxY, boxZ };
-			Vector3f position = GetTransform().GetPosition();
-			position.y += boxY * 0.5f;
-
-
-			LineRenderer::DrawCube(position, bounds, GetTransform().GetRotation());
-		}
-	}*/
-
-	
-
 	auto anAnimState = GetAnimationState();
 
 	if(GetSkeleton()->GetRoot() && anAnimState->myCurrentAnimation != nullptr)
 	{
-
 		//myModel->Update();
 		anAnimState->myCurrentTime += Time::GetDeltaTime();
 		anAnimState->myCurrentFrame = static_cast<int>(anAnimState->myCurrentTime * anAnimState->myCurrentAnimation->FramesPerSecond);
@@ -158,8 +135,10 @@ void GamerEngine::Model::UpdateAnimationHierarchy(AnimationStatus* anAnimState, 
 	Matrix4x4f highFrame = anAnimState->myCurrentAnimation->Frames[frame].LocalTransforms[someBoneInd];
 	Matrix4x4f lerpFrame = Matrix4x4f::Slerp(lowFrame, highFrame, anAnimState->myInterFrameFraction);
 	Matrix4x4f transposedFrame = (aParent * Matrix4x4f::Transpose(lerpFrame));
-	myBoneTransform[someBoneInd] = transposedFrame * GetSkeleton()->Bones[someBoneInd].BindPoseInverse;
+	Matrix4x4f transformFrame = transposedFrame * GetSkeleton()->Bones[someBoneInd].BindPoseInverse;
+	myBoneTransform[someBoneInd] = transformFrame;
 
+	
 	for(int i = 0; i < GetSkeleton()->Bones[someBoneInd].Children.size(); i++)
 	{
 		UpdateAnimationHierarchy(anAnimState, GetSkeleton()->Bones[someBoneInd].Children[i], transposedFrame);

@@ -224,7 +224,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 			return;
 		}
 
-		if(!model->RenderWithDeferred())
+		if(!model->UseDeferred())
 		{
 			continue;
 		}

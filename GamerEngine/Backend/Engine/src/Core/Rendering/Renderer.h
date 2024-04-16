@@ -55,15 +55,8 @@ public:
 
 	static void Clear()
 	{
-		
 		myRenderModels.clear();
 		mySpritesToRender.clear();
-		
-	}
-
-	static void ClearUpdateBuffer()
-	{
-		myUpdateModels.clear();
 	}
 
 

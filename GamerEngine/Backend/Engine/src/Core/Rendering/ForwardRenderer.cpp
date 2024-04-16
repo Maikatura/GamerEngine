@@ -186,7 +186,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 			return;
 		}
 
-		if(model->RenderWithDeferred())
+		if(model->UseDeferred())
 		{
 			continue;
 		}

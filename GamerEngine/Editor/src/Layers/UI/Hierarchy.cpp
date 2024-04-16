@@ -352,9 +352,6 @@ void Hierarchy::DrawArmature(GamerEngine::Entity& aEntity, Ref<GamerEngine::Mode
 		}
 
 	}
-
-
-
 }
 
 void Hierarchy::LoopBones(const GamerEngine::Skeleton* aSkeleton, const GamerEngine::Bone* aBone, unsigned int aBoneID)

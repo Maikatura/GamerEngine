@@ -232,9 +232,7 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 			}
 		}
 	}
-
-	CommonUtilities::Frustum cameraFrustum;
-
+	
 	{
 		const auto& view = myRegistry.view<TransformComponent, CameraComponent>();
 		if (view != nullptr)
@@ -246,7 +244,6 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 				if (camera.Primary)
 				{
 					camera.BuildTransform(&transform);
-					cameraFrustum = camera.GetFrustum();
 					Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
 					break;
 				}
@@ -276,15 +273,8 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 
 				if (model.GetModel())
 				{
-					auto transformedBounds = model.GetModel()->GetBoxBounds().Transform(transform.GetPosition(), transform.GetRotation(), transform.GetScale());
-
-					LineRenderer::Get().DrawAABB3D(transformedBounds);
-
-					if (transformedBounds.IsOnFrustum(cameraFrustum))
-					{
-						Entity entityPtr = Entity{ entity, this };
-						Renderer::Render(&entityPtr, model, transform);
-					}
+					Entity entityPtr = Entity{ entity, this };
+					Renderer::Render(&entityPtr, model, transform);
 				}
 			}
 		}

@@ -100,18 +100,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             break;
         }
 
-        
 
         graphicsEngine.BeginFrame();
-        graphicsEngine.OnFrameUpdate(true);
         graphicsEngine.OnFrameRender();
         graphicsEngine.EndFrame();
-
-
-
-		#ifndef _Distribution
-        //LineRenderer::Get().Clear();
-		#endif
     }
 
 #ifndef _Distribution

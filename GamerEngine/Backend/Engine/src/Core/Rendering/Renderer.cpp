@@ -2,6 +2,7 @@
 #include <Core/Rendering/Renderer.h>
 #include <Core/Model/Entity.h>
 
+#include "LineRenderer.h"
 #include "Scene/SceneManager.h"
 #include "Components/TransfromComponent.h"
 #include "Font/Font.h"
@@ -17,7 +18,15 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 	
 	//Transform transform = Transform();
 
-	myUpdateModels.push_back(RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel()});
+	auto transformedBounds = aModel.GetModel()->GetBoxBounds().Transform(aTransform.GetPosition(), aTransform.GetRotation(), aTransform.GetScale());
+
+	
+
+	if (transformedBounds.IsOnFrustum(myCamera->GetFrustum()))
+	{
+		LineRenderer::Get().DrawAABB3D(transformedBounds);
+		myUpdateModels.push_back(RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel()});
+	}
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
@@ -127,4 +136,5 @@ const Vector4f Renderer::GetClearColor()
 void Renderer::SwapBuffers()
 {
 	std::swap(myUpdateModels, myRenderModels);
+	myUpdateModels.clear();
 }

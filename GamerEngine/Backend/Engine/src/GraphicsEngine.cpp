@@ -311,10 +311,8 @@ void GraphicsEngine::BeginFrame()
 
 void GraphicsEngine::OnFrameUpdate()
 {
-
 	while (myUpdateShouldRun)
 	{
-		
 		Input::Update();
 		Time::Update();
 
@@ -365,6 +363,8 @@ void GraphicsEngine::OnFrameUpdate()
 				myRenderPass = 0;
 			}
 		}
+
+		LineRenderer::Get().Update();
 #endif
 
 		{
@@ -373,8 +373,8 @@ void GraphicsEngine::OnFrameUpdate()
 			if (SceneManager::Get().GetScene())
 			{
 				SceneManager::Get().Update();
+				
 			}
-
 		}
 
 		//#ifdef _Distribution
@@ -389,15 +389,12 @@ void GraphicsEngine::OnFrameUpdate()
 			if (myRenderIsDone)
 			{
 				Renderer::SwapBuffers();
-				Renderer::ClearUpdateBuffer();
 				myRenderIsDone = false;
 				break;
 			}
 		}
 
 	}
-
-
 }
 
 void GraphicsEngine::RenderScene(const VREye anEye) const
@@ -458,9 +455,6 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 		//PROFILE_CPU_SCOPE("Render Shadows");
 		myShadowRenderer->ClearResources();
 	
-		//myShadowRenderer->Render(environmentLight.get(), modelList);
-		//myShadowRenderer->Render(directionalLight.get(), modelList);
-	
 		for (auto& light : someLightList)
 		{
 			myShadowRenderer->Render(light, modelList);
@@ -478,26 +472,11 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 
 	{
 		//PROFILE_CPU_SCOPE("Generate GBuffer");
-		//myGBuffer->ClearResource(0);
-		//myGBuffer->SetAsTarget();
-		//myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
-		//myGBuffer->ClearTarget();
-		//myGBuffer->SetAsResource(0);
-	}
-
-	{
-		//PROFILE_CPU_SCOPE("Render SSAO");
-		//myPostProcessRenderer->ClearTargets();
-		//if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
-	}
-
-	{
-		//PROFILE_CPU_SCOPE("Render With Deferred Renderer");
-		//RendererBase::SetBlendState(BlendState::Alpha);
-		//myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
-		//myDeferredRenderer->ClearTarget();
-		//myGBuffer->ClearResource(0);
-		//myGBuffer->ClearTarget();
+		myGBuffer->ClearResource(0);
+		myGBuffer->SetAsTarget();
+		myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
+		myGBuffer->ClearTarget();
+		myGBuffer->SetAsResource(0);
 	}
 
 	{
@@ -507,11 +486,26 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 	}
 
 	{
-		DX11::Get().ResetRenderTarget(myUseEditor, true);
-		//PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
-		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-		RendererBase::SetBlendState(BlendState::None);
-		myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
+		//PROFILE_CPU_SCOPE("Render With Deferred Renderer");
+		RendererBase::SetBlendState(BlendState::Alpha);
+		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
+		myDeferredRenderer->ClearTarget();
+		myGBuffer->ClearResource(0);
+		myGBuffer->ClearTarget();
+	}
+
+	{
+		//PROFILE_CPU_SCOPE("Render SSAO");
+		myPostProcessRenderer->ClearTargets();
+		if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
+	}
+
+	{
+		//DX11::Get().ResetRenderTarget(myUseEditor, true);
+		////PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
+		//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+		//RendererBase::SetBlendState(BlendState::None);
+		//myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
 	}
 
 	{

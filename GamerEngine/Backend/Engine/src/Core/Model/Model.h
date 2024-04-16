@@ -142,7 +142,7 @@ namespace GamerEngine
 
 		void AddRenderedInstance(TransformComponent* aTransform);
 		bool UpdateInstanceBuffer();
-		bool RenderWithDeferred();
+		bool UseDeferred();
 
 		bool IsLoaded() { return myIsLoaded; }
 

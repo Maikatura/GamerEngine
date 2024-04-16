@@ -43,12 +43,14 @@ public:
 	void DrawAABB3D(CommonUtilities::AABB3D<float> aAABB, Vector4f aColor = { 1,1,1,1 });
 	void DrawCircle(Vector3f aPosition, float aRadius, int aTesselation = 24);
 
-
+	void Update();
 	void Render(const Matrix4x4f& aView,const Matrix4x4f& aProjection);
 	void Clear();
 
 private:
 
+	bool myLineRendererOn = false;
+	
 	std::vector<std::array<LineVertex, 2>> myLinesToRender;
 
 	LineCBufferData myLineCBufferData;
