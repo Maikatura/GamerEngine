@@ -143,7 +143,10 @@
     <ClInclude Include="src\Core\Asset\AssetManagerBase.h" />
     <ClInclude Include="src\Core\Asset\EditorAssetManager.h" />
     <ClInclude Include="src\Core\Asset\RuntimeAssetManager.h" />
+    <ClInclude Include="src\Core\Buffer.h" />
+    <ClInclude Include="src\Core\FileSystem.h" />
     <ClInclude Include="src\Core\Framework\DX11.h" />
+    <ClInclude Include="src\Core\KeyCodes.h" />
     <ClInclude Include="src\Core\Model\Entity.h" />
     <ClInclude Include="src\Core\Model\Material.h" />
     <ClInclude Include="src\Core\Model\Model.h" />
@@ -222,11 +225,14 @@
     <ClInclude Include="src\Physics\PhysicsSystem.h" />
     <ClInclude Include="src\Physics\PhysicsTypes.h" />
     <ClInclude Include="src\Physics\SceneQueries.h" />
+    <ClInclude Include="src\Project\Project.h" />
+    <ClInclude Include="src\Project\ProjectSerializer.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Scene\UUID.h" />
     <ClInclude Include="src\Scripting\ScriptEngine.h" />
+    <ClInclude Include="src\Scripting\ScriptGlue.h" />
     <ClInclude Include="src\Scripting\ScriptUtils.h" />
     <ClInclude Include="src\Time.hpp" />
     <ClInclude Include="src\Types\EnumTypes.h" />
@@ -257,7 +263,9 @@
     <ClCompile Include="src\Core\Asset\AssetManagerBase.cpp" />
     <ClCompile Include="src\Core\Asset\EditorAssetManager.cpp" />
     <ClCompile Include="src\Core\Asset\RuntimeAssetManager.cpp" />
+    <ClCompile Include="src\Core\FileSystem.cpp" />
     <ClCompile Include="src\Core\Framework\DX11.cpp" />
+    <ClCompile Include="src\Core\KeyCodes.cpp" />
     <ClCompile Include="src\Core\Model\Entity.cpp" />
     <ClCompile Include="src\Core\Model\Material.cpp" />
     <ClCompile Include="src\Core\Model\Model.cpp" />
@@ -314,11 +322,14 @@
     <ClCompile Include="src\Physics\PhysicsScene.cpp" />
     <ClCompile Include="src\Physics\PhysicsShapes.cpp" />
     <ClCompile Include="src\Physics\PhysicsSystem.cpp" />
+    <ClCompile Include="src\Project\Project.cpp" />
+    <ClCompile Include="src\Project\ProjectSerializer.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\Scene\UUID.cpp" />
     <ClCompile Include="src\Scripting\ScriptEngine.cpp" />
+    <ClCompile Include="src\Scripting\ScriptGlue.cpp" />
     <ClCompile Include="src\Scripting\ScriptUtils.cpp" />
     <ClCompile Include="src\VR\VRSystem.cpp" />
   </ItemGroup>

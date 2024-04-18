@@ -107,6 +107,9 @@
     <ClInclude Include="src\Utilites\COMInitializer.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilites\FileWatch.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utilites\InputManager.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>

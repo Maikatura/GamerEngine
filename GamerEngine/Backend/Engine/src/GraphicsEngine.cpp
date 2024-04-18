@@ -16,6 +16,7 @@
 #include "Core/Rendering/PostProcessRenderer.h"
 #include "Scene/SceneManager.h"
 #include "Font/Font.h"
+#include "Project/Project.h"
 #include "Scripting/ScriptEngine.h"
 
 
@@ -128,10 +129,13 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 	Time::Update();
 	Input::Init(myWindowHandle);
+	
+	GamerEngine::Project::New();
 	AudioManager::Init();
 	SceneManager::Get().Initialize();
 	GamerEngine::ScriptEngine::Init();
 
+	
 	if (!myUseEditor)
 	{
 		//gCPUProfiler.Initialize(1, 512);
@@ -269,6 +273,8 @@ void GraphicsEngine::BeginFrame()
 	{
 		//PROFILE_FRAME();
 	}
+	
+	ExecuteMainThreadQueue();
 
 	if(myWantToResizeBuffers)
 	{
@@ -647,6 +653,25 @@ void GraphicsEngine::StartUpdateThread()
 void GraphicsEngine::StopUpdateThread()
 {
 
+}
+
+void GraphicsEngine::SubmitToMainThread(const std::function<void()>& function)
+{
+	std::scoped_lock<std::mutex> lock(myMainThreadQueueMutex);
+
+	myMainThreadQueue.emplace_back(function);
+}
+
+void GraphicsEngine::ExecuteMainThreadQueue()
+{
+	
+		std::scoped_lock<std::mutex> lock(myMainThreadQueueMutex);
+
+		for (auto& func : myMainThreadQueue)
+			func();
+
+		myMainThreadQueue.clear();
+	
 }
 
 void GraphicsEngine::EndFrame() const

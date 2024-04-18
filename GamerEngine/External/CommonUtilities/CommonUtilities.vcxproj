@@ -138,6 +138,7 @@
     <ClInclude Include="src\Sort\Sort.hpp" />
     <ClInclude Include="src\Utilites\Asserts.h" />
     <ClInclude Include="src\Utilites\COMInitializer.h" />
+    <ClInclude Include="src\Utilites\FileWatch.h" />
     <ClInclude Include="src\Utilites\InputManager.h" />
     <ClInclude Include="src\Utilites\PerformaceTimer.h" />
     <ClInclude Include="src\Utilites\Pointers.h" />

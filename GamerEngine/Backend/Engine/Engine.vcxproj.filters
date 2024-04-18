@@ -180,8 +180,17 @@
     <ClInclude Include="src\Core\Asset\RuntimeAssetManager.h">
       <Filter>Core\Asset</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Buffer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\FileSystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Framework\DX11.h">
       <Filter>Core\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\KeyCodes.h">
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Model\Entity.h">
       <Filter>Core\Model</Filter>
@@ -426,6 +435,9 @@
     <ClInclude Include="src\Scripting\ScriptEngine.h">
       <Filter>Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scripting\ScriptGlue.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scripting\ScriptUtils.h">
       <Filter>Scripting</Filter>
     </ClInclude>
@@ -510,8 +522,14 @@
     <ClCompile Include="src\Core\Asset\RuntimeAssetManager.cpp">
       <Filter>Core\Asset</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\FileSystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Framework\DX11.cpp">
       <Filter>Core\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\KeyCodes.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Model\Entity.cpp">
       <Filter>Core\Model</Filter>
@@ -684,6 +702,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripting\ScriptEngine.cpp">
+      <Filter>Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\ScriptGlue.cpp">
       <Filter>Scripting</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripting\ScriptUtils.cpp">

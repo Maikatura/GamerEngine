@@ -63,6 +63,9 @@ class GraphicsEngine
 
 	Vector2ui myEditorWindowSize;
 
+	std::vector<std::function<void()>> myMainThreadQueue;
+	std::mutex myMainThreadQueueMutex;
+
 public:
 
 	static GraphicsEngine* Get();
@@ -71,6 +74,8 @@ public:
 
 	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug, const std::wstring& aName = L"GamerEngine", bool aBoolToUseEditor = false, bool isVRMode = false);
 
+
+	
 	void BeginFrame();
 	void EndFrame() const;
 	void OnFrameUpdate();
@@ -79,6 +84,10 @@ public:
 
 	void StartUpdateThread();
 	static void StopUpdateThread();
+
+	void SubmitToMainThread(const std::function<void()>& function);
+	void ExecuteMainThreadQueue();
+
 
 	void SetMinimized(bool aMinimizedState);
 	void SetUpdateBuffers(bool aUpdate);
