@@ -21,13 +21,20 @@
 #ifdef GE_PLATFORM_WINDOWS
 #include <Windows.h>
 #endif
+
+
+#ifdef GE_BACKEND_DX11
 #include <d3d11.h>
+#endif
+#ifdef GE_BACKEND_VULKAN
+
+#endif
+
 
 // Only include in editor
-#ifndef EDITOR
-#define EDITOR
+
 #include <EngineSettings/Settings.h>
-#endif
+
 
 // Common Utilities
 #include <Math/MathTypes.hpp>

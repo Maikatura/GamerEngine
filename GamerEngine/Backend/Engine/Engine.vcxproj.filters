@@ -67,6 +67,9 @@
     <Filter Include="Physics\JoltPhysics">
       <UniqueIdentifier>{F39E7C25-5F00-5A33-E86D-A0E554CE90F2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project">
+      <UniqueIdentifier>{5C2CF323-C80B-72BF-D123-FD953D82D820}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{B3F7140E-1F0C-3DBF-E88D-E01E546139F0}</UniqueIdentifier>
     </Filter>
@@ -420,6 +423,12 @@
     <ClInclude Include="src\Physics\SceneQueries.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Project\Project.h">
+      <Filter>Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Project\ProjectSerializer.h">
+      <Filter>Project</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scene\Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -688,6 +697,12 @@
     </ClCompile>
     <ClCompile Include="src\Physics\PhysicsSystem.cpp">
       <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Project\Project.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Project\ProjectSerializer.cpp">
+      <Filter>Project</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Scene.cpp">
       <Filter>Scene</Filter>

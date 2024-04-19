@@ -40,7 +40,8 @@ libdirs
 
 defines
 {
-	"GE_PLATFORM_WINDOWS",
+	"%{ProjectDefine.Platform}",
+	"%{ProjectDefine.Backend}",
     	"_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS",
 	"NOMINMAX"
 }

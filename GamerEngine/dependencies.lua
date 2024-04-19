@@ -9,8 +9,6 @@ IncludeDirs["Components"] = "%{wks.location}/Backend/Engine/src/"
 IncludeDirs["Physics"] = "%{wks.location}/Backend/Physics/src/"
 
 -- Eternal Includes
-
-
 IncludeDirs["mono"] = "%{wks.location}/Backend/vendor/mono/include/"
 IncludeDirs["Flecs"] = "%{wks.location}/External/flecs/include/"
 IncludeDirs["PyBullet"] = "%{wks.location}/External/PhysX/src"
@@ -54,3 +52,12 @@ Libs["WinSock"] = "Ws2_32.lib"
 Libs["WinMM"] = "Winmm.lib"
 Libs["WinVersion"] = "Version.lib"
 Libs["BCrypt"] = "Bcrypt.lib"
+
+
+--Includes
+ProjectDefine = {}
+ProjectDefine["Platform"] = "GE_PLATFORM_WINDOWS"
+ProjectDefine["Backend"] = "GE_BACKEND_DX11" -- GE_BACKEND_DX11, GE_BACKEND_DX12, GE_BACKEND_VULKAN
+ProjectDefine["Editor"] = "GE_EDITOR"
+ProjectDefine["Runtime"] = "GE_RUNTIME"
+ProjectDefine["Network"] = "GE_NETWORK"

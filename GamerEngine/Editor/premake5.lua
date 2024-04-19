@@ -38,8 +38,10 @@ disablewarnings
 
 defines
 {
-	"GE_PLATFORM_WINDOWS",
-	"GE_NETWORK",
+	"%{ProjectDefine.Platform}",
+	"%{ProjectDefine.Backend}",
+	"%{ProjectDefine.Editor}",
+	"%{ProjectDefine.Network}",
 
     	"_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS",
 	"_WINSOCKAPI_",

@@ -31,6 +31,7 @@
 
 #include "Modelviewer.h"
 #include "GraphicsEngine.h"
+#include "Physics.h"
 #include "Core/Rendering/LineRenderer.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
@@ -79,6 +80,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         true
     );
 
+    LineRenderer::Get().Init();
+    Physics::Get().Init();
     SceneManager::Get().Initialize();
     SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
  
