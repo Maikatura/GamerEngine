@@ -381,7 +381,7 @@ void GamerEngine::Scene::OnRender()
     }
 
 
-    {
+    /*{
         const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
         if (view != nullptr)
         {
@@ -396,7 +396,7 @@ void GamerEngine::Scene::OnRender()
                 }
             }
         }
-    }
+    }*/
 
     {
         //myLightToRender.push_back(myEnvironmentLight.get());

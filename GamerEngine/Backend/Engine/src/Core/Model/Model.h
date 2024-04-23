@@ -79,7 +79,8 @@ namespace GamerEngine
 	public:
 		struct RenderedInstanceData
 		{
-			TransformComponent* World;
+			uint32_t EntityID;
+			Matrix4x4f World;
 		};
 
 		struct MeshData
@@ -140,7 +141,7 @@ namespace GamerEngine
 		void Init(const MeshData& aMeshData, const std::wstring& aPath);
 
 
-		void AddRenderedInstance(TransformComponent* aTransform);
+		void AddRenderedInstance(uint32_t aEntityID, Matrix4x4f aTransform);
 		bool UpdateInstanceBuffer();
 		bool UseDeferred();
 

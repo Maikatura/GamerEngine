@@ -1,6 +1,8 @@
 #include "GraphicsEngine.pch.h"
 #include "Model.h"
 
+#include <stdbool.h>
+
 #include "Core/Framework/DX11.h"
 #include "Components/Components.hpp"
 
@@ -28,9 +30,29 @@ void  GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aP
 	}
 }
 
-void GamerEngine::Model::AddRenderedInstance(TransformComponent* aTransform)
+
+void GamerEngine::Model::AddRenderedInstance(uint32_t aEntityID, Matrix4x4f aTransform)
 {
-	RenderedInstanceData data = {aTransform};
+
+
+
+	bool found = false;
+	for (int i = 0; i < myRenderedInstances.size(); i++)
+	{
+		if (myRenderedInstances[i].EntityID == aEntityID)
+		{
+			found = true;
+			break;
+		}
+	}
+
+
+	if (found)
+	{
+		return;
+	}
+
+	RenderedInstanceData data = { aEntityID, aTransform};
 	myRenderedInstances.push_back(data);
 }
 

@@ -4,6 +4,7 @@
 #include "GraphicsEngine.h"
 #include "Renderer.h"
 #include "AssetHandlers/ModelAssetHandler.h"
+#include "Components/TransfromComponent.h"
 #include "Core/Framework/DX11.h"
 
 void GBuffer::SetAsTarget()
@@ -236,7 +237,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 		ModelAssetHandler::Get().ResetRenderedModels();
 
 
-		const bool isInstanced = false; // model->HasRenderedInstance();
+		const bool isInstanced = model->HasRenderedInstance();
 
 		myObjectBufferData.IsInstanced = isInstanced;
 		myObjectBufferData.World = modelBuffer.myTransform;
@@ -283,17 +284,13 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 			DX11::Get().GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 			DX11::Get().GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology));
 
-			
-			
-			
-			
-			/*if(isInstanced && !model->HasBeenRendered())
+			if(isInstanced)
 			{
 				myInstancedTransformBufferData.clear();
-				std::vector<Model::RenderedInstanceData> myTransformData = model->GetTransformVector();
+				std::vector<GamerEngine::Model::RenderedInstanceData> myTransformData = model->GetTransformVector();
 				for(int i = 0; i < myTransformData.size(); i++)
 				{
-					auto matrix = myTransformData[i].World->GetMatrix();
+					auto matrix = myTransformData[i].World;
 					myInstancedTransformBufferData.push_back(matrix);
 				}
 
@@ -315,13 +312,15 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 					0, 0, 0
 				);
 			}
-			else*/
-			//{
+			else
+			{
 				DX11::Get().GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
 				DX11::Get().GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
-			//}
+			}
 
 		}
+
+		//model->ClearInstanceData();
 
 		/*if(isInstanced)
 		{

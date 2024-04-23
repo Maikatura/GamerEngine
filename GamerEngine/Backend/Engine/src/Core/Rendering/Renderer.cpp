@@ -15,18 +15,35 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 	{
 		return;
 	}
-	
+
 	//Transform transform = Transform();
 
 	auto transformedBounds = aModel.GetModel()->GetBoxBounds().Transform(aTransform.GetPosition(), aTransform.GetRotation(), aTransform.GetScale());
 
-	
-
-	if (transformedBounds.IsOnFrustum(myCamera->GetFrustum()))
+	if (!transformedBounds.IsOnFrustum(myCamera->GetFrustum()))
 	{
-		LineRenderer::Get().DrawAABB3D(transformedBounds);
-		myUpdateModels.push_back(RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel()});
+		return;
 	}
+
+	auto it = std::ranges::find_if(myUpdateModels,
+		[&aModel](const RenderBuffer& renderBuffer)
+		{
+			return renderBuffer.myModel->GetName() == aModel.GetModel()->GetName();
+		});
+
+	if (it != myUpdateModels.end())
+	{
+		aModel.GetModel()->AddRenderedInstance(aEntity->GetID(), aTransform.GetMatrix());
+		return;
+	}
+
+	aModel.GetModel()->ClearInstanceData();
+	RenderBuffer renderBuffer = RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel() };
+
+	LineRenderer::Get().DrawAABB3D(transformedBounds);
+	myUpdateModels.push_back(renderBuffer);
+
+
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
@@ -36,7 +53,7 @@ void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTrans
 
 void Renderer::RenderLight(Light* aLight)
 {
-	if(!SceneManager::Get().GetScene())
+	if (!SceneManager::Get().GetScene())
 	{
 		return;
 	}
@@ -89,7 +106,7 @@ void Renderer::RenderString(const std::string& aString, Ref<GamerEngine::Font> a
 	texCoordMax += Vector2f(texelWidth, texelHeight);
 
 	// Render
-	Vector4f position1 = aTransform * Vector4f( quadMin, 0.0f, 1.0f);
+	Vector4f position1 = aTransform * Vector4f(quadMin, 0.0f, 1.0f);
 	Vector2f texcord1 = { 0.0f, 0.0f };
 
 	// ++
