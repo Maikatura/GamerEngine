@@ -177,6 +177,8 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 	}
 
 
+	ModelAssetHandler::Get().ResetRenderedModels();
+
 	if(aModelList.empty())
 	{
 		return;
@@ -229,12 +231,6 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 		{
 			continue;
 		}
-
-		
-
-		
-
-		ModelAssetHandler::Get().ResetRenderedModels();
 
 
 		const bool isInstanced = model->HasRenderedInstance();
@@ -322,10 +318,12 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 
 		//model->ClearInstanceData();
 
-		/*if(isInstanced)
+		if(isInstanced)
 		{
-			model->SetHasBeenRenderer(true);
-		}*/
+			//model->SetHasBeenRenderer(true);
+			//model->ClearInstanceData();
+			
+		}
 	}
 }
 

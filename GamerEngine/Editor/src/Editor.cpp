@@ -59,11 +59,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	graphicsEngine.SetWinProc(function);
 
-	const SIZE windowSize = { 1920, 1080 };
+	constexpr SIZE windowSize = { 1920, 1080 };
+
+	bool useDebugDX = false;
 
 	std::wstring editorName = L"GamerEngine Editor";
 #if _DEBUG
 	editorName += L" DEBUG";
+	useDebugDX = true;
 #endif
 
 	bool bShouldRun = graphicsEngine.Initialize(
@@ -71,7 +74,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		(GetSystemMetrics(SM_CYSCREEN) - windowSize.cy) / 2,
 		windowSize.cx,
 		windowSize.cy,
-		true,
+		useDebugDX,
 		editorName,
 	true);
 

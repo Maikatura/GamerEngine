@@ -2,7 +2,6 @@
 #include "GraphicsEngine.h"
 #include <Core/Framework/DX11.h>
 #include <Scene/Scene.h>
-#include <AssetHandlers/ModelAssetHandler.h>
 #include "Audio/AudioManager.h"
 #include "Input/Input.h"
 #include "Core/Rendering/Renderer.h"
@@ -259,7 +258,7 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 			std::cout << "Dropped something\n";
 			break;
 		}
-
+	default: ;
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -303,8 +302,7 @@ void GraphicsEngine::BeginFrame()
 	ResetStates();
 
 	Vector4f clearColor = Renderer::GetClearColor();
-	clearColor.z = 1.0f;
-	clearColor.w = 1.0f;
+	
 
 	const auto renderTarget = DX11::Get().GetRenderTargetView();
 	DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView()->myDSV.Get());
@@ -345,7 +343,7 @@ void GraphicsEngine::OnFrameUpdate()
 		}
 
 
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
 		if (Input::IsKeyPressed(VK_F6))
 		{
 			unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
@@ -439,7 +437,7 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 	const Ref<DirectionalLight>& directionalLight = scene->GetDirLight();
 	const Ref<EnvironmentLight>& environmentLight = scene->GetEnvLight();
 	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
-	std::vector<RenderBuffer2D>& spriteList = Renderer::GetSprites();
+	//std::vector<RenderBuffer2D>& spriteList = Renderer::GetSprites();
 
 	const float deltaTime = Time::GetDeltaTime();
 
@@ -529,9 +527,9 @@ void GraphicsEngine::OnFrameRender()
 	if (myIsMinimized) return;
 
 
-	while (myRenderIsDone)
+	if (myRenderIsDone)
 	{
-		// Just wait until Update id done so that renderer isn't done anymore
+		return;
 	}
 
 
@@ -562,9 +560,6 @@ void GraphicsEngine::OnFrameRender()
 
 	if (!myIsPaused)
 	{
-
-
-
 
 		DX11::Get().GetContext()->RSSetState(DX11::Get().GetFrontCulling());
 		{

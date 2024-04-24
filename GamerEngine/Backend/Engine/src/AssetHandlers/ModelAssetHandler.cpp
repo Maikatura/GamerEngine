@@ -443,7 +443,6 @@ void ModelAssetHandler::ResetRenderedModels()
 {
 	for (auto item : myModelRegistry)
 	{
-
 		if (item)
 		{
 			item->SetHasBeenRenderer(false);

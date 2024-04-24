@@ -10,13 +10,18 @@
 
 LineRenderer& LineRenderer::Get()
 {
+#ifdef _DISTRIBUTON
+    GE_ASSERT("You should not use the linerenderer on a distribution build...")
+#endif
+
+    
     static LineRenderer instance;
     return instance;
 }
 
 bool LineRenderer::Init()
 {
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
     HRESULT result;
 
     D3D11_SUBRESOURCE_DATA vertexBufferData;
@@ -73,7 +78,8 @@ bool LineRenderer::Init()
         return false;
     }
 
-    D3D11_BUFFER_DESC bufferDescription = {0};
+    D3D11_BUFFER_DESC bufferDescription;
+    ZeroMemory(&bufferDescription, sizeof(bufferDescription));
     bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
     bufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -99,16 +105,19 @@ bool LineRenderer::Init()
 
 void LineRenderer::DrawPoint(Vector3f aPosition, Vector4f aColor)
 {
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
 
     if (!myLineRendererOn)
     {
         return;
     }
 
+    LineVertex lineOne = LineVertex({aPosition.x, aPosition.y, aPosition.z, 1.0f}, aColor);
+    LineVertex lineTwo = LineVertex({aPosition.x, aPosition.y, aPosition.z, 1.0f}, aColor);
+    
     std::array<LineVertex, 2> point = {
-        LineVertex({aPosition.x, aPosition.y, aPosition.z, 1.0f}, aColor),
-        LineVertex({aPosition.x, aPosition.y, aPosition.z, 1.0f}, aColor)
+        lineOne,
+        lineTwo
     };
 
     myLinesToRender.push_back(point);
@@ -118,16 +127,19 @@ void LineRenderer::DrawPoint(Vector3f aPosition, Vector4f aColor)
 void LineRenderer::DrawLine(const Vector3f& aStartPoint, const Vector3f& aEndPoint, const Vector4f& aColor,
                             float aWidth)
 {
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
 
     if (!myLineRendererOn)
     {
         return;
     }
 
+    LineVertex lineOne = LineVertex({aStartPoint.x, aStartPoint.y, aStartPoint.z, 1.0f}, aColor, aWidth);
+    LineVertex lineTwo = LineVertex({aEndPoint.x, aEndPoint.y, aEndPoint.z, 1.0f}, aColor, aWidth);
+    
     std::array<LineVertex, 2> lines = {
-        LineVertex({aStartPoint.x, aStartPoint.y, aStartPoint.z, 1.0f}, aColor, aWidth),
-        LineVertex({aEndPoint.x, aEndPoint.y, aEndPoint.z, 1.0f}, aColor, aWidth)
+        lineOne,
+        lineTwo
     };
 
     myLinesToRender.push_back(lines);
@@ -136,7 +148,7 @@ void LineRenderer::DrawLine(const Vector3f& aStartPoint, const Vector3f& aEndPoi
 
 void LineRenderer::DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation, Vector4f aColor)
 {
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
 
     if (!myLineRendererOn)
     {
@@ -181,9 +193,9 @@ void LineRenderer::DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotati
 #endif
 }
 
-void LineRenderer::DrawAABB3D(CommonUtilities::AABB3D<float> aAABB, Vector4f aColor)
+void LineRenderer::DrawAABB3D(const CommonUtilities::AABB3D<float>& aAABB, Vector4f aColor)
 {
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
 
     if (!myLineRendererOn)
     {
@@ -220,12 +232,14 @@ void LineRenderer::DrawAABB3D(CommonUtilities::AABB3D<float> aAABB, Vector4f aCo
 #endif
 }
 
-void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselation)
+void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselation) const
 {
+#ifdef _DISTRIBUTION
     aPosition;
     aRadius;
     aTesselation;
-#if _DEBUG
+#endif
+#if defined(_DEBUG) || defined(_RELEASE)
     if (!myLineRendererOn)
     {
         return;
@@ -242,7 +256,7 @@ void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselatio
 
 void LineRenderer::Update()
 {
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
     if (Input::IsKeyPressed(0x70))
     {
         myLineRendererOn = !myLineRendererOn;
@@ -252,7 +266,7 @@ void LineRenderer::Update()
 
 void LineRenderer::Render(const Matrix4x4f& aView, const Matrix4x4f& aProjection)
 {
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
 
     if (!myLineRendererOn)
     {
@@ -273,7 +287,7 @@ void LineRenderer::Render(const Matrix4x4f& aView, const Matrix4x4f& aProjection
         return;
     }
 
-    memcpy(bufferData.pData, &myLineCBufferData, sizeof(LineCBufferData));
+    memcpy_s(bufferData.pData, sizeof(LineCBufferData), &myLineCBufferData, sizeof(LineCBufferData));
     DX11::Get().GetContext()->Unmap(myLineCBuffer.Get(), 0);
 
     DX11::Get().GetContext()->VSSetConstantBuffers(6, 1, myLineCBuffer.GetAddressOf());
@@ -283,14 +297,14 @@ void LineRenderer::Render(const Matrix4x4f& aView, const Matrix4x4f& aProjection
 
     // TODO : Skip the lines that is outside the camera (NOTE do it for models and will will have it for this too) (Also if they are out side the Far Plane distance on the camera skip them too)
 
-    for (int i = 0; i < myLinesToRender.size(); i++)
+    for (auto line : myLinesToRender)
     {
         DX11::Get().GetContext()->IASetInputLayout(myInputLayout.Get());
         DX11::Get().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-        DX11::Get().GetContext()->VSSetShader(myLineVertexShader.Get(), NULL, 0);
+        DX11::Get().GetContext()->VSSetShader(myLineVertexShader.Get(), nullptr, 0);
         //DX11::Get().GetContext()->GSSetShader(myLineGeometryShader.Get(), NULL, 0);
-        DX11::Get().GetContext()->PSSetShader(myLinePixelShader.Get(), NULL, 0);
+        DX11::Get().GetContext()->PSSetShader(myLinePixelShader.Get(), nullptr, 0);
 
         D3D11_MAPPED_SUBRESOURCE lineData;
         HRESULT hResult = DX11::Get().GetContext()->Map(myBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &lineData);
@@ -300,7 +314,7 @@ void LineRenderer::Render(const Matrix4x4f& aView, const Matrix4x4f& aProjection
             return;
         }
 
-        memcpy(lineData.pData, myLinesToRender[i].data(), sizeof(LineVertex) * 2);
+        memcpy(lineData.pData, line.data(), sizeof(LineVertex) * 2);
         DX11::Get().GetContext()->Unmap(myBuffer.Get(), 0);
 
         DX11::Get().GetContext()->IASetVertexBuffers(0, 1, myBuffer.GetAddressOf(), &stride, &offset);
@@ -313,7 +327,7 @@ void LineRenderer::Render(const Matrix4x4f& aView, const Matrix4x4f& aProjection
 
 void LineRenderer::Clear()
 {
-#if _DEBUG
+#if defined(_DEBUG) || defined(_RELEASE)
     myLinesToRender.clear();
 #endif
 }

@@ -31,13 +31,14 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 			return renderBuffer.myModel->GetName() == aModel.GetModel()->GetName();
 		});
 
-	if (it != myUpdateModels.end())
+	if (aModel.GetModel()->HasBeenRendered())
 	{
 		aModel.GetModel()->AddRenderedInstance(aEntity->GetID(), aTransform.GetMatrix());
 		return;
 	}
 
-	aModel.GetModel()->ClearInstanceData();
+	
+	aModel.GetModel()->SetHasBeenRenderer(true);
 	RenderBuffer renderBuffer = RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel() };
 
 	LineRenderer::Get().DrawAABB3D(transformedBounds);

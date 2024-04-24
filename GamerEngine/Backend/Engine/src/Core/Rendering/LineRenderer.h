@@ -15,6 +15,13 @@ struct ID3D11PixelShader;
 
 struct LineVertex
 {
+	LineVertex(Vector4f aPosition, Vector4f aColor, float aWidth = 1.0f)
+	{
+		Position = aPosition;
+		Color = aColor;
+		LineWidth = aWidth;
+	}
+	
 	Vector4f Position;
 	Vector4f Color;
 	float LineWidth;
@@ -40,8 +47,8 @@ public:
 	void DrawPoint(Vector3f aPosition, Vector4f aColor = {1,1,1,1});
 	void DrawLine(const Vector3f& aStartPoint, const Vector3f& aEndPoint, const Vector4f& aColor = { 1,1,1,1 }, float aWidth = 1.0f);
 	void DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation = { 0,0,0 }, Vector4f aColor = { 1,1,1,1 });
-	void DrawAABB3D(CommonUtilities::AABB3D<float> aAABB, Vector4f aColor = { 1,1,1,1 });
-	void DrawCircle(Vector3f aPosition, float aRadius, int aTesselation = 24);
+	void DrawAABB3D(const CommonUtilities::AABB3D<float>& aAABB, Vector4f aColor = { 1,1,1,1 });
+	void DrawCircle(Vector3f aPosition, float aRadius, int aTesselation = 24) const;
 
 	void Update();
 	void Render(const Matrix4x4f& aView,const Matrix4x4f& aProjection);
