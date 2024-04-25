@@ -33,23 +33,12 @@ void  GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aP
 
 void GamerEngine::Model::AddRenderedInstance(uint32_t aEntityID, Matrix4x4f aTransform)
 {
-
-
-
-	bool found = false;
 	for (int i = 0; i < myRenderedInstances.size(); i++)
 	{
 		if (myRenderedInstances[i].EntityID == aEntityID)
 		{
-			found = true;
-			break;
+			return;
 		}
-	}
-
-
-	if (found)
-	{
-		return;
 	}
 
 	RenderedInstanceData data = { aEntityID, aTransform};
