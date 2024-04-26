@@ -173,6 +173,7 @@
     <ClInclude Include="src\Core\Rendering\SelectionData.h" />
     <ClInclude Include="src\Core\Rendering\ShadowRenderer.h" />
     <ClInclude Include="src\Core\Rendering\VertexShader.h" />
+    <ClInclude Include="src\Core\RenderModule.h" />
     <ClInclude Include="src\Debugger\ConsoleHelper.h" />
     <ClInclude Include="src\EngineSettingDefines.h" />
     <ClInclude Include="src\EngineSettings\Settings.h" />

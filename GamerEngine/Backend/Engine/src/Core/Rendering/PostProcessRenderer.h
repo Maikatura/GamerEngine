@@ -41,6 +41,12 @@ private:
 	
 public:
 
+	static PostProcessRenderer& Get()
+	{
+		static PostProcessRenderer instance;
+		return instance;
+	}
+
 	bool Initialize();
 	void ReInitialize();
 
@@ -54,4 +60,5 @@ public:
 
 	void Release();
 	void ClearTargets();
+	
 };

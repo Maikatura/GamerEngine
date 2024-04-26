@@ -12,7 +12,7 @@
 
 using namespace Microsoft::WRL;
 
-class ShadowRenderer : public RendererBase
+class ShadowRenderer : public RenderModule
 {
 	struct ShadowCubeBuffer
 	{
@@ -29,7 +29,26 @@ class ShadowRenderer : public RendererBase
 	ComPtr<ID3D11VertexShader> myDeferredVS;
 	ComPtr<ID3D11PixelShader> myDeferredPS;
 
+	FrameBufferData myFrameBufferData{};
+	ObjectBufferData myObjectBufferData{};
+	Vector4f myMaterialBufferData;
+	/*BlendShapeData myBlendshapeBufferData{};*/
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> myFrameBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> myObjectBuffer;
+	//Microsoft::WRL::ComPtr<ID3D11Buffer> myBlendShapeBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> myMaterialBuffer;
+
 public:
+
+	bool OnAdd() override;
+	void OnRelease() override;
+	void OnUpdate() override;
+	void OnRenderSetup() override;
+	void OnRender() override;
+	void OnEnd() override;
+
+
 	bool Initialize();
 
 	void Render(Light* aLight, const std::vector<RenderBuffer>& aModelList);

@@ -69,9 +69,7 @@ void SceneView::RenderSceneView(const Ref<GamerEngine::Entity>& aEntity)
 	}
 
 
-	const int pass = GraphicsEngine::Get()->GetRenderPass();
-
-	ImGui::Image(pass == 0 ? DX11::Get().Get().GetScreenView()->GetShaderResourceView() : GBuffer::GetPasses()[pass - 1].GetShaderResourceView(), {windowSize.x, windowSize.y}); // Use this
+	ImGui::Image(DX11::Get().Get().GetScreenView()->GetShaderResourceView(), { windowSize.x, windowSize.y }); // Use this
 	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowSize.x, windowSize.y);
 	//ImGui::Image(GBuffer::GetPasses()[6].GetShaderResourceView(), {windowSize.x, windowSize.y});
 	

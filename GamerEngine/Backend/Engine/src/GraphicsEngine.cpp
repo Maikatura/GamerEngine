@@ -31,8 +31,8 @@ GraphicsEngine::~GraphicsEngine()
 
 	StopUpdateThread();
 
-	//myUpdateShouldRun = false;
-	//myUpdateThread.join();
+	myUpdateShouldRun = false;
+	myUpdateThread.join();
 
 	TextureAssetHandler::Clear();
 	RevokeDragDrop(myWindowHandle);
@@ -87,40 +87,15 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
 	myFont = MakeRef<GamerEngine::Font>("resources\\fonts\\OpenSans.ttf");
 
-	myForwardRenderer = MakeRef<ForwardRenderer>();
-	myDeferredRenderer = MakeRef<DeferredRenderer>();
-	myShadowRenderer = MakeRef<ShadowRenderer>();
-	myPostProcessRenderer = MakeRef<PostProcessRenderer>();
-	myGBuffer = MakeRef<GBuffer>();
-
 	
-	
-	if (!myForwardRenderer->Initialize())
-	{
-		GE_LOG_ERROR("Failed to init Forward Renderer");
-		return false;
-	}
 
-	if (!myDeferredRenderer->Initialize())
-	{
-		return false;
-	}
+	PostProcessRenderer::Get().Initialize();
 
-	if (!myShadowRenderer->Initialize())
-	{
-		return false;
-	}
+	AddRenderModule<ShadowRenderer>();
+	AddRenderModule<DeferredRenderer>();
+	AddRenderModule<LineRenderer>();
 
-	if (!myPostProcessRenderer->Initialize())
-	{
-		return false;
-	}
-
-	if (!myGBuffer->CreateGBuffer())
-	{
-		return false;
-	}
-
+	// TODO : Get rid of this RendererBase
 	if (!RendererBase::Init())
 	{
 		return false;
@@ -140,11 +115,37 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		//gCPUProfiler.Initialize(1, 512);
 	}
 
-	StartUpdateThread();
+
+	myUpdateThread = std::thread(&GraphicsEngine::OnFrameUpdate, this);
 
 	return true;
 }
 
+template <class T>
+void GraphicsEngine::AddRenderModule()
+{
+	Ref<RenderModule> aModule = MakeRef<T>();
+	if(!aModule->OnAdd())
+	{
+		GE_ASSERT(false,"ERROR Adding Render Module");
+	}
+	myRenderModules.push_back(aModule);
+}
+
+Ref<RenderModule> GraphicsEngine::GetRenderModule(int aModuleIndex)
+{
+	return myRenderModules[aModuleIndex];
+}
+
+void GraphicsEngine::RemoveRenderModule(int aModuleIndex)
+{
+	if (static_cast<int>(myRenderModules.size()) <= aModuleIndex)
+	{
+		return;
+	}
+
+	myRenderModules.erase(myRenderModules.begin() + aModuleIndex);
+}
 
 
 LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam)
@@ -280,12 +281,26 @@ void GraphicsEngine::BeginFrame()
 		{
 			if (SceneManager::Get().GetStatus() == GamerEngine::SceneStatus::Complete)
 			{
-				myGBuffer->Release();
+				for (auto module : myRenderModules)
+				{
+					module->OnRelease();
+				}
+				
+				//myGBuffer->Release();
 				DX11::Get().Resize();
 				const auto scene = SceneManager::Get().GetScene();
 				scene->Resize({ static_cast<unsigned int>(Get()->GetWindowSize().cx), static_cast<unsigned int>(Get()->GetWindowSize().cy) });
-				myGBuffer->CreateGBuffer();
-				myPostProcessRenderer->ReInitialize();
+				//myGBuffer->CreateGBuffer();
+
+				for (auto module : myRenderModules)
+				{
+					module->OnAdd();
+				}
+				
+				PostProcessRenderer::Get().ReInitialize();
+				
+				
+				
 
 			}
 
@@ -301,7 +316,6 @@ void GraphicsEngine::BeginFrame()
 	ResetStates();
 
 	Vector4f clearColor = Renderer::GetClearColor();
-	
 
 	const auto renderTarget = DX11::Get().GetRenderTargetView();
 	DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView()->myDSV.Get());
@@ -357,17 +371,6 @@ void GraphicsEngine::OnFrameUpdate()
 			GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
 		}
 
-		if (Input::IsKeyPressed(VK_F7))
-		{
-			myRenderPass++;
-
-			if (GBuffer::GBufferTexture::EGBufferTexture_Count + 1 == myRenderPass)
-			{
-				myRenderPass = 0;
-			}
-		}
-
-		LineRenderer::Get().Update();
 #endif
 
 		{
@@ -376,7 +379,11 @@ void GraphicsEngine::OnFrameUpdate()
 			if (SceneManager::Get().GetScene())
 			{
 				SceneManager::Get().Update();
-				
+
+				for (auto module : myRenderModules)
+				{
+module->OnUpdate();
+				}
 			}
 		}
 
@@ -402,9 +409,6 @@ void GraphicsEngine::OnFrameUpdate()
 
 void GraphicsEngine::RenderScene(const VREye anEye) const
 {
-
-	
-
 	if (!SceneManager::Get().IsReady())
 	{
 		return;
@@ -426,94 +430,12 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
 	{
 		return;
 	}
-
-	const Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(anEye);
-	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(anEye);
-
-
-	const std::vector<Light*> someLightList = scene->GetLights();
-
-	const Ref<DirectionalLight>& directionalLight = scene->GetDirLight();
-	const Ref<EnvironmentLight>& environmentLight = scene->GetEnvLight();
-	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
-	//std::vector<RenderBuffer2D>& spriteList = Renderer::GetSprites();
-
-	const float deltaTime = Time::GetDeltaTime();
-
-	// TODO : CLEAN THIS MESS UP
-
-	bool renderSSAO = true;
-	if (Input::IsKeyDown('P'))
-	{
-		renderSSAO = false;
-	}
-
-
-	//RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
-	//RendererBase::SetBlendState(BlendState::None);
-
-
-	
-	{
-		//PROFILE_CPU_SCOPE("Render Shadows");
-		myShadowRenderer->ClearResources();
-	
-		for (auto& light : someLightList)
-		{
-			myShadowRenderer->Render(light, modelList);
-		}
-	
-	}
 	
 
-	auto depth = DX11::Get().GetDepthStencilView()->mySRV;
-	DX11::Get().GetContext()->PSSetShaderResources(120, 1, &depth);
-
-	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-	RendererBase::SetBlendState(BlendState::None);
-
-
+	for (auto module : myRenderModules)
 	{
-		//PROFILE_CPU_SCOPE("Generate GBuffer");
-		myGBuffer->ClearResource(0);
-		myGBuffer->SetAsTarget();
-		myDeferredRenderer->GenerateGBuffer(view, projection, modelList, deltaTime, 0, anEye);
-		myGBuffer->ClearTarget();
-		myGBuffer->SetAsResource(0);
-	}
-
-	{
-		//PROFILE_CPU_SCOPE("Render SSAO");
-		myPostProcessRenderer->ClearTargets();
-		if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
-	}
-
-	{
-		//PROFILE_CPU_SCOPE("Render With Deferred Renderer");
-		RendererBase::SetBlendState(BlendState::Alpha);
-		myDeferredRenderer->Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, anEye);
-		myDeferredRenderer->ClearTarget();
-		myGBuffer->ClearResource(0);
-		myGBuffer->ClearTarget();
-	}
-
-	{
-		//PROFILE_CPU_SCOPE("Render SSAO");
-		myPostProcessRenderer->ClearTargets();
-		if (renderSSAO == true) myPostProcessRenderer->Render(PostProcessRenderer::PP_SSAO, view, projection);
-	}
-
-	{
-		//DX11::Get().ResetRenderTarget(myUseEditor, true);
-		////PROFILE_CPU_SCOPE("Render With Forward Renderer (Models)");
-		//RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-		//RendererBase::SetBlendState(BlendState::None);
-		//myForwardRenderer->Render(view, projection, modelList, directionalLight, environmentLight, someLightList, anEye);
-	}
-
-	{
-		//PROFILE_CPU_SCOPE("Render Debug Lines");
-		LineRenderer::Get().Render(view, projection);
+		module->OnRenderSetup();
+		module->OnRender();
 	}
 
 	//Renderer::RenderString("Test", myFont, Matrix4x4f(1.0f), Vector4f(1.0f));
@@ -530,7 +452,6 @@ void GraphicsEngine::OnFrameRender()
 	{
 		return;
 	}
-
 
 	if (!SceneManager::Get().IsReady())
 	{
@@ -599,7 +520,7 @@ void GraphicsEngine::OnFrameRender()
 		{
 			//DX11::Get().TurnZBufferOff();
 			DX11::Get().GetScreenView()->SetRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView()->myDSV.Get());
-			DX11::Get().GetScreenView()->ClearRenderTarget(DX11::Get().GetContext(), nullptr, 0.5f, 0.5f, 0.5f, 1.0f);
+			DX11::Get().GetScreenView()->ClearRenderTarget(DX11::Get().GetContext(), DX11::Get().GetDepthStencilView()->myDSV.Get(), 0.5f, 0.5f, 0.5f, 1.0f);
 		}
 		else
 		{
@@ -636,16 +557,17 @@ void GraphicsEngine::OnFrameRender()
 void GraphicsEngine::StartUpdateThread()
 {
 
-	myUpdateShouldRun = true;
+	/*myUpdateThread = MakeRef<std::thread>([&]()
+		{
+		});*/
+
 	myIsRunning = true;
-	myUpdateThread = std::thread(&GraphicsEngine::OnFrameUpdate, this);
 
 }
 
 void GraphicsEngine::StopUpdateThread()
 {
-	myUpdateShouldRun = false;
-	myUpdateThread.join();
+
 }
 
 void GraphicsEngine::SubmitToMainThread(const std::function<void()>& function)
@@ -672,11 +594,14 @@ void GraphicsEngine::EndFrame() const
 	if (myIsMinimized) return;
 
 
-	//{
+	{
 	//	PROFILE_CPU_SCOPE("Final Render Call");
-	//	DX11::Get().ResetRenderTarget(myUseEditor);
-	//	myDeferredRenderer->RenderLate();
-	//}
+		DX11::Get().ResetRenderTarget(myUseEditor);
+		for (auto module : myRenderModules)
+		{
+			module->OnEnd();
+		}
+	}
 
 	{
 		//PROFILE_CPU_SCOPE("End Of Frame");
@@ -764,11 +689,6 @@ void GraphicsEngine::SetEngineRunning(bool aCondition)
 	myIsRunning = aCondition;
 }
 
-int GraphicsEngine::GetRenderPass() const
-{
-	return myRenderPass;
-}
-
 Vector2ui GraphicsEngine::GetEditorWindowSize() const
 {
 	return myEditorWindowSize;
@@ -778,6 +698,6 @@ void GraphicsEngine::SetEditorWindowSize(Vector2ui aEditorWindowSize)
 {
 	myEditorWindowSize = aEditorWindowSize;
 
-	myPostProcessRenderer->ReInitialize();
+	//myPostProcessRenderer->ReInitialize();
 }
 

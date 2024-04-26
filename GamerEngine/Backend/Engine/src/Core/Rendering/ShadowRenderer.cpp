@@ -9,6 +9,57 @@
 #include "Core/Framework/DX11.h"
 #include "AssetHandlers/ModelAssetHandler.h"
 
+bool ShadowRenderer::OnAdd()
+{
+	if (!Initialize())
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void ShadowRenderer::OnRelease()
+{
+
+}
+
+void ShadowRenderer::OnUpdate()
+{
+}
+
+void ShadowRenderer::OnRenderSetup()
+{
+	RendererBase::SetDepthStencilState(DepthStencilState::Disabled);
+	RendererBase::SetBlendState(BlendState::None);
+	
+	
+	
+	 {
+	 	//PROFILE_CPU_SCOPE("Render Shadows");
+	 	ClearResources();
+	
+	 	
+	
+	 }
+}
+
+void ShadowRenderer::OnRender()
+{
+	auto scene = SceneManager::Get().GetScene();
+	const std::vector<Light*> someLightList = scene->GetLights();
+	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
+
+	for (auto& light : someLightList)
+	{
+		Render(light, modelList);
+	}
+}
+
+void ShadowRenderer::OnEnd()
+{
+}
+
 bool ShadowRenderer::Initialize()
 {
 	D3D11_BUFFER_DESC bufferDescription;

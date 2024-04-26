@@ -2,6 +2,7 @@
 #include "DeferredRenderer.h"
 #include "ForwardRenderer.h"
 #include "GraphicsEngine.h"
+#include "PostProcessRenderer.h"
 #include "Renderer.h"
 #include "AssetHandlers/ModelAssetHandler.h"
 #include "Components/TransfromComponent.h"
@@ -19,10 +20,6 @@ void GBuffer::SetAsTarget()
 	DX11::Get().GetContext()->OMSetRenderTargets(GBufferTexture::EGBufferTexture_Count, &rtvList[0], DX11::Get().GetDepthStencilView()->myDSV.Get());
 }
 
-void GBuffer::ClearTarget()
-{
-	DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
-}
 
 
 void GBuffer::SetAsResource(unsigned int aStartSlot)
@@ -97,14 +94,98 @@ bool GBuffer::CreateGBuffer()
 	return true;
 }
 
-RenderTexture& GBuffer::GetRenderer()
+bool DeferredRenderer::OnAdd()
 {
-	return myRenderer;
+	if (!Initialize())
+	{
+		return false;
+	}
+
+	if (!myGBuffer)
+	{
+		myGBuffer = MakeRef<GBuffer>();
+	}
+
+
+	if(!myGBuffer->CreateGBuffer())
+	{
+		return false;
+	}
+	
+	
+	return true;
 }
 
-std::array<RenderTexture, GBuffer::EGBufferTexture_Count>& GBuffer::GetPasses()
+void DeferredRenderer::OnRelease()
 {
-	return myRenderTextures;
+	ClearTarget();
+	myGBuffer->Release();
+}
+
+void DeferredRenderer::OnUpdate()
+{
+
+}
+
+void DeferredRenderer::OnRenderSetup()
+{
+	//auto depth = DX11::Get().GetDepthStencilView()->mySRV;
+	//DX11::Get().GetContext()->PSSetShaderResources(120, 1, &depth);
+
+	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+	RendererBase::SetBlendState(BlendState::None);
+}
+
+void DeferredRenderer::OnRender()
+{
+	const Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
+	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
+
+	auto scene = SceneManager::Get().GetScene();
+
+	const std::vector<Light*> someLightList = scene->GetLights();
+
+	const Ref<DirectionalLight>& directionalLight = scene->GetDirLight();
+	const Ref<EnvironmentLight>& environmentLight = scene->GetEnvLight();
+	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
+	
+	const float deltaTime = Time::GetDeltaTime();
+
+
+	{
+		//PROFILE_CPU_SCOPE("Generate GBuffer");
+		myGBuffer->ClearResource(0);
+		myGBuffer->SetAsTarget();
+		GenerateGBuffer(view, projection, modelList, deltaTime, 0, VREye::None);
+		DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
+		myGBuffer->SetAsResource(0);
+	}
+
+	{
+		//PROFILE_CPU_SCOPE("Render SSAO");
+		
+		PostProcessRenderer::Get().ClearTargets();
+		PostProcessRenderer::Get().Render(PostProcessRenderer::PostProcessPass::PP_SSAO, view, projection);
+	}
+
+	{
+		//PROFILE_CPU_SCOPE("Render With Deferred Renderer");
+		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+		RendererBase::SetBlendState(BlendState::Alpha);
+
+		DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode(), false);
+		Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, VREye::None);
+		ClearTarget();
+		myGBuffer->ClearResource(0);
+		
+	}
+
+	
+}
+
+void DeferredRenderer::OnEnd()
+{
+	
 }
 
 bool DeferredRenderer::Initialize()
@@ -141,6 +222,22 @@ bool DeferredRenderer::Initialize()
 
 	bufferDescription.ByteWidth = sizeof(SceneLightBuffer);
 	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, nullptr, myLightBuffer.GetAddressOf());
+	if(FAILED(result))
+	{
+		return false;
+	}
+
+	D3D11_BUFFER_DESC bufferDescriptionInstance = { 0 };
+	D3D11_SUBRESOURCE_DATA vxSubresource{};
+	bufferDescriptionInstance.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDescriptionInstance.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDescriptionInstance.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	myInstancedTransformBufferData.resize(2000);
+	vxSubresource.pSysMem = &myInstancedTransformBufferData[0];
+	bufferDescriptionInstance.ByteWidth = sizeof(Matrix4x4f) * 2000;
+	bufferDescriptionInstance.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescriptionInstance, &vxSubresource, myInstanceBuffer.GetAddressOf());
 	if(FAILED(result))
 	{
 		return false;
@@ -448,7 +545,6 @@ void DeferredRenderer::Render(Matrix4x4f aView, const Matrix4x4f& aProjection, c
 
 
 	DX11::Get().GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
-
 	DX11::Get().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	DX11::Get().GetContext()->IASetInputLayout(nullptr);
 	DX11::Get().GetContext()->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
@@ -458,23 +554,6 @@ void DeferredRenderer::Render(Matrix4x4f aView, const Matrix4x4f& aProjection, c
 	DX11::Get().GetContext()->PSSetShader(myDeferredPS.Get(), nullptr, 0);
 
 	DX11::Get().GetContext()->Draw(3, 0);
-}
-
-void DeferredRenderer::RenderLate() const
-{
-	const auto srv = GBuffer::GetRenderer().GetShaderResourceView();
-	DX11::Get().GetContext()->PSSetShaderResources(0, 1, &srv);
-	DX11::Get().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	DX11::Get().GetContext()->IASetInputLayout(nullptr);
-	DX11::Get().GetContext()->IAGetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
-	DX11::Get().GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
-	DX11::Get().GetContext()->VSSetShader(myDeferredVS.Get(), nullptr, 0);
-	DX11::Get().GetContext()->GSSetShader(nullptr, nullptr, 0);
-	DX11::Get().GetContext()->PSSetShader(myRenderTexPS.Get(), nullptr, 0);
-
-	DX11::Get().GetContext()->Draw(3, 0);
-
-	//DX11::Get().GetContext()->PSSetShaderResources(0, 1, nullptr);
 }
 
 void DeferredRenderer::ClearTarget()

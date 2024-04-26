@@ -184,20 +184,6 @@ void MainMenuBar::RenderMainBar()
 
 
         std::string topBar = "";
-
-        {
-            topBar += "Render Pass: ";
-
-            int pass = GraphicsEngine::Get()->GetRenderPass();
-            if (pass == 0)
-            {
-                topBar += "Default";
-            }
-            else
-            {
-                topBar += GBuffer::GetPasses()[pass - 1].GetName();
-            }
-        }
        
         topBar += "\t";
 

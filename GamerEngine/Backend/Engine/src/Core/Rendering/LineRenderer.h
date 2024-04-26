@@ -4,6 +4,7 @@
 #include <wrl/client.h>
 #include <d3d11.h>
 
+#include "Core/RenderModule.h"
 #include "Math/AABB3D.hpp"
 
 // TODO : OPTIMIZE THE LINE RENDERER
@@ -35,7 +36,7 @@ struct LineCBufferData
 };
 
 
-class LineRenderer
+class LineRenderer : public RenderModule
 {
 public:
 
@@ -44,17 +45,28 @@ public:
 
 	bool Init();
 
+	bool OnAdd() override;
+	void OnRelease() override;
+	void OnRenderSetup() override;
+	void OnUpdate() override;
+	void OnRender() override;
+	void OnEnd() override;
+
 	void DrawPoint(Vector3f aPosition, Vector4f aColor = {1,1,1,1});
 	void DrawLine(const Vector3f& aStartPoint, const Vector3f& aEndPoint, const Vector4f& aColor = { 1,1,1,1 }, float aWidth = 1.0f);
 	void DrawCube(Vector3f aPosition, Vector3f aSize, Vector3f aRotation = { 0,0,0 }, Vector4f aColor = { 1,1,1,1 });
 	void DrawAABB3D(const CommonUtilities::AABB3D<float>& aAABB, Vector4f aColor = { 1,1,1,1 });
 	void DrawCircle(Vector3f aPosition, float aRadius, int aTesselation = 24) const;
 
-	void Update();
-	void Render(const Matrix4x4f& aView,const Matrix4x4f& aProjection);
-	void Clear();
+	
 
 private:
+
+	void Update();
+	void Render(const Matrix4x4f& aView, const Matrix4x4f& aProjection);
+	void Clear();
+
+	inline static LineRenderer* myInstance = nullptr;
 
 	bool myLineRendererOn = false;
 	

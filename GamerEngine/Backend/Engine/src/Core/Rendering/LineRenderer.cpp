@@ -4,19 +4,53 @@
 #include "Core/Framework/DX11.h"
 #include <d3d11.h>
 #include <fstream>
+
+#include "RendererBase.h"
 #include "Core/Rendering/Renderer.h"
 #include "Input/Input.h"
 
 
+
+bool LineRenderer::OnAdd()
+{
+    myInstance = this;
+    return Init();
+}
+
+void LineRenderer::OnRelease()
+{
+    myInstance = nullptr;
+}
+
+void LineRenderer::OnUpdate()
+{
+    Update();
+}
+
+void LineRenderer::OnRenderSetup()
+{
+    DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
+    RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+	RendererBase::SetBlendState(BlendState::None);
+}
+
+void LineRenderer::OnRender()
+{
+    const Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
+    const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
+
+    Render(view, projection);
+}
+
+void LineRenderer::OnEnd()
+{
+}
+
 LineRenderer& LineRenderer::Get()
 {
-#ifdef _DISTRIBUTON
-    GE_ASSERT("You should not use the linerenderer on a distribution build...")
-#endif
+    GE_ASSERT(myInstance, "You are trying to use the line renderer without adding it to the render modules");
 
-    
-    static LineRenderer instance;
-    return instance;
+    return *myInstance;
 }
 
 bool LineRenderer::Init()
@@ -102,6 +136,7 @@ bool LineRenderer::Init()
 #endif
     return true;
 }
+
 
 void LineRenderer::DrawPoint(Vector3f aPosition, Vector4f aColor)
 {

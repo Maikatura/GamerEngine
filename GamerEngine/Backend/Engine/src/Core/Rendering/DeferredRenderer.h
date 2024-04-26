@@ -27,36 +27,44 @@ class GBuffer
 			EGBufferTexture_Count
 		};
 
-		static void SetAsTarget();
-		static void ClearTarget();
-		static void SetAsResource(unsigned int aStartSlot);
-		static void ClearResource(unsigned int aStartSlot);
-		static void Clear();
+		void SetAsTarget();
+		void SetAsResource(unsigned int aStartSlot);
+		void ClearResource(unsigned int aStartSlot);
+		void Clear();
 
-		static void Release();
+		void Release();
 
-		static bool CreateGBuffer();
+		bool CreateGBuffer();
+		RenderTexture& GetShaderResourceView()
+		{
+			return myRenderer;
+		};
 
-		static RenderTexture& GetRenderer();
+		//RenderTexture& GetRenderer();
 
-		static std::array<RenderTexture, GBufferTexture::EGBufferTexture_Count>& GetPasses();
-	
 	private:
 
 		ID3D11Texture2D* myTexture;
-		inline static std::array<RenderTexture, GBufferTexture::EGBufferTexture_Count> myRenderTextures;
-
-		inline static RenderTexture myRenderer;
+		std::array<RenderTexture, GBufferTexture::EGBufferTexture_Count> myRenderTextures;
+		RenderTexture myRenderer;
 };
 
-class DeferredRenderer : public RendererBase
+class DeferredRenderer : public RenderModule
 {
 	public:
+
+		bool OnAdd() override;
+		void OnRelease() override;
+
+		void OnUpdate() override;
+		void OnRenderSetup() override;
+		void OnRender() override;
+		void OnEnd() override;
+	
 		bool Initialize();
 		void GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye);
 		void Render(Matrix4x4f aView, const Matrix4x4f& aProjection, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, float aDeltaTime, float aTotalTime, VREye anEye);
-		void RenderLate() const;
-		static void ClearTarget();
+		void ClearTarget();
 
 	private:
 
@@ -72,9 +80,21 @@ class DeferredRenderer : public RendererBase
 			float Padding1;
 			float Padding2;
 		};
-		
+
+		Ref<GBuffer> myGBuffer;
+	
 		SceneLightBuffer mySceneLightBufferData = {};
+		FrameBufferData myFrameBufferData{};
+		ObjectBufferData myObjectBufferData{};
+		Vector4f myMaterialBufferData;
+		/*BlendShapeData myBlendshapeBufferData{};*/
 		
+		Microsoft::WRL::ComPtr<ID3D11Buffer> myFrameBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> myObjectBuffer;
+		//Microsoft::WRL::ComPtr<ID3D11Buffer> myBlendShapeBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> myMaterialBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> myInstanceBuffer;
+		std::vector<Matrix4x4f> myInstancedTransformBufferData;
 		ComPtr<ID3D11Buffer> myLightBuffer;
 
 		ComPtr<ID3D11PixelShader> myGBufferPS;

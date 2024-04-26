@@ -16,7 +16,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 	DeferredPixelOutput result;
 
 	float4 albedo = albedoTexture.Sample(defaultSampler, input.UV);
-	if(albedo.a == 0)
+	if(albedo.a == 0.0f)
 	{
 		discard;
 		result.Color = float4(0.0f, 0.0f, 0.0f, 0.0f);

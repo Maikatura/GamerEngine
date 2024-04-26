@@ -152,10 +152,6 @@ void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11
 	{
 		deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	}
-
-	
-
-	return;
 }
 
 ID3D11RenderTargetView* RenderTexture::GetRenderTargetView()

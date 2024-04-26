@@ -11,6 +11,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "openvr.h"
+#include "Core/RenderModule.h"
 #include "Font/Font.h"
 #include "Utilites/Pointers.h"
 
@@ -41,13 +42,6 @@ class GraphicsEngine
 
 	RenderMode myRenderMode = RenderMode::Default;
 
-
-	Ref<ForwardRenderer> myForwardRenderer;
-	Ref<DeferredRenderer> myDeferredRenderer;
-	Ref<ShadowRenderer> myShadowRenderer;
-	Ref<PostProcessRenderer> myPostProcessRenderer;
-	Ref<GBuffer> myGBuffer;
-
 	Ref<DropManager> myDropManager;
 	std::thread myUpdateThread;
 
@@ -66,6 +60,9 @@ class GraphicsEngine
 	std::vector<std::function<void()>> myMainThreadQueue;
 	std::mutex myMainThreadQueueMutex;
 
+
+	std::vector<Ref<RenderModule>> myRenderModules;
+	
 public:
 
 	static GraphicsEngine* Get();
@@ -74,7 +71,10 @@ public:
 
 	bool Initialize(unsigned someX, unsigned someY, unsigned someWidth, unsigned someHeight, bool enableDeviceDebug, const std::wstring& aName = L"GamerEngine", bool aBoolToUseEditor = false, bool isVRMode = false);
 
-
+	template<class T>
+	void AddRenderModule();
+	Ref<RenderModule> GetRenderModule(int aModuleIndex);
+	void RemoveRenderModule(int aModuleIndex);
 	
 	void BeginFrame();
 	void EndFrame() const;
@@ -112,7 +112,6 @@ public:
 
 	bool GetEngineRunning() const;
 	void SetEngineRunning(bool aCondition);
-	int GetRenderPass() const;
 
 	Vector2ui GetEditorWindowSize() const;
 	void SetEditorWindowSize(Vector2ui aEditorWindowSize);
@@ -122,10 +121,9 @@ public:
 	[[nodiscard]] void FORCEINLINE SetWindowSize(int aX, int aY) { myWindowSize.cx = aX; myWindowSize.cy = aY; }
 	
 
-private:
-
-	int myRenderPass = 0;
 	
 	
 };
+
+
 

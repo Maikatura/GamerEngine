@@ -38,6 +38,8 @@ public:
 		return *myInstance;
 	}
 
+	~SceneManager();
+
 	bool IsHeadless();
 	void SetHeadless(bool isHeadless);
 	

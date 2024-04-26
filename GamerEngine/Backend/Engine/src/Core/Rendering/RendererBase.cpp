@@ -7,22 +7,7 @@ bool RendererBase::Init()
 {
 	HRESULT result = S_FALSE;
 
-	D3D11_BUFFER_DESC bufferDescription = { 0 };
-	D3D11_SUBRESOURCE_DATA vxSubresource{};
-	bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
-	bufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-	myInstancedTransformBufferData.resize(2000);
-	vxSubresource.pSysMem = &myInstancedTransformBufferData[0];
-	bufferDescription.ByteWidth = sizeof(Matrix4x4f) * 2000;
-	bufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescription, &vxSubresource, myInstanceBuffer.GetAddressOf());
-	if(FAILED(result))
-	{
-		return false;
-	}
-
+	
 
 	{
 		D3D11_SAMPLER_DESC samplerStateDesc{};
