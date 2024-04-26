@@ -138,8 +138,11 @@ void DeferredRenderer::OnRenderSetup()
 
 void DeferredRenderer::OnRender()
 {
-	const Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
-	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
+
+	const VREye vrEye = VREye::None;
+
+	const Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(vrEye);
+	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(vrEye);
 
 	auto scene = SceneManager::Get().GetScene();
 
@@ -156,7 +159,7 @@ void DeferredRenderer::OnRender()
 		//PROFILE_CPU_SCOPE("Generate GBuffer");
 		myGBuffer->ClearResource(0);
 		myGBuffer->SetAsTarget();
-		GenerateGBuffer(view, projection, modelList, deltaTime, 0, VREye::None);
+		GenerateGBuffer(view, projection, modelList, deltaTime, 0, vrEye);
 		DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode());
 		myGBuffer->SetAsResource(0);
 	}
@@ -174,7 +177,7 @@ void DeferredRenderer::OnRender()
 		RendererBase::SetBlendState(BlendState::Alpha);
 
 		DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode(), false);
-		Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, VREye::None);
+		Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, vrEye);
 		ClearTarget();
 		myGBuffer->ClearResource(0);
 		

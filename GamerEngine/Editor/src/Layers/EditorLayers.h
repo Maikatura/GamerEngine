@@ -20,7 +20,8 @@ public:
 	void Init();
 
 
-	void AddLayer(Ref<Layer> aLayer);
+	template<typename T, typename... Args>
+	void AddLayer(Args&&... args);
 
 	void Destory();
 

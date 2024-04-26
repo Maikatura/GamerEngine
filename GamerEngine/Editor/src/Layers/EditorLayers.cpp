@@ -71,24 +71,28 @@ void EditorLayers::Init()
 	}
 }
 
-void EditorLayers::AddLayer(Ref<Layer> aLayer)
+template<typename T, typename... Args>
+void EditorLayers::AddLayer(Args&&... args)
 {
+	Ref<Layer> layer = MakeRef<T>(std::forward<Args>(args)...);
 
 	bool windowExist = false;
-	for(int i = 0; i < myLayers.size(); i++)
+	for (int i = 0; i < myLayers.size(); i++)
 	{
-		if (myLayers[i]->GetLayerName() == aLayer->GetLayerName())
+		if (myLayers[i]->GetLayerName() == layer->GetLayerName())
 		{
 			myLayers[i]->SetOpen(true);
 			windowExist = true;
 		}
 	}
 
-	if(!windowExist)
+	if (!windowExist)
 	{
-		myLayers.push_back(aLayer);
+		layer->SetLayers(this);
+		myLayers.push_back(layer);
 	}
 }
+
 
 void EditorLayers::Destory()
 {
@@ -179,18 +183,18 @@ void EditorLayers::SetShouldEngineRun(bool aCond)
 
 void EditorLayers::AddDefaultLayers()
 {
-	AddLayer(MakeRef<MainMenuBar>(*this));
-	AddLayer(MakeRef<ConsoleWindow>());
-	AddLayer(MakeRef<FileExplorer>());
-	AddLayer(MakeRef<Hierarchy>());
-	AddLayer(MakeRef<Inspector>());
-	AddLayer(MakeRef<AnimatorLayer>());
-	AddLayer(MakeRef<SceneView>());
-	AddLayer(MakeRef<KeybindShortcutsLayer>());
-	AddLayer(MakeRef<NetworkingLayer>());
-	AddLayer(MakeRef<HelpPanel>());
-	AddLayer(MakeRef<ProfilerLayer>(myShouldProfile));
-	AddLayer(MakeRef<TextureBrowserLayer>());
+	AddLayer<MainMenuBar>();
+	AddLayer<ConsoleWindow>();
+	AddLayer<FileExplorer>();
+	AddLayer<Hierarchy>();
+	AddLayer<Inspector>();
+	AddLayer<AnimatorLayer>();
+	AddLayer<SceneView>();
+	AddLayer<KeybindShortcutsLayer>();
+	AddLayer<NetworkingLayer>();
+	AddLayer<HelpPanel>();
+	AddLayer<ProfilerLayer>(myShouldProfile);
+	AddLayer<TextureBrowserLayer>();
 }
 
 void EditorLayers::OnUpdate()

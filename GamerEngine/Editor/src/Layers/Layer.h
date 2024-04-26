@@ -1,6 +1,8 @@
 #pragma once
 #include <Layers/EditorValues.hpp>
 
+class EditorLayers;
+
 class Layer 
 {
 public:
@@ -30,7 +32,13 @@ public:
 	bool BeginMenu(ImGuiWindowFlags aFlag = 0);
 	void EndMenu();
 
+	void SetLayers(EditorLayers* aLayer);
+
+
 protected:
+
+	EditorLayers* myLayers;
+
 	bool mySaveLayer = true;
 	bool myIsAlwaysOpen = false;
 	bool myIsOpen = true;

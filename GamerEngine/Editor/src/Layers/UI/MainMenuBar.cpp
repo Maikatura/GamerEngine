@@ -14,10 +14,9 @@
 #include "Scene/SceneSerializer.h"
 #include "Snapshots/SnapshotManager.h"
 #include "SettingKeybinds.h"
-#include "Core/Rendering/DeferredRenderer.h"
+#include <Layers/EditorLayers.h>
 
-
-MainMenuBar::MainMenuBar(EditorLayers& aLayer) : Layer("MainMenuBar", true, false), myLayers(aLayer)
+MainMenuBar::MainMenuBar() : Layer("MainMenuBar", true, false)
 { }
 
 void MainMenuBar::OnImGuiRender()
@@ -64,7 +63,7 @@ void MainMenuBar::RenderMainBar()
             // EditorNames::SettingsName.c_str()
             if (ImGui::MenuItem("Tools 1 & 2"))
             {
-                myLayers.AddLayer(MakeRef<EditorSettingsPanel>());
+                //myLayers->AddLayer<EditorSettingsPanel>();
             }
 
             ImGui::EndMenu();
@@ -73,9 +72,9 @@ void MainMenuBar::RenderMainBar()
         if (ImGui::BeginMenu("Windows"))
         {
 
-            for (int i = 0; i < myLayers.myLayers.size(); i++)
+            for (int i = 0; i < myLayers->myLayers.size(); i++)
             {
-                if (myLayers.myLayers[i]->ShouldBeSaved())
+                if (myLayers->myLayers[i]->ShouldBeSaved())
                 {
                     //if (myLayers.myLayers[i]->GetCategory() != "")
                     //{
@@ -97,15 +96,15 @@ void MainMenuBar::RenderMainBar()
                     //    }
                     //    else
                     //    {
-                    if (ImGui::MenuItemEx(myLayers.myLayers[i]->GetLayerName().c_str(), myLayers.myLayers[i]->IsOpen() ? ICON_FK_CHECK : ""))
+                    if (ImGui::MenuItemEx(myLayers->myLayers[i]->GetLayerName().c_str(), myLayers->myLayers[i]->IsOpen() ? ICON_FK_CHECK : ""))
                     {
-                        if (myLayers.myLayers[i]->IsOpen())
+                        if (myLayers->myLayers[i]->IsOpen())
                         {
-                            myLayers.myLayers[i]->SetOpen(false);
+                            myLayers->myLayers[i]->SetOpen(false);
                         }
                         else
                         {
-                            myLayers.myLayers[i]->SetOpen(true);
+                            myLayers->myLayers[i]->SetOpen(true);
                         }
                     }
                     //}
@@ -125,7 +124,7 @@ void MainMenuBar::RenderMainBar()
         {
             if (ImGui::MenuItem("Help Panel"))
             {
-                myLayers.AddLayer(MakeRef<HelpPanel>());
+                myLayers->AddLayer<HelpPanel>();
             }
 
             ImGui::EndMenu();
@@ -141,7 +140,7 @@ void MainMenuBar::RenderMainBar()
 
 
         float textWidth = 0.0f;
-        if (!myLayers.ShouldRunEngine())
+        if (!myLayers->ShouldRunEngine())
         {
             std::string playText = ICON_FK_PLAY;
             playText += " Play";
@@ -150,7 +149,7 @@ void MainMenuBar::RenderMainBar()
             ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
             if (ImGui::Button(playText.c_str()))
             {
-                myLayers.SetShouldEngineRun(true);
+                myLayers->SetShouldEngineRun(true);
                 mySnapshot = SnapshotManager(&SceneManager::Get().GetScene()->GetRegistry());
                 mySnapshot.CreateSnapshot();
             }
@@ -164,7 +163,7 @@ void MainMenuBar::RenderMainBar()
             ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
             if (ImGui::Button(stopText.c_str()))
             {
-                myLayers.SetShouldEngineRun(false);
+                myLayers->SetShouldEngineRun(false);
                 ConsoleHelper::Log(LogType::Info, "Stopped game");
                 mySnapshot.RestoreSnapShot();
             }

@@ -382,7 +382,7 @@ void GraphicsEngine::OnFrameUpdate()
 
 				for (auto module : myRenderModules)
 				{
-module->OnUpdate();
+					module->OnUpdate();
 				}
 			}
 		}

@@ -8,7 +8,7 @@
 
 float SSAO(float2 aScreenTexCoord, float2 aTexCoord, float3 aViewPosition, float3 aViewNormal, float aScale, float aBias, float aIntensity)
 {
-    const float3 diff = viewPositionTexture.Sample(pointClampSampler, aScreenTexCoord + aTexCoord).rgb - aViewPosition;
+	const float3 diff = viewPositionTexture.Sample(pointClampSampler, aScreenTexCoord * /* <- This should not be + and should be * */ aTexCoord).rgb - aViewPosition;
     const float3 v = normalize(diff);
     const float d = length(diff) * aScale;
     const float occlusion = max(0.0f, dot(aViewNormal, v) - aBias) * 1.0f / (1.0f + d) * aIntensity;

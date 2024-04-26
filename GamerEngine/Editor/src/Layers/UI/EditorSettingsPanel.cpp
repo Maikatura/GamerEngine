@@ -11,6 +11,7 @@
 #include "Core/RenderING/Renderer.h"
 #include <imgui_markdown/imgui_markdown.h>
 #include "Scene/SceneManager.h"
+#include <Layers/LayerHeader.h>
 
 ImFont* H1 = NULL;
 ImFont* H2 = NULL;
@@ -18,25 +19,14 @@ ImFont* H3 = NULL;
 
 ImGui::MarkdownConfig mdConfig;
 
-EditorSettingsPanel::EditorSettingsPanel() : Layer("Editor Settings")
+EditorSettingsPanel::EditorSettingsPanel() : Layer("Editor Settings", false, true, "Info")
 {
-	OnAttach();
+	
 }
 
 void EditorSettingsPanel::OnAttach()
 {
-	//float fontSize_ = 12.0f;
-
-	//ImGuiIO& io = ImGui::GetIO();
- //   io.Fonts->Clear();
- //   // Base font
- //   io.Fonts->AddFontFromFileTTF( "Editor\\Fonts\\Vera.ttf", fontSize_ );
- //   // Bold headings H2 and H3
- //   H2 = io.Fonts->AddFontFromFileTTF( "Editor\\Fonts\\VeraBd.ttf", fontSize_ );
- //   H3 = mdConfig.headingFormats[ 1 ].font;
- //   // bold heading H1
- //   float fontSizeH1 = fontSize_ * 1.1f;
- //   H1 = io.Fonts->AddFontFromFileTTF( "Editor\\Fonts\\VeraBd.ttf", fontSizeH1 );
+	Layer::OnAttach();
 }
 
 void EditorSettingsPanel::OnImGuiRender()

@@ -87,3 +87,8 @@ void Layer::EndMenu()
 {
     ImGui::End();
 }
+
+void Layer::SetLayers(EditorLayers* aLayer)
+{
+    myLayers = aLayer;
+}
