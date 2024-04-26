@@ -97,6 +97,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			{
 				myLayers.Destory();
 				bShouldRun = false;
+				//graphicsEngine.StopUpdateThread();
 			}
 		}
 

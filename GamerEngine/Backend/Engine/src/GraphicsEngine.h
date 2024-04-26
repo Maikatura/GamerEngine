@@ -83,7 +83,7 @@ public:
 	void OnFrameRender();
 
 	void StartUpdateThread();
-	static void StopUpdateThread();
+	void StopUpdateThread();
 
 	void SubmitToMainThread(const std::function<void()>& function);
 	void ExecuteMainThreadQueue();

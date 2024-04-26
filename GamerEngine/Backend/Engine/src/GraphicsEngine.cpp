@@ -31,8 +31,8 @@ GraphicsEngine::~GraphicsEngine()
 
 	StopUpdateThread();
 
-	myUpdateShouldRun = false;
-	myUpdateThread.join();
+	//myUpdateShouldRun = false;
+	//myUpdateThread.join();
 
 	TextureAssetHandler::Clear();
 	RevokeDragDrop(myWindowHandle);
@@ -140,8 +140,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 		//gCPUProfiler.Initialize(1, 512);
 	}
 
-
-	myUpdateThread = std::thread(&GraphicsEngine::OnFrameUpdate, this);
+	StartUpdateThread();
 
 	return true;
 }
@@ -637,17 +636,16 @@ void GraphicsEngine::OnFrameRender()
 void GraphicsEngine::StartUpdateThread()
 {
 
-	/*myUpdateThread = MakeRef<std::thread>([&]()
-		{
-		});*/
-
+	myUpdateShouldRun = true;
 	myIsRunning = true;
+	myUpdateThread = std::thread(&GraphicsEngine::OnFrameUpdate, this);
 
 }
 
 void GraphicsEngine::StopUpdateThread()
 {
-
+	myUpdateShouldRun = false;
+	myUpdateThread.join();
 }
 
 void GraphicsEngine::SubmitToMainThread(const std::function<void()>& function)

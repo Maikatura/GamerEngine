@@ -44,7 +44,7 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 			if(GraphicsEngine::Get())
 			{
 				GraphicsEngine::Get()->SetPauseState(true);
-				GraphicsEngine::Get()->StopUpdateThread();
+				//GraphicsEngine::Get()->StopUpdateThread();
 			}
 
 			
