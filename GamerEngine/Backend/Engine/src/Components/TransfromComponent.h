@@ -30,11 +30,6 @@ public:
 		: Translation(translation)
 	{}
 
-	~TransformComponent()
-	{
-		myChildren.clear();
-	}
-
 
 	Vector3f GetPosition() const
 	{
