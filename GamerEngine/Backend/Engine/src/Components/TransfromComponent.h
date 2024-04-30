@@ -17,8 +17,6 @@ class TransformComponent
 	Vector3f Rotation = { 0.0f, 0.0f, 0.0f };
 	Vector3f Scale = { 1.0f, 1.0f, 1.0f };
 
-	Matrix4x4f Matrix;
-
 public:
 
 	GamerEngine::Entity myParent;
@@ -94,12 +92,12 @@ public:
 	}
 
 
-	Matrix4x4f GetLocalMatrix()
+	Matrix4x4f GetLocalMatrix() const
 	{
 		return ComposeFromTRS(Translation, Vector3f(Rotation.x, Rotation.y, Rotation.z), Scale);
 	}
 
-	Matrix4x4f GetWorldMatrix()
+	Matrix4x4f GetWorldMatrix() const
 	{
 		Vector3f translation = Translation;
 		Vector3f rot = Rotation;
@@ -108,7 +106,7 @@ public:
 		if (HasParent())
 		{
 			// Get parent's world transformation matrix
-			auto parentTransform = GetWorldTransform();
+			const auto parentTransform = GetWorldTransform();
 
 			// Calculate child's translation relative to parent's forward and right directions
 			translation = parentTransform.Translation;
@@ -119,7 +117,7 @@ public:
 		return ComposeFromTRS(translation, Vector3f(rot.x, rot.y, rot.z), scale);
 	}
 
-	Transform GetWorldTransform()
+	Transform GetWorldTransform() const
 	{
 		Transform transform;
 
@@ -130,7 +128,7 @@ public:
 		if (HasParent())
 		{
 			// Get parent's world transformation matrix
-			auto& parentTransform = GetParent().GetComponent<TransformComponent>();
+			const auto& parentTransform = GetParent().GetComponent<TransformComponent>();
 
 			// Calculate child's translation relative to parent's forward and right directions
 			transform.Translation = parentTransform.GetForward() * Translation.z +
@@ -144,17 +142,17 @@ public:
 		return transform;
 	}
 
-	Vector3f GetForward()
+	Vector3f GetForward() const
 	{
 		return GetWorldMatrix().GetForward();
 	}
 
-	Vector3f GetRight()
+	Vector3f GetRight() const
 	{
 		return GetWorldMatrix().GetRight();
 	}
 
-	Vector3f GetUp()
+	Vector3f GetUp() const
 	{
 		return GetWorldMatrix().GetUp();
 	}

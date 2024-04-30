@@ -68,7 +68,7 @@ namespace CommonUtilities
 		static Matrix4x4<T> CreateRollPitchYawMatrix(Vector3<T>& aRotation);
 
 		Vector3<T> GetRight();
-		Vector3<T> GetUp();
+		Vector3<T> GetUp() const;
 		Vector3<T> GetForward();
 		Vector4<T> GetForwardW();
 
@@ -714,7 +714,7 @@ namespace CommonUtilities
 	}
 
 	template <class T>
-	Vector3<T> Matrix4x4<T>::GetUp()
+	Vector3<T> Matrix4x4<T>::GetUp() const
 	{
 		return Vector3<T>{ myMatrix[4], myMatrix[5], myMatrix[6] };;
 	}
