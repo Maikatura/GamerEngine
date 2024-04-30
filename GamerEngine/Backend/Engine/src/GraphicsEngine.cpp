@@ -309,12 +309,11 @@ void GraphicsEngine::BeginFrame()
 
     const auto renderTarget = DX11::Get().GetRenderTargetView();
     DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView()->myDSV.Get());
-    constexpr float clearDepth = 1.0f;
-    constexpr UINT8 clearStencil = 0;
+    
 
-    DX11::Get().GetContext()->ClearDepthStencilView(DX11::Get().GetDepthStencilView()->myDSV.Get(), D3D11_CLEAR_DEPTH,
-                                                    clearDepth, clearStencil);
-    DX11::Get().GetContext()->ClearRenderTargetView(DX11::Get().GetRenderTargetView(), &clearColor.x);
+    //DX11::Get().GetContext()->ClearRenderTargetView(DX11::Get().GetRenderTargetView(), &clearColor.x);
+    
+    DX11::Get().ClearRenderTargets();
 }
 
 void GraphicsEngine::OnFrameUpdate()
@@ -508,11 +507,7 @@ void GraphicsEngine::OnFrameRender()
         if (myUseEditor)
         {
             //DX11::Get().TurnZBufferOff();
-            DX11::Get().GetScreenView()->SetRenderTarget(DX11::Get().GetContext(),
-                                                         DX11::Get().GetDepthStencilView()->myDSV.Get());
-            DX11::Get().GetScreenView()->ClearRenderTarget(DX11::Get().GetContext(),
-                                                           DX11::Get().GetDepthStencilView()->myDSV.Get(), 0.5f, 0.5f,
-                                                           0.5f, 1.0f);
+            DX11::Get().ClearRenderTargets();
         }
         else
         {

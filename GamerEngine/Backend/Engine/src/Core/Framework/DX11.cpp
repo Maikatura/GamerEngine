@@ -31,6 +31,29 @@ ID3D11RasterizerState* DX11::GetFrontCulling() const
 	return myFrontCulling;
 }
 
+void DX11::ClearRenderTargets()
+{
+	myScreenView->ClearRenderTarget(DX11::Get().GetContext(),
+		DX11::Get().GetDepthStencilView()->myDSV.Get(), 0.5f, 0.5f,
+		0.5f, 1.0f);
+
+	float color[4];
+	color[0] = 0.5f;
+	color[1] = 0.5f;
+	color[2] = 0.5f;
+	color[3] = 1.0f;
+
+	// Clear the back buffer.
+
+	GetContext()->ClearRenderTargetView(myRenderTargetView, color);
+
+
+	constexpr float clearDepth = 1.0f;
+	constexpr UINT8 clearStencil = 0;
+	DX11::Get().GetContext()->ClearDepthStencilView(DX11::Get().GetDepthStencilView()->myDSV.Get(), D3D11_CLEAR_DEPTH,
+		clearDepth, clearStencil);
+}
+
 DX11& DX11::Get()
 {
 	static DX11 instance;

@@ -98,6 +98,7 @@ public:
 	~DX11();
 	ComPtr<IDXGISwapChain> GetSwapChain();
 	ID3D11RasterizerState* GetFrontCulling() const;
+	void ClearRenderTargets();
 
 	static DX11& Get();
 
