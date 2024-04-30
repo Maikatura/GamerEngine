@@ -44,8 +44,8 @@ private:
 	bool myIsEditingPosition = false;
 	bool myOldIsEditingPosition = false;
 
-	TransformComponent myStartTranslate;
-	TransformComponent myEditedTranslate;
+	Transform myStartTranslate;
+	Transform myEditedTranslate;
 
 	ImGuizmo::OPERATION myOperation = ImGuizmo::OPERATION::TRANSLATE;
 };

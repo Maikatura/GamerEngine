@@ -20,7 +20,7 @@
 #include "Layers/NetworkingLayer.h"
 #include "Core/Rendering/DeferredRenderer.h"
 
-SceneView::SceneView() : Layer("Scene"), myStartTranslate(TransformComponent()), myEditedTranslate(TransformComponent())
+SceneView::SceneView() : Layer("Scene"), myStartTranslate(Transform()), myEditedTranslate(Transform())
 {
 
 }
@@ -147,15 +147,15 @@ void SceneView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 		return;
 	}
 
-	auto& transform = aEntity->GetComponent<TransformComponent>();
+	auto transform = aEntity->GetComponent<TransformComponent>().GetWorldTransform();
 	Matrix4x4f projectionView = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
 	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
 	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(view);
 
 	Matrix4x4f localMat; // = transform.GetMatrix();
-	float translate[3] = { transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z };
-	float rotation[3] = { transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z };
-	float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
+	float translate[3] = { transform.Translation.x, transform.Translation.y, transform.Translation.z };
+	float rotation[3] = { transform.Rotation.x, transform.Rotation.y, transform.Rotation.z };
+	float scale[3] = { transform.Scale.x, transform.Scale.y, transform.Scale.z };
 
 	ImGuizmo::RecomposeMatrixFromComponents(translate, rotation, scale, localMat.Ptr());
 
@@ -185,9 +185,9 @@ void SceneView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 			
 			ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
 
-			transform.SetPosition({ translate[0], translate[1], translate[2] });
-			transform.SetRotation(Vector3f{ rotation[0], rotation[1], rotation[2]});
-			transform.SetScale({ scale[0], scale[1], scale[2] });
+			aEntity->GetComponent<TransformComponent>().SetPosition({ translate[0], translate[1], translate[2] });
+			aEntity->GetComponent<TransformComponent>().SetRotation(Vector3f{ rotation[0], rotation[1], rotation[2] });
+			aEntity->GetComponent<TransformComponent>().SetScale({ scale[0], scale[1], scale[2] });
 		}
 	}
 

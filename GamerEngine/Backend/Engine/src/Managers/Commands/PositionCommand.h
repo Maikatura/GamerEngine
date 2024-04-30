@@ -6,7 +6,7 @@
 class PositionCommand : public AbstractCommand
 {
 public:
-	PositionCommand(Ref<GamerEngine::Entity> aEntity, TransformComponent aFromPosition, TransformComponent aToPosition);
+	PositionCommand(Ref<GamerEngine::Entity> aEntity, Transform aFromPosition, Transform aToPosition);
 	~PositionCommand() override;
 
 	bool Execute() override;
@@ -14,11 +14,11 @@ public:
 
 private:
 	Ref<GamerEngine::Entity> myEntity;
-	TransformComponent myOldPosition;
-	TransformComponent myNewPosition;
+	Transform myOldPosition;
+	Transform myNewPosition;
 };
 
-inline PositionCommand::PositionCommand(Ref<GamerEngine::Entity> aEntity, TransformComponent aFromPosition, TransformComponent aToPosition)
+inline PositionCommand::PositionCommand(Ref<GamerEngine::Entity> aEntity, Transform aFromPosition, Transform aToPosition)
 {
 	myEntity = aEntity;
 	myOldPosition = aFromPosition;
@@ -37,7 +37,7 @@ inline bool PositionCommand::Execute()
 	}
 
 	auto& transform = myEntity->GetComponent<TransformComponent>();
-	transform = myNewPosition;
+	//transform = myNewPosition;
 
 	return true;
 }
@@ -50,7 +50,7 @@ inline bool PositionCommand::Undo()
 	}
 
 	auto& transform = myEntity->GetComponent<TransformComponent>();
-	transform = myOldPosition;
+	//transform = myOldPosition;
 
 	return true;
 }

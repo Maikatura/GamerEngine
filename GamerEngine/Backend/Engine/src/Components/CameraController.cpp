@@ -28,7 +28,7 @@ void CameraController::OnUpdate(float aTime)
 {
 	auto& camera = GetComponent<CameraComponent>();
 
-	if(!camera.Primary)
+	if (!camera.Primary)
 	{
 		return;
 	}
@@ -49,13 +49,13 @@ void CameraController::OnUpdate(float aTime)
 		myOldPos = myPrevMouse;
 	}
 
-	if(Input::IsMouseReleased(VK_LBUTTON) && cameraData.HasBeenActivated)
+	if (Input::IsMouseReleased(VK_LBUTTON) && cameraData.HasBeenActivated)
 	{
 		cameraData.HasBeenActivated = false;
 		Input::SetMousePos(myPrevMouse);
 	}
 
-	if(!cameraData.HasBeenActivated)
+	if (!cameraData.HasBeenActivated)
 	{
 		return;
 	}
@@ -64,7 +64,7 @@ void CameraController::OnUpdate(float aTime)
 	const float oldMouseY = transform.GetRotation().y;
 
 
-	
+
 
 	Vector2i delta = Input::GetMousePos() - myOldPos;
 
@@ -75,8 +75,11 @@ void CameraController::OnUpdate(float aTime)
 	Input::SetMousePos(centerPosition);
 
 
-	transform.GetRotation().y += static_cast<float>(delta.x) * cameraData.myMouseSensitivity;
-	transform.GetRotation().x += static_cast<float>(delta.y) * cameraData.myMouseSensitivity;
+	transform.SetRotation({
+		transform.GetRotation().x + static_cast<float>(delta.y) * cameraData.myMouseSensitivity,
+		transform.GetRotation().y + static_cast<float>(delta.x) * cameraData.myMouseSensitivity,
+		0
+	});
 	myOldPos = centerPosition;
 
 	if (Input::GetMouseWheel() != 0.0f)
@@ -129,7 +132,7 @@ void CameraController::OnUpdate(float aTime)
 		camera.SetHasMoved(true);
 	}
 
-	transform.GetPosition() += movement;
+	transform.SetPosition(transform.GetPosition() + movement);
 
 	
 }

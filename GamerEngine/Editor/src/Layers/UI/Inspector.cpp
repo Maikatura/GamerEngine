@@ -80,24 +80,24 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 	DrawComponent<TransformComponent>("Transform", aEntity, [](auto& component, auto aEntity)
 		{
 
-			auto& translate = component.GetPosition();
-			auto& rotation = component.GetRotation();
-			auto& scale = component.GetScale();
+			auto translate = component.GetPosition();
+			auto rotation = component.GetRotation();
+			auto scale = component.GetScale();
 
 
 			if (ImGui::DragFloat3("Position", &translate.x, 0.25f))
 			{
-				
+				component.SetPosition(translate);
 			}
 
 			if (ImGui::DragFloat3("Rotation", &rotation.x, 0.25f))
 			{
-				
+				component.SetRotation(rotation);
 			}
 
 			if (ImGui::DragFloat3("Scale", &scale.x, 0.05f))
 			{
-				
+				component.SetScale(scale);
 			}
 
 			//component.SetPosition(translate);

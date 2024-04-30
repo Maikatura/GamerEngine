@@ -18,7 +18,9 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 
 	//Transform transform = Transform();
 
-	auto transformedBounds = aModel.GetModel()->GetBoxBounds().Transform(aTransform.GetPosition(), aTransform.GetRotation(), aTransform.GetScale());
+	Transform transform = aTransform.GetWorldTransform();
+
+	auto transformedBounds = aModel.GetModel()->GetBoxBounds().Transform(transform.Translation, transform.Rotation, transform.Scale);
 
 	if (!transformedBounds.IsOnFrustum(myCamera->GetFrustum()))
 	{
@@ -33,13 +35,13 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 
 	if (aModel.GetModel()->HasBeenRendered())
 	{
-		aModel.GetModel()->AddRenderedInstance(aEntity->GetID(), aTransform.GetMatrix());
+		aModel.GetModel()->AddRenderedInstance(aEntity->GetID(), aTransform.GetWorldMatrix());
 		return;
 	}
 
 	
 	aModel.GetModel()->SetHasBeenRenderer(true);
-	RenderBuffer renderBuffer = RenderBuffer{ aEntity->GetID(), aTransform.GetMatrix(), aModel.GetModel() };
+	RenderBuffer renderBuffer = RenderBuffer{ aEntity->GetID(), aTransform.GetWorldMatrix(), aModel.GetModel() };
 
 	LineRenderer::Get().DrawAABB3D(transformedBounds);
 	myUpdateModels.push_back(renderBuffer);
@@ -48,7 +50,7 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
 {
-	mySpritesToRender.push_back({ aTransfrom.GetMatrix(), aSprite });
+	mySpritesToRender.push_back({ aTransfrom.GetWorldMatrix(), aSprite });
 }
 
 void Renderer::RenderLight(Light* aLight)

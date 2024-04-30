@@ -3,6 +3,14 @@
 #include "Camera.h"
 #include "Core/Model/Entity.h"
 
+
+struct Transform
+{
+	Vector3f Translation = { 0.0f, 0.0f, 0.0f };
+	Vector3f Rotation = { 0.0f, 0.0f, 0.0f };
+	Vector3f Scale = { 1.0f, 1.0f, 1.0f };
+};
+
 class TransformComponent
 {
 	Vector3f Translation = { 0.0f, 0.0f, 0.0f };
@@ -35,17 +43,7 @@ public:
 		return Translation;
 	}
 
-	Vector3f& GetPosition()
-	{
-		return Translation;
-	}
-
 	Vector3f GetRotation() const
-	{
-		return Rotation;
-	}
-
-	Vector3f& GetRotation()
 	{
 		return Rotation;
 	}
@@ -55,50 +53,110 @@ public:
 		return Scale;
 	}
 
-	Vector3f& GetScale()
-	{
-		return Scale;
-	}
 
 	void SetPosition(Vector3f aPosition)
 	{
-		Translation = aPosition;
+		if (HasParent())
+		{
+			auto& parentTransform = GetParent().GetComponent<TransformComponent>();
+			Translation = aPosition - parentTransform.GetWorldTransform().Translation;
+		}
+		else
+		{
+			Translation = aPosition;
+		}
 	}
 
 	void SetRotation(Vector3f aRotation)
 	{
-		Rotation = aRotation;
+		if (HasParent())
+		{
+			auto& parentTransform = GetParent().GetComponent<TransformComponent>();
+			Rotation = aRotation - parentTransform.GetWorldTransform().Rotation;
+		}
+		else
+		{
+			Rotation = aRotation;
+		}
 	}
 
 	void SetScale(Vector3f aScale)
 	{
-		Scale = aScale;
-	}
-
-	Matrix4x4f GetMatrix()
-	{
-		Vector3f translation = Translation;
 		if (HasParent())
 		{
-			translation += GetParent().GetComponent<TransformComponent>().Translation;
+			auto& parentTransform = GetParent().GetComponent<TransformComponent>();
+			Scale = aScale * parentTransform.GetWorldTransform().Scale;
+		}
+		else
+		{
+			Scale = aScale;
+		}
+	}
+
+
+	Matrix4x4f GetLocalMatrix()
+	{
+		return ComposeFromTRS(Translation, Vector3f(Rotation.x, Rotation.y, Rotation.z), Scale);
+	}
+
+	Matrix4x4f GetWorldMatrix()
+	{
+		Vector3f translation = Translation;
+		Vector3f rot = Rotation;
+		Vector3f scale = Scale;
+
+		if (HasParent())
+		{
+			// Get parent's world transformation matrix
+			auto parentTransform = GetWorldTransform();
+
+			// Calculate child's translation relative to parent's forward and right directions
+			translation = parentTransform.Translation;
+			rot = parentTransform.Rotation;
+			scale = parentTransform.Scale;
 		}
 
-		return ComposeFromTRS(translation, Vector3f(Rotation.x, Rotation.y, Rotation.z), Scale);
+		return ComposeFromTRS(translation, Vector3f(rot.x, rot.y, rot.z), scale);
+	}
+
+	Transform GetWorldTransform()
+	{
+		Transform transform;
+
+		transform.Translation = Translation;
+		transform.Rotation = Rotation;
+		transform.Scale = Scale;
+
+		if (HasParent())
+		{
+			// Get parent's world transformation matrix
+			auto& parentTransform = GetParent().GetComponent<TransformComponent>();
+
+			// Calculate child's translation relative to parent's forward and right directions
+			transform.Translation = parentTransform.GetForward() * Translation.z +
+				parentTransform.GetRight() * Translation.x +
+				parentTransform.GetUp() * Translation.y +
+				parentTransform.GetPosition();
+			transform.Rotation += parentTransform.GetRotation();
+			transform.Scale *= parentTransform.GetScale();
+		}
+
+		return transform;
 	}
 
 	Vector3f GetForward()
 	{
-		return GetMatrix().GetForward();
+		return GetWorldMatrix().GetForward();
 	}
 
 	Vector3f GetRight()
 	{
-		return GetMatrix().GetRight();
+		return GetWorldMatrix().GetRight();
 	}
 
 	Vector3f GetUp()
 	{
-		return GetMatrix().GetUp();
+		return GetWorldMatrix().GetUp();
 	}
 
 
@@ -186,7 +244,7 @@ public:
 
 	std::vector<GamerEngine::Entity> GetChildren() const;
 
-	bool HasParent();
+	bool HasParent() const;
 
 
 	void UpdateTransformFromMatrix()

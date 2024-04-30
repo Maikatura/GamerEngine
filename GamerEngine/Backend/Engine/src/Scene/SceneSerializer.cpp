@@ -428,32 +428,25 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 		tc.SetPosition(transformComponent["Translation"].as<Vector3f>());
 		tc.SetRotation(transformComponent["Rotation"].as<Vector3f>());
 		tc.SetScale(transformComponent["Scale"].as<Vector3f>());
-	}
 
-
-	auto childComponent = aEntityNode["ChildComponent"];
-	if(childComponent)
-	{
-		auto& cc = deserializedEntity.GetComponent<TransformComponent>();
-
-		if(childComponent["Parent"])
+		if (transformComponent["Parent"])
 		{
-			auto entityID = childComponent["Parent"].as<uint64_t>();
+			auto entityID = transformComponent["Parent"].as<uint64_t>();
 
 			aParents[uuid] = entityID;
 		}
 
-		if(childComponent["ChildrenSize"])
+		if (transformComponent["ChildrenSize"])
 		{
-			int size = childComponent["ChildrenSize"].as<int>();
+			int size = transformComponent["ChildrenSize"].as<int>();
 
-			if(size > 0)
+			if (size > 0)
 			{
-				auto children = childComponent["Children"];
+				auto children = transformComponent["Children"];
 
-				if(children)
+				if (children)
 				{
-					for(int i = 0; i < size; i++)
+					for (int i = 0; i < size; i++)
 					{
 						auto entityID = children[std::to_string(i)].as<uint64_t>();
 
@@ -463,6 +456,15 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 			}
 
 		}
+	}
+
+
+	auto childComponent = aEntityNode["ChildComponent"];
+	if(childComponent)
+	{
+		auto& cc = deserializedEntity.GetComponent<TransformComponent>();
+
+		
 	}
 
 
@@ -798,6 +800,7 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 				if (e1Id == e2Id)
 				{
 					entityOne.GetComponent<TransformComponent>().SetParent(entityTwo);
+					entityTwo.GetComponent<TransformComponent>().SetChild(entityOne);
 				}
 			}
 

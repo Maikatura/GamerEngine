@@ -10,7 +10,7 @@ std::vector<GamerEngine::Entity> TransformComponent::GetChildren() const
 	return myChildren;
 }
 
-bool TransformComponent::HasParent()
+bool TransformComponent::HasParent() const
 {
 	if (!myParent)
 	{

@@ -3,33 +3,33 @@
 #include <Core/Model/SceneObject.h>
 
 
-Transform::Transform(Vector3f somePosition, Vector3f someRotation, Vector3f someScale)
+TransformOld::TransformOld(Vector3f somePosition, Vector3f someRotation, Vector3f someScale)
 {
 	Vector3f shear = Vector3f(0, 0, 0);
 
 	ComposeTransform(somePosition, someRotation, someScale);
 }
 
-Transform::~Transform()
+TransformOld::~TransformOld()
 {
 }
 
-Matrix4x4f& Transform::GetMatrix()
+Matrix4x4f& TransformOld::GetMatrix()
 {
 	return myTransformMatrix;
 }
 
-Vector3f Transform::GetPosition()
+Vector3f TransformOld::GetPosition()
 {
 	return { myTransformMatrix(4,1), myTransformMatrix(4,2), myTransformMatrix(4,3) };
 }
 
-Vector3f Transform::GetRotation()
+Vector3f TransformOld::GetRotation()
 {
 	return myRotation;
 }
 
-Vector3f Transform::GetScale()
+Vector3f TransformOld::GetScale()
 {
 	Vector3f output;
 	
@@ -44,29 +44,29 @@ Vector3f Transform::GetScale()
 	return output;
 }
 
-Vector3f Transform::GetForward()
+Vector3f TransformOld::GetForward()
 {
 	return { myTransformMatrix(3,1), myTransformMatrix(3,2), myTransformMatrix(3,3) };
 }
 
-Vector3f Transform::GetRight()
+Vector3f TransformOld::GetRight()
 {
 	return { myTransformMatrix(1,1), myTransformMatrix(1,2), myTransformMatrix(1,3) };
 }
 
-Vector3f Transform::GetUp()
+Vector3f TransformOld::GetUp()
 {
 	return { myTransformMatrix(2,1), myTransformMatrix(2,2), myTransformMatrix(2,3) };
 }
 
-void Transform::DecomposeTransform(Vector3f& somePosition, Vector3f& someRotation, Vector3f& someScale)
+void TransformOld::DecomposeTransform(Vector3f& somePosition, Vector3f& someRotation, Vector3f& someScale)
 {
 	somePosition = GetPosition();
 	someRotation = myRotation;
 	someScale = GetScale();
 }
 
-void Transform::ComposeTransform(Vector3f somePosition, Vector3f someRotation, Vector3f someScale)
+void TransformOld::ComposeTransform(Vector3f somePosition, Vector3f someRotation, Vector3f someScale)
 {
 	//myRotation = someRotation;
 
@@ -88,7 +88,7 @@ void Transform::ComposeTransform(Vector3f somePosition, Vector3f someRotation, V
 	myTransformMatrix = transformMatrix;
 }
 
-void Transform::SetPosition(Vector3f aPosition)
+void TransformOld::SetPosition(Vector3f aPosition)
 {
 	myTransformMatrix(4, 1) = aPosition.x;
 	myTransformMatrix(4, 2) = aPosition.y;
@@ -96,7 +96,7 @@ void Transform::SetPosition(Vector3f aPosition)
 	myTransformMatrix(4, 4) = 1;
 }
 
-void Transform::SetRotation(Vector3f aRotation)
+void TransformOld::SetRotation(Vector3f aRotation)
 {
 	myRotation = aRotation;
 
@@ -106,7 +106,7 @@ void Transform::SetRotation(Vector3f aRotation)
 	ComposeTransform(pos, aRotation, scale);
 }
 
-void Transform::SetScale(Vector3f aScale)
+void TransformOld::SetScale(Vector3f aScale)
 {
 	Vector3f pos = GetPosition();
 	Vector3f rot = myRotation;
@@ -115,10 +115,10 @@ void Transform::SetScale(Vector3f aScale)
 	ComposeTransform(pos, rot, aScale);
 }
 
-Matrix4x4f Transform::GetWorldMatrix()
+Matrix4x4f TransformOld::GetWorldMatrix()
 {
 	Matrix4x4f output = GetMatrix();
-	Transform* parent = myParent;
+	TransformOld* parent = myParent;
 	while(parent != nullptr)
 	{
 		output *= parent->GetMatrix();
@@ -127,7 +127,7 @@ Matrix4x4f Transform::GetWorldMatrix()
 	return output;
 }
 
-Vector3f Transform::GetWorldPosition()
+Vector3f TransformOld::GetWorldPosition()
 {
 	Matrix4x4f matr = GetWorldMatrix();
 	Vector3f output;
@@ -136,7 +136,7 @@ Vector3f Transform::GetWorldPosition()
 	return output;
 }
 
-Vector3f Transform::GetWorldRotation()
+Vector3f TransformOld::GetWorldRotation()
 {
 	Matrix4x4f matr = GetWorldMatrix();
 	Vector3f output;
@@ -145,7 +145,7 @@ Vector3f Transform::GetWorldRotation()
 	return output;
 }
 
-Vector3f Transform::GetWorldScale()
+Vector3f TransformOld::GetWorldScale()
 {
 	Matrix4x4f matr = GetWorldMatrix();
 	Vector3f output;
@@ -154,41 +154,41 @@ Vector3f Transform::GetWorldScale()
 	return output;
 }
 
-void Transform::SetGameObject(SceneObject* aSceneObject)
+void TransformOld::SetGameObject(SceneObject* aSceneObject)
 {
 	mySceneObject = aSceneObject;
 }
 
-void Transform::SetParent(Transform* aTransform)
+void TransformOld::SetParent(TransformOld* aTransform)
 {
 	myParent = aTransform;
 	aTransform->myChildren.push_back(this);
 }
 
-void Transform::AddChild(Transform* aTransform)
+void TransformOld::AddChild(TransformOld* aTransform)
 {
 	myChildren.push_back(aTransform);
 	aTransform->myParent = this;
 }
 
-Transform* Transform::GetParent()
+TransformOld* TransformOld::GetParent()
 {
 	return myParent;
 }
 
-bool Transform::GetHasParent()
+bool TransformOld::GetHasParent()
 {
 	return myParent != nullptr;
 }
 
-Transform* Transform::GetChild(int anIndex)
+TransformOld* TransformOld::GetChild(int anIndex)
 {
 	return myChildren.size() > anIndex ? myChildren[anIndex] : nullptr;
 }
 
-Transform* Transform::GetChild(std::string aName)
+TransformOld* TransformOld::GetChild(std::string aName)
 {
-	for(Transform* t : myChildren)
+	for(TransformOld* t : myChildren)
 	{
 		/*if(t->->Name() == aName)
 		{
@@ -198,7 +198,7 @@ Transform* Transform::GetChild(std::string aName)
 	return nullptr;
 }
 
-bool Transform::GetHasChildren()
+bool TransformOld::GetHasChildren()
 {
 	return myChildren.size() != 0;
 }

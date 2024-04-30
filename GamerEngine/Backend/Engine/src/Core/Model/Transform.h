@@ -6,19 +6,19 @@
 class SceneObject;
 
 
-class Transform
+class TransformOld
 {
 public:
 
 
-	Transform() : mySceneObject(nullptr)
+	TransformOld() : mySceneObject(nullptr)
 	{}
 
-	Transform(SceneObject* aObject) : mySceneObject(aObject)
+	TransformOld(SceneObject* aObject) : mySceneObject(aObject)
 	{}
 
-	Transform(Vector3f somePosition, Vector3f someRotation = Vector3f(), Vector3f someScale = Vector3f(1.0f, 1.0f, 1.0f));
-	~Transform();
+	TransformOld(Vector3f somePosition, Vector3f someRotation = Vector3f(), Vector3f someScale = Vector3f(1.0f, 1.0f, 1.0f));
+	~TransformOld();
 	Matrix4x4f& GetMatrix();
 	Vector3f GetPosition();
 	Vector3f GetRotation();
@@ -62,20 +62,20 @@ public:
 
 	void SetGameObject(SceneObject* aSceneObject);
 
-	void SetParent(Transform* aTransform);
-	void AddChild(Transform* aTransform);
-	Transform* GetParent();
+	void SetParent(TransformOld* aTransform);
+	void AddChild(TransformOld* aTransform);
+	TransformOld* GetParent();
 	bool GetHasParent();
-	Transform* GetChild(int anIndex = 0);
-	Transform* GetChild(std::string aName);
+	TransformOld* GetChild(int anIndex = 0);
+	TransformOld* GetChild(std::string aName);
 	bool GetHasChildren();
 
 	
 
 private:
 	friend class SceneObject;
-	Transform* myParent = nullptr;
-	std::vector<Transform*> myChildren;
+	TransformOld* myParent = nullptr;
+	std::vector<TransformOld*> myChildren;
 	Matrix4x4f myTransformMatrix;
 	Vector3f myRotation;
 

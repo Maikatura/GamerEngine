@@ -346,6 +346,15 @@ namespace CommonUtilities
 		aVector.z *= aScalar;
 	}
 
+	//Equivalent to setting aVector to (aVector * aScalar) 
+	template <class T>
+	void operator*=(Vector3<T>& aVector, const Vector3<T>& aVectorTwo)
+	{
+		aVector.x *= aVectorTwo.x;
+		aVector.y *= aVectorTwo.y;
+		aVector.z *= aVectorTwo.z;
+	}
+
 	//Equivalent to setting aVector to (aVector / aScalar) 
 	template <class T>
 	void operator/=(Vector3<T>& aVector, const T& aScalar)

@@ -6,7 +6,7 @@ struct ParticleSystemEmitter
 {
 	ParticleEmitter Emitter;
 	EmitterSettingsData Settings;
-	Transform Transform;
+	TransformOld Transform;
 };
 
 class ParticleSystem : public SceneObject
