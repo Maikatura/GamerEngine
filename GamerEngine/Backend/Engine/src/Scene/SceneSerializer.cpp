@@ -167,7 +167,7 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 
 		if (tc.HasParent())
 		{
-			out << YAML::Key << "Parent" << YAML::Value << tc.GetParent()->GetUUID();
+			out << YAML::Key << "Parent" << YAML::Value << tc.GetParent().GetUUID();
 		}
 
 		out << YAML::Key << "ChildrenSize" << YAML::Value << tc.GetChildren().size();
@@ -176,7 +176,7 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 
 		for (int i = 0; i < tc.GetChildren().size(); i++)
 		{
-			out << YAML::Key << i << YAML::Value << tc.GetChildren()[i]->GetUUID();
+			out << YAML::Key << i << YAML::Value << tc.GetChildren()[i].GetUUID();
 		}
 
 		out << YAML::EndMap; // Children
@@ -406,7 +406,7 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 
 
 
-void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Scene* aScene, bool isHeadless)
+void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Scene* aScene, std::unordered_map<uint64_t, uint64_t>& aParents, bool isHeadless)
 {
 	uint64_t uuid = aEntityNode["Entity"].as<uint64_t>();
 
@@ -439,7 +439,8 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 		if(childComponent["Parent"])
 		{
 			auto entityID = childComponent["Parent"].as<uint64_t>();
-			cc.TempParent = entityID;
+
+			aParents[uuid] = entityID;
 		}
 
 		if(childComponent["ChildrenSize"])
@@ -455,7 +456,8 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 					for(int i = 0; i < size; i++)
 					{
 						auto entityID = children[std::to_string(i)].as<uint64_t>();
-						cc.TempChildren.push_back(entityID);
+
+						aParents[entityID] = uuid;
 					}
 				}
 			}
@@ -764,49 +766,52 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 	}
 
 
+	std::unordered_map<uint64_t, uint64_t> parents;
+
 	auto entities = data["Entities"];
 	if(entities)
 	{
 		for(auto entity : entities)
 		{
-			DeserializeEntity(entity, myScene, isHeadless);
+			DeserializeEntity(entity, myScene, parents, isHeadless);
 		}
 	}
 
 	// Fix parenting :)
 	const auto& view = myScene->GetRegistry().view<TransformComponent>();
-	for(auto& entity1 : view)
+	for (auto& entity1 : view)
 	{
-		for(auto& entity2 : view)
+		for (auto& entity2 : view)
 		{
-			Ref<GamerEngine::Entity> entityOne = MakeRef<GamerEngine::Entity>(GamerEngine::Entity{ entity1, myScene });
-			Ref<GamerEngine::Entity> entityTwo = MakeRef<GamerEngine::Entity>(GamerEngine::Entity{ entity2, myScene });
+			GamerEngine::Entity entityOne = GamerEngine::Entity{ entity1, myScene };
+			GamerEngine::Entity entityTwo = GamerEngine::Entity{ entity2, myScene };
 
 			if (!entityOne || !entityTwo)
 			{
 				return false;
 			}
 
-			if(entityOne->GetComponent<TransformComponent>().HasParent())
+			if (parents.count(entityOne.GetUUID()))
 			{
-				auto e1Id = entityOne->GetComponent<TransformComponent>().TempParent;
-				auto e2Id = entityTwo->GetUUID();
-				if(e1Id == e2Id)
+				auto e1Id = parents[entityOne.GetUUID()];
+				auto e2Id = entityTwo.GetUUID();
+				if (e1Id == e2Id)
 				{
-					entityOne->GetComponent<TransformComponent>().SetParent(entityTwo.get());
-
+					entityOne.GetComponent<TransformComponent>().SetParent(entityTwo);
 				}
 			}
 
-			for(size_t i = 0; i < entityOne->GetComponent<TransformComponent>().TempChildren.size(); i++)
+			// Check if entity2 is a child of entity1
+			if (parents.count(entityOne.GetUUID()))
 			{
-				if(entityOne->GetComponent<TransformComponent>().TempChildren[i] == entityTwo->GetUUID())
+				auto e1Id = entityOne.GetUUID();
+				auto e2Id = parents[entityOne.GetUUID()];
+				if (e2Id == e1Id)
 				{
-					entityOne->GetComponent<TransformComponent>().SetChild(entityTwo.get());
-					entityTwo->GetComponent<TransformComponent>().SetParent(entityOne.get());
+					entityOne.GetComponent<TransformComponent>().SetChild(entityTwo);
+					entityTwo.GetComponent<TransformComponent>().SetParent(entityOne);
 				}
 			}
-
 		}
 	}
 

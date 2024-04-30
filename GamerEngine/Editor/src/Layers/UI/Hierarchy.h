@@ -29,7 +29,7 @@ public:
 	void DrawArmature(GamerEngine::Entity& aEntity, Ref<GamerEngine::Model> aModel);
 	void LoopBones(const GamerEngine::Skeleton* aSkeleton, const GamerEngine::Bone* aBone, unsigned int aBoneID = 0);
 
-	bool LoopThoughChildren(GamerEngine::Entity* aEntity);
+	bool LoopThoughChildren(GamerEngine::Entity& aEntity);
 	void CheckIfUserWantToSetParent(GamerEngine::Entity& entity);
 	void IsItemHovered(GamerEngine::Entity& aEntity);
 

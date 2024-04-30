@@ -105,6 +105,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
         graphicsEngine.BeginFrame();
+        graphicsEngine.OnFrameUpdate();
         graphicsEngine.OnFrameRender();
         graphicsEngine.EndFrame();
     }

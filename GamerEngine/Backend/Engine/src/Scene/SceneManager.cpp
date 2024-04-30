@@ -8,11 +8,6 @@
 #include "Core/Rendering/SelectionData.h"
 
 
-SceneManager::~SceneManager()
-{
-	myScene = nullptr;
-	mySceneStatus = GamerEngine::SceneStatus::None;
-}
 
 bool SceneManager::IsHeadless()
 {

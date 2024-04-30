@@ -1,9 +1,11 @@
 #include "GraphicsEngine.pch.h"
 #include "TransfromComponent.h"
 
-#include "Core/Model/Entity.h"
 
-std::vector<GamerEngine::Entity*> TransformComponent::GetChildren() const
+
+
+
+std::vector<GamerEngine::Entity> TransformComponent::GetChildren() const
 {
 	return myChildren;
 }
@@ -15,5 +17,5 @@ bool TransformComponent::HasParent()
 		return false;
 	}
 
-	return (myParent->GetHandle() != entt::null);
+	return (myParent.GetHandle() != entt::null);
 }

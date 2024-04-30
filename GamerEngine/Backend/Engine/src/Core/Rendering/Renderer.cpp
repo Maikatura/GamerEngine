@@ -44,7 +44,6 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 	LineRenderer::Get().DrawAABB3D(transformedBounds);
 	myUpdateModels.push_back(renderBuffer);
 
-
 }
 
 void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)

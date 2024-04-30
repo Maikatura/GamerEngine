@@ -1,10 +1,7 @@
 #pragma once
 #include <entt.hpp>
 #include "Camera.h"
-namespace GamerEngine
-{
-	class Entity;
-}
+#include "Core/Model/Entity.h"
 
 class TransformComponent
 {
@@ -16,23 +13,19 @@ class TransformComponent
 
 public:
 
-	GamerEngine::Entity* myParent;
-	std::vector<GamerEngine::Entity*> myChildren{};
+	GamerEngine::Entity myParent;
+	std::vector<GamerEngine::Entity> myChildren{};
 
-
-	uint64_t TempParent;
-	std::vector<uint64_t> TempChildren;
 
 
 	TransformComponent() = default;
 	TransformComponent(const TransformComponent&) = default;
 	TransformComponent(const Vector3f& translation)
-		: Translation(translation), myParent(nullptr)
+		: Translation(translation)
 	{}
 
 	~TransformComponent()
 	{
-		myParent = nullptr;
 		myChildren.clear();
 	}
 
@@ -82,9 +75,15 @@ public:
 		Scale = aScale;
 	}
 
-	Matrix4x4f GetMatrix() const
+	Matrix4x4f GetMatrix()
 	{
-		return ComposeFromTRS(Translation, Vector3f(Rotation.x, Rotation.y, Rotation.z), Scale);
+		Vector3f translation = Translation;
+		if (HasParent())
+		{
+			translation += GetParent().GetComponent<TransformComponent>().Translation;
+		}
+
+		return ComposeFromTRS(translation, Vector3f(Rotation.x, Rotation.y, Rotation.z), Scale);
 	}
 
 	Vector3f GetForward()
@@ -153,12 +152,12 @@ public:
 
 
 
-	void SetChild(GamerEngine::Entity* aChild)
+	void SetChild(GamerEngine::Entity aChild)
 	{
 		myChildren.push_back(aChild);
 	}
 
-	void RemoveChild(GamerEngine::Entity* aChild)
+	void RemoveChild(GamerEngine::Entity aChild)
 	{
 		for (size_t i = 0; i < myChildren.size(); i++)
 		{
@@ -170,22 +169,22 @@ public:
 		}
 	}
 
-	void SetParent(GamerEngine::Entity* aParent)
+	void SetParent(GamerEngine::Entity aParent)
 	{
 		myParent = aParent;
 	}
 
 	void ClearParent()
 	{
-		myParent = nullptr;
+		myParent;
 	}
 
-	GamerEngine::Entity* GetParent() const
+	GamerEngine::Entity GetParent() const
 	{
 		return myParent;
 	}
 
-	std::vector<GamerEngine::Entity*> GetChildren() const;
+	std::vector<GamerEngine::Entity> GetChildren() const;
 
 	bool HasParent();
 

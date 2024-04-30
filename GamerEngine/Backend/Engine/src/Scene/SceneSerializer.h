@@ -21,7 +21,7 @@ public:
 	bool Deserialize(const std::string& filepath, bool loadTextures = true);
 	bool DeserializeRuntime(const std::string& aFilepath);
 
-	static void DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Scene* aScene, bool isHeadless = false);
+	static void DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Scene* aScene, std::unordered_map<uint64_t, uint64_t>& aParents, bool isHeadless = false);
 private:
 	GamerEngine::Scene* myScene;
 
