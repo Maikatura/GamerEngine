@@ -6,14 +6,14 @@
 #include "openvr.h"
 #include "Core/Rendering/LineRenderer.h"
 #include "VR/VRMath.h"
-//#include <DirectXMath.h>
+#include <DirectXMath.h>
 
-CameraComponent::CameraComponent()
+GamerEngine::CameraComponent::CameraComponent()
 {
 	Initialize(90, 0.1f, 250000.0f, { DX11::Get().GetScreenSize().x, DX11::Get().GetScreenSize().y });
 }
 
-void CameraComponent::Initialize(float aHorizontalFoV, float aNearPlane, float aFarPlane, Vector2ui aResolution)
+void GamerEngine::CameraComponent::Initialize(float aHorizontalFoV, float aNearPlane, float aFarPlane, Vector2ui aResolution)
 {
 	assert(aNearPlane < aFarPlane);
 	assert(aNearPlane >= 0.01f);
@@ -31,7 +31,7 @@ void CameraComponent::Initialize(float aHorizontalFoV, float aNearPlane, float a
 	Resize(aResolution);
 }
 
-void CameraComponent::Resize(Vector2ui aResolution)
+void GamerEngine::CameraComponent::Resize(Vector2ui aResolution)
 {
 	if (aResolution.x == 0 || aResolution.y == 0)
 	{
@@ -60,47 +60,47 @@ void CameraComponent::Resize(Vector2ui aResolution)
 
 }
 
-float CameraComponent::GetResScale()
+float GamerEngine::CameraComponent::GetResScale()
 {
 	return static_cast<float>(myRes.y) / static_cast<float>(myRes.x);
 }
 
-float CameraComponent::GetHorizontalFoV()
+float GamerEngine::CameraComponent::GetHorizontalFoV()
 {
 	return myHorizontalFoV;
 }
 
-float CameraComponent::GetVerticalFoV()
+float GamerEngine::CameraComponent::GetVerticalFoV()
 {
 	return myVerticalFoV;
 }
 
-Vector2ui CameraComponent::GetResolution()
+Vector2ui GamerEngine::CameraComponent::GetResolution()
 {
 	return myRes;
 }
 
-void CameraComponent::SetCameraSpeed(float aCameraSpeed)
+void GamerEngine::CameraComponent::SetCameraSpeed(float aCameraSpeed)
 {
 	myCameraSpeed = aCameraSpeed;
 }
 
-float CameraComponent::GetCameraSpeed()
+float GamerEngine::CameraComponent::GetCameraSpeed()
 {
 	return myCameraSpeed;
 }
 
-Vector3f CameraComponent::GetPosition()
+Vector3f GamerEngine::CameraComponent::GetPosition()
 {
 	return myPosition;
 }
 
-Vector3f CameraComponent::GetForward()
+Vector3f GamerEngine::CameraComponent::GetForward()
 {
 	return myRotation.Forward();
 }
 
-Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(VREye anEye)
+Matrix4x4f GamerEngine::CameraComponent::GetCurrentViewProjectionMatrix(VREye anEye)
 {
 	if (anEye == VREye::None)
 	{
@@ -110,7 +110,7 @@ Matrix4x4f CameraComponent::GetCurrentViewProjectionMatrix(VREye anEye)
 	return ViewProjection;
 }
 
-Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VREye anEye)
+Matrix4x4f GamerEngine::CameraComponent::GetHMDMatrixPoseEye(VREye anEye)
 {
 	if (DX11::Get().IsVrNull())
 		return Matrix4x4f();
@@ -120,7 +120,7 @@ Matrix4x4f CameraComponent::GetHMDMatrixPoseEye(VREye anEye)
 }
 
 
-Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VREye anEye)
+Matrix4x4f GamerEngine::CameraComponent::GetHMDMatrixProjectionEye(VREye anEye)
 {
 	if (!DX11::Get().IsVrNull() || anEye == VREye::None)
 		return Projection;
@@ -129,17 +129,17 @@ Matrix4x4f CameraComponent::GetHMDMatrixProjectionEye(VREye anEye)
 	return matrixObj;
 }
 
-bool CameraComponent::HasMoved()
+bool GamerEngine::CameraComponent::HasMoved()
 {
 	return myHasMoved;
 }
 
-void CameraComponent::SetHasMoved(bool aMoveValue)
+void GamerEngine::CameraComponent::SetHasMoved(bool aMoveValue)
 {
 	myHasMoved = aMoveValue;
 }
 
-void CameraComponent::BuildTransform(TransformComponent* aTransform)
+void GamerEngine::CameraComponent::BuildTransform(GamerEngine::TransformComponent* aTransform)
 {
 	myPosition = aTransform->GetPosition();
 	
@@ -152,11 +152,12 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
 	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), aTransform->GetRotation(), aTransform->GetScale());
 #else
+	ViewProjection = aTransform->GetWorldMatrix();
 	ViewFlatProjection = aTransform->GetWorldMatrix();
 #endif
 	
 
-	myFrustum = CommonUtilities::CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetPosition(), aTransform->GetRotation(), {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
+	myFrustum = CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetPosition(), aTransform->GetRotation(), {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
 
 	//LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.FarBottomLeft, { 1,0,0,1 }, 1.0f);
 	//LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.NearBottomRight, { 1,0,0,1 }, 1.0f);
@@ -175,7 +176,7 @@ void CameraComponent::BuildTransform(TransformComponent* aTransform)
 	//myFrustum = CommonUtilities::CreateFrustumFromCamera(ViewProjection, myVerticalFoV, myHorizontalFoV, myNearPlane, myFarPlane);
 }
 
-void CameraComponent::SetupCameras()
+void GamerEngine::CameraComponent::SetupCameras()
 {
 	ProjectionLeft = GetHMDMatrixProjectionEye(VREye::Left);
 	ProjectionRight = GetHMDMatrixProjectionEye(VREye::Right);
@@ -183,7 +184,7 @@ void CameraComponent::SetupCameras()
 	ViewPosRight = GetHMDMatrixPoseEye(VREye::Right);
 }
 
-Matrix4x4f CameraComponent::GetCurrentViewMatrix(VREye evr_eye)
+Matrix4x4f GamerEngine::CameraComponent::GetCurrentViewMatrix(VREye evr_eye)
 {
 	return ViewProjection;
 }

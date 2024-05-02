@@ -11,6 +11,9 @@
 #include "Components/IDComponent.h"
 #include "Components/CameraController.h"
 
-using AllComponents = 
-		ComponentGroup<TransformComponent, CameraComponent, ScriptComponent,
-			NativeScriptComponent>;
+//using AllComponents = 
+//		ComponentGroup<GamerEngine::TransformComponent, GamerEngine::CameraComponent, GamerEngine::ScriptComponent,
+//	GamerEngine::NativeScriptComponent>;
+
+using AllComponents =
+ComponentGroup<GamerEngine::TransformComponent>;

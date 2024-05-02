@@ -20,7 +20,7 @@
 #include "Layers/NetworkingLayer.h"
 #include "Core/Rendering/DeferredRenderer.h"
 
-SceneView::SceneView() : Layer("Scene"), myStartTranslate(Transform()), myEditedTranslate(Transform())
+SceneView::SceneView() : Layer("Scene"), myStartTranslate(GamerEngine::Transform()), myEditedTranslate(GamerEngine::Transform())
 {
 
 }
@@ -61,12 +61,7 @@ void SceneView::RenderSceneView(const Ref<GamerEngine::Entity>& aEntity)
 
 	ImVec2 windowSize = ImGui::GetWindowSize();
 
-	const auto view = SceneManager::Get().GetScene()->GetRegistry().view<TransformComponent, CameraComponent>();
-	for(const auto entity : view)
-	{
-		auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-		camera.Resize({ static_cast<unsigned int>(windowSize.x), static_cast<unsigned int>(windowSize.y) });
-	}
+	SceneManager::Get().GetScene()->Resize({ static_cast<unsigned int>(windowSize.x), static_cast<unsigned int>(windowSize.y) });
 
 
 	ImGui::Image(DX11::Get().Get().GetScreenView()->GetShaderResourceView(), { windowSize.x, windowSize.y }); // Use this
@@ -137,7 +132,7 @@ void SceneView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 		return;
 	}
 
-	if (!aEntity->HasComponent<TransformComponent>())
+	if (!aEntity->HasComponent<GamerEngine::TransformComponent>())
 	{
 		return;
 	}
@@ -147,7 +142,7 @@ void SceneView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 		return;
 	}
 
-	auto transform = aEntity->GetComponent<TransformComponent>().GetWorldTransform();
+	auto transform = aEntity->GetComponent<GamerEngine::TransformComponent>().GetWorldTransform();
 	Matrix4x4f projectionView = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
 	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
 	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(view);
@@ -185,9 +180,9 @@ void SceneView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 			
 			ImGuizmo::DecomposeMatrixToComponents(localMat.Ptr(), translate, rotation, scale);
 
-			aEntity->GetComponent<TransformComponent>().SetPosition({ translate[0], translate[1], translate[2] });
-			aEntity->GetComponent<TransformComponent>().SetRotation(Vector3f{ rotation[0], rotation[1], rotation[2] });
-			aEntity->GetComponent<TransformComponent>().SetScale({ scale[0], scale[1], scale[2] });
+			aEntity->GetComponent<GamerEngine::TransformComponent>().SetPosition({ translate[0], translate[1], translate[2] });
+			aEntity->GetComponent<GamerEngine::TransformComponent>().SetRotation(Vector3f{ rotation[0], rotation[1], rotation[2] });
+			aEntity->GetComponent<GamerEngine::TransformComponent>().SetScale({ scale[0], scale[1], scale[2] });
 		}
 	}
 

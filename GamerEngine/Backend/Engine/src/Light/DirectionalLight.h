@@ -1,7 +1,7 @@
 #pragma once
 #include <Light/Light.h>
 
-class TransformComponent;
+
 class DirectionalLightComponent;
 
 class DirectionalLight : public Light
@@ -19,5 +19,5 @@ public:
 	void Update() override;
 
 	void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex) override;
-	void SetData(TransformComponent* aTransform) override;
+	void SetData(GamerEngine::TransformComponent* aTransform) override;
 };

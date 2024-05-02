@@ -29,9 +29,9 @@ void SpotLight::Update()
 {
 
 	
-	SetLightPosition(myTransform->GetPosition());
+	SetLightPosition(myTransformComp->GetPosition());
 	// Get the rotation quaternion
-	Vector3f rotation = myTransform->GetRotation();
+	Vector3f rotation = myTransformComp->GetRotation();
 	Matrix4x4f viewMat = ComposeFromTRS(myLightData.Position, Vector3f(rotation.x, rotation.y, rotation.z), { 1, 1, 1 });
 
 	SetLightDirection(viewMat.GetForward());
@@ -42,7 +42,7 @@ void SpotLight::Update()
 	SpotLightNum++;
 }
 
-void SpotLight::SetData(TransformComponent* aTransform)
+void SpotLight::SetData(GamerEngine::TransformComponent* aTransform)
 {
-	myTransform = aTransform;
+	myTransformComp = aTransform;
 }

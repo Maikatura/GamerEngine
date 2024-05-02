@@ -3,6 +3,7 @@
 #include <ostream>
 #include <valarray>
 
+#include "MathTypes.hpp"
 #include "Utilites/UtilityFunctions.h"
 
 namespace CommonUtilities
@@ -45,6 +46,7 @@ namespace CommonUtilities
 
 		const Vector3<T> operator* (const T& aRval) const;
 		const Vector3<T> operator* (const Vector3<T>& aRval) const;
+		bool Compare(const Vector3<T>& aVector);
 
 		static Vector3<T> Lerp(Vector3<T> aStart, Vector3<T> aEnd, float aTime);
 		static Vector3<T> Normalize(const Vector3<T>& aVec);
@@ -188,6 +190,13 @@ namespace CommonUtilities
 	const Vector3<T> Vector3<T>::operator* (const Vector3<T>& aRval) const
 	{
 		return Vector3<T>(x * aRval.x, y * aRval.y, z * aRval.z);
+	}
+
+	template <class T>
+	bool Vector3<T>::Compare(const Vector3<T>& aVector)
+	{
+		return AreEqual(x, aVector.x) && AreEqual(y, aVector.y) && AreEqual(z, aVector.z);
+
 	}
 
 	template <class T>

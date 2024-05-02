@@ -7,6 +7,6 @@ namespace GamerEngine
 	class AssetManagerBase
 	{
 	public:
-		virtual Ref<Asset> GetAsset(AssetHandle aHandle);
+		virtual Ref<Asset> GetAsset(AssetHandle aHandle) const = 0;
  	};
 }

@@ -167,15 +167,15 @@ namespace GamerEngine {
 		bool status = LoadAssembly("Resources/Scripts/Gamer-ScriptCore.dll");
 		if (!status)
 		{
-			//HZ_CORE_ERROR("[ScriptEngine] Could not load Hazel-ScriptCore assembly.");
+			GE_LOG_ERROR("[ScriptEngine] Could not load GameEngine-ScriptCore assembly.");
 			return;
 		}
 		
 		auto scriptModulePath = Project::GetAssetDirectory() / Project::GetActive()->GetConfig().ScriptModulePath;
-		status = LoadAppAssembly(scriptModulePath);
+		status = LoadAppAssembly("Resources/Scripts/Gamer-ScriptCore.dll");
 		if (!status)
 		{
-			//HZ_CORE_ERROR("[ScriptEngine] Could not load app assembly.");
+			GE_LOG_ERROR("[ScriptEngine] Could not load app assembly.");
 			return;
 		}
 
@@ -209,7 +209,7 @@ namespace GamerEngine {
 		}
 
 		MonoDomain* rootDomain = mono_jit_init("GamerJITRuntime");
-		//HZ_CORE_ASSERT(rootDomain);
+		GE_ASSERT(rootDomain, "Root Domain was null")
 
 		// Store the root domain pointer
 		s_Data->RootDomain = rootDomain;
@@ -319,7 +319,7 @@ namespace GamerEngine {
 		}
 		else
 		{
-			//HZ_CORE_ERROR("Could not find ScriptInstance for entity {}",  entityUUID);
+			GE_LOG_ERROR("Could not find ScriptInstance for entity {}",  entityUUID);
 		}
 	}
 
@@ -360,7 +360,7 @@ namespace GamerEngine {
 
 	ScriptFieldMap& ScriptEngine::GetScriptFieldMap(Entity entity)
 	{
-		//HZ_CORE_ASSERT(entity);
+		GE_ASSERT(entity, "LOL");
 
 		UUID entityID = entity.GetUUID();
 		return s_Data->EntityScriptFields[entityID];
@@ -405,7 +405,7 @@ namespace GamerEngine {
 			// to iterate over all of the elements. When no more values are available, the return value is NULL.
 
 			int fieldCount = mono_class_num_fields(monoClass);
-			//HZ_CORE_WARN("{} has {} fields:", className, fieldCount);
+			GE_WARN("{} has {} fields:", className, fieldCount);
 			void* iterator = nullptr;
 			while (MonoClassField* field = mono_class_get_fields(monoClass, &iterator))
 			{
@@ -415,7 +415,7 @@ namespace GamerEngine {
 				{
 					MonoType* type = mono_field_get_type(field);
 					ScriptFieldType fieldType = Utils::MonoTypeToScriptFieldType(type);
-					//HZ_CORE_WARN("  {} ({})", fieldName, Utils::ScriptFieldTypeToString(fieldType));
+					GE_WARN("  {} ({})", fieldName, Utils::ScriptFieldTypeToString(fieldType));
 
 					scriptClass->m_Fields[fieldName] = { fieldType, fieldName, field };
 				}
@@ -437,7 +437,7 @@ namespace GamerEngine {
 
 	MonoObject* ScriptEngine::GetManagedInstance(UUID uuid)
 	{
-		//HZ_CORE_ASSERT(s_Data->EntityInstances.find(uuid) != s_Data->EntityInstances.end());
+		GE_ASSERT(s_Data->EntityInstances.find(uuid) != s_Data->EntityInstances.end());
 		return s_Data->EntityInstances.at(uuid)->GetManagedObject();
 	}
 

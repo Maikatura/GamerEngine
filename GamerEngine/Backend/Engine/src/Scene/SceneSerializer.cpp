@@ -154,13 +154,13 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 		out << YAML::EndMap; // TagComponent
 	}
 
-	if(entity.HasComponent<TransformComponent>())
+	if(entity.HasComponent<GamerEngine::TransformComponent>())
 	{
 		std::cout << "Saving Component: TransformComponent" << std::endl;
 		out << YAML::Key << "TransformComponent";
 		out << YAML::BeginMap; // TransformComponent
 
-		auto& tc = entity.GetComponent<TransformComponent>();
+		auto& tc = entity.GetComponent<GamerEngine::TransformComponent>();
 		out << YAML::Key << "Translation" << YAML::Value << tc.GetPosition();
 		out << YAML::Key << "Rotation" << YAML::Value << tc.GetRotation();
 		out << YAML::Key << "Scale" << YAML::Value << tc.GetScale();
@@ -184,10 +184,10 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 		out << YAML::EndMap; // TransformComponent
 	}
 
-	if(entity.HasComponent<CameraComponent>())
+	if(entity.HasComponent<GamerEngine::CameraComponent>())
 	{
 		std::cout << "Saving Component: CameraComponent" << std::endl;
-		auto& cameraComp = entity.GetComponent<CameraComponent>();
+		auto& cameraComp = entity.GetComponent<GamerEngine::CameraComponent>();
 		out << YAML::Key << "CameraComponent" << YAML::Value;
 		out << YAML::BeginMap; // Camera
 		out << YAML::Key << "FOV" << YAML::Value << cameraComp.myFoV;
@@ -358,6 +358,22 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 		out << YAML::EndMap; // PointLightComponent
 	}
 
+	if (entity.HasComponent<GamerEngine::ScriptComponent>())
+	{
+		std::cout << "Saving Component: ScriptComponent" << std::endl;
+
+		out << YAML::Key << "ScriptComponent";
+		out << YAML::BeginMap; // ScriptComponent
+
+		auto& sc = entity.GetComponent<GamerEngine::ScriptComponent>();
+		out << YAML::Key << "ClassName" << YAML::Value << sc.ClassName;
+
+		out << YAML::EndMap; // PointLightComponent
+
+
+
+	}
+
 	if (entity.HasComponent<Network::NetworkComponent>())
 	{
 		std::cout << "Saving Component: NetworkComponent" << std::endl;
@@ -376,7 +392,7 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 
 	}
 
-	if (entity.HasComponent<NativeScriptComponent>())
+	if (entity.HasComponent<GamerEngine::NativeScriptComponent>())
 	{
 		// std::cout << "Saving Component: NativeScriptComponent" << std::endl;
 		//
@@ -424,7 +440,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 	if(transformComponent)
 	{
 		// Entities always have transforms
-		auto& tc = deserializedEntity.GetComponent<TransformComponent>();
+		auto& tc = deserializedEntity.GetComponent<GamerEngine::TransformComponent>();
 		tc.SetPosition(transformComponent["Translation"].as<Vector3f>());
 		tc.SetRotation(transformComponent["Rotation"].as<Vector3f>());
 		tc.SetScale(transformComponent["Scale"].as<Vector3f>());
@@ -462,7 +478,7 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 	auto childComponent = aEntityNode["ChildComponent"];
 	if(childComponent)
 	{
-		auto& cc = deserializedEntity.GetComponent<TransformComponent>();
+		auto& cc = deserializedEntity.GetComponent<GamerEngine::TransformComponent>();
 
 		
 	}
@@ -471,10 +487,10 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 	const auto cameraComponent = aEntityNode["CameraComponent"];
 	if(cameraComponent)
 	{
-		auto& camera = deserializedEntity.AddComponent<CameraComponent>();
+		auto& camera = deserializedEntity.AddComponent<GamerEngine::CameraComponent>();
 		/*deserializedEntity.AddComponent<CameraControllerData>();
 		deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();*/
-		deserializedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		//deserializedEntity.AddComponent<GamerEngine::NativeScriptComponent>();
 
 		float FoV = cameraComponent["FOV"].as<float>();
 		float NearPlane = cameraComponent["NearPlane"].as<float>();
@@ -690,6 +706,14 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 		netComp.SetID((networkComp["ID"]) ? networkComp["ID"].as<GamerEngine::UUID>() : GamerEngine::UUID());
 	}
 
+	auto scriptComponent = aEntityNode["ScriptComponent"];
+	if (scriptComponent)
+	{
+		auto& scriptComp = deserializedEntity.AddComponent<GamerEngine::ScriptComponent>();
+		scriptComp.ClassName = scriptComponent["ClassName"].as<std::string>();
+	}
+
+
 	// auto randomMover = aEntityNode["RandomMoverComponent"];
 	// if (randomMover)
 	// {
@@ -780,7 +804,7 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 	}
 
 	// Fix parenting :)
-	const auto& view = myScene->GetRegistry().view<TransformComponent>();
+	const auto& view = myScene->GetRegistry().view<GamerEngine::TransformComponent>();
 	for (auto& entity1 : view)
 	{
 		for (auto& entity2 : view)
@@ -799,8 +823,8 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 				auto e2Id = entityTwo.GetUUID();
 				if (e1Id == e2Id)
 				{
-					entityOne.GetComponent<TransformComponent>().SetParent(entityTwo);
-					entityTwo.GetComponent<TransformComponent>().SetChild(entityOne);
+					entityOne.GetComponent<GamerEngine::TransformComponent>().SetParent(entityTwo);
+					entityTwo.GetComponent<GamerEngine::TransformComponent>().SetChild(entityOne);
 				}
 			}
 
@@ -811,8 +835,8 @@ bool SceneSerializer::Deserialize(const std::string& aFilepath, bool isHeadless)
 				auto e2Id = parents[entityOne.GetUUID()];
 				if (e2Id == e1Id)
 				{
-					entityOne.GetComponent<TransformComponent>().SetChild(entityTwo);
-					entityTwo.GetComponent<TransformComponent>().SetParent(entityOne);
+					entityOne.GetComponent<GamerEngine::TransformComponent>().SetChild(entityTwo);
+					entityTwo.GetComponent<GamerEngine::TransformComponent>().SetParent(entityOne);
 				}
 			}
 		}

@@ -9,7 +9,12 @@
 #include "Core/Rendering/DepthStencil.h"
 #include "Core/Rendering/RenderTexture.h"
 
-class TransformComponent;
+
+namespace GamerEngine
+{
+	class TransformComponent;
+
+}
 class DirectionalLightComponent;
 
 class Light : public SceneObject
@@ -62,7 +67,7 @@ protected:
 
 	Vector3f myLocalDirection;
 
-	TransformComponent* myTransformComp;
+	GamerEngine::TransformComponent* myTransformComp;
 
 	inline static int SpotLightNum = 0;
 	inline static int PointLightNum = 0;
@@ -224,6 +229,6 @@ public:
 		}
 	}
 
-	virtual void SetData(TransformComponent* aTransform) { aTransform; }
-	virtual void SetData(TransformComponent* aTransform, DirectionalLightComponent* dirLight) { aTransform; dirLight; }
+	virtual void SetData(GamerEngine::TransformComponent* aTransform) { aTransform; }
+	virtual void SetData(GamerEngine::TransformComponent* aTransform, DirectionalLightComponent* dirLight) { aTransform; dirLight; }
 };

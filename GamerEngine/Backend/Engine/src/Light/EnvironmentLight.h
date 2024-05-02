@@ -15,5 +15,5 @@ public:
 
 	virtual void SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLightBuffer, unsigned int aShaderIndex) override;
 
-	void SetData(TransformComponent* data) override;
+	void SetData(GamerEngine::TransformComponent* data) override;
 };

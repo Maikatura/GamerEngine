@@ -10,6 +10,6 @@ void EnvironmentLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLight
 	}
 }
 
-void EnvironmentLight::SetData(TransformComponent* data)
+void EnvironmentLight::SetData(GamerEngine::TransformComponent* data)
 {
 }

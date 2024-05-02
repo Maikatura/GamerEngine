@@ -44,8 +44,8 @@ private:
 	bool myIsEditingPosition = false;
 	bool myOldIsEditingPosition = false;
 
-	Transform myStartTranslate;
-	Transform myEditedTranslate;
+	GamerEngine::Transform myStartTranslate;
+	GamerEngine::Transform myEditedTranslate;
 
 	ImGuizmo::OPERATION myOperation = ImGuizmo::OPERATION::TRANSLATE;
 };

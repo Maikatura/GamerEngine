@@ -134,7 +134,7 @@ void NetworkingLayer::OnUpdate()
 			continue;
 		}
 
-		auto& transComp = myPlayers[i].myEntity.GetComponent<TransformComponent>();
+		auto& transComp = myPlayers[i].myEntity.GetComponent<GamerEngine::TransformComponent>();
 
 		float distance = (myPlayers[i].Translation - transComp.GetPosition()).Length();
 		
@@ -225,7 +225,7 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Got Something from server";
 
-				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
+				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, GamerEngine::TransformComponent, Network::NetworkComponent>();
 				for(auto entity : view)
 				{
 					if (!SceneManager::Get().GetScene()->GetRegistry().valid(entity))
@@ -251,7 +251,7 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Server Moved A Object" << std::endl;
 
-				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, TransformComponent, Network::NetworkComponent>();
+				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, GamerEngine::TransformComponent, Network::NetworkComponent>();
 				for(auto& entity : view)
 				{
 					if(!SceneManager::Get().GetScene()->GetRegistry().valid(entity))
@@ -309,8 +309,8 @@ void NetworkingLayer::StartNetworkingClient()
 				data.Rotation = { 0.0f,0.0f,0.0f };
 
 				data.myEntity = SceneManager::Get().CreateEntityType(0, id);
-				data.myEntity.GetComponent<TransformComponent>().SetPosition(playerConnectMsg.Translation);
-				data.myEntity.GetComponent<TransformComponent>().SetScale({ scale, scale ,scale });
+				data.myEntity.GetComponent<GamerEngine::TransformComponent>().SetPosition(playerConnectMsg.Translation);
+				data.myEntity.GetComponent<GamerEngine::TransformComponent>().SetScale({ scale, scale ,scale });
 				auto& networkComp = data.myEntity.AddComponent<Network::NetworkComponent>();
 				networkComp.SetID(id);
 				networkComp.SetServer(playerConnectMsg.IsServer);

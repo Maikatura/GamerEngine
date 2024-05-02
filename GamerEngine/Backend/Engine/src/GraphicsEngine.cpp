@@ -368,7 +368,7 @@ void GraphicsEngine::OnFrameUpdate()
 
         if (SceneManager::Get().GetScene())
         {
-            SceneManager::Get().Update();
+            SceneManager::Get().Update(myIsRunning);
 
             for (auto module : myRenderModules)
             {

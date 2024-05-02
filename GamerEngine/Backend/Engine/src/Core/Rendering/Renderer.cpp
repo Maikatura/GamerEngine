@@ -8,7 +8,7 @@
 #include "Font/Font.h"
 #include "Font/MSDFData.h"
 
-void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransform)
+void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, GamerEngine::TransformComponent& aTransform)
 {
 
 	if (!aModel.GetModel())
@@ -18,7 +18,7 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 
 	//Transform transform = Transform();
 
-	Transform transform = aTransform.GetWorldTransform();
+	GamerEngine::Transform transform = aTransform.GetWorldTransform();
 
 	auto transformedBounds = aModel.GetModel()->GetBoxBounds().Transform(transform.Translation, transform.Rotation, transform.Scale);
 
@@ -48,7 +48,7 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Tran
 
 }
 
-void Renderer::RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom)
+void Renderer::RenderSprite(ParticleEmitter* aSprite, GamerEngine::TransformComponent& aTransfrom)
 {
 	mySpritesToRender.push_back({ aTransfrom.GetWorldMatrix(), aSprite });
 }

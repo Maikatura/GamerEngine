@@ -6,8 +6,6 @@ class SpotLight : public Light
 {
 	friend class LightAssetHandler;
 
-	TransformComponent* myTransform;
-
 public:
 	virtual ~SpotLight() override = default;
 
@@ -20,7 +18,7 @@ public:
 
 	void Update() override;
 
-	void SetData(TransformComponent* data) override;
+	void SetData(GamerEngine::TransformComponent* data) override;
 
 	FORCEINLINE float GetInnerCone() const
 	{

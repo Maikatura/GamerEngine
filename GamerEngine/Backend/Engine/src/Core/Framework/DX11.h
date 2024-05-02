@@ -98,7 +98,7 @@ public:
 	~DX11();
 	ComPtr<IDXGISwapChain> GetSwapChain();
 	ID3D11RasterizerState* GetFrontCulling() const;
-	void ClearRenderTargets();
+	void ClearRenderTargets(const Vector4f& aColor = { 0.5f , 0.5f,0.5f , 1.0f });
 
 	static DX11& Get();
 
@@ -140,11 +140,12 @@ public:
 
 
 	UINT GetScreenObjectId(UINT x, UINT y) const;
-	static bool ResizeViewport();
+	bool ResizeViewport();
 
 private:
 
-	
+	bool CreateRenderTargetView();
+	bool CreateRasterizerState();
 	bool CreateSwapChain(bool aEnableDeviceDebug);
 	bool CreateTexture2D();
 	bool CreateDepthBuffer();

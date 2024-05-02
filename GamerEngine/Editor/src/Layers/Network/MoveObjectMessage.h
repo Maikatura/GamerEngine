@@ -7,7 +7,7 @@
 struct ObjectMoveMessage
 {
 	uint64_t EntityID;
-	TransformComponent Transform;
+	GamerEngine::TransformComponent Transform;
 
 	friend std::ostream& operator<<(std::ostream& aOutstream, const ObjectMoveMessage& aMessage)
 	{
@@ -34,7 +34,7 @@ inline TurNet::TurMessage& operator<<(TurNet::TurMessage& msg, const ObjectMoveM
 struct NetObjectMoveMessage
 {
 	uint64_t EntityID;
-	TransformComponent Transform;
+	GamerEngine::TransformComponent Transform;
 
 	friend std::ostream& operator<<(std::ostream& aOutstream, const NetObjectMoveMessage& aMessage)
 	{

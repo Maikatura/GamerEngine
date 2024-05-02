@@ -2,7 +2,11 @@
 #include "Core/Model/Transform.h"
 #include "Utilites/Pointers.h"
 
-class TransformComponent;
+
+namespace GamerEngine
+{
+	class TransformComponent;
+}
 
 
 class SceneObject

@@ -58,7 +58,7 @@ void DirectionalLight::SetAsResource(Microsoft::WRL::ComPtr<ID3D11Buffer> aLight
 	}
 }
 
-void DirectionalLight::SetData(TransformComponent* aTransform)
+void DirectionalLight::SetData(GamerEngine::TransformComponent* aTransform)
 {
 	myTransformComp = aTransform;
 }

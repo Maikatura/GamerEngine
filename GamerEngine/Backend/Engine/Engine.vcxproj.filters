@@ -463,6 +463,13 @@
     <ClInclude Include="src\VR\VRSystem.h">
       <Filter>VR</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\RenderModule.h" />
+    <ClInclude Include="Log.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Rendering\EditorCamera.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp">
@@ -727,6 +734,12 @@
     </ClCompile>
     <ClCompile Include="src\VR\VRSystem.cpp">
       <Filter>VR</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Rendering\EditorCamera.cpp">
+      <Filter>Core\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

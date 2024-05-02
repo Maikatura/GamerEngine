@@ -13,6 +13,7 @@ class FileExplorer : public Layer
 public:
 
 	FileExplorer();
+	void ListFiles(std::filesystem::path path);
 	void OnImGuiRender() override;
 	
 	void PopupMenu(const std::filesystem::directory_entry& aValue);

@@ -8,7 +8,11 @@
 
 #include "Utilites/Pointers.h"
 
-class TransformComponent;
+namespace GamerEngine
+{
+	class TransformComponent;
+}
+
 class ScriptableEntity;
 class Render2D;
 class Texture;
@@ -46,7 +50,7 @@ class ParticleEmitter
 
 	EmitterSettingsData myEmittorSettings;
 
-	TransformComponent* myTransform;
+	GamerEngine::TransformComponent* myTransform;
 
 	void InitParticle(size_t aParticleIndex);
 
@@ -56,7 +60,7 @@ public:
 	virtual ~ParticleEmitter() = default;
 
 	virtual bool Init();
-	void OnUpdate(TransformComponent& aTransform);
+	void OnUpdate(GamerEngine::TransformComponent& aTransform);
 
 	std::vector<SpriteVertex> particleVertexData;
 

@@ -113,7 +113,7 @@ bool ParticleEmitter::Init()
 	return true;
 }
 
-void ParticleEmitter::OnUpdate(TransformComponent& aTransform)
+void ParticleEmitter::OnUpdate(GamerEngine::TransformComponent& aTransform)
 {
 	myTransform = &aTransform;
 

@@ -130,14 +130,17 @@ public:
 	Ref<SpotLight> mySpotLight;
 };
 
-
-struct ScriptComponent
+namespace GamerEngine
 {
-	std::string ClassName;
+	struct ScriptComponent
+	{
+		std::string ClassName;
 
-	ScriptComponent() = default;
-	ScriptComponent(const ScriptComponent&) = default;
-};
+		ScriptComponent() = default;
+		ScriptComponent(const ScriptComponent&) = default;
+	};
+}
+
 
 template<typename... Component>
 struct ComponentGroup

@@ -154,6 +154,11 @@ void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11
 	}
 }
 
+void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* aDeviceContext, ID3D11DepthStencilView* aDepthStencil, const Vector4f& aColor)
+{
+	ClearRenderTarget(aDeviceContext, aDepthStencil, aColor.x, aColor.y, aColor.z, aColor.w);
+}
+
 ID3D11RenderTargetView* RenderTexture::GetRenderTargetView()
 {
 	return m_renderTargetView;

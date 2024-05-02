@@ -71,13 +71,7 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 		}
 	}
 
-	if (aEntity.HasComponent<TransformComponent>())
-	{
-
-	}
-
-
-	DrawComponent<TransformComponent>("Transform", aEntity, [](auto& component, auto aEntity)
+	DrawComponent<GamerEngine::TransformComponent>("Transform", aEntity, [](auto& component, auto aEntity)
 		{
 
 			auto translate = component.GetPosition();
@@ -87,7 +81,7 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 
 			if (ImGui::DragFloat3("Position", &translate.x, 0.25f))
 			{
-				component.SetPosition(translate);
+				//component.SetPosition(translate);
 			}
 
 			if (ImGui::DragFloat3("Rotation", &rotation.x, 0.25f))
@@ -100,6 +94,8 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 				component.SetScale(scale);
 			}
 
+			component.SetPosition(translate);
+
 			//component.SetPosition(translate);
 			//component.SetRotation(rotation);
 			//component.SetScale(scale);
@@ -107,7 +103,7 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 
 	ImGui::SeparateWithSpacing();
 
-	DrawComponent<CameraComponent>("Camera Component", aEntity, [](auto& component, auto aEntity)
+	DrawComponent<GamerEngine::CameraComponent>("Camera Component", aEntity, [](auto& component, auto aEntity)
 	{
 			ImGui::DragFloat("Field of View", &component.myFoV);
 			ImGui::DragFloat("Near Plane", &component.myNearPlane);
@@ -541,9 +537,9 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 			ImGui::DragInt("Index", &tempIndex);
 	});
 
-	if (aEntity.HasComponent<NativeScriptComponent>())
+	if (aEntity.HasComponent<GamerEngine::NativeScriptComponent>())
 	{
-		auto check = aEntity.GetComponent<NativeScriptComponent>().Instance;
+		auto check = aEntity.GetComponent<GamerEngine::NativeScriptComponent>().Instance;
 		if (check != nullptr)
 		{
 			// auto randomMove = dynamic_cast<RandomMoverComponent*>(check);
@@ -580,7 +576,13 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 			// }
 		}
 	}
-	
+
+	DrawComponent<GamerEngine::ScriptComponent>("Script Component", aEntity, [](auto& component, auto aEntity)
+		{
+			ImGui::InputText("Class Name", &component.ClassName);
+		});
+
+
 	DrawComponent<Network::NetworkComponent>("Network Component", aEntity, [](auto& component, auto aEntity)
 	{
 			uint64_t serverID = component.GetID().Get();
@@ -624,6 +626,12 @@ void Inspector::AddComponent(GamerEngine::Entity aEntity)
 		if (ImGui::MenuItem("Model Component"))
 		{
 			aEntity.AddComponent<ModelComponent>();
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Script Component"))
+		{
+			aEntity.AddComponent<GamerEngine::ScriptComponent>();
 			ImGui::CloseCurrentPopup();
 		}
 

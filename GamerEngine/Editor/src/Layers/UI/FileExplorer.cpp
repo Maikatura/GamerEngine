@@ -56,10 +56,43 @@ FileExplorer::FileExplorer() : Layer("File Explorer"), myCurrentDirectory(AssetP
 	myDeletePath = "";
 }
 
+void FileExplorer::ListFiles(std::filesystem::path path)
+{
+	for (const auto& entry : std::filesystem::directory_iterator(path)) 
+	{
+		if (entry.is_directory())
+		{
+			if (ImGui::TreeNode(entry.path().filename().string().c_str())) 
+			{
+				// Recursively list files in subdirectories
+				ListFiles(entry.path().string());
+
+
+				ImGui::TreePop();
+			}
+
+			if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+			{
+				myCurrentDirectory = path;
+			}
+		}
+		else 
+		{
+			//ImGui::Text("%s", entry.path().filename().string().c_str());
+		}
+	}
+}
+
 void FileExplorer::OnImGuiRender()
 {
 
 	BeginMenu();
+
+	//ImGui::SetNextWindowSizeConstraints(ImVec2(200, -1), ImVec2(200, -1));
+	//
+	//
+	//ListFiles(AssetPath);
+
 
 	if(ImGui::BeginPopupContextWindow("FILECREATOR") && !ImGui::IsItemHovered())
 	{

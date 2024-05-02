@@ -16,19 +16,19 @@ CameraController::CameraController()
 
 void CameraController::OnCreate()
 {
-	AddComponent<CameraControllerData>();
+	//AddComponent<CameraControllerData>();
 }
 
 void CameraController::OnDestroy()
 {
-	ScriptableEntity::OnDestroy();
+	//ScriptableEntity::OnDestroy();
 }
 
-void CameraController::OnUpdate(float aTime)
+void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngine::TransformComponent* aTransform, float aTime)
 {
-	auto& camera = GetComponent<CameraComponent>();
+	auto& camera = aCamera;
 
-	if (!camera.Primary)
+	if (!aCamera->Primary)
 	{
 		return;
 	}
@@ -39,29 +39,27 @@ void CameraController::OnUpdate(float aTime)
 
 
 
-	TransformComponent& transform = GetComponent<TransformComponent>();
-	CameraControllerData& cameraData = GetComponent<CameraControllerData>();
-
+	
 	if (Input::IsMousePressed(VK_LBUTTON) && IsHoveringSceneView)
 	{
-		cameraData.HasBeenActivated = true;
+		HasBeenActivated = true;
 		myPrevMouse = Input::GetMousePos();
 		myOldPos = myPrevMouse;
 	}
 
-	if (Input::IsMouseReleased(VK_LBUTTON) && cameraData.HasBeenActivated)
+	if (Input::IsMouseReleased(VK_LBUTTON) && HasBeenActivated)
 	{
-		cameraData.HasBeenActivated = false;
+		HasBeenActivated = false;
 		Input::SetMousePos(myPrevMouse);
 	}
 
-	if (!cameraData.HasBeenActivated)
+	if (!HasBeenActivated)
 	{
 		return;
 	}
 
-	const float oldMouseX = transform.GetRotation().x;
-	const float oldMouseY = transform.GetRotation().y;
+	const float oldMouseX = aTransform->GetRotation().x;
+	const float oldMouseY = aTransform->GetRotation().y;
 
 
 
@@ -75,64 +73,64 @@ void CameraController::OnUpdate(float aTime)
 	Input::SetMousePos(centerPosition);
 
 
-	transform.SetRotation({
-		transform.GetRotation().x + static_cast<float>(delta.y) * cameraData.myMouseSensitivity,
-		transform.GetRotation().y + static_cast<float>(delta.x) * cameraData.myMouseSensitivity,
+	aTransform->SetRotation({
+		aTransform->GetRotation().x + static_cast<float>(delta.y) * myMouseSensitivity,
+		aTransform->GetRotation().y + static_cast<float>(delta.x) * myMouseSensitivity,
 		0
 	});
 	myOldPos = centerPosition;
 
 	if (Input::GetMouseWheel() != 0.0f)
 	{
-		cameraData.mySpeed += (Input::GetMouseWheel() * 0.5f) * (cameraData.mySpeed * 0.25f);
-		cameraData.mySpeed = CommonUtilities::Clamp(cameraData.mySpeed, 0.1f, cameraData.myMaxSpeed);
+		mySpeed += (Input::GetMouseWheel() * 0.5f) * (mySpeed * 0.25f);
+		mySpeed = CommonUtilities::Clamp(mySpeed, 0.1f, myMaxSpeed);
 	}
 
-	float speed = cameraData.mySpeed;
+	float speed = mySpeed;
 
 	
 
 	if(Input::IsKeyDown(VK_SHIFT))
 	{
-		speed *= cameraData.mySpeedShiftMul;
+		speed *= mySpeedShiftMul;
 	}
 
-	camera.SetCameraSpeed(speed);
+	camera->SetCameraSpeed(speed);
 	
 	if(Input::IsKeyDown(87))
 	{
-		movement = 1.0f * transform.GetForward() * aDeltaTime * speed;
+		movement = 1.0f * aTransform->GetForward() * aDeltaTime * speed;
 	}
 	 if(Input::IsKeyDown(83))
 	 {
-	 	movement += -1.0f * transform.GetForward() * aDeltaTime * speed;
+	 	movement += -1.0f * aTransform->GetForward() * aDeltaTime * speed;
 	 }
 	 if(Input::IsKeyDown(68))
 	 {
-	 	movement += 1.0f * transform.GetRight() * aDeltaTime * speed;
+	 	movement += 1.0f * aTransform->GetRight() * aDeltaTime * speed;
 	 }
 	
 	 if(Input::IsKeyDown(65))
 	 {
-	 	movement += -1.0f * transform.GetRight() * aDeltaTime * speed;
+	 	movement += -1.0f * aTransform->GetRight() * aDeltaTime * speed;
 	 }
 	
 	if(Input::IsKeyDown(VK_SPACE))
 	{
-		movement += 1.0f * transform.GetUp() * aDeltaTime * speed;
+		movement += 1.0f * aTransform->GetUp() * aDeltaTime * speed;
 	}
 
 	if(Input::IsKeyDown(90))
 	{
-		movement += -1.0f * transform.GetUp() * aDeltaTime * speed;
+		movement += -1.0f * aTransform->GetUp() * aDeltaTime * speed;
 	}
 
-	if (movement != Vector3f::Zero() || oldMouseX != transform.GetRotation().x || oldMouseY != transform.GetRotation().y)
+	if (movement != Vector3f::Zero() || oldMouseX != aTransform->GetRotation().x || oldMouseY != aTransform->GetRotation().y)
 	{
-		camera.SetHasMoved(true);
+		camera->SetHasMoved(true);
 	}
 
-	transform.SetPosition(transform.GetPosition() + movement);
+	aTransform->SetPosition(aTransform->GetPosition() + movement);
 
 	
 }

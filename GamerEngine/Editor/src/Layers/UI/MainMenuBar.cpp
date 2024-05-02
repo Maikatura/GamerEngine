@@ -150,8 +150,11 @@ void MainMenuBar::RenderMainBar()
             if (ImGui::Button(playText.c_str()))
             {
                 myLayers->SetShouldEngineRun(true);
-                mySnapshot = SnapshotManager(&SceneManager::Get().GetScene()->GetRegistry());
-                mySnapshot.CreateSnapshot();
+                GraphicsEngine::Get()->SetEngineRunning(true);
+                ConsoleHelper::Log(LogType::Info, "Started game");
+
+                //mySnapshot = SnapshotManager(&SceneManager::Get().GetScene()->GetRegistry());
+                //mySnapshot.CreateSnapshot();
             }
         }
         else
@@ -164,8 +167,9 @@ void MainMenuBar::RenderMainBar()
             if (ImGui::Button(stopText.c_str()))
             {
                 myLayers->SetShouldEngineRun(false);
+                GraphicsEngine::Get()->SetEngineRunning(false);
                 ConsoleHelper::Log(LogType::Info, "Stopped game");
-                mySnapshot.RestoreSnapShot();
+                //mySnapshot.RestoreSnapShot();
             }
         }
 
@@ -178,7 +182,18 @@ void MainMenuBar::RenderMainBar()
         if (ImGui::Button(resumeOrPause.c_str()))
         {
             GraphicsEngine::Get()->SetPauseState(!GraphicsEngine::Get()->GetPauseState());
-            ConsoleHelper::Log(LogType::Info, "Paused/Resumed game");
+
+            if (GraphicsEngine::Get()->GetPauseState() == true)
+            {
+                ConsoleHelper::Log(LogType::Info, "Resumed game");
+
+            }
+            else
+            {
+                ConsoleHelper::Log(LogType::Info, "Paused game");
+            }
+
+
         }
 
 

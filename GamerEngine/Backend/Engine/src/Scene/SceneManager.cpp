@@ -8,7 +8,6 @@
 #include "Core/Rendering/SelectionData.h"
 
 
-
 bool SceneManager::IsHeadless()
 {
 	return myIsHeadless;
@@ -96,16 +95,14 @@ void SceneManager::SaveScene(const std::string& aFilepath)
 	
 }
 
-void SceneManager::Update()
+void SceneManager::Update(bool aRunningState)
 {
 	if (mySaveDone && myLoadDone && mySceneStatus == GamerEngine::SceneStatus::Complete)
 	{
 		if (myScene)
 		{
-			myScene->OnUpdate();
+			myScene->OnUpdate(aRunningState);
 		}
-
-		
 	}
 	
 }
@@ -178,7 +175,7 @@ GamerEngine::Entity SceneManager::CreateEntityType(int aEntityType, const GamerE
 	{
 		ConsoleHelper::Log(LogType::Info, "This will be removed when add component when its been added");
 		aEntity.GetComponent<TagComponent>().Tag = "EditorCamera";
-		auto& camera = aEntity.AddComponent<CameraComponent>();
+		auto& camera = aEntity.AddComponent<GamerEngine::CameraComponent>();
 		camera.EditorCam = true;
 	}
 
@@ -223,12 +220,14 @@ void SceneManager::SwapScene()
 		if (GraphicsEngine::Get()) 
 		{
 			GraphicsEngine::Get()->SetPauseState(false);
+			myScene->OnRuntimeStop();
 		}
 
 		if (myScene)
 		{
 			myScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
 			myScene->SceneReady(true);
+			myScene->OnRuntimeStart();
 		}
 
 		mySceneStatus = GamerEngine::SceneStatus::Complete;

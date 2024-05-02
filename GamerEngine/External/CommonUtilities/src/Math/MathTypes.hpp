@@ -31,6 +31,8 @@ typedef CommonUtilities::Matrix4x4<unsigned int> Matrix4x4ui;
 // Useful Tools To Convert
 namespace CommonUtilities
 {
+	
+
 	template<class T>
 	Vector3<T> ToVector3(const Vector4<T>& aVectorToConvert)
 	{

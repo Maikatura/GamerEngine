@@ -41,13 +41,13 @@ namespace GamerEngine {
 
 	static void NativeLog_Vector(Vector3f* parameter, Vector3f* outResult)
 	{
-		//HZ_CORE_WARN("Value: {0}", *parameter);
+		GE_WARN("Value: {0}", *parameter);
 		*outResult = Vector3f::Normalize(*parameter);
 	}
 
 	static float NativeLog_VectorDot(Vector3f* parameter)
 	{
-		//HZ_CORE_WARN("Value: {0}", *parameter);
+		GE_WARN("Value: {0}", *parameter);
 		return Vector3f::Dot(*parameter, *parameter);
 	}
 
@@ -59,12 +59,24 @@ namespace GamerEngine {
 	static bool Entity_HasComponent(UUID entityID, MonoReflectionType* componentType)
 	{
 		Scene* scene = ScriptEngine::GetSceneContext();
-		//HZ_CORE_ASSERT(scene);
+		GE_ASSERT(scene);
 		Entity entity = scene->GetEntityByUUID(entityID);
-		//HZ_CORE_ASSERT(entity);
+		GE_ASSERT(entity);
 
 		MonoType* managedType = mono_reflection_type_get_type(componentType);
-		//HZ_CORE_ASSERT(s_EntityHasComponentFuncs.find(managedType) != s_EntityHasComponentFuncs.end());
+		GE_ASSERT(s_EntityHasComponentFuncs.find(managedType) != s_EntityHasComponentFuncs.end());
+		return s_EntityHasComponentFuncs.at(managedType)(entity);
+	}
+
+	static bool Entity_GetComponent(UUID entityID, MonoReflectionType* componentType)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		GE_ASSERT(scene);
+		Entity entity = scene->GetEntityByUUID(entityID);
+		GE_ASSERT(entity);
+
+		MonoType* managedType = mono_reflection_type_get_type(componentType);
+		GE_ASSERT(s_EntityHasComponentFuncs.find(managedType) != s_EntityHasComponentFuncs.end());
 		return s_EntityHasComponentFuncs.at(managedType)(entity);
 	}
 
@@ -73,7 +85,7 @@ namespace GamerEngine {
 		char* nameCStr = mono_string_to_utf8(name);
 
 		Scene* scene = ScriptEngine::GetSceneContext();
-		//HZ_CORE_ASSERT(scene);
+		GE_ASSERT(scene);
 		Entity entity = scene->FindEntityByName(nameCStr);
 		mono_free(nameCStr);
 
@@ -86,21 +98,21 @@ namespace GamerEngine {
 	static void TransformComponent_GetTranslation(UUID entityID, Vector3f* outTranslation)
 	{
 		Scene* scene = ScriptEngine::GetSceneContext();
-		//HZ_CORE_ASSERT(scene);
+		GE_ASSERT(scene);
 		Entity entity = scene->GetEntityByUUID(entityID);
-		//HZ_CORE_ASSERT(entity);
+		GE_ASSERT(entity);
 
-		*outTranslation = entity.GetComponent<TransformComponent>().GetPosition();
+		*outTranslation = entity.GetComponent<GamerEngine::TransformComponent>().GetPosition();
 	}
 
 	static void TransformComponent_SetTranslation(UUID entityID, Vector3f* translation)
 	{
 		Scene* scene = ScriptEngine::GetSceneContext();
-		//HZ_CORE_ASSERT(scene);
+		GE_ASSERT(scene);
 		Entity entity = scene->GetEntityByUUID(entityID);
-		//HZ_CORE_ASSERT(entity);
+		GE_ASSERT(entity);
 
-		entity.GetComponent<TransformComponent>().SetPosition(*translation);
+		entity.GetComponent<GamerEngine::TransformComponent>().SetPosition(*translation);
 	}
 	
 	static bool Input_IsKeyDown(KeyCode keycode)
@@ -121,7 +133,7 @@ namespace GamerEngine {
 			MonoType* managedType = mono_reflection_type_from_name(managedTypename.data(), ScriptEngine::GetCoreAssemblyImage());
 			if (!managedType)
 			{
-				//HZ_CORE_ERROR("Could not find component type {}", managedTypename);
+				GE_LOG_ERROR("Could not find component type {}", managedTypename);
 				return;
 			}
 			s_EntityHasComponentFuncs[managedType] = [](Entity entity) { return entity.HasComponent<Component>(); };

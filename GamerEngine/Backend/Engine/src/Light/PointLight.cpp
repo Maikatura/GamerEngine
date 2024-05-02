@@ -41,7 +41,7 @@ void PointLight::Update()
 }
 
 
-void PointLight::SetData(TransformComponent* aTransform)
+void PointLight::SetData(GamerEngine::TransformComponent* aTransform)
 {
 	myTransformComp = aTransform;
 	myCamera.SetPerspective(90, { 2048, 2048 }, myLightData.NearPlane, myLightData.FarPlane);

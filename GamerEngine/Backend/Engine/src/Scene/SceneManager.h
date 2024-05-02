@@ -46,7 +46,7 @@ public:
 	void LoadScene(const std::string& aFilepath);
 	void SaveScene(const std::string& aFilepath);
 	
-	void Update();
+	void Update(bool aRunningState = true);
 	void Render();
 	Ref<GamerEngine::Scene> GetScene();
 	

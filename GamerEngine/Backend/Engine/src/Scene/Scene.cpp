@@ -8,19 +8,18 @@
 #include "Components/AllComponents.h"
 #include "Components/NativeScriptComponent.h"
 #include "Core/Rendering/LineRenderer.h"
+#include "Scripting/ScriptEngine.h"
 
 //#include "flecs.h"
 
 
 GamerEngine::Scene::Scene() : mySceneStatus(SceneStatus::None)
 {
+   
 }
 
 GamerEngine::Scene::~Scene()
 {
-    //myWorld.quit();
-
-
     Clear();
 }
 
@@ -39,6 +38,7 @@ bool GamerEngine::Scene::Initialize()
         myWorld.app().enable_rest().run();
     });*/
 
+   
 
     return true;
 }
@@ -72,6 +72,8 @@ void GamerEngine::Scene::Resize(Vector2ui aNewWindowSize)
         auto& camera = view.get<CameraComponent>(entity);
         camera.Resize(aNewWindowSize);
     }
+
+    myEditorCamera.myCamera->Resize(aNewWindowSize);
 }
 
 entt::registry& GamerEngine::Scene::GetRegistry()
@@ -89,7 +91,8 @@ GamerEngine::Entity GamerEngine::Scene::CreateEntityWithUUID(UUID aUUID, const s
 {
     Entity entity = {myRegistry.create(), this};
     entity.AddComponent<IDComponent>(aUUID);
-    entity.AddComponent<TransformComponent>();
+    entity.AddComponent<GamerEngine::TransformComponent>();
+    //entity.AddComponent<GamerEngine::ScriptComponent>();
     auto& tag = entity.AddComponent<TagComponent>();
     tag.Tag = aName.empty() ? "Default Entity Name" : aName;
 
@@ -150,6 +153,24 @@ void GamerEngine::Scene::DeleteEntity(Entity aEntity)
     myRegistry.destroy(aEntity);
 }
 
+void GamerEngine::Scene::OnRuntimeStart()
+{
+    ScriptEngine::OnRuntimeStart(this);
+    // Instantiate all script entities
+
+    auto view = myRegistry.view<ScriptComponent>();
+    for (auto e : view)
+    {
+        Entity entity = { e, this };
+        ScriptEngine::OnCreateEntity(entity);
+    }
+}
+
+void GamerEngine::Scene::OnRuntimeStop()
+{
+    ScriptEngine::OnRuntimeStop();
+}
+
 void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 {
     if (!mySceneIsReady) return;
@@ -172,6 +193,14 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
     if (aShouldRunLoop)
     {
         {
+
+            auto view = myRegistry.view<ScriptComponent>();
+            for (auto e : view)
+            {
+                Entity entity = { e, this };
+                ScriptEngine::OnUpdateEntity(entity, Time::GetDeltaTime());
+            }
+
             myRegistry.view<NativeScriptComponent>().each([this](auto entity, auto& nsc)
             {
                 if (!nsc.Instance)
@@ -184,6 +213,7 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
                 nsc.OnUpdateFunction(nsc.Instance, Time::GetDeltaTime());
             });
         }
+
 
 
         {
@@ -203,13 +233,13 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
         }
 
         {
-            const auto& view = myRegistry.view<TransformComponent, ParticleEmitter>();
+            const auto& view = myRegistry.view<GamerEngine::TransformComponent, ParticleEmitter>();
 
             if (view != nullptr)
             {
                 for (const auto& entity : view)
                 {
-                    auto [transform, particleEmitter] = view.get<TransformComponent, ParticleEmitter>(entity);
+                    auto [transform, particleEmitter] = view.get<GamerEngine::TransformComponent, ParticleEmitter>(entity);
                     particleEmitter.OnUpdate(transform);
                 }
             }
@@ -227,33 +257,39 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
                 }
             }
         }
-    }
 
-    {
-        const auto& view = myRegistry.view<TransformComponent, CameraComponent>();
-        if (view != nullptr)
         {
-            for (const auto& entity : view)
+            const auto& view = myRegistry.view<GamerEngine::TransformComponent, CameraComponent>();
+            if (view != nullptr)
             {
-                auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-
-                if (camera.Primary)
+                for (const auto& entity : view)
                 {
-                    camera.BuildTransform(&transform);
-                    Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
-                    break;
+                    auto [transform, camera] = view.get<GamerEngine::TransformComponent, CameraComponent>(entity);
+
+                    if (camera.Primary)
+                    {
+                        camera.BuildTransform(&transform);
+                        Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
+                        break;
+                    }
                 }
             }
         }
     }
+    else
+    {
+        myEditorCamera.Update();
+    }
+
+    
 
     {
-        const auto& view = myRegistry.view<TransformComponent, ModelComponent>();
+        const auto& view = myRegistry.view<GamerEngine::TransformComponent, ModelComponent>();
         if (view != nullptr)
         {
             for (const auto& entity : view)
             {
-                auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
+                auto [transform, model] = view.get<GamerEngine::TransformComponent, ModelComponent>(entity);
 
                 if (!model.IsLoaded())
                 {
@@ -287,12 +323,12 @@ void GamerEngine::Scene::OnRender()
     }
 
     {
-        const auto& view = myRegistry.view<TransformComponent>();
+        const auto& view = myRegistry.view<GamerEngine::TransformComponent>();
         if (view != nullptr)
         {
             for (const auto& entity : view)
             {
-                auto& transform = view.get<TransformComponent>(entity);
+                auto& transform = view.get<GamerEngine::TransformComponent>(entity);
                 transform.BuildTransform();
             }
         }
@@ -300,23 +336,23 @@ void GamerEngine::Scene::OnRender()
 
 
     {
-        const auto& view = myRegistry.view<TransformComponent, ParticleEmitter>();
+        const auto& view = myRegistry.view<GamerEngine::TransformComponent, ParticleEmitter>();
         if (view != nullptr)
         {
             for (const auto& entity : view)
             {
-                auto [transform, particleEmitter] = view.get<TransformComponent, ParticleEmitter>(entity);
+                auto [transform, particleEmitter] = view.get<GamerEngine::TransformComponent, ParticleEmitter>(entity);
                 Renderer::RenderSprite(&particleEmitter, transform);
             }
         }
     }
     {
-        const auto& view = myRegistry.view<TransformComponent, DirectionalLightComponent>();
+        const auto& view = myRegistry.view<GamerEngine::TransformComponent, DirectionalLightComponent>();
         if (view != nullptr)
         {
             for (const auto& entity : view)
             {
-                auto [transform, dirLight] = view.get<TransformComponent, DirectionalLightComponent>(entity);
+                auto [transform, dirLight] = view.get<GamerEngine::TransformComponent, DirectionalLightComponent>(entity);
                 if (dirLight.GetLight())
                 {
                     if (!dirLight.Active)
@@ -337,12 +373,12 @@ void GamerEngine::Scene::OnRender()
     }
 
     {
-        const auto& view = myRegistry.view<TransformComponent, PointLightComponent>();
+        const auto& view = myRegistry.view<GamerEngine::TransformComponent, PointLightComponent>();
         if (view != nullptr)
         {
             for (const auto& entity : view)
             {
-                auto [transform, pointLight] = view.get<TransformComponent, PointLightComponent>(entity);
+                auto [transform, pointLight] = view.get<GamerEngine::TransformComponent, PointLightComponent>(entity);
                 if (pointLight.GetLight())
                 {
                     if (!pointLight.Active)
@@ -359,12 +395,12 @@ void GamerEngine::Scene::OnRender()
     }
 
     {
-        const auto& view = myRegistry.view<TransformComponent, SpotLightComponent>();
+        const auto& view = myRegistry.view<GamerEngine::TransformComponent, SpotLightComponent>();
         if (view != nullptr)
         {
             for (const auto& entity : view)
             {
-                auto [transform, spotLight] = view.get<TransformComponent, SpotLightComponent>(entity);
+                auto [transform, spotLight] = view.get<GamerEngine::TransformComponent, SpotLightComponent>(entity);
                 if (spotLight.GetLight())
                 {
                     if (!spotLight.Active)
@@ -529,17 +565,17 @@ void GamerEngine::Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponen
 }
 
 template <>
-void GamerEngine::Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
+void GamerEngine::Scene::OnComponentAdded<GamerEngine::TransformComponent>(Entity entity, GamerEngine::TransformComponent& component)
 {
 }
 
 template <>
-void GamerEngine::Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+void GamerEngine::Scene::OnComponentAdded<GamerEngine::NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
 {
 }
 
 template <>
-void GamerEngine::Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
+void GamerEngine::Scene::OnComponentAdded<GamerEngine::CameraComponent>(Entity entity, CameraComponent& component)
 {
 }
 

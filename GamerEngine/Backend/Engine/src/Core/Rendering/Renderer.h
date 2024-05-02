@@ -4,21 +4,18 @@
 #include <vector>
 
 #include "Components/ModelComponent.h"
+#include "Components/TransfromComponent.h"
 #include "Light/Light.h"
 #include "Sort/Sort.hpp"
 
 namespace GamerEngine
 {
 	class Font;
+	class Entity;
 }
 
 class ParticleEmitter;
 
-namespace GamerEngine
-{
-	class Entity;
-	
-}
 
 
 struct TextVertex
@@ -34,15 +31,15 @@ class Renderer
 {
 public:
 
-	static void SetCamera(CameraComponent* aCamera, const Matrix4x4f& aViewProjection, const Matrix4x4f& aProjection)
+	static void SetCamera(GamerEngine::CameraComponent* aCamera, const Matrix4x4f& aViewProjection, const Matrix4x4f& aProjection)
 	{
 		myCamera = aCamera;
 		myViewProjection = aViewProjection;
 		myProjection = aProjection;
 	}
 
-	static void Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, TransformComponent& aTransfrom);
-	static void RenderSprite(ParticleEmitter* aSprite, TransformComponent& aTransfrom);
+	static void Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, GamerEngine::TransformComponent& aTransfrom);
+	static void RenderSprite(ParticleEmitter* aSprite, GamerEngine::TransformComponent& aTransfrom);
 	static void RenderLight(Light* aLight);
 	static void RenderString(const std::string& aString, Ref<GamerEngine::Font> aFont, const Matrix4x4f& aTransform, const Vector4f& aColor);
 
@@ -62,7 +59,7 @@ public:
 
 	static CommonUtilities::Matrix4x4<float>& GetProjectionMatrix() { return myProjection; }
 	static CommonUtilities::Matrix4x4<float>& GetViewMatrix() { return myViewProjection; }
-	static CameraComponent* GetCamera()
+	static GamerEngine::CameraComponent* GetCamera()
 	{
 		if(myCamera)
 		{
@@ -73,7 +70,7 @@ public:
 	}
 
 
-	static bool IsVisable(TransformComponent& aTransform)
+	static bool IsVisable(GamerEngine::TransformComponent& aTransform)
 	{
 		aTransform;
 		return true;
@@ -98,5 +95,5 @@ private:
 	inline static Vector4f myClearColor;
 
 	inline static bool myRenderGame = false;
-	inline static CameraComponent* myCamera;
+	inline static GamerEngine::CameraComponent* myCamera;
 };

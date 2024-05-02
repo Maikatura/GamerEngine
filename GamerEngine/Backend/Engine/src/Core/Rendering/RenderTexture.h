@@ -28,7 +28,8 @@ public:
 	const std::string& GetName();
 
 	void SetRenderTarget(ID3D11DeviceContext*, ID3D11DepthStencilView*);
-	void ClearRenderTarget(ID3D11DeviceContext*, ID3D11DepthStencilView*, float, float, float, float);
+	void ClearRenderTarget(ID3D11DeviceContext*, ID3D11DepthStencilView*, float aRed = 0.5f, float aGreen = 0.5f, float aBlue = 0.5f, float aAlpha = 1.0f);
+	void ClearRenderTarget(ID3D11DeviceContext*, ID3D11DepthStencilView*, const Vector4f& aColor = { 0.5f, 0.5f, 0.5f, 1.0f});
 	ID3D11RenderTargetView* GetRenderTargetView();
 	ID3D11ShaderResourceView* GetShaderResourceView();
 	ID3D11Texture2D* GetTexture();

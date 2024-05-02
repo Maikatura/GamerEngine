@@ -110,6 +110,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Rendering\EditorCamera.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\AssetHandlers\FontAssetHandler.h" />
     <ClInclude Include="src\AssetHandlers\LightAssetHandler.h" />
@@ -242,6 +244,8 @@
     <ClInclude Include="src\VR\VRSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Rendering\EditorCamera.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp" />
     <ClCompile Include="src\AssetHandlers\FontAssetHandler.cpp" />
     <ClCompile Include="src\AssetHandlers\LightAssetHandler.cpp" />

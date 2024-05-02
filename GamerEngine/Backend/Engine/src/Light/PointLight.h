@@ -15,7 +15,7 @@ public:
 
 	void Update() override;
 
-	void SetData(TransformComponent* aTransform) override;
+	void SetData(GamerEngine::TransformComponent* aTransform) override;
 
 	Camera myCamera;
 };

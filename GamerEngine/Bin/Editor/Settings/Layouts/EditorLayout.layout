@@ -1,6 +1,6 @@
 Windows:
   - Name: Console Window
-    IsOpen: false
+    IsOpen: true
   - Name: File Explorer
     IsOpen: true
   - Name: Hierarchy

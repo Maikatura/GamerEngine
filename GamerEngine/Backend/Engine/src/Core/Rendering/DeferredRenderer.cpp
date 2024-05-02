@@ -464,7 +464,7 @@ void DeferredRenderer::Render(Matrix4x4f aView, const Matrix4x4f& aProjection, c
 	}
 	else
 	{
-		GE_LOG_ERROR("Failed to move over to the Frame Buffer (Deferred Renderer)")
+		GE_LOG_ERROR("Failed to move over to the Frame Buffer (Deferred Renderer)");
 	}
 	
 	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
@@ -525,7 +525,7 @@ void DeferredRenderer::Render(Matrix4x4f aView, const Matrix4x4f& aProjection, c
 	}
 	else
 	{
-		GE_LOG_ERROR("Failed to move over to the Scene Light Buffer (Deferred Renderer)")
+		GE_LOG_ERROR("Failed to move over to the Scene Light Buffer (Deferred Renderer)");
 	}
 
 	

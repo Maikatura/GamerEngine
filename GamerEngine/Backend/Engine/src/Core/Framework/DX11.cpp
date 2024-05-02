@@ -31,27 +31,14 @@ ID3D11RasterizerState* DX11::GetFrontCulling() const
 	return myFrontCulling;
 }
 
-void DX11::ClearRenderTargets()
+void DX11::ClearRenderTargets(const Vector4f& aColor)
 {
-	myScreenView->ClearRenderTarget(DX11::Get().GetContext(),
-		DX11::Get().GetDepthStencilView()->myDSV.Get(), 0.5f, 0.5f,
-		0.5f, 1.0f);
-
-	float color[4];
-	color[0] = 0.5f;
-	color[1] = 0.5f;
-	color[2] = 0.5f;
-	color[3] = 1.0f;
-
-	// Clear the back buffer.
-
-	GetContext()->ClearRenderTargetView(myRenderTargetView, color);
-
+	myScreenView->ClearRenderTarget(myImmediateContext, nullptr, aColor);
+	myImmediateContext->ClearRenderTargetView(myRenderTargetView, &aColor.x);
 
 	constexpr float clearDepth = 1.0f;
 	constexpr UINT8 clearStencil = 0;
-	DX11::Get().GetContext()->ClearDepthStencilView(DX11::Get().GetDepthStencilView()->myDSV.Get(), D3D11_CLEAR_DEPTH,
-		clearDepth, clearStencil);
+	myImmediateContext->ClearDepthStencilView(myDepthStencilView->myDSV.Get(), D3D11_CLEAR_DEPTH, clearDepth, clearStencil);
 }
 
 DX11& DX11::Get()
@@ -64,11 +51,11 @@ void DX11::ResetRenderTarget(bool isUsingEditor, bool useDepth)
 {
 	if (isUsingEditor)
 	{
-		myScreenView->SetRenderTarget(GetContext(), (useDepth == true) ? GetDepthStencilView()->myDSV.Get() : nullptr);
+		myScreenView->SetRenderTarget(myImmediateContext, (useDepth == true) ? myDepthStencilView->myDSV.Get() : nullptr);
 	}
 	else
 	{
-		GetContext()->OMSetRenderTargets(1, &myRenderTargetView, (useDepth == true) ? GetDepthStencilView()->myDSV.Get() : nullptr);
+		myImmediateContext->OMSetRenderTargets(1, &myRenderTargetView, (useDepth == true) ? myDepthStencilView->myDSV.Get() : nullptr);
 	}
 }
 
@@ -141,16 +128,43 @@ bool DX11::IsVrNull()
 }
 
 
+bool DX11::CreateRenderTargetView()
+{
+	// CREATE RENDER TARGET VIEW
+	HRESULT result = SwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&myBackBufferTex));
+	GE_ASSERT(SUCCEEDED(result), "Failed to get swapchain buffer")
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+	D3D11_TEXTURE2D_DESC BBDesc;
+	ZeroMemory(&BBDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	myBackBufferTex->GetDesc(&BBDesc);
+
+	D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
+	ZeroMemory(&RTVDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+	RTVDesc.Format = BBDesc.Format;
+	RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	//RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+	RTVDesc.Texture2D.MipSlice = 0;
+
+	result = Device->CreateRenderTargetView(myBackBufferTex, &RTVDesc, &myRenderTargetView);
+	SafeRelease(myBackBufferTex);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target view from back buffer")
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+	return true;
+}
+
 bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 {
 	WindowHandle = aWindowHandle;
 
 
-	UINT createDeviceFlags = 0;
-
-#if _DEBUG
-	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
 
 #if ENABLE_VR
 	myVRSystem.Init(WindowHandle);
@@ -178,127 +192,49 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 		myRenderHeight = myVRSystem.GetHeight();
 	}
 
-	// CREATE DEVICE AND SWAP CHAIN
-	D3D_DRIVER_TYPE driverTypes[] =
-	{
-		D3D_DRIVER_TYPE_HARDWARE, // the first thing to try, if failed, go to the next
-		D3D_DRIVER_TYPE_WARP,
-		D3D_DRIVER_TYPE_REFERENCE
-	};
-	UINT numDriverTypes = ARRAYSIZE(driverTypes);
-
-	D3D_FEATURE_LEVEL featureLevels[] =
-	{
-		D3D_FEATURE_LEVEL_11_0, // texture size and others..
-		D3D_FEATURE_LEVEL_10_1,
-		D3D_FEATURE_LEVEL_10_0,
-		D3D_FEATURE_LEVEL_9_3
-	};
-	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-
-	HRESULT result = S_FALSE;
-
-	DXGI_SWAP_CHAIN_DESC swapDesc;
-	ZeroMemory(&swapDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-	swapDesc.BufferCount = 1;
-	swapDesc.BufferDesc.Width = clientRect.right - clientRect.left;
-	swapDesc.BufferDesc.Height = clientRect.bottom - clientRect.top;
-	swapDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // unsigned normal
-	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
-	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapDesc.OutputWindow = WindowHandle;
-	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	swapDesc.Windowed = true;
-	swapDesc.SampleDesc.Count = 1; // multisampling, which antialiasing for geometry. Turn it off
-	swapDesc.SampleDesc.Quality = 0;
-	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // alt-enter fullscreen
-
-	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-	HRESULT errorCode = S_FALSE;
-	for (unsigned i = 0; i < numDriverTypes; ++i)
-	{
-		errorCode = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, createDeviceFlags,
-		                                          featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &SwapChain, &Device,
-		                                          &featureLevel, &myImmediateContext);
-
-		GE_ASSERT(SUCCEEDED(result), "Failed to create SwapChain and Device")
-		if (SUCCEEDED(errorCode))
-		{
-			driverType = driverTypes[i];
-			break;
-		}
-	}
-
-	if (FAILED(errorCode))
-	{
-		//OutputDebugString(_T("FAILED TO CREATE DEVICE AND SWAP CHAIN"));
-		//MyDebug(_T("FAILED TO CREATE DEVICE AND SWAP CHAIN"));
-		return false;
-	}
-
-	// CREATE RENDER TARGET VIEW
-	result = SwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&myBackBufferTex));
-	GE_ASSERT(SUCCEEDED(result), "Failed to get swapchain buffer")
-	if (FAILED(result))
+	if (!CreateSwapChain(aEnableDeviceDebug))
 	{
 		return false;
 	}
 
-	D3D11_TEXTURE2D_DESC BBDesc;
-	ZeroMemory(&BBDesc, sizeof(D3D11_TEXTURE2D_DESC));
-	myBackBufferTex->GetDesc(&BBDesc);
-
-	D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
-	ZeroMemory(&RTVDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
-	RTVDesc.Format = BBDesc.Format;
-	RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	//RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
-	RTVDesc.Texture2D.MipSlice = 0;
-
-	result = Device->CreateRenderTargetView(myBackBufferTex, &RTVDesc, &myRenderTargetView);
-	SafeRelease(myBackBufferTex);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target view from back buffer")
-	if (FAILED(result))
+	if (!CreateRenderTargetView())
 	{
 		return false;
 	}
 
 	
 
-	D3D11_DEPTH_STENCIL_DESC dsDesc;
-	ZeroMemory(&dsDesc, sizeof(dsDesc));
-	// Depth test parameters
-	dsDesc.DepthEnable = true;
-	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	//D3D11_DEPTH_STENCIL_DESC dsDesc;
+	//ZeroMemory(&dsDesc, sizeof(dsDesc));
+	//// Depth test parameters
+	//dsDesc.DepthEnable = true;
+	//dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	//dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-	// Stencil test parameters
-	dsDesc.StencilEnable = true;
-	dsDesc.StencilReadMask = 0xFF;
-	dsDesc.StencilWriteMask = 0xFF;
+	//// Stencil test parameters
+	//dsDesc.StencilEnable = true;
+	//dsDesc.StencilReadMask = 0xFF;
+	//dsDesc.StencilWriteMask = 0xFF;
 
-	// Stencil operations if pixel is front-facing
-	dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-	dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-	dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	//// Stencil operations if pixel is front-facing
+	//dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	//dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	//dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	//dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-	// Stencil operations if pixel is back-facing
-	dsDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-	dsDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-	dsDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	dsDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	//// Stencil operations if pixel is back-facing
+	//dsDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	//dsDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	//dsDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	//dsDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-	// Create depth stencil state
-	result = Device->CreateDepthStencilState(&dsDesc, &pDSState);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D")
-	if (FAILED(result))
-	{
-		return false;
-	}
+	//// Create depth stencil state
+	//result = Device->CreateDepthStencilState(&dsDesc, &pDSState);
+	//GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil Texture2D")
+	//if (FAILED(result))
+	//{
+	//	return false;
+	//}
 
 	// Bind depth stencil state
 	//myImmediateContext->OMSetDepthStencilState(pDSState, 1);
@@ -319,42 +255,33 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 
 	// Now create a second depth stencil state which turns off the Z buffer for 2D rendering.  The only difference is 
 	// that DepthEnable is set to false, all other parameters are the same as the other depth stencil state.
-	depthDisabledStencilDesc.DepthEnable = false;
-	depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-	depthDisabledStencilDesc.StencilEnable = true;
-	depthDisabledStencilDesc.StencilReadMask = 0xFF;
-	depthDisabledStencilDesc.StencilWriteMask = 0xFF;
-	depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-	depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-	depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-	depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-	depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-	depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	//depthDisabledStencilDesc.DepthEnable = false;
+	//depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	//depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	//depthDisabledStencilDesc.StencilEnable = true;
+	//depthDisabledStencilDesc.StencilReadMask = 0xFF;
+	//depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+	//depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	//depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	//depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	//depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	//depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	//depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	//depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	//depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
+	//// Create the state using the device.
+	//result = Device->CreateDepthStencilState(&depthDisabledStencilDesc, &myDepthDisabledStencilState);
+	//GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil State")
+	//if (FAILED(result))
+	//{
+	//	return false;
+	//}
 
-	
-
-	// Create the state using the device.
-	result = Device->CreateDepthStencilState(&depthDisabledStencilDesc, &myDepthDisabledStencilState);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Depth Stancil State")
-	if (FAILED(result))
+	if (!CreateRasterizerState())
 	{
 		return false;
 	}
-
-
-	D3D11_RASTERIZER_DESC rasterizerDesc;
-	ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
-	rasterizerDesc.CullMode = D3D11_CULL_BACK;
-	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-
-	ID3D11RasterizerState* rasterizerState;
-	GetDevice()->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
-
-	GetContext()->RSSetState(rasterizerState);
 
 	//D3D11_RASTERIZER_DESC rasterizerDesc = {};
 	//rasterizerDesc.FillMode = D3D11_FILL_SOLID; // or D3D11_FILL_WIREFRAME for wireframe rendering
@@ -401,73 +328,17 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	//myImmediateContext->RSSetState(rasterizerState);
 
 
-
-	//VIEWPORT CREATION
-	myViewport.Width = static_cast<float>(myRenderWidth);
-	myViewport.Height = static_cast<float>(myRenderHeight);
-	myViewport.TopLeftX = 0;
-	myViewport.TopLeftY = 0;
-	myViewport.MinDepth = 0.0f;
-	myViewport.MaxDepth = 1.0f;
-
-	// BIND VIEWPORT
-	myImmediateContext->RSSetViewports(1, &myViewport);
-
-
-#if ENABLE_VR
-	// Create the render to texture object.
-	m_RenderTextureLeft = MakeRef<RenderTexture>();
-	if (!m_RenderTextureLeft)
-	{
-		return false;
-	}
-
-	// Initialize the render to texture object.
-	m_RenderTextureLeft->SetName("VR Left Eye");
-	result = m_RenderTextureLeft->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Left Render Target (VR)");
-	if (FAILED(result))
+	if (!ResizeViewport())
 	{
 		return false;
 	}
 
 
-
-	m_RenderTextureRight = MakeRef<RenderTexture>();
-	if (!m_RenderTextureRight)
+	if (!CreateShaderResourceView())
 	{
 		return false;
 	}
 
-	// Initialize the render to texture object.
-	m_RenderTextureRight->SetName("VR Right Eye");
-
-	result = m_RenderTextureRight->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Right Render Target (VR)");
-	if (FAILED(result))
-	{
-		return false;
-	}
-#endif
-
-	// Create the render to texture object.
-	myScreenView = MakeRef<RenderTexture>();
-	if (!myScreenView)
-	{
-		return false;
-	}
-
-	//m_nRenderHeight = clientRect.bottom - clientRect.top;
-	
-
-	// Initialize the render to texture object.
-	myScreenView->SetName("Window View");
-	result = myScreenView->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target (Flatscreen)")
-	if (FAILED(result))
-	{
-		return false;
-	}
 
 	//CreateSampler();
 
@@ -511,26 +382,6 @@ bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 	//if(!result)
 	//{
 	//	return false;
-	//}
-
-	//if (aEnabledVR)
-	//{
-
-	//	// Initialize the render to texture object.
-	//	m_RenderTextureLeft = RenderTexture::Create(m_nRenderWidth, m_nRenderHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
-	//	if (!result)
-	//	{
-	//		return false;
-	//	}
-
-	//	
-
-	//	// Initialize the render to texture object.
-	//	m_RenderTextureRight = RenderTexture::Create(m_nRenderWidth, m_nRenderHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
-	//	if (!result)
-	//	{
-	//		return false;
-	//	}
 	//}
 
 #if ENABLE_VR
@@ -614,52 +465,94 @@ UINT DX11::GetScreenObjectId(const UINT x, const UINT y) const
 
 bool DX11::CreateSwapChain(bool aEnableDeviceDebug)
 {
+
+	UINT createDeviceFlags = 0;
+
+#if _DEBUG
+	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
 	RECT clientRect = { 0,0,0,0 };
 	GetClientRect(WindowHandle, &clientRect);
 
-	
-	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-	swapChainDesc.BufferDesc.Width = clientRect.right - clientRect.left;
-	swapChainDesc.BufferDesc.Height = clientRect.bottom - clientRect.top;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
-
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount = 1;
-	swapChainDesc.OutputWindow = WindowHandle;
-	swapChainDesc.Windowed = TRUE;
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	swapChainDesc.Flags = 0;
-
-	constexpr UINT numberOfFeatureLevels = 1;
-	constexpr D3D_FEATURE_LEVEL featureLevels[numberOfFeatureLevels] =
+	if (myVRSystem.GetWidth() == 0)
 	{
-		//D3D_FEATURE_LEVEL_11_1, --add this if supported by the device, otherwise everything will crash!
-		D3D_FEATURE_LEVEL_11_0
+		myRenderWidth = clientRect.right - clientRect.left;
+	}
+	else
+	{
+		myRenderWidth = myVRSystem.GetWidth();
+	}
+
+	if (myVRSystem.GetHeight() == 0)
+	{
+		myRenderHeight = clientRect.bottom - clientRect.top;
+	}
+	else
+	{
+		myRenderHeight = myVRSystem.GetHeight();
+	}
+
+	// CREATE DEVICE AND SWAP CHAIN
+	D3D_DRIVER_TYPE driverTypes[] =
+	{
+		D3D_DRIVER_TYPE_HARDWARE, // the first thing to try, if failed, go to the next
+		D3D_DRIVER_TYPE_WARP,
+		D3D_DRIVER_TYPE_REFERENCE
 	};
+	UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
-	const HRESULT result = D3D11CreateDeviceAndSwapChain(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		aEnableDeviceDebug ? D3D11_CREATE_DEVICE_DEBUG : 0,
-		featureLevels,
-		numberOfFeatureLevels,
-		D3D11_SDK_VERSION,
-		&swapChainDesc,
-		SwapChain.GetAddressOf(),
-		Device.GetAddressOf(),
-		nullptr,
-		Context.GetAddressOf()
-	);
-	if (FAILED(result))
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_0, // texture size and others..
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+		D3D_FEATURE_LEVEL_9_3
+	};
+	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+
+	HRESULT result = S_FALSE;
+
+	DXGI_SWAP_CHAIN_DESC swapDesc;
+	ZeroMemory(&swapDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
+	swapDesc.BufferCount = 1;
+	swapDesc.BufferDesc.Width = clientRect.right - clientRect.left;
+	swapDesc.BufferDesc.Height = clientRect.bottom - clientRect.top;
+	swapDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // unsigned normal
+	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
+	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
+	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapDesc.OutputWindow = WindowHandle;
+	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	swapDesc.Windowed = true;
+	swapDesc.SampleDesc.Count = 1; // multisampling, which antialiasing for geometry. Turn it off
+	swapDesc.SampleDesc.Quality = 0;
+	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // alt-enter fullscreen
+
+	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+	HRESULT errorCode = S_FALSE;
+	for (unsigned i = 0; i < numDriverTypes; ++i)
+	{
+		errorCode = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, createDeviceFlags,
+			featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &SwapChain, &Device,
+			&featureLevel, &myImmediateContext);
+
+		GE_ASSERT(SUCCEEDED(result), "Failed to create SwapChain and Device")
+			if (SUCCEEDED(errorCode))
+			{
+				driverType = driverTypes[i];
+				break;
+			}
+	}
+
+	if (FAILED(errorCode))
+	{
+		//OutputDebugString(_T("FAILED TO CREATE DEVICE AND SWAP CHAIN"));
+		//MyDebug(_T("FAILED TO CREATE DEVICE AND SWAP CHAIN"));
 		return false;
-
+	}
 
 	return true;
 }
@@ -713,68 +606,111 @@ bool DX11::CreateDepthBuffer()
 
 bool DX11::ResizeViewport()
 {
-	/*RECT clientRect = { 0,0,0,0 };
-	GetClientRect(WindowHandle, &clientRect);
+	//VIEWPORT CREATION
+	myViewport.Width = static_cast<float>(myRenderWidth);
+	myViewport.Height = static_cast<float>(myRenderHeight);
+	myViewport.TopLeftX = 0;
+	myViewport.TopLeftY = 0;
+	myViewport.MinDepth = 0.0f;
+	myViewport.MaxDepth = 1.0f;
 
+	// BIND VIEWPORT
+	myImmediateContext->RSSetViewports(1, &myViewport);
 
-	D3D11_VIEWPORT viewport = {};
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
-	viewport.Width = static_cast<FLOAT>(clientRect.right - clientRect.left);
-	viewport.Height = static_cast<FLOAT>(clientRect.bottom - clientRect.top);
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-	GetContext()->RSSetViewports(1, &viewport);*/
+	return true;
+}
+
+bool DX11::CreateRasterizerState()
+{
+
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+	ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+
+	ID3D11RasterizerState* rasterizerState;
+	HRESULT result = Device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+	if (FAILED(result))
+		return false;
+
+	myImmediateContext->RSSetState(rasterizerState);
 
 	return true;
 }
 
 bool DX11::CreateShaderResourceView()
 {
-	RECT clientRect = { 0,0,0,0 };
-	GetClientRect(WindowHandle, &clientRect);
+#if ENABLE_VR
 
-	D3D11_TEXTURE2D_DESC textureDesc{};
-	ZeroMemory(&textureDesc, sizeof(textureDesc));
+	if (m_RenderTextureLeft)
+	{
+		m_RenderTextureLeft->Shutdown();
+	}
+	if (m_RenderTextureRight)
+	{
+		m_RenderTextureRight->Shutdown();
+	}
 
-	textureDesc.Width = static_cast<UINT>(clientRect.right - clientRect.left);
-	textureDesc.Height = static_cast<UINT>(clientRect.bottom - clientRect.top);
-	textureDesc.MipLevels = 1;
-	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	textureDesc.SampleDesc.Count = 1;
-	textureDesc.Usage = D3D11_USAGE_DEFAULT;
-	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-	textureDesc.CPUAccessFlags = 0;
-	textureDesc.MiscFlags = 0;
-	textureDesc.SampleDesc.Count = 1;
-	textureDesc.SampleDesc.Quality = 0;
-
-	HRESULT result = Device->CreateTexture2D(&textureDesc, nullptr, &BackBufferTex);
-	if (FAILED(result))
+	// Create the render to texture object.
+	m_RenderTextureLeft = MakeRef<RenderTexture>();
+	if (!m_RenderTextureLeft)
+	{
 		return false;
+	}
 
-	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc{};
-	renderTargetViewDesc.Format = textureDesc.Format;
-	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	renderTargetViewDesc.Texture2D.MipSlice = 0;
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc{};
-	shaderResourceViewDesc.Format = textureDesc.Format;
-	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
-	shaderResourceViewDesc.Texture2D.MipLevels = 1;
-
-
-	result = Device->CreateRenderTargetView(BackBufferTex, &renderTargetViewDesc, RenderRTV.GetAddressOf());
+	// Initialize the render to texture object.
+	m_RenderTextureLeft->SetName("VR Left Eye");
+	result = m_RenderTextureLeft->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Left Render Target (VR)");
 	if (FAILED(result))
+	{
 		return false;
+	}
 
-	result = Device->CreateShaderResourceView(BackBufferTex, &shaderResourceViewDesc, RenderSRV.GetAddressOf());
+
+
+	m_RenderTextureRight = MakeRef<RenderTexture>();
+	if (!m_RenderTextureRight)
+	{
+		return false;
+	}
+
+	// Initialize the render to texture object.
+	m_RenderTextureRight->SetName("VR Right Eye");
+
+	result = m_RenderTextureRight->Initialize(Device.Get(), myRenderWidth, myRenderHeight);
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Right Render Target (VR)");
 	if (FAILED(result))
+	{
 		return false;
+	}
+#endif
 
-	SafeRelease(BackBufferTex);
+
+	
+	if (myScreenView)
+	{
+		myScreenView->Shutdown();
+	}
+
+	// Create the render to texture object.
+	myScreenView = MakeRef<RenderTexture>();
+	if (!myScreenView)
+	{
+		return false;
+	}
+
+	//m_nRenderHeight = clientRect.bottom - clientRect.top;
+
+
+	// Initialize the render to texture object.
+	myScreenView->SetName("Window View");
+	HRESULT result = myScreenView->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target (Flatscreen)")
+	if (FAILED(result))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -961,66 +897,18 @@ void DX11::Resize()
 	myViewport.Width = static_cast<float>(myRenderWidth);
 	myViewport.Height = static_cast<float>(myRenderHeight);
 
-	if (m_RenderTextureLeft)
-	{
-		m_RenderTextureLeft->Shutdown();
-	}
-	if (m_RenderTextureRight)
-	{
-		m_RenderTextureRight->Shutdown();
-	}
-	if (myScreenView)
-	{
-		myScreenView->Shutdown();
-	}
-
-	// Create the render to texture object.
-	m_RenderTextureLeft = MakeRef<RenderTexture>();
-	if (!m_RenderTextureLeft)
-	{
-		return;
-	}
+	
 
 	// Initialize the render to texture object.
-	hr = m_RenderTextureLeft->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
-	if (!hr)
+	if (!CreateShaderResourceView())
 	{
 		return;
 	}
 
-	m_RenderTextureRight = MakeRef<RenderTexture>();
-	if (!m_RenderTextureRight)
+	if (!ResizeViewport())
 	{
 		return;
 	}
-
-	// Initialize the render to texture object.
-	hr = m_RenderTextureRight->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
-	if (!hr)
-	{
-		return;
-	}
-
-	// Create the render to texture object.
-	myScreenView = MakeRef<RenderTexture>();
-	if (!myScreenView)
-	{
-		return;
-	}
-
-	//m_nRenderHeight = clientRect.bottom - clientRect.top;
-
-
-	// Initialize the render to texture object.
-	hr = myScreenView->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
-	if (!hr)
-	{
-		return;
-	}
-
-	myViewport.Width = static_cast<float>(myRenderWidth);
-	myViewport.Height = static_cast<float>(myRenderHeight);
-	myImmediateContext->RSSetViewports(1, &myViewport);
 }
 
 void DX11::ResetViewport()

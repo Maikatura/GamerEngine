@@ -34,7 +34,7 @@ private:
     entt::registry nullReg{};
 	entt::registry* myRegistry;
 
-    SnapshotContainer<TransformComponent> entitySnapshot_Transform;
+    SnapshotContainer<GamerEngine::TransformComponent> entitySnapshot_Transform;
     SnapshotContainer<ModelComponent> entitySnapshot_Models;
 
 

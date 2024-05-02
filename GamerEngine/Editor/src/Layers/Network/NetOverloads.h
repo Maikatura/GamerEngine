@@ -41,7 +41,7 @@ inline TurNet::TurMessage& operator<<(TurNet::TurMessage& msg, const Vector3f& d
 }
 
 
-inline TurNet::TurMessage& operator>>(TurNet::TurMessage& msg, TransformComponent& data)
+inline TurNet::TurMessage& operator>>(TurNet::TurMessage& msg, GamerEngine::TransformComponent& data)
 {
 	Vector3f pos;
 	Vector3f rot;
@@ -59,7 +59,7 @@ inline TurNet::TurMessage& operator>>(TurNet::TurMessage& msg, TransformComponen
 	return msg;
 }
 
-inline TurNet::TurMessage& operator<<(TurNet::TurMessage& msg, const TransformComponent& data)
+inline TurNet::TurMessage& operator<<(TurNet::TurMessage& msg, const GamerEngine::TransformComponent& data)
 {
 	msg << data.GetPosition();
 	msg << data.GetRotation();

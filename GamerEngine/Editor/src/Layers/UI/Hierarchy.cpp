@@ -63,7 +63,7 @@ void Hierarchy::OnImGuiRender()
 
 			GamerEngine::Entity entity{ entityID, SceneManager::Get().GetScene().get()};
 
-			if(entity.GetComponent<TransformComponent>().HasParent())
+			if(entity.GetComponent<GamerEngine::TransformComponent>().HasParent())
 			{
 				return;
 			}
@@ -98,11 +98,11 @@ void Hierarchy::OnImGuiRender()
 				for(size_t i = 0; i < entityDataVector.size(); i++)
 				{
 					GamerEngine::Entity draggedEntity = GamerEngine::Entity(entityDataVector[i]);
-					if(draggedEntity.GetComponent<TransformComponent>().HasParent())
+					if(draggedEntity.GetComponent<GamerEngine::TransformComponent>().HasParent())
 					{
-						auto parent = draggedEntity.GetComponent<TransformComponent>().GetParent();
-						parent.GetComponent<TransformComponent>().RemoveChild(draggedEntity);
-						draggedEntity.GetComponent<TransformComponent>().ClearParent();
+						auto parent = draggedEntity.GetComponent<GamerEngine::TransformComponent>().GetParent();
+						parent.GetComponent<GamerEngine::TransformComponent>().RemoveChild(draggedEntity);
+						draggedEntity.GetComponent<GamerEngine::TransformComponent>().ClearParent();
 					}
 				}
 			}
@@ -127,8 +127,6 @@ void Hierarchy::DrawEntityNode(GamerEngine::Entity& aEntity)
 		}
 	}
 
-	if(aEntity.GetComponent<TagComponent>().Tag == "EditorCamera") return;
-
 	ImGuiTreeNodeFlags flags = 0;
 	for(size_t i = 0; i < mySelectedEntity.size(); i++)
 	{
@@ -138,7 +136,7 @@ void Hierarchy::DrawEntityNode(GamerEngine::Entity& aEntity)
 	if(aEntity.HasComponent<ModelComponent>())
 	{
 
-		bool check1 = (aEntity.GetComponent<TransformComponent>().myChildren.size() == 0);
+		bool check1 = (aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren.size() == 0);
 		bool check2 = false;
 
 
@@ -156,10 +154,10 @@ void Hierarchy::DrawEntityNode(GamerEngine::Entity& aEntity)
 	}
 	else
 	{
-		flags |= ((aEntity.GetComponent<TransformComponent>().myChildren.size() == 0)) ? ImGuiTreeNodeFlags_Leaf : 0;
+		flags |= ((aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren.size() == 0)) ? ImGuiTreeNodeFlags_Leaf : 0;
 	}
 
-	flags |= ((aEntity.GetComponent<TransformComponent>().myChildren.size() == 0) && !aEntity.HasComponent<ModelComponent>()) ? ImGuiTreeNodeFlags_Leaf : 0;
+	flags |= ((aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren.size() == 0) && !aEntity.HasComponent<ModelComponent>()) ? ImGuiTreeNodeFlags_Leaf : 0;
 	flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
 
@@ -211,9 +209,9 @@ void Hierarchy::DrawEntityNode(GamerEngine::Entity& aEntity)
 			}
 		}
 
-		for(int i = 0; i < aEntity.GetComponent<TransformComponent>().myChildren.size(); i++)
+		for(int i = 0; i < aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren.size(); i++)
 		{
-			GamerEngine::Entity entity{ aEntity.GetComponent<TransformComponent>().myChildren[i].GetHandle(), SceneManager::Get().GetScene().get() };
+			GamerEngine::Entity entity{ aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren[i].GetHandle(), SceneManager::Get().GetScene().get() };
 			DrawEntityNode(entity);
 		}
 		ImGui::TreePop();
@@ -380,13 +378,13 @@ void Hierarchy::LoopBones(const GamerEngine::Skeleton* aSkeleton, const GamerEng
 
 bool Hierarchy::LoopThoughChildren(GamerEngine::Entity& aEntity)
 {
-	for(GamerEngine::Entity ent : aEntity.GetComponent<TransformComponent>().myChildren)
+	for(GamerEngine::Entity ent : aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren)
 	{
 		if(ent.GetID() == aEntity.GetID())
 		{
 			return true;
 		}
-		else if(ent.GetComponent<TransformComponent>().myChildren.size() > 0)
+		else if(ent.GetComponent<GamerEngine::TransformComponent>().myChildren.size() > 0)
 		{
 			return LoopThoughChildren(ent);
 		}
@@ -432,14 +430,14 @@ void Hierarchy::CheckIfUserWantToSetParent(GamerEngine::Entity& aEntity)
 				GamerEngine::Entity aChildEntity = aChildEntityList[i];
 
 				bool shouldExit = false;
-				if(!entity.GetComponent<TransformComponent>().HasParent() && !aChildEntity.GetComponent<TransformComponent>().HasParent())
+				if(!entity.GetComponent<GamerEngine::TransformComponent>().HasParent() && !aChildEntity.GetComponent<GamerEngine::TransformComponent>().HasParent())
 				{
 
-					entity.GetComponent<TransformComponent>().SetChild(aChildEntity);
-					aChildEntity.GetComponent<TransformComponent>().SetParent(entity);
+					entity.GetComponent<GamerEngine::TransformComponent>().SetChild(aChildEntity);
+					aChildEntity.GetComponent<GamerEngine::TransformComponent>().SetParent(entity);
 					hasMoved = true;
 				}
-				else if(entity.GetComponent<TransformComponent>().HasParent() && !aChildEntity.GetComponent<TransformComponent>().HasParent())
+				else if(entity.GetComponent<GamerEngine::TransformComponent>().HasParent() && !aChildEntity.GetComponent<GamerEngine::TransformComponent>().HasParent())
 				{
 
 					GamerEngine::Entity entityParent = entity;
@@ -453,9 +451,9 @@ void Hierarchy::CheckIfUserWantToSetParent(GamerEngine::Entity& aEntity)
 							std::cout << entityParent.GetComponent<TagComponent>().Tag << std::endl;
 						}
 
-						if(entityParent.GetComponent<TransformComponent>().HasParent())
+						if(entityParent.GetComponent<GamerEngine::TransformComponent>().HasParent())
 						{
-							entityParent = entityParent.GetComponent<TransformComponent>().GetParent();
+							entityParent = entityParent.GetComponent<GamerEngine::TransformComponent>().GetParent();
 						}
 						else
 						{
@@ -471,20 +469,20 @@ void Hierarchy::CheckIfUserWantToSetParent(GamerEngine::Entity& aEntity)
 
 					if(shouldExit) return;
 
-					entity.GetComponent<TransformComponent>().SetChild(aChildEntity);
-					aChildEntity.GetComponent<TransformComponent>().SetParent(entity);
+					entity.GetComponent<GamerEngine::TransformComponent>().SetChild(aChildEntity);
+					aChildEntity.GetComponent<GamerEngine::TransformComponent>().SetParent(entity);
 					hasMoved = true;
 				}
-				else if(!entity.GetComponent<TransformComponent>().HasParent() && aChildEntity.GetComponent<TransformComponent>().HasParent())
+				else if(!entity.GetComponent<GamerEngine::TransformComponent>().HasParent() && aChildEntity.GetComponent<GamerEngine::TransformComponent>().HasParent())
 				{
-					auto parent = aChildEntity.GetComponent<TransformComponent>().GetParent();
-					parent.GetComponent<TransformComponent>().RemoveChild(aChildEntity);
+					auto parent = aChildEntity.GetComponent<GamerEngine::TransformComponent>().GetParent();
+					parent.GetComponent<GamerEngine::TransformComponent>().RemoveChild(aChildEntity);
 
-					entity.GetComponent<TransformComponent>().SetChild(aChildEntity);
-					aChildEntity.GetComponent<TransformComponent>().SetParent(entity);
+					entity.GetComponent<GamerEngine::TransformComponent>().SetChild(aChildEntity);
+					aChildEntity.GetComponent<GamerEngine::TransformComponent>().SetParent(entity);
 					hasMoved = true;
 				}
-				else if(entity.GetComponent<TransformComponent>().HasParent() && aChildEntity.GetComponent<TransformComponent>().HasParent())
+				else if(entity.GetComponent<GamerEngine::TransformComponent>().HasParent() && aChildEntity.GetComponent<GamerEngine::TransformComponent>().HasParent())
 				{
 
 					GamerEngine::Entity entityParent = entity;
@@ -500,9 +498,9 @@ void Hierarchy::CheckIfUserWantToSetParent(GamerEngine::Entity& aEntity)
 							std::cout << entityParent.GetComponent<TagComponent>().Tag << std::endl;
 						}
 
-						if(entityParent.GetComponent<TransformComponent>().HasParent())
+						if(entityParent.GetComponent<GamerEngine::TransformComponent>().HasParent())
 						{
-							entityParent = entityParent.GetComponent<TransformComponent>().GetParent();
+							entityParent = entityParent.GetComponent<GamerEngine::TransformComponent>().GetParent();
 						}
 						else
 						{
@@ -521,11 +519,11 @@ void Hierarchy::CheckIfUserWantToSetParent(GamerEngine::Entity& aEntity)
 						return;
 					}
 
-					auto parent = aChildEntity.GetComponent<TransformComponent>().GetParent();
-					parent.GetComponent<TransformComponent>().RemoveChild(aChildEntity);
+					auto parent = aChildEntity.GetComponent<GamerEngine::TransformComponent>().GetParent();
+					parent.GetComponent<GamerEngine::TransformComponent>().RemoveChild(aChildEntity);
 
-					entity.GetComponent<TransformComponent>().SetChild(aChildEntity);
-					aChildEntity.GetComponent<TransformComponent>().SetParent(entity);
+					entity.GetComponent<GamerEngine::TransformComponent>().SetChild(aChildEntity);
+					aChildEntity.GetComponent<GamerEngine::TransformComponent>().SetParent(entity);
 					hasMoved = true;
 				}
 			}

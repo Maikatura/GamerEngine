@@ -204,7 +204,7 @@ namespace GamerEngine {
 				//case ScriptFieldType::Vector4: return "Vector4";
 				case ScriptFieldType::Entity:  return "Entity";
 			}
-			//HZ_CORE_ASSERT(false, "Unknown ScriptFieldType");
+			GE_ASSERT(false, "Unknown ScriptFieldType");
 			return "None";
 		}
 
@@ -228,7 +228,7 @@ namespace GamerEngine {
 			//if (fieldType == "Vector4") return ScriptFieldType::Vector4;
 			if (fieldType == "Entity")  return ScriptFieldType::Entity;
 
-			//HZ_CORE_ASSERT(false, "Unknown ScriptFieldType");
+			GE_ASSERT(false, "Unknown ScriptFieldType");
 			return ScriptFieldType::None;
 		}
 

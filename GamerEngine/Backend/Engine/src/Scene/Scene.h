@@ -9,6 +9,8 @@
 #include "Sort/Sort.hpp"
 
 #include <mutex>
+
+#include "Core/Rendering/EditorCamera.h"
 //#include "flecs.h"
 
 class DirectionalLight;
@@ -53,6 +55,9 @@ namespace GamerEngine
         Entity CreateEntityWithUUID(UUID aUUID, const std::string& aName = std::string());
         void DeleteEntity(Entity aEntity);
 
+
+    	void OnRuntimeStart();
+    	void OnRuntimeStop();
         virtual void OnUpdate(bool aShouldRunLoop = true, bool aLoadingScene = false);
         virtual void OnRender();
 
@@ -95,6 +100,8 @@ namespace GamerEngine
 
         std::string myPath;
         entt::registry myRegistry;
+
+        EditorCamera myEditorCamera;
 
         Ref<DirectionalLight> myDirectionalLight;
         Ref<EnvironmentLight> myEnvironmentLight;

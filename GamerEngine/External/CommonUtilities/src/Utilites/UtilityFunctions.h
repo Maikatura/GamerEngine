@@ -97,4 +97,22 @@ namespace CommonUtilities
 	{
 		return std::abs(a - b) <= epsilon;
 	}
+
+	template<class T>
+	inline bool AreEqual(T a, T b, T tolerance = 1e-5)
+	{
+		return std::fabs(a - b) < tolerance;
+	}
+
+	template<class T>
+	inline bool IsGreaterThan(T a, T b, T tolerance = 1e-5)
+	{
+		return (a - b) > tolerance;
+	}
+
+	template<class T>
+	inline bool IsLessThan(T a, T b, T tolerance = 1e-5)
+	{
+		return (b - a) > tolerance;
+	}
 };
