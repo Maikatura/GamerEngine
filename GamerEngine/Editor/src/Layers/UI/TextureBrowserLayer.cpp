@@ -12,10 +12,13 @@ void TextureBrowserLayer::OnImGuiRender()
 	
 	BeginMenu();
 
+
+	const int size = 512;
+
 	auto textures = TextureAssetHandler::GetTextureList();
 	for (auto texture : textures)
 	{
-		ImGui::Image(texture->GetSRV().Get(), { 512, 512 });
+		ImGui::Image(texture->GetSRV().Get(), { size, size });
 	}
 
 	EndMenu();

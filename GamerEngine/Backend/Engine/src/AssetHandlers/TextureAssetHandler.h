@@ -8,6 +8,16 @@
 class Texture;
 class DepthStencil;
 
+
+struct TextureConfig
+{
+	std::wstring Name;
+	int Width;
+	int Height;
+	int ColorCount;
+	int Format;
+};
+
 class TextureAssetHandler
 {
 	typedef std::unordered_map<std::wstring, Ref<Texture>> TextureMap;
@@ -18,7 +28,9 @@ public:
 
 	static void Clear();
 
-	static Ref<Texture> CreateTexture(const std::wstring& aName, void* aPixels, int aWidth, int aHeight, int aColorCount = 4);
+
+	static Ref<Texture> CreateTexture(const TextureConfig& aName, void* aPixels);
+	static Ref<Texture> CreateTexture(const std::wstring& aName, DXGI_FORMAT aFormat, void* aPixels, int aWidth, int aHeight, int aColorCount = 4);
 	static Ref<Texture> GetTexture(const std::wstring& aName);
 
 	static bool LoadTexture(const std::wstring& aFileName);

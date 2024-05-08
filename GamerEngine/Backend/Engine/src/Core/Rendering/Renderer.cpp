@@ -108,25 +108,30 @@ void Renderer::RenderString(const std::string& aString, Ref<GamerEngine::Font> a
 	texCoordMax += Vector2f(texelWidth, texelHeight);
 
 	// Render
-	Vector4f position1 = aTransform * Vector4f(quadMin, 0.0f, 1.0f);
-	Vector2f texcord1 = { 0.0f, 0.0f };
+	TextVertex textVertex1;
+	textVertex1.Position = aTransform * Vector4f(quadMin, 0.0f, 1.0f);
+	textVertex1.Color = aColor;
+	textVertex1.TexCoord = { 0.0f, 0.0f };
 
 	// ++
-
-	Vector4f position2 = aTransform * Vector4f(quadMin.x, quadMax.y, 0.0f, 1.0f);
-	Vector2f texcord2 = { 0.0f, 1.0f };
-
-	// ++
-
-	Vector4f position3 = aTransform * Vector4f(quadMax, 0.0f, 1.0f);
-	Vector2f texcord3 = { 1.0f, 1.0f };
+	TextVertex textVertex2;
+	textVertex2.Position = aTransform * Vector4f(quadMin.x, quadMax.y, 0.0f, 1.0f);
+	textVertex2.Color = aColor;
+	textVertex2.TexCoord = { 0.0f, 1.0f };
 
 	// ++
+	TextVertex textVertex3;
+	textVertex3.Position = aTransform * Vector4f(quadMax, 0.0f, 1.0f);
+	textVertex3.Color = aColor;
+	textVertex3.TexCoord = { 1.0f, 1.0f };
 
-	Vector4f position4 = aTransform * Vector4f(quadMax.x, quadMin.y, 0.0f, 1.0f);
-	Vector2f texcord4 = { 1.0f, 0.0f };
+	// ++
+	TextVertex textVertex4;
+	textVertex4.Position = aTransform * Vector4f(quadMax.x, quadMin.y, 0.0f, 1.0f);
+	textVertex4.Color = aColor;
+	textVertex4.TexCoord = { 1.0f, 0.0f };
 
-
+	
 
 	double advance = glyph->getAdvance();
 	char nextCharacter = 'C';
@@ -135,6 +140,11 @@ void Renderer::RenderString(const std::string& aString, Ref<GamerEngine::Font> a
 	float kerningOffset = 0.0f;
 	x += fsScale * advance + kerningOffset;
 
+
+	myTextToRender.push_back(textVertex1);
+	myTextToRender.push_back(textVertex2);
+	myTextToRender.push_back(textVertex3);
+	myTextToRender.push_back(textVertex4);
 }
 
 void Renderer::SetRenderGame(bool aToggleToRenderGame)

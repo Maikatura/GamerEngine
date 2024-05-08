@@ -13,6 +13,7 @@
 #include "Core/Rendering/LineRenderer.h"
 #include "Core/Rendering/ShadowRenderer.h"
 #include "Core/Rendering/PostProcessRenderer.h"
+#include "Core/Rendering/TextRenderer.h"
 #include "Scene/SceneManager.h"
 #include "Font/Font.h"
 #include "Project/Project.h"
@@ -92,6 +93,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
     AddRenderModule<ShadowRenderer>();
     AddRenderModule<DeferredRenderer>();
     AddRenderModule<LineRenderer>();
+    //AddRenderModule<TextRenderer>();
 
     // TODO : Get rid of this RendererBase
     if (!RendererBase::Init())

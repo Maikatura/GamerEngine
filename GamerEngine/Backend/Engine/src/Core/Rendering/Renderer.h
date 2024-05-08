@@ -20,7 +20,7 @@ class ParticleEmitter;
 
 struct TextVertex
 {
-	Vector3f Position;
+	Vector4f Position;
 	Vector4f Color;
 	Vector2f TexCoord;
 
@@ -48,12 +48,14 @@ public:
 
 	static std::vector<RenderBuffer>& GetModels() { return myRenderModels; }
 	static std::vector<RenderBuffer2D>& GetSprites() { return mySpritesToRender; }
+	static std::vector<TextVertex>& GetText() { return myTextToRender; }
 
 
 	static void Clear()
 	{
 		myRenderModels.clear();
 		mySpritesToRender.clear();
+		myTextToRender.clear();
 	}
 
 
@@ -91,9 +93,13 @@ private:
 	inline static std::vector<RenderBuffer> myUpdateModels;
 	inline static std::vector<RenderBuffer> myRenderModels;
 	inline static std::vector<RenderBuffer2D> mySpritesToRender;
+	inline static std::vector<TextVertex> myTextToRender;
 
 	inline static Vector4f myClearColor;
 
 	inline static bool myRenderGame = false;
 	inline static GamerEngine::CameraComponent* myCamera;
+
+
+
 };

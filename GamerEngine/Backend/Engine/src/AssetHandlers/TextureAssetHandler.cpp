@@ -21,23 +21,23 @@ void TextureAssetHandler::Clear()
 	myRegistry.clear();
 }
 
-Ref<Texture> TextureAssetHandler::CreateTexture(const std::wstring& aName, void* aPixels, int aWidth, int aHeight, int aColorCount)
+Ref<Texture> TextureAssetHandler::CreateTexture(const TextureConfig& aTextureConfig, void* aPixels)
 {
 	Ref<Texture> returnTexture = MakeRef<Texture>();
 
-	returnTexture->SetWidth(aWidth);
-	returnTexture->SetHeight(aHeight);
+	returnTexture->SetWidth(aTextureConfig.Width);
+	returnTexture->SetHeight(aTextureConfig.Height);
 
 	// Assuming 'device' is your D3D11 device
 	ID3D11Texture2D* dxTexture;
 
 	// Create a texture with the same dimensions as the bitmap
 	D3D11_TEXTURE2D_DESC texDesc = {};
-	texDesc.Width = aWidth;
-	texDesc.Height = aHeight;
-	texDesc.MipLevels = 1;
+	texDesc.Width = aTextureConfig.Width;
+	texDesc.Height = aTextureConfig.Height;
+	texDesc.MipLevels = 0;
 	texDesc.ArraySize = 1;
-	texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;// Assuming R8G8B8A8 format
+	texDesc.Format = static_cast<DXGI_FORMAT>(aTextureConfig.Format); // Assuming R8G8B8A8 format
 	texDesc.SampleDesc.Count = 1;
 	texDesc.Usage = D3D11_USAGE_DEFAULT;
 	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
@@ -46,21 +46,34 @@ Ref<Texture> TextureAssetHandler::CreateTexture(const std::wstring& aName, void*
 	DX11::Get().GetDevice()->CreateTexture2D(&texDesc, nullptr, &dxTexture);
 
 	// Copy the pixel data from the 'bitmap' to 'dxTexture'
-	DX11::Get().GetContext()->UpdateSubresource(dxTexture, 0, nullptr, aPixels, aWidth * aColorCount, 0);
+	DX11::Get().GetContext()->UpdateSubresource(dxTexture, 0, nullptr, aPixels, aTextureConfig.Width * aTextureConfig.ColorCount, aTextureConfig.Width * aTextureConfig.Height);
 
 	// Create a shader resource view (SRV) from 'dxTexture'
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = texDesc.Format;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
+	
 
 	DX11::Get().GetDevice()->CreateShaderResourceView(dxTexture, &srvDesc, &returnTexture->mySRV);
 
 
-	returnTexture->SetName(aName);
-	myRegistry.insert({ aName, returnTexture });
+	returnTexture->SetName(aTextureConfig.Name);
+	myRegistry.insert({ aTextureConfig.Name, returnTexture });
 
 	return returnTexture;
+}
+
+Ref<Texture> TextureAssetHandler::CreateTexture(const std::wstring& aName, DXGI_FORMAT aFormat, void* aPixels, int aWidth, int aHeight, int aColorCount)
+{
+	TextureConfig config;
+	config.Name = aName;
+	config.Width = aWidth;
+	config.Height = aHeight;
+	config.ColorCount = aColorCount;
+	config.Format = aFormat;
+
+	return CreateTexture(config, aPixels);
 }
 
 

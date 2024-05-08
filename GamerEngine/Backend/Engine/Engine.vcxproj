@@ -244,6 +244,7 @@
     <ClInclude Include="src\VR\VRSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Framework\GraphicsBackend.hpp" />
     <ClCompile Include="src\Core\Rendering\EditorCamera.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp" />
@@ -289,6 +290,8 @@
     <ClCompile Include="src\Core\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Core\Rendering\RendererBase.cpp" />
     <ClCompile Include="src\Core\Rendering\ShadowRenderer.cpp" />
+    <ClCompile Include="src\Core\Rendering\TextRenderer.cpp" />
+    <ClCompile Include="src\Core\Rendering\TextRenderer.h" />
     <ClCompile Include="src\Core\Rendering\VertexShader.cpp" />
     <ClCompile Include="src\Debugger\ConsoleHelper.cpp" />
     <ClCompile Include="src\Font\Font.cpp" />

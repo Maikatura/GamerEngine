@@ -28,33 +28,41 @@ namespace GamerEngine
 
 		msdfgen::BitmapConstRef<T, N> bitmap = (msdfgen::BitmapConstRef<T, N>)generator.atlasStorage();
 
-		std::vector<CommonUtilities::Vector4<T>> newBuffer;
 
 		int y = 0;
-		for (int i = 0; i < static_cast<size_t>(aWidth) * static_cast<size_t>(aHeight); i++)
-		{
-			if (static_cast<uint32_t>(y) >= aHeight || i % aWidth >= aWidth)
-			{
-				continue;
-			}
+
+
+
+		std::vector<CommonUtilities::Vector4<T>> newBuffer;
+
+		uint32_t totalWidth = static_cast<uint32_t>(std::round(aWidth));
+		uint32_t totalHeight = static_cast<uint32_t>(std::round(aHeight));
+		uint32_t totalPixels = totalWidth * totalHeight;
+
+		for (uint32_t i = 0; i < totalPixels; ++i) {
+			uint32_t xIndex = i % totalWidth;
+			uint32_t yIndex = totalHeight - 1 - (i / totalWidth); // Adjust for inverted y-coordinate
 
 			CommonUtilities::Vector4<T> vectorStuff;
 
-			auto data = bitmap(i % aWidth, y);
+			auto data = bitmap(static_cast<uint32_t>(std::round(xIndex)), static_cast<uint32_t>(std::round(yIndex)));
 			vectorStuff.x = data[0];
 			vectorStuff.y = data[1];
 			vectorStuff.z = data[2];
 			vectorStuff.w = 255;
 
-			if (i % aWidth == 0)
-			{
-				y++;
-			}
-
 			newBuffer.push_back(vectorStuff);
 		}
 
-		Ref<Texture> texture = TextureAssetHandler::CreateTexture(Helpers::string_cast<std::wstring>(aFontName), (void*)newBuffer.data(), bitmap.width, bitmap.height, sizeof(CommonUtilities::Vector4<T>));
+
+		TextureConfig config;
+		config.Name = Helpers::string_cast<std::wstring>(aFontName);
+		config.Width = bitmap.width;
+		config.Height = bitmap.height;
+		config.ColorCount = (N * sizeof(T)) + (1 * sizeof(T));
+		config.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+		Ref<Texture> texture = TextureAssetHandler::CreateTexture(config, (void*)newBuffer.data());
 		return texture;
 	};
 

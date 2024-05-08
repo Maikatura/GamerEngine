@@ -741,5 +741,8 @@
     <ClCompile Include="src\Core\Rendering\EditorCamera.cpp">
       <Filter>Core\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Rendering\TextRenderer.h" />
+    <ClCompile Include="src\Core\Rendering\TextRenderer.cpp" />
+    <ClCompile Include="src\Core\Framework\GraphicsBackend.hpp" />
   </ItemGroup>
 </Project>

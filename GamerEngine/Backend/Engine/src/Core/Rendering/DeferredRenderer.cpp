@@ -6,7 +6,7 @@
 #include "Renderer.h"
 #include "AssetHandlers/ModelAssetHandler.h"
 #include "Components/TransfromComponent.h"
-#include "Core/Framework/DX11.h"
+#include "Core/Framework/GraphicsBackend.hpp"
 
 void GBuffer::SetAsTarget()
 {
