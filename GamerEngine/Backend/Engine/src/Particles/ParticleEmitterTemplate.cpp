@@ -4,6 +4,6 @@
 
 bool ParticleVertex::operator<(const ParticleVertex& aParticle) const
 {
-	auto camPos = Renderer::GetViewMatrix().GetPosition();
+	auto camPos = GamerEngine::Renderer::GetViewMatrix().GetPosition();
 	return (aParticle.myPosition - camPos).Length() < (myPosition - camPos).Length();
 }

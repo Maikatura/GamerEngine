@@ -140,12 +140,12 @@ void NetworkingLayer::OnUpdate()
 		
 		//float distanceRot = (myPlayers[i].Rotation - transComp.Rotation).Length();
 
-		if (!Renderer::GetCamera())
+		if (!GamerEngine::Renderer::GetCamera())
 		{
 			return;
 		}
 
-		Renderer::GetCamera()->GetCameraSpeed();
+		GamerEngine::Renderer::GetCamera()->GetCameraSpeed();
 
 		std::chrono::steady_clock::time_point clockNow = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double, std::milli> time = clockNow - myPlayers[i].Time;
@@ -169,32 +169,32 @@ void NetworkingLayer::UpdateCamera()
 {
 	if(mySendTime <= 0.0f)
 	{
-		if(!Renderer::GetCamera())
+		if(!GamerEngine::Renderer::GetCamera())
 		{
 			return;
 		}
 
-		if(Renderer::GetCamera()->HasMoved())
+		if(GamerEngine::Renderer::GetCamera()->HasMoved())
 		{
 			mySendTime += myMoveSendTime;
 
 
 
-			const Vector3f position = Renderer::GetCamera()->ViewProjection.GetPosition();
-			const Vector3f rotation = Renderer::GetCamera()->ViewProjection.GetRotation();
+			const Vector3f position = GamerEngine::Renderer::GetCamera()->ViewProjection.GetPosition();
+			const Vector3f rotation = GamerEngine::Renderer::GetCamera()->ViewProjection.GetRotation();
 
 
 			TurNet::TurMessage outMsg;
 			PlayerMoveMessage moveMsg;
 			moveMsg.ClientID = myClientID;
 			moveMsg.Time = std::chrono::high_resolution_clock::now();
-			moveMsg.MoveSpeed = Renderer::GetCamera()->GetCameraSpeed();
+			moveMsg.MoveSpeed = GamerEngine::Renderer::GetCamera()->GetCameraSpeed();
 			moveMsg.Translation = position;
 
 			outMsg << moveMsg;
 			myClient.SendToServer(outMsg);
 
-			Renderer::GetCamera()->SetHasMoved(false);
+			GamerEngine::Renderer::GetCamera()->SetHasMoved(false);
 		}
 	}
 	else

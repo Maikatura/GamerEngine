@@ -33,8 +33,8 @@ void DirectionalLight::Update()
 		return;
 	}
 
-
-	if (!Renderer::GetCamera())
+	auto camera = GamerEngine::Renderer::GetCamera();
+	if (!camera)
 	{
 		return;
 	}
@@ -44,7 +44,7 @@ void DirectionalLight::Update()
 
 	//SetLightDirection(rotationQuaternion);
 	myLightData.Direction = viewMat.GetForward();
-	SetLightPosition(Renderer::GetCamera()->GetPosition() - myLightData.Direction * 100000.f);
+	SetLightPosition(camera->GetPosition() - myLightData.Direction * 100000.f);
 	myLightData.LightView[0] = Matrix4x4f::GetFastInverse(viewMat);
 	myLightData.ShadowMapIndex = 19;
 

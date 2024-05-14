@@ -36,8 +36,8 @@ void LineRenderer::OnRenderSetup()
 
 void LineRenderer::OnRender()
 {
-    const Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
-    const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
+    const Matrix4x4f projection = GamerEngine::Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
+    const Matrix4x4f view = GamerEngine::Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
 
     Render(view, projection);
 }

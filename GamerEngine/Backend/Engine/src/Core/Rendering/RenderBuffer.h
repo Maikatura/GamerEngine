@@ -1,25 +1,36 @@
 #pragma once
-#include "Render2D.h"
 #include <Math/MathTypes.hpp>
 #include "Core/Model/Model.h"
 
 class ParticleEmitter;
 
 
-
-class RenderBuffer
+namespace GamerEngine
 {
-public:
-	uint32_t myId;
-	Matrix4x4f myTransform;
-	Ref<GamerEngine::Model> myModel;
-};
+	class RenderBuffer
+	{
+	public:
+		uint32_t myId;
+		Matrix4x4f myTransform;
+		Ref<GamerEngine::Model> myModel;
+	};
 
-class RenderBuffer2D
-{
-public:
-	bool operator<(RenderBuffer2D& aRenderBuffer2D);
+	class RenderBuffer2D
+	{
+	public:
+		bool operator<(RenderBuffer2D& aRenderBuffer2D);
 
-	Matrix4x4f myTransform;
-	ParticleEmitter* mySprite;
-};
+		Matrix4x4f myTransform;
+		ParticleEmitter* mySprite;
+	};
+
+	struct TextVertex
+	{
+		Vector4f Position;
+		Vector4f Color;
+		Vector2f TexCoord;
+
+		int EntityID;
+	};
+}
+

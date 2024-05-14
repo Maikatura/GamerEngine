@@ -3,7 +3,7 @@
 
 #include "Renderer.h"
 
-bool TextRenderer::OnAdd()
+bool GamerEngine::TextRenderer::OnAdd()
 {
 	D3D11_BUFFER_DESC bufferDescription;
 	ZeroMemory(&bufferDescription, sizeof(D3D11_BUFFER_DESC));
@@ -21,22 +21,22 @@ bool TextRenderer::OnAdd()
 	return true;
 }
 
-void TextRenderer::OnRelease()
+void GamerEngine::TextRenderer::OnRelease()
 {
 }
 
-void TextRenderer::OnUpdate()
+void GamerEngine::TextRenderer::OnUpdate()
 {
 }
 
-void TextRenderer::OnRenderSetup()
+void GamerEngine::TextRenderer::OnRenderSetup()
 {
 }
 
-void TextRenderer::OnRender()
+void GamerEngine::TextRenderer::OnRender()
 {
 	return;
-	auto& textVertex = Renderer::GetText();
+	auto& textVertex = GamerEngine::Renderer::GetText();
 
 	D3D11_MAPPED_SUBRESOURCE bufferData;
 
@@ -70,7 +70,7 @@ void TextRenderer::OnRender()
 
 }
 
-void TextRenderer::OnEnd()
+void GamerEngine::TextRenderer::OnEnd()
 {
 	
 }

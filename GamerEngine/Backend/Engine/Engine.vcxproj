@@ -110,7 +110,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Rendering\EditorCamera.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="src\AssetHandlers\DDSTextureLoader11.h" />
     <ClInclude Include="src\AssetHandlers\FontAssetHandler.h" />
@@ -148,6 +147,7 @@
     <ClInclude Include="src\Core\Buffer.h" />
     <ClInclude Include="src\Core\FileSystem.h" />
     <ClInclude Include="src\Core\Framework\DX11.h" />
+    <ClInclude Include="src\Core\Framework\GraphicsBackend.hpp" />
     <ClInclude Include="src\Core\KeyCodes.h" />
     <ClInclude Include="src\Core\Model\Entity.h" />
     <ClInclude Include="src\Core\Model\Material.h" />
@@ -160,9 +160,11 @@
     <ClInclude Include="src\Core\Model\Texture.h" />
     <ClInclude Include="src\Core\Model\Transform.h" />
     <ClInclude Include="src\Core\Model\Vertex.h" />
+    <ClInclude Include="src\Core\RenderModule.h" />
     <ClInclude Include="src\Core\Rendering\Buffers.h" />
     <ClInclude Include="src\Core\Rendering\DeferredRenderer.h" />
     <ClInclude Include="src\Core\Rendering\DepthStencil.h" />
+    <ClInclude Include="src\Core\Rendering\EditorCamera.h" />
     <ClInclude Include="src\Core\Rendering\ForwardRenderer.h" />
     <ClInclude Include="src\Core\Rendering\LineRenderer.h" />
     <ClInclude Include="src\Core\Rendering\PixelShader.h" />
@@ -174,8 +176,8 @@
     <ClInclude Include="src\Core\Rendering\RendererBase.h" />
     <ClInclude Include="src\Core\Rendering\SelectionData.h" />
     <ClInclude Include="src\Core\Rendering\ShadowRenderer.h" />
+    <ClInclude Include="src\Core\Rendering\TextRenderer.h" />
     <ClInclude Include="src\Core\Rendering\VertexShader.h" />
-    <ClInclude Include="src\Core\RenderModule.h" />
     <ClInclude Include="src\Debugger\ConsoleHelper.h" />
     <ClInclude Include="src\EngineSettingDefines.h" />
     <ClInclude Include="src\EngineSettings\Settings.h" />
@@ -244,8 +246,6 @@
     <ClInclude Include="src\VR\VRSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\Framework\GraphicsBackend.hpp" />
-    <ClCompile Include="src\Core\Rendering\EditorCamera.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="src\AssetHandlers\DDSTextureLoader11.cpp" />
     <ClCompile Include="src\AssetHandlers\FontAssetHandler.cpp" />
@@ -280,6 +280,7 @@
     <ClCompile Include="src\Core\Model\Texture.cpp" />
     <ClCompile Include="src\Core\Model\Transform.cpp" />
     <ClCompile Include="src\Core\Rendering\DeferredRenderer.cpp" />
+    <ClCompile Include="src\Core\Rendering\EditorCamera.cpp" />
     <ClCompile Include="src\Core\Rendering\ForwardRenderer.cpp" />
     <ClCompile Include="src\Core\Rendering\LineRenderer.cpp" />
     <ClCompile Include="src\Core\Rendering\PixelShader.cpp" />
@@ -291,7 +292,6 @@
     <ClCompile Include="src\Core\Rendering\RendererBase.cpp" />
     <ClCompile Include="src\Core\Rendering\ShadowRenderer.cpp" />
     <ClCompile Include="src\Core\Rendering\TextRenderer.cpp" />
-    <ClCompile Include="src\Core\Rendering\TextRenderer.h" />
     <ClCompile Include="src\Core\Rendering\VertexShader.cpp" />
     <ClCompile Include="src\Debugger\ConsoleHelper.cpp" />
     <ClCompile Include="src\Font\Font.cpp" />

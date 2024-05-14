@@ -62,9 +62,9 @@ bool ForwardRenderer::Initialize()
 	return true;
 }
 
-void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, VREye anEye)
+void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<GamerEngine::RenderBuffer>& aModelList, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, VREye anEye)
 {
-	if(!Renderer::GetCamera())
+	if(!GamerEngine::Renderer::GetCamera())
 	{
 		return;
 	}
@@ -84,8 +84,8 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 	myFrameBufferData.CamTranslation = aView.GetPosition();
 	myFrameBufferData.Projection = aProjection;
 	myFrameBufferData.RenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
-	myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
-	myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
+	myFrameBufferData.FarPlane = GamerEngine::Renderer::GetCamera()->myFarPlane;
+	myFrameBufferData.NearPlane = GamerEngine::Renderer::GetCamera()->myNearPlane;
 
 
 	Rect clientRect = DX11::Get().GetClientSize();
@@ -176,7 +176,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 	DX11::Get().GetContext()->PSSetConstantBuffers(3, 1, myLightBuffer.GetAddressOf());
 
 
-	for(const RenderBuffer& modelBuffer : aModelList)
+	for(const GamerEngine::RenderBuffer& modelBuffer : aModelList)
 	{
 		Ref<GamerEngine::Model> model = modelBuffer.myModel;
 
@@ -300,7 +300,7 @@ void ForwardRenderer::Render(Matrix4x4f aView, Matrix4x4f aProjection, const std
 
 }
 
-void ForwardRenderer::RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, std::vector<RenderBuffer2D>& aSpriteList,
+void ForwardRenderer::RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, std::vector<GamerEngine::RenderBuffer2D>& aSpriteList,
 	const Ref<DirectionalLight>& aDirectionalLight,
 	const Ref<EnvironmentLight>& anEnvironmentLight)
 {
@@ -330,7 +330,7 @@ void ForwardRenderer::RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, st
 	CommonUtilities::MergeSort(aSpriteList);
 
 
-	for(RenderBuffer2D rc : aSpriteList)
+	for(GamerEngine::RenderBuffer2D rc : aSpriteList)
 	{
 		ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 		result = DX11::Get().GetContext()->Map(myObjectBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);

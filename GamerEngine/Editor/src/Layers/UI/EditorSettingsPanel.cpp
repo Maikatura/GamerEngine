@@ -152,11 +152,11 @@ void EditorSettingsPanel::LoadConfig()
 
 	if (mySettings.myIsBlending)
 	{
-		Renderer::SetClearColor(mySettings.myCurrentBlendColor);
+		GamerEngine::Renderer::SetClearColor(mySettings.myCurrentBlendColor);
 	}
 	else
 	{
-		Renderer::SetClearColor(mySettings.myClearColor);
+		GamerEngine::Renderer::SetClearColor(mySettings.myClearColor);
 	}
 
 }
@@ -307,11 +307,11 @@ void EditorSettingsPanel::RenderSceneSettings()
 	if(mySettings.myIsBlending)
 	{
 		mySettings.myCurrentBlendColor = Vector4f::Blend(mySettings.myBlendColor1, mySettings.myBlendColor2, mySettings.myBlendValue);
-		Renderer::SetClearColor(mySettings.myCurrentBlendColor);
+		GamerEngine::Renderer::SetClearColor(mySettings.myCurrentBlendColor);
 	}
 	else
 	{
-		Renderer::SetClearColor(mySettings.myClearColor);
+		GamerEngine::Renderer::SetClearColor(mySettings.myClearColor);
 	}
 
 

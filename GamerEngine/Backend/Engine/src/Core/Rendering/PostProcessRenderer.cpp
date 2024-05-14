@@ -114,7 +114,8 @@ Ref<RenderTexture> PostProcessRenderer::CreateRenderTexture(const std::string& a
 
 void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection, VREye aEye)
 {
-	if(!Renderer::GetCamera())
+	auto camera = GamerEngine::Renderer::GetCamera();
+	if(!camera)
 	{
 		return;
 	}
@@ -206,13 +207,13 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			myFrameBufferData.RenderMode = 0;
 
 			myFrameBufferData.Resolution = Resolution;
-			myFrameBufferData.FarPlane = Renderer::GetCamera()->myFarPlane;
-			myFrameBufferData.NearPlane = Renderer::GetCamera()->myNearPlane;
+			myFrameBufferData.FarPlane = camera->myFarPlane;
+			myFrameBufferData.NearPlane = camera->myNearPlane;
 
 			myFrameBufferData.DeltaTime = 0;
 			myFrameBufferData.TotalTime = 0;
 
-			myFrustum = Renderer::GetCamera()->GetFrustum();
+			myFrustum = camera->GetFrustum();
 			myFrameBufferData.FrustrumCorners[0] = myFrustum.NearTopLeft;
 			myFrameBufferData.FrustrumCorners[1] = myFrustum.NearTopRight;
 			myFrameBufferData.FrustrumCorners[2] = myFrustum.NearBottomLeft;

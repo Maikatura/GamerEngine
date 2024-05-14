@@ -141,8 +141,8 @@ void DeferredRenderer::OnRender()
 
 	const VREye vrEye = VREye::None;
 
-	const Matrix4x4f projection = Renderer::GetCamera()->GetHMDMatrixProjectionEye(vrEye);
-	const Matrix4x4f view = Renderer::GetCamera()->GetCurrentViewProjectionMatrix(vrEye);
+	const Matrix4x4f projection = GamerEngine::Renderer::GetCamera()->GetHMDMatrixProjectionEye(vrEye);
+	const Matrix4x4f view = GamerEngine::Renderer::GetCamera()->GetCurrentViewProjectionMatrix(vrEye);
 
 	auto scene = SceneManager::Get().GetScene();
 
@@ -150,7 +150,7 @@ void DeferredRenderer::OnRender()
 
 	const Ref<DirectionalLight>& directionalLight = scene->GetDirLight();
 	const Ref<EnvironmentLight>& environmentLight = scene->GetEnvLight();
-	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
+	const std::vector< GamerEngine::RenderBuffer>& modelList = GamerEngine::Renderer::GetModels();
 	
 	const float deltaTime = Time::GetDeltaTime();
 
@@ -268,9 +268,9 @@ bool DeferredRenderer::Initialize()
 	return true;
 }
 
-void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye)
+void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProjection, const std::vector<GamerEngine::RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye)
 {
-	const auto* camera = Renderer::GetCamera();
+	const auto* camera = GamerEngine::Renderer::GetCamera();
 	if(!camera)
 	{
 		return;
@@ -319,7 +319,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 	DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
-	for(const RenderBuffer& modelBuffer : aModelList)
+	for(const GamerEngine::RenderBuffer& modelBuffer : aModelList)
 	{
 		Ref<GamerEngine::Model> model = modelBuffer.myModel;
 		if(model == nullptr)
@@ -430,7 +430,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 void DeferredRenderer::Render(Matrix4x4f aView, const Matrix4x4f& aProjection, const Ref<DirectionalLight>& aDirectionalLight,
 	const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, float aDeltaTime, float aTotalTime, VREye anEye)
 {
-	const auto* camera = Renderer::GetCamera();
+	const auto* camera = GamerEngine::Renderer::GetCamera();
 	if(!camera)
 	{
 		return;

@@ -48,7 +48,7 @@ void ShadowRenderer::OnRender()
 {
 	auto scene = SceneManager::Get().GetScene();
 	const std::vector<Light*> someLightList = scene->GetLights();
-	const std::vector<RenderBuffer>& modelList = Renderer::GetModels();
+	const std::vector< GamerEngine::RenderBuffer>& modelList = GamerEngine::Renderer::GetModels();
 
 	for (auto& light : someLightList)
 	{
@@ -108,7 +108,7 @@ bool ShadowRenderer::Initialize()
 	return true;
 }
 
-void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aModelList)
+void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::RenderBuffer>& aModelList)
 {
 	if(aModelList.empty())
 	{
@@ -191,7 +191,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<RenderBuffer>& aMod
 
 	
 
-	for(const RenderBuffer& modelBuffer : aModelList)
+	for(const GamerEngine::RenderBuffer& modelBuffer : aModelList)
 	{
 		Ref<GamerEngine::Model> model = modelBuffer.myModel;
 

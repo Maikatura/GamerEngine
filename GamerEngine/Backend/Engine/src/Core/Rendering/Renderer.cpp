@@ -8,7 +8,7 @@
 #include "Font/Font.h"
 #include "Font/MSDFData.h"
 
-void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, GamerEngine::TransformComponent& aTransform)
+void GamerEngine::Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, GamerEngine::TransformComponent& aTransform)
 {
 
 	if (!aModel.GetModel())
@@ -48,12 +48,12 @@ void Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, Game
 
 }
 
-void Renderer::RenderSprite(ParticleEmitter* aSprite, GamerEngine::TransformComponent& aTransfrom)
+void GamerEngine::Renderer::RenderSprite(ParticleEmitter* aSprite, GamerEngine::TransformComponent& aTransfrom)
 {
 	mySpritesToRender.push_back({ aTransfrom.GetWorldMatrix(), aSprite });
 }
 
-void Renderer::RenderLight(Light* aLight)
+void GamerEngine::Renderer::RenderLight(Light* aLight)
 {
 	if (!SceneManager::Get().GetScene())
 	{
@@ -63,7 +63,7 @@ void Renderer::RenderLight(Light* aLight)
 	SceneManager::Get().GetScene()->RenderLight(aLight);
 }
 
-void Renderer::RenderString(const std::string& aString, Ref<GamerEngine::Font> aFont, const Matrix4x4f& aTransform, const Vector4f& aColor)
+void GamerEngine::Renderer::RenderString(const std::string& aString, Ref<GamerEngine::Font> aFont, const Matrix4x4f& aTransform, const Vector4f& aColor)
 {
 	const auto& fontGeometry = aFont->GetMSDFData()->FontGeometry;
 	const auto& metrics = fontGeometry.getMetrics();
@@ -147,22 +147,22 @@ void Renderer::RenderString(const std::string& aString, Ref<GamerEngine::Font> a
 	myTextToRender.push_back(textVertex4);
 }
 
-void Renderer::SetRenderGame(bool aToggleToRenderGame)
+void GamerEngine::Renderer::SetRenderGame(bool aToggleToRenderGame)
 {
 	myRenderGame = aToggleToRenderGame;
 }
 
-void Renderer::SetClearColor(Vector4f aClearColor)
+void GamerEngine::Renderer::SetClearColor(Vector4f aClearColor)
 {
 	myClearColor = aClearColor;
 }
 
-const Vector4f Renderer::GetClearColor()
+const Vector4f GamerEngine::Renderer::GetClearColor()
 {
 	return myClearColor;
 }
 
-void Renderer::SwapBuffers()
+void GamerEngine::Renderer::SwapBuffers()
 {
 	std::swap(myUpdateModels, myRenderModels);
 	myUpdateModels.clear();

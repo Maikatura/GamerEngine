@@ -307,7 +307,7 @@ void GraphicsEngine::BeginFrame()
     //
     ResetStates();
 
-    Vector4f clearColor = Renderer::GetClearColor();
+    Vector4f clearColor = GamerEngine::Renderer::GetClearColor();
 
     const auto renderTarget = DX11::Get().GetRenderTargetView();
     DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView()->myDSV.Get());
@@ -390,7 +390,7 @@ void GraphicsEngine::OnFrameUpdate()
     //		{
     //			if (myRenderIsDone)
     //			{
-    				Renderer::SwapBuffers();
+    GamerEngine::Renderer::SwapBuffers();
     //				myRenderIsDone = false;
     //				break;
     //			}
@@ -418,7 +418,7 @@ void GraphicsEngine::RenderScene(const VREye anEye) const
         return;
     }
 
-    if (!Renderer::GetCamera())
+    if (!GamerEngine::Renderer::GetCamera())
     {
         return;
     }

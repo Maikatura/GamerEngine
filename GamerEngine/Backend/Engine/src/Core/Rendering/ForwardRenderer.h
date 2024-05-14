@@ -45,9 +45,9 @@ public:
 
 	bool Initialize();
 
-	void Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<RenderBuffer>& aModelList, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, VREye anEye);
+	void Render(Matrix4x4f aView, Matrix4x4f aProjection, const std::vector<GamerEngine::RenderBuffer>& aModelList, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, VREye anEye);
 
-	void RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, std::vector<RenderBuffer2D>& aSpriteList, const Ref<DirectionalLight>& aDirectionalLight, const std::
+	void RenderSprites(Matrix4x4f aView, Matrix4x4f aProjection, std::vector<GamerEngine::RenderBuffer2D>& aSpriteList, const Ref<DirectionalLight>& aDirectionalLight, const std::
 		shared_ptr<EnvironmentLight>& anEnvironmentLight);
 
 

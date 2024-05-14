@@ -1,31 +1,35 @@
 #pragma once
-#include "Renderer.h"
+#include <wrl/client.h>
+#include "RenderBuffer.h"
 #include "Core/RenderModule.h"
 
 
-struct TextVertexBufferData
+namespace GamerEngine
 {
-	TextVertex Vertex[4];
-};
+	struct TextVertexBufferData
+	{
+		TextVertex Vertex[4];
+	};
 
-class TextRenderer : public RenderModule
-{
-public:
-	bool OnAdd() override;
-	void OnRelease() override;
+	class TextRenderer : public RenderModule
+	{
+	public:
+		bool OnAdd() override;
+		void OnRelease() override;
 
-	void OnUpdate() override;
-	void OnRenderSetup() override;
-	void OnRender() override;
-	void OnEnd() override;
+		void OnUpdate() override;
+		void OnRenderSetup() override;
+		void OnRender() override;
+		void OnEnd() override;
 
 
 
-private:
-	TextVertexBufferData myTextBufferData{};
+	private:
+		TextVertexBufferData myTextBufferData{};
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> myTextBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> myTextBuffer;
+		Microsoft::WRL::ComPtr<ID3D11VertexShader> myTextVS;
+		Microsoft::WRL::ComPtr<ID3D11PixelShader> myTextPS;
+	};
 
-	ComPtr<ID3D11VertexShader> myTextVS;
-	ComPtr<ID3D11PixelShader> myTextPS;
-};
+}

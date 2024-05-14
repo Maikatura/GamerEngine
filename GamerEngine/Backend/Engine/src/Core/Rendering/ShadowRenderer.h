@@ -51,7 +51,7 @@ public:
 
 	bool Initialize();
 
-	void Render(Light* aLight, const std::vector<RenderBuffer>& aModelList);
+	void Render(Light* aLight, const std::vector<GamerEngine::RenderBuffer>& aModelList);
 	static void ClearResources();
 	static void ClearTarget();
 };

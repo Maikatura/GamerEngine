@@ -62,7 +62,7 @@ class DeferredRenderer : public RenderModule
 		void OnEnd() override;
 	
 		bool Initialize();
-		void GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProjection, const std::vector<RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye);
+		void GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProjection, const std::vector<GamerEngine::RenderBuffer>& aModelList, float aDeltaTime, float aTotalTime, VREye anEye);
 		void Render(Matrix4x4f aView, const Matrix4x4f& aProjection, const Ref<DirectionalLight>& aDirectionalLight, const Ref<EnvironmentLight>& anEnvironmentLight, const std::vector<Light*>& aLightList, float aDeltaTime, float aTotalTime, VREye anEye);
 		void ClearTarget();
 
