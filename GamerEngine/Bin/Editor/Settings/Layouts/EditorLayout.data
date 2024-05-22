@@ -1,6 +1,6 @@
 [Window][DockSpaceViewport_11111111]
 Pos=0,38
-Size=2560,1331
+Size=1904,1003
 Collapsed=0
 
 [Window][Debug##Default]
@@ -17,7 +17,7 @@ DockId=0x00000007,0
 
 [Window][Hierarchy]
 Pos=0,38
-Size=546,1331
+Size=546,1003
 Collapsed=0
 DockId=0x00000005,0
 
@@ -29,7 +29,7 @@ DockId=0x00000009,0
 
 [Window][Scene]
 Pos=548,38
-Size=1771,894
+Size=1115,566
 Collapsed=0
 DockId=0x00000007,0
 
@@ -96,9 +96,10 @@ Collapsed=0
 DockId=0x00000007,1
 
 [Window][Editor Settings]
-Pos=273,86
-Size=887,565
+Pos=0,38
+Size=546,1003
 Collapsed=0
+DockId=0x00000005,1
 
 [Window][Animator Editor (WIP)]
 Pos=1421,19
@@ -113,14 +114,14 @@ Collapsed=0
 DockId=0x0000000B,0
 
 [Window][File Explorer]
-Pos=548,934
-Size=1771,435
+Pos=548,606
+Size=1115,435
 Collapsed=0
 DockId=0x00000008,0
 
 [Window][Inspector]
-Pos=2321,38
-Size=239,1331
+Pos=1665,38
+Size=239,1003
 Collapsed=0
 DockId=0x0000000A,0
 
@@ -131,8 +132,8 @@ Collapsed=0
 DockId=0x0000000A,1
 
 [Window][Console Window]
-Pos=548,934
-Size=1771,435
+Pos=548,606
+Size=1115,435
 Collapsed=0
 DockId=0x00000008,1
 
@@ -165,7 +166,7 @@ Size=350,373
 Collapsed=0
 
 [Docking][Data]
-DockSpace             ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,61 Size=2560,1331 Split=X
+DockSpace             ID=0x8B93E3BD Window=0xA787BDB4 Pos=328,249 Size=1904,1003 Split=X
   DockNode            ID=0x0000000D Parent=0x8B93E3BD SizeRef=1786,1003 Split=X
     DockNode          ID=0x0000000B Parent=0x0000000D SizeRef=263,998 Selected=0x354383ED
     DockNode          ID=0x0000000C Parent=0x0000000D SizeRef=1655,998 Split=X

@@ -195,6 +195,7 @@ void EditorLayers::AddDefaultLayers()
 	AddLayer<HelpPanel>();
 	AddLayer<ProfilerLayer>(myShouldProfile);
 	AddLayer<TextureBrowserLayer>();
+	AddLayer<EditorSettingsPanel>();
 }
 
 void EditorLayers::OnUpdate()

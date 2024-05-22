@@ -19,3 +19,5 @@ Windows:
     IsOpen: false
   - Name: Texture Browser
     IsOpen: false
+  - Name: Editor Settings
+    IsOpen: false

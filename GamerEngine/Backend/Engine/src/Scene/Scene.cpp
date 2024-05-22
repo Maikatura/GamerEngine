@@ -38,7 +38,7 @@ bool GamerEngine::Scene::Initialize()
         myWorld.app().enable_rest().run();
     });*/
 
-   
+    
 
     return true;
 }
@@ -269,7 +269,7 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
                     if (camera.Primary)
                     {
                         camera.BuildTransform(&transform);
-                        Renderer::SetCamera(&camera, camera.ViewProjection, camera.Projection);
+                        Renderer::SetCamera(&camera, transform, camera.ViewProjection, camera.Projection);
                         break;
                     }
                 }

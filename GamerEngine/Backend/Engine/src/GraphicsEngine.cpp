@@ -20,6 +20,9 @@
 #include "Scripting/ScriptEngine.h"
 
 
+
+
+
 GraphicsEngine* GraphicsEngine::Get()
 {
     return myInstance;
@@ -51,6 +54,8 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
     {
         myUpdateCondition = true;
     }
+
+    myIsRunning = !aBoolToUseEditor;
 
     // Initialize our window:
     WNDCLASS windowClass = {};
@@ -593,7 +598,10 @@ void GraphicsEngine::EndFrame() const
 
     if (SceneManager::Get().GetStatus() == GamerEngine::SceneStatus::NeedSwap)
     {
+        
         SceneManager::Get().SwapScene();
+
+
     }
 }
 

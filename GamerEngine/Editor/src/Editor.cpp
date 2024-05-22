@@ -78,15 +78,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		editorName,
 	true);
 
-	graphicsEngine.SetEngineRunning(false);
-
 	myLayers.Init();
-	EditorSettingsPanel::LoadConfig();
 	LineRenderer::Get().Init();
 	Physics::Get().Init();
-	
 
 	SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
+
 	
 	while(bShouldRun)
 	{

@@ -26,6 +26,28 @@ class Scene;
 class ModelAssetHandler;
 class DropManager;
 
+
+struct EngineSetting
+{
+	Vector4f myClearColor;
+
+	Vector4f myBlendColor1;
+	Vector4f myBlendColor2;
+
+	std::string PresetPath1;
+	std::string PresetPath2;
+
+	Vector4f myCurrentBlendColor;
+
+	float myBlendValue = 0.0f;
+
+	bool myIsBlending = false;
+	bool myUseConsole = false;
+
+	Vector3f CameraPos;
+	Vector3f CameraRot;
+};
+
 class GraphicsEngine
 {
 	SIZE myWindowSize{0,0};
@@ -62,6 +84,9 @@ class GraphicsEngine
 
 
 	std::vector<Ref<RenderModule>> myRenderModules;
+
+	EngineSetting myEngineSettings;
+
 	
 public:
 
@@ -115,6 +140,13 @@ public:
 
 	Vector2ui GetEditorWindowSize() const;
 	void SetEditorWindowSize(Vector2ui aEditorWindowSize);
+
+	EngineSetting& GetEngineSettings()
+	{
+		return myEngineSettings;
+	}
+
+
 
 	[[nodiscard]] HWND FORCEINLINE GetWindowHandle() const { return myWindowHandle; }
 	[[nodiscard]] SIZE FORCEINLINE GetWindowSize() const { return myWindowSize; }

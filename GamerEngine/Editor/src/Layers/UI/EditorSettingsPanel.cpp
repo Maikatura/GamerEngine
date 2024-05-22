@@ -17,7 +17,13 @@ ImFont* H1 = NULL;
 ImFont* H2 = NULL;
 ImFont* H3 = NULL;
 
+#ifdef UNICODE
+#undef GetObject
+#endif
+
 ImGui::MarkdownConfig mdConfig;
+
+
 
 EditorSettingsPanel::EditorSettingsPanel() : Layer("Editor Settings", false, true, "Info")
 {
@@ -26,17 +32,23 @@ EditorSettingsPanel::EditorSettingsPanel() : Layer("Editor Settings", false, tru
 
 void EditorSettingsPanel::OnAttach()
 {
+	LoadConfig();
+
+	
+
 	Layer::OnAttach();
 }
 
 void EditorSettingsPanel::OnImGuiRender()
 {
+
+	
+
 	if(!myIsOpen)
 	{
 		return;
 	}
-
-
+	
 	BeginMenu();
 	
 
@@ -66,6 +78,23 @@ void EditorSettingsPanel::OnImGuiRender()
 
 	EndMenu();
 
+}
+
+void EditorSettingsPanel::OnUpdate()
+{
+
+	
+
+
+
+	Layer::OnUpdate();
+}
+
+bool EditorSettingsPanel::OnDetach()
+{
+	SaveConfig();
+	
+	return Layer::OnDetach();
 }
 
 void EditorSettingsPanel::LoadConfig()
@@ -131,33 +160,43 @@ void EditorSettingsPanel::LoadConfig()
 
 #pragma endregion
 
+
+
+	auto& settings = GraphicsEngine::Get()->GetEngineSettings();
+
+
 	const std::string path = myConfigPath + "EditorConfig.data";
-	auto document = JsonReader::ReadJson(path.c_str());
 
-	mySettings.myClearColor.x = document["x"].GetFloat();
-	mySettings.myClearColor.y = document["y"].GetFloat();
-	mySettings.myClearColor.z = document["z"].GetFloat();
-	mySettings.myClearColor.w = document["w"].GetFloat();
+	if (!std::filesystem::exists(path))
+	{
+		SaveConfig();
+	}
+	rapidjson::Document document = JsonReader::ReadJson(path.c_str());
+	
+	// mySettings.myBlendValue = document["BlendValue"].GetFloat();
+	// LoadVector4File(document["PresetPath1"].GetString(), mySettings.myBlendColor1);
+	// LoadVector4File(document["PresetPath2"].GetString(), mySettings.myBlendColor2);
 
-	mySettings.myBlendValue = document["BlendValue"].GetFloat();
-	LoadPreset(document["PresetPath1"].GetString(), mySettings.myBlendColor1);
-	LoadPreset(document["PresetPath2"].GetString(), mySettings.myBlendColor2);
+	settings.CameraPos = LoadVector3<float>(document,"CameraPosition");
+	settings.CameraRot = LoadVector3<float>(document, "CameraRotation");
 
-	mySettings.myIsBlending = document["IsBlending"].GetBool();
+
+	settings.myIsBlending = document["IsBlending"].GetBool();
 
 	if(document.HasMember("DebugConsole"))
 	{
-		mySettings.myUseConsole = document["DebugConsole"].GetBool();
+		settings.myUseConsole = document["DebugConsole"].GetBool();
 	}
 
-	if (mySettings.myIsBlending)
+	if (settings.myIsBlending)
 	{
-		GamerEngine::Renderer::SetClearColor(mySettings.myCurrentBlendColor);
+		GamerEngine::Renderer::SetClearColor(settings.myCurrentBlendColor);
 	}
 	else
 	{
-		GamerEngine::Renderer::SetClearColor(mySettings.myClearColor);
+		GamerEngine::Renderer::SetClearColor(settings.myClearColor);
 	}
+
 
 }
 
@@ -165,57 +204,55 @@ void EditorSettingsPanel::SaveConfig()
 {
 	std::ofstream stream(myConfigPath + "EditorConfig.data");
 	rapidjson::OStreamWrapper osw(stream);
-	rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+	rapidjson::Writer writer(osw);
+
+
 
 	writer.StartObject();
 
-	std::string x("x");
-	writer.String(x.c_str(), static_cast<rapidjson::SizeType>(x.length()));
-	writer.Double(mySettings.myClearColor.x);
-
-	std::string y("y");
-	writer.String(y.c_str(), static_cast<rapidjson::SizeType>(y.length()));
-	writer.Double(mySettings.myClearColor.y);
-
-	std::string z("z");
-	writer.String(z.c_str(), static_cast<rapidjson::SizeType>(z.length()));
-	writer.Double(mySettings.myClearColor.z);
-
-	std::string w("w");
-	writer.String(w.c_str(), static_cast<rapidjson::SizeType>(w.length()));
-	writer.Double(mySettings.myClearColor.w);
+	auto& settings = GraphicsEngine::Get()->GetEngineSettings();
+	
 
 	std::string useConsole("DebugConsole");
 	writer.String(useConsole.c_str(), static_cast<rapidjson::SizeType>(useConsole.length()));
-	writer.Bool(mySettings.myUseConsole);
+	writer.Bool(settings.myUseConsole);
 
 
 	std::string isBlending("IsBlending");
 	writer.String(isBlending.c_str(), static_cast<rapidjson::SizeType>(isBlending.length()));
-	writer.Bool(mySettings.myIsBlending);
+	writer.Bool(settings.myIsBlending);
 
 	std::string blendValue("BlendValue");
 	writer.String(blendValue.c_str(), static_cast<rapidjson::SizeType>(blendValue.length()));
-	writer.Double(mySettings.myBlendValue);
+	writer.Double(settings.myBlendValue);
 
-	if(mySettings.PresetPath1.empty())
+	auto transform = GamerEngine::Renderer::GetCameraTransform();
+	if (transform)
 	{
-		mySettings.PresetPath1 = "FallbackName1";
+		WriteVector3(writer, "CameraPosition", transform->GetPosition());
+		WriteVector3(writer, "CameraRotation", transform->GetRotation());
+	}
+
+
+	
+	if(settings.PresetPath1.empty())
+	{
+		settings.PresetPath1 = "FallbackName1";
 	}
 
 	std::string pathPres1("PresetPath1");
 	writer.String(pathPres1.c_str(), static_cast<rapidjson::SizeType>(pathPres1.length()));
-	std::string filePath1 = myConfigPath + "Presets\\" + mySettings.PresetPath1 + ".preset";
+	std::string filePath1 = myConfigPath + "Presets\\" + settings.PresetPath1 + ".preset";
 	writer.String(filePath1.c_str(), static_cast<rapidjson::SizeType>(filePath1.length()));
 
-	if (mySettings.PresetPath2.empty())
+	if (settings.PresetPath2.empty())
 	{
-		mySettings.PresetPath2 = "FallbackName2";
+		settings.PresetPath2 = "FallbackName2";
 	}
 
 	std::string pathPres2("PresetPath2");
 	writer.String(pathPres2.c_str(), static_cast<rapidjson::SizeType>(pathPres2.length()));
-	std::string filePath2 = myConfigPath + "Presets\\" + mySettings.PresetPath2 + ".preset";
+	std::string filePath2 = myConfigPath + "Presets\\" + settings.PresetPath2 + ".preset";
 	writer.String(filePath2.c_str(), static_cast<rapidjson::SizeType>(filePath2.length()));
 
 	writer.EndObject();
@@ -223,8 +260,9 @@ void EditorSettingsPanel::SaveConfig()
 	stream.close();
 }
 
-void EditorSettingsPanel::SavePresetFile(const std::string& aPath, Vector4f aColor)
+void EditorSettingsPanel::SaveVector4File(const std::string& aPath, Vector4f aColor)
 {
+
 	std::ofstream stream(myConfigPath + "Presets\\" + aPath + ".preset");
 	rapidjson::OStreamWrapper osw(stream);
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
@@ -253,7 +291,34 @@ void EditorSettingsPanel::SavePresetFile(const std::string& aPath, Vector4f aCol
 	stream.close();
 }
 
-void EditorSettingsPanel::LoadPreset(const std::string& aPath, Vector4f& aColor)
+void EditorSettingsPanel::SaveVector3File(const std::string& aPath, Vector3f aColor)
+{
+	std::ofstream stream(myConfigPath + "Presets\\" + aPath + ".preset");
+	rapidjson::OStreamWrapper osw(stream);
+	rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+
+	writer.StartObject();
+
+	std::string x("x");
+	writer.String(x.c_str(), static_cast<rapidjson::SizeType>(x.length()));
+	writer.Double(aColor.x);
+
+	std::string y("y");
+	writer.String(y.c_str(), static_cast<rapidjson::SizeType>(y.length()));
+	writer.Double(aColor.y);
+
+	std::string z("z");
+	writer.String(z.c_str(), static_cast<rapidjson::SizeType>(z.length()));
+	writer.Double(aColor.z);
+
+
+
+	writer.EndObject();
+
+	stream.close();
+}
+
+void EditorSettingsPanel::LoadVector4File(const std::string& aPath, Vector4f& aColor)
 {
 	std::string path = aPath;
 	auto document = JsonReader::ReadJson(path.c_str());
@@ -263,6 +328,83 @@ void EditorSettingsPanel::LoadPreset(const std::string& aPath, Vector4f& aColor)
 	aColor.z = document["z"].GetFloat();
 	aColor.w = document["w"].GetFloat();
 }
+
+void EditorSettingsPanel::LoadVector3File(const std::string& aPath, Vector3f& aColor)
+{
+	std::string path = aPath;
+	auto document = JsonReader::ReadJson(path.c_str());
+	
+	aColor.x = document["x"].GetFloat();
+	aColor.y = document["y"].GetFloat();
+	aColor.z = document["z"].GetFloat();
+}
+
+void EditorSettingsPanel::WriteVector4(rapidjson::Writer<rapidjson::OStreamWrapper>& aWriter,const std::string& aName, Vector4f aVector4)
+{
+	aWriter.Key(aName.c_str());
+	aWriter.StartObject();
+	aWriter.Key("x");
+	aWriter.Double(aVector4.x);
+	aWriter.Key("y");
+	aWriter.Double(aVector4.y);
+	aWriter.Key("z");
+	aWriter.Double(aVector4.z);
+	aWriter.Key("w");
+	aWriter.Double(aVector4.w);
+	aWriter.EndObject();
+}
+
+void EditorSettingsPanel::WriteVector3(rapidjson::Writer<rapidjson::OStreamWrapper>& aWriter,const std::string& aName, Vector3f aVector3)
+{
+	aWriter.Key(aName.c_str());
+	aWriter.StartObject();
+	aWriter.Key("x");
+	aWriter.Double(aVector3.x);
+	aWriter.Key("y");
+	aWriter.Double(aVector3.y);
+	aWriter.Key("z");
+	aWriter.Double(aVector3.z);
+	aWriter.EndObject();
+}
+template<typename T>
+Vector4<T> EditorSettingsPanel::LoadVector4(rapidjson::Document& aDocument,const std::string& aName)
+{
+	if (!aDocument.HasMember(aName.c_str()))
+	{
+		return Vector4<T>();
+	}
+
+	auto document = aDocument[aName.c_str()].GetObject();
+	
+	Vector4<T> vector4;
+	
+	vector4.x = document["x"].GetFloat();
+	vector4.y = document["y"].GetFloat();
+	vector4.z = document["z"].GetFloat();
+	vector4.w = document["w"].GetFloat();
+
+	return vector4;
+}
+
+template<typename T>
+Vector3<T> EditorSettingsPanel::LoadVector3(rapidjson::Document& aDocument,const std::string& aName)
+{
+	if (!aDocument.HasMember(aName.c_str()))
+	{
+		return Vector3<T>();
+	}
+
+	Vector3<T> vector3;
+
+	auto document = aDocument[aName.c_str()].GetObject();
+	
+	vector3.x = document["x"].Get<T>();
+	vector3.y = document["y"].Get<T>();
+	vector3.z = document["z"].Get<T>();
+
+	return vector3;
+}
+
 
 void EditorSettingsPanel::RenderEditorSettings()
 {
@@ -286,43 +428,47 @@ void EditorSettingsPanel::RenderSceneSettings()
 {
 	ImGui::SeparateWithSpacing();
 
-	ImGui::ColorEdit4("Clear Color1", &mySettings.myClearColor.x);
+
+	auto& settings = GraphicsEngine::Get()->GetEngineSettings();
+
+
+	ImGui::ColorEdit4("Clear Color1", &settings.myClearColor.x);
 	ImGui::NewLine();
 
-	ImGui::InputText("File Name 1", &mySettings.PresetPath1);
+	ImGui::InputText("File Name 1", &settings.PresetPath1);
 	if(ImGui::Button("Load If Preset 1 Exist"))
 	{
-		std::string pathPres = myConfigPath + "Presets\\" + mySettings.PresetPath1 + ".preset";
-		LoadPreset(pathPres, mySettings.myBlendColor1);
+		std::string pathPres = myConfigPath + "Presets\\" + settings.PresetPath1 + ".preset";
+		LoadVector4File(pathPres, settings.myBlendColor1);
 	}
-	ImGui::ColorEdit4("Clear Color2", &mySettings.myBlendColor1.x);
-	ImGui::InputText("File Name 2", &mySettings.PresetPath2);
-	ImGui::ColorEdit4("Clear Color3", &mySettings.myBlendColor2.x);
+	ImGui::ColorEdit4("Clear Color2", &settings.myBlendColor1.x);
+	ImGui::InputText("File Name 2", &settings.PresetPath2);
+	ImGui::ColorEdit4("Clear Color3", &settings.myBlendColor2.x);
 	if(ImGui::Button("Load If Preset 2 Exist"))
 	{
-		std::string pathPres = myConfigPath + "Presets\\" + mySettings.PresetPath2 + ".preset";
-		LoadPreset(pathPres, mySettings.myBlendColor2);
+		std::string pathPres = myConfigPath + "Presets\\" + settings.PresetPath2 + ".preset";
+		LoadVector4File(pathPres, settings.myBlendColor2);
 	}
 
-	if(mySettings.myIsBlending)
+	if(settings.myIsBlending)
 	{
-		mySettings.myCurrentBlendColor = Vector4f::Blend(mySettings.myBlendColor1, mySettings.myBlendColor2, mySettings.myBlendValue);
-		GamerEngine::Renderer::SetClearColor(mySettings.myCurrentBlendColor);
+		settings.myCurrentBlendColor = Vector4f::Blend(settings.myBlendColor1, settings.myBlendColor2, settings.myBlendValue);
+		GamerEngine::Renderer::SetClearColor(settings.myCurrentBlendColor);
 	}
 	else
 	{
-		GamerEngine::Renderer::SetClearColor(mySettings.myClearColor);
+		GamerEngine::Renderer::SetClearColor(settings.myClearColor);
 	}
 
 
 
 
-	ImGui::Checkbox("Blend", &mySettings.myIsBlending);
+	ImGui::Checkbox("Blend", &settings.myIsBlending);
 
 
-	ImGui::SliderFloat("Blend Value", &mySettings.myBlendValue, 0.0f, 1.0f);
+	ImGui::SliderFloat("Blend Value", &settings.myBlendValue, 0.0f, 1.0f);
 
-	Vector4f value = mySettings.myCurrentBlendColor;
+	Vector4f value = settings.myCurrentBlendColor;
 
 	ImGui::ColorButton("Blend Color", ImVec4(value.x, value.y, value.z, value.w), 0, { 64, 64 });
 
@@ -336,8 +482,8 @@ void EditorSettingsPanel::RenderSceneSettings()
 	if(ImGui::ButtonCenter("Save", { 128, 32 }))
 	{
 		SaveConfig();
-		SavePresetFile(mySettings.PresetPath1, mySettings.myBlendColor1);
-		SavePresetFile(mySettings.PresetPath2, mySettings.myBlendColor2);
+		SaveVector4File(settings.PresetPath1, settings.myBlendColor1);
+		SaveVector4File(settings.PresetPath2, settings.myBlendColor2);
 	}
 }
 

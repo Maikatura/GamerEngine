@@ -14,6 +14,8 @@ namespace GamerEngine
 
 class EditorCamera
 {
+	bool myFirstInit = false;
+
 public:
 	GamerEngine::CameraComponent* myCamera;
 	GamerEngine::TransformComponent* myTransform;

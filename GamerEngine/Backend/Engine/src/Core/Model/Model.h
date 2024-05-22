@@ -8,10 +8,7 @@
 #include "Core/Rendering/PixelShader.h"
 #include "Core/Rendering/VertexShader.h"
 
-namespace GamerEngine
-{
-	class TransformComponent;
-}
+class TransformComponent;
 
 
 namespace GamerEngine

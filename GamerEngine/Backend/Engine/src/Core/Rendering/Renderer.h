@@ -21,12 +21,30 @@ namespace GamerEngine
 	{
 	public:
 
-		static void SetCamera(GamerEngine::CameraComponent* aCamera, const Matrix4x4f& aViewProjection, const Matrix4x4f& aProjection)
+		static void SetCamera(GamerEngine::CameraComponent* aCamera, GamerEngine::TransformComponent& aTransform, const Matrix4x4f& aViewProjection, const Matrix4x4f& aProjection)
 		{
 			myCamera = aCamera;
+			myCameraTransform = &aTransform;
 			myViewProjection = aViewProjection;
 			myProjection = aProjection;
 		}
+
+		static GamerEngine::CameraComponent* GetCamera()
+		{
+			if (myCamera)
+			{
+				return myCamera;
+			}
+
+			return nullptr;
+		}
+
+		static GamerEngine::TransformComponent* GetCameraTransform()
+		{
+			return myCameraTransform;
+		}
+
+
 
 		static void Render(GamerEngine::Entity* aEntity, ModelComponent& aModel, GamerEngine::TransformComponent& aTransfrom);
 		static void RenderSprite(ParticleEmitter* aSprite, GamerEngine::TransformComponent& aTransfrom);
@@ -51,15 +69,6 @@ namespace GamerEngine
 
 		static CommonUtilities::Matrix4x4<float>& GetProjectionMatrix() { return myProjection; }
 		static CommonUtilities::Matrix4x4<float>& GetViewMatrix() { return myViewProjection; }
-		static GamerEngine::CameraComponent* GetCamera()
-		{
-			if (myCamera)
-			{
-				return myCamera;
-			}
-
-			return nullptr;
-		}
 
 
 		static bool IsVisable(GamerEngine::TransformComponent& aTransform)
@@ -88,6 +97,7 @@ namespace GamerEngine
 		inline static Vector4f myClearColor;
 
 		inline static bool myRenderGame = false;
+		inline static TransformComponent* myCameraTransform;
 		inline static GamerEngine::CameraComponent* myCamera;
 
 

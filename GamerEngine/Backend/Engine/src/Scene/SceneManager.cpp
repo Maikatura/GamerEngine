@@ -217,6 +217,8 @@ void SceneManager::SwapScene()
 		
 		myScene = std::move(mySwapScene);
 
+		myScene->Initialize();
+
 		if (GraphicsEngine::Get()) 
 		{
 			GraphicsEngine::Get()->SetPauseState(false);
@@ -225,6 +227,7 @@ void SceneManager::SwapScene()
 
 		if (myScene)
 		{
+
 			myScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
 			myScene->SceneReady(true);
 			myScene->OnRuntimeStart();

@@ -9,6 +9,9 @@ EditorCamera::EditorCamera()
 	myCamera = new GamerEngine::CameraComponent();
 	myTransform = new GamerEngine::TransformComponent();
 	myCameraController = new CameraController();
+
+
+	
 }
 
 EditorCamera::~EditorCamera()
@@ -20,7 +23,17 @@ EditorCamera::~EditorCamera()
 
 void EditorCamera::Update()
 {
+	if (!myFirstInit)
+	{
+		myFirstInit = true;
+
+		auto& settings = GraphicsEngine::Get()->GetEngineSettings();
+
+		myTransform->SetPosition(settings.CameraPos);
+		myTransform->SetRotation(settings.CameraRot);
+	}
+
 	myCamera->BuildTransform(myTransform);
-	GamerEngine::Renderer::SetCamera(myCamera, myCamera->GetCurrentViewMatrix(VREye::None), myCamera->GetCurrentViewProjectionMatrix(VREye::None));
+	GamerEngine::Renderer::SetCamera(myCamera, *myTransform, myCamera->GetCurrentViewMatrix(VREye::None), myCamera->GetCurrentViewProjectionMatrix(VREye::None));
 	myCameraController->OnUpdate(myCamera, myTransform, Time::GetDeltaTime());
 }
