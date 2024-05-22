@@ -27,6 +27,11 @@ namespace GamerEngine
         internal extern static void TransformComponent_SetRotation(ulong entityID, ref Vector3 translation);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_GetScale(ulong entityID, out Vector3 translation);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_SetScale(ulong entityID, ref Vector3 translation);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void TransformComponent_GetForward(ulong entityID, out Vector3 translation);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

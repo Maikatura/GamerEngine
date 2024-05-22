@@ -40,6 +40,18 @@ namespace GamerEngine
             }
         }
 
+        public Vector3 Scale
+        {
+            get
+            {
+                InternalCalls.TransformComponent_GetScale(Entity.ID, out Vector3 translation);
+                return translation;
+            }
+            set
+            {
+                InternalCalls.TransformComponent_SetScale(Entity.ID, ref value);
+            }
+        }
 
         public Vector3 GetForward()
         {

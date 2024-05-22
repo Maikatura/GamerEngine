@@ -136,6 +136,26 @@ namespace GamerEngine {
 		entity.GetComponent<GamerEngine::TransformComponent>().SetRotation(*translation);
 	}
 
+	static void TransformComponent_GetScale(UUID entityID, Vector3f* outTranslation)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		GE_ASSERT(scene);
+		Entity entity = scene->GetEntityByUUID(entityID);
+		GE_ASSERT(entity);
+
+		*outTranslation = entity.GetComponent<GamerEngine::TransformComponent>().GetScale();
+	}
+
+	static void TransformComponent_SetScale(UUID entityID, Vector3f* translation)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		GE_ASSERT(scene);
+		Entity entity = scene->GetEntityByUUID(entityID);
+		GE_ASSERT(entity);
+
+		entity.GetComponent<GamerEngine::TransformComponent>().SetScale(*translation);
+	}
+
 	static void TransformComponent_GetForward(UUID entityID, Vector3f* outTranslation)
 	{
 		Scene* scene = ScriptEngine::GetSceneContext();
@@ -227,17 +247,18 @@ namespace GamerEngine {
 		GE_ADD_INTERNAL_CALL(Entity_HasComponent);
 		GE_ADD_INTERNAL_CALL(Entity_FindEntityByName);
 
-		GE_ADD_INTERNAL_CALL(TransformComponent_GetTranslation);
 
 
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetForward);
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetRight);
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetUp);
 
-
+		GE_ADD_INTERNAL_CALL(TransformComponent_GetTranslation);
 		GE_ADD_INTERNAL_CALL(TransformComponent_SetTranslation);
 		GE_ADD_INTERNAL_CALL(TransformComponent_SetRotation);
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetRotation);
+		GE_ADD_INTERNAL_CALL(TransformComponent_GetScale);
+		GE_ADD_INTERNAL_CALL(TransformComponent_SetScale);
 		
 		GE_ADD_INTERNAL_CALL(Input_IsKeyDown);
 		GE_ADD_INTERNAL_CALL(Input_IsKeyUp);
