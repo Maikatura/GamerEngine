@@ -149,8 +149,8 @@ void GamerEngine::CameraComponent::BuildTransform(GamerEngine::TransformComponen
 
 #if ENABLE_VR
 	CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
-	ViewProjection = ComposeFromTRS(aTransform->GetPosition(), rotation, aTransform->GetScale());
-	ViewFlatProjection = ComposeFromTRS(aTransform->GetPosition(), aTransform->GetRotation(), aTransform->GetScale());
+	ViewProjection = ComposeFromTRS(aTransform->GetWorldTransform().Translation, rotation, aTransform->GetScale());
+	ViewFlatProjection = ComposeFromTRS(aTransform->GetWorldTransform().Translation, aTransform->GetRotation(), aTransform->GetScale());
 #else
 	ViewProjection = aTransform->GetWorldMatrix();
 	ViewFlatProjection = aTransform->GetWorldMatrix();
