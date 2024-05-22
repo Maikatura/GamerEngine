@@ -6,5 +6,10 @@
         {
             return InternalCalls.Input_IsKeyDown(keycode);
         }
+
+        public static bool IsKeyPressed(KeyCode keycode)
+        {
+            return InternalCalls.Input_IsKeyPressed(keycode);
+        }
     }
 }

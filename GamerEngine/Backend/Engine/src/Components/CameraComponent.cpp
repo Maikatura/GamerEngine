@@ -141,7 +141,7 @@ void GamerEngine::CameraComponent::SetHasMoved(bool aMoveValue)
 
 void GamerEngine::CameraComponent::BuildTransform(GamerEngine::TransformComponent* aTransform)
 {
-	myPosition = aTransform->GetPosition();
+	myPosition = aTransform->GetWorldTransform().Translation;
 	
 
 	myTransform = aTransform->AsGraphicsTransform();
@@ -157,7 +157,7 @@ void GamerEngine::CameraComponent::BuildTransform(GamerEngine::TransformComponen
 #endif
 	
 
-	myFrustum = CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetPosition(), aTransform->GetRotation(), {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
+	myFrustum = CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetWorldTransform().Translation, aTransform->GetWorldTransform().Rotation, {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
 
 	//LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.FarBottomLeft, { 1,0,0,1 }, 1.0f);
 	//LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.NearBottomRight, { 1,0,0,1 }, 1.0f);

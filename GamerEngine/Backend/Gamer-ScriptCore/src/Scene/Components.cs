@@ -26,6 +26,38 @@ namespace GamerEngine
                 InternalCalls.TransformComponent_SetTranslation(Entity.ID, ref value);
             }
         }
+
+        public Vector3 Rotation
+        {
+            get
+            {
+                InternalCalls.TransformComponent_GetRotation(Entity.ID, out Vector3 translation);
+                return translation;
+            }
+            set
+            {
+                InternalCalls.TransformComponent_SetRotation(Entity.ID, ref value);
+            }
+        }
+
+
+        public Vector3 GetForward()
+        {
+            InternalCalls.TransformComponent_GetForward(Entity.ID, out Vector3 translation);
+            return translation;
+        }
+
+        public Vector3 GetRight()
+        {
+            InternalCalls.TransformComponent_GetRight(Entity.ID, out Vector3 translation);
+            return translation;
+        }
+
+        public Vector3 GetUp()
+        {
+            InternalCalls.TransformComponent_GetUp(Entity.ID, out Vector3 translation);
+            return translation;
+        }
     }
 
 }

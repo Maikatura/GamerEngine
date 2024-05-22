@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace GamerEngine
 {
@@ -19,11 +20,32 @@ namespace GamerEngine
 		internal extern static void TransformComponent_GetTranslation(ulong entityID, out Vector3 translation);
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		internal extern static void TransformComponent_SetTranslation(ulong entityID, ref Vector3 translation);
-		#endregion
 
-		#region Input
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_GetRotation(ulong entityID, out Vector3 translation);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_SetRotation(ulong entityID, ref Vector3 translation);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_GetForward(ulong entityID, out Vector3 translation);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_GetRight(ulong entityID, out Vector3 translation);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_GetUp(ulong entityID, out Vector3 translation);
+
+ 
+        #endregion
+
+        #region Input
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
 		internal extern static bool Input_IsKeyDown(KeyCode keycode);
-		#endregion
-	}
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Input_IsKeyUp(KeyCode keycode);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Input_IsKeyPressed(KeyCode keycode);
+        #endregion
+    }
 }

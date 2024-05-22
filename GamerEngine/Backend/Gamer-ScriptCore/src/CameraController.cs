@@ -20,7 +20,7 @@ namespace src
 
         void OnUpdate(float ts)
         {
-            //Console.WriteLine($"Player.OnUpdate - {ts}");
+            Console.WriteLine($"Player.OnUpdate - {ts}");
 
             if (HasComponent<TransformComponent>())
             {
@@ -28,13 +28,16 @@ namespace src
             }
 
 
-            Vector3 movement = GetComponent<TransformComponent>().Translation;
-            Console.WriteLine($"Player.Movement - X:{movement.X} Y:{movement.Y} z:{movement.Z}");
+            Vector3 movement = new Vector3(); //= GetComponent<TransformComponent>().Translation;
+            //Console.WriteLine($"Player.Movement - X:{movement.X} Y:{movement.Y} z:{movement.Z}");
 
 
             if (Input.IsKeyDown(KeyCode.W))
             {
-                movement.Z += ts;
+                movement.Z += 1.0f * ts;
+
+                Console.WriteLine(movement.Z);
+
                 Console.WriteLine("Pressing");
 
 

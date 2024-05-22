@@ -21,25 +21,42 @@ namespace GamerEngine
         {
             //Console.WriteLine($"Player.OnUpdate - {ts}");
 
-            if (HasComponent<TransformComponent>())
-            {
-                Console.WriteLine("Has it!");
-            }
+         
+
+            float movement = 0.0f;
+            Vector3 moveRotation = new Vector3();
 
 
-            Vector3 movement = GetComponent<TransformComponent>().Translation;
-            Console.WriteLine($"Player.Movement - X:{movement.X} Y:{movement.Y} z:{movement.Z}");
-
+            float rotationSpeed = 100.0f;
+            float moveSpeed = 100.0f;
 
             if (Input.IsKeyDown(KeyCode.W))
             {
-                movement.Z += ts;
-                Console.WriteLine("Pressing");
-
+                movement += ts * moveSpeed;
                
+   
             }
 
-            GetComponent<TransformComponent>().Translation += movement;
+            if (Input.IsKeyDown(KeyCode.S))
+            {
+                movement -= ts * moveSpeed;
+            }
+
+            if (Input.IsKeyDown(KeyCode.D))
+            {
+                moveRotation.Y += ts * rotationSpeed;
+            }
+
+            if (Input.IsKeyDown(KeyCode.A))
+            {
+                moveRotation.Y -= ts * rotationSpeed;
+            }
+
+
+            Console.WriteLine($"Player.Movement - X:{myTransformComponent.Translation.X} Y:{myTransformComponent.Translation.Y} z:{myTransformComponent.Translation.Z}");
+            Console.WriteLine($"Player.Movement TEST - X:{myTransformComponent.GetForward().X} Y:{myTransformComponent.GetForward().Y} z:{myTransformComponent.GetForward().Z}");
+            myTransformComponent.Translation += myTransformComponent.GetForward() * movement;
+            myTransformComponent.Rotation += moveRotation;
         }
 
         

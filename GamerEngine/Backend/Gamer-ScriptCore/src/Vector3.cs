@@ -32,6 +32,11 @@ namespace GamerEngine
             return new Vector3(vector.X * scalar, vector.Y * scalar , vector.Z * scalar);
         }
 
+        public static Vector3 operator *(Vector3 vector1, Vector3 vector2)
+        {
+            return new Vector3(vector1.X * vector2.X, vector1.Y * vector2.Y, vector1.Z * vector2.Z);
+        }
+
         public float LengthSquared()
         {
             return X * X + Y * Y + Z * Z;

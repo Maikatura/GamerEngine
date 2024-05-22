@@ -22,10 +22,10 @@ void GamerEngine::Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent&
 
 	auto transformedBounds = aModel.GetModel()->GetBoxBounds().Transform(transform.Translation, transform.Rotation, transform.Scale);
 
-	if (!transformedBounds.IsOnFrustum(myCamera->GetFrustum()))
+	/*if (!transformedBounds.IsOnFrustum(myCamera->GetFrustum()))
 	{
 		return;
-	}
+	}*/
 
 	auto it = std::ranges::find_if(myUpdateModels,
 		[&aModel](const RenderBuffer& renderBuffer)
