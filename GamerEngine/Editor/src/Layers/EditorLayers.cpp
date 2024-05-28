@@ -230,16 +230,6 @@ void EditorLayers::OnImGuiRender()
 		if (myLayers[i]->HasBeenAdded() && myLayers[i]->IsOpen())
 		{
 			myLayers[i]->OnImGuiRender();
-			
-
-			/*if(!myLayers[i]->OnImGuiRender())
-			{
-				ConsoleHelper::Log(LogType::Info, "Removed a layer from editor");
-				myLayers[i].swap(myLayers[myLayers.size() - 1]);
-				myLayers[myLayers.size() - 1]->OnDetach();
-
-				myLayers.pop_back();
-			}*/
 		}
 	}
 }

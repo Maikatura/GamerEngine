@@ -1,0 +1,96 @@
+Scene: SceneTesting
+Path: G:\Github\gamerengine\GamerEngine\Bin\Assets\Scenes\SwagBag.csf
+Entities:
+  - Entity: 1828353707181980437
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, -3.67151356, 0.917554855]
+      Rotation: [0, -0, 0]
+      Scale: [1000, 1, 1000]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -431602080
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: EditorCamera
+    TransformComponent:
+      Translation: [63.0664215, -318.557648, 356.029572]
+      Rotation: [10.7614985, -167.504333, 0.000104271501]
+      Scale: [0.999961138, 0.999956548, 0.999987185]
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 250000
+      Primary: true
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [-198.434387, 635.92218, -434.789154]
+      Rotation: [33.25, 140, 0]
+      Scale: [0, 0.999664962, 0.999687016]
+      ChildrenSize: 0
+      Children:
+        {}
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Intensity: 1
+  - Entity: 17607464813599608836
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, 4.93322945, -78.8634644]
+      Rotation: [-90, -0, 0]
+      Scale: [9.99981022, 10, 10]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00631419988
+      Path: Assets\exclude\Models\Substance\Speakers Packed\Speakers.fbx
+      TextureSize: 2
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        1:
+          PixelShader: shaders\default_ps.cso
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 17789605713217244540
+    TagComponent:
+      Tag: Default Entity Name
+    TransformComponent:
+      Translation: [0, 0, 0.39635241]
+      Rotation: [-88.1950073, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.013239
+      Path: Assets\exclude\Models\Substance\Bean Bag 2 Packed\BeanBag 2.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\exclude\models\substance\bean bag 2 packed\bean bag 2_basecolor.png
+          Normal: assets\exclude\models\substance\bean bag 2 packed\bean bag 2_normal.png
+          Material: resources\textures\t_default_m.dds

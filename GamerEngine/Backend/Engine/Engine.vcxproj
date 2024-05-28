@@ -238,6 +238,7 @@
     <ClInclude Include="src\Scene\UUID.h" />
     <ClInclude Include="src\Scripting\ScriptEngine.h" />
     <ClInclude Include="src\Scripting\ScriptGlue.h" />
+    <ClInclude Include="src\Scripting\ScriptRegister.h" />
     <ClInclude Include="src\Scripting\ScriptUtils.h" />
     <ClInclude Include="src\Time.hpp" />
     <ClInclude Include="src\Types\EnumTypes.h" />
@@ -338,6 +339,7 @@
     <ClCompile Include="src\Scene\UUID.cpp" />
     <ClCompile Include="src\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="src\Scripting\ScriptGlue.cpp" />
+    <ClCompile Include="src\Scripting\ScriptRegister.cpp" />
     <ClCompile Include="src\Scripting\ScriptUtils.cpp" />
     <ClCompile Include="src\VR\VRSystem.cpp" />
   </ItemGroup>

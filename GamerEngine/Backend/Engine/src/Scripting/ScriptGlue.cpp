@@ -13,6 +13,7 @@
 
 #include "mono/metadata/object.h"
 #include "mono/metadata/reflection.h"
+#include "ScriptRegister.h"
 
 
 namespace GamerEngine {
@@ -95,112 +96,7 @@ namespace GamerEngine {
 		return entity.GetUUID();
 	}
 
-	static void TransformComponent_GetTranslation(UUID entityID, Vector3f* outTranslation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		*outTranslation = entity.GetComponent<GamerEngine::TransformComponent>().GetPosition();
-	}
-
-	static void TransformComponent_SetTranslation(UUID entityID, Vector3f* translation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		entity.GetComponent<GamerEngine::TransformComponent>().SetPosition(*translation);
-	}
-
-
-	static void TransformComponent_GetRotation(UUID entityID, Vector3f* outTranslation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		*outTranslation = entity.GetComponent<GamerEngine::TransformComponent>().GetRotation();
-	}
-
-	static void TransformComponent_SetRotation(UUID entityID, Vector3f* translation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		entity.GetComponent<GamerEngine::TransformComponent>().SetRotation(*translation);
-	}
-
-	static void TransformComponent_GetScale(UUID entityID, Vector3f* outTranslation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		*outTranslation = entity.GetComponent<GamerEngine::TransformComponent>().GetScale();
-	}
-
-	static void TransformComponent_SetScale(UUID entityID, Vector3f* translation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		entity.GetComponent<GamerEngine::TransformComponent>().SetScale(*translation);
-	}
-
-	static void TransformComponent_GetForward(UUID entityID, Vector3f* outTranslation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		*outTranslation = entity.GetComponent<GamerEngine::TransformComponent>().GetForward();
-	}
-
-	static void TransformComponent_GetRight(UUID entityID, Vector3f* outTranslation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		*outTranslation = entity.GetComponent<GamerEngine::TransformComponent>().GetRight();
-	}
-
-	static void TransformComponent_GetUp(UUID entityID, Vector3f* outTranslation)
-	{
-		Scene* scene = ScriptEngine::GetSceneContext();
-		GE_ASSERT(scene);
-		Entity entity = scene->GetEntityByUUID(entityID);
-		GE_ASSERT(entity);
-
-		*outTranslation = entity.GetComponent<GamerEngine::TransformComponent>().GetUp();
-	}
-
 	
-	static bool Input_IsKeyDown(KeyCode keycode)
-	{
-		return Input::IsKeyDown(keycode);
-	}
-
-	static bool Input_IsKeyUp(KeyCode keycode)
-	{
-		return Input::IsKeyReleased(keycode);
-	}
-
-	static bool Input_IsKeyPressed(KeyCode keycode)
-	{
-		return Input::IsKeyPressed(keycode);
-	}
 
 	
 
@@ -248,17 +144,16 @@ namespace GamerEngine {
 		GE_ADD_INTERNAL_CALL(Entity_FindEntityByName);
 
 
-
-		GE_ADD_INTERNAL_CALL(TransformComponent_GetForward);
-		GE_ADD_INTERNAL_CALL(TransformComponent_GetRight);
-		GE_ADD_INTERNAL_CALL(TransformComponent_GetUp);
-
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetTranslation);
 		GE_ADD_INTERNAL_CALL(TransformComponent_SetTranslation);
 		GE_ADD_INTERNAL_CALL(TransformComponent_SetRotation);
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetRotation);
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetScale);
 		GE_ADD_INTERNAL_CALL(TransformComponent_SetScale);
+
+		GE_ADD_INTERNAL_CALL(TransformComponent_GetForward);
+		GE_ADD_INTERNAL_CALL(TransformComponent_GetRight);
+		GE_ADD_INTERNAL_CALL(TransformComponent_GetUp);
 		
 		GE_ADD_INTERNAL_CALL(Input_IsKeyDown);
 		GE_ADD_INTERNAL_CALL(Input_IsKeyUp);

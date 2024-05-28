@@ -151,6 +151,9 @@ namespace GamerEngine {
 
 			GraphicsEngine::Get()->SubmitToMainThread([]()
 			{
+
+				std::cout << "Reloading assembly" << std::endl;
+
 				s_Data->AppAssemblyFileWatcher.reset();
 				ScriptEngine::ReloadAssembly();
 			});

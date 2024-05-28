@@ -23,7 +23,7 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 #define DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION 8192.0f
 
 	constexpr float nearPlane = 30.0f;
-	constexpr float farPlane = 250000.0f;
+	constexpr float farPlane = 25000.0f;
 	constexpr float DIVIDE = .4f;
 
 	myDirectionalLight->myNearPlane = nearPlane;

@@ -6,7 +6,7 @@
 // #include "JoltScene.h"
 // #include "JoltLayerInterface.h"
 //
-// #include "Hazel/Physics/PhysicsSystem.h"
+// #include "Physics/PhysicsSystem.h"
 //
 // #include <Jolt/Physics/Body/Body.h>
 // #include <Jolt/Physics/Body/BodyCreationSettings.h>
@@ -61,17 +61,17 @@
 // 			return;
 //
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		lock.GetBody().GetMotionProperties()->SetGravityFactor(isEnabled ? 1.0f : 0.0f);
 // 	}
 //
-// 	void JoltBody::AddForce(const glm::vec3& force, EForceMode forceMode, bool forceWake /*= true*/)
+// 	void JoltBody::AddForce(const Vector3f& force, EForceMode forceMode, bool forceWake /*= true*/)
 // 	{
 // 		if (!IsDynamic())
 // 			return;
 //
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		auto& body = lock.GetBody();
 //
 // 		switch (forceMode)
@@ -106,13 +106,13 @@
 // 			JoltScene::GetBodyInterface(false).ActivateBody(m_BodyID);
 // 	}
 //
-// 	void JoltBody::AddForce(const glm::vec3& force, const glm::vec3& location, EForceMode forceMode, bool forceWake /*= true*/)
+// 	void JoltBody::AddForce(const Vector3f& force, const Vector3f& location, EForceMode forceMode, bool forceWake /*= true*/)
 // 	{
 // 		if (!IsDynamic())
 // 			return;
 //
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		auto& body = lock.GetBody();
 //
 // 		switch (forceMode)
@@ -148,7 +148,7 @@
 // 			JoltScene::GetBodyInterface(false).ActivateBody(m_BodyID);
 // 	}
 //
-// 	void JoltBody::AddTorque(const glm::vec3& torque, bool forceWake /*= true*/)
+// 	void JoltBody::AddTorque(const Vector3f& torque, bool forceWake /*= true*/)
 // 	{
 // 		if (!IsDynamic())
 // 			return;
@@ -159,14 +159,14 @@
 // 	void JoltBody::ChangeTriggerState(bool isTrigger)
 // 	{
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		lock.GetBody().SetIsSensor(isTrigger);
 // 	}
 //
 // 	bool JoltBody::IsTrigger() const
 // 	{
 // 		JPH::BodyLockRead lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		return lock.GetBody().IsSensor();
 // 	}
 //
@@ -176,7 +176,7 @@
 // 			return 0.0f;
 //
 // 		JPH::BodyLockRead lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		const JPH::Body& body = lock.GetBody();
 // 		return 1.0f / body.GetMotionProperties()->GetInverseMass();
 // 	}
@@ -184,7 +184,7 @@
 // 	void JoltBody::SetMass(float mass)
 // 	{
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 //
 // 		JPH::Body& body = lock.GetBody();
 // 		JPH::MassProperties massProperties = body.GetShape()->GetMassProperties();
@@ -196,7 +196,7 @@
 // 	void JoltBody::SetLinearDrag(float inLinearDrag)
 // 	{
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		JPH::Body& body = lock.GetBody();
 // 		body.GetMotionProperties()->SetLinearDamping(inLinearDrag);
 // 	}
@@ -204,20 +204,20 @@
 // 	void JoltBody::SetAngularDrag(float inAngularDrag)
 // 	{
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		JPH::Body& body = lock.GetBody();
 // 		body.GetMotionProperties()->SetAngularDamping(inAngularDrag);
 // 	}
 //
-// 	glm::vec3 JoltBody::GetLinearVelocity() const
+//    Vector3f JoltBody::GetLinearVelocity() const
 // 	{
 // 		if (!IsDynamic())
-// 			return glm::vec3(0.0f);
+// 			return Vector3f(0.0f);
 //
 // 		return JoltUtils::FromJoltVector(JoltScene::GetBodyInterface().GetLinearVelocity(m_BodyID));
 // 	}
 //
-// 	void JoltBody::SetLinearVelocity(const glm::vec3& inVelocity)
+// 	void JoltBody::SetLinearVelocity(const Vector3f& inVelocity)
 // 	{
 // 		if (!IsDynamic())
 // 			return;
@@ -225,21 +225,21 @@
 // 		JoltScene::GetBodyInterface().SetLinearVelocity(m_BodyID, JoltUtils::ToJoltVector(inVelocity));
 // 	}
 //
-// 	glm::vec3 JoltBody::GetAngularVelocity() const
+//    Vector3f JoltBody::GetAngularVelocity() const
 // 	{
 // 		if (!IsDynamic())
-// 			return glm::vec3(0.0f);
+// 			return Vector3f(0.0f);
 //
 // 		return JoltUtils::FromJoltVector(JoltScene::GetBodyInterface().GetAngularVelocity(m_BodyID));
 // 	}
 //
-// 	void JoltBody::SetAngularVelocity(const glm::vec3& inVelocity)
+// 	void JoltBody::SetAngularVelocity(const Vector3f& inVelocity)
 // 	{
 // 		if (!IsDynamic())
 // 			return;
 //
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		auto& body = lock.GetBody();
 // 		auto velocity = JoltUtils::ToJoltVector(inVelocity);
 // 		body.SetAngularVelocityClamped(velocity);
@@ -254,7 +254,7 @@
 // 			return 0.0f;
 //
 // 		JPH::BodyLockRead lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		return lock.GetBody().GetMotionProperties()->GetMaxLinearVelocity();
 // 	}
 //
@@ -264,7 +264,7 @@
 // 			return;
 //
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		lock.GetBody().GetMotionProperties()->SetMaxLinearVelocity(inMaxVelocity);
 // 	}
 //
@@ -274,7 +274,7 @@
 // 			return 0.0f;
 //
 // 		JPH::BodyLockRead lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		return lock.GetBody().GetMotionProperties()->GetMaxAngularVelocity();
 // 	}
 //
@@ -284,7 +284,7 @@
 // 			return;
 //
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		lock.GetBody().GetMotionProperties()->SetMaxAngularVelocity(inMaxVelocity);
 // 	}
 //
@@ -294,7 +294,7 @@
 // 			return false;
 //
 // 		JPH::BodyLockRead lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		return !lock.GetBody().IsActive();
 // 	}
 //
@@ -320,21 +320,21 @@
 // 		}
 // 	}
 //
-// 	void JoltBody::AddRadialImpulse(const glm::vec3& origin, float radius, float strength, EFalloffMode falloff, bool velocityChange)
+// 	void JoltBody::AddRadialImpulse(const Vector3f& origin, float radius, float strength, EFalloffMode falloff, bool velocityChange)
 // 	{
 // 		if (!IsDynamic())
 // 			return;
 //
 // 		JPH::BodyLockRead readLock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(readLock.Succeeded());
+// 		//HZ_CORE_VERIFY(readLock.Succeeded());
 //
 // 		const JPH::Body& bodyRead = readLock.GetBody();
 // 		
-// 		glm::vec3 centerOfMassPosition = JoltUtils::FromJoltVector(bodyRead.GetCenterOfMassPosition());
+//        Vector3f centerOfMassPosition = JoltUtils::FromJoltVector(bodyRead.GetCenterOfMassPosition());
 //
 // 		readLock.ReleaseLock();
 //
-// 		glm::vec3 direction = centerOfMassPosition - origin;
+//        Vector3f direction = centerOfMassPosition - origin;
 //
 // 		float distance = glm::length(direction);
 //
@@ -348,10 +348,10 @@
 // 		if (falloff == EFalloffMode::Linear)
 // 			impulseMagnitude *= (1.0f - (distance / radius));
 //
-// 		glm::vec3 impulse = direction * impulseMagnitude;
+//        Vector3f impulse = direction * impulseMagnitude;
 // 		
 // 		JPH::BodyLockWrite writeLock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(writeLock.Succeeded());
+// 		//HZ_CORE_VERIFY(writeLock.Succeeded());
 // 		JPH::Body& bodyWrite = writeLock.GetBody();
 //
 // 		if (velocityChange)
@@ -376,10 +376,10 @@
 // 		JoltScene::GetBodyInterface().SetMotionQuality(m_BodyID, JoltUtils::ToJoltMotionQuality(collisionDetectionMode));
 // 	}
 //
-// 	void JoltBody::MoveKinematic(const glm::vec3& targetPosition, const glm::quat& targetRotation, float deltaSeconds)
+// 	void JoltBody::MoveKinematic(const Vector3f& targetPosition, const glm::quat& targetRotation, float deltaSeconds)
 // 	{
 // 		JPH::BodyLockWrite bodyLock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(bodyLock.Succeeded());
+// 		//HZ_CORE_VERIFY(bodyLock.Succeeded());
 //
 // 		JPH::Body& body = bodyLock.GetBody();
 //
@@ -389,10 +389,10 @@
 // 		body.MoveKinematic(JoltUtils::ToJoltVector(targetPosition), JoltUtils::ToJoltQuat(targetRotation), deltaSeconds);
 // 	}
 //
-// 	void JoltBody::SetTranslation(const glm::vec3& translation)
+// 	void JoltBody::SetTranslation(const Vector3f& translation)
 // 	{
 // 		JPH::BodyLockWrite bodyLock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(bodyLock.Succeeded());
+// 		//HZ_CORE_VERIFY(bodyLock.Succeeded());
 // 		JPH::Body& body = bodyLock.GetBody();
 //
 // 		if (!body.IsStatic())
@@ -405,7 +405,7 @@
 // 		entityScene->GetPhysicsScene()->MarkForSynchronization(this);
 // 	}
 //
-// 	glm::vec3 JoltBody::GetTranslation() const
+//    Vector3f JoltBody::GetTranslation() const
 // 	{
 // 		return JoltUtils::FromJoltVector(JoltScene::GetBodyInterface().GetPosition(m_BodyID));
 // 	}
@@ -413,7 +413,7 @@
 // 	void JoltBody::SetRotation(const glm::quat& rotation)
 // 	{
 // 		JPH::BodyLockWrite bodyLock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(bodyLock.Succeeded());
+// 		//HZ_CORE_VERIFY(bodyLock.Succeeded());
 // 		JPH::Body& body = bodyLock.GetBody();
 //
 // 		if (!body.IsStatic())
@@ -434,14 +434,14 @@
 // 	void JoltBody::Rotate(const glm::vec3& inRotationTimesDeltaTime)
 // 	{
 // 		JPH::BodyLockWrite bodyLock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(bodyLock.Succeeded());
+// 		//HZ_CORE_VERIFY(bodyLock.Succeeded());
 // 		bodyLock.GetBody().AddRotationStep(JoltUtils::ToJoltVector(inRotationTimesDeltaTime));
 // 	}
 //
 // 	void JoltBody::OnAxisLockUpdated(bool forceWake)
 // 	{
 // 		JPH::BodyLockWrite bodyLock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(bodyLock.Succeeded());
+// 		//HZ_CORE_VERIFY(bodyLock.Succeeded());
 //
 // 		if (m_AxisLockConstraint)
 // 		{
@@ -457,7 +457,7 @@
 // 	void JoltBody::CreateStaticBody(JPH::BodyInterface& bodyInterface)
 // 	{
 // 		Ref<Scene> scene = Scene::GetScene(m_Entity.GetSceneUUID());
-// 		HZ_CORE_VERIFY(scene, "No scene active?");
+// 		//HZ_CORE_VERIFY(scene, "No scene active?");
 //
 // 		const TransformComponent worldTransform = scene->GetWorldSpaceTransform(m_Entity);
 // 		const auto& rigidBodyComponent = m_Entity.GetComponent<RigidBodyComponent>();
@@ -488,7 +488,7 @@
 //
 // 		if (firstShape == nullptr)
 // 		{
-// 			HZ_CORE_INFO_TAG("Physics", "Failed to create static PhysicsBody, no collision shape provided!");
+// 			//HZ_CORE_INFO_TAG("Physics", "Failed to create static PhysicsBody, no collision shape provided!");
 // 			m_Shapes.clear();
 // 			return;
 // 		}
@@ -508,7 +508,7 @@
 //
 // 		if (body == nullptr)
 // 		{
-// 			HZ_CORE_ERROR_TAG("Physics", "Failed to create PhysicsBody! This means we don't have enough space to store more RigidBodies!");
+// 			//HZ_CORE_ERROR_TAG("Physics", "Failed to create PhysicsBody! This means we don't have enough space to store more RigidBodies!");
 // 			return;
 // 		}
 //
@@ -519,7 +519,7 @@
 // 	void JoltBody::CreateDynamicBody(JPH::BodyInterface& bodyInterface)
 // 	{
 // 		Ref<Scene> scene = Scene::GetScene(m_Entity.GetSceneUUID());
-// 		HZ_CORE_VERIFY(scene, "No scene active?");
+// 		//HZ_CORE_VERIFY(scene, "No scene active?");
 //
 // 		const TransformComponent worldTransform = scene->GetWorldSpaceTransform(m_Entity);
 // 		auto& rigidBodyComponent = m_Entity.GetComponent<RigidBodyComponent>();
@@ -550,7 +550,7 @@
 //
 // 		if (firstShape == nullptr)
 // 		{
-// 			HZ_CORE_INFO_TAG("Physics", "Failed to create dynamic PhysicsBody, no collision shape provided!");
+// 			//HZ_CORE_INFO_TAG("Physics", "Failed to create dynamic PhysicsBody, no collision shape provided!");
 // 			m_Shapes.clear();
 // 			return;
 // 		}
@@ -558,7 +558,7 @@
 // 		if (!PhysicsLayerManager::IsLayerValid(rigidBodyComponent.LayerID))
 // 		{
 // 			rigidBodyComponent.LayerID = 0; // Use the default layer
-// 			HZ_CONSOLE_LOG_WARN("Entity '{}' has a RigidBodyComponent with an invalid layer set! Using the Default layer.", m_Entity.Name());
+// 			//HZ_CONSOLE_LOG_WARN("Entity '{}' has a RigidBodyComponent with an invalid layer set! Using the Default layer.", m_Entity.Name());
 // 		}
 //
 // 		JPH::BodyCreationSettings bodySettings(
@@ -582,7 +582,7 @@
 // 		JPH::Body* body = bodyInterface.CreateBody(bodySettings);
 // 		if (body == nullptr)
 // 		{
-// 			HZ_CORE_ERROR_TAG("Physics", "Failed to create PhysicsBody! This means we don't have enough space to store more RigidBodies!");
+// 			//HZ_CORE_ERROR_TAG("Physics", "Failed to create PhysicsBody! This means we don't have enough space to store more RigidBodies!");
 // 			return;
 // 		}
 //
@@ -625,7 +625,7 @@
 // 	void JoltBody::Release()
 // 	{
 // 		JPH::BodyLockWrite lock(JoltScene::GetBodyLockInterface(), m_BodyID);
-// 		HZ_CORE_VERIFY(lock.Succeeded());
+// 		//HZ_CORE_VERIFY(lock.Succeeded());
 // 		auto& body = lock.GetBody();
 //
 // 		if (m_AxisLockConstraint != nullptr)

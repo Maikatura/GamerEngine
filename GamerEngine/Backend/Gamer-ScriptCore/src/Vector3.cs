@@ -46,5 +46,16 @@ namespace GamerEngine
         {
             return (float)Math.Sqrt(LengthSquared());
         }
+
+
+        public Vector3 Lerp(Vector3 aVector1, Vector3 aVector2, float aTime)
+        {
+            return new Vector3(
+                aVector1.X + (aTime * (aVector2.X - aVector1.X)),
+                aVector1.Y + (aTime * (aVector2.Y - aVector1.Y)),
+                aVector1.Z + (aTime * (aVector2.Z - aVector1.Z))
+            );
+
+        }
     }
 }

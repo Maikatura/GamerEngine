@@ -27,14 +27,14 @@
 //
 // 		s_PhysicsMeshCache.Init();
 //
-// 		Application::Get().AddEventCallback(OnEvent);
+// 		//Application::Get().AddEventCallback(OnEvent);
 // 	}
 //
 // 	void PhysicsSystem::Shutdown()
 // 	{
 // 		s_PhysicsMeshCache.Clear();
 // 		s_PhysicsAPI->Shutdown();
-// 		hdelete s_PhysicsAPI;
+// 		delete s_PhysicsAPI;
 // 	}
 //
 // 	const std::string& PhysicsSystem::GetLastErrorMessage() { return s_PhysicsAPI->GetLastErrorMessage(); }

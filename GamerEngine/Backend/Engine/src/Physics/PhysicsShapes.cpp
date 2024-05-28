@@ -13,7 +13,7 @@
 // 			case PhysicsAPIType::Jolt: return Ref<JoltImmutableCompoundShape>::Create(entity);
 // 		}
 //
-// 		HZ_CORE_VERIFY(false);
+// 		//HZ_CORE_VERIFY(false);
 // 		return nullptr;
 // 	}
 //
@@ -24,7 +24,7 @@
 // 			case PhysicsAPIType::Jolt: return Ref<JoltMutableCompoundShape>::Create(entity);
 // 		}
 //
-// 		HZ_CORE_VERIFY(false);
+// 		//HZ_CORE_VERIFY(false);
 // 		return nullptr;
 // 	}
 //
@@ -35,7 +35,7 @@
 // 			case PhysicsAPIType::Jolt: return Ref<JoltBoxShape>::Create(entity, totalBodyMass);
 // 		}
 //
-// 		HZ_CORE_VERIFY(false);
+// 		//HZ_CORE_VERIFY(false);
 // 		return nullptr;
 // 	}
 //
@@ -46,7 +46,7 @@
 // 			case PhysicsAPIType::Jolt: return Ref<JoltSphereShape>::Create(entity, totalBodyMass);
 // 		}
 //
-// 		HZ_CORE_VERIFY(false);
+// 		//HZ_CORE_VERIFY(false);
 // 		return nullptr;
 // 	}
 //

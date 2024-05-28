@@ -57,6 +57,9 @@ namespace GamerEngine
             //Console.WriteLine($"Player.Movement TEST - X:{myTransformComponent.GetForward().X} Y:{myTransformComponent.GetForward().Y} z:{myTransformComponent.GetForward().Z}");
             myTransformComponent.Translation += myTransformComponent.GetForward() * movement;
             myTransformComponent.Rotation += moveRotation;
+
+
+
         }
 
         

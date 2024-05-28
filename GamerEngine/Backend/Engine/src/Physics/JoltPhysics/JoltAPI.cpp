@@ -12,6 +12,7 @@
 // #include <Jolt/Physics/Body/BodyCreationSettings.h>
 // #include <Jolt/Physics/Body/BodyActivationListener.h>
 //
+//#include "Scene/Scene.h"
 // #include "Utilites/Pointers.h"
 //
 // namespace GamerEngine
@@ -38,14 +39,14 @@
 // 		vsnprintf(buffer, sizeof(buffer), format, list);
 //
 // 		s_JoltData->LastErrorMessage = buffer;
-// 		HZ_CORE_TRACE_TAG("Physics", buffer);
+// 		//HZ_CORE_TRACE_TAG("Physics", buffer);
 // 	}
 //
 // #ifdef JPH_ENABLE_ASSERTS
 //
 // 	static bool JoltAssertFailedCallback(const char* expression, const char* message, const char* file, uint32_t line)
 // 	{
-// 		HZ_CORE_FATAL_TAG("Physics", "{}:{}: ({}) {}", file, line, expression, message != nullptr ? message : "");
+// 		GE_LOG_ERROR("Physics", "{}:{}: ({}) {}", file, line, expression, message != nullptr ? message : "");
 // 		return true;
 // 	}
 //
@@ -65,7 +66,7 @@
 //
 // 	void JoltAPI::Init()
 // 	{
-// 		HZ_CORE_VERIFY(!s_JoltData, "Can't initialize Jolt multiple times!");
+// 		//GE_VALID(!s_JoltData, "Can't initialize Jolt multiple times!");
 //
 // 		JPH::RegisterDefaultAllocator();
 //
@@ -79,7 +80,7 @@
 //
 // 		JPH::RegisterTypes();
 //
-// 		s_JoltData = hnew JoltData();
+// 		s_JoltData = new JoltData();
 //
 // #if HZ_ENABLE_MALLOC_ALLOC
 // 		// NOTE(Peter): We shouldn't be using this allocator if we want the best performance
@@ -91,10 +92,10 @@
 // 		// NOTE(Peter): Just construct the thread pool for now, don't start the threads
 // 		s_JoltData->JobThreadPool = std::make_unique<JPH::JobSystemThreadPool>(2048, 8, 6);
 //
-// 		s_JoltData->CookingFactory = Ref<JoltCookingFactory>::Create();
+//        s_JoltData->CookingFactory = MakeRef<JoltCookingFactory>();
 // 		s_JoltData->CookingFactory->Init();
 //
-// 		s_JoltData->CaptureManager = Ref<JoltCaptureManager>::Create();
+// 		s_JoltData->CaptureManager = MakeRef<JoltCaptureManager>();
 // 	}
 //
 // 	void JoltAPI::Shutdown()
@@ -106,7 +107,7 @@
 //
 // 		delete s_JoltData->TemporariesAllocator;
 //
-// 		hdelete s_JoltData;
+// 		delete s_JoltData;
 // 		s_JoltData = nullptr;
 //
 // 		delete JPH::Factory::sInstance;

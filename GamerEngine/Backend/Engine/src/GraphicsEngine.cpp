@@ -266,6 +266,8 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
 void GraphicsEngine::BeginFrame()
 {
+    ExecuteMainThreadQueue();
+
     if (myIsMinimized) return;
 
     if (!myUseEditor)
@@ -273,7 +275,6 @@ void GraphicsEngine::BeginFrame()
         //PROFILE_FRAME();
     }
 
-    ExecuteMainThreadQueue();
 
     if (myWantToResizeBuffers)
     {

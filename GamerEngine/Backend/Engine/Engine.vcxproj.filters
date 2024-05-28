@@ -487,6 +487,7 @@
     <ClInclude Include="src\VR\VRSystem.h">
       <Filter>src\VR</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scripting\ScriptRegister.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Log.cpp" />
@@ -763,5 +764,6 @@
     <ClCompile Include="src\VR\VRSystem.cpp">
       <Filter>src\VR</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripting\ScriptRegister.cpp" />
   </ItemGroup>
 </Project>
