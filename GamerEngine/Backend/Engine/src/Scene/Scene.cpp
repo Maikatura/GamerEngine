@@ -89,7 +89,7 @@ GamerEngine::Entity GamerEngine::Scene::CreateEntity(const std::string& aName)
 
 GamerEngine::Entity GamerEngine::Scene::CreateEntityWithUUID(UUID aUUID, const std::string& aName)
 {
-    Entity entity = {myRegistry.create(), this};
+    Entity entity = {myRegistry.create(), this };
     entity.AddComponent<IDComponent>(aUUID);
     entity.AddComponent<GamerEngine::TransformComponent>();
     //entity.AddComponent<GamerEngine::ScriptComponent>();
@@ -206,7 +206,7 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
                 if (!nsc.Instance)
                 {
                     nsc.InstantiateFunction();
-                    nsc.Instance->myEntity = {entity, this};
+                    nsc.Instance->myEntity = {entity, this };
                     nsc.OnCreateFunction(nsc.Instance);
                 }
 
@@ -224,7 +224,7 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
                 for (const auto& entity : view)
                 {
                     auto& networkComponent = view.get<Network::NetworkComponent>(entity);
-                    auto aEntity = Entity{entity, this};
+                    auto aEntity = Entity{entity, this };
 
                     // networkComponent.SetEntity(&aEntity);
                     // networkComponent.OnUpdate();
@@ -305,7 +305,7 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 
                 if (model.GetModel())
                 {
-                    Entity entityPtr = Entity{entity, this};
+                    Entity entityPtr = Entity{entity, this };
                     Renderer::Render(&entityPtr, model, transform);
                 }
             }
@@ -468,7 +468,7 @@ GamerEngine::Entity GamerEngine::Scene::GetEntityByUUID(UUID uuid)
 {
     // TODO(Yan): Maybe should be assert
     if (myEntityMap.contains(uuid))
-        return {myEntityMap.at(uuid), this};
+        return {myEntityMap.at(uuid), this };
 
     return {};
 }

@@ -42,14 +42,17 @@ public:
 	bool IsHeadless();
 	void SetHeadless(bool isHeadless);
 	
-	void Initialize();
+	void Init();
 	void LoadScene(const std::string& aFilepath);
 	void SaveScene(const std::string& aFilepath);
 	
 	void Update(bool aRunningState = true);
 	void Render();
 	Ref<GamerEngine::Scene> GetScene();
-	
+
+	void OnRuntimeStart();
+	void OnRuntimeStop();
+
 	bool IsReady();
 	
 	GamerEngine::SceneStatus GetStatus();

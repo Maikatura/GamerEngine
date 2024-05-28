@@ -37,20 +37,23 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 
 	Vector3f movement;
 
+	HasBeenActivated = false;
 
-
-	
-	if (Input::IsMousePressed(VK_LBUTTON) && IsHoveringSceneView)
+	if (Input::IsMouseDown(VK_LBUTTON) && IsHoveringSceneView)
 	{
 		HasBeenActivated = true;
-		myPrevMouse = Input::GetMousePos();
+		Input::LockMouse(CommonUtilities::Mouse::Lock_CurrentPos);
 		myOldPos = myPrevMouse;
+	}
+	else
+	{
+		Input::LockMouse(CommonUtilities::Mouse::None);
 	}
 
 	if (Input::IsMouseReleased(VK_LBUTTON) && HasBeenActivated)
 	{
 		HasBeenActivated = false;
-		Input::SetMousePos(myPrevMouse);
+		//Input::SetMousePos(myPrevMouse);
 	}
 
 	if (!HasBeenActivated)
@@ -64,13 +67,13 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 
 
 
-	Vector2i delta = Input::GetMousePos() - myOldPos;
-
-	SIZE windowRect = GraphicsEngine::Get()->GetWindowSize();
-	Vector2i centerPosition;
-	centerPosition.x = (windowRect.cx) / 2;
-	centerPosition.y = (windowRect.cy) / 2;
-	Input::SetMousePos(centerPosition);
+	Vector2f delta = Input::GetMouseDelta();
+	//
+	//SIZE windowRect = GraphicsEngine::Get()->GetWindowSize();
+	//Vector2i centerPosition;
+	//centerPosition.x = (windowRect.cx) / 2;
+	//centerPosition.y = (windowRect.cy) / 2;
+	//Input::SetMousePos(centerPosition);
 
 
 	aTransform->SetRotation({
@@ -78,7 +81,7 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 		aTransform->GetRotation().y + static_cast<float>(delta.x) * myMouseSensitivity,
 		0
 	});
-	myOldPos = centerPosition;
+	//myOldPos = centerPosition;
 
 	if (Input::GetMouseWheel() != 0.0f)
 	{

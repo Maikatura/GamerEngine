@@ -10,6 +10,7 @@
 #include "Scene/Scene.h"
 #include <Fonts/IconsForkAwesome.h>
 #include "Debugger/ConsoleHelper.h"
+#include "Utilites/VisualProfiler.h"
 //#include "Profiler/Profiler.h"
 
 
@@ -23,6 +24,8 @@ EditorLayers::~EditorLayers()
 
 void EditorLayers::Init()
 {
+	PROFILE_SCOPE("EditorLayers::Init");
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();

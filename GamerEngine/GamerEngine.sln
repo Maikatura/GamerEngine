@@ -4,10 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{E080A971-4C97-A707-950E-33290164788F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Editor\Editor.vcxproj", "{8C1A20B0-78BC-4A86-6177-5EDA4DB8D1D6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9C4F38F8-8848-574A-B17A-3CCF9DD23656} = {9C4F38F8-8848-574A-B17A-3CCF9DD23656}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gamer-ScriptCore", "Backend\Gamer-ScriptCore\Gamer-ScriptCore.csproj", "{9C4F38F8-8848-574A-B17A-3CCF9DD23656}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Runtime", "Runtime\Runtime.vcxproj", "{4995DAC4-B574-5960-BE8C-E4362AEBBFC1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9C4F38F8-8848-574A-B17A-3CCF9DD23656} = {9C4F38F8-8848-574A-B17A-3CCF9DD23656}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{5445FE13-C005-7A4A-8940-C3C7F5BFBE26}"
 EndProject

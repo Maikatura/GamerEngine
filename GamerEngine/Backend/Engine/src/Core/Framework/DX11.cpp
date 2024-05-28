@@ -1,6 +1,7 @@
 #include <GraphicsEngine.pch.h>
 #include "DX11.h"
 #include "AssetHandlers/TextureAssetHandler.h"
+#include "Utilites/VisualProfiler.h"
 
 
 DX11::DX11(): BackBufferTex(nullptr), IDBufferDesc(), StagingTexDesc(), featureLevel(), driverType(),
@@ -162,6 +163,7 @@ bool DX11::CreateRenderTargetView()
 
 bool DX11::Init(HWND aWindowHandle, bool aEnableDeviceDebug, bool aEnabledVR)
 {
+	PROFILE_SCOPE("DX11::Init");
 	WindowHandle = aWindowHandle;
 
 

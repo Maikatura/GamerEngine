@@ -10,6 +10,8 @@ namespace GamerEngine
     {
         private TransformComponent myTransformComponent;
 
+        MouseLock myMouseLock = MouseLock.None;
+        bool myLeftMouseButtinIsDown = true;
 
         void OnCreate()
         {
@@ -21,43 +23,104 @@ namespace GamerEngine
         {
             //Console.WriteLine($"Player.OnUpdate - {ts}");
 
-         
 
-            float movement = 0.0f;
+            //Console.WriteLine(myTransformComponent.GetChildCount());
+
+
+            float movementZ = 0.0f;
+            float movementX = 0.0f;
             Vector3 moveRotation = new Vector3();
 
 
             float rotationSpeed = 100.0f;
             float moveSpeed = 100.0f;
 
-            if (Input.IsKeyDown(KeyCode.W))
+
+            myLeftMouseButtinIsDown = Input.IsMouseDown(KeyCode.LeftMouseBtn);
+            Input.LockMouse(myLeftMouseButtinIsDown ? MouseLock.Center : MouseLock.None);
+
+            bool forwardKey = Input.IsKeyDown(KeyCode.W);
+            bool backwardKey = Input.IsKeyDown(KeyCode.S);
+            bool rightKey = Input.IsKeyDown(KeyCode.D);
+            bool leftKey = Input.IsKeyDown(KeyCode.A);
+
+            bool eKey = Input.IsKeyDown(KeyCode.E);
+            bool qKey = Input.IsKeyDown(KeyCode.Q);
+
+
+            if (forwardKey)
             {
-                movement += ts * moveSpeed;
+                movementZ += ts * moveSpeed;
+            }
+
+            if (backwardKey)
+            {
+                movementZ -= ts * (moveSpeed * 0.5f);
+            }
+
+            if (forwardKey && backwardKey)
+            {
+                movementZ = 0.0f;
+            }
+
+            if (myLeftMouseButtinIsDown)
+            {
+                if (rightKey || eKey)
+                {
+                    movementX += ts * moveSpeed;
+                }
+
+                if (leftKey || qKey)
+                {
+                    movementX -= ts * moveSpeed;
+                }
+
+                if (rightKey && leftKey)
+                {
+                    movementX = 0.0f;
+                }
+
+                Vector2 mouseDelta = Input.GetMouseDelta();
+                moveRotation.Y -= mouseDelta.X * ts * rotationSpeed;
                
-   
             }
-
-            if (Input.IsKeyDown(KeyCode.S))
+            else
             {
-                movement -= ts * moveSpeed;
-            }
+                if (rightKey)
+                {
+                    moveRotation.Y -= ts * rotationSpeed;
+                }
 
-            if (Input.IsKeyDown(KeyCode.D))
-            {
-                moveRotation.Y += ts * rotationSpeed;
-            }
+                if (leftKey)
+                {
+                    moveRotation.Y += ts * rotationSpeed;
+                }
 
-            if (Input.IsKeyDown(KeyCode.A))
-            {
-                moveRotation.Y -= ts * rotationSpeed;
-            }
+                if (rightKey && leftKey)
+                {
+                    moveRotation.Y = 0.0f;
+                }
 
+                if (eKey)
+                {
+                    movementX += ts * moveSpeed;
+                }
+
+                if (qKey)
+                {
+                    movementX -= ts * moveSpeed;
+                }
+
+                if (eKey && qKey)
+                {
+                    movementX = 0.0f;
+                }
+            }
 
             //Console.WriteLine($"Player.Movement - X:{myTransformComponent.Translation.X} Y:{myTransformComponent.Translation.Y} z:{myTransformComponent.Translation.Z}");
             //Console.WriteLine($"Player.Movement TEST - X:{myTransformComponent.GetForward().X} Y:{myTransformComponent.GetForward().Y} z:{myTransformComponent.GetForward().Z}");
-            myTransformComponent.Translation += myTransformComponent.GetForward() * movement;
+            myTransformComponent.Translation += myTransformComponent.GetForward() * movementZ + myTransformComponent.GetRight() * movementX;
             myTransformComponent.Rotation += moveRotation;
-
 
 
         }

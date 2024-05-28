@@ -2,7 +2,7 @@
 
 #include "ScriptEngine.h"
 #include "Components/TransfromComponent.h"
-#include "Core/KeyCodes.h"
+#include "Utilites/KeyCodes.h"
 #include "Input/Input.h"
 #include "Scene/Scene.h"
 
@@ -103,19 +103,34 @@ namespace GamerEngine
 	}
 
 
-	static bool Input_IsKeyDown(KeyCode keycode)
+	static bool Input_Keyboard_IsKeyDown(CommonUtilities::KeyCode keycode)
 	{
 		return Input::IsKeyDown(keycode);
 	}
 
-	static bool Input_IsKeyUp(KeyCode keycode)
+	static bool Input_Keyboard_IsKeyUp(CommonUtilities::KeyCode keycode)
 	{
 		return Input::IsKeyReleased(keycode);
 	}
 
-	static bool Input_IsKeyPressed(KeyCode keycode)
+	static bool Input_Keyboard_IsKeyPressed(CommonUtilities::KeyCode keycode)
 	{
 		return Input::IsKeyPressed(keycode);
+	}
+
+	static bool Input_Mouse_IsKeyDown(CommonUtilities::KeyCode keycode)
+	{
+		return Input::IsMouseDown(keycode);
+	}
+
+	static void Input_Mouse_LockMouse(CommonUtilities::MouseLock aMouseLockState)
+	{
+		Input::LockMouse(aMouseLockState);
+	}
+
+	static void Input_Mouse_GetDelta(Vector2f* outTranslation)
+	{
+		*outTranslation = Input::GetMouseDelta();
 	}
 
 }

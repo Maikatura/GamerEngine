@@ -8,11 +8,12 @@
 #include "RendererBase.h"
 #include "Core/Rendering/Renderer.h"
 #include "Input/Input.h"
-
+#include "Utilites/VisualProfiler.h"
 
 
 bool LineRenderer::OnAdd()
 {
+    PROFILE_SCOPE("LineRenderer::OnAdd");
     myInstance = this;
     return Init();
 }
@@ -55,6 +56,8 @@ LineRenderer& LineRenderer::Get()
 
 bool LineRenderer::Init()
 {
+
+
 #if defined(_DEBUG) || defined(_RELEASE)
     HRESULT result;
 

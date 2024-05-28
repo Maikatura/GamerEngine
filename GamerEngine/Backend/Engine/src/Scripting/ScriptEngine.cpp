@@ -14,6 +14,7 @@
 #include "Core/FileSystem.h"
 #include "Project/Project.h"
 #include "Utilites/FileWatch.h"
+#include "Utilites/VisualProfiler.h"
 
 namespace GamerEngine {
 
@@ -162,6 +163,7 @@ namespace GamerEngine {
 
 	void ScriptEngine::Init()
 	{
+		PROFILE_SCOPE("ScriptEngine::Init");
 		s_Data = new ScriptEngineData();
 
 		InitMono();

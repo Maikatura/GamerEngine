@@ -153,8 +153,10 @@ void MainMenuBar::RenderMainBar()
                 GraphicsEngine::Get()->SetEngineRunning(true);
                 ConsoleHelper::Log(LogType::Info, "Started game");
 
-                //mySnapshot = SnapshotManager(&SceneManager::Get().GetScene()->GetRegistry());
-                //mySnapshot.CreateSnapshot();
+                mySnapshot = SnapshotManager(SceneManager::Get().GetScene().get(), &SceneManager::Get().GetScene()->GetRegistry());
+                mySnapshot.CreateSnapshot();
+
+				SceneManager::Get().OnRuntimeStart();
             }
         }
         else
@@ -166,10 +168,13 @@ void MainMenuBar::RenderMainBar()
             ImGui::SetCursorPosX((windowWidth * 0.5f) - (size + padding) - (textWidth * 0.5f));
             if (ImGui::Button(stopText.c_str()))
             {
+                SceneManager::Get().OnRuntimeStop();
                 myLayers->SetShouldEngineRun(false);
                 GraphicsEngine::Get()->SetEngineRunning(false);
                 ConsoleHelper::Log(LogType::Info, "Stopped game");
-                //mySnapshot.RestoreSnapShot();
+
+            	mySnapshot.RestoreSnapShot();
+
             }
         }
 

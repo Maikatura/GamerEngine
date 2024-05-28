@@ -211,7 +211,7 @@ void Hierarchy::DrawEntityNode(GamerEngine::Entity& aEntity)
 
 		for(int i = 0; i < aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren.size(); i++)
 		{
-			GamerEngine::Entity entity{ aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren[i].GetHandle(), SceneManager::Get().GetScene().get() };
+			GamerEngine::Entity entity{ aEntity.GetComponent<GamerEngine::TransformComponent>().myChildren[i].GetHandle(), SceneManager::Get().GetScene().get()};
 			DrawEntityNode(entity);
 		}
 		ImGui::TreePop();

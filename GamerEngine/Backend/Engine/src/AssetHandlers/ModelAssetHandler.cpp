@@ -412,7 +412,7 @@ void ModelAssetHandler::Clear()
 
 }
 
-bool ModelAssetHandler::Initialize()
+bool ModelAssetHandler::Init()
 {
 
 	if (SceneManager::Get().IsHeadless())

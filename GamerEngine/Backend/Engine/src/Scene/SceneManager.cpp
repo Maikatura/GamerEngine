@@ -6,6 +6,7 @@
 #include "Debugger/ConsoleHelper.h"
 #include "Particles/ParticleEmitter.h"
 #include "Core/Rendering/SelectionData.h"
+#include "Utilites/VisualProfiler.h"
 
 
 bool SceneManager::IsHeadless()
@@ -18,17 +19,20 @@ void SceneManager::SetHeadless(bool isHeadless)
 	myIsHeadless = isHeadless;
 }
 
-void SceneManager::Initialize()
+void SceneManager::Init()
 {
+	PROFILE_SCOPE("SceneManager::Init");
 	myScene = MakeRef<GamerEngine::Scene>();
 	mySceneStatus = GamerEngine::SceneStatus::Complete;
 }
 
 void SceneManager::LoadScene(const std::string& aFilepath)
 {
+
+
 	if (!myScene)
 	{
-		Initialize();
+		Init();
 	}
 
 	if (IsReady())
@@ -84,7 +88,7 @@ void SceneManager::SaveScene(const std::string& aFilepath)
 			{
 				if (!myScene)
 				{
-					Initialize();
+					Init();
 				}
 				SceneSerializer saveScene(myScene.get());
 				saveScene.Serialize(aFilepath);
@@ -123,7 +127,7 @@ Ref<GamerEngine::Scene> SceneManager::GetScene()
 {
 	if(!myScene)
 	{
-		Initialize();
+		Init();
 	}
 
 	if (myScene)
@@ -135,6 +139,22 @@ Ref<GamerEngine::Scene> SceneManager::GetScene()
 	}
 
 	return nullptr;
+}
+
+void SceneManager::OnRuntimeStart()
+{
+	if (myScene)
+	{
+		myScene->OnRuntimeStart();
+	}
+}
+
+void SceneManager::OnRuntimeStop()
+{
+	if (myScene)
+	{
+		myScene->OnRuntimeStop();
+	}
 }
 
 bool SceneManager::IsReady()
@@ -149,7 +169,7 @@ GamerEngine::SceneStatus SceneManager::GetStatus()
 
 GamerEngine::Entity SceneManager::ConstructEntity(entt::entity aEntityValue)
 {
-	return GamerEngine::Entity(aEntityValue, myScene.get());
+	return GamerEngine::Entity(aEntityValue, myScene.get() );
 }
 
 GamerEngine::Entity SceneManager::CreateEntityType(int aEntityType, const GamerEngine::UUID& aUUID)

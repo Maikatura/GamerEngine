@@ -199,9 +199,6 @@
     <ClInclude Include="src\Core\Framework\GraphicsBackend.hpp">
       <Filter>src\Core\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\KeyCodes.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Model\Entity.h">
       <Filter>src\Core\Model</Filter>
     </ClInclude>
@@ -469,6 +466,9 @@
     <ClInclude Include="src\Scripting\ScriptGlue.h">
       <Filter>src\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scripting\ScriptRegister.h">
+      <Filter>src\Scripting</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scripting\ScriptUtils.h">
       <Filter>src\Scripting</Filter>
     </ClInclude>
@@ -487,7 +487,6 @@
     <ClInclude Include="src\VR\VRSystem.h">
       <Filter>src\VR</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scripting\ScriptRegister.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Log.cpp" />
@@ -562,9 +561,6 @@
     </ClCompile>
     <ClCompile Include="src\Core\Framework\DX11.cpp">
       <Filter>src\Core\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\KeyCodes.cpp">
-      <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Model\Entity.cpp">
       <Filter>src\Core\Model</Filter>
@@ -758,12 +754,14 @@
     <ClCompile Include="src\Scripting\ScriptGlue.cpp">
       <Filter>src\Scripting</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripting\ScriptRegister.cpp">
+      <Filter>src\Scripting</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scripting\ScriptUtils.cpp">
       <Filter>src\Scripting</Filter>
     </ClCompile>
     <ClCompile Include="src\VR\VRSystem.cpp">
       <Filter>src\VR</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripting\ScriptRegister.cpp" />
   </ItemGroup>
 </Project>

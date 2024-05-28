@@ -18,9 +18,7 @@
 #include "Font/Font.h"
 #include "Project/Project.h"
 #include "Scripting/ScriptEngine.h"
-
-
-
+#include "Utilites/VisualProfiler.h"
 
 
 GraphicsEngine* GraphicsEngine::Get()
@@ -46,6 +44,8 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
                                 unsigned someWidth, unsigned someHeight,
                                 bool enableDeviceDebug, const std::wstring& aName, bool aBoolToUseEditor, bool isVRMode)
 {
+	PROFILE_SCOPE("GraphicsEngine::Init");
+
     OleInitialize(nullptr);
 
     myInstance = this;
@@ -57,7 +57,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
     myIsRunning = !aBoolToUseEditor;
 
-    // Initialize our window:
+    // Init our window:
     WNDCLASS windowClass = {};
     windowClass.style = CS_VREDRAW | CS_HREDRAW | CS_OWNDC;
     windowClass.lpfnWndProc = GraphicsEngine::WinProc;
@@ -90,10 +90,10 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
         return false;
     }
 
-    myFont = MakeRef<GamerEngine::Font>("resources\\fonts\\OpenSans.ttf");
+    //myFont = MakeRef<GamerEngine::Font>("resources\\fonts\\OpenSans.ttf");
 
 
-    PostProcessRenderer::Get().Initialize();
+    PostProcessRenderer::Get().Init();
 
     AddRenderModule<ShadowRenderer>();
     AddRenderModule<DeferredRenderer>();
@@ -111,13 +111,13 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
 
     GamerEngine::Project::New();
     AudioManager::Init();
-    SceneManager::Get().Initialize();
+    SceneManager::Get().Init();
     GamerEngine::ScriptEngine::Init();
 
 
     if (!myUseEditor)
     {
-        //gCPUProfiler.Initialize(1, 512);
+        //gCPUProfiler.Init(1, 512);
     }
 
 

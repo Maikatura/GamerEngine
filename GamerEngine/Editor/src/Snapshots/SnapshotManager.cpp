@@ -20,7 +20,7 @@ void SnapshotManager::CreateSnapshot()
 	// Store the actual snapshot data per each component class
 	// This copy-per-class approach is necessary due to how EnTT is built
 	CreateSnapshotForComponent<GamerEngine::TransformComponent>(entitySnapshot_Transform);
-    CreateSnapshotForComponent<ModelComponent>(entitySnapshot_Models);
+    //CreateSnapshotForComponent<ModelComponent>(entitySnapshot_Models);
 }
 
 void SnapshotManager::RestoreSnapShot()
@@ -31,8 +31,33 @@ void SnapshotManager::RestoreSnapShot()
 	// Restore the actual snapshot data per each component class
 	// This copy-per-class approach is necessary due to how EnTT is built
 	RestoreSnapshotForComponent<GamerEngine::TransformComponent>(entitySnapshot_Transform);
-    RestoreSnapshotForComponent<ModelComponent>(entitySnapshot_Models);
+    //RestoreSnapshotForComponent<ModelComponent>(entitySnapshot_Models);
     /*RestoreSnapshotForComponent()*/
+
+    const auto& view = myRegistry->view<GamerEngine::TransformComponent>();
+    if (view != nullptr)
+    {
+        for (const auto& entity : view)
+        {
+            auto& transform  = view.get<GamerEngine::TransformComponent>(entity);
+
+            auto copyOfChildren = transform.GetChildren();
+
+            transform.ClearChildren();
+
+
+			for (auto child : copyOfChildren)
+			{
+                transform.SetChild(GamerEngine::Entity{ child, myScene});
+			}
+
+			if (transform.HasParent())
+            {
+				transform.SetParent(GamerEngine::Entity{ transform.GetParent(), myScene });
+			}
+        }
+    }
+
 
     CleanUpSnapshotData();
 }
@@ -43,7 +68,7 @@ void SnapshotManager::CleanUpSnapshotData()
 
     // Clear all existing snapshot data
     CleanUpSnapshotData<GamerEngine::TransformComponent>(entitySnapshot_Transform);
-    CleanUpSnapshotData<ModelComponent>(entitySnapshot_Models);
+    //CleanUpSnapshotData<ModelComponent>(entitySnapshot_Models);
 }
 
 template <typename ComponentType>

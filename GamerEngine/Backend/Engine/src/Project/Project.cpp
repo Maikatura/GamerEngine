@@ -3,11 +3,14 @@
 
 #include "ProjectSerializer.h"
 #include "Utilites/Pointers.h"
+#include "Utilites/VisualProfiler.h"
 
 namespace GamerEngine {
 
     Ref<Project> Project::New()
     {
+        PROFILE_SCOPE("Project::New");
+
         s_ActiveProject = MakeRef<Project>();
         return s_ActiveProject;
     }

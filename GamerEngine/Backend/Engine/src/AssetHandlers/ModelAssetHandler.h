@@ -42,7 +42,7 @@ public:
 	static ModelAssetHandler& Get();
 
 	void Clear();
-	bool Initialize();
+	bool Init();
 
 	void UnloadModel(const std::wstring& aFilePath);
 

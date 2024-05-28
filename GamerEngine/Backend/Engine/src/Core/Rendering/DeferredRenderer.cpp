@@ -7,6 +7,7 @@
 #include "AssetHandlers/ModelAssetHandler.h"
 #include "Components/TransfromComponent.h"
 #include "Core/Framework/GraphicsBackend.hpp"
+#include "Utilites/VisualProfiler.h"
 
 void GBuffer::SetAsTarget()
 {
@@ -96,6 +97,8 @@ bool GBuffer::CreateGBuffer()
 
 bool DeferredRenderer::OnAdd()
 {
+	PROFILE_SCOPE("DeferredRenderer::OnAdd");
+
 	if (!Initialize())
 	{
 		return false;

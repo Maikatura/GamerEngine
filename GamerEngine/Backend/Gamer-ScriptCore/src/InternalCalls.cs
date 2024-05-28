@@ -11,7 +11,15 @@ namespace GamerEngine
 		internal extern static bool Entity_HasComponent(ulong entityID, Type componentType);
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		internal extern static ulong Entity_FindEntityByName(string name);
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static string Entity_GetName(ulong entityID);
+        
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Entity_HasChildren(ulong entityID);
+        
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static int Entity_GetChildCount(ulong entityID);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
 		internal extern static object GetScriptInstance(ulong entityID);
 		#endregion
 
@@ -44,13 +52,23 @@ namespace GamerEngine
 
         #region Input
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-		internal extern static bool Input_IsKeyDown(KeyCode keycode);
+		internal extern static bool Input_Keyboard_IsKeyDown(KeyCode keycode);
+        
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool Input_IsKeyUp(KeyCode keycode);
+        internal extern static bool Input_Keyboard_IsKeyUp(KeyCode keycode);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool Input_IsKeyPressed(KeyCode keycode);
+        internal extern static bool Input_Keyboard_IsKeyPressed(KeyCode keycode);
+
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Input_Mouse_IsKeyDown(KeyCode keycode);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Input_Mouse_GetDelta(out Vector2 aMouseDelta);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Input_Mouse_LockMouse(MouseLock aLockMouseState);
+
         #endregion
     }
 }

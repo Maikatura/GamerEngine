@@ -311,7 +311,7 @@ public:
 	Light(const Scene& _scene, const IElement& _element)
 		: Object(_scene, _element)
 	{
-		// Initialize the light properties here
+		// Init the light properties here
 	}
 
 	// Light type

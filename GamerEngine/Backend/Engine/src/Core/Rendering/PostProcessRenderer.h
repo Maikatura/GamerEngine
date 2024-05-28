@@ -47,7 +47,7 @@ public:
 		return instance;
 	}
 
-	bool Initialize();
+	bool Init();
 	void ReInitialize();
 
 	Ref<RenderTexture> CreateRenderTexture(const std::string& aName, float aWidth, float aHeight, DXGI_FORMAT aFormat = DXGI_FORMAT_R8G8B8A8_UNORM);

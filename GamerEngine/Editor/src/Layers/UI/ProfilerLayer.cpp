@@ -5,7 +5,7 @@
 
 ProfilerLayer::ProfilerLayer(bool& shouldUseProfiler) : Layer("Profiler", true, true), myUseProfiler(shouldUseProfiler)
 {
-	//gCPUProfiler.Initialize(10, 512);
+	//gCPUProfiler.Init(10, 512);
 }
 
 void ProfilerLayer::OnImGuiRender()

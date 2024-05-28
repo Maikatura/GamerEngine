@@ -13,7 +13,7 @@ class SnapshotManager
 {
 public:
     SnapshotManager();
-    SnapshotManager(entt::registry* aRegistry) : myRegistry(aRegistry) {}
+    SnapshotManager(GamerEngine::Scene* aScene, entt::registry* aRegistry) : myScene(aScene), myRegistry(aRegistry) {}
 
 	void CreateSnapshot();
 	void RestoreSnapShot();
@@ -33,9 +33,10 @@ private:
 
     entt::registry nullReg{};
 	entt::registry* myRegistry;
+    GamerEngine::Scene* myScene;
 
     SnapshotContainer<GamerEngine::TransformComponent> entitySnapshot_Transform;
-    SnapshotContainer<ModelComponent> entitySnapshot_Models;
+    //SnapshotContainer<ModelComponent> entitySnapshot_Models;
 
 
 	// Additional snapshot data for proper entity restoration

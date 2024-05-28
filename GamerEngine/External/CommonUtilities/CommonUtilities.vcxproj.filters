@@ -140,6 +140,9 @@
     <ClInclude Include="src\Utilites\VisualProfiler.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilites\KeyCodes.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

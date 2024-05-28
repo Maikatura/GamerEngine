@@ -203,6 +203,11 @@ namespace GamerEngine
 
 		std::vector<GamerEngine::Entity> GetChildren() const;
 
+		void ClearChildren()
+		{
+			myChildren.clear();
+		}
+
 		bool HasParent() const;
 
 

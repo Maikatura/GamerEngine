@@ -5,13 +5,15 @@
 #endif
 #include <Windows.h>
 
+#include "KeyCodes.h"
 #include "Math/MathTypes.hpp"
 #include "Math/Vector3.hpp"
+
 
 namespace CommonUtilities
 {
 
-    class InputManager
+	class InputManager
     {
     public:
         InputManager(HWND aHWND);
@@ -37,6 +39,9 @@ namespace CommonUtilities
         bool UpdateEvents(UINT message, WPARAM wParam, LPARAM lParam);
         void SetMousePos(Vector2i aPos);
         Vector2i GetMousePos();
+        void LockMouse(CommonUtilities::MouseLock aLockState);
+
+        void OnMouseMove(int xPos, int yPos);
 
     private:
         HWND myHWND;
@@ -51,9 +56,9 @@ namespace CommonUtilities
 
         POINT myMousePoint;
 
-        Vector2f mySavedMousePosition;
-        Vector2f myPreviousMousePosition;
-        Vector2f myCurrentMousePosition;
+        Vector2i mySavedMousePosition;
+        Vector2i myPreviousMousePosition;
+        Vector2i myCurrentMousePosition;
         Vector2f myMouseDelta;
 
         Vector2f myCurrentRelativeMousePosition;
@@ -63,5 +68,8 @@ namespace CommonUtilities
         std::bitset<256> myPreviousKeyboardState;
 
         bool myWindowIsActive = false;
+        CommonUtilities::MouseLock myMouseLockState = CommonUtilities::Mouse::None;
+        CommonUtilities::MouseLock myOldMouseLockState = CommonUtilities::Mouse::None;
+        bool myFirstTime = true;
     };
 }

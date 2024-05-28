@@ -1,9 +1,12 @@
 ﻿#include "GraphicsEngine.pch.h"
 #include "ScriptGlue.h"
+
+#include <mono/metadata/appdomain.h>
+
 #include "ScriptEngine.h"
 #include "Components/AllComponents.h"
 #include "Components/Components.hpp"
-#include "Core/KeyCodes.h"
+#include "Utilites/KeyCodes.h"
 
 #include "Input/Input.h"
 
@@ -26,6 +29,11 @@ namespace GamerEngine {
 			std::string str(cStr);
 			mono_free(cStr);
 			return str;
+		}
+
+		MonoString* StringToMonoString(const std::string& string)
+		{
+			return mono_string_new(mono_domain_get(), string.c_str());
 		}
 
 	}
@@ -69,6 +77,28 @@ namespace GamerEngine {
 		return s_EntityHasComponentFuncs.at(managedType)(entity);
 	}
 
+
+	static bool Entity_HasChildren(UUID entityID)
+	{
+		GamerEngine::Scene* scene = GamerEngine::ScriptEngine::GetSceneContext();
+		GE_ASSERT(scene);
+		GamerEngine::Entity entity = scene->GetEntityByUUID(entityID);
+		GE_ASSERT(entity);
+
+		return entity.GetComponent<GamerEngine::TransformComponent>().GetChildren().size() > 0;
+	}
+
+	static bool Entity_GetChildCount(UUID entityID)
+	{
+		GamerEngine::Scene* scene = GamerEngine::ScriptEngine::GetSceneContext();
+		GE_ASSERT(scene);
+		GamerEngine::Entity entity = scene->GetEntityByUUID(entityID);
+		GE_ASSERT(entity);
+
+		return entity.GetComponent<GamerEngine::TransformComponent>().GetChildren().size();
+	}
+
+
 	static bool Entity_GetComponent(UUID entityID, MonoReflectionType* componentType)
 	{
 		Scene* scene = ScriptEngine::GetSceneContext();
@@ -96,7 +126,15 @@ namespace GamerEngine {
 		return entity.GetUUID();
 	}
 
-	
+	static MonoString* Entity_GetName(UUID entityID)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		GE_ASSERT(scene);
+		Entity entity = scene->GetEntityByUUID(entityID);
+		GE_ASSERT(entity);
+
+		return Utils::StringToMonoString(entity.GetName());
+	}
 
 	
 
@@ -142,6 +180,9 @@ namespace GamerEngine {
 
 		GE_ADD_INTERNAL_CALL(Entity_HasComponent);
 		GE_ADD_INTERNAL_CALL(Entity_FindEntityByName);
+		GE_ADD_INTERNAL_CALL(Entity_GetName);
+		GE_ADD_INTERNAL_CALL(Entity_HasChildren);
+		GE_ADD_INTERNAL_CALL(Entity_GetChildCount);
 
 
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetTranslation);
@@ -155,9 +196,13 @@ namespace GamerEngine {
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetRight);
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetUp);
 		
-		GE_ADD_INTERNAL_CALL(Input_IsKeyDown);
-		GE_ADD_INTERNAL_CALL(Input_IsKeyUp);
-		GE_ADD_INTERNAL_CALL(Input_IsKeyPressed);
+		GE_ADD_INTERNAL_CALL(Input_Keyboard_IsKeyDown);
+		GE_ADD_INTERNAL_CALL(Input_Keyboard_IsKeyUp);
+		GE_ADD_INTERNAL_CALL(Input_Keyboard_IsKeyPressed);
+
+		GE_ADD_INTERNAL_CALL(Input_Mouse_IsKeyDown);
+		GE_ADD_INTERNAL_CALL(Input_Mouse_GetDelta);
+		GE_ADD_INTERNAL_CALL(Input_Mouse_LockMouse);
 	}
 
 }

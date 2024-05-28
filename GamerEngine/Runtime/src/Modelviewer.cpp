@@ -36,6 +36,7 @@
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
 #include "Scene/SceneSerializer.h"
+#include "Utilites/VisualProfiler.h"
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -43,6 +44,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                       _In_ LPWSTR    lpCmdLine,
                       _In_ int       nCmdShow)
 {
+
+    START_PROFILE_WITH_PATH("Game Profile", "startup_game_profile.json");
+
     UNREFERENCED_PARAMETER(hInstance);
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -80,11 +84,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         true
     );
 
-    LineRenderer::Get().Init();
     Physics::Get().Init();
-    SceneManager::Get().Initialize();
+    SceneManager::Get().Init();
     SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
- 
+
+    STOP_PROFILE();
+
     while(bShouldRun)
     {
 		while(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))

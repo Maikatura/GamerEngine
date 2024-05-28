@@ -2,12 +2,14 @@
 #include "Core/Rendering/RendererBase.h"
 
 #include "Core/Framework/DX11.h"
+#include "Utilites/VisualProfiler.h"
 
 bool RendererBase::Init()
 {
-	HRESULT result = S_FALSE;
 
-	
+	PROFILE_SCOPE("RenderBase::Init");
+
+	HRESULT result = S_FALSE;
 
 	{
 		D3D11_SAMPLER_DESC samplerStateDesc{};

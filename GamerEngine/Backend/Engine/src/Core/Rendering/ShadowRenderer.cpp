@@ -8,9 +8,12 @@
 #include "Renderer.h"
 #include "Core/Framework/DX11.h"
 #include "AssetHandlers/ModelAssetHandler.h"
+#include "Utilites/VisualProfiler.h"
 
 bool ShadowRenderer::OnAdd()
 {
+	PROFILE_SCOPE("ShadowRenderer::OnAdd");
+
 	if (!Initialize())
 	{
 		return false;

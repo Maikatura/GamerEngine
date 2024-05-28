@@ -16,6 +16,7 @@
 #include "Layers/EditorLayers.h"
 #include "Layers/UI/EditorSettingsPanel.h"
 #include "Scene/SceneManager.h"
+#include "Utilites/VisualProfiler.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -25,6 +26,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                       _In_ LPWSTR    lpCmdLine,
                       _In_ int       nCmdShow)
 {
+
+	START_PROFILE_WITH_PATH("Editor Profile", "startup_editor_profile.json");
+
 #if _DEBUG
 #pragma warning( push )
 #pragma warning( disable : 4996 )
@@ -78,12 +82,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		editorName,
 	true);
 
+
+
 	myLayers.Init();
 	LineRenderer::Get().Init();
 	Physics::Get().Init();
 
 	SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
 
+	STOP_PROFILE();
 	
 	while(bShouldRun)
 	{

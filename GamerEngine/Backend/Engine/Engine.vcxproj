@@ -148,7 +148,6 @@
     <ClInclude Include="src\Core\FileSystem.h" />
     <ClInclude Include="src\Core\Framework\DX11.h" />
     <ClInclude Include="src\Core\Framework\GraphicsBackend.hpp" />
-    <ClInclude Include="src\Core\KeyCodes.h" />
     <ClInclude Include="src\Core\Model\Entity.h" />
     <ClInclude Include="src\Core\Model\Material.h" />
     <ClInclude Include="src\Core\Model\Model.h" />
@@ -272,7 +271,6 @@
     <ClCompile Include="src\Core\Asset\RuntimeAssetManager.cpp" />
     <ClCompile Include="src\Core\FileSystem.cpp" />
     <ClCompile Include="src\Core\Framework\DX11.cpp" />
-    <ClCompile Include="src\Core\KeyCodes.cpp" />
     <ClCompile Include="src\Core\Model\Entity.cpp" />
     <ClCompile Include="src\Core\Model\Material.cpp" />
     <ClCompile Include="src\Core\Model\Model.cpp" />

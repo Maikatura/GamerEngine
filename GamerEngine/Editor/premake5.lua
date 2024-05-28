@@ -84,6 +84,8 @@ externalincludedirs {
 
 externalwarnings "Off"
 
+dependson "Gamer-ScriptCore"
+
 links
 {
 	"FBXImporter",

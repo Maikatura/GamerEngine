@@ -29,10 +29,12 @@ public:
 	static bool IsMousePressed(const int aMouseKey);
 	static bool IsMouseReleased(const int aMouseKey);
 
-	static CommonUtilities::Vector2<float> GetMouseDelta();
+	static Vector2f GetMouseDelta();
 	static Vector2i GetMousePos();
 
 	static void SetMousePos(Vector2i aPos);
+
+	static void LockMouse(int aLock);
 
 private:
 	inline static Ref<CommonUtilities::InputManager> myInput;

@@ -21,7 +21,7 @@ namespace GamerEngine
         void OnCreate()
         {
             myTransformComponent = GetComponent<TransformComponent>();
-            Console.WriteLine("Test");
+            //Console.WriteLine("Test");
 
             myStartPos = myTransformComponent.Translation;
         }

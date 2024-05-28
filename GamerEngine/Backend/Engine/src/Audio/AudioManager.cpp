@@ -2,9 +2,11 @@
 #include <Audio/AudioManager.h>
 #include <Audio/Audio.h>
 
+#include "Utilites/VisualProfiler.h"
+
 void AudioManager::Init()
 {
-	
+	PROFILE_SCOPE("AudioManager::Init");
 }
 
 

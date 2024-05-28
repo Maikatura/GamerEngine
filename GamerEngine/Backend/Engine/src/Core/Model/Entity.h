@@ -2,6 +2,7 @@
 #include <entt.hpp>
 
 #include "Components/IDComponent.h"
+#include "Components/TagComponent.h"
 #include "Scene/Scene.h"
 
 
@@ -9,8 +10,6 @@ namespace GamerEngine
 {
 
 
-
-	class Scene;
 
 	class Entity
 	{
@@ -33,6 +32,10 @@ namespace GamerEngine
 		}
 
 		GamerEngine::UUID GetUUID() { return GetComponent<IDComponent>().ID; }
+		std::string GetName() { return GetComponent<TagComponent>().Tag; }
+
+
+
 
 		template<typename T>
 		T& AddComponent()

@@ -176,7 +176,15 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 
 		for (int i = 0; i < tc.GetChildren().size(); i++)
 		{
-			out << YAML::Key << i << YAML::Value << tc.GetChildren()[i].GetUUID();
+			if (tc.GetChildren()[i])
+			{
+
+
+
+				out << YAML::Key << i << YAML::Value << tc.GetChildren()[i].GetUUID();
+
+			}
+
 		}
 
 		out << YAML::EndMap; // Children

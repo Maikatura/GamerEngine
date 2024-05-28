@@ -5,9 +5,12 @@
 #include "Renderer.h"
 #include "Input/Input.h"
 #include "Utilites/StringCast.h"
+#include "Utilites/VisualProfiler.h"
 
-bool PostProcessRenderer::Initialize()
+bool PostProcessRenderer::Init()
 {
+	PROFILE_SCOPE("PostProcessRenderer::Init");
+
 	HRESULT result;
 	D3D11_BUFFER_DESC bufferDescription = { 0 };
 	bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
@@ -94,7 +97,7 @@ Ref<RenderTexture> PostProcessRenderer::CreateRenderTexture(const std::string& a
 	//	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 	//	
 
-	//	renderTex->Initialize(DX11::Get().GetDevice(), aWidth, aHeight);
+	//	renderTex->Init(DX11::Get().GetDevice(), aWidth, aHeight);
 
 
 

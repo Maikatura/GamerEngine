@@ -10,10 +10,6 @@
 
 #include <thread>
 
-
-
-
-
 struct ProfileResult
 {
     std::string Name;
@@ -130,11 +126,12 @@ private:
     bool m_Stopped;
 };
 
-
+#define START_PROFILE_WITH_PATH(a, b) Instrumentor::Get().BeginSession(a, b)
 #define START_PROFILE(a) Instrumentor::Get().BeginSession(a)
 #define PROFILE_SCOPE(a) InstrumentationTimer timer(a)
 #define STOP_PROFILE() Instrumentor::Get().EndSession()
 #else
+#define START_PROFILE_WITH_PATH(a, b)
 #define START_PROFILE(a)
 #define PROFILE_SCOPE(a)
 #define STOP_PROFILE()

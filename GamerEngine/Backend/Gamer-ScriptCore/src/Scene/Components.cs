@@ -70,6 +70,17 @@ namespace GamerEngine
             InternalCalls.TransformComponent_GetUp(Entity.ID, out Vector3 translation);
             return translation;
         }
+
+        public bool HasChildren()
+        {
+            return InternalCalls.Entity_HasChildren(Entity.ID);
+        }
+
+        public int GetChildCount()
+        {
+            return InternalCalls.Entity_GetChildCount(Entity.ID);
+        }
+
     }
 
 }
