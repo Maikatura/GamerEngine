@@ -1,231 +1,23 @@
 Scene: SceneTesting
-Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
+Path: C:\Users\simon\OneDrive\Dokument\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
 Entities:
-  - Entity: 10840798227440027384
-    TagComponent:
-      Tag: Room
-    TransformComponent:
-      Translation: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [0.999999702, 0.999999762, 0.999999702]
-      ChildrenSize: 3
-      Children:
-        0: 17697230832881840710
-        1: 7440434943858370797
-        2: 1828353707181980437
-  - Entity: 15804195029097994578
-    TagComponent:
-      Tag: WowSkeleton
-    TransformComponent:
-      Translation: [-23.9251175, -47.5909996, -29.545042]
-      Rotation: [-179.999893, 34.25, -179.999893]
-      Scale: [10, 10, 10]
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Delay: -0.283814102
-      Path: Assets\Warcraft_Test\Models\taurenskeleton\taurenskeleton_blood101.fbx
-      TextureSize: 2
-      Texture:
-        0:
-          PixelShader: shaders\custom\default_toon_ps.cso
-          Albedo: assets\warcraft_test\models\taurenskeleton\taurenskeleton_blood.png
-          Normal: resources\textures\t_default_n.dds
-          Material: resources\textures\t_default_m.dds
-        1:
-          PixelShader: shaders\custom\default_toon_ps.cso
-          Albedo: assets\warcraft_test\models\taurenskeleton\taurenskeleton_horns_blood.png
-          Normal: resources\textures\t_default_n.dds
-          Material: resources\textures\t_default_m.dds
-    ScriptComponent:
-      ClassName: GamerEngine.Goober
-  - Entity: 17697230832881840710
-    TagComponent:
-      Tag: Wall
-    TransformComponent:
-      Translation: [-100, 0, 0]
-      Rotation: [0.000104055282, 0, 0]
-      Scale: [1, 50, 100]
-      Parent: 10840798227440027384
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Delay: -0.0195470992
-      Path: Assets\Models\Shapes\Cube.fbx
-      TextureSize: 1
-      Texture:
-        0:
-          PixelShader: shaders\default_ps.cso
-          Albedo: resources\textures\t_default_c.dds
-          Normal: resources\textures\t_default_n.dds
-          Material: resources\textures\t_default_m.dds
-  - Entity: 7440434943858370797
-    TagComponent:
-      Tag: Wall
-    TransformComponent:
-      Translation: [0, 0, -100]
-      Rotation: [2.10263215e-06, 0, 2.66996426e-06]
-      Scale: [100, 50, 0.999999881]
-      Parent: 10840798227440027384
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Delay: -0.00389210018
-      Path: Assets\Models\Shapes\Cube.fbx
-      TextureSize: 1
-      Texture:
-        0:
-          PixelShader: shaders\default_ps.cso
-          Albedo: resources\textures\t_default_c.dds
-          Normal: resources\textures\t_default_n.dds
-          Material: resources\textures\t_default_m.dds
-  - Entity: 2108338710293810877
-    TagComponent:
-      Tag: Point Light
-    TransformComponent:
-      Translation: [-60.6723862, -33.2019463, 30.9459171]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-      ChildrenSize: 0
-      Children:
-        {}
-    PointLightComponent:
-      Color: [0, 0.819607854, 1]
-      Intensity: 0.00999999978
-      Range: 0.00999999978
-  - Entity: 11770492277339510883
-    TagComponent:
-      Tag: Point Light
-    TransformComponent:
-      Translation: [430.818726, -242.848526, 207.688873]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-      ChildrenSize: 0
-      Children:
-        {}
-    PointLightComponent:
-      Color: [0, 1, 0]
-      Intensity: 1
-      Range: 0.100000001
-  - Entity: 8532554453439454148
-    TagComponent:
-      Tag: Point Light
-    TransformComponent:
-      Translation: [-12.9125671, -423.798096, -101.987244]
-      Rotation: [0, -0, 0]
-      Scale: [1, 0.999999881, 0.999999881]
-      ChildrenSize: 0
-      Children:
-        {}
-    PointLightComponent:
-      Color: [1, 1, 0]
-      Intensity: 0.300000012
-      Range: 0.0199999996
-  - Entity: 5923227853819891854
-    TagComponent:
-      Tag: Cube
-    TransformComponent:
-      Translation: [0, 0, -128.920456]
-      Rotation: [0, 0, 0]
-      Scale: [31.1136951, 31.1136589, 31.1136951]
-      Parent: 15553723860272066188
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Delay: -0.00350430002
-      Path: Assets\Models\Shapes\Cube.fbx
-      TextureSize: 1
-      Texture:
-        0:
-          PixelShader: shaders\default_ps.cso
-          Albedo: resources\textures\t_default_c.dds
-          Normal: resources\textures\t_default_n.dds
-          Material: resources\textures\t_default_m.dds
-  - Entity: 1828353707181980437
-    TagComponent:
-      Tag: Ground
-    TransformComponent:
-      Translation: [0, -50, 0]
-      Rotation: [0, -0, 0]
-      Scale: [100, 2, 100]
-      Parent: 10840798227440027384
-      ChildrenSize: 0
-      Children:
-        {}
-    ModelComponent:
-      Delay: -107374176
-      Path: Assets\Models\Shapes\Cube.fbx
-      TextureSize: 1
-      Texture:
-        0:
-          PixelShader: shaders\default_ps.cso
-          Albedo: resources\textures\t_default_c.dds
-          Normal: resources\textures\t_default_n.dds
-          Material: resources\textures\t_default_m.dds
-  - Entity: 4488255876943964703
-    TagComponent:
-      Tag: Play Camera
-    TransformComponent:
-      Translation: [0, 127, -137]
-      Rotation: [25, 0, 0]
-      Scale: [0.999960899, 0.99995631, 0.999987602]
-      Parent: 17804868780395308565
-      ChildrenSize: 0
-      Children:
-        {}
-    CameraComponent:
-      FOV: 90
-      NearPlane: 0.100000001
-      FarPlane: 250000
-      Primary: true
-  - Entity: 16032452205484422433
-    TagComponent:
-      Tag: Directional Light
-    TransformComponent:
-      Translation: [590.171021, 64.862999, 447.524689]
-      Rotation: [37.26054, -15.1709509, -1.81009376]
-      Scale: [0.99514395, 0.999493062, 0.9996171]
-      ChildrenSize: 0
-      Children:
-        {}
-    DirectionalLightComponent:
-      Color: [1, 1, 1]
-      Intensity: 1
-  - Entity: 15553723860272066188
-    TagComponent:
-      Tag: Point Light
-    TransformComponent:
-      Translation: [0, 0, -104.38707]
-      Rotation: [-47.143837, -0, 0]
-      Scale: [1, 0.99999994, 0.99999994]
-      ChildrenSize: 1
-      Children:
-        0: 5923227853819891854
-    PointLightComponent:
-      Color: [1, 0, 1]
-      Intensity: 1
-      Range: 0.100000001
-  - Entity: 4333660610956395841
+  - Entity: 6560000753651608803
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [25.7303276, -30.5032043, -34.0337715]
-      Rotation: [0, -16.7324429, 0]
-      Scale: [0.100000091, 0.100000001, 0.100000091]
+      Translation: [-28.4307957, -47.5863113, 42.5333748]
+      Rotation: [179.99884, -3.35315728, 179.998718]
+      Scale: [5, 5, 5]
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Delay: -0.00174780004
-      Path: Assets\Models\Buddah_Test_Bakes_low.fbx
+      Delay: -14.1967897
+      Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:
         0:
-          PixelShader: shaders\custom\default_toon_ps.cso
+          PixelShader: shaders\default_ps.cso
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
@@ -256,19 +48,19 @@ Entities:
           Material: resources\textures\t_default_m.dds
     ScriptComponent:
       ClassName: GamerEngine.Player
-  - Entity: 6560000753651608803
+  - Entity: 4333660610956395841
     TagComponent:
       Tag: Default Entity Name
     TransformComponent:
-      Translation: [-28.4307957, -47.5863113, 42.5333748]
-      Rotation: [179.99884, -3.35315728, 179.998718]
-      Scale: [5, 5, 5]
+      Translation: [25.2400379, -30.5032043, -32.4028664]
+      Rotation: [0, -16.7324429, 0]
+      Scale: [0.100000091, 0.100000001, 0.100000091]
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Delay: -14.0877457
-      Path: Assets\Models\pedal.fbx
+      Delay: -0.00174780004
+      Path: Assets\Models\Buddah_Test_Bakes_low.fbx
       TextureSize: 1
       Texture:
         0:
@@ -276,19 +68,183 @@ Entities:
           Albedo: resources\textures\t_default_c.dds
           Normal: resources\textures\t_default_n.dds
           Material: resources\textures\t_default_m.dds
-  - Entity: 16591687773649836614
+  - Entity: 15553723860272066188
     TagComponent:
-      Tag: Spot Light
+      Tag: Point Light
     TransformComponent:
-      Translation: [31.9802132, -390.553802, 181.997971]
-      Rotation: [152.466568, -27.9873199, 0]
-      Scale: [0.999782264, 1.09994328, 0.999852419]
+      Translation: [0, -34.9743042, 5.66474056]
+      Rotation: [-47.1438293, -0, 0]
+      Scale: [1, 0.999999881, 0.999999881]
+      ChildrenSize: 1
+      Children:
+        0: 5923227853819891854
+    PointLightComponent:
+      Color: [1, 0, 1]
+      Intensity: 0.00499999989
+      Range: 0.00499999989
+  - Entity: 16032452205484422433
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      Translation: [590.171021, 64.862999, 447.524689]
+      Rotation: [123, 0, 10.25]
+      Scale: [1, 1, 0.9996171]
       ChildrenSize: 0
       Children:
         {}
-    SpotLightComponent:
-      Color: [1, 0.0470588244, 1]
-      Intensity: 2
-      Range: 0.100000001
-      InnerCone: 5
-      OuterCone: 37
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Intensity: 1
+  - Entity: 4488255876943964703
+    TagComponent:
+      Tag: Play Camera
+    TransformComponent:
+      Translation: [0, 127, -137]
+      Rotation: [25, 0, 0]
+      Scale: [0.999960899, 0.99995631, 0.999987602]
+      Parent: 17804868780395308565
+      ChildrenSize: 0
+      Children:
+        {}
+    CameraComponent:
+      FOV: 90
+      NearPlane: 0.100000001
+      FarPlane: 250000
+      Primary: true
+  - Entity: 1828353707181980437
+    TagComponent:
+      Tag: Ground
+    TransformComponent:
+      Translation: [0, -50, 0]
+      Rotation: [0, -0, 0]
+      Scale: [100, 2, 100]
+      Parent: 10840798227440027384
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -107374176
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 5923227853819891854
+    TagComponent:
+      Tag: Cube
+    TransformComponent:
+      Translation: [0, 28.0969963, 21.7327118]
+      Rotation: [-35.4440002, -1.75, 0]
+      Scale: [9.99995136, 9.9995594, 9.9995594]
+      Parent: 15553723860272066188
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00350430002
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 2108338710293810877
+    TagComponent:
+      Tag: Point Light
+    TransformComponent:
+      Translation: [-60.6723862, -33.2019463, 30.9459171]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    PointLightComponent:
+      Color: [0, 0.819607854, 1]
+      Intensity: 0.00999999978
+      Range: 0.00499999989
+  - Entity: 7440434943858370797
+    TagComponent:
+      Tag: Wall
+    TransformComponent:
+      Translation: [0, 0, -100]
+      Rotation: [2.10263215e-06, 0, 2.66996426e-06]
+      Scale: [100, 50, 0.999999881]
+      Parent: 10840798227440027384
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00389210018
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 17697230832881840710
+    TagComponent:
+      Tag: Wall
+    TransformComponent:
+      Translation: [-100, 0, 0]
+      Rotation: [0.000104055282, 0, 0]
+      Scale: [1, 50, 100]
+      Parent: 10840798227440027384
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.0195470992
+      Path: Assets\Models\Shapes\Cube.fbx
+      TextureSize: 1
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: resources\textures\t_default_c.dds
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+  - Entity: 15804195029097994578
+    TagComponent:
+      Tag: WowSkeleton
+    TransformComponent:
+      Translation: [-23.9251175, -47.5909996, -29.545042]
+      Rotation: [-179.999893, 34.25, -179.999893]
+      Scale: [10, 10, 10]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.590313494
+      Path: Assets\Warcraft_Test\Models\taurenskeleton\taurenskeleton_blood101.fbx
+      TextureSize: 2
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\warcraft_test\models\taurenskeleton\taurenskeleton_blood.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        1:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\warcraft_test\models\taurenskeleton\taurenskeleton_horns_blood.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+    ScriptComponent:
+      ClassName: GamerEngine.Goober
+  - Entity: 10840798227440027384
+    TagComponent:
+      Tag: Room
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [0.999999702, 0.999999762, 0.999999702]
+      ChildrenSize: 3
+      Children:
+        0: 1828353707181980437
+        1: 7440434943858370797
+        2: 17697230832881840710

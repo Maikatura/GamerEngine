@@ -1,12 +1,7 @@
 ﻿namespace GamerEngine
 {
 
-    public enum MouseLock 
-    { 
-        None,
-        Center,
-        CurrentPosition, 
-    }
+  
 
     public class Input
     {

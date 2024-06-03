@@ -58,13 +58,15 @@ inline std::string replacePlaceholder(const std::string& message, Args&&... args
     }
 
 #define GE_ASSERT(condition, ...) \
-    if (!(condition)) \
-    { \
-        std::stringstream ss; \
-        ss << "ERROR: " << replacePlaceholder("Condition Meet", ##__VA_ARGS__); \
-        ss << " in " << __FILE__ << " at line " << __LINE__ << std::endl; \
-        std::cerr << ss.str(); \
-    }
+    do { \
+        if (!(condition)) \
+        { \
+            std::stringstream ss; \
+            ss << "ERROR: " << replacePlaceholder("Condition Meet", ##__VA_ARGS__); \
+            ss << " in " << __FILE__ << " at line " << __LINE__ << std::endl; \
+            std::cerr << ss.str(); \
+        } \
+    } while (false)
 
 #define GE_VALID(pointer) \
     GE_ASSERT((pointer) != nullptr, "Pointer is null")

@@ -6,7 +6,7 @@
 #include "Textures.hlsli"
 
 
-bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightProjection, float3 aWorldPosition, float aBias, bool aCastShadows)
+bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightProjection, float3 aWorldPosition, float aBias, bool aCastShadows, float textureSize)
 {
     if (!aCastShadows)
         return false;
@@ -16,6 +16,9 @@ bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightPr
     float2 lightUV;
     lightUV.x = v2lProj.x / v2lProj.w / 2.f + .5f;
     lightUV.y = -v2lProj.y / v2lProj.w / 2.f + .5f;
+    
+    //lightUV.x *= textureSize;
+    //lightUV.y *= textureSize;
 
     float vDepth = (v2lProj.z / v2lProj.w) - aBias;
 

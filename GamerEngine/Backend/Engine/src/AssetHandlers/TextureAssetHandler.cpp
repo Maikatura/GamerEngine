@@ -169,7 +169,7 @@ Ref<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 
 	std::string name = Helpers::string_cast<std::string>(aName);
 
-	std::unique_ptr<DepthStencil> output = std::make_unique<DepthStencil>();
+	Ref<DepthStencil> output = MakeRef<DepthStencil>();
 	output->myName = aName;
 
 	D3D11_TEXTURE2D_DESC desc = { 0 };
@@ -186,9 +186,6 @@ Ref<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 	desc.MiscFlags = 0;
 	result = DX11::Get().GetDevice()->CreateTexture2D(&desc, nullptr, reinterpret_cast<ID3D11Texture2D**>(output->myTexture.GetAddressOf()));
 
-	
-	
-
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC resourceDesc = {};
 	ZeroMemory(&resourceDesc, sizeof(resourceDesc));
@@ -197,6 +194,11 @@ Ref<DepthStencil> TextureAssetHandler::CreateDepthStencil(
 	resourceDesc.Texture2D.MipLevels = desc.MipLevels;
 	result = DX11::Get().GetDevice()->CreateShaderResourceView(output->myTexture.Get(), &resourceDesc, output->mySRV.GetAddressOf());
 	GE_ASSERT(SUCCEEDED(result), std::string("Failed to create Shader Resource View: " + name).c_str());
+
+	if (output->mySRV.Get() == nullptr)
+	{
+		std::cout << "WTF" << std::endl;
+	}
 
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthDesc = {};

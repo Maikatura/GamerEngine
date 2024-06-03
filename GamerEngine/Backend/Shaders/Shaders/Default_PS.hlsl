@@ -88,10 +88,10 @@ PixelOutput main(VertexToPixel input)
 
     
     LightData Light = LB_DirectionalLight;
-    if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
-    {
-        dirLightTemp *= SHADOW_BIAS;
-    }
+    //if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+    //{
+    //    dirLightTemp *= SHADOW_BIAS;
+    //}
 		
 
     directLighting += dirLightTemp;
@@ -160,10 +160,8 @@ PixelOutput main(VertexToPixel input)
 					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
-				if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
-				{
-					spotTemp *= SHADOW_BIAS;
-				}
+                    spotTemp *= GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows, 2048.0f);
+				
 				spotLight += spotTemp;
 				break;
 			}
@@ -279,7 +277,9 @@ PixelOutput main(VertexToPixel input)
 			result.Color.a = 1.0f;
 			break;
 		case 19://RenderMode::SpotLightNoAlbedo:
-			result.Color.rgb = spotLight;
+            result.Color.r = directLighting.r + ambientLighting.r + ((pointLight.r + spotLight.r));
+			result.Color.g = 0.0f;
+			result.Color.b = 0.0f;
 			result.Color.a = 1.0f;
 			break;
 	}

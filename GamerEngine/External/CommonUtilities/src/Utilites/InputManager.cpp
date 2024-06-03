@@ -247,7 +247,7 @@ Vector2i CommonUtilities::InputManager::GetMousePos()
 	return mousePos;
 }
 
-void CommonUtilities::InputManager::LockMouse(CommonUtilities::MouseLock aLockState)
+void CommonUtilities::InputManager::LockMouse(int aLockState)
 {
 	myMouseLockState = aLockState;
 
@@ -255,6 +255,7 @@ void CommonUtilities::InputManager::LockMouse(CommonUtilities::MouseLock aLockSt
 	{
 		POINT currentMousePos = {};
 		::GetCursorPos(&currentMousePos);
+
 
 		//OnMouseMove(currentMousePos.x, currentMousePos.y);
 		mySavedMousePosition.x = currentMousePos.x;
@@ -307,6 +308,8 @@ void CommonUtilities::InputManager::OnMouseMove(int xPos, int yPos)
 			}
 			case  CommonUtilities::Mouse::Lock_CurrentPos:
 			{
+
+				// Change to a clipping size instead.
 				SetCursorPos(mySavedMousePosition.x, mySavedMousePosition.y);
 
 				// Store the current position as the previous position for the next frame

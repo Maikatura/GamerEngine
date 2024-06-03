@@ -271,6 +271,9 @@ void MainMenuBar::RenderMainBar()
         case RenderMode::SpotLightNoAlbedo:
             topBar += "Spot Light No Albedo";
             break;
+        case RenderMode::DepthBuffer:
+            topBar += "Depth Buffer";
+            break;
         case RenderMode::COUNT:
         default:
             topBar += "Error";

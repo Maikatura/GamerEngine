@@ -7,9 +7,9 @@
 #include "Data/ShadowFunctions.hlsli"
 #include "Data/LightBuffer.hlsli"
 
-PixelOutput main(FullscreenVertexToPixel input)
+DeferredPixelOutput main(FullscreenVertexToPixel input)
 {
-    PixelOutput result;
+    DeferredPixelOutput result;
 
     const float4 albedo = albedoTexture.Sample(defaultSampler, input.UV);
     if (albedo.a <= 0.05f)
@@ -86,6 +86,8 @@ PixelOutput main(FullscreenVertexToPixel input)
     float3 finalColor = directLighting + ambientLightning + ((pointLight + spotLight));
     result.Color.rgb = finalColor;
     result.Color.a = 1;
+
+    result.Depth = 1;
 
     return result;
 }

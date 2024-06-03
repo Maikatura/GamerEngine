@@ -29,7 +29,7 @@ PixelShader::PixelShader(const std::string& aPath)
     std::string psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
     auto result = DX11::Get().GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &myShader);
     if (FAILED(result))
-    {
+    { 
         
     }
     psFile.close();

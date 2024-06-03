@@ -355,11 +355,26 @@ void GraphicsEngine::OnFrameUpdate()
 
 
 #if defined(_DEBUG) || defined(_RELEASE)
+
+    if(Input::IsKeyPressed(VK_F5))
+    {
+        int currentRenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
+        currentRenderMode--;
+        if(currentRenderMode < 0)
+        {
+            currentRenderMode = static_cast<int>(RenderMode::COUNT) - 1;
+        }
+
+        std::cout << "Render Mode: " << currentRenderMode << "\n";
+
+        GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
+    }
+
     if (Input::IsKeyPressed(VK_F6))
     {
-        unsigned int currentRenderMode = static_cast<unsigned int>(GraphicsEngine::Get()->GetRenderMode());
+        int currentRenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
         currentRenderMode++;
-        if (currentRenderMode == static_cast<unsigned char>(RenderMode::COUNT))
+        if (currentRenderMode == static_cast<int>(RenderMode::COUNT))
         {
             currentRenderMode = 0;
         }

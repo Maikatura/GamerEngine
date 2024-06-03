@@ -92,16 +92,21 @@ struct FullscreenVertexInput
 struct FullscreenVertexToPixel
 {
 	float4 Position		:	SV_POSITION;
-	float2 UV			:	TEXCOORD0;
+	float2 UV			:	TEXCOORD;
+};
+
+struct PostProcessingPixelOutput
+{
+    float4 Color : SV_TARGET;
+};
+
+struct PostProcessingPixelOutputDepth
+{
+    float4 Color : SV_TARGET;
+    float Depth : SV_DEPTH;
 };
 
 struct DeferredPixelOutput
-{
-	float4 Color			:	SV_TARGET;
-    float Depth				:	SV_DEPTH;
-};
-
-struct FullscreenPixelOutput
 {
     float4 Color : SV_TARGET;
     float Depth : SV_DEPTH;

@@ -134,7 +134,7 @@ public:
 
 	void ResetViewport();
 
-	void ResetRenderTarget(bool isUsingEditor = false, bool useDepth = true);
+	void ResetRenderTarget(bool isUsingEditor = false, bool useDepth = true, Ref<DepthStencil> aDepth = nullptr);
 
 	Vector2ui GetScreenSize() const;
 

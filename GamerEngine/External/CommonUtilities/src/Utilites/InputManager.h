@@ -39,7 +39,7 @@ namespace CommonUtilities
         bool UpdateEvents(UINT message, WPARAM wParam, LPARAM lParam);
         void SetMousePos(Vector2i aPos);
         Vector2i GetMousePos();
-        void LockMouse(CommonUtilities::MouseLock aLockState);
+        void LockMouse(int aLockState);
 
         void OnMouseMove(int xPos, int yPos);
 

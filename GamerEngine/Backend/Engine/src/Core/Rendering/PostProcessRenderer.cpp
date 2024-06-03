@@ -115,7 +115,7 @@ Ref<RenderTexture> PostProcessRenderer::CreateRenderTexture(const std::string& a
 	return nullptr;
 }
 
-void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection, VREye aEye)
+void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix4x4f aProjection, Ref<DepthStencil> aDepth, VREye aEye)
 {
 	auto camera = GamerEngine::Renderer::GetCamera();
 	if(!camera)
@@ -241,7 +241,7 @@ void PostProcessRenderer::Render(PostProcessPass aPass, Matrix4x4f aView, Matrix
 			SetBlendState(BlendState::Additive);
 
 			
-			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture, nullptr);
+			RenderTextureOnSlot(8, 8, PostProcessPass::PP_SSAO, mySSAOTexture, aDepth != nullptr ? aDepth->myDSV.Get() : nullptr);
 			break;
 		}
 
