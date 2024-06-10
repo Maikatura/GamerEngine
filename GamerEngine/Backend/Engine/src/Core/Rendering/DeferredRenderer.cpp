@@ -18,7 +18,7 @@ void GBuffer::SetAsTarget()
 		
 	}
 
-	DX11::Get().GetContext()->OMSetRenderTargets(GBufferTexture::EGBufferTexture_Count, &rtvList[0], DX11::Get().GetDepthStencilView()->myDSV.Get());
+	DX11::Get().GetContext()->OMSetRenderTargets(GBufferTexture::EGBufferTexture_Count, &rtvList[0], myDepthStencil->myDSV.Get());
 }
 
 
@@ -31,8 +31,15 @@ void GBuffer::SetAsResource(unsigned int aStartSlot)
 		mySRVList[t] = myRenderTextures[t].GetShaderResourceView();
 	}
 
+
 	//DX11::Get().GetContext()->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &mySRVList[0]);
 	DX11::Get().GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::EGBufferTexture_Count, &mySRVList[0]);
+	DX11::Get().GetContext()->PSSetShaderResources(120, 1, myDepthStencil->mySRV.GetAddressOf());
+
+	//GE_ASSERT(myDepthStencil->mySRV != nullptr, "Pointer is null?");
+
+
+
 	
 }
 
@@ -43,12 +50,13 @@ void GBuffer::ClearResource(unsigned int aStartSlot)
 	for(int i = 0; i < GBufferTexture::EGBufferTexture_Count; i++)
 	{
 		srvList[i] = nullptr;
-		myRenderTextures[i].ClearRenderTarget(DX11::Get().GetContext(),nullptr, 0, 0, 0, 0);
+		myRenderTextures[i].ClearRenderTarget(DX11::Get().GetContext(), nullptr, 0, 0, 0, 0);
 	}
 
-
+	DX11::Get().GetContext()->ClearDepthStencilView(myDepthStencil->myDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	//DX11::Get().GetContext()->VSSetShaderResources(aStartSlot, GBufferTexture::GBufferTexture_Count, &srvList[0]);
 	DX11::Get().GetContext()->PSSetShaderResources(aStartSlot, GBufferTexture::EGBufferTexture_Count, &srvList[0]);
+	DX11::Get().GetContext()->PSSetShaderResources(120, 1, &srvList[0]);
 }
 
 void GBuffer::Clear()
@@ -91,6 +99,8 @@ bool GBuffer::CreateGBuffer()
 	myRenderTextures[GBuffer::GBufferTexture::EGBufferTexture_ViewNormal].Initialize(DX11::Get().GetDevice(), width, height, DXGI_FORMAT_R16G16B16A16_SNORM, "View Normal GBuffer");
 
 	myRenderer.Initialize(DX11::Get().GetDevice(), width, height);
+
+	myDepthStencil = TextureAssetHandler::CreateDepthStencil(L"GBuffer DepthStencil", width, height);
 
 	return true;
 }
@@ -135,15 +145,14 @@ void DeferredRenderer::OnRenderSetup()
 	//auto depth = DX11::Get().GetDepthStencilView()->mySRV;
 	//DX11::Get().GetContext()->PSSetShaderResources(120, 1, &depth);
 
-	RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
-	RendererBase::SetBlendState(BlendState::None);
+	
 }
 
 void DeferredRenderer::OnRender()
 {
 
 	const VREye vrEye = VREye::None;
-
+	
 	const Matrix4x4f projection = GamerEngine::Renderer::GetCamera()->GetHMDMatrixProjectionEye(vrEye);
 	const Matrix4x4f view = GamerEngine::Renderer::GetCamera()->GetCurrentViewProjectionMatrix(vrEye);
 
@@ -160,6 +169,9 @@ void DeferredRenderer::OnRender()
 
 	{
 		//PROFILE_CPU_SCOPE("Generate GBuffer");
+		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
+		RendererBase::SetBlendState(BlendState::None);
+
 		myGBuffer->ClearResource(0);
 		myGBuffer->SetAsTarget();
 		GenerateGBuffer(view, projection, modelList, deltaTime, 0, vrEye);
@@ -169,19 +181,28 @@ void DeferredRenderer::OnRender()
 
 	{
 		//PROFILE_CPU_SCOPE("Render SSAO");
+
+		
+
+		//DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode(), true, myGBuffer->GetDepth());
 		
 		PostProcessRenderer::Get().ClearTargets();
-		PostProcessRenderer::Get().Render(PostProcessRenderer::PostProcessPass::PP_SSAO, view, projection);
+		PostProcessRenderer::Get().Render(PostProcessRenderer::PostProcessPass::PP_SSAO, view, projection, nullptr);
 	}
 
 	{
 		//PROFILE_CPU_SCOPE("Render With Deferred Renderer");
+		
 		RendererBase::SetDepthStencilState(DepthStencilState::ReadWrite);
 		RendererBase::SetBlendState(BlendState::Alpha);
 
 		DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode(), false);
+
 		Render(view, projection, directionalLight, environmentLight, someLightList, deltaTime, 0, vrEye);
 		ClearTarget();
+
+		DX11::Get().ResetRenderTarget(GraphicsEngine::Get()->GetEditorMode(), true);
+
 		myGBuffer->ClearResource(0);
 		
 	}
@@ -266,8 +287,7 @@ bool DeferredRenderer::Initialize()
 	myGBufferPS = TextureAssetHandler::GetPixelShader("Shaders\\GBuffer_PS.cso");
 	myDeferredVS = TextureAssetHandler::GetVertexShader("Shaders\\Fullscreen_VS.cso");
 	myDeferredPS = TextureAssetHandler::GetPixelShader("Shaders\\Deferred_PS.cso");
-	myRenderTexPS = TextureAssetHandler::GetPixelShader("Shaders\\RenderTex_PS.cso");
-
+	
 	return true;
 }
 

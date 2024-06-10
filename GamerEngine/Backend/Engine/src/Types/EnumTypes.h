@@ -43,6 +43,7 @@ enum class RenderMode
 	AmbientLightNoAlbedo,
 	PointLightNoAlbedo,
 	SpotLightNoAlbedo,
+	DepthBuffer,
 	COUNT
 };
 

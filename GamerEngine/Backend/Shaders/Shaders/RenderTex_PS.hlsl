@@ -2,9 +2,9 @@
 #include "Data/Textures.hlsli"
 #include "Data/Samplers.hlsli"
 
-FullscreenPixelOutput main(FullscreenVertexToPixel input)
+DeferredPixelOutput main(FullscreenVertexToPixel input)
 {
-    FullscreenPixelOutput result;
+    DeferredPixelOutput result;
 
 	const float4 albedo = albedoTexture.Sample(defaultSampler, input.UV);
 

@@ -48,15 +48,15 @@ DX11& DX11::Get()
 	return instance;
 }
 
-void DX11::ResetRenderTarget(bool isUsingEditor, bool useDepth)
+void DX11::ResetRenderTarget(bool isUsingEditor, bool useDepth, Ref<DepthStencil> aDepth)
 {
 	if (isUsingEditor)
 	{
-		myScreenView->SetRenderTarget(myImmediateContext, (useDepth == true) ? myDepthStencilView->myDSV.Get() : nullptr);
+		myScreenView->SetRenderTarget(myImmediateContext, (useDepth == true) ? (aDepth == nullptr) ? myDepthStencilView->myDSV.Get() : aDepth->myDSV.Get() : nullptr);
 	}
 	else
 	{
-		myImmediateContext->OMSetRenderTargets(1, &myRenderTargetView, (useDepth == true) ? myDepthStencilView->myDSV.Get() : nullptr);
+		myImmediateContext->OMSetRenderTargets(1, &myRenderTargetView, (useDepth == true) ? (aDepth == nullptr) ? myDepthStencilView->myDSV.Get() : aDepth->myDSV.Get() : nullptr);
 	}
 }
 
@@ -133,7 +133,7 @@ bool DX11::CreateRenderTargetView()
 {
 	// CREATE RENDER TARGET VIEW
 	HRESULT result = SwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&myBackBufferTex));
-	GE_ASSERT(SUCCEEDED(result), "Failed to get swapchain buffer")
+	GE_ASSERT(SUCCEEDED(result), "Failed to get swapchain buffer");
 		if (FAILED(result))
 		{
 			return false;
@@ -152,7 +152,7 @@ bool DX11::CreateRenderTargetView()
 
 	result = Device->CreateRenderTargetView(myBackBufferTex, &RTVDesc, &myRenderTargetView);
 	SafeRelease(myBackBufferTex);
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target view from back buffer")
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target view from back buffer");
 		if (FAILED(result))
 		{
 			return false;
@@ -541,7 +541,7 @@ bool DX11::CreateSwapChain(bool aEnableDeviceDebug)
 			featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &SwapChain, &Device,
 			&featureLevel, &myImmediateContext);
 
-		GE_ASSERT(SUCCEEDED(result), "Failed to create SwapChain and Device")
+		GE_ASSERT(SUCCEEDED(result), "Failed to create SwapChain and Device");
 			if (SUCCEEDED(errorCode))
 			{
 				driverType = driverTypes[i];
@@ -708,7 +708,7 @@ bool DX11::CreateShaderResourceView()
 	// Initialize the render to texture object.
 	myScreenView->SetName("Window View");
 	HRESULT result = myScreenView->Initialize(Device.Get(), static_cast<int>(myRenderWidth), static_cast<int>(myRenderHeight));
-	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target (Flatscreen)")
+	GE_ASSERT(SUCCEEDED(result), "Failed to create Render Target (Flatscreen)");
 	if (FAILED(result))
 	{
 		return false;

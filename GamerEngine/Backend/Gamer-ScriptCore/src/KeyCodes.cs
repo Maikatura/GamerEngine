@@ -1,13 +1,23 @@
 ﻿namespace GamerEngine
 {
 
-        public enum MouseKeyCode
+    public enum MouseLock
+    {
+        None,
+        Center,
+        CurrentPosition,
+        Count
+    }
+
+    public enum MouseKeyCode
     {
         LeftMouseButton = 0,
     }
 
-        public enum KeyCode
-        {
+
+    
+    public enum KeyCode
+    {
 
         LeftMouseBtn = 0x01, //Left mouse button
         RightMouseBtn = 0x02, //Right mouse button
@@ -422,6 +432,6 @@
         //    RightAlt = 346,
         //    RightSuper = 347,
         //    Menu = 348
-        }
-
     }
+
+}

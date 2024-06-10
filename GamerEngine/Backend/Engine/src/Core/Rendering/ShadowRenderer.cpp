@@ -140,8 +140,11 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::Render
 	myFrameBufferData.View = lightData.LightView[0];
 	myFrameBufferData.CamTranslation = lightData.Position;
 	myFrameBufferData.Projection = lightData.LightProjection;
+	myFrameBufferData.NearPlane = lightData.NearPlane;
+	myFrameBufferData.FarPlane = lightData.FarPlane;
 	myFrameBufferData.RenderMode = static_cast<unsigned int>(0);
-
+	myFrameBufferData.DeltaTime = 0;
+	myFrameBufferData.TotalTime = 0;
 
 
 
@@ -154,7 +157,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::Render
 	memcpy_s(bufferData.pData, sizeof(FrameBufferData), &myFrameBufferData, sizeof(FrameBufferData));
 	DX11::Get().GetContext()->Unmap(myFrameBuffer.Get(), 0);
 	DX11::Get().GetContext()->VSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
-	DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
+	//DX11::Get().GetContext()->PSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 
 	if(isCubeMap)
 	{
@@ -179,7 +182,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::Render
 		memcpy_s(bufferData.pData, sizeof(ShadowCubeBuffer), &myShadowCubeData, sizeof(ShadowCubeBuffer));
 		DX11::Get().GetContext()->Unmap(myPointLightBuffer.Get(), 0);
 		DX11::Get().GetContext()->GSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
-		DX11::Get().GetContext()->PSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
+		//DX11::Get().GetContext()->PSSetConstantBuffers(5, 1, myPointLightBuffer.GetAddressOf());
 		DX11::Get().GetContext()->GSSetConstantBuffers(0, 1, myFrameBuffer.GetAddressOf());
 	}
 	else
@@ -234,7 +237,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::Render
 		DX11::Get().GetContext()->Unmap(myObjectBuffer.Get(), 0);
 
 		DX11::Get().GetContext()->VSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
-		DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
+		//DX11::Get().GetContext()->PSSetConstantBuffers(1, 1, myObjectBuffer.GetAddressOf());
 
 		if (isCubeMap)
 		{
@@ -253,7 +256,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::Render
 			DX11::Get().GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology));
 
 			meshData.MaterialData.SetAsResource(myMaterialBuffer.Get());
-			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+			//DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 
 
 			/*if(isInstanced && !model->HasBeenRendered())

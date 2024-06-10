@@ -42,11 +42,18 @@ class GBuffer
 
 		//RenderTexture& GetRenderer();
 
+		Ref<DepthStencil> GetDepth()
+		{
+			return myDepthStencil;
+		}
+
 	private:
 
 		ID3D11Texture2D* myTexture;
 		std::array<RenderTexture, GBufferTexture::EGBufferTexture_Count> myRenderTextures;
 		RenderTexture myRenderer;
+
+		Ref<DepthStencil> myDepthStencil;
 };
 
 class DeferredRenderer : public RenderModule
@@ -100,5 +107,4 @@ class DeferredRenderer : public RenderModule
 		ComPtr<ID3D11PixelShader> myGBufferPS;
 		ComPtr<ID3D11PixelShader> myDeferredPS;
 		ComPtr<ID3D11VertexShader> myDeferredVS;
-		ComPtr<ID3D11PixelShader> myRenderTexPS;
 };

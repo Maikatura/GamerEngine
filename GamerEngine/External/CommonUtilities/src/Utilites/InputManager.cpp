@@ -71,7 +71,7 @@ bool CommonUtilities::InputManager::IsMouseReleased(const int aMouseKeyCode) con
 
 bool CommonUtilities::InputManager::IsMouseMoving() const
 {
-	return (myCurrentActiveMousePosition.x != myPreviousActiveMousePosition.x && myCurrentActiveMousePosition.y != myPreviousActiveMousePosition.y);
+	return (myCurrentMousePosition.x != myPreviousMousePosition.x && myCurrentMousePosition.y != myPreviousMousePosition.y);
 }
 
 
@@ -94,7 +94,7 @@ float CommonUtilities::InputManager::ScrollDelta()
 
 POINT CommonUtilities::InputManager::GetMousePos() const
 {
-	return POINT{ static_cast<long>(myCurrentActiveMousePosition.x) , static_cast<long>(myCurrentActiveMousePosition.y) };
+	return POINT{ static_cast<long>(myCurrentMousePosition.x) , static_cast<long>(myCurrentMousePosition.y) };
 }
 
 POINT CommonUtilities::InputManager::GetMousePosRelativeToWindow() const
@@ -120,10 +120,10 @@ void CommonUtilities::InputManager::Update()
 	//}
 
 
-	//POINT currentMousePos = {};
-	//::GetCursorPos(&currentMousePos);
+	POINT currentMousePos = {};
+	::GetCursorPos(&currentMousePos);
 
-	OnMouseMove(myCurrentMousePosition.x, myCurrentMousePosition.y);
+	OnMouseMove(currentMousePos.x, currentMousePos.y);
 
 	myPreviousKeyboardState = myCurrentKeyboardState;
 	myCurrentKeyboardState = mySavedWindowsKeyboardState;
@@ -160,16 +160,7 @@ bool CommonUtilities::InputManager::UpdateEvents(UINT message, WPARAM wParam, LP
 	}
 	case WM_MOUSEMOVE:
 	{
-		POINT windowPosition;
-		RECT windowRect;
-		GetWindowRect(myHWND, &windowRect);
-
-		windowPosition.x = windowRect.left;
-		windowPosition.y = windowRect.top;
-
-		//OnMouseMove(currentMousePos.x, currentMousePos.y);
-		myCurrentMousePosition.x = GET_X_LPARAM(lParam) + windowPosition.x;
-		myCurrentMousePosition.y = GET_Y_LPARAM(lParam) + windowPosition.y;
+		//OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return true;
 	}
 	case WM_LBUTTONDOWN:
@@ -219,19 +210,22 @@ void CommonUtilities::InputManager::SetMousePos(Vector2i aPos)
 	GetWindowRect(myHWND, &windowRect);
 
 
-	// Set the cursor position to the middle of the window
-	//SetCursorPos(aPos.x, aPos.y);
 
-	int windowX = windowRect.left;
-	int windowY = windowRect.top;
+	// Calculate the middle of the window
+	int middleX = windowRect.left + (windowRect.right - windowRect.left) / 2;
+	int middleY = windowRect.top + (windowRect.bottom - windowRect.top) / 2;
+
+	// Set the cursor position to the middle of the window
+	SetCursorPos(middleX, middleY);
+
+	//int windowX = windowRect.left;
+	//int windowY = windowRect.top;
 	//
 	//// Calculate the new cursor position
-	int newX = windowX + aPos.x;
-	int newY = windowY + aPos.y;
-	// Set the cursor position
-	SetCursorPos(newX, newY);
-	mySettingPosition = true;
-	
+	//int newX = windowX + aPos.x;
+	//int newY = windowY + aPos.y;
+	//// Set the cursor position
+	//SetCursorPos(newX, newY);
 }
 
 Vector2i CommonUtilities::InputManager::GetMousePos()
@@ -253,151 +247,89 @@ Vector2i CommonUtilities::InputManager::GetMousePos()
 	return mousePos;
 }
 
-void CommonUtilities::InputManager::LockMouse(CommonUtilities::MouseLock aLockState)
+void CommonUtilities::InputManager::LockMouse(int aLockState)
 {
 	myMouseLockState = aLockState;
+
+	if (myMouseLockState == CommonUtilities::Mouse::Lock_CurrentPos && myOldMouseLockState != CommonUtilities::Mouse::Lock_CurrentPos)
+	{
+		POINT currentMousePos = {};
+		::GetCursorPos(&currentMousePos);
+
+
+		//OnMouseMove(currentMousePos.x, currentMousePos.y);
+		mySavedMousePosition.x = currentMousePos.x;
+		mySavedMousePosition.y = currentMousePos.y;
+	}
+
+	if (myMouseLockState == CommonUtilities::Mouse::None && myOldMouseLockState == CommonUtilities::Mouse::Lock_CurrentPos)
+	{
+		SetCursorPos(mySavedMousePosition.x, mySavedMousePosition.y);
+	}
+
+	myOldMouseLockState = myMouseLockState;
 }
 
 void CommonUtilities::InputManager::OnMouseMove(int xPos, int yPos)
 {
-	myCurrentActiveMousePosition.x = xPos;
-	myCurrentActiveMousePosition.y = yPos;
-
-	
+	myCurrentMousePosition.x = xPos;
+	myCurrentMousePosition.y = yPos;
 
 	if (myFirstTime)
 	{
-		myPreviousActiveMousePosition.x = myCurrentActiveMousePosition.x;
-		myPreviousActiveMousePosition.y = myCurrentActiveMousePosition.y;
+		myPreviousMousePosition.x = myCurrentMousePosition.x;
+		myPreviousMousePosition.y = myCurrentMousePosition.y;
 		myFirstTime = false;
 	}
 
-	if ((myCurrentMousePosition.x != myPreviousActiveMousePosition.x || myCurrentMousePosition.y != myPreviousActiveMousePosition.y))
+	if (myCurrentMousePosition.x != myPreviousMousePosition.x || myCurrentMousePosition.y != myPreviousMousePosition.y)
 	{
+		myMouseDelta.x = static_cast<float>(myCurrentMousePosition.x) - static_cast<float>(myPreviousMousePosition.x);
+		myMouseDelta.y = static_cast<float>(myCurrentMousePosition.y) - static_cast<float>(myPreviousMousePosition.y);
+
 
 		switch (myMouseLockState)
 		{
-			case CommonUtilities::Mouse::Lock_Center:
+			case  CommonUtilities::Mouse::Lock_Center:
 			{
-
-
-					
-
 				// Calculate the middle of the window
 				RECT rect;
 				GetWindowRect(myHWND, &rect);
 				int middleX = rect.left + (rect.right - rect.left) / 2;
 				int middleY = rect.top + (rect.bottom - rect.top) / 2;
 
-
-				int middleMouseX = middleX - myCurrentActiveMousePosition.x;
-				int middleMosueY = middleY - myCurrentActiveMousePosition.y;
-
-				myCurrentActiveMousePosition.x = middleMouseX;
-				myCurrentActiveMousePosition.y = middleMosueY;
-
-				myMouseDelta.x = static_cast<float>(myCurrentActiveMousePosition.x) - static_cast<float>(myPreviousActiveMousePosition.x);
-				myMouseDelta.y = static_cast<float>(myCurrentActiveMousePosition.y) - static_cast<float>(myPreviousActiveMousePosition.y);
-
 				// Set the cursor position to the middle of the window
-				//SetCursorPos(middleX, middleY);
-
-				SetMousePos({ middleX,middleY });
+				SetCursorPos(middleX, middleY);
 
 				// Store the middle position as the previous position for the next frame
-				myPreviousActiveMousePosition.x = static_cast<int>(middleX);
-				myPreviousActiveMousePosition.y = static_cast<int>(middleY);
-				
+				myPreviousMousePosition.x = static_cast<int>(middleX);
+				myPreviousMousePosition.y = static_cast<int>(middleY);
+				break;
 			}
-			break;
-			case CommonUtilities::Mouse::Lock_CurrentPos:
+			case  CommonUtilities::Mouse::Lock_CurrentPos:
 			{
 
-				POINT windowPosition;
-				RECT windowRect;
-				GetWindowRect(myHWND, &windowRect);
+				// Change to a clipping size instead.
+				SetCursorPos(mySavedMousePosition.x, mySavedMousePosition.y);
 
-				windowPosition.x = windowRect.left;
-				windowPosition.y = windowRect.top;
-
-				// Calculate the active mouse position relative to the window
-				int myCurrentActiveMousePositionX = myCurrentMousePosition.x;// - windowPosition.x;
-				int myCurrentActiveMousePositionY = myCurrentMousePosition.y;// - windowPosition.y;
-
-				// Calculate the mouse delta
-				if (!mySettingPosition)
-				{
-					myMouseDelta.x = static_cast<float>(myCurrentActiveMousePositionX - myPreviousActiveMousePosition.x);
-					myMouseDelta.y = static_cast<float>(myCurrentActiveMousePositionY - myPreviousActiveMousePosition.y);
-
-					SetMousePos({ myCurrentActiveMousePositionX, myCurrentActiveMousePositionY });
-				}
-				else
-				{
-					myCurrentActiveMousePosition.x = 0;
-					myCurrentActiveMousePosition.y = 0;
-
-					myMouseDelta.x = 0;
-					myMouseDelta.y = 0;
-					mySettingPosition = false;
-				}
-
-				std::cout << "X: " << myCurrentActiveMousePositionX << " Y: " << myCurrentActiveMousePositionY << std::endl;
-
-
-				// Set the cursor position back to the saved position (relative to the window)
-				//SetMousePos({ mySavedMousePosition.x,mySavedMousePosition.y });
-				// Store the current active position as the previous position for the next frame
-				myPreviousActiveMousePosition.x = myCurrentActiveMousePositionX;
-				myPreviousActiveMousePosition.y = myCurrentActiveMousePositionY;
+				// Store the current position as the previous position for the next frame
+				myPreviousMousePosition.x = mySavedMousePosition.x;
+				myPreviousMousePosition.y = mySavedMousePosition.y;
 				
 				break;
-				
-				
 			}
-			break;
-			case CommonUtilities::Mouse::None:
+			case  CommonUtilities::Mouse::None:
 			{
-				myMouseDelta.x = static_cast<float>(myCurrentActiveMousePosition.x) - static_cast<float>(myPreviousActiveMousePosition.x);
-				myMouseDelta.y = static_cast<float>(myCurrentActiveMousePosition.y) - static_cast<float>(myPreviousActiveMousePosition.y);
-				myPreviousActiveMousePosition = myCurrentActiveMousePosition;
-				
+				myPreviousMousePosition = myCurrentMousePosition;
+				break;
 			}
-			break;
 		}
 	}
 	else
 	{
-		
 		myMouseDelta.x = 0;
 		myMouseDelta.y = 0;
 	}
-
-	if ((myMouseLockState == CommonUtilities::Mouse::Lock_CurrentPos && myOldMouseLockState != CommonUtilities::Mouse::Lock_CurrentPos))
-	{
-		POINT windowPosition;
-		RECT windowRect;
-		GetWindowRect(myHWND, &windowRect);
-
-		windowPosition.x = windowRect.left;
-		windowPosition.y = windowRect.top;
-
-		//OnMouseMove(currentMousePos.x, currentMousePos.y);
-		mySavedMousePosition.x = myCurrentMousePosition.x + windowPosition.x;
-		mySavedMousePosition.y = myCurrentMousePosition.y + windowPosition.y;
-
-		std::cout << "Lock Current Pos" << std::endl;
-	}
-
-	if ((myMouseLockState == CommonUtilities::Mouse::None && myOldMouseLockState == CommonUtilities::Mouse::Lock_CurrentPos))
-	{
-		SetMousePos({ mySavedMousePosition.x,mySavedMousePosition.y });
-		std::cout << "Lock none" << std::endl;
-	}
-
-
-	myOldMouseLockState = myMouseLockState;
-
 
 
 	// Calculate the mouse delta

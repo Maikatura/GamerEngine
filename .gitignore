@@ -13,6 +13,9 @@
 *.exe
 *.pdb
 !GamerEngine/External/DirectXTK/Src/Shaders/fxc.exe
+*.sln
+*.vcxproj
+*.vcxproj.user
 
 
 // GamerEngine

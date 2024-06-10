@@ -15,9 +15,9 @@ float SSAO(float2 aScreenTexCoord, float2 aTexCoord, float3 aViewPosition, float
     return occlusion;
 }
 
-PixelOutput main(FullscreenVertexToPixel aInput)
+PostProcessingPixelOutput main(FullscreenVertexToPixel aInput)
 {
-    PixelOutput output;
+    PostProcessingPixelOutput output;
 
 	// SSAO SETTINGS
 	float intensity = 1.0f;
@@ -30,8 +30,8 @@ PixelOutput main(FullscreenVertexToPixel aInput)
 	const float random = (int)fmod(randomTexCoordScale.x, 4) + (int)(fmod(randomTexCoordScale.y, 4) * 4);
 
 	//point clamp sampler since the textures have already been linearly interpolated when downsized
-	const float3 viewPosition = viewPositionTexture.Sample(pointWrapSampler, aInput.UV).xyz;
-    const float3 viewNormal = viewNormalTexture.Sample(pointWrapSampler, aInput.UV).xyz;
+	const float3 viewPosition = viewPositionTexture.Sample(pointClampSampler, aInput.UV).xyz;
+    const float3 viewNormal = viewNormalTexture.Sample(pointClampSampler, aInput.UV).xyz;
 
 	float occlusion = 0.0f;
 

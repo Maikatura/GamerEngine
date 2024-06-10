@@ -214,7 +214,7 @@ namespace GamerEngine {
 		}
 
 		MonoDomain* rootDomain = mono_jit_init("GamerJITRuntime");
-		GE_ASSERT(rootDomain, "Root Domain was null")
+		GE_ASSERT(rootDomain, "Root Domain was null");
 
 		// Store the root domain pointer
 		s_Data->RootDomain = rootDomain;

@@ -109,7 +109,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="src\Utilites\KeyCodes.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="src\Data\FastVector.hpp" />
     <ClInclude Include="src\Data\HashTable.hpp" />
@@ -141,6 +140,7 @@
     <ClInclude Include="src\Utilites\COMInitializer.h" />
     <ClInclude Include="src\Utilites\FileWatch.h" />
     <ClInclude Include="src\Utilites\InputManager.h" />
+    <ClInclude Include="src\Utilites\KeyCodes.h" />
     <ClInclude Include="src\Utilites\PerformaceTimer.h" />
     <ClInclude Include="src\Utilites\Pointers.h" />
     <ClInclude Include="src\Utilites\ProfilerMacro.h" />
