@@ -43,7 +43,7 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 	{
 		HasBeenActivated = true;
 		Input::LockMouse(CommonUtilities::Mouse::Lock_CurrentPos);
-		myOldPos = myPrevMouse;
+		//myOldPos = myPrevMouse;
 	}
 	else
 	{
@@ -52,6 +52,7 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 
 	if (Input::IsMouseReleased(VK_LBUTTON) && HasBeenActivated)
 	{
+		
 		HasBeenActivated = false;
 		//Input::SetMousePos(myPrevMouse);
 	}

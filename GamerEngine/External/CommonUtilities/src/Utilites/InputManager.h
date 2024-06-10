@@ -57,8 +57,9 @@ namespace CommonUtilities
         POINT myMousePoint;
 
         Vector2i mySavedMousePosition;
-        Vector2i myPreviousMousePosition;
         Vector2i myCurrentMousePosition;
+        Vector2i myPreviousActiveMousePosition;
+        Vector2i myCurrentActiveMousePosition;
         Vector2f myMouseDelta;
 
         Vector2f myCurrentRelativeMousePosition;
@@ -66,6 +67,8 @@ namespace CommonUtilities
         std::bitset<256> mySavedWindowsKeyboardState;
         std::bitset<256> myCurrentKeyboardState;
         std::bitset<256> myPreviousKeyboardState;
+
+        bool mySettingPosition = false;
 
         bool myWindowIsActive = false;
         CommonUtilities::MouseLock myMouseLockState = CommonUtilities::Mouse::None;

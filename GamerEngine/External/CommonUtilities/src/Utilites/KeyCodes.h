@@ -150,9 +150,9 @@ namespace CommonUtilities
 	{
 		enum : MouseLock
 		{
-			None,
-			Lock_Center,
-			Lock_CurrentPos,
+			None = 0,
+			Lock_Center = 1,
+			Lock_CurrentPos = 2,
 			Count
 		};
 	}
