@@ -71,7 +71,10 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 		}
 	}
 
-	DrawComponent<GamerEngine::TransformComponent>("Transform", aEntity, [](auto& component, auto aEntity)
+		std::string transformComp = ICON_FK_GLOBE;
+		transformComp += " Transform";
+
+	DrawComponent<GamerEngine::TransformComponent>(transformComp, aEntity, [](auto& component, auto aEntity)
 		{
 
 			auto translate = component.GetPosition();
@@ -101,14 +104,16 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 			//component.SetScale(scale);
 		});
 
-	ImGui::SeparateWithSpacing();
-
-	DrawComponent<GamerEngine::CameraComponent>("Camera Component", aEntity, [](auto& component, auto aEntity)
+	
+	std::string CameraComp = ICON_FK_CAMERA;
+	CameraComp += +" Camera Component";
+	DrawComponent<GamerEngine::CameraComponent>(CameraComp, aEntity, [](auto& component, auto aEntity)
 	{
 			ImGui::DragFloat("Field of View", &component.myFoV);
 			ImGui::DragFloat("Near Plane", &component.myNearPlane);
 			ImGui::DragFloat("Far Plane", &component.myFarPlane);
 			ImGui::Checkbox("Primary", &component.Primary);
+
 
 			component.Initialize(component.myFoV, component.myNearPlane, component.myFarPlane);
 	});
@@ -494,7 +499,10 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 			}
 		});
 
-	DrawComponent<DirectionalLightComponent>("Directional Light", aEntity, [](auto& component, auto aEntity)
+
+	std::string lightComp = ICON_FK_LIGHTBULB_O;
+
+	DrawComponent<DirectionalLightComponent>(lightComp + " Directional Light", aEntity, [](auto& component, auto aEntity)
 	{
 		ImGui::Checkbox("Active", &component.Active);
 		ImGui::Checkbox("Cast Shadows", &component.CastShadow);
@@ -505,7 +513,7 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 		
 	});
 
-	DrawComponent<SpotLightComponent>("Spot Light", aEntity, [](auto& component, auto aEntity)
+	DrawComponent<SpotLightComponent>(lightComp + " Spot Light", aEntity, [](auto& component, auto aEntity)
 	{
 
 		ImGui::Checkbox("Active", &component.Active);
@@ -521,9 +529,12 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 		int tempIndex = component.mySpotLight->GetLightBufferData().ShadowMapIndex;
 		ImGui::DragInt("Index", &tempIndex);
 
+
+
+
 	});
 
-	DrawComponent<PointLightComponent>("Point Light", aEntity, [](auto& component, auto aEntity)
+	DrawComponent<PointLightComponent>(lightComp + " Point Light", aEntity, [](auto& component, auto aEntity)
 	{
 			ImGui::Checkbox("Active", &component.Active);
 			ImGui::Checkbox("Cast Shadows", &component.CastShadow);
@@ -660,7 +671,7 @@ void Inspector::AddComponent(GamerEngine::Entity aEntity)
 
 
 template<typename T>
-void Inspector::DrawComponent(const std::string& aName, GamerEngine::Entity aEntity, std::function<void(T&, GamerEngine::Entity)> aFunction)
+void Inspector::DrawComponent(const std::string& aName, GamerEngine::Entity aEntity, std::function<void(T&, GamerEngine::Entity)> aFunction, Ref<Texture> aTexture)
 {
 
 	const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
@@ -670,6 +681,11 @@ void Inspector::DrawComponent(const std::string& aName, GamerEngine::Entity aEnt
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4,4 });
 		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, aName.c_str());
+		if (aTexture)
+		{
+			ImGui::Image(aTexture->GetSRV().Get(), {16, 16});
+		}
+
 		ImGui::SameLine(ImGui::GetWindowWidth() - 25);
 		if (ImGui::Button("+", ImVec2{ 20, 20 }))
 		{

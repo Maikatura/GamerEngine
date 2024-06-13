@@ -18,7 +18,7 @@ public:
 
 
 	template <typename T>
-	static void DrawComponent(const std::string& aName, GamerEngine::Entity aEntity, std::function<void(T&, GamerEngine::Entity)> aFunction);
+	static void DrawComponent(const std::string& aName, GamerEngine::Entity aEntity, std::function<void(T&, GamerEngine::Entity)> aFunction, Ref<Texture> aTexture = nullptr);
 
 	void AddComponent(GamerEngine::Entity aEntity);
 	bool ShowTexturePicker(GamerEngine::Entity aEntity, Ref<Material>& selectedMaterial, TextureType textureType);

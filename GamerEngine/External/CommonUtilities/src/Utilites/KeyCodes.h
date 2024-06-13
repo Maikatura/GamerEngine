@@ -153,6 +153,7 @@ namespace CommonUtilities
 			None = 0,
 			Lock_Center = 1,
 			Lock_CurrentPos = 2,
+			Lock_WithinWindow = 3,
 			Count
 		};
 	}

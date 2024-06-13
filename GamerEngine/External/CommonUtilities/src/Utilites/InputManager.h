@@ -29,7 +29,7 @@ namespace CommonUtilities
         bool IsMouseReleased(const int aMouseKeyCode) const;
 
         bool IsMouseMoving() const;
-        Vector2f MouseDelta();
+        Vector2i MouseDelta();
         bool IsScrolling() const;
         float ScrollDelta();
         POINT GetMousePos() const;
@@ -60,7 +60,7 @@ namespace CommonUtilities
         Vector2i myCurrentMousePosition;
         Vector2i myPreviousActiveMousePosition;
         Vector2i myCurrentActiveMousePosition;
-        Vector2f myMouseDelta;
+        Vector2i myMouseDelta;
 
         Vector2f myCurrentRelativeMousePosition;
 

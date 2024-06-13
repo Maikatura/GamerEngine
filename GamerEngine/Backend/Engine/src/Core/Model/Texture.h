@@ -37,8 +37,7 @@ protected:
 
 public:
 
-	
-	
+
 	FORCEINLINE const ComPtr<struct ID3D11ShaderResourceView> GetSRV() const { return mySRV; }
 	FORCEINLINE const std::wstring& GetName() const { return myName; }
 	FORCEINLINE const std::wstring& GetPath() const { return myPath; }
