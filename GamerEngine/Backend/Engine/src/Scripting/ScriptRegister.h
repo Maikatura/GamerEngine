@@ -103,27 +103,27 @@ namespace GamerEngine
 	}
 
 
-	static bool Input_Keyboard_IsKeyDown(CommonUtilities::KeyCode keycode)
+	static bool Input_Keyboard_IsKeyDown(uint16_t keycode)
 	{
-		return Input::IsKeyDown(keycode);
+		return Input::IsKeyDown(static_cast<CommonUtilities::Key::Code>(keycode));
 	}
 
-	static bool Input_Keyboard_IsKeyUp(CommonUtilities::KeyCode keycode)
+	static bool Input_Keyboard_IsKeyUp(uint16_t keycode)
 	{
-		return Input::IsKeyReleased(keycode);
+		return Input::IsKeyReleased(static_cast<CommonUtilities::Key::Code>(keycode));
 	}
 
-	static bool Input_Keyboard_IsKeyPressed(CommonUtilities::KeyCode keycode)
+	static bool Input_Keyboard_IsKeyPressed(uint16_t keycode)
 	{
-		return Input::IsKeyPressed(keycode);
+		return Input::IsKeyPressed(static_cast<CommonUtilities::Key::Code>(keycode));
 	}
 
-	static bool Input_Mouse_IsKeyDown(CommonUtilities::KeyCode keycode)
+	static bool Input_Mouse_IsKeyDown(uint16_t keycode)
 	{
-		return Input::IsMouseDown(keycode);
+		return Input::IsMouseDown(static_cast<CommonUtilities::Mouse::Button>(keycode));
 	}
 
-	static void Input_Mouse_LockMouse(CommonUtilities::MouseLock aMouseLockState)
+	static void Input_Mouse_LockMouse(uint16_t aMouseLockState)
 	{
 		Input::LockMouse(aMouseLockState);
 	}

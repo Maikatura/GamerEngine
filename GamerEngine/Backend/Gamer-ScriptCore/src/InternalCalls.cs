@@ -63,7 +63,7 @@ namespace GamerEngine
 
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool Input_Mouse_IsKeyDown(KeyCode keycode);
+        internal extern static bool Input_Mouse_IsKeyDown(MouseKeyCode keycode);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Input_Mouse_GetDelta(out Vector2 aMouseDelta);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

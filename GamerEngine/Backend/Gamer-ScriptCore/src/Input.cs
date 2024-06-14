@@ -17,7 +17,7 @@
 
 
 
-        public static bool IsMouseDown(KeyCode keycode)
+        public static bool IsMouseDown(MouseKeyCode keycode)
         {
             return InternalCalls.Input_Mouse_IsKeyDown(keycode);
         }

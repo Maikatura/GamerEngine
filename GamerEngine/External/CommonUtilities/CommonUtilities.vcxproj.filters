@@ -7,6 +7,9 @@
     <Filter Include="src\Data">
       <UniqueIdentifier>{B6241DCF-A2F1-77DA-CB0A-6682B736AD68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Input">
+      <UniqueIdentifier>{EC4823B3-58B3-D729-A1F1-88CF0D9BB57E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\List">
       <UniqueIdentifier>{B8A921CF-A476-7CDA-CD8F-6A82B9BBB168}</UniqueIdentifier>
     </Filter>
@@ -37,6 +40,21 @@
     </ClInclude>
     <ClInclude Include="src\Data\UniquePtr.h">
       <Filter>src\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\InputCodes.h">
+      <Filter>src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\KeyboardInput.h">
+      <Filter>src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\MouseCursor.h">
+      <Filter>src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\MouseInput.h">
+      <Filter>src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\XboxControllerInput.h">
+      <Filter>src\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\List\BSTSet.hpp">
       <Filter>src\List</Filter>
@@ -110,7 +128,7 @@
     <ClInclude Include="src\Utilites\FileWatch.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utilites\InputManager.h">
+    <ClInclude Include="src\Utilites\InputUtil.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
     <ClInclude Include="src\Utilites\KeyCodes.h">
@@ -143,16 +161,34 @@
     <ClInclude Include="src\Utilites\VisualProfiler.h">
       <Filter>src\Utilites</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilites\WindowsUtils.h">
+      <Filter>src\Utilites</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="src\Input\KeyboardInput.cpp">
+      <Filter>src\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\MouseCursor.cpp">
+      <Filter>src\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\MouseInput.cpp">
+      <Filter>src\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\XboxControllerInput.cpp">
+      <Filter>src\Input</Filter>
+    </ClCompile>
     <ClCompile Include="src\Utilites\COMInitializer.cpp">
       <Filter>src\Utilites</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utilites\InputManager.cpp">
+    <ClCompile Include="src\Utilites\InputUtil.cpp">
       <Filter>src\Utilites</Filter>
     </ClCompile>
     <ClCompile Include="src\Utilites\Timer.cpp">
+      <Filter>src\Utilites</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utilites\WindowsUtils.cpp">
       <Filter>src\Utilites</Filter>
     </ClCompile>
   </ItemGroup>

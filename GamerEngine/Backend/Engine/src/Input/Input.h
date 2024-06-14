@@ -1,4 +1,7 @@
 #pragma once
+#include "Input/KeyboardInput.h"
+#include "Input/MouseInput.h"
+#include "Utilites/KeyCodes.h"
 #include "Utilites/Pointers.h"
 
 #ifndef NOMINMAX
@@ -19,15 +22,15 @@ public:
 	static void Update();
 	static void UpdateEvents(UINT message, WPARAM wParam, LPARAM lParam);
 
-	static bool IsKeyReleased(const int aKey);
-	static bool IsKeyDown(const int aKey);
-	static bool IsKeyPressed(const int aKey);
+	static bool IsKeyReleased(CommonUtilities::Key::Code aKey);
+	static bool IsKeyDown(CommonUtilities::Key::Code aKey);
+	static bool IsKeyPressed(CommonUtilities::Key::Code aKey);
 
 	static float GetMouseWheel();
 
-	static bool IsMouseDown(const int aMouseKey);
-	static bool IsMousePressed(const int aMouseKey);
-	static bool IsMouseReleased(const int aMouseKey);
+	static bool IsMouseDown(CommonUtilities::Mouse::Button aMouseKey);
+	static bool IsMousePressed(CommonUtilities::Mouse::Button aMouseKey);
+	static bool IsMouseReleased(CommonUtilities::Mouse::Button aMouseKey);
 
 	static Vector2f GetMouseDelta();
 	static Vector2i GetMousePos();
@@ -37,5 +40,7 @@ public:
 	static void LockMouse(int aLock);
 
 private:
-	inline static Ref<CommonUtilities::InputManager> myInput;
+	inline static Ref<CommonUtilities::KeyboardInput> myKeyboard;
+	inline static Ref<CommonUtilities::MouseInput> myMouseButton;
+	inline static Ref<CommonUtilities::MouseCursor> myMouseMovement;
 };

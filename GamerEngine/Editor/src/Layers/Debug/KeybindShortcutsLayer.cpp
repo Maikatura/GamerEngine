@@ -15,7 +15,7 @@ KeybindShortcutsLayer::KeybindShortcutsLayer() : Layer("Keybinds", true, false)
 void KeybindShortcutsLayer::OnImGuiRender()
 {
 	{
-		if(Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('S') && !Input::IsMouseDown(VK_LBUTTON))
+		if(Input::IsKeyDown(CommonUtilities::Key::Code::LeftCtrl) && Input::IsKeyPressed(CommonUtilities::Key::Code::S) && !Input::IsMouseDown(CommonUtilities::Mouse::LeftButton))
 		{
 			const std::string path = FileDialog::SaveFile("Scene File (*.csf)\0*.csf\0");
 			if (!path.empty())

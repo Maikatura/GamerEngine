@@ -36,7 +36,7 @@ namespace GamerEngine
             float moveSpeed = 100.0f;
 
 
-            myLeftMouseButtinIsDown = Input.IsMouseDown(KeyCode.LeftMouseBtn);
+            myLeftMouseButtinIsDown = Input.IsMouseDown(MouseKeyCode.RightButton);
             Input.LockMouse(myLeftMouseButtinIsDown ? MouseLock.Center : MouseLock.None);
 
             bool forwardKey = Input.IsKeyDown(KeyCode.W);
