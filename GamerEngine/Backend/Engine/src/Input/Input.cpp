@@ -76,8 +76,7 @@ void Input::SetMousePos(Vector2i aPos)
 	//myInput->SetMousePos(aPos);
 }
 
-void Input::LockMouse(int aLock)
+void Input::LockMouse(CommonUtilities::CursorLockMode aLock)
 {
-
-	//myInput->LockMouse(aLock);
+	myMouseMovement->SetCursorLockMode(aLock);
 }

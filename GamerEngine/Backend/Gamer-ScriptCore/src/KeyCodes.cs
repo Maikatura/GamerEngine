@@ -4,9 +4,8 @@
     public enum MouseLock
     {
         None,
-        Center,
-        CurrentPosition,
-        Count
+        Locked,
+        LockedToWindow
     }
 
     public enum MouseKeyCode

@@ -42,13 +42,13 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 	if (Input::IsMouseDown(CommonUtilities::Mouse::RightButton) && IsHoveringSceneView)
 	{
 		HasBeenActivated = true;
-		//Input::LockMouse(CommonUtilities::Mouse::Lock_CurrentPos);
+		Input::LockMouse(CommonUtilities::CursorLockMode::Locked);
 		//myOldPos = myPrevMouse;
 	}
-	//else
-	//{
-	//	Input::LockMouse(CommonUtilities::Mouse::None);
-	//}
+	else
+	{
+		Input::LockMouse(CommonUtilities::CursorLockMode::None);
+	}
 
 	if (Input::IsMouseReleased(CommonUtilities::Mouse::RightButton) && HasBeenActivated)
 	{

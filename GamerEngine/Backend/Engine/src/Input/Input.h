@@ -37,7 +37,7 @@ public:
 
 	static void SetMousePos(Vector2i aPos);
 
-	static void LockMouse(int aLock);
+	static void LockMouse(CommonUtilities::CursorLockMode aLock);
 
 private:
 	inline static Ref<CommonUtilities::KeyboardInput> myKeyboard;

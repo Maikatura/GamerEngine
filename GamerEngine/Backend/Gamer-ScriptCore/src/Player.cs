@@ -37,7 +37,7 @@ namespace GamerEngine
 
 
             myLeftMouseButtinIsDown = Input.IsMouseDown(MouseKeyCode.RightButton);
-            Input.LockMouse(myLeftMouseButtinIsDown ? MouseLock.Center : MouseLock.None);
+            Input.LockMouse(myLeftMouseButtinIsDown ? MouseLock.Locked : MouseLock.None);
 
             bool forwardKey = Input.IsKeyDown(KeyCode.W);
             bool backwardKey = Input.IsKeyDown(KeyCode.S);

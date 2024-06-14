@@ -125,7 +125,7 @@ namespace GamerEngine
 
 	static void Input_Mouse_LockMouse(uint16_t aMouseLockState)
 	{
-		Input::LockMouse(aMouseLockState);
+		Input::LockMouse(static_cast<CommonUtilities::CursorLockMode>(aMouseLockState));
 	}
 
 	static void Input_Mouse_GetDelta(Vector2f* outTranslation)
