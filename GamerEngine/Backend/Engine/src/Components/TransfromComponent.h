@@ -2,6 +2,7 @@
 #include <entt.hpp>
 #include "Camera.h"
 #include "Core/Model/Entity.h"
+#include "Scene/SceneManager.h"
 
 namespace GamerEngine
 {
@@ -22,8 +23,8 @@ namespace GamerEngine
 
 	public:
 
-		GamerEngine::Entity myParent;
-		std::vector<GamerEngine::Entity> myChildren{};
+		entt::entity myParent;
+		std::vector<entt::entity> myChildren{};
 
 
 
@@ -31,6 +32,9 @@ namespace GamerEngine
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(const Vector3f& translation)
 			: Translation(translation)
+		{}
+		TransformComponent(const Transform& aTransform)
+			: Translation(aTransform.Translation), Rotation(aTransform.Rotation), Scale(aTransform.Scale)
 		{}
 
 
@@ -78,6 +82,11 @@ namespace GamerEngine
 			return ComposeFromTRS(transform.Translation, transform.Rotation, transform.Scale);
 		}
 
+		Transform GetTransform() const
+		{
+			return { Translation, Rotation, Scale };
+		}
+
 		Transform GetWorldTransform() const
 		{
 			Transform transform;
@@ -89,7 +98,7 @@ namespace GamerEngine
 			if (HasParent())
 			{
 				// Get parent's world transformation matrix
-				const auto& parentTransform = GetParent().GetComponent<GamerEngine::TransformComponent>();
+				const auto& parentTransform = Entity(myParent, SceneManager::Get().GetScene().get()).GetComponent<GamerEngine::TransformComponent>();
 
 				// Calculate child's translation relative to parent's forward and right directions
 				transform.Translation = parentTransform.GetForward() * Translation.z +
@@ -188,20 +197,20 @@ namespace GamerEngine
 
 		void SetParent(GamerEngine::Entity aParent)
 		{
-			myParent = aParent;
+			myParent = aParent.GetHandle();
 		}
 
 		void ClearParent()
 		{
-			myParent;
+			myParent = entt::null;
 		}
 
-		GamerEngine::Entity GetParent() const
+		entt::entity GetParent()
 		{
 			return myParent;
 		}
 
-		std::vector<GamerEngine::Entity> GetChildren() const;
+		std::vector<entt::entity> GetChildren() const;
 
 		void ClearChildren()
 		{

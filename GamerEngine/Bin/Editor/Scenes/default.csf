@@ -1,5 +1,5 @@
 Scene: SceneTesting
-Path: C:\Users\simon\OneDrive\Dokument\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
+Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
 Entities:
   - Entity: 6560000753651608803
     TagComponent:
@@ -12,7 +12,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -14.1967897
+      Delay: -14.2585573
       Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:
@@ -30,7 +30,7 @@ Entities:
       Scale: [0.5, 0.5, 0.5]
       ChildrenSize: 1
       Children:
-        0: 4488255876943964703
+        0: 4033625071291792200
     ModelComponent:
       Delay: -0.0068597002
       Path: Assets\Models\Gremlin.fbx
@@ -102,7 +102,7 @@ Entities:
       Translation: [0, 127, -137]
       Rotation: [25, 0, 0]
       Scale: [0.999960899, 0.99995631, 0.999987602]
-      Parent: 17804868780395308565
+      Parent: 4033625071291792200
       ChildrenSize: 0
       Children:
         {}
@@ -220,7 +220,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.590313494
+      Delay: -0.647382796
       Path: Assets\Warcraft_Test\Models\taurenskeleton\taurenskeleton_blood101.fbx
       TextureSize: 2
       Texture:
@@ -248,3 +248,14 @@ Entities:
         0: 1828353707181980437
         1: 7440434943858370797
         2: 17697230832881840710
+  - Entity: 4033625071291792200
+    TagComponent:
+      Tag: CameraRoot
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      Parent: 17804868780395308565
+      ChildrenSize: 1
+      Children:
+        0: 4488255876943964703

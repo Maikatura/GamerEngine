@@ -38,6 +38,7 @@ public:
 private:
 
 	std::vector<uint32_t> myEntityList;
+	bool myEngineIsRunning = false;
 
 	friend class Scene;
 };

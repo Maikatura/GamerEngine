@@ -88,14 +88,14 @@ namespace GamerEngine {
 		return entity.GetComponent<GamerEngine::TransformComponent>().GetChildren().size() > 0;
 	}
 
-	static bool Entity_GetChildCount(UUID entityID)
+	static int Entity_GetChildCount(UUID entityID)
 	{
 		GamerEngine::Scene* scene = GamerEngine::ScriptEngine::GetSceneContext();
 		GE_ASSERT(scene);
 		GamerEngine::Entity entity = scene->GetEntityByUUID(entityID);
 		GE_ASSERT(entity);
 
-		return entity.GetComponent<GamerEngine::TransformComponent>().GetChildren().size();
+		return static_cast<int>(entity.GetComponent<GamerEngine::TransformComponent>().GetChildren().size());
 	}
 
 

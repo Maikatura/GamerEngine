@@ -43,7 +43,7 @@ void SnapshotManager::RestoreSnapShot()
 
             auto copyOfChildren = transform.GetChildren();
 
-            transform.ClearChildren();
+            //transform.ClearChildren();
 
 
 			for (auto child : copyOfChildren)

@@ -20,6 +20,7 @@ namespace GamerEngine
 
 		Entity(entt::entity aHandle, Scene* aScene) : myEntityHandle(aHandle), myScene(aScene)
 		{ }
+		
 
 		Entity(const Entity& other) = default;
 
@@ -119,7 +120,10 @@ namespace GamerEngine
 			return (uint32_t)myEntityHandle;
 		}
 
-
+		bool GetScene() const
+		{
+			return myScene;
+		}
 
 
 	private:

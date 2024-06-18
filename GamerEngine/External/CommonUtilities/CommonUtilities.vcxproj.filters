@@ -41,9 +41,6 @@
     <ClInclude Include="src\Data\UniquePtr.h">
       <Filter>src\Data</Filter>
     </ClInclude>
-    <ClInclude Include="src\Input\InputCodes.h">
-      <Filter>src\Input</Filter>
-    </ClInclude>
     <ClInclude Include="src\Input\KeyboardInput.h">
       <Filter>src\Input</Filter>
     </ClInclude>

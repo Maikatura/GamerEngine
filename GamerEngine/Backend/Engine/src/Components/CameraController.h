@@ -22,8 +22,8 @@ private:
 	Vector2i myPrevMouse {};
 	Vector2i myOldPos {};
 
-	float myMaxSpeed = 50.0f;
-	float mySpeed = 2.0f;
+	float myMaxSpeed = 150.0f;
+	float mySpeed = 25.0f;
 	float mySpeedShiftMul = 1.5f;
 	float myMouseSensitivity = 0.033f;
 	bool HasBeenActivated = false;
