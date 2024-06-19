@@ -17,14 +17,16 @@ namespace GamerEngine
 
 	class TransformComponent
 	{
+		
+
+	public:
+
 		Vector3f Translation = { 0.0f, 0.0f, 0.0f };
 		Vector3f Rotation = { 0.0f, 0.0f, 0.0f };
 		Vector3f Scale = { 1.0f, 1.0f, 1.0f };
 
-	public:
-
-		entt::entity myParent;
-		std::vector<entt::entity> myChildren{};
+		uint64_t myParent = 0;
+		std::vector<uint64_t> myChildren{};
 
 
 
@@ -98,15 +100,18 @@ namespace GamerEngine
 			if (HasParent())
 			{
 				// Get parent's world transformation matrix
-				const auto& parentTransform = Entity(myParent, SceneManager::Get().GetScene().get()).GetComponent<GamerEngine::TransformComponent>();
+				auto parentEntity = Entity(SceneManager::Get().GetScene()->GetEntityByUUID(myParent), SceneManager::Get().GetScene().get());
+				TransformComponent& parentTransform = parentEntity.GetComponent<GamerEngine::TransformComponent>();
+				Matrix4x4f parentWorldMatrix = parentTransform.GetWorldMatrix();
+
 
 				// Calculate child's translation relative to parent's forward and right directions
-				transform.Translation = parentTransform.GetForward() * Translation.z +
-					parentTransform.GetRight() * Translation.x +
-					parentTransform.GetUp() * Translation.y +
-					parentTransform.Translation;
-				transform.Rotation += parentTransform.GetRotation();
-				transform.Scale *= parentTransform.GetScale();
+				transform.Translation = parentWorldMatrix.GetForward() * Translation.z +
+					parentWorldMatrix.GetRight() * Translation.x +
+					parentWorldMatrix.GetUp() * Translation.y +
+					parentWorldMatrix.GetPosition();
+				transform.Rotation += parentTransform.GetWorldTransform().Rotation;
+				transform.Scale *= parentTransform.GetWorldTransform().Scale;
 			}
 
 			return transform;
@@ -114,17 +119,17 @@ namespace GamerEngine
 
 		Vector3f GetForward() const
 		{
-			return GetLocalMatrix().GetForward();
+			return GetWorldMatrix().GetForward();
 		}
 
 		Vector3f GetRight() const
 		{
-			return GetLocalMatrix().GetRight();
+			return GetWorldMatrix().GetRight();
 		}
 
 		Vector3f GetUp() const
 		{
-			return GetLocalMatrix().GetUp();
+			return GetWorldMatrix().GetUp();
 		}
 
 
@@ -180,14 +185,14 @@ namespace GamerEngine
 
 		void SetChild(GamerEngine::Entity aChild)
 		{
-			myChildren.push_back(aChild);
+			myChildren.push_back(aChild.GetUUID());
 		}
 
 		void RemoveChild(GamerEngine::Entity aChild)
 		{
 			for (size_t i = 0; i < myChildren.size(); i++)
 			{
-				if (myChildren[i] == aChild)
+				if (myChildren[i] == aChild.GetUUID())
 				{
 					myChildren.erase(myChildren.begin() + i);
 					i--;
@@ -197,20 +202,20 @@ namespace GamerEngine
 
 		void SetParent(GamerEngine::Entity aParent)
 		{
-			myParent = aParent.GetHandle();
+			myParent = aParent.GetUUID();
 		}
 
 		void ClearParent()
 		{
-			myParent = entt::null;
+			myParent = 0;
 		}
 
-		entt::entity GetParent()
+		uint64_t GetParent()
 		{
 			return myParent;
 		}
 
-		std::vector<entt::entity> GetChildren() const;
+		std::vector<uint64_t> GetChildren() const;
 
 		void ClearChildren()
 		{

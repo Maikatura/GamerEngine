@@ -84,7 +84,7 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 
 			if (ImGui::DragFloat3("Position", &translate.x, 0.25f))
 			{
-				//component.SetPosition(translate);
+				component.SetPosition(translate);
 			}
 
 			if (ImGui::DragFloat3("Rotation", &rotation.x, 0.25f))
@@ -97,7 +97,7 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 				component.SetScale(scale);
 			}
 
-			component.SetPosition(translate);
+			//component.SetPosition(translate);
 
 			//component.SetPosition(translate);
 			//component.SetRotation(rotation);

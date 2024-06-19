@@ -105,8 +105,34 @@ void SceneManager::Update(bool aRunningState)
 	{
 		if (myScene)
 		{
-			myScene->OnUpdate(aRunningState);
+			if (myOldSceneState != mySceneState)
+			{
+				if (mySceneState == SceneState::Play)
+				{
+					myRuntimeScene = GamerEngine::Scene::Copy(myScene);
+					myRuntimeScene->OnRuntimeStart();
+					myRuntimeScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
+					myRuntimeScene->SceneReady(true);
+				}
+				else
+				{
+					myRuntimeScene->OnRuntimeStop();
+				}
+			}
+
+			if (mySceneState == SceneState::Play)
+			{
+				myRuntimeScene->OnUpdate(aRunningState);
+			}
+			else
+			{
+				myScene->OnUpdate(aRunningState);
+			}
+
+			myOldSceneState = mySceneState;
+
 		}
+
 	}
 	
 }
@@ -117,7 +143,15 @@ void SceneManager::Render()
 	{
 		if (myScene)
 		{
-			myScene->OnRender();
+			if (mySceneState == SceneState::Play)
+			{
+				myRuntimeScene->OnRender();
+			}
+			else
+			{
+				myScene->OnRender();
+			}
+
 		}
 	}
 	
@@ -134,6 +168,12 @@ Ref<GamerEngine::Scene> SceneManager::GetScene()
 	{
 		if (mySceneStatus == GamerEngine::SceneStatus::Complete)
 		{
+			if (mySceneState == SceneState::Play)
+			{
+				return myRuntimeScene;
+			}
+
+
 			return myScene;
 		}
 	}
@@ -145,7 +185,7 @@ void SceneManager::OnRuntimeStart()
 {
 	if (myScene)
 	{
-		myScene->OnRuntimeStart();
+		mySceneState = SceneState::Play;
 	}
 }
 
@@ -153,7 +193,7 @@ void SceneManager::OnRuntimeStop()
 {
 	if (myScene)
 	{
-		myScene->OnRuntimeStop();
+		mySceneState = SceneState::Edit;
 	}
 }
 
@@ -169,7 +209,7 @@ GamerEngine::SceneStatus SceneManager::GetStatus()
 
 GamerEngine::Entity SceneManager::ConstructEntity(entt::entity aEntityValue)
 {
-	return GamerEngine::Entity(aEntityValue, myScene.get() );
+	return GamerEngine::Entity(aEntityValue, (mySceneState == SceneState::Play) ? myRuntimeScene.get() : myScene.get());
 }
 
 GamerEngine::Entity SceneManager::CreateEntityType(int aEntityType, const GamerEngine::UUID& aUUID)
@@ -242,7 +282,7 @@ void SceneManager::SwapScene()
 		if (GraphicsEngine::Get()) 
 		{
 			GraphicsEngine::Get()->SetPauseState(false);
-			myScene->OnRuntimeStop();
+			
 		}
 
 		if (myScene)
@@ -250,7 +290,6 @@ void SceneManager::SwapScene()
 
 			myScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
 			myScene->SceneReady(true);
-			myScene->OnRuntimeStart();
 		}
 
 		mySceneStatus = GamerEngine::SceneStatus::Complete;

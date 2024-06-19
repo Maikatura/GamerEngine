@@ -1,6 +1,89 @@
 Scene: SceneTesting
-Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
+Path: C:\Users\simon\OneDrive\Dokument\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
 Entities:
+  - Entity: 8976672298228889999
+    TagComponent:
+      Tag: Particle Emitter
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    ParticleComponent:
+      EmitterSettingsSize: 2
+      EmitterSettings:
+        0:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+        1:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+      ParticleSettingsSize: 2
+      ParticleSettings:
+        0:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 10, 0]
+          Scale: [1, 1, 1]
+          Color: [1, 0, 0, 1]
+        1:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 20, 0]
+          Scale: [0, 0, 0]
+          Color: [1, 0, 1, 1]
+  - Entity: 4837912226354239985
+    TagComponent:
+      Tag: Test 3
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      Parent: 15888918766242960987
+      ChildrenSize: 0
+      Children:
+        {}
+  - Entity: 15888918766242960987
+    TagComponent:
+      Tag: Test 2
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      Parent: 2070257078735909303
+      ChildrenSize: 1
+      Children:
+        0: 4837912226354239985
+  - Entity: 2070257078735909303
+    TagComponent:
+      Tag: Test 1
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 1
+      Children:
+        0: 15888918766242960987
   - Entity: 6560000753651608803
     TagComponent:
       Tag: Default Entity Name
@@ -12,7 +95,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -14.2585573
+      Delay: -14.2631187
       Path: Assets\Models\pedal.fbx
       TextureSize: 1
       Texture:
@@ -25,8 +108,8 @@ Entities:
     TagComponent:
       Tag: Goblin
     TransformComponent:
-      Translation: [70.6287155, -47.5172691, 64.2543564]
-      Rotation: [-179.999893, -48.7989845, -179.999756]
+      Translation: [0, -45, 95.3323135]
+      Rotation: [0, -180, 0]
       Scale: [0.5, 0.5, 0.5]
       ChildrenSize: 1
       Children:
@@ -99,9 +182,9 @@ Entities:
     TagComponent:
       Tag: Play Camera
     TransformComponent:
-      Translation: [0, 127, -137]
-      Rotation: [25, 0, 0]
-      Scale: [0.999960899, 0.99995631, 0.999987602]
+      Translation: [0, 90, -75]
+      Rotation: [30, 0, 0]
+      Scale: [1, 1, 1]
       Parent: 4033625071291792200
       ChildrenSize: 0
       Children:
@@ -117,7 +200,7 @@ Entities:
     TransformComponent:
       Translation: [0, -50, 0]
       Rotation: [0, -0, 0]
-      Scale: [100, 2, 100]
+      Scale: [99.9944763, 1.99991369, 99.9944763]
       Parent: 10840798227440027384
       ChildrenSize: 0
       Children:
@@ -220,7 +303,7 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.647382796
+      Delay: -0.6490767
       Path: Assets\Warcraft_Test\Models\taurenskeleton\taurenskeleton_blood101.fbx
       TextureSize: 2
       Texture:

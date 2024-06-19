@@ -167,7 +167,7 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity, Game
 
 		if (tc.HasParent())
 		{
-			GamerEngine::Entity parent = { tc.GetParent(), aScene };
+			GamerEngine::Entity parent = { aScene->GetEntityByUUID(tc.GetParent()), aScene };
 			out << YAML::Key << "Parent" << YAML::Value << parent.GetUUID();
 		}
 
@@ -177,7 +177,7 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity, Game
 
 		for (int i = 0; i < tc.GetChildren().size(); i++)
 		{
-			GamerEngine::Entity child = {tc.GetChildren()[i], aScene };
+			GamerEngine::Entity child = { aScene->GetEntityByUUID(tc.GetChildren()[i]), aScene };
 			if (child)
 			{
 				out << YAML::Key << i << YAML::Value << child.GetUUID();

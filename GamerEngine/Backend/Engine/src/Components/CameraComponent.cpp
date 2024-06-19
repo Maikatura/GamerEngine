@@ -141,11 +141,11 @@ void GamerEngine::CameraComponent::SetHasMoved(bool aMoveValue)
 
 void GamerEngine::CameraComponent::BuildTransform(GamerEngine::TransformComponent* aTransform)
 {
-	myPosition = aTransform->GetWorldTransform().Translation;
-	
 
+	Transform transform = aTransform->GetWorldTransform();
+
+	myPosition = transform.Translation;
 	myTransform = aTransform->AsGraphicsTransform();
-	
 
 #if ENABLE_VR
 	CommonUtilities::Quaternionf rotation = DX11::Get().GetVRSystem().GetHMDPose().GetQuat();
@@ -157,7 +157,7 @@ void GamerEngine::CameraComponent::BuildTransform(GamerEngine::TransformComponen
 #endif
 	
 
-	myFrustum = CreateFrustumFromCamera(ComposeFromTRS(aTransform->GetWorldTransform().Translation, aTransform->GetWorldTransform().Rotation, {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
+	myFrustum = CreateFrustumFromCamera(ComposeFromTRS(transform.Translation, transform.Rotation, {1,1,1}), myVerticalFoV * CommonUtilities::RadToDeg, myHorizontalFoV * CommonUtilities::RadToDeg, myNearPlane, myFarPlane);
 
 	//LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.FarBottomLeft, { 1,0,0,1 }, 1.0f);
 	//LineRenderer::Get().DrawLine(myFrustum.NearBottomLeft, myFrustum.NearBottomRight, { 1,0,0,1 }, 1.0f);

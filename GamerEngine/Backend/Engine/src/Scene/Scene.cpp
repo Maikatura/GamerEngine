@@ -153,6 +153,69 @@ void GamerEngine::Scene::DeleteEntity(Entity aEntity)
     myRegistry.destroy(aEntity);
 }
 
+
+template<typename... Component>
+static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<GamerEngine::UUID, entt::entity>& enttMap)
+{
+    ([&]()
+    {
+        auto view = src.view<Component>();
+        for (auto srcEntity : view)
+        {
+            entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).ID);
+
+            auto& srcComponent = src.get<Component>(srcEntity);
+            dst.emplace_or_replace<Component>(dstEntity, srcComponent);
+        }
+    }(), ...);
+}
+
+template<typename... Component>
+static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<GamerEngine::UUID, entt::entity>& enttMap)
+{
+    CopyComponent<Component...>(dst, src, enttMap);
+}
+
+template<typename... Component>
+static void CopyComponentIfExists(GamerEngine::Entity dst, GamerEngine::Entity src)
+{
+    ([&]()
+    {
+        if (src.HasComponent<Component>())
+            dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+    }(), ...);
+}
+
+template<typename... Component>
+static void CopyComponentIfExists(ComponentGroup<Component...>, GamerEngine::Entity dst, GamerEngine::Entity src)
+{
+    CopyComponentIfExists<Component...>(dst, src);
+}
+
+Ref<GamerEngine::Scene> GamerEngine::Scene::Copy(Ref<Scene> other)
+{
+    Ref<Scene> newScene = MakeRef<Scene>();
+
+
+    auto& srcSceneRegistry = other->myRegistry;
+    auto& dstSceneRegistry = newScene->myRegistry;
+    std::unordered_map<GamerEngine::UUID, entt::entity> enttMap;
+
+    // Create entities in new scene
+    auto idView = srcSceneRegistry.view<IDComponent>();
+    for (auto e : idView)
+    {
+		GamerEngine::UUID uuid = srcSceneRegistry.get<IDComponent>(e).ID;
+        const auto& name = srcSceneRegistry.get<TagComponent>(e).Tag;
+        Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
+        enttMap[uuid] = (entt::entity)newEntity;
+    }
+
+    // Copy components (except IDComponent and TagComponent)
+    CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
+    return newScene;
+}
+
 void GamerEngine::Scene::OnRuntimeStart()
 {
     ScriptEngine::OnRuntimeStart(this);
