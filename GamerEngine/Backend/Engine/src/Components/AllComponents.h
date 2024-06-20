@@ -17,3 +17,6 @@
 
 using AllComponents =
 ComponentGroup<GamerEngine::TransformComponent, GamerEngine::NativeScriptComponent, ModelComponent, GamerEngine::CameraComponent, PointLightComponent, SpotLightComponent, DirectionalLightComponent,GamerEngine::ScriptComponent>;
+
+using ScriptComponents =
+ComponentGroup<GamerEngine::TransformComponent>;

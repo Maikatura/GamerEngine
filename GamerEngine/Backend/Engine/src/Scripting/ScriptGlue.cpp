@@ -187,7 +187,7 @@ namespace GamerEngine {
 	void ScriptGlue::RegisterComponents()
 	{
 		s_EntityHasComponentFuncs.clear();
-		RegisterComponent(AllComponents{});
+		RegisterComponent(ScriptComponents{});
 	}
 
 	void ScriptGlue::RegisterFunctions()

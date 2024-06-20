@@ -17,6 +17,7 @@ public:
 	void OnImGuiRender() override;
 	
 	void PopupMenu(const std::filesystem::directory_entry& aValue);
+	void ListDirectoryRecursive(const std::filesystem::path& path);
 	void LoopThroughFiles();
 
 	void HoveredWithItem();

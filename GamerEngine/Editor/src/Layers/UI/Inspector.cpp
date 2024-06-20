@@ -417,19 +417,19 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 				{
 					ImGui::BeginGroup();
 
-					/*if(ImGui::ListBoxHeader("Animations"))
+					if(ImGui::BeginListBox("Animations"))
 					{
-						for(auto item : model.GetModel()->GetSkeleton()->Animations)
+						for(auto item : component.GetModel()->GetSkeleton()->Animations)
 						{
 							std::string item_name = Helpers::string_cast<std::string>(item.first);
 							if(ImGui::Selectable(item_name.c_str()))
 							{
-								model.GetModel()->PlayAnimation(item.first);
+								component.GetModel()->PlayAnimation(item.first);
 							}
 						}
-						ImGui::ListBoxFooter();
+						ImGui::EndListBox();
 						DropHandler::DropFileEntity(aEntity);
-					}*/
+					}
 
 					ImGui::EndGroup();
 				}

@@ -12,7 +12,6 @@
 #include <Core/Framework/DX11.h>
 #include <GraphicsEngine.h>
 #include <Core/Rendering/LineRenderer.h> 
-#include "Physics.h"
 #include "Layers/EditorLayers.h"
 #include "Layers/UI/EditorSettingsPanel.h"
 #include "Scene/SceneManager.h"
@@ -86,7 +85,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	myLayers.Init();
 	LineRenderer::Get().Init();
-	Physics::Get().Init();
+	//Physics::Get().Init();
 
 	SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
 

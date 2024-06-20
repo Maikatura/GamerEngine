@@ -5,10 +5,16 @@
 
 #include "Core/Framework/DX11.h"
 #include "Components/Components.hpp"
+#include "Utilites/StringCast.h"
 
 void GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
 {
-	mySkeleton = aSkeleton;
+	if (!HasSkeleton())
+	{
+		mySkeleton = aSkeleton;
+	}
+
+	
 	Init(aMeshData, aPath);
 }
 
@@ -23,10 +29,6 @@ void  GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aP
 		{
 			myFirstTimeInit = false;
 		}
-	}
-	else
-	{
-		myAnimState = MakeRef<AnimationStatus>();
 	}
 }
 
@@ -99,8 +101,20 @@ void GamerEngine::Model::SetHasBeenRenderer(bool aValue)
 
 void GamerEngine::Model::PlayAnimation(std::wstring aAnimationPath)
 {
-	myAnimState->myCurrentAnimation = &GetSkeleton()->Animations[aAnimationPath];
-	myAnimState->myCurrentAnimation->Frames = GetSkeleton()->Animations[aAnimationPath].Frames;
+	std::cout << GetSkeleton()->Animations.size() << std::endl;
+
+	for(auto e : GetSkeleton()->Animations)
+	{
+				std::cout << Helpers::string_cast<std::string>(e.first) << std::endl;
+	}
+
+	std::cout << Helpers::string_cast<std::string>(aAnimationPath) << std::endl;
+
+	myAnimState.myCurrentAnimation = &GetSkeleton()->Animations[Helpers::ToLowerCase(aAnimationPath)];
+
+	std::cout << GetSkeleton()->Animations[Helpers::ToLowerCase(aAnimationPath)].Frames.size() << std::endl;
+
+	myAnimState.myCurrentAnimation->Frames = GetSkeleton()->Animations[Helpers::ToLowerCase(aAnimationPath)].Frames;
 }
 
 void GamerEngine::Model::Update()
@@ -109,11 +123,12 @@ void GamerEngine::Model::Update()
 
 	if(GetSkeleton()->GetRoot() && anAnimState->myCurrentAnimation != nullptr)
 	{
+		
 		//myModel->Update();
 		anAnimState->myCurrentTime += Time::GetDeltaTime();
 		anAnimState->myCurrentFrame = static_cast<int>(anAnimState->myCurrentTime * anAnimState->myCurrentAnimation->FramesPerSecond);
 		anAnimState->myFraction = anAnimState->myCurrentTime / anAnimState->myCurrentAnimation->Duration;
-		anAnimState->myInterFrameFraction = ((0) + ((myAnimState->myCurrentTime) - ((float)myAnimState->myCurrentFrame / myAnimState->myCurrentAnimation->FramesPerSecond)) * ((1) - (0)) / (((float)(myAnimState->myCurrentFrame + 1) / myAnimState->myCurrentAnimation->FramesPerSecond) - ((float)myAnimState->myCurrentFrame / myAnimState->myCurrentAnimation->FramesPerSecond)));
+		anAnimState->myInterFrameFraction = ((0) + ((myAnimState.myCurrentTime) - ((float)myAnimState.myCurrentFrame / myAnimState.myCurrentAnimation->FramesPerSecond)) * ((1) - (0)) / (((float)(myAnimState.myCurrentFrame + 1) / myAnimState.myCurrentAnimation->FramesPerSecond) - ((float)myAnimState.myCurrentFrame / myAnimState.myCurrentAnimation->FramesPerSecond)));
 
 		if(anAnimState->myFraction >= 1)
 		{
@@ -123,7 +138,7 @@ void GamerEngine::Model::Update()
 		}
 
 		myBoneTransform[0] = CommonUtilities::Matrix4x4<float>();
-		UpdateAnimationHierarchy(anAnimState.get(), 0, myBoneTransform[0]);
+		UpdateAnimationHierarchy(anAnimState, 0, myBoneTransform[0]);
 	}
 }
 

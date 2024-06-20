@@ -117,7 +117,7 @@ namespace GamerEngine
 		ComPtr<ID3D11Buffer> myInstanceBuffer;
 
 		std::array<CommonUtilities::Matrix4x4<float>, MAX_MODEL_BONES> myBoneTransform{};
-		Ref<AnimationStatus> myAnimState;
+		AnimationStatus myAnimState;
 		std::vector<RenderedInstanceData> myRenderedInstances;
 
 
@@ -197,7 +197,7 @@ namespace GamerEngine
 
 		void UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent);
 
-		FORCEINLINE Ref<AnimationStatus> GetAnimationState() { return myAnimState; }
+		FORCEINLINE AnimationStatus* GetAnimationState() { return &myAnimState; }
 		FORCEINLINE Skeleton* GetSkeleton() { return &mySkeleton; }
 		FORCEINLINE const Skeleton* GetSkeleton() const { return &mySkeleton; }
 		MeshData& GetMeshData(unsigned int anIndex) { return myMeshData[anIndex]; }

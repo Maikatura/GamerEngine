@@ -549,7 +549,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 #else
 
 
-	const std::string ansiFileName = Helpers::string_cast<std::string>(aFilePath);
+	const std::string ansiFileName = Helpers::string_cast<std::string>(Helpers::ToLowerCase(aFilePath));
 
 	HRESULT result = S_FALSE;
 
@@ -793,11 +793,11 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			if (hasSkeleton)
 			{
-				mdlInstance->Init(modelData, aFilePath, mdlSkeleton);
+				mdlInstance->Init(modelData, Helpers::ToLowerCase(aFilePath), mdlSkeleton);
 			}
 			else
 			{
-				mdlInstance->Init(modelData, aFilePath);
+				mdlInstance->Init(modelData, Helpers::ToLowerCase(aFilePath));
 			}
 
 			
@@ -815,11 +815,11 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const std::wstring& someFilePath)
 {
-	const std::string ansiFileName = Helpers::string_cast<std::string>(someFilePath);
-	Ref<GamerEngine::Model> model = GetModelInstance(aModelName);
+	const std::string ansiFileName = Helpers::string_cast<std::string>(Helpers::ToLowerCase(someFilePath));
+	Ref<GamerEngine::Model> model = GetModelInstance(Helpers::ToLowerCase(aModelName));
 
 	TGA::FBX::Animation tgaAnimation;
-	if (!TGA::FBX::Importer::LoadAnimation(someFilePath, tgaAnimation))
+	if (!TGA::FBX::Importer::LoadAnimation(Helpers::ToLowerCase(someFilePath), tgaAnimation))
 	{
 		return false;
 	}
@@ -840,7 +840,7 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 		animOut.Frames.push_back(frames);
 	}
 
-	model->GetSkeleton()->Animations.insert({ someFilePath, animOut });
+	model->GetSkeleton()->Animations.insert({ Helpers::ToLowerCase(someFilePath), animOut });
 
 	return true;
 }
@@ -867,35 +867,33 @@ Ref<GamerEngine::Model> ModelAssetHandler::GetModelInstance(const std::wstring& 
 	}
 
 	{
-		std::scoped_lock<std::mutex> lock(myListMutex);
-		if (LoadModelData(aFilePath))
+		/*std::scoped_lock<std::mutex> lock(myListMutex);
+		if (LoadModelData(Helpers::ToLowerCase(aFilePath)))
 		{
 			return myModelRegistry.back();
-		}
-	}
-	
-
-	/*{
-		std::scoped_lock<std::mutex> lock(myListMutex);
-
-		auto model = myModelRegistry.find(aFilePath);
-		if (model != myModelRegistry.end())
-		{
-			return model->second;
-		}
+		}*/
 	}
 
-	if (LoadModelData(aFilePath))
+
+	for (auto& item : myModelRegistry)
 	{
-		std::scoped_lock<std::mutex> lock(myListMutex);
-
-		auto model = myModelRegistry.find(aFilePath);
-		if (model != myModelRegistry.end())
+		if (item->GetName() == Helpers::ToLowerCase(aFilePath))
 		{
-			return model->second;
+			return item;
 		}
+	}
 
-	}*/
+
+	if (LoadModelData(Helpers::ToLowerCase(aFilePath)))
+	{
+		for (auto& item : myModelRegistry)
+		{
+			if (item->GetName() == Helpers::ToLowerCase(aFilePath))
+			{
+				return item;
+			}
+		}
+	}
 
 	if (myModelRegistry.empty())
 	{

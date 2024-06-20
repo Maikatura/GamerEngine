@@ -369,6 +369,8 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
 
                 if (model.GetModel())
                 {
+                    model.OnUpdate();
+
                     Entity entityPtr = Entity{entity, this };
                     Renderer::Render(&entityPtr, model, transform);
                 }
