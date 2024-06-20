@@ -7,16 +7,17 @@
 
 
 
-
+enum class SceneState
+{
+	Play,
+	Edit,
+	Runtime,
+	Count
+};
 
 class SceneManager
 {
-	enum class SceneState
-	{
-		Play,
-		Edit,
-		Count
-	};
+	
 	
 	Ref<GamerEngine::Scene> myScene;
 	Ref<GamerEngine::Scene> myRuntimeScene;
@@ -48,7 +49,6 @@ public:
 		return *myInstance;
 	}
 
-
 	bool IsHeadless();
 	void SetHeadless(bool isHeadless);
 	
@@ -64,7 +64,8 @@ public:
 	void OnRuntimeStop();
 
 	bool IsReady();
-	
+
+	void SetSceneState(SceneState aSceneState);
 	GamerEngine::SceneStatus GetStatus();
 	
 	GamerEngine::Entity ConstructEntity(entt::entity aEntityValue);

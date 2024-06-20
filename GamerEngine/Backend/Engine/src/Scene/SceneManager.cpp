@@ -9,6 +9,29 @@
 #include "Utilites/VisualProfiler.h"
 
 
+void SceneManager::SetSceneState(SceneState aSceneState)
+{
+	
+
+	if (aSceneState == SceneState::Play)
+	{
+		myRuntimeScene = GamerEngine::Scene::Copy(myScene);
+		myRuntimeScene->OnRuntimeStart();
+		myRuntimeScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
+		myRuntimeScene->SceneReady(true);
+	}
+	else if (aSceneState == SceneState::Edit)
+	{
+		if (myRuntimeScene)
+		{
+			myRuntimeScene->OnRuntimeStop();
+			myRuntimeScene = nullptr;
+		}
+	}
+
+	mySceneState = aSceneState;
+}
+
 bool SceneManager::IsHeadless()
 {
 	return myIsHeadless;
@@ -68,6 +91,7 @@ void SceneManager::LoadScene(const std::string& aFilepath)
 						mySwapScene = newScene;
 						mySceneStatus = GamerEngine::SceneStatus::NeedSwap;
 
+
 						// At this point, oldScene will automatically be destroyed
 					}
 
@@ -105,36 +129,24 @@ void SceneManager::Update(bool aRunningState)
 	{
 		if (myScene)
 		{
-			if (myOldSceneState != mySceneState)
-			{
-				if (mySceneState == SceneState::Play)
-				{
-					myRuntimeScene = GamerEngine::Scene::Copy(myScene);
-					myRuntimeScene->OnRuntimeStart();
-					myRuntimeScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
-					myRuntimeScene->SceneReady(true);
-				}
-				else
-				{
-					myRuntimeScene->OnRuntimeStop();
-				}
-			}
+			
 
-			if (mySceneState == SceneState::Play)
+			switch (mySceneState)
 			{
-				myRuntimeScene->OnUpdate(aRunningState);
-			}
-			else
-			{
+
+			case SceneState::Runtime:
 				myScene->OnUpdate(aRunningState);
+				break;
+			case SceneState::Play:
+				myRuntimeScene->OnUpdate(aRunningState);
+				break;
+
+			case SceneState::Edit:
+				myScene->OnUpdate(aRunningState);
+				break;
 			}
-
-			myOldSceneState = mySceneState;
-
 		}
-
 	}
-	
 }
 
 void SceneManager::Render()
@@ -143,13 +155,18 @@ void SceneManager::Render()
 	{
 		if (myScene)
 		{
-			if (mySceneState == SceneState::Play)
+			switch (mySceneState)
 			{
-				myRuntimeScene->OnRender();
-			}
-			else
-			{
+			case SceneState::Runtime:
 				myScene->OnRender();
+				break;
+			case SceneState::Play:
+				myRuntimeScene->OnRender();
+				break;
+
+			case SceneState::Edit:
+				myScene->OnRender();
+				break;
 			}
 
 		}
@@ -172,7 +189,6 @@ Ref<GamerEngine::Scene> SceneManager::GetScene()
 			{
 				return myRuntimeScene;
 			}
-
 
 			return myScene;
 		}
@@ -274,8 +290,26 @@ void SceneManager::SwapScene()
 {
 	if (mySceneStatus == GamerEngine::SceneStatus::NeedSwap && mySaveDone && myLoadDone)
 	{
-		
+		if (mySceneState == SceneState::Runtime)
+		{
+			if (myScene)
+			{
+				myScene->OnRuntimeStop();
+			}
+		}
+
 		myScene = std::move(mySwapScene);
+
+		if (mySceneState == SceneState::Runtime)
+		{
+			
+
+			//myScene = GamerEngine::Scene::Copy(myScene);
+			myScene->OnRuntimeStart();
+			myScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
+			myScene->SceneReady(true);
+		}
+
 
 		myScene->Initialize();
 

@@ -13,6 +13,11 @@ namespace GamerEngine
 		Vector3f Translation = { 0.0f, 0.0f, 0.0f };
 		Vector3f Rotation = { 0.0f, 0.0f, 0.0f };
 		Vector3f Scale = { 1.0f, 1.0f, 1.0f };
+
+		Matrix4x4f GetMatrix() const
+		{
+			return ComposeFromTRS(Translation, Rotation, Scale);
+		}
 	};
 
 	class TransformComponent
@@ -96,6 +101,7 @@ namespace GamerEngine
 			transform.Translation = Translation;
 			transform.Rotation = Rotation;
 			transform.Scale = Scale;
+			
 
 			if (HasParent())
 			{
@@ -112,6 +118,7 @@ namespace GamerEngine
 					parentWorldMatrix.GetPosition();
 				transform.Rotation += parentTransform.GetWorldTransform().Rotation;
 				transform.Scale *= parentTransform.GetWorldTransform().Scale;
+
 			}
 
 			return transform;
@@ -119,20 +126,18 @@ namespace GamerEngine
 
 		Vector3f GetForward() const
 		{
-			return GetWorldMatrix().GetForward();
+			return GetLocalMatrix().GetForward();
 		}
 
 		Vector3f GetRight() const
 		{
-			return GetWorldMatrix().GetRight();
+			return GetLocalMatrix().GetRight();
 		}
 
 		Vector3f GetUp() const
 		{
-			return GetWorldMatrix().GetUp();
+			return GetLocalMatrix().GetUp();
 		}
-
-
 
 		void LookAt(const Vector3f aPosition)
 		{

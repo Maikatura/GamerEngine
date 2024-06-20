@@ -41,7 +41,6 @@ public:
 
 	ModelComponent(const std::wstring& aModelPath, float aDelay = 0.0f, bool aShouldThread = true)
 	{
-
 		myPath = aModelPath;
 		myDelay = aDelay;
 
@@ -110,9 +109,12 @@ public:
 
 	void OnUpdate()
 	{
+		
+
 		if (myModel && myIsLoaded)
 		{
 			myModel->Update();
+
 		}
 
 

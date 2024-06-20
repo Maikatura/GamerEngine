@@ -22,6 +22,10 @@
             return InternalCalls.Input_Mouse_IsKeyDown(keycode);
         }
 
+        public static float GetScrollWheel()
+        {
+            return InternalCalls.Input_Mouse_GetScrollWheel();
+        }
 
         public static Vector2 GetMouseDelta()
         {

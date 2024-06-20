@@ -213,6 +213,7 @@ Ref<GamerEngine::Scene> GamerEngine::Scene::Copy(Ref<Scene> other)
 
     // Copy components (except IDComponent and TagComponent)
     CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
+
     return newScene;
 }
 

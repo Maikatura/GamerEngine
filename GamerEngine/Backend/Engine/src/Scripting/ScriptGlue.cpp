@@ -98,6 +98,26 @@ namespace GamerEngine {
 		return static_cast<int>(entity.GetComponent<GamerEngine::TransformComponent>().GetChildren().size());
 	}
 
+	static uint64_t Entity_GetChild(UUID entityID, int aChildIndex)
+	{
+		GamerEngine::Scene* scene = GamerEngine::ScriptEngine::GetSceneContext();
+		GE_ASSERT(scene);
+		GamerEngine::Entity entity = scene->GetEntityByUUID(entityID);
+		GE_ASSERT(entity);
+
+
+		bool hasChildren = entity.GetComponent<GamerEngine::TransformComponent>().GetChildren().size() > 0;
+
+		if (!hasChildren)
+			return 0;
+
+		if (aChildIndex < 0 || aChildIndex >= entity.GetComponent<GamerEngine::TransformComponent>().GetChildren().size())
+			return 0;
+
+		return entity.GetComponent<GamerEngine::TransformComponent>().GetChildren()[aChildIndex];
+	}
+
+
 
 	static bool Entity_GetComponent(UUID entityID, MonoReflectionType* componentType)
 	{
@@ -183,6 +203,7 @@ namespace GamerEngine {
 		GE_ADD_INTERNAL_CALL(Entity_GetName);
 		GE_ADD_INTERNAL_CALL(Entity_HasChildren);
 		GE_ADD_INTERNAL_CALL(Entity_GetChildCount);
+		GE_ADD_INTERNAL_CALL(Entity_GetChild);
 
 
 		GE_ADD_INTERNAL_CALL(TransformComponent_GetTranslation);
@@ -202,6 +223,7 @@ namespace GamerEngine {
 
 		GE_ADD_INTERNAL_CALL(Input_Mouse_IsKeyDown);
 		GE_ADD_INTERNAL_CALL(Input_Mouse_GetDelta);
+		GE_ADD_INTERNAL_CALL(Input_Mouse_GetScrollWheel);
 		GE_ADD_INTERNAL_CALL(Input_Mouse_LockMouse);
 	}
 

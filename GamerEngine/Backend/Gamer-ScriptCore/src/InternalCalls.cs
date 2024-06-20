@@ -19,6 +19,10 @@ namespace GamerEngine
         
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static int Entity_GetChildCount(ulong entityID);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static ulong Entity_GetChild(ulong entityID, int childIndex);
+
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
 		internal extern static object GetScriptInstance(ulong entityID);
 		#endregion
@@ -66,6 +70,9 @@ namespace GamerEngine
         internal extern static bool Input_Mouse_IsKeyDown(MouseKeyCode keycode);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Input_Mouse_GetDelta(out Vector2 aMouseDelta);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float Input_Mouse_GetScrollWheel();
+
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Input_Mouse_LockMouse(MouseLock aLockMouseState);
 

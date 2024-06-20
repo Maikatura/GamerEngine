@@ -133,4 +133,9 @@ namespace GamerEngine
 		*outTranslation = Input::GetMouseDelta();
 	}
 
+	static float Input_Mouse_GetScrollWheel()
+	{
+		return Input::GetMouseWheel();
+	}
+
 }

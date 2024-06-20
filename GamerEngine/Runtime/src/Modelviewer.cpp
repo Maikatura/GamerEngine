@@ -87,6 +87,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     Physics::Get().Init();
     SceneManager::Get().Init();
     SceneManager::Get().LoadScene("Editor\\Scenes\\default.csf");
+    SceneManager::Get().SetSceneState(SceneState::Runtime);
 
     STOP_PROFILE();
 
