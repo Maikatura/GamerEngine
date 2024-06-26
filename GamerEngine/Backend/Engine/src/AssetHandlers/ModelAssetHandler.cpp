@@ -662,21 +662,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			}*/
 
 
-			GamerEngine::Skeleton mdlSkeleton;
-			const bool hasSkeleton = tgaModel.Skeleton.GetRoot();
-			if (hasSkeleton)
-			{
-				for (size_t i = 0; i < tgaModel.Skeleton.Bones.size(); i++)
-				{
-					mdlSkeleton.Bones.push_back(GamerEngine::Bone());
-					mdlSkeleton.Bones[i].BindPoseInverse = *((Matrix4x4f*)&tgaModel.Skeleton.Bones[i].BindPoseInverse);
-					mdlSkeleton.Bones[i].Children = tgaModel.Skeleton.Bones[i].Children;
-					//mdlSkeleton.Bones[i].Name = tgaModel.Skeleton.Bones[i].Name;
-					mdlSkeleton.Bones[i].ParentIdx = tgaModel.Skeleton.Bones[i].ParentIdx;
-					mdlSkeleton.BoneNames.push_back(tgaModel.Skeleton.Bones[i].Name);
-					mdlSkeleton.BoneNameToIndex[tgaModel.Skeleton.Bones[i].Name] = i;
-				}
-			}
+			
 
 			D3D11_BUFFER_DESC vertexBufferDesc = {};
 			vertexBufferDesc.ByteWidth = static_cast<UINT>(mdlVertices.size()) * static_cast<UINT>(sizeof(Vertex));
@@ -791,17 +777,37 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			//modelData.myBlendShapeBuffer = blendBuffer;
 
-			if (hasSkeleton)
-			{
-				mdlInstance->Init(modelData, Helpers::ToLowerCase(aFilePath), mdlSkeleton);
-			}
-			else
-			{
-				mdlInstance->Init(modelData, Helpers::ToLowerCase(aFilePath));
-			}
+			mdlInstance->Init(modelData, Helpers::ToLowerCase(aFilePath));
 
 			
 		}
+
+		GamerEngine::Skeleton mdlSkeleton;
+		const bool hasSkeleton = tgaModel.Skeleton.GetRoot();
+		if (hasSkeleton)
+		{
+			for (size_t i = 0; i < tgaModel.Skeleton.Bones.size(); i++)
+			{
+				mdlSkeleton.Bones.push_back(GamerEngine::Bone());
+				mdlSkeleton.Bones[i].BindPoseInverse = Matrix4x4f(std::array<float, 16>{
+					tgaModel.Skeleton.Bones[i].BindPoseInverse[0], tgaModel.Skeleton.Bones[i].BindPoseInverse[1], tgaModel.Skeleton.Bones[i].BindPoseInverse[2], tgaModel.Skeleton.Bones[i].BindPoseInverse[3],
+					tgaModel.Skeleton.Bones[i].BindPoseInverse[4], tgaModel.Skeleton.Bones[i].BindPoseInverse[5], tgaModel.Skeleton.Bones[i].BindPoseInverse[6], tgaModel.Skeleton.Bones[i].BindPoseInverse[7],
+					tgaModel.Skeleton.Bones[i].BindPoseInverse[8], tgaModel.Skeleton.Bones[i].BindPoseInverse[9], tgaModel.Skeleton.Bones[i].BindPoseInverse[10], tgaModel.Skeleton.Bones[i].BindPoseInverse[11],
+					tgaModel.Skeleton.Bones[i].BindPoseInverse[12], tgaModel.Skeleton.Bones[i].BindPoseInverse[13], tgaModel.Skeleton.Bones[i].BindPoseInverse[14], tgaModel.Skeleton.Bones[i].BindPoseInverse[15]
+				});
+				mdlSkeleton.Bones[i].Children = tgaModel.Skeleton.Bones[i].Children;
+				//mdlSkeleton.Bones[i].Name = tgaModel.Skeleton.Bones[i].Name;
+				mdlSkeleton.Bones[i].ParentIdx = tgaModel.Skeleton.Bones[i].ParentIdx;
+				mdlSkeleton.BoneNames.push_back(tgaModel.Skeleton.Bones[i].Name);
+				mdlSkeleton.BoneNameToIndex[tgaModel.Skeleton.Bones[i].Name] = i;
+			}
+		}
+
+		if (hasSkeleton)
+		{
+			mdlInstance->SetSkeleton(mdlSkeleton);
+		}
+		
 
 		mdlInstance->Name = ansiFileName;
 		myModelRegistry.push_back(mdlInstance);

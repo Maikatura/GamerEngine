@@ -135,11 +135,8 @@ namespace GamerEngine
 
 	public:
 
-
-
-		void Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton);
+		void SetSkeleton(Skeleton aSkeleton);
 		void Init(const MeshData& aMeshData, const std::wstring& aPath);
-
 
 		void AddRenderedInstance(uint32_t aEntityID, Matrix4x4f aTransform);
 		bool UpdateInstanceBuffer();
@@ -158,7 +155,6 @@ namespace GamerEngine
 		{
 			myBoxBounds = aBounds;
 		}
-
 
 		FORCEINLINE bool HasRenderedInstance() const
 		{
@@ -195,7 +191,7 @@ namespace GamerEngine
 		virtual void Update();
 
 
-		void UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent);
+		void UpdateAnimationHierarchy(AnimationStatus* anAnimState, unsigned int someBoneInd, CommonUtilities::Matrix4x4<float> aParent);
 
 		FORCEINLINE AnimationStatus* GetAnimationState() { return &myAnimState; }
 		FORCEINLINE Skeleton* GetSkeleton() { return &mySkeleton; }
