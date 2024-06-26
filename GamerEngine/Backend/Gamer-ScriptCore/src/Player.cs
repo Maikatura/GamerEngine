@@ -12,8 +12,8 @@ namespace GamerEngine
         private TransformComponent myChildTransform;
 
         MouseLock myMouseLock = MouseLock.None;
-        bool myLeftMouseButtinIsDown = false;
         bool myRightMouseButtinIsDown = false;
+        bool myLeftMouseButtinIsDown = false;
 
         float myMinZoom = 10.0f;
         float myMaxZoom = 20.0f;
@@ -48,10 +48,10 @@ namespace GamerEngine
             float moveSpeed = 100.0f;
 
 
-            myLeftMouseButtinIsDown = Input.IsMouseDown(MouseKeyCode.RightButton);
-            myRightMouseButtinIsDown = Input.IsMouseDown(MouseKeyCode.LeftButton);
+            myRightMouseButtinIsDown = Input.IsMouseDown(MouseKeyCode.RightButton);
+            myLeftMouseButtinIsDown = Input.IsMouseDown(MouseKeyCode.LeftButton);
             bool myLeftMouseButtinIsDownThisFrame = Input.IsMousePressedThisFrame(MouseKeyCode.RightButton);
-            Input.LockMouse(myLeftMouseButtinIsDown ? MouseLock.Locked : MouseLock.None);
+            Input.LockMouse(myRightMouseButtinIsDown ? MouseLock.Locked : MouseLock.None);
 
             bool forwardKey = Input.IsKeyDown(KeyCode.W);
             bool backwardKey = Input.IsKeyDown(KeyCode.S);
@@ -82,7 +82,7 @@ namespace GamerEngine
                 moveRotation = myChildTransform.Rotation;
             }
 
-            if (myLeftMouseButtinIsDown)
+            if (myRightMouseButtinIsDown)
             {
                 if (rightKey || eKey)
                 {
@@ -103,7 +103,7 @@ namespace GamerEngine
                 moveRotation.Y += mouseDelta.X * ts * rotationSpeed;
                
             }
-            else if (myRightMouseButtinIsDown)
+            else if (myLeftMouseButtinIsDown)
             {
                 moveRotation += new Vector3(0.0f, 1.0f, 0.0f) * Input.GetMouseDelta().X;
 
@@ -142,12 +142,12 @@ namespace GamerEngine
             //Console.WriteLine($"Player.Movement TEST - X:{myTransformComponent.GetForward().X} Y:{myTransformComponent.GetForward().Y} z:{myTransformComponent.GetForward().Z}");
             myTransformComponent.Translation += myTransformComponent.GetForward() * movementZ + myTransformComponent.GetRight() * movementX;
             
-            if (myLeftMouseButtinIsDown)
+            if (myRightMouseButtinIsDown)
             {
                 myChildTransform.Rotation = new Vector3(0.0f, 0.0f, 0.0f);
                 myTransformComponent.Rotation += moveRotation;
             }
-            else if(myRightMouseButtinIsDown)
+            else if(myLeftMouseButtinIsDown)
             {
                 myChildTransform.Rotation += moveRotation;
             }
