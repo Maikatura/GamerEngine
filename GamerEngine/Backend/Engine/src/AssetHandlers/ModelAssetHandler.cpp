@@ -800,6 +800,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 				mdlSkeleton.Bones[i].ParentIdx = tgaModel.Skeleton.Bones[i].ParentIdx;
 				mdlSkeleton.BoneNames.push_back(tgaModel.Skeleton.Bones[i].Name);
 				mdlSkeleton.BoneNameToIndex[tgaModel.Skeleton.Bones[i].Name] = i;
+				mdlSkeleton.IndexToBoneName[i] = tgaModel.Skeleton.Bones[i].Name;
 			}
 		}
 
@@ -837,10 +838,25 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 	animOut.Name = Helpers::string_cast<std::wstring>(tgaAnimation.Name);
 	for (int i = 0; i < static_cast<int>(tgaAnimation.Length); i++)
 	{
-		GamerEngine::Animation::Frame frames; //{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
-		for (int y = 0; y < tgaAnimation.Frames[i].LocalTransforms.size(); y++)
+
+
+		GamerEngine::Animation::Frame frames;
+		frames.LocalTransforms.resize(model->GetSkeleton()->Bones.size());
+
+		//{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
+		for (auto bonePair : tgaAnimation.Frames[i].LocalTransforms)
 		{
-			frames.LocalTransforms.push_back(*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
+			auto bone = bonePair.first;
+			auto index = model->GetSkeleton()->BoneNameToIndex[bone];
+
+			Matrix4x4f anim = Matrix4x4f(std::array<float, 16>{
+				tgaAnimation.Frames[i].LocalTransforms[bone][0], tgaAnimation.Frames[i].LocalTransforms[bone][1], tgaAnimation.Frames[i].LocalTransforms[bone][2], tgaAnimation.Frames[i].LocalTransforms[bone][3],
+					tgaAnimation.Frames[i].LocalTransforms[bone][4], tgaAnimation.Frames[i].LocalTransforms[bone][5], tgaAnimation.Frames[i].LocalTransforms[bone][6], tgaAnimation.Frames[i].LocalTransforms[bone][7],
+					tgaAnimation.Frames[i].LocalTransforms[bone][8], tgaAnimation.Frames[i].LocalTransforms[bone][9], tgaAnimation.Frames[i].LocalTransforms[bone][10], tgaAnimation.Frames[i].LocalTransforms[bone][11],
+					tgaAnimation.Frames[i].LocalTransforms[bone][12], tgaAnimation.Frames[i].LocalTransforms[bone][13], tgaAnimation.Frames[i].LocalTransforms[bone][14], tgaAnimation.Frames[i].LocalTransforms[bone][15]
+			});
+			frames.LocalTransforms[index] = anim; // (*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
+			//frames.LocalTransforms.push_back(*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
 		}
 
 		animOut.Frames.push_back(frames);

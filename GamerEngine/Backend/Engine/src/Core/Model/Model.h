@@ -24,6 +24,7 @@ namespace GamerEngine
 		unsigned int Length = 0;
 		float Duration = 0.0f;
 		float FramesPerSecond = 0.0f;
+		bool ShouldLoop = true;
 		std::wstring Name;
 	};
 
@@ -41,6 +42,7 @@ namespace GamerEngine
 
 		std::vector<Bone> Bones;
 		std::unordered_map<std::string, size_t> BoneNameToIndex;
+		std::unordered_map<size_t, std::string> IndexToBoneName;
 		std::vector<std::string> BoneNames;
 		std::unordered_map<std::wstring, Animation> Animations;
 		std::string Name;

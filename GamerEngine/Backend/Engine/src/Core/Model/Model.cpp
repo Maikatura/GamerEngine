@@ -120,7 +120,7 @@ void GamerEngine::Model::Update()
 			anAnimState->myFraction = 0;
 		}
 
-		myBoneTransform[0] = Matrix4x4f();
+		myBoneTransform[0] = CommonUtilities::Matrix4x4<float>();
 		UpdateAnimationHierarchy(anAnimState, 0, myBoneTransform[0]);
 	}
 }
@@ -139,17 +139,21 @@ void GamerEngine::Model::UpdateAnimationHierarchy(AnimationStatus* anAnimState, 
 		return;
 	}
 
-	int frame = (anAnimState->myCurrentFrame < length - 1 ? anAnimState->myCurrentFrame + 1 : 0);
+
+
+	int frame = anAnimState->myCurrentFrame;
+	if (anAnimState->myCurrentAnimation->ShouldLoop) {
+		frame = (anAnimState->myCurrentFrame < length - 1 ? anAnimState->myCurrentFrame + 1 : length - 1);
+	}
+	else {
+		frame = (anAnimState->myCurrentFrame < length - 1 ? anAnimState->myCurrentFrame + 1 : 0);
+	}
 	Matrix4x4f lowFrame = anAnimState->myCurrentAnimation->Frames[anAnimState->myCurrentFrame].LocalTransforms[someBoneInd];
 	Matrix4x4f highFrame = anAnimState->myCurrentAnimation->Frames[frame].LocalTransforms[someBoneInd];
 	Matrix4x4f lerpFrame = Matrix4x4f::Slerp(lowFrame, highFrame, anAnimState->myInterFrameFraction);
-
-	Matrix4x4f transposedPreframe = Matrix4x4f::Transpose(lerpFrame);
-
-	Matrix4x4f transposedFrame = (aParent * transposedPreframe);
+	Matrix4x4f transposedFrame = (aParent * Matrix4x4f::Transpose(lerpFrame));
 	Matrix4x4f transformFrame = transposedFrame * GetSkeleton()->Bones[someBoneInd].BindPoseInverse;
 	myBoneTransform[someBoneInd] = transformFrame;
-
 
 	
 	for (const unsigned int i : GetSkeleton()->Bones[someBoneInd].Children)
