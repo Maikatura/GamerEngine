@@ -3,7 +3,6 @@
 
 #include "Time.hpp"
 #include "Components/Components.hpp"
-#include "Components/Network/NetworkComponent.h"
 #include "Core/Model/Entity.h"
 #include "Network/CreateObjectMessage.h"
 #include "Scene/SceneManager.h"
@@ -225,7 +224,7 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Got Something from server";
 
-				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, GamerEngine::TransformComponent, Network::NetworkComponent>();
+				/*auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, GamerEngine::TransformComponent, Network::NetworkComponent>();
 				for(auto entity : view)
 				{
 					if (!SceneManager::Get().GetScene()->GetRegistry().valid(entity))
@@ -241,7 +240,7 @@ void NetworkingLayer::StartNetworkingClient()
 						netComp.SetNewPosition(moveMsg.Transform.GetPosition());
 						std::cout << moveMsg << std::endl;
 					}
-				}
+				}*/
 				break;
 			}
 			case NetworkMessages::ServerObjectMove:
@@ -251,7 +250,7 @@ void NetworkingLayer::StartNetworkingClient()
 
 				std::cout << "Server Moved A Object" << std::endl;
 
-				auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, GamerEngine::TransformComponent, Network::NetworkComponent>();
+				/*auto view = SceneManager::Get().GetScene()->GetRegistry().view<IDComponent, GamerEngine::TransformComponent, Network::NetworkComponent>();
 				for(auto& entity : view)
 				{
 					if(!SceneManager::Get().GetScene()->GetRegistry().valid(entity))
@@ -264,7 +263,7 @@ void NetworkingLayer::StartNetworkingClient()
 					{
 						netComp.SetNewPosition(moveMsg.Transform.GetPosition());
 					}
-				}
+				}*/
 				break;
 			}
 			case NetworkMessages::ObjectSpawn:
@@ -311,7 +310,7 @@ void NetworkingLayer::StartNetworkingClient()
 				data.myEntity = SceneManager::Get().CreateEntityType(0, id);
 				data.myEntity.GetComponent<GamerEngine::TransformComponent>().SetPosition(playerConnectMsg.Translation);
 				data.myEntity.GetComponent<GamerEngine::TransformComponent>().SetScale({ scale, scale ,scale });
-				auto& networkComp = data.myEntity.AddComponent<Network::NetworkComponent>();
+			/*	auto& networkComp = data.myEntity.AddComponent<Network::NetworkComponent>();
 				networkComp.SetID(id);
 				networkComp.SetServer(playerConnectMsg.IsServer);
 
@@ -319,7 +318,7 @@ void NetworkingLayer::StartNetworkingClient()
 				model.GetModel()->GetMeshData(0).MaterialData.SetAlbedoTexture(TextureAssetHandler::GetTexture(L"Editor\\Models\\network\\NetworkCube.dds"));
 				model.GetModel()->GetMeshData(0).MaterialData.SetNormalTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_N.dds"));
 				model.GetModel()->GetMeshData(0).MaterialData.SetMaterialTexture(TextureAssetHandler::GetTexture(L"Editor\\Textures\\T_Default_M.dds"));
-				myPlayers.push_back(data);
+				myPlayers.push_back(data);*/
 
 				break;
 			}

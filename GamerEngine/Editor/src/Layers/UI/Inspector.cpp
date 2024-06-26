@@ -593,27 +593,6 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 			ImGui::InputText("Class Name", &component.ClassName);
 		});
 
-
-	DrawComponent<Network::NetworkComponent>("Network Component", aEntity, [](auto& component, auto aEntity)
-	{
-			uint64_t serverID = component.GetID().Get();
-			ImGui::Text("Server ID");
-			ImGui::SameLine();
-			ImGui::DragScalarN("##LOL", ImGuiDataType_U64, &serverID, 1);
-			component.SetID(serverID);
-
-			bool isServer = component.IsServer();
-			ImGui::Text("Is Server");
-			ImGui::SameLine();
-			ImGui::Checkbox("##IsServer", &isServer);
-			component.SetServer(isServer);
-
-			bool shouldSmooth = component.ShouldSmooth();
-			ImGui::Text("Smooth");
-			ImGui::SameLine();
-			ImGui::Checkbox("##SmoothSync", &shouldSmooth);
-			component.SetShouldSmooth(shouldSmooth);
-	});
 	
 
 
@@ -649,12 +628,6 @@ void Inspector::AddComponent(GamerEngine::Entity aEntity)
 		if (ImGui::MenuItem("Particle Emitter"))
 		{
 			aEntity.AddComponent<ParticleEmitter>();
-			ImGui::CloseCurrentPopup();
-		}
-
-		if (ImGui::MenuItem("Network Component"))
-		{
-			aEntity.AddComponent<Network::NetworkComponent>();
 			ImGui::CloseCurrentPopup();
 		}
 
