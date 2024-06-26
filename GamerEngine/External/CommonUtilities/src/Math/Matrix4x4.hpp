@@ -19,6 +19,7 @@ namespace CommonUtilities
 		Matrix4x4<T>();
 		Matrix4x4<T>(const Matrix4x4<T>& aMatrix);
 		Matrix4x4(T aValue);
+		Matrix4x4(std::array<T, 16> myMatrix);
 
 		T& operator()(const size_t aRow, const size_t aColumn);
 		const T& operator()(const size_t aRow, const size_t aColumn) const;
@@ -79,7 +80,14 @@ namespace CommonUtilities
 
 
 
-
+		friend std::ostream& operator<<(std::ostream& os, const Matrix4x4<T>& obj)
+		{
+			os << obj.myMatrix[0] << " " << obj.myMatrix[1] << " " << obj.myMatrix[2] << " " << obj.myMatrix[3] << std::endl;
+			os << obj.myMatrix[4] << " " << obj.myMatrix[5] << " " << obj.myMatrix[6] << " " << obj.myMatrix[7] << std::endl;
+			os << obj.myMatrix[8] << " " << obj.myMatrix[9] << " " << obj.myMatrix[10] << " " << obj.myMatrix[11] << std::endl;
+			os << obj.myMatrix[12] << " " << obj.myMatrix[13] << " " << obj.myMatrix[14] << " " << obj.myMatrix[15] << std::endl;
+			return os;
+		}
 
 
 		void SetPosition(Vector4<T> aPosition);
@@ -187,6 +195,12 @@ namespace CommonUtilities
 		{
 			myMatrix[i] = aValue;
 		}
+	}
+
+	template <class T>
+	Matrix4x4<T>::Matrix4x4(std::array<T, 16> myMatrix)
+	{
+		this->myMatrix = myMatrix;
 	}
 
 
@@ -567,6 +581,7 @@ namespace CommonUtilities
 				transpose(row, column) = aMatrixToTranspose(column, row);
 			}
 		}
+
 		return transpose;
 	}
 

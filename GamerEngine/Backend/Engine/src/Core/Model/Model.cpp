@@ -5,11 +5,12 @@
 
 #include "Core/Framework/DX11.h"
 #include "Components/Components.hpp"
+#include "Utilites/StringCast.h"
 
-void GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton)
+
+void GamerEngine::Model::SetSkeleton(Skeleton aSkeleton)
 {
 	mySkeleton = aSkeleton;
-	Init(aMeshData, aPath);
 }
 
 void  GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aPath)
@@ -23,10 +24,6 @@ void  GamerEngine::Model::Init(const MeshData& aMeshData, const std::wstring& aP
 		{
 			myFirstTimeInit = false;
 		}
-	}
-	else
-	{
-		myAnimState = MakeRef<AnimationStatus>();
 	}
 }
 
@@ -99,23 +96,24 @@ void GamerEngine::Model::SetHasBeenRenderer(bool aValue)
 
 void GamerEngine::Model::PlayAnimation(std::wstring aAnimationPath)
 {
-	myAnimState->myCurrentAnimation = &GetSkeleton()->Animations[aAnimationPath];
-	myAnimState->myCurrentAnimation->Frames = GetSkeleton()->Animations[aAnimationPath].Frames;
+	myAnimState.myCurrentAnimation = &GetSkeleton()->Animations[Helpers::ToLowerCase(aAnimationPath)];
+	myAnimState.myCurrentAnimation->Frames = GetSkeleton()->Animations[Helpers::ToLowerCase(aAnimationPath)].Frames;
 }
 
 void GamerEngine::Model::Update()
 {
 	auto anAnimState = GetAnimationState();
 
-	if(GetSkeleton()->GetRoot() && anAnimState->myCurrentAnimation != nullptr)
+	if (GetSkeleton()->GetRoot() && anAnimState->myCurrentAnimation != nullptr)
 	{
+
 		//myModel->Update();
 		anAnimState->myCurrentTime += Time::GetDeltaTime();
 		anAnimState->myCurrentFrame = static_cast<int>(anAnimState->myCurrentTime * anAnimState->myCurrentAnimation->FramesPerSecond);
 		anAnimState->myFraction = anAnimState->myCurrentTime / anAnimState->myCurrentAnimation->Duration;
-		anAnimState->myInterFrameFraction = ((0) + ((myAnimState->myCurrentTime) - ((float)myAnimState->myCurrentFrame / myAnimState->myCurrentAnimation->FramesPerSecond)) * ((1) - (0)) / (((float)(myAnimState->myCurrentFrame + 1) / myAnimState->myCurrentAnimation->FramesPerSecond) - ((float)myAnimState->myCurrentFrame / myAnimState->myCurrentAnimation->FramesPerSecond)));
+		anAnimState->myInterFrameFraction = ((0) + ((myAnimState.myCurrentTime) - ((float)myAnimState.myCurrentFrame / myAnimState.myCurrentAnimation->FramesPerSecond)) * ((1) - (0)) / (((float)(myAnimState.myCurrentFrame + 1) / myAnimState.myCurrentAnimation->FramesPerSecond) - ((float)myAnimState.myCurrentFrame / myAnimState.myCurrentAnimation->FramesPerSecond)));
 
-		if(anAnimState->myFraction >= 1)
+		if (anAnimState->myFraction >= 1)
 		{
 			anAnimState->myCurrentTime = 0;
 			anAnimState->myCurrentFrame = 0;
@@ -123,7 +121,7 @@ void GamerEngine::Model::Update()
 		}
 
 		myBoneTransform[0] = CommonUtilities::Matrix4x4<float>();
-		UpdateAnimationHierarchy(anAnimState.get(), 0, myBoneTransform[0]);
+		UpdateAnimationHierarchy(anAnimState, 0, myBoneTransform[0]);
 	}
 }
 
@@ -132,7 +130,7 @@ void GamerEngine::Model::EditorUpdate()
 	
 }
 
-void GamerEngine::Model::UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent)
+void GamerEngine::Model::UpdateAnimationHierarchy(AnimationStatus* anAnimState, unsigned int someBoneInd, CommonUtilities::Matrix4x4<float> aParent)
 {
 	int length = static_cast<int>(anAnimState->myCurrentAnimation->Length);
 
@@ -141,7 +139,15 @@ void GamerEngine::Model::UpdateAnimationHierarchy(AnimationStatus* anAnimState, 
 		return;
 	}
 
-	int frame = (anAnimState->myCurrentFrame < length - 1 ? anAnimState->myCurrentFrame + 1 : 0);
+
+
+	int frame = anAnimState->myCurrentFrame;
+	if (anAnimState->myCurrentAnimation->ShouldLoop) {
+		frame = (anAnimState->myCurrentFrame < length - 1 ? anAnimState->myCurrentFrame + 1 : length - 1);
+	}
+	else {
+		frame = (anAnimState->myCurrentFrame < length - 1 ? anAnimState->myCurrentFrame + 1 : 0);
+	}
 	Matrix4x4f lowFrame = anAnimState->myCurrentAnimation->Frames[anAnimState->myCurrentFrame].LocalTransforms[someBoneInd];
 	Matrix4x4f highFrame = anAnimState->myCurrentAnimation->Frames[frame].LocalTransforms[someBoneInd];
 	Matrix4x4f lerpFrame = Matrix4x4f::Slerp(lowFrame, highFrame, anAnimState->myInterFrameFraction);
@@ -150,8 +156,8 @@ void GamerEngine::Model::UpdateAnimationHierarchy(AnimationStatus* anAnimState, 
 	myBoneTransform[someBoneInd] = transformFrame;
 
 	
-	for(int i = 0; i < GetSkeleton()->Bones[someBoneInd].Children.size(); i++)
+	for (const unsigned int i : GetSkeleton()->Bones[someBoneInd].Children)
 	{
-		UpdateAnimationHierarchy(anAnimState, GetSkeleton()->Bones[someBoneInd].Children[i], transposedFrame);
+		UpdateAnimationHierarchy(anAnimState, i, transposedFrame);
 	}
 }

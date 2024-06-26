@@ -5,17 +5,12 @@
 
 
 
-std::vector<GamerEngine::Entity> GamerEngine::TransformComponent::GetChildren() const
+std::vector<uint64_t> GamerEngine::TransformComponent::GetChildren() const
 {
 	return myChildren;
 }
 
 bool GamerEngine::TransformComponent::HasParent() const
 {
-	if (!myParent)
-	{
-		return false;
-	}
-
-	return (myParent.GetHandle() != entt::null);
+	return (myParent != 0);
 }

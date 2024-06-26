@@ -20,6 +20,7 @@ VertexToPixel main(VertexInput input)
 		skinningMatrix += mul(input.BoneWeights.w, OB_BoneData[input.BoneIDs.w]);
 	}
 
+
     float4 vertexWorldPosition;
     if (OB_IsInstanced)
     {

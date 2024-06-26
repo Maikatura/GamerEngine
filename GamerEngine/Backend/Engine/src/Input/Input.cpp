@@ -55,7 +55,7 @@ bool Input::IsKeyPressed(CommonUtilities::Key::Code aKey)
 
 float Input::GetMouseWheel()
 {
-	return 0.0f; // myInput->ScrollDelta();
+	return myMouseButton->GetScrollValue().y;
 }
 
 CommonUtilities::Vector2<float> Input::GetMouseDelta()
@@ -68,15 +68,20 @@ Vector2i Input::GetMousePos()
 	return myMouseMovement->GetPosition();
 }
 
-void Input::SetMousePos(Vector2i aPos)
+void Input::SetCursorPos(Vector2i aPos)
 {
 
 
 
-	//myInput->SetMousePos(aPos);
+	//myInput->SetCursorPos(aPos);
 }
 
-void Input::LockMouse(CommonUtilities::CursorLockMode aLock)
+void Input::LockCursor(CommonUtilities::CursorLockMode aLock)
 {
 	myMouseMovement->SetCursorLockMode(aLock);
+}
+
+void Input::SetCursorVisibility(bool aIsVisible)
+{
+	myMouseMovement->SetCursorVisibility(aIsVisible);
 }

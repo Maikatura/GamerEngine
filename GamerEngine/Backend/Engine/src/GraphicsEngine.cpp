@@ -389,15 +389,13 @@ void GraphicsEngine::OnFrameUpdate()
     {
         //PROFILE_CPU_SCOPE("Update Loop");
 
-        if (SceneManager::Get().GetScene())
-        {
-            SceneManager::Get().Update(myIsRunning);
+        SceneManager::Get().Update(myIsRunning);
 
-            for (auto module : myRenderModules)
-            {
-                module->OnUpdate();
-            }
+        for (auto module : myRenderModules)
+        {
+            module->OnUpdate();
         }
+        
     }
 
     //#ifdef _Distribution

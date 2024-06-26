@@ -81,6 +81,12 @@ namespace GamerEngine
             return InternalCalls.Entity_GetChildCount(Entity.ID);
         }
 
+        public Entity GetChild(int index)
+        {
+            ulong childID = InternalCalls.Entity_GetChild(Entity.ID, index);
+            return new Entity(childID);
+        }
+
     }
 
 }

@@ -153,10 +153,7 @@ void MainMenuBar::RenderMainBar()
                 GraphicsEngine::Get()->SetEngineRunning(true);
                 ConsoleHelper::Log(LogType::Info, "Started game");
 
-                mySnapshot = SnapshotManager(SceneManager::Get().GetScene().get(), &SceneManager::Get().GetScene()->GetRegistry());
-                mySnapshot.CreateSnapshot();
-
-				SceneManager::Get().OnRuntimeStart();
+                SceneManager::Get().SetSceneState(SceneState::Play);
             }
         }
         else
@@ -173,8 +170,7 @@ void MainMenuBar::RenderMainBar()
                 GraphicsEngine::Get()->SetEngineRunning(false);
                 ConsoleHelper::Log(LogType::Info, "Stopped game");
 
-            	mySnapshot.RestoreSnapShot();
-
+                SceneManager::Get().SetSceneState(SceneState::Edit);
             }
         }
 

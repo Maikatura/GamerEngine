@@ -42,19 +42,19 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 	if (Input::IsMouseDown(CommonUtilities::Mouse::RightButton) && IsHoveringSceneView)
 	{
 		HasBeenActivated = true;
-		Input::LockMouse(CommonUtilities::CursorLockMode::Locked);
+		Input::LockCursor(CommonUtilities::CursorLockMode::Locked);
+		Input::SetCursorVisibility(false);
 		//myOldPos = myPrevMouse;
 	}
 	else
 	{
-		Input::LockMouse(CommonUtilities::CursorLockMode::None);
-	}
+		if (Input::IsMouseReleased(CommonUtilities::Mouse::RightButton) && HasBeenActivated)
+		{
+			HasBeenActivated = false;
+		}
 
-	if (Input::IsMouseReleased(CommonUtilities::Mouse::RightButton) && HasBeenActivated)
-	{
-		
-		HasBeenActivated = false;
-	//	//Input::SetMousePos(myPrevMouse);
+		Input::SetCursorVisibility(true);
+		Input::LockCursor(CommonUtilities::CursorLockMode::None);
 	}
 
 	if (!HasBeenActivated)
@@ -66,15 +66,8 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 	const float oldMouseY = aTransform->GetRotation().y;
 
 
-
-
 	Vector2f delta = Input::GetMouseDelta();
-	//
-	//SIZE windowRect = GraphicsEngine::Get()->GetWindowSize();
-	//Vector2i centerPosition;
-	//centerPosition.x = (windowRect.cx) / 2;
-	//centerPosition.y = (windowRect.cy) / 2;
-	//Input::SetMousePos(centerPosition);
+
 
 
 	aTransform->SetRotation({

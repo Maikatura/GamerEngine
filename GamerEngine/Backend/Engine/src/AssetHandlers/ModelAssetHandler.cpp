@@ -549,7 +549,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 #else
 
 
-	const std::string ansiFileName = Helpers::string_cast<std::string>(aFilePath);
+	const std::string ansiFileName = Helpers::string_cast<std::string>(Helpers::ToLowerCase(aFilePath));
 
 	HRESULT result = S_FALSE;
 
@@ -662,21 +662,7 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 			}*/
 
 
-			GamerEngine::Skeleton mdlSkeleton;
-			const bool hasSkeleton = tgaModel.Skeleton.GetRoot();
-			if (hasSkeleton)
-			{
-				for (size_t i = 0; i < tgaModel.Skeleton.Bones.size(); i++)
-				{
-					mdlSkeleton.Bones.push_back(GamerEngine::Bone());
-					mdlSkeleton.Bones[i].BindPoseInverse = *((Matrix4x4f*)&tgaModel.Skeleton.Bones[i].BindPoseInverse);
-					mdlSkeleton.Bones[i].Children = tgaModel.Skeleton.Bones[i].Children;
-					//mdlSkeleton.Bones[i].Name = tgaModel.Skeleton.Bones[i].Name;
-					mdlSkeleton.Bones[i].ParentIdx = tgaModel.Skeleton.Bones[i].ParentIdx;
-					mdlSkeleton.BoneNames.push_back(tgaModel.Skeleton.Bones[i].Name);
-					mdlSkeleton.BoneNameToIndex[tgaModel.Skeleton.Bones[i].Name] = i;
-				}
-			}
+			
 
 			D3D11_BUFFER_DESC vertexBufferDesc = {};
 			vertexBufferDesc.ByteWidth = static_cast<UINT>(mdlVertices.size()) * static_cast<UINT>(sizeof(Vertex));
@@ -791,17 +777,38 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 			//modelData.myBlendShapeBuffer = blendBuffer;
 
-			if (hasSkeleton)
-			{
-				mdlInstance->Init(modelData, aFilePath, mdlSkeleton);
-			}
-			else
-			{
-				mdlInstance->Init(modelData, aFilePath);
-			}
+			mdlInstance->Init(modelData, Helpers::ToLowerCase(aFilePath));
 
 			
 		}
+
+		GamerEngine::Skeleton mdlSkeleton;
+		const bool hasSkeleton = tgaModel.Skeleton.GetRoot();
+		if (hasSkeleton)
+		{
+			for (size_t i = 0; i < tgaModel.Skeleton.Bones.size(); i++)
+			{
+				mdlSkeleton.Bones.push_back(GamerEngine::Bone());
+				mdlSkeleton.Bones[i].BindPoseInverse = Matrix4x4f(std::array<float, 16>{
+					tgaModel.Skeleton.Bones[i].BindPoseInverse[0], tgaModel.Skeleton.Bones[i].BindPoseInverse[1], tgaModel.Skeleton.Bones[i].BindPoseInverse[2], tgaModel.Skeleton.Bones[i].BindPoseInverse[3],
+					tgaModel.Skeleton.Bones[i].BindPoseInverse[4], tgaModel.Skeleton.Bones[i].BindPoseInverse[5], tgaModel.Skeleton.Bones[i].BindPoseInverse[6], tgaModel.Skeleton.Bones[i].BindPoseInverse[7],
+					tgaModel.Skeleton.Bones[i].BindPoseInverse[8], tgaModel.Skeleton.Bones[i].BindPoseInverse[9], tgaModel.Skeleton.Bones[i].BindPoseInverse[10], tgaModel.Skeleton.Bones[i].BindPoseInverse[11],
+					tgaModel.Skeleton.Bones[i].BindPoseInverse[12], tgaModel.Skeleton.Bones[i].BindPoseInverse[13], tgaModel.Skeleton.Bones[i].BindPoseInverse[14], tgaModel.Skeleton.Bones[i].BindPoseInverse[15]
+				});
+				mdlSkeleton.Bones[i].Children = tgaModel.Skeleton.Bones[i].Children;
+				//mdlSkeleton.Bones[i].Name = tgaModel.Skeleton.Bones[i].Name;
+				mdlSkeleton.Bones[i].ParentIdx = tgaModel.Skeleton.Bones[i].ParentIdx;
+				mdlSkeleton.BoneNames.push_back(tgaModel.Skeleton.Bones[i].Name);
+				mdlSkeleton.BoneNameToIndex[tgaModel.Skeleton.Bones[i].Name] = i;
+				mdlSkeleton.IndexToBoneName[i] = tgaModel.Skeleton.Bones[i].Name;
+			}
+		}
+
+		if (hasSkeleton)
+		{
+			mdlInstance->SetSkeleton(mdlSkeleton);
+		}
+		
 
 		mdlInstance->Name = ansiFileName;
 		myModelRegistry.push_back(mdlInstance);
@@ -815,11 +822,11 @@ bool ModelAssetHandler::LoadModelData(const std::wstring& aFilePath)
 
 bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const std::wstring& someFilePath)
 {
-	const std::string ansiFileName = Helpers::string_cast<std::string>(someFilePath);
-	Ref<GamerEngine::Model> model = GetModelInstance(aModelName);
+	const std::string ansiFileName = Helpers::string_cast<std::string>(Helpers::ToLowerCase(someFilePath));
+	Ref<GamerEngine::Model> model = GetModelInstance(Helpers::ToLowerCase(aModelName));
 
 	TGA::FBX::Animation tgaAnimation;
-	if (!TGA::FBX::Importer::LoadAnimation(someFilePath, tgaAnimation))
+	if (!TGA::FBX::Importer::LoadAnimation(Helpers::ToLowerCase(someFilePath), tgaAnimation))
 	{
 		return false;
 	}
@@ -831,16 +838,31 @@ bool ModelAssetHandler::LoadAnimationData(const std::wstring& aModelName, const 
 	animOut.Name = Helpers::string_cast<std::wstring>(tgaAnimation.Name);
 	for (int i = 0; i < static_cast<int>(tgaAnimation.Length); i++)
 	{
-		GamerEngine::Animation::Frame frames; //{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
-		for (int y = 0; y < tgaAnimation.Frames[i].LocalTransforms.size(); y++)
+
+
+		GamerEngine::Animation::Frame frames;
+		frames.LocalTransforms.resize(model->GetSkeleton()->Bones.size());
+
+		//{ *(std::vector<Matrix4x4f>*)& tgaAnimation.Frames[i].LocalTransforms }
+		for (auto bonePair : tgaAnimation.Frames[i].LocalTransforms)
 		{
-			frames.LocalTransforms.push_back(*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
+			auto bone = bonePair.first;
+			auto index = model->GetSkeleton()->BoneNameToIndex[bone];
+
+			Matrix4x4f anim = Matrix4x4f(std::array<float, 16>{
+				tgaAnimation.Frames[i].LocalTransforms[bone][0], tgaAnimation.Frames[i].LocalTransforms[bone][1], tgaAnimation.Frames[i].LocalTransforms[bone][2], tgaAnimation.Frames[i].LocalTransforms[bone][3],
+					tgaAnimation.Frames[i].LocalTransforms[bone][4], tgaAnimation.Frames[i].LocalTransforms[bone][5], tgaAnimation.Frames[i].LocalTransforms[bone][6], tgaAnimation.Frames[i].LocalTransforms[bone][7],
+					tgaAnimation.Frames[i].LocalTransforms[bone][8], tgaAnimation.Frames[i].LocalTransforms[bone][9], tgaAnimation.Frames[i].LocalTransforms[bone][10], tgaAnimation.Frames[i].LocalTransforms[bone][11],
+					tgaAnimation.Frames[i].LocalTransforms[bone][12], tgaAnimation.Frames[i].LocalTransforms[bone][13], tgaAnimation.Frames[i].LocalTransforms[bone][14], tgaAnimation.Frames[i].LocalTransforms[bone][15]
+			});
+			frames.LocalTransforms[index] = anim; // (*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
+			//frames.LocalTransforms.push_back(*(Matrix4x4f*)&tgaAnimation.Frames[i].LocalTransforms);
 		}
 
 		animOut.Frames.push_back(frames);
 	}
 
-	model->GetSkeleton()->Animations.insert({ someFilePath, animOut });
+	model->GetSkeleton()->Animations.insert({ Helpers::ToLowerCase(someFilePath), animOut });
 
 	return true;
 }
@@ -867,35 +889,33 @@ Ref<GamerEngine::Model> ModelAssetHandler::GetModelInstance(const std::wstring& 
 	}
 
 	{
-		std::scoped_lock<std::mutex> lock(myListMutex);
-		if (LoadModelData(aFilePath))
+		/*std::scoped_lock<std::mutex> lock(myListMutex);
+		if (LoadModelData(Helpers::ToLowerCase(aFilePath)))
 		{
 			return myModelRegistry.back();
-		}
-	}
-	
-
-	/*{
-		std::scoped_lock<std::mutex> lock(myListMutex);
-
-		auto model = myModelRegistry.find(aFilePath);
-		if (model != myModelRegistry.end())
-		{
-			return model->second;
-		}
+		}*/
 	}
 
-	if (LoadModelData(aFilePath))
+
+	for (auto& item : myModelRegistry)
 	{
-		std::scoped_lock<std::mutex> lock(myListMutex);
-
-		auto model = myModelRegistry.find(aFilePath);
-		if (model != myModelRegistry.end())
+		if (item->GetName() == Helpers::ToLowerCase(aFilePath))
 		{
-			return model->second;
+			return item;
 		}
+	}
 
-	}*/
+
+	if (LoadModelData(Helpers::ToLowerCase(aFilePath)))
+	{
+		for (auto& item : myModelRegistry)
+		{
+			if (item->GetName() == Helpers::ToLowerCase(aFilePath))
+			{
+				return item;
+			}
+		}
+	}
 
 	if (myModelRegistry.empty())
 	{

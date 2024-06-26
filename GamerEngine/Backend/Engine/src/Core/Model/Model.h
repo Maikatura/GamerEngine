@@ -24,6 +24,7 @@ namespace GamerEngine
 		unsigned int Length = 0;
 		float Duration = 0.0f;
 		float FramesPerSecond = 0.0f;
+		bool ShouldLoop = true;
 		std::wstring Name;
 	};
 
@@ -41,6 +42,7 @@ namespace GamerEngine
 
 		std::vector<Bone> Bones;
 		std::unordered_map<std::string, size_t> BoneNameToIndex;
+		std::unordered_map<size_t, std::string> IndexToBoneName;
 		std::vector<std::string> BoneNames;
 		std::unordered_map<std::wstring, Animation> Animations;
 		std::string Name;
@@ -117,7 +119,7 @@ namespace GamerEngine
 		ComPtr<ID3D11Buffer> myInstanceBuffer;
 
 		std::array<CommonUtilities::Matrix4x4<float>, MAX_MODEL_BONES> myBoneTransform{};
-		Ref<AnimationStatus> myAnimState;
+		AnimationStatus myAnimState;
 		std::vector<RenderedInstanceData> myRenderedInstances;
 
 
@@ -135,11 +137,8 @@ namespace GamerEngine
 
 	public:
 
-
-
-		void Init(const MeshData& aMeshData, const std::wstring& aPath, Skeleton aSkeleton);
+		void SetSkeleton(Skeleton aSkeleton);
 		void Init(const MeshData& aMeshData, const std::wstring& aPath);
-
 
 		void AddRenderedInstance(uint32_t aEntityID, Matrix4x4f aTransform);
 		bool UpdateInstanceBuffer();
@@ -158,7 +157,6 @@ namespace GamerEngine
 		{
 			myBoxBounds = aBounds;
 		}
-
 
 		FORCEINLINE bool HasRenderedInstance() const
 		{
@@ -195,9 +193,9 @@ namespace GamerEngine
 		virtual void Update();
 
 
-		void UpdateAnimationHierarchy(AnimationStatus* anAnimState, int someBoneInd, CommonUtilities::Matrix4x4<float>& aParent);
+		void UpdateAnimationHierarchy(AnimationStatus* anAnimState, unsigned int someBoneInd, CommonUtilities::Matrix4x4<float> aParent);
 
-		FORCEINLINE Ref<AnimationStatus> GetAnimationState() { return myAnimState; }
+		FORCEINLINE AnimationStatus* GetAnimationState() { return &myAnimState; }
 		FORCEINLINE Skeleton* GetSkeleton() { return &mySkeleton; }
 		FORCEINLINE const Skeleton* GetSkeleton() const { return &mySkeleton; }
 		MeshData& GetMeshData(unsigned int anIndex) { return myMeshData[anIndex]; }

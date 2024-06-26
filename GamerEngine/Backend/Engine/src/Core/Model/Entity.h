@@ -20,6 +20,7 @@ namespace GamerEngine
 
 		Entity(entt::entity aHandle, Scene* aScene) : myEntityHandle(aHandle), myScene(aScene)
 		{ }
+		
 
 		Entity(const Entity& other) = default;
 
@@ -41,7 +42,7 @@ namespace GamerEngine
 		T& AddComponent()
 		{
 			T& component = myScene->GetRegistry().emplace<T>(myEntityHandle);
-			//myScene->OnComponentAdded<T>(*this, component);
+			//mySavedScene->OnComponentAdded<T>(*this, component);
 			return component;
 		}
 
@@ -50,7 +51,7 @@ namespace GamerEngine
 		T& AddOrReplaceComponent()
 		{
 			T& component = myScene->GetRegistry().emplace_or_replace<T>(myEntityHandle);
-			//myScene->OnComponentAdded<T>(*this, component);
+			//mySavedScene->OnComponentAdded<T>(*this, component);
 			return component;
 		}
 
@@ -58,7 +59,7 @@ namespace GamerEngine
 		T& AddComponent(Args&&... args)
 		{
 			T& component = myScene->GetRegistry().emplace<T>(myEntityHandle, std::forward<Args>(args)...);
-			//myScene->OnComponentAdded<T>(*this, component);
+			//mySavedScene->OnComponentAdded<T>(*this, component);
 			return component;
 		}
 
@@ -67,7 +68,7 @@ namespace GamerEngine
 		T& AddOrReplaceComponent(Args&&... args)
 		{
 			T& component = myScene->GetRegistry().emplace_or_replace<T>(myEntityHandle, std::forward<Args>(args)...);
-			//myScene->OnComponentAdded<T>(*this, component);
+			//mySavedScene->OnComponentAdded<T>(*this, component);
 			return component;
 		}
 
@@ -119,7 +120,10 @@ namespace GamerEngine
 			return (uint32_t)myEntityHandle;
 		}
 
-
+		bool GetScene() const
+		{
+			return myScene;
+		}
 
 
 	private:

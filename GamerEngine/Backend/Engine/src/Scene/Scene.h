@@ -55,6 +55,7 @@ namespace GamerEngine
         Entity CreateEntityWithUUID(UUID aUUID, const std::string& aName = std::string());
         void DeleteEntity(Entity aEntity);
 
+        static Ref<Scene> Copy(Ref<Scene> other);
 
     	void OnRuntimeStart();
     	void OnRuntimeStop();

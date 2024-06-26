@@ -133,7 +133,7 @@ SceneSerializer::SceneSerializer(GamerEngine::Scene* scene)
 	: myScene(scene)
 {}
 
-static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
+static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity, GamerEngine::Scene* aScene)
 {
 	std::cout << "Saving Entity: Start" << std::endl;
 
@@ -167,7 +167,8 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 
 		if (tc.HasParent())
 		{
-			out << YAML::Key << "Parent" << YAML::Value << tc.GetParent().GetUUID();
+			GamerEngine::Entity parent = { aScene->GetEntityByUUID(tc.GetParent()), aScene };
+			out << YAML::Key << "Parent" << YAML::Value << parent.GetUUID();
 		}
 
 		out << YAML::Key << "ChildrenSize" << YAML::Value << tc.GetChildren().size();
@@ -176,12 +177,10 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity)
 
 		for (int i = 0; i < tc.GetChildren().size(); i++)
 		{
-			if (tc.GetChildren()[i])
+			GamerEngine::Entity child = { aScene->GetEntityByUUID(tc.GetChildren()[i]), aScene };
+			if (child)
 			{
-
-
-
-				out << YAML::Key << i << YAML::Value << tc.GetChildren()[i].GetUUID();
+				out << YAML::Key << i << YAML::Value << child.GetUUID();
 
 			}
 
@@ -748,7 +747,7 @@ void SceneSerializer::Serialize(const std::string& aFilepath)
 			if(!entity)
 				return;
 
-			SerializeEntity(out, entity);
+			SerializeEntity(out, entity, myScene);
 		});
 	out << YAML::EndSeq;
 	out << YAML::EndMap;

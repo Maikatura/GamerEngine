@@ -35,9 +35,9 @@ public:
 	static Vector2f GetMouseDelta();
 	static Vector2i GetMousePos();
 
-	static void SetMousePos(Vector2i aPos);
-
-	static void LockMouse(CommonUtilities::CursorLockMode aLock);
+	static void SetCursorPos(Vector2i aPos);
+	static void LockCursor(CommonUtilities::CursorLockMode aLock);
+	static void SetCursorVisibility(bool aIsVisible);
 
 private:
 	inline static Ref<CommonUtilities::KeyboardInput> myKeyboard;

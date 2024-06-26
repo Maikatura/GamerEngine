@@ -12,62 +12,62 @@ SnapshotManager::SnapshotManager()
 
 void SnapshotManager::CreateSnapshot()
 {
-	snapshotRegistrySize = myRegistry->size();
-	snapshotReleased = myRegistry->released();
-	snapshotRegistryEntities.insert(snapshotRegistryEntities.end(), myRegistry->data(),
-        myRegistry->data() + snapshotRegistrySize);
+	//snapshotRegistrySize = myRegistry->size();
+	//snapshotReleased = myRegistry->released();
+	//snapshotRegistryEntities.insert(snapshotRegistryEntities.end(), myRegistry->data(),
+    //    myRegistry->data() + snapshotRegistrySize);
 
 	// Store the actual snapshot data per each component class
 	// This copy-per-class approach is necessary due to how EnTT is built
-	CreateSnapshotForComponent<GamerEngine::TransformComponent>(entitySnapshot_Transform);
+	//CreateSnapshotForComponent<GamerEngine::TransformComponent>(entitySnapshot_Transform);
     //CreateSnapshotForComponent<ModelComponent>(entitySnapshot_Models);
 }
 
 void SnapshotManager::RestoreSnapShot()
 {
-	/*myRegistry = {};
-	myRegistry->assign(snapshotRegistryEntities.data(), snapshotRegistryEntities.data() + snapshotRegistrySize, snapshotReleased);*/
+	//myRegistry = {};
+	//myRegistry->assign(snapshotRegistryEntities.data(), snapshotRegistryEntities.data() + snapshotRegistrySize, snapshotReleased);
 
 	// Restore the actual snapshot data per each component class
 	// This copy-per-class approach is necessary due to how EnTT is built
-	RestoreSnapshotForComponent<GamerEngine::TransformComponent>(entitySnapshot_Transform);
+	//RestoreSnapshotForComponent<GamerEngine::TransformComponent>(entitySnapshot_Transform);
     //RestoreSnapshotForComponent<ModelComponent>(entitySnapshot_Models);
     /*RestoreSnapshotForComponent()*/
 
-    const auto& view = myRegistry->view<GamerEngine::TransformComponent>();
-    if (view != nullptr)
-    {
-        for (const auto& entity : view)
-        {
-            auto& transform  = view.get<GamerEngine::TransformComponent>(entity);
+   // const auto& view = myRegistry->view<GamerEngine::TransformComponent>();
+   // if (view != nullptr)
+   // {
+   //     for (const auto& entity : view)
+   //     {
+   //         auto& transform  = view.get<GamerEngine::TransformComponent>(entity);
 
-            auto copyOfChildren = transform.GetChildren();
+   //         auto copyOfChildren = transform.GetChildren();
 
-            transform.ClearChildren();
-
-
-			for (auto child : copyOfChildren)
-			{
-                transform.SetChild(GamerEngine::Entity{ child, myScene});
-			}
-
-			if (transform.HasParent())
-            {
-				transform.SetParent(GamerEngine::Entity{ transform.GetParent(), myScene });
-			}
-        }
-    }
+   //         //transform.ClearChildren();
 
 
-    CleanUpSnapshotData();
+			//for (auto child : copyOfChildren)
+			//{
+   //             transform.SetChild(GamerEngine::Entity{ child, myScene});
+			//}
+
+			//if (transform.HasParent())
+   //         {
+			//	transform.SetParent(GamerEngine::Entity{ transform.GetParent(), myScene });
+			//}
+   //     }
+   // }
+
+
+    //CleanUpSnapshotData();
 }
 
 void SnapshotManager::CleanUpSnapshotData()
 {
-    snapshotRegistryEntities.clear();
+    //snapshotRegistryEntities.clear();
 
     // Clear all existing snapshot data
-    CleanUpSnapshotData<GamerEngine::TransformComponent>(entitySnapshot_Transform);
+    //CleanUpSnapshotData<GamerEngine::TransformComponent>(entitySnapshot_Transform);
     //CleanUpSnapshotData<ModelComponent>(entitySnapshot_Models);
 }
 
@@ -83,19 +83,19 @@ void SnapshotManager::CreateSnapshotForComponent(SnapshotContainer<ComponentType
 
     // Create component snapshot
     // Note that data may cross multiple pages in memory. Thus, need to copy the data into the output vector one page at a time
-    const std::size_t pageSize = entt::component_traits<ComponentType>::page_size;
-    const std::size_t totalPages = (storage.size() + pageSize - 1u) / pageSize;
-    for(std::size_t pageIndex{}; pageIndex < totalPages; pageIndex++)
-    {
-        // Calculate number of elements to copy so only copyyig over the necessary number of elements
-        // Truly necessary as using ComponentType vector here instead of, say, vector of arbitrary bytes
-        const std::size_t offset = pageIndex * pageSize;
-        const std::size_t numberOfElementsToCopy = (((pageSize) < (storage.size() - offset)) ? (pageSize) : (storage.size() - offset));
-
-        // Do the actual copying
-        ComponentType* pageStartPtr = storage.raw()[pageIndex];
-        aSnapshot.componentSnapshot.insert(aSnapshot.componentSnapshot.end(), pageStartPtr, pageStartPtr + numberOfElementsToCopy);
-    }
+    //const std::size_t pageSize = entt::component_traits<ComponentType>::page_size;
+    //const std::size_t totalPages = (storage.size() + pageSize - 1u) / pageSize;
+    //for(std::size_t pageIndex{}; pageIndex < totalPages; pageIndex++)
+    //{
+    //    // Calculate number of elements to copy so only copyyig over the necessary number of elements
+    //    // Truly necessary as using ComponentType vector here instead of, say, vector of arbitrary bytes
+    //    const std::size_t offset = pageIndex * pageSize;
+    //    const std::size_t numberOfElementsToCopy = (((pageSize) < (storage.size() - offset)) ? (pageSize) : (storage.size() - offset));
+    //
+    //    // Do the actual copying
+    //    ComponentType* pageStartPtr = storage.raw()[pageIndex];
+    //    aSnapshot.componentSnapshot.insert(aSnapshot.componentSnapshot.end(), pageStartPtr, pageStartPtr + numberOfElementsToCopy);
+    //}
 }
 
 template <typename ComponentType>
@@ -104,20 +104,20 @@ void SnapshotManager::RestoreSnapshotForComponent(SnapshotContainer<ComponentTyp
     auto&& storage = myRegistry->storage<ComponentType>();
 
     // Restore entities
-    //storage.insert(entitySnapshot.begin(), entitySnapshot.end());
+    storage.insert(aSnapshot.entitySnapshot.begin(), aSnapshot.entitySnapshot.end());
 
     // Restore components
     // Note that data may cross multiple pages in memory. Thus, need to copy the data into the storage one page at a time
-    const std::size_t pageSize = entt::component_traits<ComponentType>::page_size;
-    const std::size_t totalPages = (storage.size() + pageSize - 1u) / pageSize;
-    for(std::size_t pageIndex = 0; pageIndex < totalPages; pageIndex++)
-    {
-        const std::size_t offset = pageIndex * pageSize;
-        const std::size_t numberOfElementsToCopy = (((pageSize) < (aSnapshot.componentSnapshot.size() - offset)) ? (pageSize) : (aSnapshot.componentSnapshot.size() - offset));
-
-        ComponentType* pageStartPtr = storage.raw()[pageIndex];
-        memcpy(pageStartPtr, aSnapshot.componentSnapshot.data() + offset, sizeof(ComponentType) * numberOfElementsToCopy);
-    }
+    //const std::size_t pageSize = entt::component_traits<ComponentType>::page_size;
+    //const std::size_t totalPages = (storage.size() + pageSize - 1u) / pageSize;
+    //for(std::size_t pageIndex = 0; pageIndex < totalPages; pageIndex++)
+    //{
+    //    const std::size_t offset = pageIndex * pageSize;
+    //    const std::size_t numberOfElementsToCopy = (((pageSize) < (aSnapshot.componentSnapshot.size() - offset)) ? (pageSize) : (aSnapshot.componentSnapshot.size() - offset));
+    //
+    //    ComponentType* pageStartPtr = storage.raw()[pageIndex];
+    //    memcpy(pageStartPtr, aSnapshot.componentSnapshot.data() + offset, sizeof(ComponentType) * numberOfElementsToCopy);
+    //}
 }
 
 

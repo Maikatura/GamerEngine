@@ -50,8 +50,8 @@ includedirs{
 externalincludedirs {
 	"%{IncludeDirs.GraphicsEngine}",
 	"%{IncludeDirs.CommonUtilities}",
-	"%{IncludeDirs.PhysX}",
-	"%{IncludeDirs.Game}"
+	"%{IncludeDirs.Game}",
+    "%{IncludeDirs.JoltPhysics}",
 }
 
 externalwarnings "Off"

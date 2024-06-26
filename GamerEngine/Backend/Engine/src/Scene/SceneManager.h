@@ -7,13 +7,20 @@
 
 
 
-
+enum class SceneState
+{
+	Play,
+	Edit,
+	Runtime,
+	Count
+};
 
 class SceneManager
 {
-
+	
 	
 	Ref<GamerEngine::Scene> myScene;
+	Ref<GamerEngine::Scene> myRuntimeScene;
 	Ref<GamerEngine::Scene> mySwapScene;
 	std::mutex mySceneMutex;
 
@@ -22,7 +29,11 @@ class SceneManager
 
 	GamerEngine::SceneStatus mySceneStatus = GamerEngine::SceneStatus::None;
 
+	SceneState mySceneState = SceneState::Edit;
+	SceneState myOldSceneState = SceneState::Edit;
+
 	bool myIsHeadless = false;
+	bool myIsInRuntime = false;
 
 	inline static Ref<SceneManager> myInstance;
 	
@@ -37,7 +48,6 @@ public:
 		
 		return *myInstance;
 	}
-
 
 	bool IsHeadless();
 	void SetHeadless(bool isHeadless);
@@ -54,7 +64,8 @@ public:
 	void OnRuntimeStop();
 
 	bool IsReady();
-	
+
+	void SetSceneState(SceneState aSceneState);
 	GamerEngine::SceneStatus GetStatus();
 	
 	GamerEngine::Entity ConstructEntity(entt::entity aEntityValue);

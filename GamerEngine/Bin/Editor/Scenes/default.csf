@@ -1,6 +1,89 @@
 Scene: SceneTesting
-Path: C:\Users\simon\OneDrive\Dokument\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
+Path: C:\Users\simon\Documents\GitHub\GamerEngine\GamerEngine\Bin\Editor\Scenes\default.csf
 Entities:
+  - Entity: 8976672298228889999
+    TagComponent:
+      Tag: Particle Emitter
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 0
+      Children:
+        {}
+    ParticleComponent:
+      EmitterSettingsSize: 2
+      EmitterSettings:
+        0:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+        1:
+          MinFrequency: 0.000500000024
+          MaxFrequency: 0.00100000005
+          MinSpeed: 1
+          MaxSpeed: 4
+          MinRotationSpeed: 20
+          MaxRotationSpeed: -20
+          MinLifeTime: 3
+          MaxLifeTime: 4
+          MinAngle: [-45, -45, -45]
+          MaxAngle: [45, 45, 45]
+      ParticleSettingsSize: 2
+      ParticleSettings:
+        0:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 10, 0]
+          Scale: [1, 1, 1]
+          Color: [1, 0, 0, 1]
+        1:
+          Drag: 0
+          RotationalDrag: -0.100000001
+          Velocity: [0, 0, 0]
+          Acceleration: [0, 20, 0]
+          Scale: [0, 0, 0]
+          Color: [1, 0, 1, 1]
+  - Entity: 4837912226354239985
+    TagComponent:
+      Tag: Test 3
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      Parent: 15888918766242960987
+      ChildrenSize: 0
+      Children:
+        {}
+  - Entity: 15888918766242960987
+    TagComponent:
+      Tag: Test 2
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      Parent: 2070257078735909303
+      ChildrenSize: 1
+      Children:
+        0: 4837912226354239985
+  - Entity: 2070257078735909303
+    TagComponent:
+      Tag: Test 1
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      ChildrenSize: 1
+      Children:
+        0: 15888918766242960987
   - Entity: 6560000753651608803
     TagComponent:
       Tag: Default Entity Name
@@ -12,8 +95,8 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -14.1967897
-      Path: Assets\Models\pedal.fbx
+      Delay: -14.2648058
+      Path: assets\models\pedal.fbx
       TextureSize: 1
       Texture:
         0:
@@ -25,15 +108,15 @@ Entities:
     TagComponent:
       Tag: Goblin
     TransformComponent:
-      Translation: [70.6287155, -47.5172691, 64.2543564]
-      Rotation: [-179.999893, -48.7989845, -179.999756]
+      Translation: [0, -45, 95.3323135]
+      Rotation: [0, -180, 0]
       Scale: [0.5, 0.5, 0.5]
       ChildrenSize: 1
       Children:
-        0: 4488255876943964703
+        0: 4033625071291792200
     ModelComponent:
       Delay: -0.0068597002
-      Path: Assets\Models\Gremlin.fbx
+      Path: assets\models\gremlin.fbx
       TextureSize: 2
       Texture:
         0:
@@ -60,7 +143,7 @@ Entities:
         {}
     ModelComponent:
       Delay: -0.00174780004
-      Path: Assets\Models\Buddah_Test_Bakes_low.fbx
+      Path: assets\models\buddah_test_bakes_low.fbx
       TextureSize: 1
       Texture:
         0:
@@ -99,10 +182,10 @@ Entities:
     TagComponent:
       Tag: Play Camera
     TransformComponent:
-      Translation: [0, 127, -137]
-      Rotation: [25, 0, 0]
-      Scale: [0.999960899, 0.99995631, 0.999987602]
-      Parent: 17804868780395308565
+      Translation: [0, 90, -75]
+      Rotation: [30, 0, 0]
+      Scale: [1, 1, 1]
+      Parent: 4033625071291792200
       ChildrenSize: 0
       Children:
         {}
@@ -115,16 +198,16 @@ Entities:
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Translation: [0, -50, 0]
+      Translation: [0, -49.9987526, 0]
       Rotation: [0, -0, 0]
-      Scale: [100, 2, 100]
+      Scale: [99.9911499, 1.99986172, 99.9911499]
       Parent: 10840798227440027384
       ChildrenSize: 0
       Children:
         {}
     ModelComponent:
-      Delay: -107374176
-      Path: Assets\Models\Shapes\Cube.fbx
+      Delay: 0
+      Path: assets\models\shapes\cube.fbx
       TextureSize: 1
       Texture:
         0:
@@ -145,7 +228,7 @@ Entities:
         {}
     ModelComponent:
       Delay: -0.00350430002
-      Path: Assets\Models\Shapes\Cube.fbx
+      Path: assets\models\shapes\cube.fbx
       TextureSize: 1
       Texture:
         0:
@@ -180,7 +263,7 @@ Entities:
         {}
     ModelComponent:
       Delay: -0.00389210018
-      Path: Assets\Models\Shapes\Cube.fbx
+      Path: assets\models\shapes\cube.fbx
       TextureSize: 1
       Texture:
         0:
@@ -201,7 +284,7 @@ Entities:
         {}
     ModelComponent:
       Delay: -0.0195470992
-      Path: Assets\Models\Shapes\Cube.fbx
+      Path: assets\models\shapes\cube.fbx
       TextureSize: 1
       Texture:
         0:
@@ -220,8 +303,8 @@ Entities:
       Children:
         {}
     ModelComponent:
-      Delay: -0.590313494
-      Path: Assets\Warcraft_Test\Models\taurenskeleton\taurenskeleton_blood101.fbx
+      Delay: -0.6490767
+      Path: assets\warcraft_test\models\taurenskeleton\taurenskeleton_blood101.fbx
       TextureSize: 2
       Texture:
         0:
@@ -248,3 +331,59 @@ Entities:
         0: 1828353707181980437
         1: 7440434943858370797
         2: 17697230832881840710
+  - Entity: 4033625071291792200
+    TagComponent:
+      Tag: CameraRoot
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+      Parent: 17804868780395308565
+      ChildrenSize: 1
+      Children:
+        0: 4488255876943964703
+  - Entity: 13937686805489951841
+    TagComponent:
+      Tag: NovaBeast
+    TransformComponent:
+      Translation: [76.2319031, -47.7543716, -23.0547104]
+      Rotation: [-90, 0, 0]
+      Scale: [0.509953022, 0.510001183, 0.510000169]
+      ChildrenSize: 0
+      Children:
+        {}
+    ModelComponent:
+      Delay: -0.00394239975
+      Path: assets\novabeast\fbx\novabeast.fbx
+      TextureSize: 6
+      Texture:
+        0:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\novabeast\materials\body1tex.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        1:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\novabeast\materials\fluff1tex.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        2:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\novabeast\materials\eyes1tex.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        3:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\novabeast\materials\eyes1tex.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        4:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\novabeast\materials\fluff1tex.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds
+        5:
+          PixelShader: shaders\default_ps.cso
+          Albedo: assets\novabeast\materials\fluff1tex.png
+          Normal: resources\textures\t_default_n.dds
+          Material: resources\textures\t_default_m.dds

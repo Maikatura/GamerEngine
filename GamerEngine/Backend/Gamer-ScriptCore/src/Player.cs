@@ -9,13 +9,24 @@ namespace GamerEngine
     public class Player : Entity
     {
         private TransformComponent myTransformComponent;
+        private TransformComponent myChildTransform;
 
         MouseLock myMouseLock = MouseLock.None;
         bool myLeftMouseButtinIsDown = true;
 
+        float myMinZoom = 10.0f;
+        float myMaxZoom = 20.0f;
+
+
+
         void OnCreate()
         {
             myTransformComponent = GetComponent<TransformComponent>();
+
+            myChildTransform = myTransformComponent.GetChild(0).GetComponent<TransformComponent>();
+
+
+
             Console.WriteLine("Test");
         }
 
@@ -25,6 +36,10 @@ namespace GamerEngine
 
 
             //Console.WriteLine(myTransformComponent.GetChildCount());
+
+
+            myChildTransform.Translation += myChildTransform.GetForward() * Input.GetScrollWheel() * 10.0f;
+            
 
 
             float movementZ = 0.0f;

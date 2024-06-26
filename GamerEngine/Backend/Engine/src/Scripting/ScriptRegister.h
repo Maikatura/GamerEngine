@@ -125,12 +125,17 @@ namespace GamerEngine
 
 	static void Input_Mouse_LockMouse(uint16_t aMouseLockState)
 	{
-		Input::LockMouse(static_cast<CommonUtilities::CursorLockMode>(aMouseLockState));
+		Input::LockCursor(static_cast<CommonUtilities::CursorLockMode>(aMouseLockState));
 	}
 
 	static void Input_Mouse_GetDelta(Vector2f* outTranslation)
 	{
 		*outTranslation = Input::GetMouseDelta();
+	}
+
+	static float Input_Mouse_GetScrollWheel()
+	{
+		return Input::GetMouseWheel();
 	}
 
 }

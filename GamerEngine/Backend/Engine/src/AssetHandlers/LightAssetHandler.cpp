@@ -24,7 +24,7 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 
 	constexpr float nearPlane = 30.0f;
 	constexpr float farPlane = 25000.0f;
-	constexpr float DIVIDE = .4f;
+	constexpr float DIVIDE = 0.1f;
 
 	myDirectionalLight->myNearPlane = nearPlane;
 	myDirectionalLight->myFarPlane = farPlane;
@@ -44,7 +44,6 @@ Ref<DirectionalLight> LightAssetHandler::CreateDirectionalLight(Vector3f aColor,
 	myDirectionalLight->myLightData.LightProjection = Matrix4x4f::CreateOrthographicProjection(-DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION * DIVIDE, DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION * DIVIDE, -DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION * DIVIDE, DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION * DIVIDE, nearPlane, farPlane);
 	myDirectionalLight->myShadowMap = TextureAssetHandler::CreateDepthStencil(L"DirectionalLight", static_cast<size_t>(DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION), static_cast<size_t>(DIRECTIONAL_LIGHT_SHADOW_MAP_RESOLUTION));
 	myDirectionalLight->myLightData.CastShadows = true;
-
 
 
 

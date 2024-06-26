@@ -83,18 +83,61 @@ void FileExplorer::ListFiles(std::filesystem::path path)
 	}
 }
 
+std::vector<std::string> GetDirectoryContents(const std::string& path, bool directoriesOnly = false) {
+	std::vector<std::string> items;
+	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		if (directoriesOnly) {
+			if (entry.is_directory()) {
+				items.push_back(entry.path().filename().string());
+			}
+		}
+		else {
+			items.push_back(entry.path().filename().string());
+		}
+	}
+	return items;
+}
+
 void FileExplorer::OnImGuiRender()
 {
 
 	BeginMenu();
 
-	//ImGui::SetNextWindowSizeConstraints(ImVec2(200, -1), ImVec2(200, -1));
+
+	//static std::filesystem::path currentPath = AssetPath; // Keep track of the current path.
+	//static std::string selectedFolder; // Currently selected folder.
+
 	//
-	//
-	//ListFiles(AssetPath);
+	//	ImGui::Columns(2, "AssetBrowser"); // Create two columns.
+
+	//	// Column 1: Folders
+	//	ImGui::Text("Folders");
+	//	ImGui::Separator();
+	//	std::vector<std::string> folders = GetDirectoryContents(AssetPath.string(), true);
+	//	for (const auto& folder : folders) {
+	//		if (ImGui::Selectable(folder.c_str(), selectedFolder == folder)) {
+	//			selectedFolder = folder;
+	//			currentPath = std::filesystem::path(AssetPath.string()) / folder;
+	//		}
+	//	}
+
+	//	// Column 2: Files in the selected folder
+	//	ImGui::NextColumn();
+	//	ImGui::Text("Files");
+	//	ImGui::Separator();
+	//	if (!selectedFolder.empty()) {
+	//		std::vector<std::string> files = GetDirectoryContents(currentPath.string());
+	//		for (const auto& file : files) {
+	//			ImGui::Text("%s", file.c_str());
+	//		}
+	//	}
+
+	//	ImGui::Columns(1); // Reset to one column so subsequent content is not affected.
+	
+	
 
 
-	if(ImGui::BeginPopupContextWindow("FILECREATOR") && !ImGui::IsItemHovered())
+	if (ImGui::BeginPopupContextWindow("FILECREATOR") && !ImGui::IsItemHovered())
 	{
 		if (ImGui::BeginMenu("Create"))
 		{
@@ -162,12 +205,7 @@ void FileExplorer::OnImGuiRender()
 	ImGui::PopStyleVar();
 	ImGui::NewLine();
 
-	const float panelWidth = ImGui::GetContentRegionAvail().x;
-	int columnCount = static_cast<int>(panelWidth / cellSize);
-	if(columnCount < 1)
-		columnCount = 1;
-
-	ImGui::Columns(columnCount, nullptr, false);
+	
 	
 	LoopThroughFiles();
 
@@ -218,8 +256,51 @@ void FileExplorer::PopupMenu(const std::filesystem::directory_entry& aDirEntry)
 	}
 }
 
+void FileExplorer::ListDirectoryRecursive(const std::filesystem::path& path)
+{
+	for (const auto& entry : std::filesystem::directory_iterator(path))
+	{
+		if (entry.is_directory())
+		{
+			std::string folderName = entry.path().filename().string();
+			if (ImGui::TreeNodeEx(folderName.c_str(), ImGuiTreeNodeFlags_NoAutoOpenOnLog  | ImGuiTreeNodeFlags_OpenOnArrow)) 
+			{
+				if (ImGui::IsItemClicked()) 
+				{
+					mySelectedPath = entry.path();
+					myCurrentDirectory = entry.path();
+				}
+				// Recursively list subdirectories
+				ListDirectoryRecursive(entry.path());
+				ImGui::TreePop();
+			}
+		}
+	}
+}
+
 void FileExplorer::LoopThroughFiles()
 {
+
+	ImGui::Columns(2, "AssetBrowser"); // Create two columns.
+
+	// Begin the "Folders" child window with a fixed width.
+	ImGui::BeginChild("Folders", ImVec2(0, 0), true);
+	ListDirectoryRecursive(AssetPath);
+	ImGui::EndChild();
+
+	
+	ImGui::NextColumn();
+	// Begin the "Assets" child window with the calculated remaining width.
+	ImGui::BeginChild("Assets", ImVec2(0, 0), true);
+
+
+	const float panelWidth = ImGui::GetContentRegionAvail().x;
+	int columnCount = static_cast<int>(panelWidth / cellSize);
+	if (columnCount < 1)
+		columnCount = 1;
+
+	ImGui::Columns(columnCount, nullptr, false);
+
 	const auto sortedDirectories = GetSortedDirectory();
 	for(auto& directoryEntry : sortedDirectories)
 	{
@@ -288,6 +369,10 @@ void FileExplorer::LoopThroughFiles()
 		ImGui::NextColumn();
 		ImGui::PopID();
 	}
+
+	ImGui::EndChild();
+
+	ImGui::Columns(1);
 }
 
 inline bool FileExists(const std::string& name)
