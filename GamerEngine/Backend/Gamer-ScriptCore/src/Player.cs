@@ -38,8 +38,9 @@ namespace GamerEngine
             //Console.WriteLine(myTransformComponent.GetChildCount());
 
 
-            myChildTransform.Translation += myChildTransform.GetForward() * Input.GetScrollWheel() * 10.0f;
-            
+            myChildTransform.GetChild(0).Translation +=  myChildTransform.GetChild(0).Transform.GetForward() * Input.GetScrollWheel() * 10.0f;
+
+
 
 
             float movementZ = 0.0f;
@@ -52,6 +53,7 @@ namespace GamerEngine
 
 
             myLeftMouseButtinIsDown = Input.IsMouseDown(MouseKeyCode.RightButton);
+            bool myLeftMouseButtinIsDownThisFrame = Input.IsMousePressedThisFrame(MouseKeyCode.RightButton);
             Input.LockMouse(myLeftMouseButtinIsDown ? MouseLock.Locked : MouseLock.None);
 
             bool forwardKey = Input.IsKeyDown(KeyCode.W);
@@ -78,6 +80,11 @@ namespace GamerEngine
                 movementZ = 0.0f;
             }
 
+            if (myLeftMouseButtinIsDownThisFrame)
+            {
+                moveRotation = myChildTransform.Rotation;
+            }
+
             if (myLeftMouseButtinIsDown)
             {
                 if (rightKey || eKey)
@@ -95,20 +102,29 @@ namespace GamerEngine
                     movementX = 0.0f;
                 }
 
+              
+
+               
+
+
                 Vector2 mouseDelta = Input.GetMouseDelta();
-                moveRotation.Y -= mouseDelta.X * ts * rotationSpeed;
+                moveRotation.Y += mouseDelta.X * ts * rotationSpeed;
                
             }
             else
             {
+                moveRotation += new Vector3(0.0f, 1.0f, 0.0f) * Input.GetMouseDelta().X;
+
+
+
                 if (rightKey)
                 {
-                    moveRotation.Y -= ts * rotationSpeed;
+                    moveRotation.Y += ts * rotationSpeed;
                 }
 
                 if (leftKey)
                 {
-                    moveRotation.Y += ts * rotationSpeed;
+                    moveRotation.Y -= ts * rotationSpeed;
                 }
 
                 if (rightKey && leftKey)
@@ -135,7 +151,17 @@ namespace GamerEngine
             //Console.WriteLine($"Player.Movement - X:{myTransformComponent.Translation.X} Y:{myTransformComponent.Translation.Y} z:{myTransformComponent.Translation.Z}");
             //Console.WriteLine($"Player.Movement TEST - X:{myTransformComponent.GetForward().X} Y:{myTransformComponent.GetForward().Y} z:{myTransformComponent.GetForward().Z}");
             myTransformComponent.Translation += myTransformComponent.GetForward() * movementZ + myTransformComponent.GetRight() * movementX;
-            myTransformComponent.Rotation += moveRotation;
+            
+            
+            if (myLeftMouseButtinIsDown)
+            {
+                myChildTransform.Rotation = new Vector3(0.0f, 0.0f, 0.0f);
+                myTransformComponent.Rotation += moveRotation;
+            }
+            else
+            {
+                myChildTransform.Rotation += moveRotation;
+            }
 
 
         }

@@ -15,6 +15,9 @@ namespace GamerEngine
 
         public readonly ulong ID;
 
+
+        public TransformComponent Transform => GetComponent<TransformComponent>();
+
         public Vector3 Translation
         {
             get

@@ -7,7 +7,6 @@
 #include "Components/Components.hpp"
 #include "Components/ModelComponent.h"
 #include "Components/TagComponent.h"
-#include "Components/Network/NetworkComponent.h"
 #include "Components/IDComponent.h"
 #include "Components/CameraController.h"
 

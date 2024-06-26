@@ -22,6 +22,17 @@
             return InternalCalls.Input_Mouse_IsKeyDown(keycode);
         }
 
+        public static bool IsMouseUp(MouseKeyCode keycode)
+        {
+            return InternalCalls.Input_Mouse_IsKeyUp(keycode);
+        }
+
+
+        public static bool IsMousePressedThisFrame(MouseKeyCode keycode)
+        {
+            return InternalCalls.Input_Mouse_IsKeyPressedThisFrame(keycode);
+        }
+
         public static float GetScrollWheel()
         {
             return InternalCalls.Input_Mouse_GetScrollWheel();

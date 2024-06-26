@@ -381,24 +381,6 @@ static void SerializeEntity(YAML::Emitter& out, GamerEngine::Entity entity, Game
 
 	}
 
-	if (entity.HasComponent<Network::NetworkComponent>())
-	{
-		std::cout << "Saving Component: NetworkComponent" << std::endl;
-
-		out << YAML::Key << "NetworkComponent";
-		out << YAML::BeginMap; // PointLightComponent
-
-		auto& netComp = entity.GetComponent<Network::NetworkComponent>();
-		out << YAML::Key << "IsServer" << YAML::Value << netComp.IsServer();
-		out << YAML::Key << "Smooth" << YAML::Value << netComp.ShouldSmooth();
-		out << YAML::Key << "ID" << YAML::Value << netComp.GetID();
-
-		out << YAML::EndMap; // PointLightComponent
-
-
-
-	}
-
 	if (entity.HasComponent<GamerEngine::NativeScriptComponent>())
 	{
 		// std::cout << "Saving Component: NativeScriptComponent" << std::endl;
@@ -701,16 +683,6 @@ void SceneSerializer::DeserializeEntity(YAML::Node aEntityNode, GamerEngine::Sce
 			pointLightComp.Intensity = (pointLightComponent["Intensity"]) ? pointLightComponent["Intensity"].as<float>() : 1.0f;
 			pointLightComp.Range = (pointLightComponent["Range"]) ? pointLightComponent["Range"].as<float>() : 1.0f;;
 		}
-	}
-
-
-	auto networkComp = aEntityNode["NetworkComponent"];
-	if (networkComp)
-	{
-		auto& netComp = deserializedEntity.AddComponent<Network::NetworkComponent>();
-		netComp.SetServer((networkComp["IsServer"]) ? networkComp["IsServer"].as<bool>() : false);
-		netComp.SetShouldSmooth((networkComp["Smooth"]) ? networkComp["Smooth"].as<bool>() : false);
-		netComp.SetID((networkComp["ID"]) ? networkComp["ID"].as<GamerEngine::UUID>() : GamerEngine::UUID());
 	}
 
 	auto scriptComponent = aEntityNode["ScriptComponent"];

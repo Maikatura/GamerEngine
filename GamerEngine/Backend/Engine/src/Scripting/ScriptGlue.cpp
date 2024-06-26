@@ -222,6 +222,8 @@ namespace GamerEngine {
 		GE_ADD_INTERNAL_CALL(Input_Keyboard_IsKeyPressed);
 
 		GE_ADD_INTERNAL_CALL(Input_Mouse_IsKeyDown);
+		GE_ADD_INTERNAL_CALL(Input_Mouse_IsKeyUp);
+		GE_ADD_INTERNAL_CALL(Input_Mouse_IsKeyPressedThisFrame);
 		GE_ADD_INTERNAL_CALL(Input_Mouse_GetDelta);
 		GE_ADD_INTERNAL_CALL(Input_Mouse_GetScrollWheel);
 		GE_ADD_INTERNAL_CALL(Input_Mouse_LockMouse);

@@ -123,6 +123,16 @@ namespace GamerEngine
 		return Input::IsMouseDown(static_cast<CommonUtilities::Mouse::Button>(keycode));
 	}
 
+	static bool Input_Mouse_IsKeyUp(uint16_t keycode)
+	{
+		return Input::IsMouseReleased(static_cast<CommonUtilities::Mouse::Button>(keycode));
+	}
+
+	static bool Input_Mouse_IsKeyPressedThisFrame(uint16_t keycode)
+	{
+		return Input::IsMousePressed(static_cast<CommonUtilities::Mouse::Button>(keycode));
+	}
+
 	static void Input_Mouse_LockMouse(uint16_t aMouseLockState)
 	{
 		Input::LockCursor(static_cast<CommonUtilities::CursorLockMode>(aMouseLockState));

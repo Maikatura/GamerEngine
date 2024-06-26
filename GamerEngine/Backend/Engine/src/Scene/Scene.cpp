@@ -278,24 +278,6 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
             });
         }
 
-
-
-        {
-            const auto& view = myRegistry.view<Network::NetworkComponent>();
-
-            if (view != nullptr)
-            {
-                for (const auto& entity : view)
-                {
-                    auto& networkComponent = view.get<Network::NetworkComponent>(entity);
-                    auto aEntity = Entity{entity, this };
-
-                    // networkComponent.SetEntity(&aEntity);
-                    // networkComponent.OnUpdate();
-                }
-            }
-        }
-
         {
             const auto& view = myRegistry.view<GamerEngine::TransformComponent, ParticleEmitter>();
 

@@ -133,7 +133,6 @@
     <ClInclude Include="src\Components\IDComponent.h" />
     <ClInclude Include="src\Components\ModelComponent.h" />
     <ClInclude Include="src\Components\NativeScriptComponent.h" />
-    <ClInclude Include="src\Components\Network\NetworkComponent.h" />
     <ClInclude Include="src\Components\RandomMoverComponent.h" />
     <ClInclude Include="src\Components\Rotater.h" />
     <ClInclude Include="src\Components\TagComponent.h" />
@@ -234,7 +233,6 @@
     <ClCompile Include="src\Components\CameraComponent.cpp" />
     <ClCompile Include="src\Components\CameraController.cpp" />
     <ClCompile Include="src\Components\Component.cpp" />
-    <ClCompile Include="src\Components\Network\NetworkComponent.cpp" />
     <ClCompile Include="src\Components\RandomMoverComponent.cpp" />
     <ClCompile Include="src\Components\TransfromComponent.cpp" />
     <ClCompile Include="src\Core\Asset\Asset.cpp" />

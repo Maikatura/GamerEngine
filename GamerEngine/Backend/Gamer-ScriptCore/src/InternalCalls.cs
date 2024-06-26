@@ -64,10 +64,15 @@ namespace GamerEngine
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool Input_Keyboard_IsKeyPressed(KeyCode keycode);
-
-
+        
+        
+        
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool Input_Mouse_IsKeyDown(MouseKeyCode keycode);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Input_Mouse_IsKeyUp(MouseKeyCode keycode);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Input_Mouse_IsKeyPressedThisFrame(MouseKeyCode keycode);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Input_Mouse_GetDelta(out Vector2 aMouseDelta);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
