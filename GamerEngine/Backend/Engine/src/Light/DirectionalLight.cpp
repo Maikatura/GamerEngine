@@ -26,7 +26,7 @@ void DirectionalLight::Update()
 
 	// Set the direction using the rotation quaternion
 	//myTransformComp->GetRotation().z = 0.0f;
-	//SetLightPosition(myTransformComp->GetPosition() - (myLightData.Direction * 3000.0f));
+	//SetLightPosition(myTransformComp->GetMousePosition() - (myLightData.Direction * 3000.0f));
 
 	if (!myTransformComp)
 	{

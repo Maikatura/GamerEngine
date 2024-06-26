@@ -1,67 +1,71 @@
 #include <GraphicsEngine.pch.h>
 #include <Input/Input.h>
-#include <Utilites/InputManager.h>
-
 #include "Utilites/Pointers.h"
 
 void Input::Init(HWND aHWND)
 {
-	myInput = MakeRef<CommonUtilities::InputManager>(aHWND);
+	myKeyboard = MakeRef<CommonUtilities::KeyboardInput>();
+	myMouseButton = MakeRef<CommonUtilities::MouseInput>(aHWND);
+	myMouseMovement = MakeRef<CommonUtilities::MouseCursor>(aHWND);
 }
 
 void Input::Update()
 {
-	myInput->Update();
+	myKeyboard->Update();
+	myMouseButton->Update();
+	myMouseMovement->Update();
 }
 
 void Input::UpdateEvents(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	myInput->UpdateEvents(message, wParam, lParam);
+	myKeyboard->ProcessEvents(message, wParam, lParam);
+	myMouseButton->ProcessEvents(message, wParam, lParam);
+	myMouseMovement->ProcessEvents(message, wParam, lParam);
 }
 
-bool Input::IsMouseDown(const int aMouseKey)
+bool Input::IsMouseDown(CommonUtilities::Mouse::Button aMouseKey)
 {
-	return myInput->IsMouseDown(aMouseKey);
+	return myMouseButton->IsMousePressed(aMouseKey); // myInput->IsKeyPressed(aMouseKey);
 }
 
-bool Input::IsMousePressed(const int aMouseKey)
+bool Input::IsMousePressed(CommonUtilities::Mouse::Button aMouseKey)
 {
-	return myInput->IsMousePressed(aMouseKey);
+	return myMouseButton->WasMousePressedThisFrame(aMouseKey);//myInput->IsMousePressed(aMouseKey);
 }
 
-bool Input::IsMouseReleased(const int aMouseKey)
+bool Input::IsMouseReleased(CommonUtilities::Mouse::Button aMouseKey)
 {
-	return myInput->IsMouseReleased(aMouseKey);
+	return myMouseButton->IsMouseReleased(aMouseKey); //myInput->IsMouseReleased(aMouseKey);
 }
 
-bool Input::IsKeyReleased(const int aKey)
+bool Input::IsKeyReleased(CommonUtilities::Key::Code aKey)
 {
-	return myInput->IsKeyReleased(aKey);
+	return myKeyboard->IsKeyReleased(aKey);
 }
 
-bool Input::IsKeyDown(const int aKey)
+bool Input::IsKeyDown(CommonUtilities::Key::Code aKey)
 {
-	return myInput->IsKeyDown(aKey);
+	return myKeyboard->IsKeyPressed(aKey); // myInput->is(aKey);
 }
 
-bool Input::IsKeyPressed(const int aKey)
+bool Input::IsKeyPressed(CommonUtilities::Key::Code aKey)
 {
-	return myInput->IsKeyPressed(aKey);
+	return myKeyboard->WasKeyPressedThisFrame(aKey);
 }
 
 float Input::GetMouseWheel()
 {
-	return myInput->ScrollDelta();
+	return 0.0f; // myInput->ScrollDelta();
 }
 
 CommonUtilities::Vector2<float> Input::GetMouseDelta()
 {
-	return { static_cast<float>(myInput->MouseDelta().x), static_cast<float>(myInput->MouseDelta().y) };
+	return { static_cast<float>(myMouseMovement->GetRawMouseDelta().x), static_cast<float>(myMouseMovement->GetRawMouseDelta().y) };
 }
 
 Vector2i Input::GetMousePos()
 {
-	return myInput->GetMousePos();
+	return myMouseMovement->GetPosition();
 }
 
 void Input::SetMousePos(Vector2i aPos)
@@ -69,11 +73,10 @@ void Input::SetMousePos(Vector2i aPos)
 
 
 
-	myInput->SetMousePos(aPos);
+	//myInput->SetMousePos(aPos);
 }
 
-void Input::LockMouse(int aLock)
+void Input::LockMouse(CommonUtilities::CursorLockMode aLock)
 {
-
-	myInput->LockMouse(aLock);
+	myMouseMovement->SetCursorLockMode(aLock);
 }

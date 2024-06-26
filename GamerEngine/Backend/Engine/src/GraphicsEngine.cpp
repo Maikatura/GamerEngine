@@ -342,12 +342,12 @@ void GraphicsEngine::OnFrameUpdate()
 
     if (myIsPaused)
     {
-        if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Z'))
+        if (Input::IsKeyDown(CommonUtilities::Key::Code::LeftCtrl) && Input::IsKeyPressed(CommonUtilities::Key::Code::Z))
         {
             CommandManager::Undo();
         }
 
-        if (Input::IsKeyDown(VK_CONTROL) && Input::IsKeyPressed('Y'))
+        if (Input::IsKeyDown(CommonUtilities::Key::Code::LeftCtrl) && Input::IsKeyPressed(CommonUtilities::Key::Code::Y))
         {
             CommandManager::Redo();
         }
@@ -356,7 +356,7 @@ void GraphicsEngine::OnFrameUpdate()
 
 #if defined(_DEBUG) || defined(_RELEASE)
 
-    if(Input::IsKeyPressed(VK_F5))
+    if(Input::IsKeyPressed(CommonUtilities::Key::Code::F5))
     {
         int currentRenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
         currentRenderMode--;
@@ -370,7 +370,7 @@ void GraphicsEngine::OnFrameUpdate()
         GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
     }
 
-    if (Input::IsKeyPressed(VK_F6))
+    if (Input::IsKeyPressed(CommonUtilities::Key::Code::F6))
     {
         int currentRenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
         currentRenderMode++;

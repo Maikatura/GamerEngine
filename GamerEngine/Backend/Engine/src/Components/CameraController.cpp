@@ -39,22 +39,22 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 
 	HasBeenActivated = false;
 
-	if (Input::IsMouseDown(VK_LBUTTON) && IsHoveringSceneView)
+	if (Input::IsMouseDown(CommonUtilities::Mouse::RightButton) && IsHoveringSceneView)
 	{
 		HasBeenActivated = true;
-		Input::LockMouse(CommonUtilities::Mouse::Lock_CurrentPos);
+		Input::LockMouse(CommonUtilities::CursorLockMode::Locked);
 		//myOldPos = myPrevMouse;
 	}
 	else
 	{
-		Input::LockMouse(CommonUtilities::Mouse::None);
+		Input::LockMouse(CommonUtilities::CursorLockMode::None);
 	}
 
-	if (Input::IsMouseReleased(VK_LBUTTON) && HasBeenActivated)
+	if (Input::IsMouseReleased(CommonUtilities::Mouse::RightButton) && HasBeenActivated)
 	{
 		
 		HasBeenActivated = false;
-		//Input::SetMousePos(myPrevMouse);
+	//	//Input::SetMousePos(myPrevMouse);
 	}
 
 	if (!HasBeenActivated)
@@ -94,37 +94,37 @@ void CameraController::OnUpdate(GamerEngine::CameraComponent* aCamera, GamerEngi
 
 	
 
-	if(Input::IsKeyDown(VK_SHIFT))
+	if(Input::IsKeyDown(CommonUtilities::Key::Code::LeftShift))
 	{
 		speed *= mySpeedShiftMul;
 	}
 
 	camera->SetCameraSpeed(speed);
 	
-	if(Input::IsKeyDown(87))
+	if(Input::IsKeyDown(CommonUtilities::Key::Code::W))
 	{
 		movement = 1.0f * aTransform->GetForward() * aDeltaTime * speed;
 	}
-	 if(Input::IsKeyDown(83))
+	 if(Input::IsKeyDown(CommonUtilities::Key::Code::S))
 	 {
 	 	movement += -1.0f * aTransform->GetForward() * aDeltaTime * speed;
 	 }
-	 if(Input::IsKeyDown(68))
+	 if(Input::IsKeyDown(CommonUtilities::Key::Code::D))
 	 {
 	 	movement += 1.0f * aTransform->GetRight() * aDeltaTime * speed;
 	 }
 	
-	 if(Input::IsKeyDown(65))
+	 if(Input::IsKeyDown(CommonUtilities::Key::Code::A))
 	 {
 	 	movement += -1.0f * aTransform->GetRight() * aDeltaTime * speed;
 	 }
 	
-	if(Input::IsKeyDown(VK_SPACE))
+	if(Input::IsKeyDown(CommonUtilities::Key::Code::Space))
 	{
 		movement += 1.0f * aTransform->GetUp() * aDeltaTime * speed;
 	}
 
-	if(Input::IsKeyDown(90))
+	if(Input::IsKeyDown(CommonUtilities::Key::Code::Z))
 	{
 		movement += -1.0f * aTransform->GetUp() * aDeltaTime * speed;
 	}

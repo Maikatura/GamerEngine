@@ -59,7 +59,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -85,7 +85,7 @@
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -115,6 +115,11 @@
     <ClInclude Include="src\Data\Pointer.h" />
     <ClInclude Include="src\Data\SharedRef.h" />
     <ClInclude Include="src\Data\UniquePtr.h" />
+    <ClInclude Include="src\Input\InputCodes.h" />
+    <ClInclude Include="src\Input\KeyboardInput.h" />
+    <ClInclude Include="src\Input\MouseCursor.h" />
+    <ClInclude Include="src\Input\MouseInput.h" />
+    <ClInclude Include="src\Input\XboxControllerInput.h" />
     <ClInclude Include="src\List\BSTSet.hpp" />
     <ClInclude Include="src\List\DoublyLinkedList.hpp" />
     <ClInclude Include="src\List\DoublyLinkedListNode.hpp" />
@@ -139,7 +144,7 @@
     <ClInclude Include="src\Utilites\Asserts.h" />
     <ClInclude Include="src\Utilites\COMInitializer.h" />
     <ClInclude Include="src\Utilites\FileWatch.h" />
-    <ClInclude Include="src\Utilites\InputManager.h" />
+    <ClInclude Include="src\Utilites\InputUtil.h" />
     <ClInclude Include="src\Utilites\KeyCodes.h" />
     <ClInclude Include="src\Utilites\PerformaceTimer.h" />
     <ClInclude Include="src\Utilites\Pointers.h" />
@@ -150,14 +155,20 @@
     <ClInclude Include="src\Utilites\Timer.h" />
     <ClInclude Include="src\Utilites\UtilityFunctions.h" />
     <ClInclude Include="src\Utilites\VisualProfiler.h" />
+    <ClInclude Include="src\Utilites\WindowsUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Input\KeyboardInput.cpp" />
+    <ClCompile Include="src\Input\MouseCursor.cpp" />
+    <ClCompile Include="src\Input\MouseInput.cpp" />
+    <ClCompile Include="src\Input\XboxControllerInput.cpp" />
     <ClCompile Include="src\Utilites\COMInitializer.cpp" />
-    <ClCompile Include="src\Utilites\InputManager.cpp" />
+    <ClCompile Include="src\Utilites\InputUtil.cpp" />
     <ClCompile Include="src\Utilites\Timer.cpp" />
+    <ClCompile Include="src\Utilites\WindowsUtils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

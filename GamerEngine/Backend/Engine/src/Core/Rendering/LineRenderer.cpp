@@ -295,7 +295,7 @@ void LineRenderer::DrawCircle(Vector3f aPosition, float aRadius, int aTesselatio
 void LineRenderer::Update()
 {
 #if defined(_DEBUG) || defined(_RELEASE)
-    if (Input::IsKeyPressed(0x70))
+    if (Input::IsKeyPressed(CommonUtilities::Key::Code::F1))
     {
         myLineRendererOn = !myLineRendererOn;
     }

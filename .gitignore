@@ -16,6 +16,7 @@
 *.sln
 *.vcxproj
 *.vcxproj.user
+!**/premake5.exe
 
 
 // GamerEngine

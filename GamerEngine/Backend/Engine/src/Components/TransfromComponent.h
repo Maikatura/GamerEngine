@@ -213,7 +213,7 @@ namespace GamerEngine
 
 		void UpdateTransformFromMatrix()
 		{
-			/*Translation = Matrix.GetPosition();
+			/*Translation = Matrix.GetMousePosition();
 			Rotation = Matrix.GetRotation().Eulers();
 			Scale = Matrix.GetScale();*/
 		}

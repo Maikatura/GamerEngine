@@ -38,34 +38,34 @@ RandomMoverComponent::RandomMoverComponent()
 //
 // 	const float radius = 125.0f;
 //
-// 	if (transform.GetPosition().x < -radius)
+// 	if (transform.GetMousePosition().x < -radius)
 // 	{
-// 		transform.GetPosition().x = radius;
+// 		transform.GetMousePosition().x = radius;
 // 	}
-// 	else if (transform.GetPosition().x > radius)
+// 	else if (transform.GetMousePosition().x > radius)
 // 	{
-// 		transform.GetPosition().x = -radius;
-// 	}
-//
-// 	if (transform.GetPosition().y < -radius)
-// 	{
-// 		transform.GetPosition().y = radius;
-// 	}
-// 	else if (transform.GetPosition().y > radius)
-// 	{
-// 		transform.GetPosition().y = -radius;
+// 		transform.GetMousePosition().x = -radius;
 // 	}
 //
-// 	if (transform.GetPosition().z < -radius)
+// 	if (transform.GetMousePosition().y < -radius)
 // 	{
-// 		transform.GetPosition().z = radius;
+// 		transform.GetMousePosition().y = radius;
 // 	}
-// 	else if (transform.GetPosition().z > radius)
+// 	else if (transform.GetMousePosition().y > radius)
 // 	{
-// 		transform.GetPosition().z = -radius;
+// 		transform.GetMousePosition().y = -radius;
 // 	}
 //
-// 	transform.GetPosition() += myVelocity * Time::GetDeltaTime();
+// 	if (transform.GetMousePosition().z < -radius)
+// 	{
+// 		transform.GetMousePosition().z = radius;
+// 	}
+// 	else if (transform.GetMousePosition().z > radius)
+// 	{
+// 		transform.GetMousePosition().z = -radius;
+// 	}
+//
+// 	transform.GetMousePosition() += myVelocity * Time::GetDeltaTime();
 //
 //
 // 	
