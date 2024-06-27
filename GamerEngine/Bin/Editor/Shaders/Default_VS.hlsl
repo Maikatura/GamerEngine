@@ -20,6 +20,7 @@ VertexToPixel main(VertexInput input)
 		skinningMatrix += mul(input.BoneWeights.w, OB_BoneData[input.BoneIDs.w]);
 	}
 
+
     float4 vertexWorldPosition;
     if (OB_IsInstanced)
     {
@@ -39,10 +40,10 @@ VertexToPixel main(VertexInput input)
 
 
     float3x3 worldNormalRotation = (float3x3)OB_ToWorld;
-    if (OB_IsInstanced)
-    {
-        //worldNormalRotation = (float3x3) instanceBuffer[instanceArgs[OB_StartInstanceOffset + 3] + input.InstanceID].Transform;
-    }
+    //if (OB_IsInstanced)
+    //{
+    //    //worldNormalRotation = (float3x3) instanceBuffer[instanceArgs[OB_StartInstanceOffset + 3] + input.InstanceID].Transform;
+    //}
 	
     float3x3 skinNormalRotation = (float3x3)skinningMatrix;
 

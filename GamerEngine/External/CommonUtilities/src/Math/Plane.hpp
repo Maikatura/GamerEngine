@@ -32,6 +32,13 @@ namespace CommonUtilities
 		T GetSignedDistanceToPlane(const Vector3<T>& aPoint) const;
 		T GetDistance() const;
 
+		friend std::ostream& operator<<(std::ostream& os, const Plane<T>& obj)
+		{
+			os << "Point 1: " << myPoint0 << " Point 2: " << myPoint1 << " Point 3: " << myPoint2 << std::endl;
+			os << "Direction:" << myDirection << " Normal: " << myNormal <<  std::endl;
+			return os;
+		}
+
 	private:
 		Vector3<T> myPoint0;
 		Vector3<T> myPoint1;

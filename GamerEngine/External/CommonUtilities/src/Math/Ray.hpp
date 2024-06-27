@@ -25,6 +25,17 @@ namespace CommonUtilities
 		// Init the ray with an origin and a direction.
 		void InitWithOriginAndDirection(const Vector3<T>& aOrigin, const Vector3<T>& aDirection);
 
+		friend std::ostream& operator<<(std::ostream& os, const Ray<T>& obj)
+		{
+			os << "Origin: " << myOrigin << " Direction: " << myDirection << std::endl;
+			return os;
+		}
+
+		Vector3<T> GetOrigin() const { return myOrigin; }
+		Vector3<T> GetDirection() const { return myDirection; }
+
+	private:
+
 		Vector3<T> myOrigin;
 		Vector3<T> myDirection;
 	};

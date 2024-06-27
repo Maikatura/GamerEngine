@@ -1,7 +1,6 @@
 #include "Data/ShaderStructs.hlsli"
 #include "Data/Textures.hlsli"
 
-
 #include "Data/PBRFunctions.hlsli"
 #include "Data/Samplers.hlsli"
 #include "Data/ShadowFunctions.hlsli"

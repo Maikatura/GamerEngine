@@ -56,6 +56,12 @@ namespace CommonUtilities
 		static Vector4<T> Blend(Vector4<T> aBlendOne, Vector4<T> aBlendTwo, T aBlendAmount);
 
 		static Vector4<T> Forward() { return Vector4<T>(0, 0, 1, 0); }
+
+		friend std::ostream& operator<<(std::ostream& os, const Vector4<T>& obj)
+		{
+			os << "X: " << obj.x << " Y: " << obj.y << " Z: " << obj.z << " W: " << obj.w << std::endl;
+			return os;
+		}
 	};
 
 	template <typename T>

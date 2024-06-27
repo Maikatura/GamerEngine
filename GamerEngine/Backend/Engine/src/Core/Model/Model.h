@@ -160,7 +160,7 @@ namespace GamerEngine
 
 		FORCEINLINE bool HasRenderedInstance() const
 		{
-			return !myRenderedInstances.empty();
+			return (static_cast<int>(myRenderedInstances.size()) > 1) && !HasSkeleton();
 		}
 
 		FORCEINLINE unsigned GetNumberOfInstances() const

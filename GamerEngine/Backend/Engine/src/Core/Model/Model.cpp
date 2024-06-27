@@ -34,6 +34,7 @@ void GamerEngine::Model::AddRenderedInstance(uint32_t aEntityID, Matrix4x4f aTra
 	{
 		if (myRenderedInstances[i].EntityID == aEntityID)
 		{
+			myRenderedInstances[i].World = aTransform;
 			return;
 		}
 	}
@@ -80,7 +81,7 @@ bool GamerEngine::Model::UseDeferred()
 
 bool GamerEngine::Model::HasBeenRendered()
 {
-	return myHasBeenRendered;
+	return myHasBeenRendered && !HasSkeleton();
 }
 
 void GamerEngine::Model::ClearInstanceData()

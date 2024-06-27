@@ -61,6 +61,12 @@ namespace CommonUtilities
 		
 		static Vector3<T> Abs(const Vector3<T>& aRval);
 
+		friend std::ostream& operator<<(std::ostream& os, const Vector3<T>& obj)
+		{
+			os << "X: " << obj.x << " Y: " << obj.y <<  " Z: " << obj.z << std::endl;
+			return os;
+		}
+
 	};
 
 

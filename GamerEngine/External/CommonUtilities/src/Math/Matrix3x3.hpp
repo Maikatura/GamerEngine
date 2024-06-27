@@ -24,7 +24,19 @@ namespace CommonUtilities
 		static Matrix3x3<T> CreateRotationAroundZ(T aAngleInRadians);
 		static Matrix3x3<T> Transpose(const Matrix3x3<T>& aMatrixToTranspose);
 
+
+		friend std::ostream& operator<<(std::ostream& os, const Matrix3x3<T>& obj)
+		{
+			os << obj.myMatrix[0] << " " << obj.myMatrix[1] << " " << obj.myMatrix[2] << std::endl;
+			os << obj.myMatrix[3] << " " << obj.myMatrix[4] << " " << obj.myMatrix[5] << std::endl;
+			os << obj.myMatrix[6] << " " << obj.myMatrix[7] << " " << obj.myMatrix[8] << std::endl;
+			return os;
+		}
+
+	private:
 		std::array<T, 9> myMatrix;
+
+
 
 	};
 

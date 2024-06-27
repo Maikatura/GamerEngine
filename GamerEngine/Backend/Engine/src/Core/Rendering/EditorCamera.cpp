@@ -34,6 +34,6 @@ void EditorCamera::Update()
 	}
 
 	myCamera->BuildTransform(myTransform);
-	GamerEngine::Renderer::SetCamera(myCamera, *myTransform, myCamera->GetCurrentViewMatrix(VREye::None), myCamera->GetCurrentViewProjectionMatrix(VREye::None));
+	GamerEngine::Renderer::SetCamera(myCamera, *myTransform, myCamera->GetCurrentViewMatrix(VREye::None), myCamera->GetHMDMatrixProjectionEye(VREye::None));
 	myCameraController->OnUpdate(myCamera, myTransform, Time::GetDeltaTime());
 }

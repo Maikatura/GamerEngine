@@ -3,6 +3,7 @@
 #include "GraphicsEngine.h"
 #include "SceneSerializer.h"
 #include "Components/AllComponents.h"
+#include "Core/Rendering/Renderer.h"
 #include "Debugger/ConsoleHelper.h"
 #include "Particles/ParticleEmitter.h"
 #include "Core/Rendering/SelectionData.h"
@@ -11,7 +12,7 @@
 
 void SceneManager::SetSceneState(SceneState aSceneState)
 {
-	
+	GamerEngine::Renderer::Clear();
 
 	if (aSceneState == SceneState::Play)
 	{
@@ -19,9 +20,12 @@ void SceneManager::SetSceneState(SceneState aSceneState)
 		myRuntimeScene->OnRuntimeStart();
 		myRuntimeScene->SetSceneStatus(GamerEngine::SceneStatus::Complete);
 		myRuntimeScene->SceneReady(true);
+
+		SelectionData::SetEntityObject(GamerEngine::Entity{ entt::null, nullptr });
 	}
 	else if (aSceneState == SceneState::Edit)
 	{
+		SelectionData::SetEntityObject(GamerEngine::Entity{ entt::null, nullptr });
 		if (myRuntimeScene)
 		{
 			myRuntimeScene->OnRuntimeStop();
@@ -129,7 +133,7 @@ void SceneManager::Update(bool aRunningState)
 	{
 		if (myScene)
 		{
-			
+			ModelAssetHandler::Get().ResetRenderedModels();
 
 			switch (mySceneState)
 			{

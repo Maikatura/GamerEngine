@@ -100,6 +100,22 @@ bool ShadowRenderer::Initialize()
 		return false;
 	}
 
+	D3D11_BUFFER_DESC bufferDescriptionInstance = { 0 };
+	D3D11_SUBRESOURCE_DATA vxSubresource{};
+	bufferDescriptionInstance.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDescriptionInstance.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDescriptionInstance.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	myInstancedTransformBufferData.resize(128);
+	vxSubresource.pSysMem = &myInstancedTransformBufferData[0];
+	bufferDescriptionInstance.ByteWidth = sizeof(Matrix4x4f) * 128;
+	bufferDescriptionInstance.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescriptionInstance, &vxSubresource, myInstanceBuffer.GetAddressOf());
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	std::ifstream gsFile;
 	gsFile.open("Shaders\\ShadowCube_GS.cso", std::ios::binary);
 	const std::string gsData = { std::istreambuf_iterator(gsFile), std::istreambuf_iterator<char>() };
@@ -207,7 +223,7 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::Render
 		}
 
 
-		const bool isInstanced = false; //model->HasRenderedInstance();
+		const bool isInstanced = model->HasRenderedInstance();
 
 
 		myObjectBufferData.IsInstanced = isInstanced;
@@ -259,20 +275,21 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::Render
 			//DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
 
 
-			/*if(isInstanced && !model->HasBeenRendered())
+			if (isInstanced)
 			{
 				myInstancedTransformBufferData.clear();
-				std::vector<Model::RenderedInstanceData> myTransformData = model->GetTransformVector();
-				for(int i = 0; i < myTransformData.size(); i++)
+				const std::vector<GamerEngine::Model::RenderedInstanceData>& myTransformData = model->GetTransformVector();
+				for (int i = 0; i < myTransformData.size(); i++)
 				{
-					auto matrix = myTransformData[i].World->GetMatrix();
+					auto matrix = myTransformData[i].World;
 					myInstancedTransformBufferData.push_back(matrix);
 				}
 
+				unsigned int instanceCount = static_cast<unsigned int>(myInstancedTransformBufferData.size());
 
 				ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 				result = DX11::Get().GetContext()->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-				memcpy(bufferData.pData, &myInstancedTransformBufferData[0], sizeof(Matrix4x4f) * model->GetNumberOfInstances());
+				memcpy(bufferData.pData, myInstancedTransformBufferData.data(), sizeof(Matrix4x4f) * instanceCount);
 				DX11::Get().GetContext()->Unmap(myInstanceBuffer.Get(), 0);
 
 				ID3D11Buffer* buffers[2] = { meshData.myVertexBuffer.Get(), myInstanceBuffer.Get() };
@@ -284,16 +301,15 @@ void ShadowRenderer::Render(Light* aLight, const std::vector<GamerEngine::Render
 				DX11::Get().GetContext()->IASetVertexBuffers(0, 2, buffers, stride, offset);
 				DX11::Get().GetContext()->DrawIndexedInstanced(
 					meshData.myNumberOfIndices,
-					model->GetNumberOfInstances(),
+					instanceCount,
 					0, 0, 0
 				);
-
 			}
 			else
-			{*/
+			{
 				DX11::Get().GetContext()->IASetVertexBuffers(0, 1, meshData.myVertexBuffer.GetAddressOf(), &meshData.myStride, &meshData.myOffset);
 				DX11::Get().GetContext()->DrawIndexed(meshData.myNumberOfIndices, 0, 0);
-			//}
+			}
 		}
 
 		/*if(isInstanced)

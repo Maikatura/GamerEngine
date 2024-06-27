@@ -38,6 +38,8 @@ class ShadowRenderer : public RenderModule
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myObjectBuffer;
 	//Microsoft::WRL::ComPtr<ID3D11Buffer> myBlendShapeBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> myMaterialBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> myInstanceBuffer;
+	std::vector<Matrix4x4f> myInstancedTransformBufferData;
 
 public:
 

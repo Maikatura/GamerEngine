@@ -1,5 +1,6 @@
 #include "Data/ShaderStructs.hlsli"
 #include "Data/Textures.hlsli"
+
 #include "Data/PBRFunctions.hlsli"
 #include "Data/Samplers.hlsli"
 #include "Data/ShadowFunctions.hlsli"
@@ -87,7 +88,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 	if(LB_DirectionalLight.CastShadows)
 	{
         LightData Light = LB_DirectionalLight;
-        if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, 1.0f / SHADOW_MAP_TEXCOORD_SCALE, Light.CastShadows, SHADOW_MAP_TEXCOORD_SCALE))
+        if (GetShadowPixel2D(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, 1.0f / SHADOW_MAP_TEXCOORD_SCALE, Light.CastShadows, SHADOW_MAP_TEXCOORD_SCALE))
         {
             dirLightTemp *= SHADOW_MAP_TEXCOORD_BIAS;
         }
@@ -109,7 +110,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 
 				if (Light.CastShadows)
 				{
-					if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+					if (GetShadowPixelCube(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
 						pointTemp *= SHADOW_BIAS;
 					}
@@ -136,7 +137,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 
 				if (Light.CastShadows)
 				{
-                        if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows, 2048.0f))
+                        if (GetShadowPixel2D(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows, 2048.0f))
 					{
 						spotTemp *= SHADOW_BIAS;
 					}

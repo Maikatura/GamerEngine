@@ -45,7 +45,13 @@ namespace CommonUtilities
 		void Print() const;
 
 		void DebugPrint() const;
-		bool operator==(const Vector2& vector2) const;
+		bool operator==(const Vector2<T>& vector2) const;
+
+		friend std::ostream& operator<<(std::ostream& os, const Vector2<T>& obj)
+		{
+			os << "X: " << obj.x << " Y: " << obj.y << " Z: " << std::endl;
+			return os;
+		}
 	};
 
 	template <typename T>

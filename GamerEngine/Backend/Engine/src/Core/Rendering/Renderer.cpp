@@ -33,17 +33,19 @@ void GamerEngine::Renderer::Render(GamerEngine::Entity* aEntity, ModelComponent&
 			return renderBuffer.myModel->GetName() == aModel.GetModel()->GetName();
 		});
 
+	LineRenderer::Get().DrawAABB3D(transformedBounds);
+
 	if (aModel.GetModel()->HasBeenRendered())
 	{
 		aModel.GetModel()->AddRenderedInstance(aEntity->GetID(), aTransform.GetWorldMatrix());
+
 		return;
 	}
 
-	
 	aModel.GetModel()->SetHasBeenRenderer(true);
+	aModel.GetModel()->AddRenderedInstance(aEntity->GetID(), aTransform.GetWorldMatrix());
 	RenderBuffer renderBuffer = RenderBuffer{ aEntity->GetID(), aTransform.GetWorldMatrix(), aModel.GetModel() };
 
-	LineRenderer::Get().DrawAABB3D(transformedBounds);
 	myUpdateModels.push_back(renderBuffer);
 
 }

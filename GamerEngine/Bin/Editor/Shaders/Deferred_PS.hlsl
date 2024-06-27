@@ -1,5 +1,6 @@
 #include "Data/ShaderStructs.hlsli"
 #include "Data/Textures.hlsli"
+
 #include "Data/PBRFunctions.hlsli"
 #include "Data/Samplers.hlsli"
 #include "Data/ShadowFunctions.hlsli"
@@ -16,10 +17,11 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 	DeferredPixelOutput result;
 
 	float4 albedo = albedoTexture.Sample(defaultSampler, input.UV);
-	if(albedo.a == 0)
+	if(albedo.a == 0.0f)
 	{
 		discard;
 		result.Color = float4(0.0f, 0.0f, 0.0f, 0.0f);
+        result.Depth = 1.0f;
 		return result;
 	}
 
@@ -34,10 +36,10 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 	const float ssao = saturate(ssaoTexture.Sample(defaultSampler, input.UV).r);
 
 	[flatten]
-		if (FB_RenderMode >= 16 && FB_RenderMode <= 19)
-		{
-			albedo = 1.0f;
-		}
+	if (FB_RenderMode >= 16 && FB_RenderMode <= 19)
+	{
+		albedo = 1.0f;
+	}
 
 	const float metalness = material.r;
 	const float roughness = material.g;
@@ -85,13 +87,13 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 
 	if(LB_DirectionalLight.CastShadows)
 	{
-		LightData Light = LB_DirectionalLight;
-		if (GetShadowPixel(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
-		{
-			dirLightTemp *= SHADOW_BIAS;
-		}
+        LightData Light = LB_DirectionalLight;
+        if (GetShadowPixel2D(dirLightShadowTexture, Light.LightView[0], Light.LightProjection, worldPosition.xyz, 1.0f / SHADOW_MAP_TEXCOORD_SCALE, Light.CastShadows, SHADOW_MAP_TEXCOORD_SCALE))
+        {
+            dirLightTemp *= SHADOW_MAP_TEXCOORD_BIAS;
+        }
+        directLighting += dirLightTemp;
 
-		directLighting += dirLightTemp;
     }
 
 	[unroll(20)]
@@ -108,7 +110,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 
 				if (Light.CastShadows)
 				{
-					if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+					if (GetShadowPixelCube(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 					{
 						pointTemp *= SHADOW_BIAS;
 					}
@@ -135,7 +137,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 
 				if (Light.CastShadows)
 				{
-					if (GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+                        if (GetShadowPixel2D(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows, 2048.0f))
 					{
 						spotTemp *= SHADOW_BIAS;
 					}
@@ -150,6 +152,7 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
     float emissiveStrength = 10.0f;
 	float3 emissiveColor = emissive * emissiveIntensity * albedo.xyz * emissiveStrength;
     float3 finalColor = directLighting + ambientLighting + emissiveColor + ((pointLight + spotLight));
+    float depth = fullscreenDepth.SampleLevel(pointClampSampler, input.UV, 0.0f).r;
 
 
 	switch(FB_RenderMode)
@@ -259,10 +262,14 @@ DeferredPixelOutput main(FullscreenVertexToPixel input)
 		case 19://RenderMode::SpotLightNoAlbedo:
 			result.Color.rgb = spotLight;
 			result.Color.a = 1.0f;
+            break;
+        case 20: //RenderMode::DepthBuffer:
+        	float4 outputColor = float4(depth, 0.0f, 0.0f, 1.0f);
+		
+            result.Color = outputColor;
 			break;
 	}
 
-	result.Depth = fullscreenDepth.SampleLevel(pointClampSampler, input.UV, 0.0f).r;
-
+    result.Depth = depth;
 	return result;
 }

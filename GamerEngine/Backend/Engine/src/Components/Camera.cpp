@@ -56,7 +56,7 @@ Vector3f Camera::ScreenToWorldPos(Vector2f aMousePos, float aZ) const
 	CommonUtilities::Ray<float> ray = ScreenToWorldRay(aMousePos);
 
 	float worldZ = aZ - GetTransform().Translation.Length();
-	Vector3f worldPosition = ray.myOrigin + ray.myDirection * worldZ;
+	Vector3f worldPosition = ray.GetOrigin() + ray.GetDirection() * worldZ;
 	return worldPosition;
 }
 

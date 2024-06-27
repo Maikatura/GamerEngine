@@ -26,10 +26,17 @@ namespace CommonUtilities
 		// sphere surface or inside of the sphere.
 		bool IsInside(const Vector3<T>& aPosition) const;
 
+		friend std::ostream& operator<<(std::ostream& os, const Sphere<T>& obj)
+		{
+			os << "Position: " << myPosition << " Radius: " << myRadius << std::endl;
+			return os;
+		}
+
+	private:
 		T myRadius;
 		Vector3<T> myPosition;
 
-
+		
 	};
 
 	

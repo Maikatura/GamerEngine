@@ -1,4 +1,3 @@
-
 #include "LightBuffer.hlsli"
 #include "Samplers.hlsli"
 #include "ShaderStructs.hlsli"
@@ -6,7 +5,7 @@
 #include "Textures.hlsli"
 
 
-bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightProjection, float3 aWorldPosition, float aBias, bool aCastShadows, float textureSize)
+bool GetShadowPixel2D(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightProjection, float3 aWorldPosition, float aBias, bool aCastShadows, float textureSize)
 {
     if (!aCastShadows)
         return false;
@@ -31,7 +30,7 @@ bool GetShadowPixel(Texture2D aShadowMap, float4x4 aLightView, float4x4 aLightPr
     return false;
 }
 
-bool GetShadowPixel(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLightProjection, float aRange, float3 aLightPosition, float3 aWorldPosition, float aBias, bool aCastShadows)
+bool GetShadowPixelCube(TextureCube aShadowMap, float4x4 aLightView[6], float4x4 aLightProjection, float aRange, float3 aLightPosition, float3 aWorldPosition, float aBias, bool aCastShadows)
 {
 	if (!aCastShadows) 
     {

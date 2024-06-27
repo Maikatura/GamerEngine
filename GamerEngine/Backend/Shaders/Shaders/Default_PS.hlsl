@@ -135,7 +135,7 @@ PixelOutput main(VertexToPixel input)
 					Light.Range, Light.Position, toEye, worldPosition.xyz);
 
 				
-				if (GetShadowPixel(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
+                    if (GetShadowPixelCube(shadowCubeTexture[l], Light.LightView, Light.LightProjection, Light.Range, Light.Position, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows))
 				{
 					pointTemp *= SHADOW_BIAS;
 				}
@@ -160,7 +160,7 @@ PixelOutput main(VertexToPixel input)
 					Light.Range, Light.Position, Light.Direction, Light.SpotOuterRadius * (3.1451f / 180.0f),
 					Light.SpotInnerRadius * (3.1451f / 180.0f), toEye, worldPosition.xyz);
 
-                    spotTemp *= GetShadowPixel(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows, 2048.0f);
+                    spotTemp *= GetShadowPixel2D(shadowMap[l], Light.LightView[0], Light.LightProjection, worldPosition.xyz, SHADOW_MAP_TEXCOORD_BIAS, Light.CastShadows, 2048.0f);
 				
 				spotLight += spotTemp;
 				break;

@@ -37,10 +37,6 @@ void GBuffer::SetAsResource(unsigned int aStartSlot)
 	DX11::Get().GetContext()->PSSetShaderResources(120, 1, myDepthStencil->mySRV.GetAddressOf());
 
 	//GE_ASSERT(myDepthStencil->mySRV != nullptr, "Pointer is null?");
-
-
-
-	
 }
 
 void GBuffer::ClearResource(unsigned int aStartSlot)
@@ -153,8 +149,8 @@ void DeferredRenderer::OnRender()
 
 	const VREye vrEye = VREye::None;
 	
-	const Matrix4x4f projection = GamerEngine::Renderer::GetCamera()->GetHMDMatrixProjectionEye(vrEye);
-	const Matrix4x4f view = GamerEngine::Renderer::GetCamera()->GetCurrentViewProjectionMatrix(vrEye);
+	const Matrix4x4f projection = GamerEngine::Renderer::GetProjectionMatrix();
+	const Matrix4x4f view = GamerEngine::Renderer::GetViewMatrix();
 
 	auto scene = SceneManager::Get().GetScene();
 
@@ -260,9 +256,9 @@ bool DeferredRenderer::Initialize()
 	bufferDescriptionInstance.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDescriptionInstance.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	myInstancedTransformBufferData.resize(2000);
+	myInstancedTransformBufferData.resize(128);
 	vxSubresource.pSysMem = &myInstancedTransformBufferData[0];
-	bufferDescriptionInstance.ByteWidth = sizeof(Matrix4x4f) * 2000;
+	bufferDescriptionInstance.ByteWidth = sizeof(Matrix4x4f) * 128;
 	bufferDescriptionInstance.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	result = DX11::Get().GetDevice()->CreateBuffer(&bufferDescriptionInstance, &vxSubresource, myInstanceBuffer.GetAddressOf());
 	if(FAILED(result))
@@ -299,8 +295,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 		return;
 	}
 
-
-	ModelAssetHandler::Get().ResetRenderedModels();
+	//ModelAssetHandler::Get().ResetRenderedModels();
 
 	if(aModelList.empty())
 	{
@@ -393,29 +388,32 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 		for(size_t index = 0; index < model->GetNumMeshes(); index++)
 		{
 			GamerEngine::Model::MeshData& meshData = model->GetMeshData(static_cast<unsigned>(index));
-			meshData.MaterialData.SetAsResource(myMaterialBuffer);
-			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
-			DX11::Get().GetContext()->VSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
-
+			
 			
 			DX11::Get().GetContext()->IASetInputLayout(meshData.myVertexShader->GetInputLayout().Get());
 			DX11::Get().GetContext()->VSSetShader(meshData.myVertexShader->Get().Get(), nullptr, 0);
 			DX11::Get().GetContext()->IASetIndexBuffer(meshData.myIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 			DX11::Get().GetContext()->IASetPrimitiveTopology(static_cast<D3D_PRIMITIVE_TOPOLOGY>(meshData.myPrimitiveTopology));
 
+			meshData.MaterialData.SetAsResource(myMaterialBuffer);
+			DX11::Get().GetContext()->PSSetConstantBuffers(2, 1, myMaterialBuffer.GetAddressOf());
+
+
 			if(isInstanced)
 			{
 				myInstancedTransformBufferData.clear();
-				std::vector<GamerEngine::Model::RenderedInstanceData> myTransformData = model->GetTransformVector();
-				for(int i = 0; i < myTransformData.size(); i++)
+				const std::vector<GamerEngine::Model::RenderedInstanceData>& myTransformData = model->GetTransformVector();
+				for (int i = 0; i < myTransformData.size(); i++)
 				{
 					auto matrix = myTransformData[i].World;
 					myInstancedTransformBufferData.push_back(matrix);
 				}
 
+				unsigned int instanceCount = static_cast<unsigned int>(myInstancedTransformBufferData.size());
+
 				ZeroMemory(&bufferData, sizeof(D3D11_MAPPED_SUBRESOURCE));
 				result = DX11::Get().GetContext()->Map(myInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &bufferData);
-				memcpy(bufferData.pData, &myInstancedTransformBufferData[0], sizeof(Matrix4x4f) * model->GetNumberOfInstances());
+				memcpy(bufferData.pData, myInstancedTransformBufferData.data(), sizeof(Matrix4x4f) * instanceCount);
 				DX11::Get().GetContext()->Unmap(myInstanceBuffer.Get(), 0);
 
 				ID3D11Buffer* buffers[2] = { meshData.myVertexBuffer.Get(), myInstanceBuffer.Get() };
@@ -427,7 +425,7 @@ void DeferredRenderer::GenerateGBuffer(Matrix4x4f aView, const Matrix4x4f& aProj
 				DX11::Get().GetContext()->IASetVertexBuffers(0, 2, buffers, stride, offset);
 				DX11::Get().GetContext()->DrawIndexedInstanced(
 					meshData.myNumberOfIndices,
-					model->GetNumberOfInstances(),
+					instanceCount,
 					0, 0, 0
 				);
 			}

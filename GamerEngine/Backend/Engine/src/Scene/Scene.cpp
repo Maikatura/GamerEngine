@@ -330,6 +330,7 @@ void GamerEngine::Scene::OnUpdate(bool aShouldRunLoop, bool aLoadingScene)
     
 
     {
+
         const auto& view = myRegistry.view<GamerEngine::TransformComponent, ModelComponent>();
         if (view != nullptr)
         {

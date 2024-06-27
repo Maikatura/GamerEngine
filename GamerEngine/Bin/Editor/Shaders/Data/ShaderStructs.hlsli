@@ -1,16 +1,16 @@
 #ifndef SHADERSTRUCTS_HLSLI
 #define SHADERSTRUCTS_HLSLI
 
-#define MAX_MODEL_BONES 512
+#define MAX_MODEL_BONES 256
 #define BLENDSHAPE_ARRAY_SIZE 1024
 
 struct VertexInput
 {
 	float4 Position		:	POSITION;
 
-    float3 Normal : NORMAL;
-	float3 Tangent : TANGENT;
-    float3 Binormal : BINORMAL;
+    float3 Normal		:	NORMAL;
+	float3 Tangent		:	TANGENT;
+    float3 Binormal		:	BINORMAL;
 
 	float4 VxColor		:	COLOR0;
 	float4 VxColor2		:	COLOR1;
@@ -60,13 +60,16 @@ struct LineInput
 {
 	float4 Position		:	POSITION;
 	float4 Color			:	COLOR;
-	float4 Width			:	WIDTH;
+	float LineWidth			:	WIDTH;
 };
 
 struct LineToPixel
 {
 	float4 Position		:	SV_POSITION;
-	float4 Color			:	COLOR;
+	float4 Color		:	COLOR;
+	float LineWidth		:	WIDTH;
+	float3 ViewDir		:	VIEWDIRECTION;
+	float4 WorldPos		:	POSITION;
 };
 
 struct GBufferOutput
@@ -89,16 +92,21 @@ struct FullscreenVertexInput
 struct FullscreenVertexToPixel
 {
 	float4 Position		:	SV_POSITION;
-	float2 UV			:	TEXCOORD0;
+	float2 UV			:	TEXCOORD;
+};
+
+struct PostProcessingPixelOutput
+{
+    float4 Color : SV_TARGET;
+};
+
+struct PostProcessingPixelOutputDepth
+{
+    float4 Color : SV_TARGET;
+    float Depth : SV_DEPTH;
 };
 
 struct DeferredPixelOutput
-{
-	float4 Color			:	SV_TARGET;
-    float Depth				:	SV_DEPTH;
-};
-
-struct FullscreenPixelOutput
 {
     float4 Color : SV_TARGET;
     float Depth : SV_DEPTH;
@@ -123,6 +131,8 @@ struct RectVertexOutput
     uint ImageIndex : IMAGEINDEX;
     uint SamplingData : MSDFDATA;
 };
+
+
 
 
 cbuffer FrameBuffer	: register(b0)
@@ -162,4 +172,11 @@ cbuffer LineCBuffer : register(b6)
     float4x4 LCB_ToView;
     float4x4 LCB_ToProjection;
 };
+
+cbuffer TextCBuffer : register(b7)
+{
+    float4x4 Text_Position;
+    float4 Text_Color;
+};
+
 #endif

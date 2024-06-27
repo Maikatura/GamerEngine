@@ -39,6 +39,9 @@ namespace GamerEngine
 			return nullptr;
 		}
 
+		static Matrix4x4f GetProjectionMatrix() { return myProjection; }
+		static Matrix4x4f GetViewMatrix() { return myViewProjection; }
+
 		static GamerEngine::TransformComponent* GetCameraTransform()
 		{
 			return myCameraTransform;
@@ -61,14 +64,15 @@ namespace GamerEngine
 
 		static void Clear()
 		{
+			for (auto model : myRenderModels)
+			{
+				model.myModel->ClearInstanceData();
+			}
+
 			myRenderModels.clear();
 			mySpritesToRender.clear();
 			myTextToRender.clear();
 		}
-
-
-		static CommonUtilities::Matrix4x4<float>& GetProjectionMatrix() { return myProjection; }
-		static CommonUtilities::Matrix4x4<float>& GetViewMatrix() { return myViewProjection; }
 
 
 		static bool IsVisable(GamerEngine::TransformComponent& aTransform)

@@ -143,8 +143,8 @@ void SceneView::EditTransform(const Ref<GamerEngine::Entity>& aEntity)
 	}
 
 	auto transform = aEntity->GetComponent<GamerEngine::TransformComponent>().GetWorldTransform();
-	Matrix4x4f projectionView = GamerEngine::Renderer::GetCamera()->GetHMDMatrixProjectionEye(VREye::None);
-	const Matrix4x4f view = GamerEngine::Renderer::GetCamera()->GetCurrentViewProjectionMatrix(VREye::None);
+	Matrix4x4f projectionView = GamerEngine::Renderer::GetProjectionMatrix();
+	const Matrix4x4f view = GamerEngine::Renderer::GetViewMatrix();
 	Matrix4x4f viewInverse = Matrix4x4f::GetFastInverse(view);
 
 	Matrix4x4f localMat; // = transform.GetMatrix();

@@ -47,6 +47,13 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 	static ImGuiInputTextFlags flagsReadOnly;
 	flagsReadOnly |= ImGuiInputTextFlags_ReadOnly;
 
+	if (!aEntity)
+	{
+		ImGui::TextWrapped("No entity selected...");
+		return;
+	}
+
+
 	if (aEntity.HasComponent<TagComponent>())
 	{
 		auto& tag = aEntity.GetComponent<TagComponent>();
@@ -440,9 +447,7 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 		{
 			auto& particle = component;
 
-			if (ImGui::TreeNodeEx("ParticleEmitter", ImGuiTreeNodeFlags_DefaultOpen, "Particle Emitter"))
-			{
-				auto& emitterSettings = particle.GetEmitterSettings();
+			auto& emitterSettings = particle.GetEmitterSettings();
 				auto& particleSettings = particle.GetSettings();
 
 				if (ImGui::TreeNodeEx("Emitter Settings"))
@@ -496,7 +501,6 @@ void Inspector::DrawSceneObject(GamerEngine::Entity aEntity)
 					}
 					ImGui::TreePop();
 				}
-			}
 		});
 
 

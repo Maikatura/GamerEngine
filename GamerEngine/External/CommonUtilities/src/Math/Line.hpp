@@ -31,6 +31,14 @@ namespace CommonUtilities
 		// Returns the normal of the line, which is (-direction.y, direction.x).
 		const Vector2<T>& GetNormal() const;
 
+
+		friend std::ostream& operator<<(std::ostream& os, const Line<T>& obj)
+		{
+			os << "Point 1: " << myPoint0 << " Point 2: " << myPoint1 << std::endl;
+			os << "Direction:" << myDirection << " Normal: " << myNormal << std::endl;
+			return os;
+		}
+
 	private:
 		Vector2<T> myPoint0;
 		Vector2<T> myPoint1;
