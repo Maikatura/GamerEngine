@@ -65,7 +65,7 @@ includedirs{
 	"%{IncludeDirs.msdfgen}",
 	"%{IncludeDirs.msdf_atlas_gen}",
 	"%{IncludeDirs.Flecs}../include2",
-	"%{IncludeDirs.JoltPhysics}",
+	--"%{IncludeDirs.JoltPhysics}",
 	"%{IncludeDirs.mono}"
 	
 }

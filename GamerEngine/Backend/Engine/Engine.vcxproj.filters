@@ -19,9 +19,6 @@
     <Filter Include="src\Components\Audio">
       <UniqueIdentifier>{A339C058-8FC8-4922-38E7-5D1D24555AC8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Components\Network">
-      <UniqueIdentifier>{9BFE404E-87F8-69A0-7065-00B15CFECF0C}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Core">
       <UniqueIdentifier>{A5D31CCF-91A0-77DA-BAB9-6582A6E5AC68}</UniqueIdentifier>
     </Filter>

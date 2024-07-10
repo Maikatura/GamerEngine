@@ -49,6 +49,9 @@
     <Filter Include="Physics\Ragdoll">
       <UniqueIdentifier>{FC1BD3BB-68A7-4080-71B8-C374DDC29C80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics\SoftBody">
+      <UniqueIdentifier>{8181DB56-6D7A-FAA8-96AC-DF2D8204DAB4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Physics\Vehicle">
       <UniqueIdentifier>{D75425F9-43E0-92BD-4CF1-15B2B8FBEEBD}</UniqueIdentifier>
     </Filter>
@@ -127,6 +130,9 @@
     <ClInclude Include="JoltPhysics\Jolt\Core\JobSystem.inl">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Core\JobSystemSingleThreaded.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Core\JobSystemThreadPool.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -191,6 +197,9 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Core\StreamOut.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Core\StreamUtils.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Core\StreamWrapper.h">
@@ -431,6 +440,9 @@
     <ClInclude Include="JoltPhysics\Jolt\ObjectStream\TypeDeclarations.h">
       <Filter>ObjectStream</Filter>
     </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Body\AllowedDOFs.h">
+      <Filter>Physics\Body</Filter>
+    </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Body\Body.h">
       <Filter>Physics\Body</Filter>
     </ClInclude>
@@ -468,6 +480,9 @@
       <Filter>Physics\Body</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Body\BodyPair.h">
+      <Filter>Physics\Body</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Body\BodyType.h">
       <Filter>Physics\Body</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Body\MassProperties.h">
@@ -515,10 +530,22 @@
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\BroadPhase\BroadPhaseLayer.h">
       <Filter>Physics\Collision\BroadPhase</Filter>
     </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\BroadPhase\BroadPhaseLayerInterfaceMask.h">
+      <Filter>Physics\Collision\BroadPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\BroadPhase\BroadPhaseLayerInterfaceTable.h">
+      <Filter>Physics\Collision\BroadPhase</Filter>
+    </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\BroadPhase\BroadPhaseQuadTree.h">
       <Filter>Physics\Collision\BroadPhase</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\BroadPhase\BroadPhaseQuery.h">
+      <Filter>Physics\Collision\BroadPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\BroadPhase\ObjectVsBroadPhaseLayerFilterMask.h">
+      <Filter>Physics\Collision\BroadPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\BroadPhase\ObjectVsBroadPhaseLayerFilterTable.h">
       <Filter>Physics\Collision\BroadPhase</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\BroadPhase\QuadTree.h">
@@ -543,6 +570,9 @@
       <Filter>Physics\Collision</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\CollideShape.h">
+      <Filter>Physics\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\CollideSoftBodyVerticesVsTriangles.h">
       <Filter>Physics\Collision</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\CollideSphereVsTriangles.h">
@@ -572,6 +602,9 @@
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\GroupFilterTable.h">
       <Filter>Physics\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\InternalEdgeRemovingCollector.h">
+      <Filter>Physics\Collision</Filter>
+    </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\ManifoldBetweenTwoFaces.h">
       <Filter>Physics\Collision</Filter>
     </ClInclude>
@@ -582,6 +615,12 @@
       <Filter>Physics\Collision</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\ObjectLayer.h">
+      <Filter>Physics\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\ObjectLayerPairFilterMask.h">
+      <Filter>Physics\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\ObjectLayerPairFilterTable.h">
       <Filter>Physics\Collision</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\PhysicsMaterial.h">
@@ -677,6 +716,9 @@
     <ClInclude Include="JoltPhysics\Jolt\Physics\Collision\TransformedShape.h">
       <Filter>Physics\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Constraints\CalculateSolverSteps.h">
+      <Filter>Physics\Constraints</Filter>
+    </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Constraints\ConeConstraint.h">
       <Filter>Physics\Constraints</Filter>
     </ClInclude>
@@ -764,6 +806,9 @@
     <ClInclude Include="JoltPhysics\Jolt\Physics\Constraints\SliderConstraint.h">
       <Filter>Physics\Constraints</Filter>
     </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\Constraints\SpringSettings.h">
+      <Filter>Physics\Constraints</Filter>
+    </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Constraints\SwingTwistConstraint.h">
       <Filter>Physics\Constraints</Filter>
     </ClInclude>
@@ -805,6 +850,30 @@
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\Ragdoll\Ragdoll.h">
       <Filter>Physics\Ragdoll</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyContactListener.h">
+      <Filter>Physics\SoftBody</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyCreationSettings.h">
+      <Filter>Physics\SoftBody</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyManifold.h">
+      <Filter>Physics\SoftBody</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyMotionProperties.h">
+      <Filter>Physics\SoftBody</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyShape.h">
+      <Filter>Physics\SoftBody</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodySharedSettings.h">
+      <Filter>Physics\SoftBody</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyUpdateContext.h">
+      <Filter>Physics\SoftBody</Filter>
+    </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyVertex.h">
+      <Filter>Physics\SoftBody</Filter>
     </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Physics\StateRecorder.h">
       <Filter>Physics</Filter>
@@ -858,6 +927,9 @@
     <ClInclude Include="JoltPhysics\Jolt\Renderer\DebugRendererRecorder.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="JoltPhysics\Jolt\Renderer\DebugRendererSimple.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="JoltPhysics\Jolt\Skeleton\SkeletalAnimation.h">
       <Filter>Skeleton</Filter>
     </ClInclude>
@@ -909,6 +981,9 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="JoltPhysics\Jolt\Core\IssueReporting.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\Jolt\Core\JobSystemSingleThreaded.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="JoltPhysics\Jolt\Core\JobSystemThreadPool.cpp">
@@ -1175,6 +1250,9 @@
     <ClCompile Include="JoltPhysics\Jolt\Physics\Constraints\SliderConstraint.cpp">
       <Filter>Physics\Constraints</Filter>
     </ClCompile>
+    <ClCompile Include="JoltPhysics\Jolt\Physics\Constraints\SpringSettings.cpp">
+      <Filter>Physics\Constraints</Filter>
+    </ClCompile>
     <ClCompile Include="JoltPhysics\Jolt\Physics\Constraints\SwingTwistConstraint.cpp">
       <Filter>Physics\Constraints</Filter>
     </ClCompile>
@@ -1204,6 +1282,18 @@
     </ClCompile>
     <ClCompile Include="JoltPhysics\Jolt\Physics\Ragdoll\Ragdoll.cpp">
       <Filter>Physics\Ragdoll</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyCreationSettings.cpp">
+      <Filter>Physics\SoftBody</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyMotionProperties.cpp">
+      <Filter>Physics\SoftBody</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodyShape.cpp">
+      <Filter>Physics\SoftBody</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\Jolt\Physics\SoftBody\SoftBodySharedSettings.cpp">
+      <Filter>Physics\SoftBody</Filter>
     </ClCompile>
     <ClCompile Include="JoltPhysics\Jolt\Physics\StateRecorderImpl.cpp">
       <Filter>Physics</Filter>
@@ -1252,6 +1342,9 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="JoltPhysics\Jolt\Renderer\DebugRendererRecorder.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="JoltPhysics\Jolt\Renderer\DebugRendererSimple.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="JoltPhysics\Jolt\Skeleton\SkeletalAnimation.cpp">

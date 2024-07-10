@@ -51,7 +51,7 @@ externalincludedirs {
 	"%{IncludeDirs.GraphicsEngine}",
 	"%{IncludeDirs.CommonUtilities}",
 	"%{IncludeDirs.Game}",
-    "%{IncludeDirs.JoltPhysics}",
+    --"%{IncludeDirs.JoltPhysics}",
 }
 
 externalwarnings "Off"

@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Physics/PhysicsTypes.h"
-
-#include <Jolt/Math/Vec3.h>
-#include <Jolt/Math/Quat.h>
-#include <Jolt/Core/Reference.h>
-#include <Jolt/Physics/Body/MotionQuality.h>
-#include <Jolt/Physics/Body/MotionType.h>
-
-
-#include "Math/MathTypes.hpp"
+//
+//#include <Jolt/Math/Vec3.h>
+//#include <Jolt/Math/Quat.h>
+//#include <Jolt/Core/Reference.h>
+//#include <Jolt/Physics/Body/MotionQuality.h>
+//#include <Jolt/Physics/Body/MotionType.h>
+//
+//
+//#include "Math/MathTypes.hpp"
 
 namespace GamerEngine::JoltUtils
 {

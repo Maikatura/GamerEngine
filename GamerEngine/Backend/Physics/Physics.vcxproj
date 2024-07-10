@@ -45,14 +45,14 @@
     <IntDir>..\..\Temp\Intermediate\Debug\Physics\</IntDir>
     <TargetName>Debug/Physics</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\Engine\src;..\..\External\CommonUtilities\src;.;..\..\External\JoltPhysics\JoltPhysics;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\Engine\src;..\..\External\CommonUtilities\src;.;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Temp\lib\</OutDir>
     <IntDir>..\..\Temp\Intermediate\Release\Physics\</IntDir>
     <TargetName>Release/Physics</TargetName>
     <TargetExt>.lib</TargetExt>
-    <ExternalIncludePath>..\Engine\src;..\..\External\CommonUtilities\src;.;..\..\External\JoltPhysics\JoltPhysics;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\Engine\src;..\..\External\CommonUtilities\src;.;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

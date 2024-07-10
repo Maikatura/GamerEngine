@@ -1,3 +1,4 @@
+// Jolt Physics Library (https://github.com/jrouwe/JoltPhysics)
 // SPDX-FileCopyrightText: 2021 Jorrit Rouwe
 // SPDX-License-Identifier: MIT
 
@@ -5,13 +6,16 @@
 
 #include <JoltViewer.h>
 #include <Jolt/Core/StreamWrapper.h>
-#include <Jolt/Core/FPException.h>
+#include <Application/EntryPoint.h>
 #include <Renderer/DebugRendererImp.h>
 #include <UI/UIManager.h>
 #include <Application/DebugUI.h>
-#include <fstream>
 
-#ifndef JPH_DEBUG_RENDERER	
+JPH_SUPPRESS_WARNINGS_STD_BEGIN
+#include <fstream>
+JPH_SUPPRESS_WARNINGS_STD_END
+
+#ifndef JPH_DEBUG_RENDERER
 	// Hack to still compile DebugRenderer inside the test framework when Jolt is compiled without
 	#define JPH_DEBUG_RENDERER
 	#include <Jolt/Renderer/DebugRendererRecorder.cpp>
@@ -25,7 +29,7 @@ JoltViewer::JoltViewer()
 	String cmd_line = GetCommandLineA();
 	Array<String> args;
 	StringToVector(cmd_line, args, " ");
-	
+
 	// Check arguments
 	if (args.size() != 2 || args[1].empty())
 	{
@@ -75,7 +79,7 @@ JoltViewer::JoltViewer()
 	mDebugUI->ShowMenu(main_menu);
 }
 
-bool JoltViewer::RenderFrame(float inDeltaTime)
+bool JoltViewer::UpdateFrame(float inDeltaTime)
 {
 	// If no frames were read, abort
 	if (mRendererPlayback.GetNumFrames() == 0)
@@ -147,38 +151,4 @@ bool JoltViewer::RenderFrame(float inDeltaTime)
 	return true;
 }
 
-#if defined(JPH_PLATFORM_WINDOWS)
-
-int WINAPI wWinMain(_In_ HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-{
-	RegisterDefaultAllocator();
-
-	FPExceptionsEnable enable_exceptions;
-	JPH_UNUSED(enable_exceptions);
-
-	{
-		JoltViewer app;
-		app.Run();
-	}
-
-	return 0;
-}																									
-
-int __cdecl main(int inArgC, char **inArgV)
-{
-	RegisterDefaultAllocator();
-
-	FPExceptionsEnable enable_exceptions;
-	JPH_UNUSED(enable_exceptions);
-
-	{
-		JoltViewer app;
-		app.Run();
-	}
-
-	return 0;
-}
-
-#else
-#error Undefined
-#endif
+ENTRY_POINT(JoltViewer, RegisterDefaultAllocator)

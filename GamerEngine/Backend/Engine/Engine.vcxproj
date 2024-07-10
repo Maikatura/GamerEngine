@@ -60,7 +60,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_BACKEND_DX11;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\..\External\TurNet;..\..\External\CommonUtilities\src;..\..\External\FBXImporter;..\..\External\OpenFBX\src;..\..\External\openvr\headers;..\..\External\openxr\include;..\..\External\entt;..\..\External\ImGui\src;..\..\External\yaml-cpp;..\..\External\json;..\..\External\WICTextureLoader;.;..\..\External\msdf\msdfgen;..\..\External\msdf\msdf-atlas-gen;..\..\External\flecs\include2;..\..\External\JoltPhysics\JoltPhysics;..\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\..\External\TurNet;..\..\External\CommonUtilities\src;..\..\External\FBXImporter;..\..\External\OpenFBX\src;..\..\External\openvr\headers;..\..\External\openxr\include;..\..\External\entt;..\..\External\ImGui\src;..\..\External\yaml-cpp;..\..\External\json;..\..\External\WICTextureLoader;.;..\..\External\msdf\msdfgen;..\..\External\msdf\msdf-atlas-gen;..\..\External\flecs\include2;..\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -87,7 +87,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_BACKEND_DX11;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NOMINMAX;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\..\External\TurNet;..\..\External\CommonUtilities\src;..\..\External\FBXImporter;..\..\External\OpenFBX\src;..\..\External\openvr\headers;..\..\External\openxr\include;..\..\External\entt;..\..\External\ImGui\src;..\..\External\yaml-cpp;..\..\External\json;..\..\External\WICTextureLoader;.;..\..\External\msdf\msdfgen;..\..\External\msdf\msdf-atlas-gen;..\..\External\flecs\include2;..\..\External\JoltPhysics\JoltPhysics;..\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\..\External\TurNet;..\..\External\CommonUtilities\src;..\..\External\FBXImporter;..\..\External\OpenFBX\src;..\..\External\openvr\headers;..\..\External\openxr\include;..\..\External\entt;..\..\External\ImGui\src;..\..\External\yaml-cpp;..\..\External\json;..\..\External\WICTextureLoader;.;..\..\External\msdf\msdfgen;..\..\External\msdf\msdf-atlas-gen;..\..\External\flecs\include2;..\vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
