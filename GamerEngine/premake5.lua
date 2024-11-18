@@ -35,7 +35,7 @@ include "External/msdf"
 include "External/msdf/msdfgen"
 --include "External/openxr"
 include "External/JoltPhysics/JoltPhysicsPremake"
-include "External/JoltPhysics/JoltViewerPremake"
+--include "External/JoltPhysics/JoltViewerPremake"
 	
 group "Backend"
 include "Backend/Shaders"
