@@ -64,9 +64,16 @@ class GraphicsEngine
 	RenderMode myRenderMode = RenderMode::Default;
 
 	Ref<DropManager> myDropManager;
+
+	//std::atomic_bool myRenderIsDone;
+
 	std::thread myUpdateThread;
 
-	std::atomic_bool myRenderIsDone;
+	std::atomic_bool myUpdateReady = false;
+	std::mutex myUpdateMutex;
+	std::atomic_bool myRunning = true;
+	std::condition_variable myRenderCondition;
+	
 	bool myUpdateShouldRun = true;
 
 	bool myUpdateCondition = false;

@@ -118,7 +118,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		//Physics::Get().Update();
 
-		graphicsEngine.OnFrameUpdate();
+		// graphicsEngine.OnFrameUpdate();
 		graphicsEngine.OnFrameRender();
 		
 

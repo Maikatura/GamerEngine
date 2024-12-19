@@ -28,12 +28,15 @@ GraphicsEngine* GraphicsEngine::Get()
 
 GraphicsEngine::~GraphicsEngine()
 {
+    
+    
     GamerEngine::ScriptEngine::Shutdown();
 
+    
     //StopUpdateThread();
     //
     //myUpdateShouldRun = false;
-    //myUpdateThread.join();
+    myUpdateThread.join();
 
     TextureAssetHandler::Clear();
     RevokeDragDrop(myWindowHandle);
@@ -44,7 +47,7 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
                                 unsigned someWidth, unsigned someHeight,
                                 bool enableDeviceDebug, const std::wstring& aName, bool aBoolToUseEditor, bool isVRMode)
 {
-	PROFILE_SCOPE("GraphicsEngine::Init");
+    PROFILE_SCOPE("GraphicsEngine::Init");
 
     OleInitialize(nullptr);
 
@@ -121,7 +124,8 @@ bool GraphicsEngine::Initialize(unsigned someX, unsigned someY,
     }
 
 
-    //myUpdateThread = std::thread(&GraphicsEngine::OnFrameUpdate, this);
+    //myUpdateThread = std::thread(OnFrameUpdate);
+    myUpdateThread = std::thread(&GraphicsEngine::OnFrameUpdate, this);
 
     return true;
 }
@@ -155,6 +159,9 @@ void GraphicsEngine::RemoveRenderModule(int aModuleIndex)
 
 LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
+
+    
+    
     Input::UpdateEvents(uMsg, wParam, lParam);
 
 
@@ -235,6 +242,12 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
     case WM_DESTROY:
         {
+            graphicsEnginePtr->myRunning = false;
+            while (!graphicsEnginePtr->myUpdateThread.joinable())
+            {
+        
+            }
+            
             PostQuitMessage(0);
             break;
         }
@@ -247,6 +260,11 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
     case WM_QUIT:
         {
+            graphicsEnginePtr->myRunning = false;
+            while (!graphicsEnginePtr->myUpdateThread.joinable())
+            {
+        
+            }
             graphicsEnginePtr->SetEngineRunning(false);
             std::cout << "Test\n";
             break;
@@ -254,6 +272,11 @@ LRESULT CALLBACK GraphicsEngine::WinProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WP
 
     case WM_CLOSE:
         {
+            graphicsEnginePtr->myRunning = false;
+            while (!graphicsEnginePtr->myUpdateThread.joinable())
+            {
+        
+            }
             graphicsEnginePtr->SetEngineRunning(false);
             std::cout << "Dropped something\n";
             break;
@@ -317,105 +340,116 @@ void GraphicsEngine::BeginFrame()
 
     const auto renderTarget = DX11::Get().GetRenderTargetView();
     DX11::Get().GetContext()->OMSetRenderTargets(1, &renderTarget, DX11::Get().GetDepthStencilView()->myDSV.Get());
-    
+
 
     //DX11::Get().GetContext()->ClearRenderTargetView(DX11::Get().GetRenderTargetView(), &clearColor.x);
-    
+
     DX11::Get().ClearRenderTargets();
 }
 
 void GraphicsEngine::OnFrameUpdate()
 {
-    //while (myUpdateShouldRun)
-    //{
-    Input::Update();
-    Time::Update();
-
-
-    if (myIsMinimized) return;
-
-    if (!SceneManager::Get().IsReady())
+    while (myRunning)
     {
-        return;
-    }
+        Input::Update();
+        
+        if (!myUpdateReady) return;
+        
+        
+        Time::Update();
 
 
-    if (myIsPaused)
-    {
-        if (Input::IsKeyDown(CommonUtilities::Key::Code::LeftCtrl) && Input::IsKeyPressed(CommonUtilities::Key::Code::Z))
+        if (myIsMinimized) return;
+
+        if (!SceneManager::Get().IsReady())
         {
-            CommandManager::Undo();
+            return;
         }
 
-        if (Input::IsKeyDown(CommonUtilities::Key::Code::LeftCtrl) && Input::IsKeyPressed(CommonUtilities::Key::Code::Y))
+
+        if (myIsPaused)
         {
-            CommandManager::Redo();
+            if (Input::IsKeyDown(CommonUtilities::Key::Code::LeftCtrl) && Input::IsKeyPressed(
+                CommonUtilities::Key::Code::Z))
+            {
+                CommandManager::Undo();
+            }
+
+            if (Input::IsKeyDown(CommonUtilities::Key::Code::LeftCtrl) && Input::IsKeyPressed(
+                CommonUtilities::Key::Code::Y))
+            {
+                CommandManager::Redo();
+            }
         }
-    }
 
 
 #if defined(_DEBUG) || defined(_RELEASE)
 
-    if(Input::IsKeyPressed(CommonUtilities::Key::Code::F5))
-    {
-        int currentRenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
-        currentRenderMode--;
-        if(currentRenderMode < 0)
+        if (Input::IsKeyPressed(CommonUtilities::Key::Code::F5))
         {
-            currentRenderMode = static_cast<int>(RenderMode::COUNT) - 1;
+            int currentRenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
+            currentRenderMode--;
+            if (currentRenderMode < 0)
+            {
+                currentRenderMode = static_cast<int>(RenderMode::COUNT) - 1;
+            }
+
+            std::cout << "Render Mode: " << currentRenderMode << "\n";
+
+            GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
         }
 
-        std::cout << "Render Mode: " << currentRenderMode << "\n";
-
-        GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
-    }
-
-    if (Input::IsKeyPressed(CommonUtilities::Key::Code::F6))
-    {
-        int currentRenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
-        currentRenderMode++;
-        if (currentRenderMode == static_cast<int>(RenderMode::COUNT))
+        if (Input::IsKeyPressed(CommonUtilities::Key::Code::F6))
         {
-            currentRenderMode = 0;
+            int currentRenderMode = static_cast<int>(GraphicsEngine::Get()->GetRenderMode());
+            currentRenderMode++;
+            if (currentRenderMode == static_cast<int>(RenderMode::COUNT))
+            {
+                currentRenderMode = 0;
+            }
+
+            std::cout << "Render Mode: " << currentRenderMode << "\n";
+
+            GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
         }
-
-        std::cout << "Render Mode: " << currentRenderMode << "\n";
-
-        GraphicsEngine::Get()->SetRenderMode(static_cast<RenderMode>(currentRenderMode));
-    }
 
 #endif
 
-    {
-        //PROFILE_CPU_SCOPE("Update Loop");
-
-        SceneManager::Get().Update(myIsRunning);
-
-        for (auto module : myRenderModules)
         {
-            module->OnUpdate();
+            //PROFILE_CPU_SCOPE("Update Loop");
+
+            SceneManager::Get().Update(myIsRunning);
+
+            for (auto module : myRenderModules)
+            {
+                module->OnUpdate();
+            }
         }
+
+        //#ifdef _Distribution
+        //	std::string fps = "FPS: " + std::to_string(Time::GetFPS());
+        //	std::cout << fps.c_str() << std::endl;
+        //#endif
+
+        //}
+
+        //		while (myUpdateShouldRun)
+        //		{
+        //			if (myRenderIsDone)
+        //			{
+{
+    
+        std::scoped_lock lock(myUpdateMutex);
+        myUpdateReady = false;
+}
         
+        //				myRenderIsDone = false;
+        //				break;
+        //			}
+        //		}
+        //
+        //}
     }
-
-    //#ifdef _Distribution
-    //	std::string fps = "FPS: " + std::to_string(Time::GetFPS());
-    //	std::cout << fps.c_str() << std::endl;
-    //#endif
-
-    //}
-
-    //		while (myUpdateShouldRun)
-    //		{
-    //			if (myRenderIsDone)
-    //			{
-    GamerEngine::Renderer::SwapBuffers();
-    //				myRenderIsDone = false;
-    //				break;
-    //			}
-    //		}
-    //
-    //}
 }
 
 void GraphicsEngine::RenderScene(const VREye anEye) const
@@ -456,7 +490,18 @@ void GraphicsEngine::OnFrameRender()
 {
     if (myWantToResizeBuffers) return;
     if (myIsMinimized) return;
+    if (!myRunning) return;
 
+
+    {
+        std::scoped_lock lock(myUpdateMutex);
+        if (!myUpdateReady)
+        {
+            GamerEngine::Renderer::SwapBuffers();
+            myUpdateReady = true;
+        }
+    }
+    
 
     // if (myRenderIsDone)
     // {
@@ -612,10 +657,7 @@ void GraphicsEngine::EndFrame() const
 
     if (SceneManager::Get().GetStatus() == GamerEngine::SceneStatus::NeedSwap)
     {
-        
         SceneManager::Get().SwapScene();
-
-
     }
 }
 
